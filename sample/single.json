@@ -1,0 +1,23 @@
+{
+    "type":"2D",
+    "size":["480","480"],
+    "format":{
+        "value":["START","STEP","DIVIDE"],
+        "img":["LINE","ROW","LINE_EXT","ROW_EXT"],
+        "position":["POSITION_X","POSITION_Y"],
+        "center":["X","Y"],
+        "rotation":"IMAGE_ROTATION",
+        "scale":1,
+        "color":["START","STEP","DIVIDE",["RED_OFFSET","GREEN_OFFSET","BLUE_OFFSET"]]
+    },
+    "puzzle":[
+            {
+                "value":[24,2,16],
+                "img":[0,1,1,1],
+                "center":[0.5,0.5],
+                "position":[200,200]
+            }
+        ],
+    "version":"1.0.0",
+    "auth":["AUTH_NAME"]
+}
