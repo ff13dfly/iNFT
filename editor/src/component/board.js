@@ -31,7 +31,7 @@ function Board(props) {
     };
 
     let [hash,setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
-    console.log(Data.get("hash"));
+    //console.log(Data.get("hash"));
     if(Data.get("hash")===null){
         Data.set("hash",hash);
     }

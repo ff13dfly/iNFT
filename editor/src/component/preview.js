@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 
 import  Data from "../lib/data";
 import tools from "../lib/tools";
@@ -23,6 +23,8 @@ function Preview(props) {
     let [cellY,setCellY]=useState(ss.cell[1]);      //cell的Y轴像素宽度
     let [line,setLine]=useState(ss.grid[0]);        //X轴，每行多少个
     let [row,setRow]=useState(ss.grid[1]);          //Y轴，多少行
+
+    const ref = useRef(null);
 
     const self={
         changeCellX:(ev)=>{
@@ -114,10 +116,15 @@ function Preview(props) {
         },
     }
 
-    let width=306;
-    let w=parseInt(width/line);
+    
 
     useEffect(() =>{
+
+        const  width=ref.current.offsetWidth;
+        const  w=tools.toF(width/line,3);
+
+        //console.log(width,line,w);
+
         const bs64=Data.get("template");
         if(bs64!==null){
             setImage(bs64);
@@ -135,7 +142,6 @@ function Preview(props) {
 
                     const sel=rand%amount;
                     setActive(sel);
-                    //Data.set("grid",sel);
 
                     const [gX,gY,eX,eY]=def.img;
                     const grid=self.getHelper(amount,line,w,gX,gY,eX,eY);
@@ -143,7 +149,10 @@ function Preview(props) {
                 }
             }
         }
-    }, [props.update]);
+
+        //console.log('width', ref.current ? ref.current.offsetWidth : 0);
+
+    }, [props.update,ref.current]);
 
     return (
         <Row>
@@ -160,11 +169,10 @@ function Preview(props) {
                             backgroundColor:self.getBackground(index),
                         }} 
                         onClick={(ev)=>{
-                            //console.log("clicked");
                             self.clickGrid(index);
                         }}>{index}</div>
                 ))}
-                {<img id="preview" src={image} alt="Preview of full iNFT" />}
+                {<img id="preview" ref={ref} src={image} alt="Preview of full iNFT" />}
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <hr />

@@ -42,6 +42,9 @@ const self = {
       rate:window.devicePixelRatio,
     }
   },
+  toF: (a,fix)=>{
+    fix=fix||3;return parseFloat(a.toFixed(fix))
+  },
   download:(filename,text,type)=>{
     var element = document.createElement('a');
 

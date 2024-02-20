@@ -14,7 +14,7 @@ const map={
 
 const self={
     set:(key,value)=>{
-        console.log(key,value);
+        //console.log(key,value);
         if(map[key]===undefined) return false;
         map[key]=value;
         
