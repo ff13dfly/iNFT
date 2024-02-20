@@ -2,7 +2,9 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import  Data from "../lib/data";
+import tools from "../lib/tools";
 
+//let selected=0;
 
 function Preview(props) {
     const size = {
@@ -15,6 +17,7 @@ function Preview(props) {
     let [image,setImage]=useState("image/empty.png");
     let [grid, setGrid] =useState([]);
     let [active, setActive]=useState(null);
+    //let [selected, setSelected]= useState(0);
     
     let [cellX,setCellX]=useState(ss.cell[0]);      //cell的X轴像素宽度
     let [cellY,setCellY]=useState(ss.cell[1]);      //cell的Y轴像素宽度
@@ -50,11 +53,26 @@ function Preview(props) {
                 self.saveSize(cellX,cellY,line,val);
             }
         },
+        clickGrid:(index)=>{
+            //console.log(`Index ${index} clicked.`);
+            Data.set("grid",index);
+            self.updateHash(index);
+            props.fresh();
+        },
         saveSize:(cx,cy,gx,gy)=>{
             Data.set("size",{
                 cell:[cx,cy],
                 grid:[gx,gy],
             })
+        },
+        updateHash:(order)=>{
+            const puzzle_index=Data.get("selected");
+            const NFT=Data.get("NFT");
+            const hash=Data.get("hash");
+            const def=NFT.puzzle[puzzle_index];
+            const [hash_start,hash_step,amount]=def.value;
+            console.log(self.getHash(hash,order,hash_start,hash_step,amount));
+            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount));
         },
         getHelper:(amount,line,w,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
             const list=[];
@@ -70,6 +88,30 @@ function Preview(props) {
             } 
             return list;
         },
+        getBackground:(index)=>{
+            const selected_grid=Data.get("grid");
+            const ac="#4aab67";
+            const sc="#f7cece";
+            const bc="#99ce23";
+            if(selected_grid===index){
+                return sc;
+            }else{
+                return active===index?ac:bc
+            }
+            
+        },
+        getHash:(hash,order,start,step,max)=>{
+            const s=16;
+            const top=Math.pow(s,step);         //总数据量
+            const m=Math.floor(top/max)-1;
+            const multi=tools.rand(0,m);
+            const n=multi*max+order;
+
+            const px=2;
+            const prefix=hash.substring(0,start+px);
+            const tailor=hash.substring(start+step+px,hash.length+px);
+            return `${prefix}${n.toString(16)}${tailor}`;
+        },
     }
 
     let width=260;
@@ -80,17 +122,20 @@ function Preview(props) {
         if(bs64!==null){
             setImage(bs64);
             
-            const selected=Data.get("selected");
+            const puzzle_selected=Data.get("selected");
             const NFT=Data.get("NFT");
-            if(selected!==null){
-                const def=NFT.puzzle[selected];
+            if(puzzle_selected!==null){
+                const def=NFT.puzzle[puzzle_selected];
                 const hash=Data.get("hash");
                 
                 if(def.img){
                     const [hash_start,hash_step,amount]=def.value;
                     const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
                     const rand=parseInt(str);
-                    setActive(rand%amount);
+
+                    const sel=rand%amount;
+                    setActive(sel);
+                    //Data.set("grid",sel);
 
                     const [gX,gY,eX,eY]=def.img;
                     const grid=self.getHelper(amount,line,w,gX,gY,eX,eY);
@@ -112,10 +157,11 @@ function Preview(props) {
                             width:`${row.wX}px`,
                             height:`${row.wY}px`,
                             lineHeight:`${row.wY}px`,
-                            backgroundColor:(active===index?"#4aab67":"#f7cece"),
+                            backgroundColor:self.getBackground(index),
                         }} 
                         onClick={(ev)=>{
-                            console.log("clicked");
+                            //console.log("clicked");
+                            self.clickGrid(index);
                         }}>{index}</div>
                 ))}
                 {<img id="preview" src={image} alt="Preview of full iNFT" />}

@@ -8,12 +8,13 @@ const map={
     NFT:null,           //NFT的JSON文件
     hash:null,          //用于显示NFT的Hash
     selected:null,      //选中的NFT的片段
+    grid:null,          //选中的NFT的次序
     subcribe:{},        //挂载的sub的funs
 }
 
 const self={
     set:(key,value)=>{
-        //console.log(key);
+        console.log(key,value);
         if(map[key]===undefined) return false;
         map[key]=value;
         

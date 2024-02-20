@@ -24,6 +24,7 @@ function Puzzle(props) {
             if(cur!==index){
                 setActive(index);
                 Data.set("selected",parseInt(index));
+                Data.set("grid",null);
                 props.fresh();
             }
         },

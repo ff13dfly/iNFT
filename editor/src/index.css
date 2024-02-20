@@ -37,6 +37,7 @@ code {
   color: #000000;
   background-color: #4aab67;
   opacity: 0.6;
+  cursor: pointer;
 }
 
 .puzzle{

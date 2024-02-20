@@ -31,7 +31,7 @@ function Board(props) {
     };
 
     let [hash,setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
-
+    console.log(Data.get("hash"));
     if(Data.get("hash")===null){
         Data.set("hash",hash);
     }
@@ -46,6 +46,7 @@ function Board(props) {
             const {cell,grid}=tpl;
             const multi=window.devicePixelRatio;
             for(let i=0;i<parts.length;i++){
+                //获取不同的图像
                 const part=parts[i];
                 const [hash_start,hash_step,amount]=part.value;
                 const [gX,gY,eX,eY]=part.img;
@@ -65,8 +66,8 @@ function Board(props) {
                 const vy=py-zy*cell[1]*(1+eY);
                 pen.drawImage(img, cx*multi, cy*multi, dx*multi, dy*multi, vx, vy, dx, dy);
                 
+                //绘制当前的选中的块
                 if(active===i){
-                    //console.log(`Active ${i}, ready to draw.`);
                     Render.active(pen,dx,dy,vx,vy,"#FF0000",3);
                 }
             }
@@ -74,6 +75,11 @@ function Board(props) {
     }
     
     useEffect(() => {
+        const hash=Data.get("hash");
+        if(hash!=="0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486"){
+            setHash(hash);
+        }
+        
         const pen=Render.create(cfg.id);
         const bs64=Data.get("template");
         const def=Data.get("NFT");
