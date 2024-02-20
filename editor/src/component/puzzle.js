@@ -90,12 +90,21 @@ function Puzzle(props) {
             locker=true;
 
             const def=Data.get("NFT");
+            //1.如果是最后一个，调整active的index
+            if(index===def.puzzle.length-1){
+                setActive(index-1);
+                Data.set("selected",parseInt(index)-1);
+            }
+
+            //2.删除对应的数据
             const nlist=[];
             for(let i=0;i<def.puzzle.length;i++){
                 if(i!==index) nlist.push(def.puzzle[i]);
             }
             def.puzzle=nlist;
             Data.set("NFT",JSON.parse(JSON.stringify(def)));
+
+            
             locker=false;
             props.fresh();
         },

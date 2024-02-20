@@ -2,7 +2,8 @@
 const RDS={};   //缓存render的方法
 
 const config={
-    background:"#71366b",
+    //background:"#71366b",
+    background:"#EEEEEE",
 };
 
 const self={
