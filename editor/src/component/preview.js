@@ -114,7 +114,7 @@ function Preview(props) {
         },
     }
 
-    let width=260;
+    let width=306;
     let w=parseInt(width/line);
 
     useEffect(() =>{

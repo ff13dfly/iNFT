@@ -41,7 +41,27 @@ const self = {
       height:window.screen.height,
       rate:window.devicePixelRatio,
     }
+  },
+  download:(filename,text,type)=>{
+    var element = document.createElement('a');
 
+    switch (type) {
+      case "image":
+        element.setAttribute('href', text);
+        break;
+    
+      default:
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        break;
+    }
+    
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+    document.body.removeChild(element);
   },
 };
 
