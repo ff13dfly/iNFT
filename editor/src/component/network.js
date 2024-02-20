@@ -7,6 +7,8 @@ function Network(props) {
         opt:[2,2,1,7],
     };
 
+    let [net,setNet] =useState("anchor");
+
     useEffect(() => {
 
     }, []);
@@ -18,9 +20,9 @@ function Network(props) {
             </Col>
             <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
                 <select className="form-control">
-                    <option value="Anchor">Anchor Network</option>
-                    <option value="">Bitcoin Network</option>
-                    <option value="">Ethereum Network</option>
+                    <option value="anchor">Anchor Network</option>
+                    <option value="btc">Bitcoin Network</option>
+                    <option value="eth">Ethereum Network</option>
                 </select>
             </Col>
             <Col className="text-end" lg={size.opt[2]} xl={size.opt[2]} xxl={size.opt[2]} >

@@ -6,8 +6,9 @@ const map={
     },
     basic:null,         //模版的网格划分
     NFT:null,           //NFT的JSON文件
-    hash:null,            //用于显示NFT的Hash
+    hash:null,          //用于显示NFT的Hash
     selected:null,      //选中的NFT的片段
+    subcribe:{},        //挂载的sub的funs
 }
 
 const self={
