@@ -115,7 +115,11 @@ function Puzzle(props) {
 
             const def=Data.get("NFT");
             const row=JSON.parse(JSON.stringify(def.puzzle[def.puzzle.length-1]));
+            
             row.value[0]=row.value[0]+4;
+            row.position[0]=row.value[0]+50;
+            row.position[1]=row.value[1]+50;
+
             def.puzzle.push(row);
             Data.set("NFT",JSON.parse(JSON.stringify(def)));
             locker=false;

@@ -1,8 +1,9 @@
 const map={
     template:null,      //模版image文件
     size:{              //模版对应的数据
-        cell:[50,50],   //组件的基础尺寸
-        grid:[8,20],    //图像的尺寸
+        cell:[50,50],       //组件的基础尺寸
+        grid:[8,20],        //图像的尺寸(row,line)
+        target:[400,400]    //显示图像的尺寸
     },
     basic:null,         //模版的网格划分
     NFT:null,           //NFT的JSON文件

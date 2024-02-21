@@ -6,7 +6,7 @@ import  Data from "../lib/data";
 function Detail(props) {
     const size = {
         row: [12],
-        value:[4,4,4],
+        value:[6,6,6,6],
         center:[6,6],
         img:[6,6,6,6],
         position:[6,6],
@@ -20,6 +20,7 @@ function Detail(props) {
     let [value_start,setValueStart]=useState(0);
     let [value_step,setValueStep]=useState(0);
     let [value_divide,setValueDivide]=useState(0);
+    let [value_offset,setValueOffset]=useState(0);
 
     let [img_line,setImageLine] =useState(0);
     let [img_row, setImageRow] =useState(0);
@@ -40,7 +41,7 @@ function Detail(props) {
             const def=Data.get("NFT");
             if(active===null || def===null) return false;
             const data={
-                value:[value_start,value_step,value_divide],
+                value:[value_start,value_step,value_divide,value_offset],
                 img:[img_line,img_row,img_ext_x,img_ext_y],
                 position:[pos_x,pos_y],
                 center:[center_x,center_y],
@@ -72,6 +73,12 @@ function Detail(props) {
             const val=parseInt(ev.target.value);
             if(isNaN(val)) return false;
             setValueDivide(val);
+            self.autoSave("value",2,val);
+        },
+        changeValueOffset:(ev)=>{
+            const val=parseInt(ev.target.value);
+            if(isNaN(val)) return false;
+            setValueOffset(val);
             self.autoSave("value",2,val);
         },
         changeImageLine:(ev)=>{
@@ -168,8 +175,8 @@ function Detail(props) {
     return (
         <Row hidden={hidden} className="pt-2">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <hr />
                 <small className="text-warning">Raw: {raw}, value:{num}, order: {order}</small>
+                <hr />
             </Col>
             <Col lg={size.value[0]} xl={size.value[0]} xxl={size.value[0]}>
                 <small>Start</small>
@@ -183,10 +190,16 @@ function Detail(props) {
                     self.changeValueStep(ev);
                 }}/>
             </Col>
-            <Col lg={size.value[1]} xl={size.value[1]} xxl={size.value[1]}>
+            <Col lg={size.value[2]} xl={size.value[2]} xxl={size.value[2]}>
                 <small>Divide</small>
                 <input type="number" className="form-control" value={value_divide} onChange={(ev)=>{
                     self.changeValueDivide(ev);
+                }}/>
+            </Col>
+            <Col lg={size.value[3]} xl={size.value[3]} xxl={size.value[3]}>
+                <small>Offset</small>
+                <input type="number" className="form-control" value={value_offset} onChange={(ev)=>{
+                    self.changeValueOffset(ev);
                 }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
