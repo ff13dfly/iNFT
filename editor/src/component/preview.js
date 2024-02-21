@@ -19,6 +19,8 @@ function Preview(props) {
     let [active, setActive]=useState(null);
     //let [selected, setSelected]= useState(0);
     
+    let [width,setWidth]=useState(ss.target[0]);
+    let [height,setHeight]=useState(ss.target[1]);
     let [cellX,setCellX]=useState(ss.cell[0]);      //cell的X轴像素宽度
     let [cellY,setCellY]=useState(ss.cell[1]);      //cell的Y轴像素宽度
     let [line,setLine]=useState(ss.grid[0]);        //X轴，每行多少个
@@ -156,6 +158,22 @@ function Preview(props) {
 
     return (
         <Row>
+            <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                <small>NFT Width</small>
+                <input className="form-control" type="number" value={width} onChange={(ev)=>{
+                    
+                }}/>
+            </Col>
+            <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
+                <small>NFT Height</small>
+                <input className="form-control" type="number" value={height} onChange={(ev)=>{
+                    
+                }}/>
+            </Col>
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                <hr />
+            </Col>
+
             <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                 <small>Cell X</small>
                 <input className="form-control" type="number" value={cellX} onChange={(ev)=>{

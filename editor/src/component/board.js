@@ -1,8 +1,5 @@
-import { Stage, Container, Sprite, Text } from '@pixi/react';
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
-
-import { utils,Rectangle,Texture,BaseTexture } from 'pixi.js';
 
 import  Data from "../lib/data";
 import  Render from "../lib/render";
@@ -28,6 +25,7 @@ const self={
 function Board(props) {
     const size = {
         row: [12],
+        hash:[8,4],
     };
 
     let [hash,setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
@@ -100,11 +98,20 @@ function Board(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="pt-2" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                <h5>iNFT Preview</h5>
+            </Col>
+            <Col className="pt-2" lg={size.hash[0]} xl={size.hash[0]} xxl={size.hash[0]} >
                 <small>{hash.length-2} bytes</small>
                 <textarea className="form-control" cols="30" rows="2" value={hash} onChange={(ev)=>{
                     self.changeHash(ev);
                 }}></textarea>   
+            </Col>
+            <Col className="pt-2" lg={size.hash[1]} xl={size.hash[1]} xxl={size.hash[1]} >
+                <Form>
+                    <Form.Check type="checkbox" label={`Enable hash check.`} />
+                    <Form.Check type="checkbox" label={`Disable highlight.`} />
+                </Form>
             </Col>
             <Col className="text-center pt-4" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <canvas  width={cfg.width} height={cfg.height} id={cfg.id}></canvas>
