@@ -11,22 +11,27 @@ function Operation(props) {
     };
 
     let [disable, setDisable]=useState(true);
+    let [writeable,setWriteable]=useState(true);
     let [encryFile,setEncryFile]=useState(null);
     let [anchor, setAnchor]=useState("");
     let [password,setPassword]=useState("");
 
     const self={
         clickWrite:(ev)=>{
-
+            console.log(encryFile,anchor,password);
+            console.log(`Ready to write to anchor`);
         },
         changeJSON:(ev)=>{
-
+            setEncryFile(ev.target.value);
+            props.fresh();
         },
         changePassword:(ev)=>{
-
+            setPassword(ev.target.value);
+            props.fresh();
         },
         changeAnchor:(ev)=>{
-
+            setAnchor(ev.target.value.trim());
+            props.fresh();
         },
     }
 
@@ -34,12 +39,13 @@ function Operation(props) {
         const bs64=Data.get("template");
         const NFT=Data.get("NFT");
         const basic=Data.get("size");
-
-        console.log(basic);
-
         if(bs64!==null && NFT!==null && basic!==null){
             setDisable(false);
-            console.log(`Data ready.`);
+            if(encryFile!==null && anchor!=="" && password!==""){
+                setWriteable(false);
+            }else{
+                setWriteable(true);
+            }
         }
     }, [props.update]);
 
@@ -63,8 +69,8 @@ function Operation(props) {
                 }}/>
             </Col>
             <Col className="pt-4 text-end" lg={size.write[1]} xl={size.write[1]} xxl={size.write[1]} >
-                <button disabled={disable} className="btn btn-md btn-primary" onClick={(ev)=>{
-
+                <button disabled={writeable} className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickWrite(ev);
                 }}>Write iNFT Template</button>
             </Col>
         </Row>
