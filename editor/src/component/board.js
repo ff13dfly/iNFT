@@ -42,7 +42,8 @@ function Board(props) {
         },
         decode:(hash,pen,img,parts,tpl,active)=>{
             const {cell,grid}=tpl;
-            const multi=window.devicePixelRatio;
+            //const multi=window.devicePixelRatio;
+            const multi=1;
             for(let i=0;i<parts.length;i++){
                 //获取不同的图像
                 const part=parts[i];

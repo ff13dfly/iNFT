@@ -5,7 +5,7 @@ const map={
         grid:[8,20],        //图像的尺寸(row,line)
         target:[400,400]    //显示图像的尺寸
     },
-    basic:null,         //模版的网格划分
+    //basic:null,         //模版的网格划分
     NFT:null,           //NFT的JSON文件
     hash:null,          //用于显示NFT的Hash
     selected:null,      //选中的NFT的片段

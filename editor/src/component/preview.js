@@ -158,6 +158,24 @@ function Preview(props) {
 
     return (
         <Row>
+            <Col className="pt-4" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                {/* template image preview, {props.update}
+                <p>Image information, 1,234 bytes, 1024 * 2048.</p> */}
+                {grid.map((row, index) => (
+                    <div className="cover" key={index} style={{
+                            marginLeft:`${row.mX}px`,
+                            marginTop:`${row.mY}px`,
+                            width:`${row.wX}px`,
+                            height:`${row.wY}px`,
+                            lineHeight:`${row.wY}px`,
+                            backgroundColor:self.getBackground(index),
+                        }} 
+                        onClick={(ev)=>{
+                            self.clickGrid(index);
+                        }}>{index}</div>
+                ))}
+                {<img id="preview" ref={ref} src={image} alt="Preview of full iNFT" />}
+            </Col>
             <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                 <small>NFT Width</small>
                 <input className="form-control" type="number" value={width} onChange={(ev)=>{
@@ -201,24 +219,7 @@ function Preview(props) {
             {/* <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <hr />
             </Col> */}
-            <Col className="pt-4" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                {/* template image preview, {props.update}
-                <p>Image information, 1,234 bytes, 1024 * 2048.</p> */}
-                {grid.map((row, index) => (
-                    <div className="cover" key={index} style={{
-                            marginLeft:`${row.mX}px`,
-                            marginTop:`${row.mY}px`,
-                            width:`${row.wX}px`,
-                            height:`${row.wY}px`,
-                            lineHeight:`${row.wY}px`,
-                            backgroundColor:self.getBackground(index),
-                        }} 
-                        onClick={(ev)=>{
-                            self.clickGrid(index);
-                        }}>{index}</div>
-                ))}
-                {<img id="preview" ref={ref} src={image} alt="Preview of full iNFT" />}
-            </Col>
+            
         </Row>
     )
 }

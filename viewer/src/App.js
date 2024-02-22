@@ -1,6 +1,9 @@
 import { Container,Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+// iNFT definition
+// anchor://aabb/217148
+
 function App() {
 
   const size = {

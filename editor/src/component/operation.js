@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 
 import  Data from "../lib/data";
 
+let wsAPI=null;
+let linking = false;
+const server="ws://127.0.0.1:9944";
+
 function Operation(props) {
     const size = {
         row: [12],
@@ -16,14 +20,105 @@ function Operation(props) {
     let [anchor, setAnchor]=useState("");
     let [password,setPassword]=useState("");
 
+    let [info, setInfo]=useState("Encry JSON file");
+
     const self={
+        link:(uri,ck)=>{
+            //console.log(uri);
+            if(linking) return setTimeout(()=>{
+                self.link(uri,ck);
+            },500);
+
+            if(wsAPI!==null)return ck && ck(wsAPI);
+
+            linking=true;
+            const { ApiPromise, WsProvider } =window.Polkadot;
+            //console.log(window.Polkadot);
+            try {
+                const provider = new WsProvider(uri);
+                ApiPromise.create({ provider: provider }).then((api) => {
+                  wsAPI=api;
+                  linking=false;
+                  return ck && ck(wsAPI);
+                });
+            } catch (error) {
+                console.log(error);
+                linking=false;
+                return ck && ck(error);
+            }
+        },
+        getNFTData:(type)=>{
+            const bs64=Data.get("template");
+            const NFT=Data.get("NFT");
+            const basic=Data.get("size");
+            if(bs64===null || NFT===null || basic==null) return false;
+
+            return {
+                image:bs64,         //图像的base64编码，带前缀
+                size:basic.target,  //图像的基本配置
+                cell:basic.cell,    //图像的裁切
+                grid:basic.grid,
+                parts:NFT.puzzle,        //图像的组成
+                type:type,             //2D的图像， [1.像素化产品;2.2D图像;3.3D模型]
+            }
+        },
+        getNFTProtocol:()=>{
+            return {
+                type:"NFT",
+                fmt:"json",
+            }
+        },
         clickWrite:(ev)=>{
-            console.log(encryFile,anchor,password);
-            console.log(`Ready to write to anchor`);
+            self.link(server,(WS)=>{
+                const keyring = new window.Polkadot.Keyring({ type: "sr25519" });
+                const pair = keyring.createFromJson(encryFile);
+
+                try {
+                    pair.decodePkcs8(password);
+                    //console.log(WS);
+                    const ankr=window.AnchorJS;
+                    ankr.set(WS);
+                    const raw=self.getNFTData(2);
+                    const protocol=self.getNFTProtocol();
+
+                    //console.log(raw);
+                    //console.log(protocol);
+
+                    ankr.write(pair,anchor, JSON.stringify(raw), JSON.stringify(protocol), (res)=>{
+                        console.log(res);
+                    });
+                }catch(error){
+
+                }
+            })
         },
         changeJSON:(ev)=>{
             setEncryFile(ev.target.value);
             props.fresh();
+            //1.这里需要对文件内容进行处理
+            try {
+                const fa = ev.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                try {
+                    const sign = JSON.parse(e.target.result);
+                    if (!sign.address || !sign.encoded)
+                    return setInfo("Error encry JSON file");
+                    if (sign.address.length !== 48)
+                    return setInfo("Error SS58 address");
+                    if (sign.encoded.length !== 268)
+                    return setInfo("Error encoded verification");
+                    setInfo("Encoded account file loaded");
+                    setEncryFile(sign);
+                } catch (error) {
+                    console.log(error);
+                    setInfo("Not encry JSON file");
+                }
+                };
+                reader.readAsText(fa);
+            } catch (error) {
+                setInfo("Can not load target file");
+            }
         },
         changePassword:(ev)=>{
             setPassword(ev.target.value);
@@ -55,7 +150,7 @@ function Operation(props) {
                 <hr />
             </Col>
             <Col lg={size.encry[0]} xl={size.encry[0]} xxl={size.encry[0]} >
-                <small>Encry JSON file</small>
+                <small>{info}</small>
                 <input disabled={disable} className="form-control" type="file" onChange={(ev)=>{
                     self.changeJSON(ev);
                 }}/>
