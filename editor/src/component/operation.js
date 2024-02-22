@@ -64,8 +64,11 @@ function Operation(props) {
         },
         getNFTProtocol:()=>{
             return {
-                type:"NFT",
+                type:"data",        //数据类型的格式
                 fmt:"json",
+                tpl:"iNFT",
+                //app:"",
+                //auth:"",          //权限设置的地方，可以免费供使用，否则采用白名单的方式来处理
             }
         },
         clickWrite:(ev)=>{

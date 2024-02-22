@@ -1,6 +1,6 @@
-# Identifiable NFT ( iNFT in short )
+# Identifiable NFT ( iNFT in short ) Viewer
 
-- 数字化的
+- 可识别的NFT的编辑期，支持直接发布iNFT的模板
 
 ## Feather
 
