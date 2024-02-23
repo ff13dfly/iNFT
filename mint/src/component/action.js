@@ -1,4 +1,4 @@
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 function Action(props) {
@@ -6,10 +6,15 @@ function Action(props) {
         row: [12],
     };
 
-    let [width,setWidth]    =useState(400);
-    let [height, setHeight] =useState(400);
     const self={
+        clickMint:(ev)=>{
+            console.log(`Ready to mint an iNFT.`);
+            //1.检测是否有账号
 
+            //2.检测账号的余额
+
+            //3.准备数据，开始写入
+        },
     }
     useEffect(() => {
        
@@ -19,7 +24,9 @@ function Action(props) {
         <div id="footer">
             <Row>
                 <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                    <button className="btn btn-lg btn-primary">Mint Now!</button>
+                    <button className="btn btn-lg btn-primary" onClick={(ev)=>{
+                        self.clickMint(ev);
+                    }}>Mint Now!</button>
                 </Col>
             </Row>
         </div>

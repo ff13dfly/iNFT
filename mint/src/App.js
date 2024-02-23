@@ -5,8 +5,11 @@ import Preview from "./component/render";
 import Action from "./component/action";
 import Header from "./component/header";
 
+import  Data from "./lib/data";
+
 // iNFT definition
 // anchor://aabb/217148
+let subs={};            //加载订阅的方法
 
 function App() {
 
@@ -14,23 +17,26 @@ function App() {
     row: [12],
     side:[6,3,3],
   };
-
+  let [update, setUpdate]= useState(0);
   let [show,setShow]=useState(false);
   let [title,setTitle]=useState("");
   let [content,setContent]=useState("");
 
   const config={
     default:"anchor://aabb/217148",
-    //default:"anchor://aabb",
     server:"ws://127.0.0.1:9944",
   }
+
+  // const config={
+  //   default:"anchor://aabb/777139",
+  //   server:"wss://dev2.metanchor.net",
+  // }
 
   let wsAPI=null;
   let linking=false;
 
   const self={
     init:(uri,ck)=>{
-      //console.log(uri);
       if(linking) return setTimeout(()=>{
           self.link(uri,ck);
       },500);
@@ -39,10 +45,11 @@ function App() {
 
       linking=true;
       const { ApiPromise, WsProvider } =window.Polkadot;
-      //console.log(window.Polkadot);
+      console.log(`Linking to ${config.server}`);
       try {
           const provider = new WsProvider(uri);
           ApiPromise.create({ provider: provider }).then((api) => {
+            console.log(`Linked to ${config.server}`);
             wsAPI=api;
             linking=false;
             return ck && ck(wsAPI);
@@ -53,14 +60,7 @@ function App() {
           return ck && ck(error);
       }
     },
-    dialog:(ctx,title)=>{
-      setTitle(title);
-      setContent(ctx);
-      setShow(true);
-    },
-    fresh:()=>{
-
-    },
+    
     read:(alink,ck)=>{
       const anchorJS=window.AnchorJS;
       const startAPI = {
@@ -75,17 +75,27 @@ function App() {
           },
           agent:{
               "process":(txt)=>{
-                  self.step(txt);
+                console.log(txt);
+                  //self.step(txt);
               },
           },
       };
-      console.log(window.Easy);
       const easyRun = window.Easy.easyRun;
-      //const alink=config.default;
       easyRun(alink, startAPI, (res) => {
-        console.log(res);
         return ck && ck(res);
       });
+    },
+    dialog:(ctx,title)=>{
+      setTitle(title);
+      setContent(ctx);
+      setShow(true);
+    },
+    fresh:()=>{
+      update++;
+      setUpdate(update);
+    },
+    subscribe:(key,fun)=>{
+      subs[key]=fun;
     },
   }
 
@@ -94,18 +104,38 @@ function App() {
       const anchorJS=window.AnchorJS;
       anchorJS.set(API);
 
+      console.log(`Ready to read data.`);
+
       self.read(config.default,(res)=>{
         console.log(res);
-      })
+        const key=`${res.location[0]}_${res.location[1]}`;
+        if(res.data && res.data[key]!==undefined){
+          const dt=res.data[key];
+          try {
+            const raw=JSON.parse(dt.raw);
+            Data.set("template",raw);
+            self.fresh();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+
+      anchorJS.subcribe((anchors,block,hash)=>{
+        for(let k in subs){
+          subs[k](block,hash);
+        }
+      });
+
     });
   }, []);
   
   return (
     <div>
       <Container>
-        <Header fresh={self.fresh} dialog={self.dialog}/>
-        <Preview fresh={self.fresh}/>
-        <Action fresh={self.fresh}/>
+        <Header fresh={self.fresh} dialog={self.dialog} update={update}/>
+        <Preview fresh={self.fresh} update={update} subscribe={self.subscribe}/>
+        <Action fresh={self.fresh} update={update}/>
       </Container>
 
       <Modal show={show} size="lg"

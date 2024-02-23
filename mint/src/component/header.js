@@ -16,13 +16,13 @@ function Header(props) {
 
     const self={
         clickMine:(ev)=>{
-            dialog(<Mine/>,"My iNFT list");
+            dialog(<Mine fresh={props.fresh} dialog={props.dialog} />,"My iNFT list");
         },
         clickTemplate:(ev)=>{
-            dialog(<Template/>,"Template");
+            dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Template");
         },
         clickAccount:(ev)=>{
-            dialog(<Account/>,"Account Management");
+            dialog(<Account fresh={props.fresh} dialog={props.dialog} />,"Account Management");
         },
 
     }
