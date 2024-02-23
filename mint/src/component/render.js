@@ -68,7 +68,6 @@ function Preview(props) {
                     }
                     self.decode(hash,pen,img,tpl.parts,ss);
                     props.subscribe("preview",(bk,bhash)=>{
-                        //console.log(hash)
                         setBlock(bk);
                         setHash(bhash);
                         Render.clear(dom_id);

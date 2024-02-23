@@ -9,7 +9,7 @@ const self={
         //console.log(key,value);
         if(keys[key]===undefined) return false;
         const name=keys[key];
-        localStorage[name]=value;
+        localStorage.setItem(name,value);
         return true;
     },
     get:(key)=>{
@@ -17,7 +17,12 @@ const self={
         if(keys[key]===undefined) return false;
         const name=keys[key];
         return localStorage[name];
-    }
+    },
+    remove:(key)=>{
+        if(keys[key]===undefined) return false;
+        const name=keys[key];
+        localStorage.removeItem(name);
+    },
 };
 
 export default self;

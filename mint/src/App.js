@@ -6,6 +6,7 @@ import Action from "./component/action";
 import Header from "./component/header";
 
 import  Data from "./lib/data";
+import  Local from "./lib/local";
 
 // iNFT definition
 // anchor://aabb/217148
@@ -45,11 +46,10 @@ function App() {
 
       linking=true;
       const { ApiPromise, WsProvider } =window.Polkadot;
-      console.log(`Linking to ${config.server}`);
       try {
           const provider = new WsProvider(uri);
           ApiPromise.create({ provider: provider }).then((api) => {
-            console.log(`Linked to ${config.server}`);
+            //console.log(`Linked to ${config.server}`);
             wsAPI=api;
             linking=false;
             return ck && ck(wsAPI);
@@ -76,7 +76,6 @@ function App() {
           agent:{
               "process":(txt)=>{
                 console.log(txt);
-                  //self.step(txt);
               },
           },
       };
@@ -99,7 +98,19 @@ function App() {
     },
   }
 
+  const tpls=Local.get("template");
+  if(!tpls){
+    const data=[]
+    data.push({
+      alink:config.default,
+      name:"",
+      tags:[]
+    })
+    Local.set("template",JSON.stringify(data));
+  }
+
   useEffect(() => {
+    //1.连接服务器
     self.init(config.server,(API)=>{
       const anchorJS=window.AnchorJS;
       anchorJS.set(API);
@@ -107,7 +118,7 @@ function App() {
       console.log(`Ready to read data.`);
 
       self.read(config.default,(res)=>{
-        console.log(res);
+        //console.log(res);
         const key=`${res.location[0]}_${res.location[1]}`;
         if(res.data && res.data[key]!==undefined){
           const dt=res.data[key];
@@ -126,7 +137,6 @@ function App() {
           subs[k](block,hash);
         }
       });
-
     });
   }, []);
   
@@ -135,7 +145,7 @@ function App() {
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update}/>
         <Preview fresh={self.fresh} update={update} subscribe={self.subscribe}/>
-        <Action fresh={self.fresh} update={update}/>
+        <Action fresh={self.fresh} dialog={self.dialog} update={update}/>
       </Container>
 
       <Modal show={show} size="lg"

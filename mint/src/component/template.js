@@ -9,6 +9,7 @@ function Template(props) {
         add: [8,4],
     };
 
+    let [list, setList]=useState([]);
     let [alink, setAlink]= useState("anchor://");
 
     const self = {
@@ -18,12 +19,21 @@ function Template(props) {
         clickAdd:(ev)=>{
             console.log(`Add a template`);
             const tpls=Local.get("template");
-            const list=!tpls?[]:JSON.parse(tpls);
-            console.log(list);
+            const nlist=!tpls?[]:JSON.parse(tpls);
+            nlist.unshift({
+                alink:alink,
+                name:"",
+                tags:[]
+            });
+            Local.set("template",JSON.stringify(nlist));
+            setList(nlist);
         },
     }
 
     useEffect(() => {
+        const tpls=Local.get("template");
+        const nlist=!tpls?[]:JSON.parse(tpls);
+        setList(nlist);
 
     }, [props.update]);
 
@@ -42,6 +52,11 @@ function Template(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
+            {list.map((row, index) => (
+                <Col key={index} sm={size.row[0]} xs={size.row[0]}>
+                    {JSON.stringify(row)}
+                </Col>
+            ))}
         </Row>
     )
 }
