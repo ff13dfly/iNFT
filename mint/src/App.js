@@ -144,7 +144,7 @@ function App() {
     <div>
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update}/>
-        <Preview fresh={self.fresh} update={update} subscribe={self.subscribe}/>
+        <Preview fresh={self.fresh} update={update} subscribe={self.subscribe} node={config.server}/>
         <Action fresh={self.fresh} dialog={self.dialog} update={update}/>
       </Container>
 

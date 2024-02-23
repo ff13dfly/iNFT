@@ -1,8 +1,12 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Result from "./result";
+
 import Local from "../lib/local";
 import Account from "./account";
+import tools from "../lib/tools"
+
 
 function Action(props) {
     const size = {
@@ -10,6 +14,7 @@ function Action(props) {
         password:[2,8,2]
     };
 
+    let [info,setInfo]=useState("");
     let [password, setPassword]=useState("");
     let [hidden,setHidden]=useState(true);
     let [disable,setDisable]=useState(false);
@@ -39,6 +44,29 @@ function Action(props) {
             }
         },
 
+        getAnchorName:(ck)=>{
+            const name=`iNFT_${tools.char(14)}`;
+            AnchorJS.search(name,(res)=>{
+                if(res===false) return ck && ck(name);
+                return self.getAnchorName(ck);
+            });
+        },
+
+        getProtocol:()=>{
+            return {
+                type: "data",        //数据类型的格式
+                fmt: "json",
+                tpl: "iNFT",
+            }
+        },
+
+        getRaw:(tpl)=>{
+            return {
+                source:tpl.alink,   //使用的mint模版
+                stamp:[],           //辅助证明的各个链的数据
+            }
+        },
+
         clickMint:(ev)=>{
             const fa = Local.get("login");
             if(fa===undefined){
@@ -50,9 +78,38 @@ function Action(props) {
                 }
                 setDisable(true);
                 self.vertify(fa,password,(pair)=>{
-                    setDisable(false);
+                    if(pair.error!==undefined){
+                        setInfo(pair.error);
+                        setPassword("");
+                        return false;
+                    }
+                    //setDisable(false);
 
-                    //AnchorJS.write(pair)
+                    //AnchorJS.write(pair);
+                    self.getAnchorName((name)=>{
+                        const list=Local.get("template");
+                        try {
+                            const tpls=JSON.parse(list);
+                            const target=tpls[0];
+                            const raw=self.getRaw(target);
+                            const protocol=self.getProtocol();
+                            AnchorJS.write(pair,name,raw,protocol,(res)=>{
+                                //console.log(res);
+                                setInfo(res.message);
+                                if(res.step==="Finalized"){
+                                    setDisable(false);
+                                    props.dialog(<Result anchor={name}/>,"iNFT Result");
+                                    setTimeout(()=>{
+                                        setInfo("");
+                                    },400);
+                                }
+                            });
+                        } catch (error) {
+                            console.log(error);
+                            Local.remove("template");
+                        }
+                       
+                    });
                 });
             }
         },
@@ -66,6 +123,9 @@ function Action(props) {
     return (
         <div id="footer">
             <Row>
+                <Col className="text-center" hidden={hidden} sm={size.row[0]} xs={size.row[0]}>
+                    <small>{info}</small>
+                </Col>
                 <Col className="text-center" hidden={hidden} sm={size.password[0]} xs={size.password[0]}>
 
                 </Col>
@@ -79,6 +139,7 @@ function Action(props) {
                 </Col>
                 <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                     <button className="btn btn-lg btn-primary" disabled={disable} onClick={(ev)=>{
+                        setInfo("");
                         self.clickMint(ev);
                     }}>Mint Now!</button>
                 </Col>

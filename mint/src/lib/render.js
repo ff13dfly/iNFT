@@ -14,13 +14,37 @@ const self={
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
+    decode: (hash, pen, img, parts, tpl, active) => {
+        const { cell, grid } = tpl;
+        //const multi=window.devicePixelRatio;
+        const multi = 1;
+        for (let i = 0; i < parts.length; i++) {
+            //获取不同的图像
+            const part = parts[i];
+            const [hash_start, hash_step, amount] = part.value;
+            const [gX, gY, eX, eY] = part.img;
+            const [px, py] = part.position;
+            const [zx, zy] = part.center;
+
+            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
+            const index = num % amount;     //图像的位次
+            const max = grid[0] / (1 + eX);
+            const br = Math.floor(index / max);
+
+            const cx = cell[0] * (eX + 1) * (index % max);
+            const cy = cell[1] * gY + br * cell[1] * (1 + eY);
+            const dx = cell[0] * (eX + 1);
+            const dy = cell[1] * (eY + 1);
+            const vx = px - zx * cell[0] * (1 + eX);
+            const vy = py - zy * cell[1] * (1 + eY);
+            pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
+        }
+    },
 }
 
 const Render= {
-    create:(id,cfg)=>{
-        //console.log(`Ready to init canvas.`);
-        if(RDS[id]!==undefined) return RDS[id];
-        //console.log(`First time to init`);
+    create:(id,force)=>{
+        if(RDS[id]!==undefined && force!==true) return RDS[id];
         const cvs=document.getElementById(id);		//1.创建好canvas并返回画笔
 		RDS[id]=cvs.getContext("2d");
         self.border(id);
@@ -50,6 +74,13 @@ const Render= {
     },
     clear:(id)=>{
         self.border(id);
+    },
+    preview:(pen,bs64,hash,parts,basic)=>{
+        const img = new Image();
+        img.src = bs64;
+        img.onload = (e) => {
+            self.decode(hash, pen, img, parts, basic);
+        }
     },
 };
 
