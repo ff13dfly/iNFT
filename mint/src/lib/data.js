@@ -35,6 +35,11 @@ const self={
         if(map[main][key]===undefined) return false;
         return map[main][key]
     },
+    exsistHash:(main,key)=>{
+        if(map[main]===undefined) return false;
+        if(map[main][key]===undefined) return false;
+        return true;
+    },
     removeHash:(main,key)=>{
         if(map[main]===undefined) return false;
         if(map[main][key]===undefined) return false;

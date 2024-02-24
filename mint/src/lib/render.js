@@ -82,6 +82,11 @@ const Render= {
             self.decode(hash, pen, img, parts, basic);
         }
     },
+    // thumb:(pen,bs64,hash,parts,basic)=>{
+	// 	const ctx=pen.getContext("experimental-webgl",{preserveDrawingBuffer:true});
+	// 	const bs=ctx.canvas.toDataURL("image/jpeg");
+	// 	return bs;
+    // },
 };
 
 export default Render;

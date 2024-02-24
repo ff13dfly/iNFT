@@ -18,6 +18,7 @@ function App() {
     row: [12],
     side:[6,3,3],
   };
+  
   let [update, setUpdate]= useState(0);
   let [show,setShow]=useState(false);
   let [title,setTitle]=useState("");
