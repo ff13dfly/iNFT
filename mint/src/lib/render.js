@@ -75,6 +75,17 @@ const Render= {
     clear:(id)=>{
         self.border(id);
     },
+    fill:(pen,color)=>{
+        const w=pen.canvas.clientWidth;
+        const h=pen.canvas.clientHeight;
+        pen.fillStyle=color===undefined?config.background:color;
+		pen.fillRect(0,0,w,h);
+    },
+    reset:(pen)=>{
+        const w=pen.canvas.clientWidth;
+        const h=pen.canvas.clientHeight;
+        pen.clearRect(0, 0, w, h);
+    },
     preview:(pen,bs64,hash,parts,basic)=>{
         const img = new Image();
         img.src = bs64;
@@ -82,11 +93,6 @@ const Render= {
             self.decode(hash, pen, img, parts, basic);
         }
     },
-    // thumb:(pen,bs64,hash,parts,basic)=>{
-	// 	const ctx=pen.getContext("experimental-webgl",{preserveDrawingBuffer:true});
-	// 	const bs=ctx.canvas.toDataURL("image/jpeg");
-	// 	return bs;
-    // },
 };
 
 export default Render;

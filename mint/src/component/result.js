@@ -24,7 +24,6 @@ function Result(props) {
     const fix=40;
     useEffect(() => {
         Chain.read(`anchor://${anchor}`,(res)=>{
-            //console.log(res);
             const bk=res.location[1];
             const alink=`anchor://${anchor}/${bk}`;
             const key=`${anchor}_${bk}`.toLocaleLowerCase();

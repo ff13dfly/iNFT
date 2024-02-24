@@ -35,6 +35,11 @@ code {
   height: 300px;
 }
 
+.mine{
+  width: 180px;
+  height: 180px;
+}
+
 /*限制高度的容器*/
 .limited{
   width: 100%;

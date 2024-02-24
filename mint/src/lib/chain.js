@@ -67,7 +67,9 @@ const self = {
         }
         subs[key]=fun;
     },
-
+    search:(name,ck)=>{
+        return anchorJS.search(name,ck);
+    },
     balance:(address,ck)=>{
         return anchorJS.balance(address,ck);
     },

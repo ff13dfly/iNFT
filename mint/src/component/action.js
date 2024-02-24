@@ -62,7 +62,7 @@ function Action(props) {
 
         getRaw:(tpl)=>{
             return {
-                source:tpl.alink,   //使用的mint模版
+                tpl:tpl.alink,      //使用的mint模版
                 stamp:[],           //辅助证明的各个链的数据
             }
         },

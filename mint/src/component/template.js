@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import  Local from "../lib/local";
 import  Chain from "../lib/chain";
 import  Data from "../lib/data";
-import Render from "../lib/render";
+import  Render from "../lib/render";
 
 function Template(props) {
     const size = {
@@ -15,10 +15,9 @@ function Template(props) {
 
     let [list, setList]=useState([]);
     let [alink, setAlink]= useState("anchor://");
-    let [image,setImage]=useState("image/empty.png");
+    let [image, setImage]=useState("image/empty.png");
 
     const zero="0x0000000000000000000000000000000000000000000000000000000000000000";
-    
     const self = {
         changeAlink:(ev)=>{
             setAlink(ev.target.value.trim());
@@ -41,7 +40,6 @@ function Template(props) {
             if(!Data.exsistHash("cache",single)){
                 return Chain.read(single,(res)=>{
                     const key=`${res.location[0]}_${res.location[1]}`;
-                    console.log(res.data[key]);
                     res.data[key].raw=JSON.parse(res.data[key].raw);
                     Data.setHash("cache",single,res.data[key]);
                     return self.cacheData(alinks,ck);
@@ -75,8 +73,6 @@ function Template(props) {
                 const pen = Render.create(dom_id);
                 const row=last[0];
                 const dt=row.data.raw;
-                //console.log(row);
-
                 const basic = {
                     cell: dt.cell,
                     grid: dt.grid,
@@ -84,7 +80,6 @@ function Template(props) {
                 }
                 Render.clear(dom_id);
                 Render.preview(pen,dt.image,zero,dt.parts,basic);
-                //const ctx=pen.getContext("experimental-webgl",{preserveDrawingBuffer:true});
                 const bs=pen.canvas.toDataURL("image/jpeg");
                 setImage(bs);
             },200);
