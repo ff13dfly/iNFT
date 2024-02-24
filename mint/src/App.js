@@ -7,7 +7,7 @@ import Header from "./component/header";
 
 import  Data from "./lib/data";
 import  Local from "./lib/local";
-
+import  Chain from "./lib/chain";
 // iNFT definition
 // anchor://aabb/217148
 let subs={};            //加载订阅的方法
@@ -32,58 +32,8 @@ function App() {
   //   default:"anchor://aabb/777139",
   //   server:"wss://dev2.metanchor.net",
   // }
-
-  let wsAPI=null;
-  let linking=false;
-
+  
   const self={
-    init:(uri,ck)=>{
-      if(linking) return setTimeout(()=>{
-          self.link(uri,ck);
-      },500);
-
-      if(wsAPI!==null)return ck && ck(wsAPI);
-
-      linking=true;
-      const { ApiPromise, WsProvider } =window.Polkadot;
-      try {
-          const provider = new WsProvider(uri);
-          ApiPromise.create({ provider: provider }).then((api) => {
-            //console.log(`Linked to ${config.server}`);
-            wsAPI=api;
-            linking=false;
-            return ck && ck(wsAPI);
-          });
-      } catch (error) {
-          console.log(error);
-          linking=false;
-          return ck && ck(error);
-      }
-    },
-    
-    read:(alink,ck)=>{
-      const anchorJS=window.AnchorJS;
-      const startAPI = {
-          common: {
-              "latest": anchorJS.latest,
-              "target": anchorJS.target,
-              "history": anchorJS.history,
-              "owner": anchorJS.owner,
-              "subcribe": anchorJS.subcribe,
-              "multi":anchorJS.multi,
-              "block": anchorJS.block,
-          },
-          agent:{
-              "process":(txt)=>{
-                console.log(txt);
-              },
-          },
-      };
-      const easyRun = window.Easy.easyRun;
-      easyRun(alink, startAPI, (res) => {
-        return ck && ck(res);
-      });
-    },
     dialog:(ctx,title)=>{
       setTitle(title);
       setContent(ctx);
@@ -111,13 +61,8 @@ function App() {
 
   useEffect(() => {
     //1.连接服务器
-    self.init(config.server,(API)=>{
-      const anchorJS=window.AnchorJS;
-      anchorJS.set(API);
-
-      console.log(`Ready to read data.`);
-
-      self.read(config.default,(res)=>{
+    Chain.link(config.server,(API)=>{
+      Chain.read(config.default,(res)=>{
         //console.log(res);
         const key=`${res.location[0]}_${res.location[1]}`;
         if(res.data && res.data[key]!==undefined){
@@ -131,12 +76,6 @@ function App() {
           }
         }
       });
-
-      anchorJS.subcribe((anchors,block,hash)=>{
-        for(let k in subs){
-          subs[k](block,hash);
-        }
-      });
     });
   }, []);
   
@@ -144,7 +83,7 @@ function App() {
     <div>
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update}/>
-        <Preview fresh={self.fresh} update={update} subscribe={self.subscribe} node={config.server}/>
+        <Preview fresh={self.fresh} update={update} node={config.server}/>
         <Action fresh={self.fresh} dialog={self.dialog} update={update}/>
       </Container>
 

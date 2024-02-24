@@ -12,6 +12,8 @@ function Template(props) {
     let [list, setList]=useState([]);
     let [alink, setAlink]= useState("anchor://");
 
+    
+
     const self = {
         changeAlink:(ev)=>{
             setAlink(ev.target.value.trim());
@@ -28,12 +30,27 @@ function Template(props) {
             Local.set("template",JSON.stringify(nlist));
             setList(nlist);
         },
+        cacheData:(alinks,ck)=>{
+
+
+            return ck && ck(true);
+        },
     }
 
     useEffect(() => {
         const tpls=Local.get("template");
         const nlist=!tpls?[]:JSON.parse(tpls);
-        setList(nlist);
+        
+        const arr=[];
+        for(let i=0;i<nlist.length;i++){
+            arr.push(nlist[i].alink);
+        }
+
+        self.cacheData(arr,()=>{
+            setList(nlist);
+        });
+
+        
 
     }, [props.update]);
 

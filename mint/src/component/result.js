@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Local from "../lib/local";
 import Render from "../lib/render";
 import Data from "../lib/data";
-import tools from "../lib/tools"
+import tools from "../lib/tools";
+import Chain from "../lib/chain";
 
 function Result(props) {
     const size = {
@@ -13,7 +14,6 @@ function Result(props) {
     };
 
     const anchor=props.anchor;
-    const AnchorJS=window.AnchorJS;
 
     let [width,setWidth]    =useState(100);
     let [height, setHeight] =useState(100);
@@ -23,13 +23,16 @@ function Result(props) {
     const dom_id="pre_result";
     const fix=40;
     useEffect(() => {
-        AnchorJS.search(anchor,(res)=>{
+        Chain.read(`anchor://${anchor}`,(res)=>{
             //console.log(res);
-            const alink=`anchor://${res.name}/${res.block}`;
-            const raw=JSON.parse(res.raw);
-            AnchorJS.hash(res.block,(hash)=>{
+            const bk=res.location[1];
+            const alink=`anchor://${anchor}/${bk}`;
+            const key=`${anchor}_${bk}`.toLocaleLowerCase();
+            const adata=res.data[key];
+            const raw=JSON.parse(adata.raw);
 
-                setBlock(res.block);
+            Chain.hash(bk,(hash)=>{
+                setBlock(bk);
                 setBlockHash(hash);
 
                 //1.保存数据

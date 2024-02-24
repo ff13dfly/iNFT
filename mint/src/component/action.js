@@ -6,7 +6,7 @@ import Result from "./result";
 import Local from "../lib/local";
 import Account from "./account";
 import tools from "../lib/tools"
-
+import Chain from "../lib/chain";
 
 function Action(props) {
     const size = {
@@ -20,7 +20,6 @@ function Action(props) {
     let [disable,setDisable]=useState(false);
 
     const {Keyring}=window.Polkadot;
-    const AnchorJS=window.AnchorJS;
 
     const self={
         changePassword:(ev)=>{
@@ -46,8 +45,9 @@ function Action(props) {
 
         getAnchorName:(ck)=>{
             const name=`iNFT_${tools.char(14)}`;
-            AnchorJS.search(name,(res)=>{
-                if(res===false) return ck && ck(name);
+            Chain.read(`anchor://${name}`,(res)=>{
+                //console.log(res);
+                if(res.location[1]===0) return ck && ck(name);
                 return self.getAnchorName(ck);
             });
         },
@@ -83,9 +83,6 @@ function Action(props) {
                         setPassword("");
                         return false;
                     }
-                    //setDisable(false);
-
-                    //AnchorJS.write(pair);
                     self.getAnchorName((name)=>{
                         const list=Local.get("template");
                         try {
@@ -93,8 +90,7 @@ function Action(props) {
                             const target=tpls[0];
                             const raw=self.getRaw(target);
                             const protocol=self.getProtocol();
-                            AnchorJS.write(pair,name,raw,protocol,(res)=>{
-                                //console.log(res);
+                            Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
                                 setInfo(res.message);
                                 if(res.step==="Finalized"){
                                     setDisable(false);

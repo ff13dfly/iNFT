@@ -5,6 +5,7 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 import Local from "../lib/local";
+import Chain from "../lib/chain";
 
 function Preview(props) {
     const size = {
@@ -34,7 +35,7 @@ function Preview(props) {
                     grid: tpl.grid,
                     target: tpl.size
                 }
-                props.subscribe("preview", (bk, bhash) => {
+                Chain.subscribe("preview", (bk, bhash) => {
                     setBlock(bk);
                     setHash(bhash);
                     Render.clear(dom_id);

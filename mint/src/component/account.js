@@ -6,6 +6,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
+import Chain from "../lib/chain";
 
 function Account(props) {
     const size = {
@@ -25,9 +26,7 @@ function Account(props) {
 
     let [password, setPassword]= useState("");
     let [dis_new, setNewDisable] = useState(true);
-
-
-    const AnchorJS=window.AnchorJS;
+    
     const {Keyring}=window.Polkadot;
 
     const self = {
@@ -100,8 +99,7 @@ function Account(props) {
                 const account=JSON.parse(fa);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}`);
-                AnchorJS.balance(account.address,(res)=>{
-                    //console.log(res);
+                Chain.balance(account.address,(res)=>{
                     setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
                 })
             } catch (error) {
