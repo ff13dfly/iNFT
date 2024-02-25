@@ -71,6 +71,10 @@ function App() {
           try {
             const raw=JSON.parse(dt.raw);
             Data.set("template",raw);
+
+            dt.raw=JSON.parse(dt.raw);
+            Data.setHash("cache",config.default,dt);
+            
             self.fresh();
           } catch (error) {
             console.log(error);

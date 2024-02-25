@@ -48,7 +48,6 @@ function Preview(props) {
         if (tpls !== undefined) {
             const list = JSON.parse(tpls);
             const tpl = list[0];
-            //console.log(tpl);
             setAlink(tpl.alink);
         }
     }, [props.update]);

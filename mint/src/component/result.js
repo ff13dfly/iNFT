@@ -22,7 +22,15 @@ function Result(props) {
 
     const dom_id="pre_result";
     const fix=40;
+
+    
+
     useEffect(() => {
+        const fa = Local.get("login");
+        if(!fa) return false;
+        const login=JSON.parse(fa);
+        const addr=login.address;
+
         Chain.read(`anchor://${anchor}`,(res)=>{
             const bk=res.location[1];
             const alink=`anchor://${anchor}/${bk}`;
@@ -36,8 +44,10 @@ function Result(props) {
 
                 //1.保存数据
                 const its=Local.get("list");
-                const nlist=its===undefined?[]:JSON.parse(its);
-                nlist.unshift({link:alink,hash:hash});
+                const nlist=its===undefined?{}:JSON.parse(its);
+                if(nlist[addr]===undefined)nlist[addr]=[];
+                nlist[addr].unshift({link:alink,hash:hash});
+
                 Local.set("list",JSON.stringify(nlist));
                 
                 //2.显示数据

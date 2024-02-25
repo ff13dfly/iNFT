@@ -78,6 +78,7 @@ function Mine(props) {
             //1.获取数据内容
             const me=arr.shift();
             const me_anchor=Data.getHash("cache",me.link.toLocaleLowerCase());
+            //console.log(me_anchor);
             const row=Data.getHash("cache",me_anchor.raw.tpl);
             const dt=row.raw;
             const basic = {
@@ -101,26 +102,29 @@ function Mine(props) {
             //3.获取生成的图像
             return setTimeout(()=>{
                 me.bs64=pen.canvas.toDataURL("image/jpeg");
-                me.block=row.block;
+                me.block=me_anchor.block;
                 todo.push(me);
                 con.innerHTML="";
 
                 return self.getThumbs(arr,dom_id,ck,todo);
-            },0);
+            },50);
         },
     }
 
     const dom_id="pre_mine";
     useEffect(() => {
+        const fa = Local.get("login");
+        if(!fa) return false;
+        const login=JSON.parse(fa);
+        const addr=login.address;
         const ls=Local.get("list");
         if(ls!==undefined){
             try {
                 const nlist=JSON.parse(ls);
-                const plist=self.page(nlist,1,10);
+                const plist=nlist[addr]===undefined?[]:self.page(nlist[addr],1,10);
                 self.cacheData(self.getAlinks(plist),(tpls)=>{
                     self.cacheTemplate(tpls,()=>{
                         self.getThumbs(plist,dom_id,(glist)=>{
-                            //console.log(glist);
                             setList(glist);
                         });
                     });

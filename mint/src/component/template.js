@@ -37,6 +37,7 @@ function Template(props) {
         cacheData:(alinks,ck)=>{
             if(alinks.length===0) return ck && ck();
             const single=alinks.pop();
+            //console.log(Data.exsistHash("cache",single));
             if(!Data.exsistHash("cache",single)){
                 return Chain.read(single,(res)=>{
                     const key=`${res.location[0]}_${res.location[1]}`;
@@ -47,6 +48,43 @@ function Template(props) {
             }else{
                 return self.cacheData(alinks,ck);
             }
+        },
+        getThumbs:(arr,dom_id,ck,todo)=>{
+            //console.log(arr);
+            if(todo===undefined) todo=[];
+            if(arr.length===0) return ck && ck(todo);
+
+            //1.获取数据内容
+            const me=arr.shift();
+            const row=Data.getHash("cache",me.alink.toLocaleLowerCase());
+            const dt=row.raw;
+            const basic = {
+                cell: dt.cell,
+                grid: dt.grid,
+                target: dt.size
+            }
+
+            //2.准备绘图用的canvas
+            const con = document.getElementById("tpl_handle");
+            const cvs = document.createElement('canvas');
+            cvs.id = dom_id;
+            cvs.width=400;
+            cvs.height=400;
+            con.appendChild(cvs);
+
+            const pen = Render.create(dom_id,true);
+            Render.reset(pen);
+            Render.preview(pen,dt.image,zero,dt.parts,basic);
+
+            //3.获取生成的图像
+            return setTimeout(()=>{
+                me.bs64=pen.canvas.toDataURL("image/jpeg");
+                me.block=row.block;
+                todo.push(me);
+                con.innerHTML="";
+
+                return self.getThumbs(arr,dom_id,ck,todo);
+            },50);
         },
     }
 
@@ -67,22 +105,10 @@ function Template(props) {
                 nlist[i].data=Data.getHash("cache",nlist[i].alink);
                 last.push(nlist[i]);
             }
-            setList(last);
 
-            setTimeout(()=>{
-                const pen = Render.create(dom_id);
-                const row=last[0];
-                const dt=row.data.raw;
-                const basic = {
-                    cell: dt.cell,
-                    grid: dt.grid,
-                    target: dt.size
-                }
-                Render.clear(dom_id);
-                Render.preview(pen,dt.image,zero,dt.parts,basic);
-                const bs=pen.canvas.toDataURL("image/jpeg");
-                setImage(bs);
-            },200);
+            self.getThumbs(last,dom_id,(glist)=>{
+                setList(glist);
+            });
         });
     }, [props.update]);
 
@@ -98,31 +124,32 @@ function Template(props) {
                     self.clickAdd(ev);
                 }}>Add</button>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <canvas hidden={true} width={400} height={400} id={dom_id}></canvas>
+            <Col hidden={true} id="tpl_handle" sm={size.row[0]} xs={size.row[0]}>
+                {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
-            {list.map((row, index) => (
-                <Col className="pt-2" key={index} sm={size.row[0]} xs={size.row[0]}>
-                    <div className="limited" style={{height:"200px"}}>
-                        <Row className="pb-4">
-                            <Col sm={size.row[0]} xs={size.row[0]}>
-                                Alink: <strong>{row.alink}</strong> <br/>
-                                {row.data.raw.parts.length} parts.
-                            </Col>
-                            <Col sm={size.detail[0]} xs={size.detail[0]}>
-                                <img className="template" src={image} alt="" />
-                            </Col>
-                            <Col sm={size.detail[1]} xs={size.detail[1]}>
-                                <Row>
-                                    <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
-                                        <button className="btn btn-md btn-primary">Try</button>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </div>
-                </Col>
-            ))}
+            <div className="limited">
+                {list.map((row, index) => (
+                    <Col className="pt-2" key={index} sm={size.row[0]} xs={size.row[0]}>
+                        
+                            <Row className="pb-4">
+                                <Col sm={size.row[0]} xs={size.row[0]}>
+                                    Alink: <strong>{row.alink}</strong> <br/>
+                                    {row.data.raw.parts.length} parts.
+                                </Col>
+                                <Col sm={size.detail[0]} xs={size.detail[0]}>
+                                    <img className="template" src={row.bs64} alt="" />
+                                </Col>
+                                <Col sm={size.detail[1]} xs={size.detail[1]}>
+                                    <Row>
+                                        <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+                                            <button className="btn btn-md btn-primary">Try</button>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                    </Col>
+                ))}
+            </div>
         </Row>
     )
 }
