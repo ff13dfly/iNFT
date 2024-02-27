@@ -55,9 +55,9 @@ function Board(props) {
                 const num=parseInt("0x"+hash.substring(hash_start+2,hash_start+2+hash_step));
                 const index=num%amount;     //图像的位次
                 const max=grid[0]/(1+eX);
-                const br=Math.floor(index/max);
+                const br=Math.floor((index+gX)/max);
 
-                const cx=cell[0]*(eX+1)*(index%max);
+                const cx=cell[0]*(eX+1)*((index+gX)%max);
                 const cy=cell[1]*gY+br*cell[1]*(1+eY);
                 const dx=cell[0]*(eX+1);
                 const dy=cell[1]*(eY+1);
