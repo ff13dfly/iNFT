@@ -2,11 +2,12 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Data from "../lib/data";
+import config from "../config";
+
 
 let wsAPI = null;
 let linking = false;
-//const server="ws://127.0.0.1:9944";
-const server = "wss://dev2.metanchor.net";
+const server=config.node;
 
 function Operation(props) {
     const size = {

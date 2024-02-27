@@ -25,12 +25,16 @@ function App() {
   let [content,setContent]=useState("");
 
   const config={
-    default:"anchor://aabb/217148",
+    //default:"anchor://aabb/217148",
+    default:"anchor://single/265468",
     server:"ws://127.0.0.1:9944",
   }
 
+  //  anchor://single/265468
+
   // const config={
   //   default:"anchor://aabb/777139",
+  //   default:"anchor://color/862736",
   //   server:"wss://dev2.metanchor.net",
   // }
   

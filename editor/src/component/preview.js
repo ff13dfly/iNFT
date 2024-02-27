@@ -82,9 +82,9 @@ function Preview(props) {
             const list=[];
             const max=line/(1+eX);
             for(let i=0;i<amount;i++){
-                const br=Math.floor(i/max);
+                const br=Math.floor((gX+i)/max);
                 list.push({
-                    mX:w*(eX+1)*(i%max),    //margin的X值
+                    mX:w*(eX+1)*((gX+i)%max),    //margin的X值
                     mY:w*gY+br*w*(1+eY),    //margin的Y值
                     wX:w*(eX+1),            //block的width
                     wY:w*(eY+1),            //block的height

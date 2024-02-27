@@ -34,19 +34,26 @@ function Template(props) {
             Local.set("template",JSON.stringify(nlist));
             setList(nlist);
         },
-        cacheData:(alinks,ck)=>{
-            if(alinks.length===0) return ck && ck();
+        cacheData:(alinks,ck,dels)=>{
+            if(dels===undefined) dels=[];
+            if(alinks.length===0) return ck && ck(dels);
             const single=alinks.pop();
             //console.log(Data.exsistHash("cache",single));
             if(!Data.exsistHash("cache",single)){
                 return Chain.read(single,(res)=>{
                     const key=`${res.location[0]}_${res.location[1]}`;
+                    if(res.data[key]===undefined){
+                        //console.log(alinks)
+                        const left=alinks.length;
+                        dels.push(left);
+                        return self.cacheData(alinks,ck,dels);
+                    }
                     res.data[key].raw=JSON.parse(res.data[key].raw);
                     Data.setHash("cache",single,res.data[key]);
-                    return self.cacheData(alinks,ck);
+                    return self.cacheData(alinks,ck,dels);
                 });
             }else{
-                return self.cacheData(alinks,ck);
+                return self.cacheData(alinks,ck,dels);
             }
         },
         getThumbs:(arr,dom_id,ck,todo)=>{
@@ -98,16 +105,17 @@ function Template(props) {
             arr.push(nlist[i].alink);
         }
 
-        self.cacheData(arr,()=>{
+        self.cacheData(arr,(dels)=>{
+            
             const last=[]
             for(let i=0;i<nlist.length;i++){
-
                 nlist[i].data=Data.getHash("cache",nlist[i].alink);
-                last.push(nlist[i]);
+                if(!dels.includes(i)) last.push(nlist[i]);
             }
 
             self.getThumbs(last,dom_id,(glist)=>{
                 setList(glist);
+                console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
             });
         });
     }, [props.update]);
