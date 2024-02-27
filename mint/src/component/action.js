@@ -83,6 +83,7 @@ function Action(props) {
                         setPassword("");
                         return false;
                     }
+
                     self.getAnchorName((name)=>{
                         const list=Local.get("template");
                         try {
@@ -90,6 +91,7 @@ function Action(props) {
                             const target=tpls[0];
                             const raw=self.getRaw(target);
                             const protocol=self.getProtocol();
+                            props.countdown();
                             Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
                                 setInfo(res.message);
                                 if(res.step==="Finalized"){

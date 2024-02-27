@@ -78,13 +78,17 @@ const Render= {
     fill:(pen,color)=>{
         const w=pen.canvas.clientWidth;
         const h=pen.canvas.clientHeight;
-        pen.fillStyle=color===undefined?config.background:color;
+        pen.fillStyle=(color===undefined?config.background:color);
 		pen.fillRect(0,0,w,h);
     },
-    reset:(pen)=>{
+    reset:(pen,color)=>{
+        //console.log(color===undefined?config.background:color);
         const w=pen.canvas.clientWidth;
         const h=pen.canvas.clientHeight;
-        pen.clearRect(0, 0, w, h);
+        pen.fillStyle=(color===undefined?config.background:color);
+        //pen.clearRect(0, 0, w, h);
+        pen.fillRect(0,0,w,h);
+        pen.stroke();
     },
     preview:(pen,bs64,hash,parts,basic)=>{
         const img = new Image();
@@ -92,6 +96,10 @@ const Render= {
         img.onload = (e) => {
             self.decode(hash, pen, img, parts, basic);
         }
+    },
+    count:(pen,n,back)=>{
+        self.reset(pen);
+        
     },
 };
 

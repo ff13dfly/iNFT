@@ -12,7 +12,7 @@ function Account(props) {
     const size = {
         row: [12],
         user: [4, 8],
-        logout:[6,6],
+        logout:[8,4],
         new:[9,3]
     };
 
@@ -26,6 +26,9 @@ function Account(props) {
 
     let [password, setPassword]= useState("");
     let [dis_new, setNewDisable] = useState(true);
+
+    let [copy, setCopy]=useState("Copy");
+    let [dis_copy,setCopyDisable]= useState(false);
     
     const {Keyring}=window.Polkadot;
 
@@ -64,6 +67,12 @@ function Account(props) {
         },
         clickCopy:(ev)=>{
             Copy(address);
+            setCopy("Copied");
+            setCopyDisable(true);
+            setTimeout(() => {
+                setCopy("Copy");
+                setCopyDisable(false);
+            }, 2000);
         },
         changeFile: (ev) => {
             try {
@@ -98,7 +107,7 @@ function Account(props) {
             try {
                 const account=JSON.parse(fa);
                 setAddress(account.address);
-                setAvatar(`https://robohash.org/${account.address}`);
+                setAvatar(`https://robohash.org/${account.address}?set=set2`);
                 Chain.balance(account.address,(res)=>{
                     setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
                 })
@@ -136,10 +145,10 @@ function Account(props) {
                     </Col>
                 </Row>
             </Col>
-            <Col hidden={!login} className="pt-4" sm={size.logout[1]} xs={size.logout[1]}>
-                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+            <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
+                <button disabled={dis_copy} className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickCopy(ev);
-                }}>Copy</button>
+                }}>{copy}</button>
                 <button className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickDownload(ev);
                 }}>Download</button>

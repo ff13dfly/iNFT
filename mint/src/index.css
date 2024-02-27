@@ -20,7 +20,7 @@ code {
   position: fixed;
   width: 100%;
   left: 0px;
-  bottom: 25px;
+  bottom: 35px;
 }
 
 .avatar{
@@ -42,7 +42,7 @@ code {
 
 /*限制高度的容器*/
 .limited{
-  min-height: 200px;
+  max-height: 480px;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
 }

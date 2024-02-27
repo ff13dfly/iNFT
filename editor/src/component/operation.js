@@ -21,7 +21,8 @@ function Operation(props) {
     let [encryFile, setEncryFile] = useState(null);
     let [anchor, setAnchor] = useState("");
     let [password, setPassword] = useState("");
-
+    
+    let [final, setFinal]= useState("");
     let [info, setInfo] = useState("Encry JSON file");
 
     const self = {
@@ -87,7 +88,16 @@ function Operation(props) {
                     const protocol = self.getNFTProtocol();
 
                     ankr.write(pair, anchor, JSON.stringify(raw), JSON.stringify(protocol), (res) => {
-                        console.log(res);
+                        //console.log(res);
+                        setFinal(res.message);
+                        if(res.step==="Finalized"){
+                            //start: 20478
+                            //end: 
+                            ankr.search(anchor,(data)=>{
+                                console.log(data);
+                                setFinal(`Template link: anchor://${anchor}/${data.block}`);
+                            });
+                        }
                     });
                 } catch (error) {
 
@@ -172,6 +182,9 @@ function Operation(props) {
                 <button disabled={writeable} className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickWrite(ev);
                 }}>Write iNFT Template</button>
+            </Col>
+            <Col className="pt-2 text-end" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                {final}
             </Col>
         </Row>
     )
