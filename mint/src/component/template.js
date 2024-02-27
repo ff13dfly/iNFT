@@ -93,6 +93,10 @@ function Template(props) {
                 return self.getThumbs(arr,dom_id,ck,todo);
             },50);
         },
+        clickClean:(ev)=>{
+            Local.remove("template");
+            props.fresh();
+        },
     }
 
     const dom_id="pre_image";
@@ -158,6 +162,11 @@ function Template(props) {
                     </Col>
                 ))}
             </div>
+            <Col className="text-end pt-2" sm={size.row[0]} xs={size.row[0]}>
+                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickClean(ev);
+                }}>Clean</button>
+            </Col>
         </Row>
     )
 }

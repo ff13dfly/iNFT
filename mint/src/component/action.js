@@ -94,7 +94,7 @@ function Action(props) {
                                 setInfo(res.message);
                                 if(res.step==="Finalized"){
                                     setDisable(false);
-                                    props.dialog(<Result anchor={name}/>,"iNFT Result");
+                                    props.dialog(<Result anchor={`anchor://${name}`}/>,"iNFT Result");
                                     setTimeout(()=>{
                                         setInfo("");
                                     },400);

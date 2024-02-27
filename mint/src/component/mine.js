@@ -1,10 +1,12 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Result from "./result";
+
 import Local from "../lib/local";
 import Render from "../lib/render";
-import  Chain from "../lib/chain";
-import  Data from "../lib/data";
+import Chain from "../lib/chain";
+import Data from "../lib/data";
 
 
 function Mine(props) {
@@ -14,7 +16,6 @@ function Mine(props) {
     };
 
     let [list,setList] = useState([]);
-    let [image,setImage]=useState("image/empty.png");
 
     const self = {
         page:(arr,page,step)=>{
@@ -28,15 +29,21 @@ function Mine(props) {
             }
             return nlist;
         },
-        cacheTemplate:(alinks,ck)=>{
-            if(alinks.length===0) return ck && ck();
+        cacheTemplate:(alinks,ck,dels)=>{
+            if(dels===undefined) dels=[];
+            if(alinks.length===0) return ck && ck(dels);
             const single=alinks.pop();
             if(!Data.exsistHash("cache",single)){
                 return Chain.read(single,(res)=>{
                     const key=`${res.location[0]}_${res.location[1]}`;
+                    if(res.data[key]===undefined){
+                        const left=alinks.length;
+                        dels.push(left);
+                        return self.cacheData(alinks,ck,dels);
+                    }
                     res.data[key].raw=JSON.parse(res.data[key].raw);
                     Data.setHash("cache",single,res.data[key]);
-                    return self.cacheData(alinks,ck);
+                    return self.cacheData(alinks,ck,dels);
                 });
             }else{
                 return self.cacheData(alinks,ck);
@@ -109,6 +116,24 @@ function Mine(props) {
                 return self.getThumbs(arr,dom_id,ck,todo);
             },50);
         },
+        clickClean:(ev)=>{
+            Local.remove("list");
+            props.fresh();
+        },
+        clickSingle:(index)=>{
+            console.log(`${index} is clicked`);
+            const fa = Local.get("login");
+            if(!fa) return false;
+            const login=JSON.parse(fa);
+            const addr=login.address;
+
+            const ls=Local.get("list");
+            const my=JSON.parse(ls);
+            const dt=my[addr][index];
+            const alink=dt.link.toLocaleLowerCase();
+            console.log(alink);
+            props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog}/>,"iNFT Details");
+        },
     }
 
     const dom_id="pre_mine";
@@ -123,7 +148,9 @@ function Mine(props) {
                 const nlist=JSON.parse(ls);
                 const plist=nlist[addr]===undefined?[]:self.page(nlist[addr],1,10);
                 self.cacheData(self.getAlinks(plist),(tpls)=>{
-                    self.cacheTemplate(tpls,()=>{
+                    //console.log(tpls);
+                    self.cacheTemplate(tpls,(dels)=>{
+                        //console.log(JSON.stringify(plist));
                         self.getThumbs(plist,dom_id,(glist)=>{
                             setList(glist);
                         });
@@ -141,18 +168,31 @@ function Mine(props) {
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
-            {list.map((row, index) => (
-                <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]}>
-                    <Row>
-                        <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                            <img className="mine" src={row.bs64} alt="" />
-                        </Col>
-                        <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                            {row.block.toLocaleString()}
-                        </Col>
-                    </Row>
-                </Col>
-            ))}
+            <div className="limited">
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <Row>
+                {list.map((row, index) => (
+                    <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]} onClick={(ev)=>{
+                        self.clickSingle(index);
+                    }}>
+                        <Row>
+                            <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                                <img className="mine" src={row.bs64} alt="" />
+                            </Col>
+                            <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                                {row.block.toLocaleString()}
+                            </Col>
+                        </Row>
+                    </Col>
+                ))}
+                </Row>
+            </Col>
+            </div>
+            <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickClean(ev);
+                }}>Clean</button>
+            </Col>
         </Row>
     )
 }

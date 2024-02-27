@@ -47,7 +47,7 @@ const self = {
                 },
             },
         };
-        easyRun(alink, startAPI, (res) => {
+        easyRun(alink.toLocaleLowerCase(), startAPI, (res) => {
             return ck && ck(res);
         });
     },

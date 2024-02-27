@@ -8,6 +8,8 @@ import Header from "./component/header";
 import  Data from "./lib/data";
 import  Local from "./lib/local";
 import  Chain from "./lib/chain";
+import  config from "./config";
+
 // iNFT definition
 // anchor://aabb/217148
 let subs={};            //加载订阅的方法
@@ -23,20 +25,6 @@ function App() {
   let [show,setShow]=useState(false);
   let [title,setTitle]=useState("");
   let [content,setContent]=useState("");
-
-  const config={
-    //default:"anchor://aabb/217148",
-    default:"anchor://single/265468",
-    server:"ws://127.0.0.1:9944",
-  }
-
-  //  anchor://single/265468
-
-  // const config={
-  //   default:"anchor://aabb/777139",
-  //   default:"anchor://color/862736",
-  //   server:"wss://dev2.metanchor.net",
-  // }
   
   const self={
     dialog:(ctx,title)=>{
@@ -51,13 +39,24 @@ function App() {
     subscribe:(key,fun)=>{
       subs[key]=fun;
     },
+    getTemplate:()=>{
+      const ts=Local.get("template");
+      if(!ts) return config.default[0];
+      try {
+        const tpls=JSON.parse(ts);
+        if(tpls[0] && tpls[0].alink) return tpls[0].alink
+        return config.default[0];
+      } catch (error) {
+        return config.default[0];
+      }
+    },
   }
 
   const tpls=Local.get("template");
   if(!tpls){
     const data=[]
     data.push({
-      alink:config.default,
+      alink:config.default[0],
       name:"",
       tags:[]
     })
@@ -66,8 +65,10 @@ function App() {
 
   useEffect(() => {
     //1.连接服务器
-    Chain.link(config.server,(API)=>{
-      Chain.read(config.default,(res)=>{
+    Chain.link(config.node[0],(API)=>{
+      const tpl=self.getTemplate();
+      //console.log(tpl);
+      Chain.read(tpl,(res)=>{
         //console.log(res);
         const key=`${res.location[0]}_${res.location[1]}`;
         if(res.data && res.data[key]!==undefined){
