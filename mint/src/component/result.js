@@ -93,7 +93,7 @@ function Result(props) {
                 Block: {block.toLocaleString()}
             </Col>
             <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
-                <FaBackspace size={30} onClick={(ev)=>{
+                <FaBackspace size={30} color={"#FFAABB"} onClick={(ev)=>{
                     self.clickHome(ev);
                 }}/>
             </Col>

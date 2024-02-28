@@ -1,7 +1,9 @@
+const prefix="ii_";
 const keys={
-    login:"ii_user",
-    list:"ii_list",
-    template:"ii_tpl",
+    login:`${prefix}user`,
+    list:`${prefix}list`,
+    template:`${prefix}tpl`,
+    down:`${prefix}download`,
 }
 
 const self={

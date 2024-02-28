@@ -141,17 +141,18 @@ function Account(props) {
                         {tools.shorten(address)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {balance} unit
+                        <strong>{balance}</strong> unit
                     </Col>
                 </Row>
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
-                <button disabled={dis_copy} className="btn btn-md btn-primary" onClick={(ev)=>{
+                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickDownload(ev);
+                }}>Download Key</button>
+                <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button>
-                <button className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
-                    self.clickDownload(ev);
-                }}>Download</button>
+                
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev)=>{

@@ -55,7 +55,7 @@ function Template(props) {
         clickOpen:(index)=>{
             const tpls = JSON.parse(Local.get("template"));
             const tpl=tpls[index];
-            props.dialog(<Detail anchor={tpl.alink} skip={true} back={true} dialog={props.dialog} />,"Tempalate Details");
+            props.dialog(<Detail alink={tpl.alink} skip={true} back={true} dialog={props.dialog} fresh={props.fresh}/>,"Tempalate Details");
         },
         clickRemove:(index)=>{
             const tpls = JSON.parse(Local.get("template"));
@@ -189,7 +189,9 @@ function Template(props) {
                                     Copy(row.alink);
                                 }}/>
                             </Col>
-                            <Col sm={size.detail[0]} xs={size.detail[0]}>
+                            <Col sm={size.detail[0]} xs={size.detail[0]} onClick={(ev)=>{
+                                self.clickOpen(index);
+                            }}>
                                 <img className="template" src={row.bs64} alt="" />
                             </Col>
                             <Col sm={size.detail[1]} xs={size.detail[1]}>
