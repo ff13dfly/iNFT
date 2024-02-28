@@ -1,9 +1,11 @@
 import { Row, Col, ListGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Account from "./account";
 import Template from "./template";
-import Mine from "./mine";
+
+//import Chain from "../lib/chain";
+import Data from "../lib/data";
+
 import { FaBackspace,FaPuzzlePiece,FaSyncAlt,FaLongArrowAltDown,FaLongArrowAltUp } from "react-icons/fa";
 
 function Detail(props) {
@@ -25,14 +27,75 @@ function Detail(props) {
     let [parts, setParts] =useState([]);
     let [mask, setMask]= useState(0);                   //Mask的数量
 
+    let [active, setActive]=useState(null);
+    let [grid, setGrid]=useState([]);
+
+    let [cmap,setImageMap]=useState({})
+
     const self={
         clickBack:()=>{
             dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Template");
         },
+        clickGrid:(index)=>{
+            console.log(`Index ${index} clicked.`);
+        },
+        getBackground:(index)=>{
+            const selected_grid=Data.get("grid");
+            const ac="#4aab67";
+            const sc="#f7cece";
+            const bc="#99ce23";
+            if(selected_grid===index){
+                return sc;
+            }else{
+                return active===index?ac:bc
+            }
+            
+        },
+        getHelper:(amount,line,w,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
+            const list=[];
+            const max=line/(1+eX);
+            for(let i=0;i<amount;i++){
+                const br=Math.floor((gX+i)/max);
+                list.push({
+                    mX:w*(eX+1)*((gX+i)%max),    //margin的X值
+                    mY:w*gY+br*w*(1+eY),    //margin的Y值
+                    wX:w*(eX+1),            //block的width
+                    wY:w*(eY+1),            //block的height
+                });
+            } 
+            return list;
+        },
     }
+
+    // position: absolute;
+    // top: 0;
+    // width: 100%;
+    // height: 100%;
+    // object-fit: cover;
+    // object-position: 55%;
+    // transform: scale(0.5) translate(0, 5%) rotate(30deg);
+    const offset=90;
+
     useEffect(() => {
+        const row = Data.getHash("cache", alink.toLocaleLowerCase());
+        //console.log(row);
+        setBS64(row.raw.image);
+
+        const obj={
+            width: "100%",
+            height: "100px",
+            backgroundImage: `url("${row.raw.image}")`,
+            backgroundPosition:"0px 200px",
+            //objectFit: "fill",
+            backgroundSize: "cover",
+        }
+        setImageMap(obj);
 
        //console.log(alink);
+       //getHelper:(amount,line,w,gX,gY,eX,eY)
+       const ns=self.getHelper(8,8,48,0,0,0,1);
+       console.log(ns);
+       setGrid(ns);
     }, [props.update]);
 
     return (
@@ -64,6 +127,23 @@ function Detail(props) {
                     </Col>
                 </Row>
             </Col>
+            
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <div style={cmap}></div>
+                {grid.map((row, index) => (
+                    <div className="cover" key={index} style={{
+                            marginLeft:`${row.mX}px`,
+                            marginTop:`${row.mY-offset}px`,
+                            width:`${row.wX}px`,
+                            height:`${row.wY}px`,
+                            lineHeight:`${row.wY}px`,
+                            backgroundColor:self.getBackground(index),
+                        }} 
+                        onClick={(ev)=>{
+                            self.clickGrid(index);
+                        }}>{index}</div>
+                ))}
+            </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
@@ -82,15 +162,13 @@ function Detail(props) {
                 <span style={{fontSize:"24px"}} className="mt-2">0</span>
                 <FaLongArrowAltUp size={24} color={"#FFAABB"} className="pl-2"/> 
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
+            
             <Col sm={size.row[0]} xs={size.row[0]}>
-                <img src={bs64} style={{width:"100%"}} alt=""/>
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                        Cover here, the same as editor
-            </Col>
+                Cover here, the same as editor
+            </Col> */}
         </Row>
     )
 }

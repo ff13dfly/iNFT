@@ -89,11 +89,11 @@ function Result(props) {
 
     return (
         <Row>
-            <Col className="" sm={size.back[0]} xs={size.back[0]}>
+            <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
                 Block: {block.toLocaleString()}
             </Col>
             <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
-                <FaBackspace size={30} color={"#FFAABB"} onClick={(ev)=>{
+                <FaBackspace size={40} color={"#FFAABB"} onClick={(ev)=>{
                     self.clickHome(ev);
                 }}/>
             </Col>

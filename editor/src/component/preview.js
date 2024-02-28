@@ -146,8 +146,8 @@ function Preview(props) {
                     setActive(sel);
 
                     const [gX,gY,eX,eY]=def.img;
-                    const grid=self.getHelper(amount,line,w,gX,gY,eX,eY);
-                    setGrid(grid);
+                    const gg=self.getHelper(amount,line,w,gX,gY,eX,eY);
+                    setGrid(gg);
                 }
             }
         }

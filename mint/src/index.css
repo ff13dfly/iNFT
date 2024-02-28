@@ -22,6 +22,20 @@ code {
   left: 0px;
   bottom: 35px;
 }
+.cover{
+  width: 50px;
+  height: 50px;
+  border: solid 2px #71366b;
+  position: fixed;
+  margin: 0px 0px 0px 100px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 50px;
+  color: #000000;
+  background-color: #4aab67;
+  opacity: 0.6;
+  cursor: pointer;
+}
 
 .avatar{
   width: "60px";
