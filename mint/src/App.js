@@ -32,10 +32,10 @@ function App() {
       setContent(ctx);
       setShow(true);
     },
-    fresh: () => {
+    fresh: (force) => {
       update++;
       setUpdate(update);
-      self.start();
+      if(force) self.start();
     },
     subscribe: (key, fun) => {
       subs[key] = fun;
@@ -102,7 +102,7 @@ function App() {
     <div>
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update} />
-        <Preview fresh={self.fresh} update={update} node={config.server} />
+        <Preview fresh={self.fresh} update={update} node={config.node[0]} />
         {/* <div className="countdown">
           <svg viewBox="-50 -50 100 100" strokeWidth="10" className="circle">
             <circle r="45" className="circle-01"></circle>

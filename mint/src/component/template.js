@@ -1,10 +1,13 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Detail from "./detail";
+
 import Local from "../lib/local";
 import Chain from "../lib/chain";
 import Data from "../lib/data";
 import Render from "../lib/render";
+import Copy from "../lib/clipboard";
 
 import { FaExchangeAlt, FaTrashAlt, FaCopy,FaFolderOpen } from "react-icons/fa";
 
@@ -47,13 +50,22 @@ function Template(props) {
             }
             Local.set("template",JSON.stringify(nlist))
             self.showTemplate();
-            props.fresh();
+            props.fresh(true);
         },
         clickOpen:(index)=>{
-
+            const tpls = JSON.parse(Local.get("template"));
+            const tpl=tpls[index];
+            props.dialog(<Detail anchor={tpl.alink} skip={true} back={true} dialog={props.dialog} />,"Tempalate Details");
         },
         clickRemove:(index)=>{
-
+            const tpls = JSON.parse(Local.get("template"));
+            const nlist=[];
+            for(let i=0;i<tpls.length;i++){
+                if(i!==index) nlist.push(tpls[i]);
+            }
+            Local.set("template",JSON.stringify(nlist))
+            self.showTemplate();
+            props.fresh(true);
         },
         cacheData: (alinks, ck, dels) => {
             if (dels === undefined) dels = [];
@@ -150,12 +162,12 @@ function Template(props) {
 
     return (
         <Row>
-            <Col sm={size.add[0]} xs={size.add[0]}>
+            <Col className="pb-2" sm={size.add[0]} xs={size.add[0]}>
                 <input className="form-control" type="text" placeholder="The template anchor link" value={alink} onChange={(ev) => {
                     self.changeAlink(ev);
                 }} />
             </Col>
-            <Col className="text-end" sm={size.add[1]} xs={size.add[1]}>
+            <Col className="text-end pb-2" sm={size.add[1]} xs={size.add[1]}>
                 <button className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickAdd(ev);
                 }}>Add</button>
@@ -173,7 +185,9 @@ function Template(props) {
                                 {row.data.raw.parts.length} parts.
                             </Col>
                             <Col className="text-end pt-2" sm={size.alink[1]} xs={size.alink[1]}>
-                                <FaCopy size={28} className="text-primary" />
+                                <FaCopy size={28} className="text-primary" onClick={(ev)=>{
+                                    Copy(row.alink);
+                                }}/>
                             </Col>
                             <Col sm={size.detail[0]} xs={size.detail[0]}>
                                 <img className="template" src={row.bs64} alt="" />

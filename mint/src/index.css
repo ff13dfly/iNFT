@@ -46,3 +46,7 @@ code {
   width: 100%;
   overflow: auto;
 }
+
+.pr-2{
+  margin-right: 15px;
+}

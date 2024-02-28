@@ -8,13 +8,14 @@ import Render from "../lib/render";
 import Chain from "../lib/chain";
 import Data from "../lib/data";
 
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
 
 function Mine(props) {
     const size = {
         row: [12],
         list: [6],
         page: [4, 4, 4],
+        filter:[6,6],
     };
 
     let [list, setList] = useState([]);
@@ -125,7 +126,7 @@ function Mine(props) {
             props.fresh();
         },
         clickSingle: (index) => {
-            console.log(`${index} is clicked`);
+            //console.log(`${index} is clicked`);
             const fa = Local.get("login");
             if (!fa) return false;
             const login = JSON.parse(fa);
@@ -135,7 +136,7 @@ function Mine(props) {
             const my = JSON.parse(ls);
             const dt = my[addr][index];
             const alink = dt.link.toLocaleLowerCase();
-            console.log(alink);
+            //console.log(alink);
             props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
         },
     }
@@ -178,6 +179,16 @@ function Mine(props) {
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
+            <Col className="pb-2" sm={size.filter[0]} xs={size.filter[0]}>
+                <FaGripHorizontal size="28"/>
+                {/*切换每行显示的数量*/}
+            </Col>
+            <Col className="text-end pb-2" sm={size.filter[1]} xs={size.filter[1]}>
+                <FaImages className="pr-2" size="24"/>
+                <FaBars className="pr-2" size="24"/>
+                <FaHeart size="24"/>
+            </Col>
+            
             <Col sm={size.row[0]} xs={size.row[0]}>{info}</Col>
             <div className="limited">
                 <Col sm={size.row[0]} xs={size.row[0]}>

@@ -9,12 +9,13 @@ import Data from "../lib/data";
 import tools from "../lib/tools";
 import Chain from "../lib/chain";
 
-import { FaHome,FaBackspace } from "react-icons/fa";
+import { FaBackspace } from "react-icons/fa";
 
 function Result(props) {
     const size = {
         row: [12],
-        sell:[8,4]
+        sell:[8,4],
+        back:[8,4],
     };
 
     const anchor=props.anchor;
@@ -48,7 +49,7 @@ function Result(props) {
         Chain.read(anchor,(res)=>{
             const bk=res.location[1];
             const alink=`anchor://${res.location[0]}/${res.location[1]}`;
-            console.log(res);
+            //console.log(res);
             const key=`${res.location[0]}_${bk}`.toLocaleLowerCase();
             const adata=res.data[key];
             const raw=JSON.parse(adata.raw);
@@ -88,27 +89,28 @@ function Result(props) {
 
     return (
         <Row>
-            <Col className="pb-2 text-end" hidden={!props.back} sm={size.row[0]} xs={size.row[0]}>
+            <Col className="" sm={size.back[0]} xs={size.back[0]}>
+                Block: {block.toLocaleString()}
+            </Col>
+            <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace size={30} onClick={(ev)=>{
                     self.clickHome(ev);
                 }}/>
             </Col>
-            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Block: {block.toLocaleString()}<br/>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Hash: {tools.shorten(block_hash,16)}
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
-                Recommand Price: <strong>$AC 100</strong>
+                Recommand Price: <strong>$AC 100</strong>; Rarity: <strong>0.15%</strong>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Rarity Price: <strong>0.15%</strong>
-            </Col>
-
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
+            </Col>
+            <Col className="pb-2" sm={size.row[0]} xs={size.row[0]}>
+                <input className="form-control" type="password" placeholder="Account password ..." />
             </Col>
             <Col sm={size.sell[0]} xs={size.sell[0]}>
                 <input className="form-control" type="text" placeholder="Price to sell." 
@@ -119,7 +121,7 @@ function Result(props) {
             </Col>
             <Col className="text-end" sm={size.sell[1]} xs={size.sell[1]}>
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
-
+                    self.clickSell();
                 }}>Sell</button>
             </Col>
         </Row>

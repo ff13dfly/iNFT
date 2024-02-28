@@ -31,9 +31,9 @@ function Header(props) {
     }, [props.update]);
 
     return (
-        <Row className="pt-3">
+        <Row className="pt-4">
             <Col sm={size.title[0]} xs={size.title[0]}>
-                <FaList size={28} onClick={(ev)=>{
+                <FaList size={26} onClick={(ev)=>{
                     self.clickMine(ev);
                 }}/>
             </Col>
@@ -44,7 +44,7 @@ function Header(props) {
                 <FaRegImage size={30} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
-                <FaRegUser size={28} style={{marginLeft:"15px"}} onClick={(ev)=>{
+                <FaRegUser size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
                     self.clickAccount(ev);
                 }}/>
             </Col>

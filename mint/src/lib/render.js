@@ -17,7 +17,7 @@ const self={
     decode: (hash, pen, img, parts, tpl, active) => {
         const { cell, grid } = tpl;
         //const multi=window.devicePixelRatio;
-        const multi = 1;
+        const multi = 1;        //这里需要处理Mac的高精度显示问题
         for (let i = 0; i < parts.length; i++) {
             //获取不同的图像
             const part = parts[i];
@@ -88,7 +88,7 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         //pen.clearRect(0, 0, w, h);
         pen.fillRect(0,0,w,h);
-        pen.stroke();
+        //pen.stroke();
     },
     preview:(pen,bs64,hash,parts,basic)=>{
         const img = new Image();
@@ -100,6 +100,13 @@ const Render= {
     count:(pen,n,back)=>{
         self.reset(pen);
         
+    },
+    text:(pen,txt,pos,style)=>{
+        //console.log(txt);
+        if(style!==undefined) pen.font = style.font;
+        pen.fillStyle=style.color;
+        pen.fillText(txt, pos[0], pos[1]);
+        pen.stroke();
     },
 };
 
