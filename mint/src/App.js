@@ -35,13 +35,23 @@ function App() {
     fresh: () => {
       update++;
       setUpdate(update);
+      self.start();
     },
     subscribe: (key, fun) => {
       subs[key] = fun;
     },
     getTemplate: () => {
       const ts = Local.get("template");
-      if (!ts) return config.default[0];
+      if (!ts){
+        const data = []
+        data.push({
+          alink: config.default[0],
+          name: "",
+          tags: []
+        })
+        Local.set("template", JSON.stringify(data));
+        return config.default[0];
+      } 
       try {
         const tpls = JSON.parse(ts);
         if (tpls[0] && tpls[0].alink) return tpls[0].alink
@@ -58,24 +68,8 @@ function App() {
         n--;
       },1000);
     },
-  }
-
-  const tpls = Local.get("template");
-  if (!tpls) {
-    const data = []
-    data.push({
-      alink: config.default[0],
-      name: "",
-      tags: []
-    })
-    Local.set("template", JSON.stringify(data));
-  }
-
-  useEffect(() => {
-    //1.连接服务器
-    Chain.link(config.node[0], (API) => {
+    start:()=>{
       const tpl = self.getTemplate();
-      //console.log(tpl);
       Chain.read(tpl, (res) => {
         //console.log(res);
         const key = `${res.location[0]}_${res.location[1]}`;
@@ -94,6 +88,13 @@ function App() {
           }
         }
       });
+    },
+  }
+
+  useEffect(() => {
+    //1.连接服务器
+    Chain.link(config.node[0], (API) => {
+      self.start();
     });
   }, []);
 

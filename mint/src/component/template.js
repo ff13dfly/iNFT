@@ -38,6 +38,23 @@ function Template(props) {
             //setList(nlist);
             self.showTemplate();
         },
+        clickTry:(index)=>{
+            if(index===0) return true;
+            const tpls = JSON.parse(Local.get("template"));
+            const nlist=[tpls[index]];
+            for(let i=0;i<tpls.length;i++){
+                if(i!==index) nlist.push(tpls[i]);
+            }
+            Local.set("template",JSON.stringify(nlist))
+            self.showTemplate();
+            props.fresh();
+        },
+        clickOpen:(index)=>{
+
+        },
+        clickRemove:(index)=>{
+
+        },
         cacheData: (alinks, ck, dels) => {
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
@@ -165,15 +182,21 @@ function Template(props) {
                                 <Row className="pt-2">
                                     <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
                                     <Col className="text-end pt-4" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaExchangeAlt size={28} className="text-primary" />
+                                        <FaExchangeAlt size={28} className="text-primary" onClick={(ev)=>{
+                                            self.clickTry(index);
+                                        }}/>
                                     </Col>
                                     <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
                                     <Col className="text-end pt-4" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaFolderOpen size={28} className="text-primary" />
+                                        <FaFolderOpen size={28} className="text-primary" onClick={(ev)=>{
+                                            self.clickOpen(index);
+                                        }}/>
                                     </Col>
                                     <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
                                     <Col className="pt-4 text-end" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaTrashAlt size={28} className="text-danger" />
+                                        <FaTrashAlt size={28} className="text-danger" onClick={(ev)=>{
+                                            self.clickRemove(index);
+                                        }}/>
                                     </Col>
                                 </Row>
                             </Col>
