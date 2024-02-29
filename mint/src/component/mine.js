@@ -13,7 +13,7 @@ import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } fr
 function Mine(props) {
     const size = {
         row: [12],
-        list: [6],
+        list: [4],
         page: [4, 4, 4],
         filter:[6,6],
     };

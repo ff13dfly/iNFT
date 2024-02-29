@@ -126,7 +126,7 @@ function Detail(props) {
                 grid: def.grid,
                 target: def.size
             }
-            console.log(basic);
+            //console.log(basic);
             const pen = Render.create(dom_id,true);
             Render.clear(dom_id);
             Render.preview(pen,def.image,hash,def.parts,basic);

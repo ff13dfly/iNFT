@@ -72,7 +72,7 @@ function Account(props) {
             setTimeout(() => {
                 setCopy("Copy");
                 setCopyDisable(false);
-            }, 2000);
+            }, 300);
         },
         changeFile: (ev) => {
             try {

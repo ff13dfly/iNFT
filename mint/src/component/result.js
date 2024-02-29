@@ -97,7 +97,7 @@ function Result(props) {
                     self.clickHome(ev);
                 }}/>
             </Col>
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{minHeight:"300px"}}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
