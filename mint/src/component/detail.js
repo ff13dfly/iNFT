@@ -5,6 +5,7 @@ import Template from "./template";
 
 //import Chain from "../lib/chain";
 import Data from "../lib/data";
+import Render from "../lib/render";
 
 import { FaBackspace,FaPuzzlePiece,FaSyncAlt,FaLongArrowAltDown,FaLongArrowAltUp } from "react-icons/fa";
 
@@ -27,7 +28,8 @@ function Detail(props) {
     let [parts, setParts] =useState([]);
     let [mask, setMask]= useState(0);                   //Mask的数量
 
-    let [active, setActive]=useState(null);
+    let [selected,setSelected ]=useState(0);        //选中的NFT组件
+    let [active, setActive]=useState(null);         //选中的图像位次
     let [grid, setGrid]=useState([]);
 
     let [cmap,setImageMap]=useState({})
@@ -37,7 +39,15 @@ function Detail(props) {
             dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Template");
         },
         clickGrid:(index)=>{
-            console.log(`Index ${index} clicked.`);
+            //console.log(`Index ${index} clicked.`);
+            setActive(index);
+        },
+        clickPart:(index)=>{
+            setSelected(index);
+            self.autoFresh(index,active);
+        },
+        clickHashFresh:(ev)=>{
+            setHash("0xa3dfd11908fasdfas8df");
         },
         getBackground:(index)=>{
             const selected_grid=Data.get("grid");
@@ -49,53 +59,85 @@ function Detail(props) {
             }else{
                 return active===index?ac:bc
             }
-            
         },
-        getHelper:(amount,line,w,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
+        getHelper:(amount,line,w,h,gX,gY,eX,eY,rate)=>{       //gX没用到，默认从0开始
             const list=[];
             const max=line/(1+eX);
+            const rows= Math.ceil((amount+gX)/max);
+            const ww=w/rate;
+            const hh=h/rate;
             for(let i=0;i<amount;i++){
                 const br=Math.floor((gX+i)/max);
                 list.push({
-                    mX:w*(eX+1)*((gX+i)%max),    //margin的X值
-                    mY:w*gY+br*w*(1+eY),    //margin的Y值
-                    wX:w*(eX+1),            //block的width
-                    wY:w*(eY+1),            //block的height
+                    mX:ww*(eX+1)*((gX+i)%max),  //margin的X值
+                    mY:(br-rows)*hh*(1+eY),    //margin的Y值
+                    wX:ww*(eX+1),            //block的width
+                    wY:hh*(eY+1),            //block的height
                 });
-            } 
+            }
+            //console.log(list);
             return list;
+        },
+        //ipart: 选中的组件
+        //iselect, 选中的零件
+        autoFresh:(ipart,iselect)=>{
+            const tpl = Data.getHash("cache", alink.toLocaleLowerCase());
+            
+            //0.获取基本的参数
+            const def=tpl.raw;
+            const target=def.parts[ipart];
+            const w=def.cell[0],h=def.cell[1];
+            const [gX,gY,eX,eY]=target.img;
+            const [start,step,divide,offset]=target.value;
+            const [line,row]=def.grid;
+            const max=line/(1+eX);
+            const br=Math.ceil((gX+divide)/max);
+            const height=h*24;      //这里的行数出错了，需要修正
+            //console.log(height);
+            //console.log(`Rows: ${br}`,max);
+            //1.截取显示对应的图像
+            setBS64(def.image);  
+            const rate=  1.0526;        
+            const obj={
+                width: "100%",
+                height: `${h*(1+eY)*br/rate}px`,
+                backgroundImage: `url("${def.image}")`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition:`0% ${rate*100*h*gY/height}%`,
+                backgroundSize: "cover",
+                //backgroundPosition:`0px ${h*gY}px`,
+                //backgroundSize: "fill",
+                //backgroundPosition:`0px ${height-h*gY}px`,
+                //backgroundSize: "cover",
+            }
+            console.log(obj);
+            setImageMap(obj);
+
+            //2.显示组件列表
+            setParts(def.parts);
+
+            //3.显示组件的按钮
+            const ns=self.getHelper(divide,line,w,h,gX,gY,eX,eY,rate)
+            setGrid(ns);
+
+            //4.渲染图像
+            const basic = {
+                cell: def.cell,
+                grid: def.grid,
+                target: def.size
+            }
+            console.log(basic);
+            const pen = Render.create(dom_id,true);
+            Render.clear(dom_id);
+            Render.preview(pen,def.image,hash,def.parts,basic);
         },
     }
 
-    // position: absolute;
-    // top: 0;
-    // width: 100%;
-    // height: 100%;
-    // object-fit: cover;
-    // object-position: 55%;
-    // transform: scale(0.5) translate(0, 5%) rotate(30deg);
     const offset=90;
-
+    const dom_id = "pre_detail";
     useEffect(() => {
-        const row = Data.getHash("cache", alink.toLocaleLowerCase());
-        //console.log(row);
-        setBS64(row.raw.image);
+        self.autoFresh(selected,active);
 
-        const obj={
-            width: "100%",
-            height: "100px",
-            backgroundImage: `url("${row.raw.image}")`,
-            backgroundPosition:"0px 200px",
-            //objectFit: "fill",
-            backgroundSize: "cover",
-        }
-        setImageMap(obj);
-
-       //console.log(alink);
-       //getHelper:(amount,line,w,gX,gY,eX,eY)
-       const ns=self.getHelper(8,8,48,0,0,0,1);
-       console.log(ns);
-       setGrid(ns);
     }, [props.update]);
 
     return (
@@ -112,28 +154,29 @@ function Detail(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        <canvas width={width} height={height}></canvas>
+                        <canvas id={dom_id} width={width} height={height}></canvas>
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
-                        Parts list:
                         <ListGroup as="ul" style={{cursor:"pointer"}}>
-                            <ListGroup.Item as="li" active={true}>
-                                <FaPuzzlePiece size="20" color={"#AAAAAA"}/> #1
+                        {parts.map((row, index) => (
+                            <ListGroup.Item key={index} as="li" active={selected===index} onClick={(ev)=>{
+                                self.clickPart(index);
+                            }}>
+                                {/* {console.log(row)} */}
+                                <FaPuzzlePiece size="20" color={"#AAAAAA"}/> #{index}
                             </ListGroup.Item>
-                            <ListGroup.Item as="li" active={false}>
-                                <FaPuzzlePiece size="20" color={"#AAAAAA"}/> #2
-                            </ListGroup.Item>
+                        ))}
                         </ListGroup>
                     </Col>
                 </Row>
             </Col>
             
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <div style={cmap}></div>
                 {grid.map((row, index) => (
                     <div className="cover" key={index} style={{
                             marginLeft:`${row.mX}px`,
-                            marginTop:`${row.mY-offset}px`,
+                            marginTop:`${row.mY}px`,
                             width:`${row.wX}px`,
                             height:`${row.wY}px`,
                             lineHeight:`${row.wY}px`,
@@ -141,7 +184,9 @@ function Detail(props) {
                         }} 
                         onClick={(ev)=>{
                             self.clickGrid(index);
-                        }}>{index}</div>
+                        }}>
+                        {index}
+                    </div>
                 ))}
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
@@ -151,7 +196,9 @@ function Detail(props) {
                 Mock hash: 0xabc123abc123<span className="bg-warning"><strong> ab </strong></span>123abc12
             </Col>
             <Col className="text-end" sm={size.hash[1]} xs={size.hash[1]}>
-                <FaSyncAlt size={24} color={"#FFAABB"}/> 
+                <FaSyncAlt size={24} color={"#FFAABB"} onClick={(ev)=>{
+                    self.clickHashFresh(ev);
+                }}/> 
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 From 24 to 26, hexadecimal value <strong> 231 </strong>, offset value 0<br />

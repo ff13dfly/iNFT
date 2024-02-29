@@ -57,6 +57,7 @@ code {
 /*限制高度的容器*/
 .limited{
   max-height: 480px;
+  min-height: 480px;
   width: 100%;
   overflow: auto;
 }

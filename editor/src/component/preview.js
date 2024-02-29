@@ -118,19 +118,12 @@ function Preview(props) {
         },
     }
 
-    
-
     useEffect(() =>{
-
         const  width=ref.current.offsetWidth;
         const  w=tools.toF(width/line,3);
-
-        //console.log(width,line,w);
-
         const bs64=Data.get("template");
         if(bs64!==null){
             setImage(bs64);
-            
             const puzzle_selected=Data.get("selected");
             const NFT=Data.get("NFT");
             if(puzzle_selected!==null){
@@ -151,9 +144,6 @@ function Preview(props) {
                 }
             }
         }
-
-        //console.log('width', ref.current ? ref.current.offsetWidth : 0);
-
     }, [props.update,ref.current]);
 
     return (
