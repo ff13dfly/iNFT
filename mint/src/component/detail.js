@@ -2,12 +2,16 @@ import { Row, Col, ListGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Template from "./template";
+import Hightlight from "./highlight";
 
 //import Chain from "../lib/chain";
 import Data from "../lib/data";
 import Render from "../lib/render";
+import tools from "../lib/tools";
 
 import { FaBackspace,FaPuzzlePiece,FaSyncAlt,FaLongArrowAltDown,FaLongArrowAltUp } from "react-icons/fa";
+
+let current=0;
 
 function Detail(props) {
     const size = {
@@ -21,18 +25,23 @@ function Detail(props) {
     const dialog=props.dialog;
     const alink=props.alink;
 
-    let [width, setWidth]= useState(200);
-    let [height, setHeight]= useState(200);
-    let [hash, setHash] = useState("0x123456abcdef123467890");
+    let [width, setWidth]= useState(400);
+    let [height, setHeight]= useState(400);
+    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
     let [bs64, setBS64] =useState("image/empty.png");
-    let [parts, setParts] =useState([]);
-    let [mask, setMask]= useState(0);                   //Mask的数量
+    let [img_part, setImagePart]=useState("");
+    let [parts, setParts] =useState([]);        //iNFT的组件列表
+    //let [mask, setMask]= useState(0);                   //Mask的数量
+
+    let [hightlight, setHightlight]=useState("");
+
+    let [cut_width,setCutWidth]=useState(400);
+    let [cut_height,setCutHeight]=useState(50);
+    let [hide_mask,setHideMask]=useState(true);
 
     let [selected,setSelected ]=useState(0);        //选中的NFT组件
     let [active, setActive]=useState(null);         //选中的图像位次
     let [grid, setGrid]=useState([]);
-
-    let [cmap,setImageMap]=useState({})
 
     const self={
         clickBack:()=>{
@@ -44,10 +53,18 @@ function Detail(props) {
         },
         clickPart:(index)=>{
             setSelected(index);
+            current=index;
             self.autoFresh(index,active);
         },
         clickHashFresh:(ev)=>{
-            setHash("0xa3dfd11908fasdfas8df");
+            setHash(self.randomHash(64));
+            self.autoFresh(current,active);
+        },
+        randomHash:(n)=>{
+            const str="01234567890abcdef";
+            let hex="0x";
+            for(let i=0;i<n;i++) hex+=str[tools.rand(0,str.length-1)];
+            return hex;
         },
         getBackground:(index)=>{
             const selected_grid=Data.get("grid");
@@ -70,7 +87,8 @@ function Detail(props) {
                 const br=Math.floor((gX+i)/max);
                 list.push({
                     mX:ww*(eX+1)*((gX+i)%max),  //margin的X值
-                    mY:(br-rows)*hh*(1+eY),    //margin的Y值
+                    //mY:(br-rows)*hh*(1+eY),    //margin的Y值
+                    mY:(br-rows)*hh*(1+eY)/rate,         //margin的Y值
                     wX:ww*(eX+1),            //block的width
                     wY:hh*(eY+1),            //block的height
                 });
@@ -93,34 +111,36 @@ function Detail(props) {
             const max=line/(1+eX);
             const br=Math.ceil((gX+divide)/max);
             const height=h*24;      //这里的行数出错了，需要修正
-            //console.log(height);
-            //console.log(`Rows: ${br}`,max);
-            //1.截取显示对应的图像
-            setBS64(def.image);  
-            const rate=  1.0526;        
-            const obj={
-                width: "100%",
-                height: `${h*(1+eY)*br/rate}px`,
-                backgroundImage: `url("${def.image}")`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition:`0% ${rate*100*h*gY/height}%`,
-                backgroundSize: "cover",
-                //backgroundPosition:`0px ${h*gY}px`,
-                //backgroundSize: "fill",
-                //backgroundPosition:`0px ${height-h*gY}px`,
-                //backgroundSize: "cover",
-            }
-            console.log(obj);
-            setImageMap(obj);
+            const rate=  1.0526;
+            
+            //1.显示hash
+            setHightlight(<Hightlight start={start} step={step} hash={hash} divide={divide}/>);
 
-            //2.显示组件列表
+            //2.截取显示对应的图像
+            const ch=h*(1+eY)*br/rate;
+            setCutHeight(ch);
+            setCutWidth(def.size[0]);
+            //console.log(ch,def);
+
+            setHideMask(true);  //先关闭mask的显示
+
+            const cpen=Render.create(cut_id);
+            Render.clear(cut_id);
+            Render.cut(cpen,def.image,w,h,gY,line,(1+eY)*br,(b64)=>{
+                setImagePart(b64);
+                setTimeout(()=>{
+                    setHideMask(false);
+                },50);
+            });
+
+            //3.显示组件列表
             setParts(def.parts);
 
-            //3.显示组件的按钮
+            //4.显示组件的按钮
             const ns=self.getHelper(divide,line,w,h,gX,gY,eX,eY,rate)
             setGrid(ns);
 
-            //4.渲染图像
+            //5.渲染图像
             const basic = {
                 cell: def.cell,
                 grid: def.grid,
@@ -128,14 +148,20 @@ function Detail(props) {
             }
             //console.log(basic);
             const pen = Render.create(dom_id,true);
-            Render.clear(dom_id);
+            Render.reset(pen);
             Render.preview(pen,def.image,hash,def.parts,basic);
+            setTimeout(() => {
+                const img=pen.canvas.toDataURL("image/jpeg");
+                setBS64(img);
+            },50);  
         },
     }
 
     const offset=90;
     const dom_id = "pre_detail";
+    const cut_id="pre_cut";
     useEffect(() => {
+        setImagePart("");
         self.autoFresh(selected,active);
 
     }, [props.update]);
@@ -145,16 +171,28 @@ function Detail(props) {
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
                 Alink: <strong>{props.alink}</strong> 
             </Col>
-             <Col className="pb-2 text-end" sm={size.back[1]} xs={size.back[1]}>
+             <Col className="text-end" sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace size={40} color={"#FFAABB"} onClick={(ev)=>{
                     self.clickBack(ev);
                 }}/>
             </Col>
-            
             <Col sm={size.row[0]} xs={size.row[0]}>
+                <hr />
+            </Col>
+            <Col sm={size.hash[0]} xs={size.hash[0]}>
+                {hightlight}
+            </Col>
+            <Col className="pt-2 text-end" sm={size.hash[1]} xs={size.hash[1]}>
+                <FaSyncAlt size={24} color={"#FFAABB"} onClick={(ev)=>{
+                    self.clickHashFresh(ev);
+                }}/> 
+            </Col>
+            
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        <canvas id={dom_id} width={width} height={height}></canvas>
+                        <canvas hidden={true} id={dom_id} width={width} height={height} style={{width:"100%"}}></canvas>
+                        <img src={bs64} alt="" style={{width:"100%",minHeight:"150px"}}/>
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <ListGroup as="ul" style={{cursor:"pointer"}}>
@@ -162,25 +200,27 @@ function Detail(props) {
                             <ListGroup.Item key={index} as="li" active={selected===index} onClick={(ev)=>{
                                 self.clickPart(index);
                             }}>
-                                {/* {console.log(row)} */}
-                                <FaPuzzlePiece size="20" color={"#AAAAAA"}/> #{index}
+                                <FaPuzzlePiece size="20" color={"#AAAAAA"} style={{marginTop:"-5px"}}/>
+                                <span style={{marginLeft:"15px",marginTop:"5px"}}>#{index}</span>
                             </ListGroup.Item>
                         ))}
                         </ListGroup>
                     </Col>
                 </Row>
             </Col>
-            
+
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                <div style={cmap}></div>
+                <canvas hidden={true} id={cut_id} width={cut_width} height={cut_height}></canvas>
+                <img src={img_part} alt="" style={{width:"100%"}} />
                 {grid.map((row, index) => (
-                    <div className="cover" key={index} style={{
+                    <div hidden={hide_mask} className="cover" key={index} style={{
                             marginLeft:`${row.mX}px`,
                             marginTop:`${row.mY}px`,
                             width:`${row.wX}px`,
                             height:`${row.wY}px`,
                             lineHeight:`${row.wY}px`,
                             backgroundColor:self.getBackground(index),
+                            color:"#FF0000",
                         }} 
                         onClick={(ev)=>{
                             self.clickGrid(index);
@@ -189,33 +229,6 @@ function Detail(props) {
                     </div>
                 ))}
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <hr />
-            </Col>
-            <Col sm={size.hash[0]} xs={size.hash[0]}>
-                Mock hash: 0xabc123abc123<span className="bg-warning"><strong> ab </strong></span>123abc12
-            </Col>
-            <Col className="text-end" sm={size.hash[1]} xs={size.hash[1]}>
-                <FaSyncAlt size={24} color={"#FFAABB"} onClick={(ev)=>{
-                    self.clickHashFresh(ev);
-                }}/> 
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                From 24 to 26, hexadecimal value <strong> 231 </strong>, offset value 0<br />
-                Target <strong> 231%16 = 12 </strong>
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <FaLongArrowAltDown size={24} color={"#FFAABB"} className="pr-2"/>
-                <span style={{fontSize:"24px"}} className="mt-2">0</span>
-                <FaLongArrowAltUp size={24} color={"#FFAABB"} className="pl-2"/> 
-            </Col>
-            {/* <Col sm={size.row[0]} xs={size.row[0]}>
-                <hr />
-            </Col>
-            
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Cover here, the same as editor
-            </Col> */}
         </Row>
     )
 }

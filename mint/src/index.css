@@ -55,6 +55,10 @@ code {
   /* height: 180px; */
 }
 
+.Monospaced{
+  font-family: 'Courier New', Courier, monospace;
+}
+
 /*限制高度的容器*/
 .limited{
   max-height: 480px;

@@ -82,19 +82,34 @@ const Render= {
 		pen.fillRect(0,0,w,h);
     },
     reset:(pen,color)=>{
-        //console.log(color===undefined?config.background:color);
         const w=pen.canvas.clientWidth;
         const h=pen.canvas.clientHeight;
         pen.fillStyle=(color===undefined?config.background:color);
-        //pen.clearRect(0, 0, w, h);
         pen.fillRect(0,0,w,h);
-        //pen.stroke();
     },
     preview:(pen,bs64,hash,parts,basic)=>{
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
             self.decode(hash, pen, img, parts, basic);
+        }
+    },
+    cut:(pen,bs64,w,h,row,line,step,ck)=>{
+        const img = new Image();
+        img.src = bs64;
+        img.onload = (e) => {
+            const cx=0;
+            const cy=row*h;
+            const vx=0;
+            const vy=0;
+            const dx=w*line;
+            const dy=h*step;
+            //console.log(cx,cy);
+            pen.drawImage(img, cx , cy , dx , dy , vx, vy, dx, dy);
+            setTimeout(()=>{
+                const b64=pen.canvas.toDataURL("image/jpeg");
+                return ck && ck(b64);
+            },50)
         }
     },
     count:(pen,n,back)=>{
