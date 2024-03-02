@@ -149,7 +149,7 @@ function Template(props) {
 
                 self.getThumbs(last, dom_id, (glist) => {
                     setList(glist);
-                    console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
+                    //console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
                 });
             });
         }

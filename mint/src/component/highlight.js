@@ -47,16 +47,12 @@ function Hightlight(props) {
         showResult: (hash, start, step,divide) => {
             const value=hash.slice(start,start+step);
             const int=parseInt("0x"+value);
-            setInfo(`Value: 0x${value} , Result: ${int} % ${divide} = ${int%divide}`);
+            setInfo((<p style={{marginBottom:"0px"}}>Value: 0x{value} , Result: {int} % {divide} = <span className="bg-warning">&nbsp;{int%divide}&nbsp;</span></p>));
         }
     }
 
     useEffect(() => {
-        console.log(hash);
         const str=hash.slice(2,66);
-        //console.log(str,start,step);
-        //const start=55;
-        //const step=4;
         self.firstRow(str, start, step);
         self.secondRow(str, start, step);
         self.showResult(str,start,step,divide);
@@ -64,6 +60,9 @@ function Hightlight(props) {
 
     return (
         <Row >
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <small>Mock the block hash</small>
+            </Col>
             <Col className="Monospaced" sm={size.row[0]} xs={size.row[0]}>
                 <strong>{first}</strong>
             </Col>

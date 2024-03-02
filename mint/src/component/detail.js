@@ -34,6 +34,7 @@ function Detail(props) {
     //let [mask, setMask]= useState(0);                   //Mask的数量
 
     let [hightlight, setHightlight]=useState("");
+    let [owner, setOwner]=useState("");
 
     let [cut_width,setCutWidth]=useState(400);
     let [cut_height,setCutHeight]=useState(50);
@@ -100,6 +101,9 @@ function Detail(props) {
         //iselect, 选中的零件
         autoFresh:(ipart,iselect)=>{
             const tpl = Data.getHash("cache", alink.toLocaleLowerCase());
+
+            //console.log(tpl);
+            setOwner(tpl.owner);
             
             //0.获取基本的参数
             const def=tpl.raw;
@@ -176,13 +180,11 @@ function Detail(props) {
                     self.clickBack(ev);
                 }}/>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <hr />
-            </Col>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}></Col>
             <Col sm={size.hash[0]} xs={size.hash[0]}>
                 {hightlight}
             </Col>
-            <Col className="pt-2 text-end" sm={size.hash[1]} xs={size.hash[1]}>
+            <Col className="pt-4 text-end" sm={size.hash[1]} xs={size.hash[1]}>
                 <FaSyncAlt size={24} color={"#FFAABB"} onClick={(ev)=>{
                     self.clickHashFresh(ev);
                 }}/> 
@@ -228,6 +230,9 @@ function Detail(props) {
                         {index}
                     </div>
                 ))}
+            </Col>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                Owner:{tools.shorten(owner,15)}
             </Col>
         </Row>
     )
