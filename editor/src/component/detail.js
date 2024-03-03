@@ -6,9 +6,9 @@ import  Data from "../lib/data";
 function Detail(props) {
     const size = {
         row: [12],
-        value:[6,6,6,6],
+        value:[3,3,3,3],
         center:[6,6],
-        img:[6,6,6,6],
+        img:[3,3,3,3],
         position:[6,6],
     };
 
@@ -206,25 +206,25 @@ function Detail(props) {
                 <hr />
             </Col>
             <Col lg={size.img[0]} xl={size.img[0]} xxl={size.img[0]}>
-                <small>Image line</small>
+                <small>Line X</small>
                 <input type="number" className="form-control" value={img_line} onChange={(ev)=>{
                     self.changeImageLine(ev);
                 }}/>
             </Col>
             <Col lg={size.img[1]} xl={size.img[1]} xxl={size.img[1]}>
-                <small>Image row</small>
+                <small>Row Y</small>
                 <input type="number" className="form-control" value={img_row} onChange={(ev)=>{
                     self.changeImageRow(ev);
                 }}/>
             </Col>
             <Col lg={size.img[2]} xl={size.img[2]} xxl={size.img[2]}>
-                <small>Size X extend</small>
+                <small>X extend</small>
                 <input type="number" className="form-control" value={img_ext_x} onChange={(ev)=>{
                     self.changeImageEX(ev);
                 }}/>
             </Col>
             <Col lg={size.img[3]} xl={size.img[3]} xxl={size.img[3]}>
-                <small>Size Y extend</small>
+                <small>Y extend</small>
                 <input type="number" className="form-control" value={img_ext_y} onChange={(ev)=>{
                     self.changeImageEY(ev);
                 }}/>

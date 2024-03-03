@@ -154,6 +154,7 @@ function Detail(props) {
             const pen = Render.create(dom_id,true);
             Render.reset(pen);
             Render.preview(pen,def.image,hash,def.parts,basic);
+            Render.active(pen,w*(1+eX),h*(1+eY),target.position[0],target.position[1],"#FFFFFF",2);
             setTimeout(() => {
                 const img=pen.canvas.toDataURL("image/jpeg");
                 setBS64(img);

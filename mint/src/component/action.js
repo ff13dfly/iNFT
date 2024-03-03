@@ -19,28 +19,10 @@ function Action(props) {
     let [hidden,setHidden]=useState(true);
     let [disable,setDisable]=useState(false);
 
-    const {Keyring}=window.Polkadot;
-
     const self={
         changePassword:(ev)=>{
             setPassword(ev.target.value);
             setDisable(!ev.target.value?true:false);
-        },
-
-        vertify:(fa,password,ck)=>{
-            try {
-                const acc=JSON.parse(fa);
-                const keyring = new Keyring({ type: "sr25519" });
-                const pair = keyring.createFromJson(acc);
-                try {
-                    pair.decodePkcs8(password);
-                    return  ck && ck(pair);
-                } catch (error) {
-                    return ck && ck({error:"Invalid passoword"});
-                }
-            } catch (error) {
-                return ck && ck({error:"Invalid file"}); 
-            }
         },
 
         getAnchorName:(ck)=>{
@@ -77,7 +59,7 @@ function Action(props) {
                     return false;
                 }
                 setDisable(true);
-                self.vertify(fa,password,(pair)=>{
+                Chain.load(fa,password,(pair)=>{
                     if(pair.error!==undefined){
                         setInfo(pair.error);
                         setPassword("");
@@ -96,7 +78,7 @@ function Action(props) {
                                 setInfo(res.message);
                                 if(res.step==="Finalized"){
                                     setDisable(false);
-                                    props.dialog(<Result anchor={`anchor://${name}`}/>,"iNFT Result");
+                                    props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
                                     setTimeout(()=>{
                                         setInfo("");
                                     },400);

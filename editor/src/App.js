@@ -9,6 +9,7 @@ import Template from "./component/template";
 import Network from "./component/network";
 import Preview from "./component/preview";
 import Puzzle from "./component/puzzle";
+import Rarity from "./component/rarity";
 import NFT from "./component/nft";
 import Detail from "./component/detail";
 
@@ -43,12 +44,14 @@ function App() {
         <Row>
           <Col lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
             <Board fresh={self.fresh} update={update}/>
+            
             <Operation fresh={self.fresh} update={update}/>
           </Col>
           <Col lg={size.side[1]} xl={size.side[1]} xxl={size.side[1]} >
             <NFT fresh={self.fresh} update={update}/>
             <Puzzle fresh={self.fresh} update={update}/>
             <Detail fresh={self.fresh} update={update} />
+            <Rarity fresh={self.fresh} update={update}/>
           </Col>
           <Col lg={size.side[2]} xl={size.side[2]} xxl={size.side[2]} > 
             <Template fresh={self.fresh} update={update}/>

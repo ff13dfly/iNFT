@@ -16,6 +16,7 @@ function Mine(props) {
         list: [4],
         page: [4, 4, 4],
         filter:[6,6],
+        selling:[6,6],
     };
 
     let [list, setList] = useState([]);
@@ -115,6 +116,11 @@ function Mine(props) {
             return setTimeout(() => {
                 me.bs64 = pen.canvas.toDataURL("image/jpeg");
                 me.block = me_anchor.block;
+
+                me.sell=me_anchor.sell;     //附加销售的信息
+                me.price=me_anchor.cost;
+
+                //console.log(me_anchor);
                 todo.push(me);
                 con.innerHTML = "";
 
@@ -157,6 +163,7 @@ function Mine(props) {
                         self.cacheTemplate(tpls, (dels) => {
                             //console.log(JSON.stringify(plist));
                             self.getThumbs(plist, dom_id, (glist) => {
+                                //console.log(glist);
                                 setPageShow(true);
                                 setList(glist);
                             });
@@ -201,8 +208,11 @@ function Mine(props) {
                                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                                         <img className="mine" src={row.bs64} alt="" />
                                     </Col>
-                                    <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                                    <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
                                         {row.block.toLocaleString()}
+                                    </Col>
+                                    <Col className="text-end" sm={size.selling[1]} xs={size.selling[1]}>
+                                        {row.sell?row.price:""}
                                     </Col>
                                 </Row>
                             </Col>

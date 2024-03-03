@@ -68,6 +68,22 @@ const self = {
         }
         subs[key]=fun;
     },
+    load:(fa,password,ck)=>{
+        const {Keyring}=window.Polkadot;
+        try {
+            const acc=JSON.parse(fa);
+            const keyring = new Keyring({ type: "sr25519" });
+            const pair = keyring.createFromJson(acc);
+            try {
+                pair.decodePkcs8(password);
+                return  ck && ck(pair);
+            } catch (error) {
+                return ck && ck({error:"Invalid passoword"});
+            }
+        } catch (error) {
+            return ck && ck({error:"Invalid file"}); 
+        }
+    },
     search:(name,ck)=>{
         return anchorJS.search(name,ck);
     },
@@ -77,6 +93,12 @@ const self = {
     hash:(block,ck)=>{
         return anchorJS.hash(block,ck);
     },
+    sell:(pair,anchor,price,ck,target)=>{
+        return anchorJS.sell(pair,anchor,price,ck,target);
+    },
+    unsell:(pair,anchor,ck)=>{
+        return anchorJS.unsell(pair,anchor,ck);
+    }
 };
 
 export default self;
