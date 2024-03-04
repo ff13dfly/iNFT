@@ -1,26 +1,37 @@
-import { Container,Col, Row } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-// iNFT definition
-// anchor://aabb/217148
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./entry/home";
+import Template from "./entry/template";
+import Editor from "./entry/editor";
+import Minter from "./entry/minter";
+import Mine from "./entry/mine";
+import View from "./entry/view";
 
 function App() {
 
   const size = {
     row: [12],
-    side:[6,3,3],
   };
 
 
-  const self={
+  const self = {
+
   }
-  
+
   return (
-    <div>
-      <Container>
-        
-      </Container>
-    </div>
+    <BrowserRouter>
+      <Routes>
+          <Route index element={<Home />} />
+          <Route path="template" element={<Template />} />
+          <Route path="editor" element={<Editor />} />
+          <Route path="minter" element={<Minter />} />
+          <Route path="/" element={<Mine />}></Route>
+          <Route path="*" element={<View />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
