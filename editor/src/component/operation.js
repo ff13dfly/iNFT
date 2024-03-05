@@ -181,7 +181,7 @@ function Operation(props) {
             <Col className="pt-4 text-end" lg={size.write[1]} xl={size.write[1]} xxl={size.write[1]} >
                 <button disabled={writeable} className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickWrite(ev);
-                }}>Write iNFT Template</button>
+                }}>To Chain</button>
             </Col>
             <Col className="pt-2 text-end" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 {final}

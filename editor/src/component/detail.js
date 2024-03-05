@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Rarity from "./rarity";
+
 import  Data from "../lib/data";
 
 function Detail(props) {
@@ -32,6 +34,8 @@ function Detail(props) {
 
     let [center_x,setCenterX]=useState(0);
     let [center_y,setCenterY]=useState(0);
+
+    let [rare, setRare]=useState("");
 
     const self={
         autoSave:(key,index,val)=>{
@@ -157,10 +161,11 @@ function Detail(props) {
             const dt=def.puzzle[active];
             self.setValues(dt);
 
+            setRare(<Rarity fresh={props.fresh} update={props.update} index={active}/>);
+
             const hash=Data.get("hash");
-            //console.log(hash);
+
             if(hash){
-                //console.log(hash);
                 const [hash_start,hash_step,amount]=dt.value;
                 const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
                 const rand=parseInt(str);
@@ -258,6 +263,9 @@ function Detail(props) {
                 <input type="number" className="form-control" value={pos_y} onChange={(ev)=>{
                     self.changePositionY(ev);
                 }}/>
+            </Col>
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                {rare}
             </Col>
         </Row>
     )

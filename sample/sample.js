@@ -1,6 +1,6 @@
-
 const template={
-    type:2,                 //[1.1D; 2.2D]
+    type:2,                 //{1:"1D",2:"2D iNFT",3:"3D iNFT"}
+    size:[400,400],         //iNFT输出的尺寸大小
     cell:[50,50],           //每个像素点的大小
     grid:[8,20],            //整体图像的像素
     image:"BASE64_IMAGE",
@@ -10,10 +10,11 @@ const template={
     ]
 }
 
-
 const definition={
     "type":"2D",                //iNFT的组件类型    
-    "size":["400","400"],   
+    "size":[400,400], 
+    "cell":[50,50],
+    "grid":[8,20],
     "parts":{
         "piece":{
             "value":[
