@@ -13,7 +13,18 @@ function Rarity(props) {
 
     let [ series, setSeries]=useState([]);
 
+    const self={
+        getMatrix:(rarity,sum)=>{
+
+        },
+    }
+
     useEffect(() => {
+        const sample=[
+            [0,1,2],
+            [3,4,5,6],
+            [7]
+        ];
         const rare=[
             [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
