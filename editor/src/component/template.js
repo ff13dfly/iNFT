@@ -50,13 +50,12 @@ function Template(props) {
     }, []);
 
     return (
-        <Row>
+        <Row className="pt-4">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <h5>iNFT Image</h5>
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <FaFileUpload style={{ color: "rgb(13, 110, 253)", cursor: "pointer"}} onClick={(ev)=>{
-                    //self.clickDownload();
                     fileUpload.current.click()
                 }}/>  
                 <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
@@ -64,7 +63,6 @@ function Template(props) {
                 }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                {/* <small>Select the template png file.</small> */}
                 <input hidden={true} ref={fileUpload} type="file" className="form-control" placeholder="The template file." onChange={(ev)=>{
                     self.changeTemplate(ev);
                 }}/>

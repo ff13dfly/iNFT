@@ -59,9 +59,11 @@ function Basic(props) {
         },
         saveSize:(cx,cy,gx,gy)=>{
             Data.set("size",{
+                target:[width,height],
                 cell:[cx,cy],
                 grid:[gx,gy],
-            })
+            });
+            props.fresh();
         },
         updateHash:(order)=>{
             const puzzle_index=Data.get("selected");

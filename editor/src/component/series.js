@@ -65,17 +65,31 @@ function Series(props) {
             Data.set("NFT",JSON.parse(JSON.stringify(def)));
             props.fresh();
         },
+        calcRarity:(puzzle,series)=>{
+            //console.log(puzzle,series);
+            for(let i=0;i<series.length;i++){
+                series[i].rate=1;
+                for(let j=0;j<puzzle.length;j++){
+                    const part=puzzle[j];
+                    const max=part.value[2];
+                    const bingo=part.rarity[i];
+                    //console.log(bingo);
+                    series[i].rate=series[i].rate*(bingo.length/max);
+                }
+            }
+            return series;
+        },
     };
 
     useEffect(() => {
-
         const def=Data.get("NFT");
         if(def!==null){
             if(def.series===undefined) def.series=[];
-            setSeries(def.series);
+            
+            const nlist=self.calcRarity(def.puzzle,def.series);
+            //console.log(nlist);
+            setSeries(nlist);
         }
-        
-
     }, [props.update]);
 
     return (
@@ -85,7 +99,7 @@ function Series(props) {
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
-                    self.clickAdd(ev);
+                    //self.clickAdd(ev);
                 }}/>
             </Col>
             {series.map((row, index) => (
