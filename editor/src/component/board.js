@@ -83,6 +83,9 @@ function Board(props) {
         const bs64=Data.get("template");
         const def=Data.get("NFT");
         const ss=Data.get("size");
+
+        //console.log(def);
+        //console.log(ss);
         
         if(bs64!==null && def!==null){
             const img = new Image();

@@ -115,7 +115,10 @@ function Basic(props) {
     }, [props.update]);
 
     return (
-        <Row>
+        <Row className="pt-2">
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                <h5>Basic parameters</h5>
+            </Col>
             <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                 <small>NFT Width</small>
                 <input className="form-control" type="number" value={width} onChange={(ev)=>{

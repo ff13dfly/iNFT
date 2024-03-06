@@ -159,7 +159,7 @@ function Operation(props) {
     return (
         <Row className="pt-2">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                <hr />
+                <h5>Write iNFT template to chain</h5>
             </Col>
             <Col lg={size.encry[0]} xl={size.encry[0]} xxl={size.encry[0]} >
                 <small>{info}</small>

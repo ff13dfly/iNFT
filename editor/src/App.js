@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Board from "./component/board";
 import Operation from "./component/operation";
 import Basic from "./component/basic";
+import Series from "./component/series";
 import Template from "./component/template";
 import Network from "./component/network";
 import Preview from "./component/preview";
@@ -59,6 +60,7 @@ function App() {
             <Detail fresh={self.fresh} update={update} />
           </Col>
           <Col lg={size.side[2]} xl={size.side[2]} xxl={size.side[2]} > 
+            <Series fresh={self.fresh} update={update}/>
             <Template fresh={self.fresh} update={update}/>
             <Preview fresh={self.fresh} update={update}/>
           </Col>
