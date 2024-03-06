@@ -68,7 +68,6 @@ function Rarity(props) {
             return result;
         },
         getMatrix:(rarity,max,series)=>{
-            console.log(rarity,series);
             const nlist=[];
             for(let i=0;i<series;i++){
                 if(rarity!==undefined && rarity[i]!==undefined){
@@ -80,7 +79,6 @@ function Rarity(props) {
             return nlist;
         },
         fillArray:(arr,max)=>{
-            console.log(arr,max)
             const nlist=[];
             for(let i=0;i<max;i++){
                 nlist.push(arr.includes(i)?1:0);
@@ -94,9 +92,7 @@ function Rarity(props) {
         const def=Data.get("NFT");
         const dt=def.puzzle[active];
         const sum=def.series===undefined?0:def.series.length;
-        //console.log(def);
         const list=self.getMatrix(dt.rarity,dt.value[2],sum);
-        console.log(list);
         setSeries(list);
     }, [props.index,props.update]);
 
