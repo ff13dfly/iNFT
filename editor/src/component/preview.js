@@ -148,9 +148,7 @@ function Preview(props) {
 
     return (
         <Row>
-            <Col className="pt-4" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                {/* template image preview, {props.update}
-                <p>Image information, 1,234 bytes, 1024 * 2048.</p> */}
+            <Col className="pt-2" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {grid.map((row, index) => (
                     <div className="cover" key={index} style={{
                             marginLeft:`${row.mX}px`,
@@ -166,47 +164,6 @@ function Preview(props) {
                 ))}
                 {<img id="preview" ref={ref} src={image} alt="Preview of full iNFT" />}
             </Col>
-            {/* <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                <small>NFT Width</small>
-                <input className="form-control" type="number" value={width} onChange={(ev)=>{
-                    
-                }}/>
-            </Col>
-            <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
-                <small>NFT Height</small>
-                <input className="form-control" type="number" value={height} onChange={(ev)=>{
-                    
-                }}/>
-            </Col>
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <hr />
-            </Col> */}
-
-            {/* <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                <small>Cell X</small>
-                <input className="form-control" type="number" value={cellX} onChange={(ev)=>{
-                    self.changeCellX(ev);
-                }}/>
-            </Col>
-            <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
-                <small>Cell Y</small>
-                <input className="form-control" type="number" value={cellY} onChange={(ev)=>{
-                    self.changeCellY(ev);
-                }}/>
-            </Col>
-            <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                <small>Lines</small>
-                <input className="form-control" type="number" value={line} onChange={(ev)=>{
-                    self.changeLine(ev);
-                }}/>
-            </Col>
-            <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
-                <small>Rows</small>
-                <input className="form-control" type="number" value={row} onChange={(ev)=>{
-                    self.changeRow(ev)
-                }}/>
-            </Col> */}
-            
         </Row>
     )
 }

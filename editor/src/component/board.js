@@ -33,7 +33,7 @@ function Board(props) {
     let [highlight,setHighlight] = useState(true);
     let [series, setSeries]=useState([]);
     let [rate,setRate]=useState(0);
-
+    let [win,setWin]=useState("");
 
     if (Data.get("hash") === null) {
         Data.set("hash", hash);
@@ -79,6 +79,42 @@ function Board(props) {
                 rate+=series[i].rate;
             }
             return rate;
+        },
+        calcResult:(hash,parts,s_amount)=>{
+            //console.log(hash,parts,series);
+            let series=[];
+            for(let i=0;i<parts.length;i++){
+                const part=parts[i];
+                const [hash_start, hash_step, amount,offset] = part.value;
+                const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
+                const index=num%amount;
+                if(part.rarity===undefined) continue;
+
+                const rlist=part.rarity;
+                const in_asset=[];
+                for(let j=0;j<rlist.length;j++){
+                    const asset=rlist[j];
+                    if(asset.includes(index)){
+                       in_asset.push(j);
+                    } 
+                }
+                series.push(in_asset);
+            }
+            //console.log(series);
+
+            const index=[];
+            for(let i=0;i<s_amount;i++){
+                let not=false;           //i系列是否被包括了
+                for(let j=0;j<parts.length;j++){
+                    const arr=series[j];
+                    if(!arr.includes(i)) not=true;
+                }
+
+                if(!not) index.push(i);
+            }
+
+            if(index.length===0) return false;
+            return index[0];
         },
         decode: (hash, pen, img, parts, tpl, active) => {
             const { cell, grid } = tpl;
@@ -131,11 +167,18 @@ function Board(props) {
                 const active = Data.get("selected");
                 //console.log(highlight);
                 self.decode(hash, pen, img, def.puzzle, ss, highlight?active:undefined);
-            }
 
-            const rlist=self.calcRarity(def.puzzle,def.series);
-            setSeries(rlist);
-            setRate(tools.toF(100*self.getTotalRate(rlist),5));
+                const rlist=self.calcRarity(def.puzzle,def.series);
+                setSeries(rlist);
+                setRate(tools.toF(100*self.getTotalRate(rlist),5));
+
+                const sindex=self.calcResult(hash,def.puzzle,def.series.length);
+                if(sindex!==false){
+                    setWin(`Series ${sindex} winner. Rate: ${tools.toF(100*rlist[sindex].rate,5)} %`)
+                }else{
+                    setWin("")
+                }
+            }
         }
         //ETH.init();
     }, [props.update]);
@@ -190,7 +233,7 @@ function Board(props) {
                 ))}
                 <Row className="pt-4">
                     <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        Target result
+                        Target result: {win}
                     </Col>
                 </Row>
             </Col>

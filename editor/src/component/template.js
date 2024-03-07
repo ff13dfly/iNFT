@@ -50,7 +50,7 @@ function Template(props) {
     }, []);
 
     return (
-        <Row className="pt-4">
+        <Row className="pt-2">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <h5>iNFT Image</h5>
             </Col>
