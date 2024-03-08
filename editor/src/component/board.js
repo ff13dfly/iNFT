@@ -121,8 +121,8 @@ function Board(props) {
         },
         decode: (hash, pen, img, parts, tpl, active) => {
             const { cell, grid } = tpl;
-            //const multi=window.devicePixelRatio;
             const multi = 1;
+            let cache=null;
             for (let i = 0; i < parts.length; i++) {
                 //获取不同的图像
                 const part = parts[i];
@@ -144,18 +144,17 @@ function Board(props) {
                 const vy = py - zy * cell[1] * (1 + eY);
                 pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
 
-                //绘制当前的选中的块
                 if (active === i) {
-                    Render.active(pen, dx, dy, vx, vy, "#FF0000", 3);
+                    cache=[dx, dy, vx, vy, "#FF0000", 2];
                 }
             }
+
+            if(cache!==null){
+                const [dx, dy, vx, vy,color, pw]=cache
+                Render.active(pen, dx, dy, vx, vy, color, pw);
+            }
         },
-        autofresh:()=>{
-            // const hash = Data.get("hash");
-            // if (hash !== "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486") {
-            //     setHash(hash);
-            // }
-            
+        autofresh:(hash)=>{
             const pen = Render.create(cfg.id);
             const bs64 = Data.get("template");
             const def = Data.get("NFT");
@@ -185,15 +184,11 @@ function Board(props) {
     }
 
     useEffect(() => {
-        const hash = Data.get("hash");
-        if (hash !== "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486") {
-            setHash(hash);
-        }
+        setHash(Data.get("hash"));
         const { target } = Data.get("size");
         setWidth(target[0]);
         setHeight(target[1]);
-
-        self.autofresh();
+        self.autofresh(Data.get("hash"));
         
         //ETH.init();
     }, [props.update]);

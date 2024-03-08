@@ -38,7 +38,6 @@ function Preview(props) {
             const hash=Data.get("hash");
             const def=NFT.puzzle[puzzle_index];
             const [hash_start,hash_step,amount]=def.value;
-            //console.log(self.getHash(hash,order,hash_start,hash_step,amount));
             Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount));
             return ck && ck();
         },
