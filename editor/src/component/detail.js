@@ -39,8 +39,6 @@ function Detail(props) {
 
     const self={
         autoSave:(key,index,val)=>{
-            //console.log(key,index,val);
-            //return false;
             const active=Data.get("selected");
             const def=Data.get("NFT");
             if(active===null || def===null) return false;
@@ -50,16 +48,15 @@ function Detail(props) {
                 position:[pos_x,pos_y],
                 center:[center_x,center_y],
             }
+            if(def.puzzle[active].rarity!==undefined){
+                data.rarity=def.puzzle[active].rarity;
+            }
 
             def.puzzle[active]=data;
             def.puzzle[active][key][index]=val;
-            //console.log(JSON.stringify(def));
-
             const changed=JSON.parse(JSON.stringify(def));
-            
             Data.set("NFT",changed);
             props.fresh();
-            
         },
         changeValueStart:(ev)=>{
             const val=parseInt(ev.target.value);
@@ -83,7 +80,7 @@ function Detail(props) {
             const val=parseInt(ev.target.value);
             if(isNaN(val)) return false;
             setValueOffset(val);
-            self.autoSave("value",2,val);
+            self.autoSave("value",3,val);
         },
         changeImageLine:(ev)=>{
             const val=parseInt(ev.target.value);

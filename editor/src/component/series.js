@@ -99,7 +99,7 @@ function Series(props) {
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
-                    //self.clickAdd(ev);
+                    self.clickAdd(ev);
                 }}/>
             </Col>
             {series.map((row, index) => (

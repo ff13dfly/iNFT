@@ -12,82 +12,46 @@ function Preview(props) {
         grid: [6,6],
     };
 
-    const ss=Data.get("size");
-
     let [image,setImage]=useState("image/empty.png");
     let [grid, setGrid] =useState([]);
     let [active, setActive]=useState(null);
-    //let [selected, setSelected]= useState(0);
-    
-    let [width,setWidth]=useState(ss.target[0]);
-    let [height,setHeight]=useState(ss.target[1]);
-    let [cellX,setCellX]=useState(ss.cell[0]);      //cell的X轴像素宽度
-    let [cellY,setCellY]=useState(ss.cell[1]);      //cell的Y轴像素宽度
-    let [line,setLine]=useState(ss.grid[0]);        //X轴，每行多少个
-    let [row,setRow]=useState(ss.grid[1]);          //Y轴，多少行
+
+    //let [width,setWidth]=useState(400);
+    //let [height,setHeight]=useState(400);
+    let [cellX,setCellX]=useState(50);      //cell的X轴像素宽度
+    let [cellY,setCellY]=useState(50);      //cell的Y轴像素宽度
+    let [line,setLine]=useState(8);        //X轴，每行多少个
+    let [row,setRow]=useState(10);          //Y轴，多少行
 
     const ref = useRef(null);
 
     const self={
-        changeCellX:(ev)=>{
-            const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setCellX(val);
-                self.saveSize(val,cellY,line,row);
-            }
-        },
-        changeCellY:(ev)=>{
-            const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setCellY(val);
-                self.saveSize(cellX,val,line,row);
-            }
-        },
-        changeLine:(ev)=>{
-            const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setLine(val);
-                self.saveSize(cellX,cellY,val,row);
-            }
-        },
-        changeRow:(ev)=>{
-            const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setRow(val);
-                self.saveSize(cellX,cellY,line,val);
-            }
-        },
         clickGrid:(index)=>{
-            //console.log(`Index ${index} clicked.`);
             Data.set("grid",index);
-            self.updateHash(index);
-            props.fresh();
+            self.updateHash(index,()=>{
+                props.fresh();
+            });
         },
-        saveSize:(cx,cy,gx,gy)=>{
-            Data.set("size",{
-                cell:[cx,cy],
-                grid:[gx,gy],
-            })
-        },
-        updateHash:(order)=>{
+        updateHash:(order,ck)=>{
             const puzzle_index=Data.get("selected");
             const NFT=Data.get("NFT");
             const hash=Data.get("hash");
             const def=NFT.puzzle[puzzle_index];
             const [hash_start,hash_step,amount]=def.value;
-            console.log(self.getHash(hash,order,hash_start,hash_step,amount));
+            //console.log(self.getHash(hash,order,hash_start,hash_step,amount));
             Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount));
+            return ck && ck();
         },
-        getHelper:(amount,line,w,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
+        getHelper:(amount,line,w,h,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
             const list=[];
             const max=line/(1+eX);
             for(let i=0;i<amount;i++){
                 const br=Math.floor((gX+i)/max);
                 list.push({
                     mX:w*(eX+1)*((gX+i)%max),    //margin的X值
-                    mY:w*gY+br*w*(1+eY),    //margin的Y值
-                    wX:w*(eX+1),            //block的width
-                    wY:w*(eY+1),            //block的height
+                    mY:h*(gY+br*(1+eY)),        //margin的Y值
+                    wX:w*(eX+1),                //block的width
+                    wY:h*(eY+1),                //block的height
                 });
             } 
             return list;
@@ -102,48 +66,56 @@ function Preview(props) {
             }else{
                 return active===index?ac:bc
             }
-            
         },
         getHash:(hash,order,start,step,max)=>{
-            const s=16;
-            const top=Math.pow(s,step);         //总数据量
+            const top=Math.pow(16,step);         //总数据量
             const m=Math.floor(top/max)-1;
             const multi=tools.rand(0,m);
             const n=multi*max+order;
 
-            const px=2;
+            const px=2;     //支付串"0x"前缀
             const prefix=hash.substring(0,start+px);
             const tailor=hash.substring(start+step+px,hash.length+px);
             return `${prefix}${n.toString(16)}${tailor}`;
         },
+        autoFresh:()=>{
+            const width=ref.current.offsetWidth;
+            const w=tools.toF(width/line,3);
+            const rate=w/cellX;
+            const h=cellY*rate;
+            const bs64=Data.get("template");
+            if(bs64!==null){
+                setImage(bs64);
+                const puzzle_selected=Data.get("selected");
+                const NFT=Data.get("NFT");
+                if(puzzle_selected!==null){
+                    const def=NFT.puzzle[puzzle_selected];
+                    const hash=Data.get("hash");
+                    
+                    if(def.img){
+                        const [hash_start,hash_step,amount]=def.value;
+                        const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
+                        const rand=parseInt(str);
+    
+                        const sel=rand%amount;
+                        setActive(sel);
+    
+                        const [gX,gY,eX,eY]=def.img;
+                        const gg=self.getHelper(amount,line,w,h,gX,gY,eX,eY);
+                        setGrid(gg);
+                    }
+                }
+            }
+        },
     }
 
     useEffect(() =>{
-        const  width=ref.current.offsetWidth;
-        const  w=tools.toF(width/line,3);
-        const bs64=Data.get("template");
-        if(bs64!==null){
-            setImage(bs64);
-            const puzzle_selected=Data.get("selected");
-            const NFT=Data.get("NFT");
-            if(puzzle_selected!==null){
-                const def=NFT.puzzle[puzzle_selected];
-                const hash=Data.get("hash");
-                
-                if(def.img){
-                    const [hash_start,hash_step,amount]=def.value;
-                    const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
-                    const rand=parseInt(str);
-
-                    const sel=rand%amount;
-                    setActive(sel);
-
-                    const [gX,gY,eX,eY]=def.img;
-                    const gg=self.getHelper(amount,line,w,gX,gY,eX,eY);
-                    setGrid(gg);
-                }
-            }
-        }
+        const ss=Data.get("size");
+        setCellX(ss.cell[0]);      //cell的X轴像素宽度
+        setCellY(ss.cell[1]);      //cell的Y轴像素宽度
+        setLine(ss.grid[0]);        //X轴，每行多少个
+        setRow(ss.grid[1]);          //Y轴，多少行
+        self.autoFresh();
     }, [props.update,ref.current]);
 
     return (

@@ -23,32 +23,46 @@ function Basic(props) {
     const ref = useRef(null);
 
     const self={
+        changeWidth:(ev)=>{
+            const val=parseInt(ev.target.value);
+            if(!isNaN(val)){
+                setWidth(val);
+                self.saveSize(cellX,cellY,line,row,val,height);
+            }
+        },
+        changeHeight:(ev)=>{
+            const val=parseInt(ev.target.value);
+            if(!isNaN(val)){
+                setHeight(val);
+                self.saveSize(cellX,cellY,line,row,width,val);
+            }
+        },
         changeCellX:(ev)=>{
             const val=parseInt(ev.target.value);
             if(!isNaN(val)){
                 setCellX(val);
-                self.saveSize(val,cellY,line,row);
+                self.saveSize(val,cellY,line,row,width,height);
             }
         },
         changeCellY:(ev)=>{
             const val=parseInt(ev.target.value);
             if(!isNaN(val)){
                 setCellY(val);
-                self.saveSize(cellX,val,line,row);
+                self.saveSize(cellX,val,line,row,width,height);
             }
         },
         changeLine:(ev)=>{
             const val=parseInt(ev.target.value);
             if(!isNaN(val)){
                 setLine(val);
-                self.saveSize(cellX,cellY,val,row);
+                self.saveSize(cellX,cellY,val,row,width,height);
             }
         },
         changeRow:(ev)=>{
             const val=parseInt(ev.target.value);
             if(!isNaN(val)){
                 setRow(val);
-                self.saveSize(cellX,cellY,line,val);
+                self.saveSize(cellX,cellY,line,val,width,height);
             }
         },
         clickGrid:(index)=>{
@@ -57,9 +71,9 @@ function Basic(props) {
             self.updateHash(index);
             props.fresh();
         },
-        saveSize:(cx,cy,gx,gy)=>{
+        saveSize:(cx,cy,gx,gy,w,h)=>{
             Data.set("size",{
-                target:[width,height],
+                target:[w,h],
                 cell:[cx,cy],
                 grid:[gx,gy],
             });
@@ -89,31 +103,6 @@ function Basic(props) {
     }
 
     useEffect(() =>{
-        // const  width=ref.current.offsetWidth;
-        // const  w=tools.toF(width/line,3);
-        // const bs64=Data.get("template");
-        // if(bs64!==null){
-        //     setImage(bs64);
-        //     const puzzle_selected=Data.get("selected");
-        //     const NFT=Data.get("NFT");
-        //     if(puzzle_selected!==null){
-        //         const def=NFT.puzzle[puzzle_selected];
-        //         const hash=Data.get("hash");
-                
-        //         if(def.img){
-        //             const [hash_start,hash_step,amount]=def.value;
-        //             const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
-        //             const rand=parseInt(str);
-
-        //             const sel=rand%amount;
-        //             setActive(sel);
-
-        //             const [gX,gY,eX,eY]=def.img;
-        //             const gg=self.getHelper(amount,line,w,gX,gY,eX,eY);
-        //             setGrid(gg);
-        //         }
-        //     }
-        // }
     }, [props.update]);
 
     return (
@@ -124,13 +113,13 @@ function Basic(props) {
             <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                 <small>NFT Width</small>
                 <input className="form-control" type="number" value={width} onChange={(ev)=>{
-                    
+                    self.changeWidth(ev);
                 }}/>
             </Col>
             <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
                 <small>NFT Height</small>
                 <input className="form-control" type="number" value={height} onChange={(ev)=>{
-                    
+                    self.changeHeight(ev);
                 }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

@@ -17,8 +17,8 @@ import tools from "../lib/tools";
 
 const cfg = {
     id: "NFT_canvas",
-    width: 400,
-    height: 400,
+    //width: 400,
+    //height: 400,
 }
 
 function Board(props) {
@@ -28,6 +28,9 @@ function Board(props) {
         rare:[9,3],
         rate:[3,9],
     };
+
+    let [width,setWidth]=useState(400);
+    let [height,setHeight]=useState(400);
 
     let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
     let [highlight,setHighlight] = useState(true);
@@ -147,6 +150,38 @@ function Board(props) {
                 }
             }
         },
+        autofresh:()=>{
+            // const hash = Data.get("hash");
+            // if (hash !== "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486") {
+            //     setHash(hash);
+            // }
+            
+            const pen = Render.create(cfg.id);
+            const bs64 = Data.get("template");
+            const def = Data.get("NFT");
+            const ss = Data.get("size");
+            if (bs64 !== null && def !== null) {
+                const img = new Image();
+                img.src = bs64;
+                img.onload = (e) => {
+                    Render.clear(cfg.id);
+                    const active = Data.get("selected");
+                    //console.log(highlight);
+                    self.decode(hash, pen, img, def.puzzle, ss, highlight?active:undefined);
+    
+                    const rlist=self.calcRarity(def.puzzle,def.series);
+                    setSeries(rlist);
+                    setRate(tools.toF(100*self.getTotalRate(rlist),5));
+    
+                    const sindex=self.calcResult(hash,def.puzzle,def.series.length);
+                    if(sindex!==false){
+                        setWin(`Series ${sindex} winner. Rate: ${tools.toF(100*rlist[sindex].rate,5)} %`)
+                    }else{
+                        setWin("")
+                    }
+                }
+            }
+        },
     }
 
     useEffect(() => {
@@ -154,32 +189,12 @@ function Board(props) {
         if (hash !== "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486") {
             setHash(hash);
         }
+        const { target } = Data.get("size");
+        setWidth(target[0]);
+        setHeight(target[1]);
 
-        const pen = Render.create(cfg.id);
-        const bs64 = Data.get("template");
-        const def = Data.get("NFT");
-        const ss = Data.get("size");
-        if (bs64 !== null && def !== null) {
-            const img = new Image();
-            img.src = bs64;
-            img.onload = (e) => {
-                Render.clear(cfg.id);
-                const active = Data.get("selected");
-                //console.log(highlight);
-                self.decode(hash, pen, img, def.puzzle, ss, highlight?active:undefined);
-
-                const rlist=self.calcRarity(def.puzzle,def.series);
-                setSeries(rlist);
-                setRate(tools.toF(100*self.getTotalRate(rlist),5));
-
-                const sindex=self.calcResult(hash,def.puzzle,def.series.length);
-                if(sindex!==false){
-                    setWin(`Series ${sindex} winner. Rate: ${tools.toF(100*rlist[sindex].rate,5)} %`)
-                }else{
-                    setWin("")
-                }
-            }
-        }
+        self.autofresh();
+        
         //ETH.init();
     }, [props.update]);
 
@@ -213,7 +228,7 @@ function Board(props) {
                 </Row>
             </Col>
             <Col className="text-center pt-4" lg={size.rare[0]} xl={size.rare[0]} xxl={size.rare[0]} >
-                <canvas width={cfg.width} height={cfg.height} id={cfg.id}></canvas>
+                <canvas width={width} height={height} id={cfg.id}></canvas>
             </Col>
             <Col className="pt-2" lg={size.rare[1]} xl={size.rare[1]} xxl={size.rare[1]} >
                 <Row className="pb-2">
