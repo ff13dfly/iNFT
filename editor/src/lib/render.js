@@ -18,9 +18,7 @@ const self={
 
 const Render= {
     create:(id,cfg)=>{
-        //console.log(`Ready to init canvas.`);
         if(RDS[id]!==undefined) return RDS[id];
-        //console.log(`First time to init`);
         const cvs=document.getElementById(id);		//1.创建好canvas并返回画笔
 		RDS[id]=cvs.getContext("2d");
         self.border(id);

@@ -49,7 +49,7 @@ function NFT(props) {
     return (
         <Row>
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
-                <h5>iNFT Instance</h5>
+                <h5>iNFT Components</h5>
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <FaFileUpload style={{ color: "rgb(13, 110, 253)", cursor: "pointer"}} onClick={(ev)=>{
