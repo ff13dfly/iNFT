@@ -35,8 +35,8 @@ function Preview(props) {
             const NFT=Data.get("NFT");
             const hash=Data.get("hash");
             const def=NFT.puzzle[puzzle_index];
-            const [hash_start,hash_step,amount]=def.value;
-            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount));
+            const [hash_start,hash_step,amount,offset]=def.value;
+            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount,offset));
             return ck && ck();
         },
         getHelper:(amount,line,w,h,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
@@ -64,11 +64,11 @@ function Preview(props) {
                 return active===index?ac:bc
             }
         },
-        getHash:(hash,order,start,step,max)=>{
+        getHash:(hash,order,start,step,max,offset)=>{
             const top=Math.pow(16,step);         //总数据量
             const m=Math.floor(top/max)-1;
             const multi=tools.rand(0,m);
-            const n=multi*max+order;
+            const n=multi*max+order-offset;
 
             const px=2;     //支付串"0x"前缀
             const prefix=hash.substring(0,start+px);
@@ -90,11 +90,11 @@ function Preview(props) {
                     const hash=Data.get("hash");
                     
                     if(def.img){
-                        const [hash_start,hash_step,amount]=def.value;
+                        const [hash_start,hash_step,amount,offset]=def.value;
                         const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
                         const rand=parseInt(str);
     
-                        const sel=rand%amount;
+                        const sel=(rand+offset)%amount;
                         setActive(sel);
     
                         const [gX,gY,eX,eY]=def.img;

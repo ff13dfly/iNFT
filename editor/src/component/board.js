@@ -1,18 +1,13 @@
 import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Value from "./value";
+
 import Data from "../lib/data";
 import Render from "../lib/render";
 import ETH from '../lib/eth';
 
 import tools from "../lib/tools";
-
-//pixijs documents
-//https://pixijs.download/dev/docs/PIXI.Rectangle.html
-
-//pixi react
-//https://pixijs.io/pixi-react/components/Sprite/
-
 //context.drawImage(img, sx, sy, swidth, sheight, x, y, width, height)
 
 const cfg = {
@@ -25,7 +20,7 @@ function Board(props) {
     const size = {
         row: [12],
         hash: [8, 4],
-        rare:[9,3],
+        rare:[8,4],
         rate:[3,9],
     };
 
@@ -37,6 +32,11 @@ function Board(props) {
     let [series, setSeries]=useState([]);
     let [rate,setRate]=useState(0);
     let [win,setWin]=useState("");
+
+    let [start,setStart]=useState(0);
+    let [step,setStep]=useState(0);
+    let [divide,setDivide]=useState(1);
+    let [offset,setOffset]=useState(0);
 
     if (Data.get("hash") === null) {
         Data.set("hash", hash);
@@ -126,13 +126,13 @@ function Board(props) {
             for (let i = 0; i < parts.length; i++) {
                 //获取不同的图像
                 const part = parts[i];
-                const [hash_start, hash_step, amount] = part.value;
+                const [hash_start, hash_step, amount,offset] = part.value;
                 const [gX, gY, eX, eY] = part.img;
                 const [px, py] = part.position;
                 const [zx, zy] = part.center;
 
                 const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
-                const index = num % amount;     //图像的位次
+                const index = (num+offset) % amount;     //图像的位次
                 const max = grid[0] / (1 + eX);
                 const br = Math.floor((index + gX) / max);
 
@@ -159,6 +159,18 @@ function Board(props) {
             const bs64 = Data.get("template");
             const def = Data.get("NFT");
             const ss = Data.get("size");
+            const selected=Data.get("selected");
+
+            if(selected!==null){
+                const part=def.puzzle[selected];
+                //console.log(part);
+                const [p_start,p_step,p_divide,p_offset]=part.value;
+                setStart(p_start);
+                setStep(p_step);
+                setDivide(p_divide);
+                setOffset(p_offset);
+            }
+
             if (bs64 !== null && def !== null) {
                 const img = new Image();
                 img.src = bs64;
@@ -187,9 +199,9 @@ function Board(props) {
         const { target } = Data.get("size");
         setWidth(target[0]);
         setHeight(target[1]);
+
         self.autofresh(Data.get("hash"));
-        
-        //ETH.init();
+
     }, [props.update]);
 
     return (
@@ -198,10 +210,8 @@ function Board(props) {
                 <h5>iNFT Preview</h5>
             </Col>
             <Col className="pt-2" lg={size.hash[0]} xl={size.hash[0]} xxl={size.hash[0]} >
-                <small>{hash.length - 2} bytes</small>
-                <textarea className="form-control" cols="30" rows="2" value={hash} onChange={(ev) => {
-                    self.changeHash(ev);
-                }}></textarea>
+                <small>{hash.length-2} bytes hexadecimal mock hash.</small>
+                <Value start={start} step={step} divide={divide} offset={offset} hash={hash}/>
             </Col>
             <Col className="pt-2" lg={size.hash[1]} xl={size.hash[1]} xxl={size.hash[1]} >
                 <Row>
@@ -224,7 +234,7 @@ function Board(props) {
                 <canvas width={width} height={height} id={cfg.id}></canvas>
             </Col>
             <Col className="pt-2" lg={size.rare[1]} xl={size.rare[1]} xxl={size.rare[1]} >
-                <Row className="pb-2">
+                <Row className="pt-4 pb-2">
                     <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         Total: {rate}%
                     </Col>

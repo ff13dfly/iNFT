@@ -20,7 +20,7 @@ function Basic(props) {
     let [line,setLine]=useState(ss.grid[0]);        //X轴，每行多少个
     let [row,setRow]=useState(ss.grid[1]);          //Y轴，多少行
 
-    const ref = useRef(null);
+    //const ref = useRef(null);
 
     const self={
         changeWidth:(ev)=>{

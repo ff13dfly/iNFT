@@ -176,10 +176,10 @@ function Detail(props) {
 
     return (
         <Row hidden={hidden} className="pt-2">
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {/* <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <small className="text-warning">Raw: {raw}, value:{num}, order: {order}</small>
                 <hr />
-            </Col>
+            </Col> */}
             <Col lg={size.value[0]} xl={size.value[0]} xxl={size.value[0]}>
                 <small>Start</small>
                 <input type="number" className="form-control" value={value_start} onChange={(ev)=>{
@@ -204,9 +204,9 @@ function Detail(props) {
                     self.changeValueOffset(ev);
                 }}/>
             </Col>
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {/* <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <hr />
-            </Col>
+            </Col> */}
             <Col lg={size.img[0]} xl={size.img[0]} xxl={size.img[0]}>
                 <small>Line X</small>
                 <input type="number" className="form-control" value={img_line} onChange={(ev)=>{
@@ -231,9 +231,9 @@ function Detail(props) {
                     self.changeImageEY(ev);
                 }}/>
             </Col>
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {/* <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <hr />
-            </Col>
+            </Col> */}
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
                 <small>Center X offset</small>
                 <input type="number" className="form-control" value={center_x} onChange={(ev)=>{
@@ -246,9 +246,9 @@ function Detail(props) {
                     self.changeCenterY(ev);
                 }}/>
             </Col>
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {/* <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <hr />
-            </Col>
+            </Col> */}
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
                 <small>Position X</small>
                 <input type="number" className="form-control" value={pos_x} onChange={(ev)=>{

@@ -45,3 +45,7 @@ code {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.Monospaced{
+  font-family: 'Courier New', Courier, monospace;
+}
