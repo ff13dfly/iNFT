@@ -35,12 +35,8 @@ function Template(props) {
             }
         },
         clickDownload:()=>{
-            //console.log("Download template image");
             const img=Data.get("template");
             if(img===null) return false;
-
-            //window.location.href=img;
-
             tools.download("full.png",img,"image");
         },
     };

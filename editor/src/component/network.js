@@ -5,10 +5,11 @@ function Network(props) {
     const size = {
         row: [12],
         opt:[2,2,1,7],
+        head:[2,10],
     };
 
-    const nets=["anchor","btc","eth"];
-    let [net,setNet] =useState(nets);
+    //const nets=["anchor","btc","eth"];
+    //let [net,setNet] =useState(nets);
 
     const router={
         anchor:()=>{
@@ -38,10 +39,13 @@ function Network(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="text-left" lg={size.opt[0]} xl={size.opt[0]} xxl={size.opt[0]} >
+            <Col className="text-left" lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
                 <h3>iNFT Editor</h3>
             </Col>
-            <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
+            <Col className="text-left" lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
+               
+            </Col>
+            {/* <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
                 <select className="form-control">
                     {net.map((row, index) => (
                         <option key={index} value={row} onClick={(ev)=>{
@@ -55,7 +59,7 @@ function Network(props) {
             </Col>
             <Col className="pt-2" lg={size.opt[3]} xl={size.opt[3]} xxl={size.opt[3]} >
                 12,343,453 0x123fad33d..dd123adcca
-            </Col>
+            </Col> */}
         </Row>
     )
 }

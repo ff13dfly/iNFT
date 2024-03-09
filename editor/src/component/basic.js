@@ -103,6 +103,13 @@ function Basic(props) {
     }
 
     useEffect(() =>{
+        const bs64=Data.get("template");
+        tools.getImageSize(bs64,(w,h)=>{
+            const rline=Math.floor(w/cellX);
+            const rrow=Math.floor(h/cellY);
+            setLine(rline);
+            setRow(rrow);
+        });
     }, [props.update]);
 
     return (
@@ -140,13 +147,13 @@ function Basic(props) {
             </Col>
             <Col lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                 <small>Lines</small>
-                <input className="form-control" type="number" value={line} onChange={(ev)=>{
+                <input disabled={true} className="form-control" type="number" value={line} onChange={(ev)=>{
                     self.changeLine(ev);
                 }}/>
             </Col>
             <Col lg={size.grid[1]} xl={size.row[1]} xxl={size.grid[1]}>
                 <small>Rows</small>
-                <input className="form-control" type="number" value={row} onChange={(ev)=>{
+                <input disabled={true} className="form-control" type="number" value={row} onChange={(ev)=>{
                     self.changeRow(ev)
                 }}/>
             </Col>

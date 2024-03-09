@@ -19,13 +19,13 @@ const self = {
     if (n === undefined) n = 10;
     return addr.substr(0, n) + "..." + addr.substr(addr.length - n, n);
   },
-  copy:(arr_obj)=>{
+  copy: (arr_obj) => {
     return JSON.parse(JSON.stringify(arr_obj));
   },
-  clean:(arr)=>{
+  clean: (arr) => {
     return Array.from(new Set(arr));
   },
-  tail:(str,n)=>{
+  tail: (str, n) => {
     return str.substr(0, n) + "...";
   },
   empty: (obj) => {
@@ -35,29 +35,29 @@ const self = {
   toDate: (stamp) => {
     return new Date(stamp).toLocaleString();
   },
-  device:()=>{
+  device: () => {
     return {
-      width:window.screen.width,
-      height:window.screen.height,
-      rate:window.devicePixelRatio,
+      width: window.screen.width,
+      height: window.screen.height,
+      rate: window.devicePixelRatio,
     }
   },
-  toF: (a,fix)=>{
-    fix=fix||3;return parseFloat(a.toFixed(fix))
+  toF: (a, fix) => {
+    fix = fix || 3; return parseFloat(a.toFixed(fix))
   },
-  download:(filename,text,type)=>{
+  download: (filename, text, type) => {
     var element = document.createElement('a');
 
     switch (type) {
       case "image":
         element.setAttribute('href', text);
         break;
-    
+
       default:
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         break;
     }
-    
+
     element.setAttribute('download', filename);
 
     element.style.display = 'none';
@@ -66,6 +66,13 @@ const self = {
     element.click();
     document.body.removeChild(element);
   },
+  getImageSize: (bs64, ck) => {
+    const img = new Image();
+    img.src = bs64;
+    img.onload = (e) => {
+      return ck && ck(img.width, img.height);
+    }
+  }
 };
 
 module.exports = self;

@@ -16,8 +16,6 @@ function Preview(props) {
     let [grid, setGrid] =useState([]);
     let [active, setActive]=useState(null);
 
-    //let [width,setWidth]=useState(400);
-    //let [height,setHeight]=useState(400);
     let [cellX,setCellX]=useState(50);      //cell的X轴像素宽度
     let [cellY,setCellY]=useState(50);      //cell的Y轴像素宽度
     let [line,setLine]=useState(8);        //X轴，每行多少个
@@ -114,6 +112,7 @@ function Preview(props) {
         setCellY(ss.cell[1]);      //cell的Y轴像素宽度
         setLine(ss.grid[0]);        //X轴，每行多少个
         setRow(ss.grid[1]);          //Y轴，多少行
+        
         self.autoFresh();
     }, [props.update,ref.current]);
 

@@ -165,7 +165,6 @@ function Board(props) {
                 img.onload = (e) => {
                     Render.clear(cfg.id);
                     const active = Data.get("selected");
-                    //console.log(highlight);
                     self.decode(hash, pen, img, def.puzzle, ss, highlight?active:undefined);
     
                     const rlist=self.calcRarity(def.puzzle,def.series);
@@ -203,7 +202,6 @@ function Board(props) {
                 <textarea className="form-control" cols="30" rows="2" value={hash} onChange={(ev) => {
                     self.changeHash(ev);
                 }}></textarea>
-
             </Col>
             <Col className="pt-2" lg={size.hash[1]} xl={size.hash[1]} xxl={size.hash[1]} >
                 <Row>
