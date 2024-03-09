@@ -43,6 +43,24 @@ function Series(props) {
             }
             self.save(def);
         },
+        changeName:(index,ev)=>{
+            const val=ev.target.value.trim();
+            series[index].name=val;
+            const ns=JSON.parse(JSON.stringify(series));
+        
+            const def=Data.get("NFT");
+            def.series=ns;
+            self.save(def);
+        },
+        changeDesc:(index,ev)=>{
+            const val=ev.target.value.trim();
+            series[index].desc=val;
+            const ns=JSON.parse(JSON.stringify(series));
+        
+            const def=Data.get("NFT");
+            def.series=ns;
+            self.save(def);
+        },
         getArrayRemoved:(list,index)=>{
             const arr=[];
             for(let i=0;i<list.length;i++){
@@ -115,11 +133,15 @@ function Series(props) {
                         </Col>
                         <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                             <small>Name of series</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" value={row.name} onChange={(ev)=>{
+                                self.changeName(index,ev);
+                            }}/>
                         </Col>
                         <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                             <small>Description of series</small>
-                            <textarea className="form-control" cols="30" rows="2"></textarea>
+                            <textarea className="form-control" cols="30" rows="2" onChange={(ev)=>{
+                                self.changeDesc(index,ev);
+                            }}>{row.desc}</textarea>
                         </Col>
                     </Row>
                 </Col>
