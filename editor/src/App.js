@@ -19,7 +19,7 @@ function App() {
 
   const size = {
     row: [12],
-    side:[6,3,3],
+    side:[6,4,2],
     opt:[4,8],
   };
   // let [page, setPage] = useState("");
@@ -60,9 +60,10 @@ function App() {
             <Detail fresh={self.fresh} update={update} />
           </Col>
           <Col lg={size.side[2]} xl={size.side[2]} xxl={size.side[2]} > 
-            <Series fresh={self.fresh} update={update}/>
+            
             <Template fresh={self.fresh} update={update}/>
             <Preview fresh={self.fresh} update={update}/>
+            <Series fresh={self.fresh} update={update}/>
           </Col>
         </Row>
       </Container>

@@ -9,30 +9,30 @@ function Rarity(props) {
     const size = {
         row: [12],
         title: [8, 4],
-        select:[2,10],
-        button:[2],
+        select:[1,11],
+        button:[1],
     };
 
     let [ series, setSeries]=useState([]);
 
     const self={
-        clickAdd:(ev)=>{
-            const def=Data.get("NFT");
-            if(def.series===undefined) def.series=[];
+        // clickAdd:(ev)=>{
+        //     const def=Data.get("NFT");
+        //     if(def.series===undefined) def.series=[];
 
-            //1.增加系列
-            def.series.push({name:"",desc:""});
-            const sum=def.series.length;
+        //     //1.增加系列
+        //     def.series.push({name:"",desc:""});
+        //     const sum=def.series.length;
 
-            //2.整理puzzle里的rarity的数据
-            for(let i=0;i<def.puzzle.length;i++){
-                if(!def.puzzle[i].rarity) def.puzzle[i].rarity=[];
-                def.puzzle[i].rarity=self.getNewRarity(def.puzzle[i].rarity,sum)
-            }
+        //     //2.整理puzzle里的rarity的数据
+        //     for(let i=0;i<def.puzzle.length;i++){
+        //         if(!def.puzzle[i].rarity) def.puzzle[i].rarity=[];
+        //         def.puzzle[i].rarity=self.getNewRarity(def.puzzle[i].rarity,sum)
+        //     }
 
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
-            props.fresh();
-        },
+        //     Data.set("NFT",JSON.parse(JSON.stringify(def)));
+        //     props.fresh();
+        // },
         clickRare:(series,index)=>{
             //console.log(series,index);
             const def=Data.get("NFT");
@@ -102,18 +102,18 @@ function Rarity(props) {
                 <h5>iNFT Rarity</h5>
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
-                <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
+                {/* <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
                     self.clickAdd(ev);
-                }}/>
+                }}/> */}
             </Col>
-            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col  lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {series.map((row, index) => (
-                    <Row className="" key={index}>
-                        <Col lg={size.select[0]} xl={size.select[0]} xxl={size.select[0]}>
+                    <Row key={index}>
+                        <Col className="pt-2" lg={size.select[0]} xl={size.select[0]} xxl={size.select[0]}>
                             #{index}
                         </Col>
-                        <Col lg={size.select[1]} xl={size.select[1]} xxl={size.select[1]}>
-                            <Row className="">
+                        <Col className="text-end" lg={size.select[1]} xl={size.select[1]} xxl={size.select[1]}>
+                            <Row className="text-end">
                                 {row.map((single, skey) => (
                                     <Col key={skey} lg={size.button[0]} xl={size.button[0]} xxl={size.button[0]}>
                                         <button className={single?"btn btn-md btn-primary":"btn btn-md btn-default"} onClick={(ev)=>{

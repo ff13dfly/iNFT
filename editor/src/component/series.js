@@ -93,7 +93,7 @@ function Series(props) {
     }, [props.update]);
 
     return (
-        <Row>
+        <Row className="pt-4">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <h5>iNFT Series</h5>
             </Col>

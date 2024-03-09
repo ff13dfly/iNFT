@@ -90,7 +90,7 @@ function Board(props) {
                 const part=parts[i];
                 const [hash_start, hash_step, amount,offset] = part.value;
                 const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
-                const index=num%amount;
+                const index=(num+offset)%amount;
                 if(part.rarity===undefined) continue;
 
                 const rlist=part.rarity;

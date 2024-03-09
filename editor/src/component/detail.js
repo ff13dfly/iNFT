@@ -9,9 +9,9 @@ function Detail(props) {
     const size = {
         row: [12],
         value:[3,3,3,3],
-        center:[6,6],
+        center:[3,3],
         img:[3,3,3,3],
-        position:[6,6],
+        position:[3,3],
     };
 
     let [hidden,setHidden] = useState(true);
@@ -136,6 +136,7 @@ function Detail(props) {
             setValueStart(dt.value[0]);
             setValueStep(dt.value[1]);
             setValueDivide(dt.value[2]);
+            setValueOffset(dt.value[3]);
             
             setImageLine(dt.img[0]);
             setImageRow(dt.img[1]);
@@ -235,13 +236,13 @@ function Detail(props) {
                 <hr />
             </Col> */}
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
-                <small>Center X offset</small>
+                <small>Center X</small>
                 <input type="number" className="form-control" value={center_x} onChange={(ev)=>{
                     self.changeCenterX(ev);
                 }}/>
             </Col>
             <Col lg={size.center[1]} xl={size.center[1]} xxl={size.center[1]}>
-                <small>Center Y offset</small>
+                <small>Center Y</small>
                 <input type="number" className="form-control" value={center_y} onChange={(ev)=>{
                     self.changeCenterY(ev);
                 }}/>
@@ -250,13 +251,13 @@ function Detail(props) {
                 <hr />
             </Col> */}
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
-                <small>Position X</small>
+                <small>Pos X</small>
                 <input type="number" className="form-control" value={pos_x} onChange={(ev)=>{
                     self.changePositionX(ev);
                 }}/>
             </Col>
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
-                <small>Position Y</small>
+                <small>Pos Y</small>
                 <input type="number" className="form-control" value={pos_y} onChange={(ev)=>{
                     self.changePositionY(ev);
                 }}/>

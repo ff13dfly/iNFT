@@ -1,4 +1,4 @@
-import { Row, Col, Accordion,ListGroup } from "react-bootstrap";
+import { Row, Col,ListGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaArrowUp,FaArrowDown,FaTrash,FaPlus } from "react-icons/fa";
@@ -10,10 +10,10 @@ function Puzzle(props) {
     const size = {
         row: [12],
         opt:[2,2,1,7],
-        header:[2,2,6,2],
+        header:[1,1,9,1],
         title:[8,4]
     };
-    
+    let [hash,setHash]=useState("");
     let [list,setList]=useState([]);
     let [active,setActive]=useState(0);
     let [disable, setDisable]=useState(true);
@@ -134,6 +134,9 @@ function Puzzle(props) {
             setDisable(false);
             self.clickPuzzle(active);
         }
+
+        const hh=Data.get("hash");
+        setHash(hh);
     }, [props.update]);
 
     return (
@@ -165,7 +168,9 @@ function Puzzle(props) {
                                 <Col lg={size.header[2]} xl={size.header[2]} xxl={size.header[2]} onClick={(ev)=>{
                                     self.clickPuzzle(index);
                                 }}>  
-                                #{index}- {row.value[0]},{row.value[0]+row.value[1]}  
+                                 #{index}-<span className="text-info">0x{hash.slice(row.value[0]+2,row.value[0]+2+row.value[1])}</span>,
+                                 divide:<span className="text-info">{row.value[2]}</span>,
+                                 offset:<span className="text-info">{row.value[3]}</span> 
                                 </Col>
                                 <Col className="text-end" lg={size.header[3]} xl={size.header[3]} xxl={size.header[3]} >
                                     <FaTrash onClick={(ev)=>{
