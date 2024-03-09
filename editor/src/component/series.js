@@ -1,6 +1,6 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { FaPlus,FaTrash } from "react-icons/fa";
+import { FaPlus,FaTrashAlt } from "react-icons/fa";
 
 import  Data from "../lib/data";
 
@@ -104,14 +104,22 @@ function Series(props) {
             </Col>
             {series.map((row, index) => (
                 <Col key={index} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                    <Row className="pb-2">
+                    <Row className="pb-2 pt-2">
                         <Col lg={size.list[0]} xl={size.list[0]} xxl={size.list[0]}>
-                        #{index} {row.name}
+                            #{index} {row.name}
                         </Col>
                         <Col className="text-end" lg={size.list[1]} xl={size.list[1]} xxl={size.list[1]}>
-                        <FaTrash style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
+                        <FaTrashAlt style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
                             self.clickRemove(index);
                         }}/>
+                        </Col>
+                        <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                            <small>Name of series</small>
+                            <input type="text" className="form-control" />
+                        </Col>
+                        <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                            <small>Description of series</small>
+                            <textarea className="form-control" cols="30" rows="2"></textarea>
                         </Col>
                     </Row>
                 </Col>

@@ -1,7 +1,7 @@
 import { Row, Col,ListGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaArrowUp,FaArrowDown,FaTrash,FaPlus } from "react-icons/fa";
+import { FaArrowUp,FaArrowDown,FaTrashAlt,FaPlus } from "react-icons/fa";
 import  Data from "../lib/data";
 
 let locker=false;
@@ -173,7 +173,7 @@ function Puzzle(props) {
                                  offset:<span className="text-info">{row.value[3]}</span> 
                                 </Col>
                                 <Col className="text-end" lg={size.header[3]} xl={size.header[3]} xxl={size.header[3]} >
-                                    <FaTrash onClick={(ev)=>{
+                                    <FaTrashAlt onClick={(ev)=>{
                                         self.clickRemove(index);
                                     }}/>
                                 </Col>

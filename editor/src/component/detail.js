@@ -15,9 +15,6 @@ function Detail(props) {
     };
 
     let [hidden,setHidden] = useState(true);
-    let [raw, setRaw]=useState("");
-    let [order,setOrder]=useState(0);
-    let [num,setNum]=useState(0);
 
     let [value_start,setValueStart]=useState(0);
     let [value_step,setValueStep]=useState(0);
@@ -38,7 +35,30 @@ function Detail(props) {
     let [rare, setRare]=useState("");
 
     const self={
-        autoSave:(key,index,val)=>{
+        autoTask:(arr)=>{
+            const active=Data.get("selected");
+            const def=Data.get("NFT");
+            if(active===null || def===null) return false;
+            const data={
+                value:[value_start,value_step,value_divide,value_offset],
+                img:[img_line,img_row,img_ext_x,img_ext_y],
+                position:[pos_x,pos_y],
+                center:[center_x,center_y],
+            }
+            if(def.puzzle[active].rarity!==undefined){
+                data.rarity=def.puzzle[active].rarity;
+            }
+            def.puzzle[active]=data;
+
+            for(let i=0;i<arr.length;i++){
+                const [key,index,val]=arr[i];
+                def.puzzle[active][key][index]=val;
+            }
+            const changed=JSON.parse(JSON.stringify(def));
+            Data.set("NFT",changed);
+            props.fresh();
+        },
+        autoSave:(key,index,val,pending)=>{
             const active=Data.get("selected");
             const def=Data.get("NFT");
             if(active===null || def===null) return false;
@@ -52,82 +72,201 @@ function Detail(props) {
                 data.rarity=def.puzzle[active].rarity;
             }
 
+            
             def.puzzle[active]=data;
             def.puzzle[active][key][index]=val;
             const changed=JSON.parse(JSON.stringify(def));
             Data.set("NFT",changed);
-            props.fresh();
+
+            if(!pending){   //更新数据
+                //const changed=JSON.parse(JSON.stringify(def));
+                //Data.set("NFT",changed);
+                props.fresh();
+            }
         },
         changeValueStart:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
-            setValueStart(val);
-            self.autoSave("value",0,val);
+            const min=0,index=0;
+
+            //1.处理非正常数据、删除的操作，重置为1
+            if(isNaN(val) || val<min){
+                setValueStart(min);
+                self.autoSave("value",index,min);
+                return false;
+            } 
+
+            const hash=Data.get("hash");
+            const len=hash.length-2;
+            const max=len-value_step;
+
+            //2.处理顶到step的问题
+            if(val<max){
+                setValueStart(val);
+                self.autoSave("value",index,val);
+                return true;
+            }else{
+                const index_step=1;
+                if(val >= len-1){
+                    //2.1.顶到hash的长度限制了
+                    setValueStart(len-1);
+                    setValueStep(1);            //保留一位取值
+                    const task=[
+                        ["value",index,len-1],
+                        ["value",index_step,1],
+                    ]
+                    self.autoTask(task)
+                    return true;
+                }else{
+                    const fix_step=len-val;
+                    setValueStart(val);
+                    setValueStep(fix_step);            //保留一位取值
+                    const task=[
+                        ["value",index,val],
+                        ["value",index_step,fix_step],
+                    ]
+                    self.autoTask(task);
+                    return true;
+                }
+            }
         },
         changeValueStep:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
-            setValueStep(val);
-            self.autoSave("value",1,val);
+            const min=1,index=1;
+            if(isNaN(val) || val<min){
+                setValueStep(min);
+                self.autoSave("value",index,min);
+                return false;
+            }
+            const hash=Data.get("hash");
+            const len=hash.length-2;
+            const max=len-value_start;
+
+            const index_start=0;
+            if(val>len){
+                setValueStart(0);
+                setValueStep(len);            //保留一位取值
+                const task=[
+                    ["value",index_start,0],
+                    ["value",index,len],
+                ]
+                self.autoTask(task);
+                return true;
+            }else{
+                if(val>max){
+                    setValueStart(len-val);
+                    setValueStep(val);            //保留一位取值
+                    const task=[
+                        ["value",index_start,len-val],
+                        ["value",index,val],
+                    ]
+                    self.autoTask(task)
+                    return true;
+                }else{
+                    setValueStep(val);
+                    self.autoSave("value",index,val);
+                    return true;
+                }
+            }
         },
         changeValueDivide:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            const min=2,index=2;
+            if(isNaN(val) || val<min){
+                setValueDivide(min);
+                self.autoSave("value",index,min);
+                return false;
+            } 
             setValueDivide(val);
             self.autoSave("value",2,val);
         },
         changeValueOffset:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<value_divide){
+                setValueOffset(0);
+                self.autoSave("value",3,0);
+                return false;
+            } 
             setValueOffset(val);
             self.autoSave("value",3,val);
         },
         changeImageLine:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setImageLine(0);
+                self.autoSave("img",0,0);
+                return false;
+            }
             setImageLine(val);
             self.autoSave("img",0,val);
         },
         changeImageRow:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setImageRow(0);
+                self.autoSave("img",1,0);
+                return false;
+            }
             setImageRow(val);
             self.autoSave("img",1,val);
         },
         
         changeImageEX:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setImageEx(0);
+                self.autoSave("img",2,0);
+                return false;
+            }
             setImageEx(val);
             self.autoSave("img",2,val);
         },
         changeImageEY:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setImageEy(0);
+                self.autoSave("img",3,0);
+                return false;
+            }
             setImageEy(val);
             self.autoSave("img",3,val);
         },
         changeCenterX:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setCenterX(0);
+                self.autoSave("center",0,0);
+                return false;
+            }
             setCenterX(val);
             self.autoSave("center",0,val);
         },
         changeCenterY:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setCenterY(0);
+                self.autoSave("center",1,0);
+                return false;
+            }
             setCenterY(val);
             self.autoSave("center",1,val);
         },
         changePositionX:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setPosX(0);
+                self.autoSave("position",0,0);
+                return false;
+            }
             setPosX(val);
             self.autoSave("position",0,val);
         },
         changePositionY:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val)) return false;
+            if(isNaN(val) || val<0){
+                setPosY(0);
+                self.autoSave("position",1,0);
+                return false;
+            }
             setPosY(val);
             self.autoSave("position",1,val);
         },
@@ -161,16 +300,12 @@ function Detail(props) {
 
             setRare(<Rarity fresh={props.fresh} update={props.update} index={active}/>);
 
-            const hash=Data.get("hash");
-
-            if(hash){
-                const [hash_start,hash_step,amount]=dt.value;
-                const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
-                const rand=parseInt(str);
-                setRaw(str);
-                setNum(rand);
-                setOrder(rand%amount);
-            }
+            // const hash=Data.get("hash");
+            // if(hash){
+            //     const [hash_start,hash_step,amount,offset]=dt.value;
+            //     const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
+            //     const rand=parseInt(str);
+            // }
         }
 
     }, [props.update]);
