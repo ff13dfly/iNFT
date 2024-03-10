@@ -25,10 +25,15 @@ function Basic(props) {
     const self={
         changeWidth:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setWidth(val);
-                self.saveSize(cellX,cellY,line,row,val,height);
+            const min=180;
+            if(isNaN(val) || val<min){
+                setWidth(min);
+                self.saveSize(cellX,cellY,line,row,min,height);
+                return true;
             }
+
+            setWidth(val);
+            self.saveSize(cellX,cellY,line,row,val,height);
         },
         changeHeight:(ev)=>{
             const val=parseInt(ev.target.value);

@@ -139,9 +139,9 @@ function Series(props) {
                         </Col>
                         <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                             <small>Description of series</small>
-                            <textarea className="form-control" cols="30" rows="2" onChange={(ev)=>{
+                            <textarea className="form-control" cols="30" rows="2" defaultValue={row.desc} onChange={(ev)=>{
                                 self.changeDesc(index,ev);
-                            }}>{row.desc}</textarea>
+                            }}></textarea>
                         </Col>
                     </Row>
                 </Col>

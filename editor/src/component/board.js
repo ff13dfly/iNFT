@@ -218,7 +218,7 @@ function Board(props) {
                     <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                         <Form>
                             {/* <Form.Check type="checkbox" label={`Enable hash check.`} /> */}
-                            <Form.Check type="checkbox" label={`Disable highlight.`} checked={highlight} onChange={(ev)=>{
+                            <Form.Check type="checkbox" label={`Enable highlight.`} checked={highlight} onChange={(ev)=>{
                                 self.changeHighlight(ev);
                             }}/>
                         </Form>
@@ -245,7 +245,7 @@ function Board(props) {
                             #{index}
                         </Col>
                         <Col lg={size.rate[1]} xl={size.rate[1]} xxl={size.rate[1]}>
-                            {tools.toF(row.rate*100,5)}%
+                            {tools.toF(row.rate*100,7)}%
                         </Col>
                     </Row>
                 ))}

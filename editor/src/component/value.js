@@ -20,13 +20,19 @@ function Value(props) {
     const self = {
         firstRow: (hash, start, step) => {
             const c_start = 0, c_end = 32;
+            console.log(start,step,c_end);
             if (start <= c_end) {
                 if(start===0){
-                    return setFirst(<p style={{marginBottom:"0px"}}><span className="bg-warning">{hash.slice(start,start+step)}</span>{hash.slice(start+step,c_end)}</p>)
+                    if(start+step>c_end){
+                        return setFirst(<p style={{marginBottom:"0px"}}><span className="bg-warning">{hash.slice(start,c_end)}</span></p>)
+                    }else{
+                        return setFirst(<p style={{marginBottom:"0px"}}><span className="bg-warning">{hash.slice(start,start+step)}</span>{hash.slice(start+step,c_end)}</p>)
+                    }
                 }else{
                     if(start+step>c_end){
                         return setFirst(<p style={{marginBottom:"0px"}}>{hash.slice(c_start,start)}<span className="bg-warning">{hash.slice(start,c_end)}</span></p>)
                     }else{
+                        //console.log(`3`);
                         return setFirst(<p style={{marginBottom:"0px"}}>{hash.slice(c_start,start)}<span className="bg-warning">{hash.slice(start,start+step)}</span>{hash.slice(start+step,c_end)}</p>)
                     }
                 }

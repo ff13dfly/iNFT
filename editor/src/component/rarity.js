@@ -9,32 +9,14 @@ function Rarity(props) {
     const size = {
         row: [12],
         title: [8, 4],
-        select:[1,11],
-        button:[1],
+        select:[4,8],
+        button:[2],
     };
 
     let [ series, setSeries]=useState([]);
 
     const self={
-        // clickAdd:(ev)=>{
-        //     const def=Data.get("NFT");
-        //     if(def.series===undefined) def.series=[];
-
-        //     //1.增加系列
-        //     def.series.push({name:"",desc:""});
-        //     const sum=def.series.length;
-
-        //     //2.整理puzzle里的rarity的数据
-        //     for(let i=0;i<def.puzzle.length;i++){
-        //         if(!def.puzzle[i].rarity) def.puzzle[i].rarity=[];
-        //         def.puzzle[i].rarity=self.getNewRarity(def.puzzle[i].rarity,sum)
-        //     }
-
-        //     Data.set("NFT",JSON.parse(JSON.stringify(def)));
-        //     props.fresh();
-        // },
         clickRare:(series,index)=>{
-            //console.log(series,index);
             const def=Data.get("NFT");
             const active=props.index;
             if(!def.puzzle || !def.puzzle[active]) return false;
@@ -85,6 +67,11 @@ function Rarity(props) {
             }
             return nlist;
         },
+        getSeriesName:(index)=>{
+            const def=Data.get("NFT");
+            if(!def.series[index] || !def.series[index].name) return "";
+            return def.series[index].name;
+        },
     }
 
     useEffect(() => {
@@ -93,6 +80,7 @@ function Rarity(props) {
         const dt=def.puzzle[active];
         const sum=def.series===undefined?0:def.series.length;
         const list=self.getMatrix(dt.rarity,dt.value[2],sum);
+        //console.log(list);
         setSeries(list);
     }, [props.index,props.update]);
 
@@ -101,19 +89,14 @@ function Rarity(props) {
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <h5>iNFT Rarity</h5>
             </Col>
-            <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
-                {/* <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
-                    self.clickAdd(ev);
-                }}/> */}
-            </Col>
             <Col  lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {series.map((row, index) => (
                     <Row key={index}>
                         <Col className="pt-2" lg={size.select[0]} xl={size.select[0]} xxl={size.select[0]}>
-                            #{index}
+                            #{index} {self.getSeriesName(index)}
                         </Col>
-                        <Col className="text-end" lg={size.select[1]} xl={size.select[1]} xxl={size.select[1]}>
-                            <Row className="text-end">
+                        <Col lg={size.select[1]} xl={size.select[1]} xxl={size.select[1]}>
+                            <Row>
                                 {row.map((single, skey) => (
                                     <Col key={skey} lg={size.button[0]} xl={size.button[0]} xxl={size.button[0]}>
                                         <button className={single?"btn btn-md btn-primary":"btn btn-md btn-default"} onClick={(ev)=>{
@@ -122,6 +105,9 @@ function Rarity(props) {
                                     </Col>
                                 ))}
                             </Row>
+                        </Col>
+                        <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                            <hr/>
                         </Col>
                     </Row>
                 ))}

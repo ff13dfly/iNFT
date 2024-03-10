@@ -33,11 +33,9 @@ function NFT(props) {
             }
         },
         clickDownload:(ev)=>{
-            //console.log("Download iNFT definition.");
-
             const def=Data.get("NFT");
             if(def===null) return false;
-
+            delete def.format;
             tools.download("def.json",JSON.stringify(def));
         },
     };
