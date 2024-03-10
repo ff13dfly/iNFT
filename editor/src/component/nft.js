@@ -51,7 +51,6 @@ function NFT(props) {
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <FaFileUpload style={{ color: "rgb(13, 110, 253)", cursor: "pointer"}} onClick={(ev)=>{
-                    //self.clickDownload();
                     fileUpload.current.click()
                 }}/>  
                 <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
@@ -60,7 +59,8 @@ function NFT(props) {
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {/* <small>Select the iNFT definition JSON file.</small> */}
-                <input hidden={true} ref={fileUpload} type="file" className="form-control" placeholder="The iNFT definition." onChange={(ev)=>{
+                <input hidden={true} ref={fileUpload} className="form-control" 
+                    type="file" accept="application/JSON" placeholder="The iNFT definition." onChange={(ev)=>{
                     self.changeDef(ev);
                 }}/>
             </Col>

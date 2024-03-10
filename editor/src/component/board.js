@@ -133,7 +133,7 @@ function Board(props) {
 
                 const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
                 const index = (num+offset) % amount;     //图像的位次
-                const max = grid[0] / (1 + eX);
+                const max = Math.floor(grid[0] / (1 + eX)); //处理无法整除的情况
                 const br = Math.floor((index + gX) / max);
 
                 const cx = cell[0] * (eX + 1) * ((index + gX) % max);

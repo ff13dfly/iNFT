@@ -59,7 +59,7 @@ function Template(props) {
                 }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <input hidden={true} ref={fileUpload} type="file" className="form-control" placeholder="The template file." onChange={(ev)=>{
+                <input hidden={true} ref={fileUpload} type="file" accept="image/png, image/jpeg" className="form-control" placeholder="The template file." onChange={(ev)=>{
                     self.changeTemplate(ev);
                 }}/>
             </Col>

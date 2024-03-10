@@ -86,38 +86,37 @@ function Detail(props) {
         },
         changeValueStart:(ev)=>{
             const val=parseInt(ev.target.value);
-            const min=0,index=0;
+
+            const hash=Data.get("hash");
+            const min=0,index=0,limit=hash.length-2;
 
             //1.处理非正常数据、删除的操作，重置为1
             if(isNaN(val) || val<min){
                 setValueStart(min);
                 self.autoSave("value",index,min);
                 return false;
-            } 
-
-            const hash=Data.get("hash");
-            const len=hash.length-2;
-            const max=len-value_step;
+            }
 
             //2.处理顶到step的问题
+            const max=limit-value_step;
             if(val<max){
                 setValueStart(val);
                 self.autoSave("value",index,val);
                 return true;
             }else{
                 const index_step=1;
-                if(val >= len-1){
+                if(val >= limit-1){
                     //2.1.顶到hash的长度限制了
-                    setValueStart(len-1);
+                    setValueStart(limit-1);
                     setValueStep(1);            //保留一位取值
                     const task=[
-                        ["value",index,len-1],
+                        ["value",index,limit-1],
                         ["value",index_step,1],
                     ]
                     self.autoTask(task)
                     return true;
                 }else{
-                    const fix_step=len-val;
+                    const fix_step=limit-val;
                     setValueStart(val);
                     setValueStep(fix_step);            //保留一位取值
                     const task=[
@@ -129,20 +128,53 @@ function Detail(props) {
                 }
             }
         },
+
+        //TODO, 还需要对divide进行修正
         changeValueStep:(ev)=>{
             const val=parseInt(ev.target.value);
-            const min=1,index=1;
+            //const min=1,index=1,limit=12;
+            const min=1,index=1,limit=9;
+
+            //0.最小值带来的联动处理
+            if(val===min && value_divide>16){
+                console.log(`here?`);
+                const index_divide=2;
+                setValueStep(val);            //保留一位取值
+                setValueDivide(16);
+                const task=[
+                    ["value",index,val],
+                    ["value",index_divide,16],
+                ]
+                if(value_offset>16){
+                    const index_offset=3;
+                    setValueOffset(16);
+                    task.push(["value",index_offset,16])
+                }
+                self.autoTask(task);
+                return true;
+            }
+
+            //1.处理异常数据
             if(isNaN(val) || val<min){
-                setValueStep(min);
-                self.autoSave("value",index,min);
+                    setValueStep(min);
+                    self.autoSave("value",index,min);
+                    return false;
+            }
+
+            //2.处理过大的异常
+            if(val>limit){
+                setValueStep(limit);
+                self.autoSave("value",index,limit);
                 return false;
             }
+
             const hash=Data.get("hash");
             const len=hash.length-2;
             const max=len-value_start;
 
             const index_start=0;
             if(val>len){
+                //3.超出总长度的控制，全部为取值（和limit冲突，取不到）
                 setValueStart(0);
                 setValueStep(len);            //保留一位取值
                 const task=[
@@ -153,6 +185,7 @@ function Detail(props) {
                 return true;
             }else{
                 if(val>max){
+                    //4.修正start的位置的情况
                     setValueStart(len-val);
                     setValueStep(val);            //保留一位取值
                     const task=[
@@ -162,32 +195,84 @@ function Detail(props) {
                     self.autoTask(task)
                     return true;
                 }else{
-                    setValueStep(val);
-                    self.autoSave("value",index,val);
-                    return true;
+                    if(val===1 && value_divide>16){
+                        //5.对divide进行修正
+                        const index_offset=3;
+                        setValueStep(val);            //保留一位取值
+                        setValueOffset(16);
+                        const task=[
+                            ["value",index,val],
+                            ["value",index_offset,16],
+                        ]
+                        self.autoTask(task);
+                    }else{
+                        setValueStep(val);
+                        self.autoSave("value",index,val);
+                        return true;
+                    }
+                   
                 }
             }
         },
         changeValueDivide:(ev)=>{
             const val=parseInt(ev.target.value);
             const min=2,index=2;
+            const limit=value_step>2?256:Math.pow(16,value_step);
+
+            //1.最小和异常的处理
             if(isNaN(val) || val<min){
                 setValueDivide(min);
                 self.autoSave("value",index,min);
                 return false;
-            } 
-            setValueDivide(val);
-            self.autoSave("value",2,val);
+            }
+
+            //2.处理过大的异常
+            if(val>limit){
+                setValueStep(limit);
+                self.autoSave("value",index,limit);
+                return false;
+            }
+
+            //3.对offset进行同步修正
+            if(val<value_offset){
+                const index_offset=3;
+
+                setValueDivide(val);
+                setValueOffset(val);            //保留一位取值
+                const task=[
+                    ["value",index_offset,val],
+                    ["value",index,val],
+                ]
+                self.autoTask(task)
+                return true;
+
+            }else{
+                setValueDivide(val);
+                self.autoSave("value",2,val);
+                return true;
+            }
         },
         changeValueOffset:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val) || val<value_divide){
-                setValueOffset(0);
-                self.autoSave("value",3,0);
-                return false;
+            const index=3,min=0;
+            const limit=value_divide;
+
+             //1.最小和异常的处理
+            if(isNaN(val) || val<min){
+                setValueOffset(min);
+                self.autoSave("value",index,min);
+                return true;
             } 
+
+            //2.处理过大的异常
+            if(val>limit){
+                setValueStep(limit);
+                self.autoSave("value",index,limit);
+                return true;
+            }
+
             setValueOffset(val);
-            self.autoSave("value",3,val);
+            self.autoSave("value",index,val);
         },
         changeImageLine:(ev)=>{
             const val=parseInt(ev.target.value);
@@ -198,6 +283,8 @@ function Detail(props) {
             }
             setImageLine(val);
             self.autoSave("img",0,val);
+
+            //1.最大端超出图像下部范围的检测
         },
         changeImageRow:(ev)=>{
             const val=parseInt(ev.target.value);
@@ -208,6 +295,7 @@ function Detail(props) {
             }
             setImageRow(val);
             self.autoSave("img",1,val);
+            //1.最大端超出图像下部范围的检测
         },
         
         changeImageEX:(ev)=>{
@@ -219,6 +307,8 @@ function Detail(props) {
             }
             setImageEx(val);
             self.autoSave("img",2,val);
+            //1.超出横向范围的检测
+            //2.超出图像下部范围的检测
         },
         changeImageEY:(ev)=>{
             const val=parseFloat(ev.target.value);
@@ -229,6 +319,8 @@ function Detail(props) {
             }
             setImageEy(val);
             self.autoSave("img",3,val);
+            //1.超出横向范围的检测
+            //2.超出图像下部范围的检测
         },
         changeCenterX:(ev)=>{
             const val=parseFloat(ev.target.value);

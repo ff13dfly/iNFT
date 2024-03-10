@@ -20,7 +20,7 @@ function Value(props) {
     const self = {
         firstRow: (hash, start, step) => {
             const c_start = 0, c_end = 32;
-            console.log(start,step,c_end);
+            //console.log(start,step,c_end);
             if (start <= c_end) {
                 if(start===0){
                     if(start+step>c_end){

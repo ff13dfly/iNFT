@@ -41,7 +41,8 @@ function Preview(props) {
         },
         getHelper:(amount,line,w,h,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
             const list=[];
-            const max=line/(1+eX);
+            const max=Math.floor(line/(1+eX));
+            //console.log(max);
             for(let i=0;i<amount;i++){
                 const br=Math.floor((gX+i)/max);
                 list.push({

@@ -142,7 +142,7 @@ function Puzzle(props) {
     return (
         <Row className="pt-2">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                Parts
+                <span hidden={disable}>iNFT parts list</span>
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
                 <FaPlus hidden={disable} style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
