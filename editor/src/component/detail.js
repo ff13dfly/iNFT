@@ -12,6 +12,7 @@ function Detail(props) {
         center:[3,3],
         img:[3,3,3,3],
         position:[3,3],
+        rotation:[3],
     };
 
     let [hidden,setHidden] = useState(true);
@@ -20,19 +21,27 @@ function Detail(props) {
     let [value_step,setValueStep]=useState(0);
     let [value_divide,setValueDivide]=useState(0);
     let [value_offset,setValueOffset]=useState(0);
-
+    
     let [img_line,setImageLine] =useState(0);
     let [img_row, setImageRow] =useState(0);
     let [img_ext_x,setImageEx]=useState(0);
     let [img_ext_y,setImageEy]=useState(0);
 
-    let [pos_x, setPosX]= useState(0);
-    let [pos_y, setPosY]= useState(0);
-
     let [center_x,setCenterX]=useState(0);
     let [center_y,setCenterY]=useState(0);
 
+    let [pos_x, setPosX]= useState(0);
+    let [pos_y, setPosY]= useState(0);
+
+    let [rotation,setRotation]=useState(0);
+
     let [rare, setRare]=useState("");
+
+    //集中调用的router，来优化参数检测
+    const router={
+        "position_0":setPosX,
+        "position_1":setPosY,
+    }
 
     const self={
         autoTask:(arr)=>{
@@ -67,12 +76,13 @@ function Detail(props) {
                 img:[img_line,img_row,img_ext_x,img_ext_y],
                 position:[pos_x,pos_y],
                 center:[center_x,center_y],
+                rotation:[rotation],
             }
             if(def.puzzle[active].rarity!==undefined){
                 data.rarity=def.puzzle[active].rarity;
             }
 
-            
+            //console.log(def);
             def.puzzle[active]=data;
             def.puzzle[active][key][index]=val;
             const changed=JSON.parse(JSON.stringify(def));
@@ -324,44 +334,111 @@ function Detail(props) {
         },
         changeCenterX:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val) || val<0){
-                setCenterX(0);
-                self.autoSave("center",0,0);
-                return false;
+            const index=0,min=0;
+            const limit=1;
+
+            if(isNaN(val) || val<min){
+                setCenterX(min);
+                self.autoSave("center",index,min);
+                return true;
             }
+
+            if(val > limit){
+                setCenterX(limit);
+                self.autoSave("center",index,limit);
+                return true;
+            }
+
+
             setCenterX(val);
-            self.autoSave("center",0,val);
+            self.autoSave("center",index,val);
         },
         changeCenterY:(ev)=>{
             const val=parseFloat(ev.target.value);
-            if(isNaN(val) || val<0){
-                setCenterY(0);
-                self.autoSave("center",1,0);
+            const index=1,min=0;
+            const limit=1;
+
+            if(isNaN(val) || val<min){
+                setCenterY(min);
+                self.autoSave("center",index,min);
                 return false;
             }
+
+            if(val > limit){
+                setCenterY(limit);
+                self.autoSave("center",index,limit);
+                return true;
+            }
+
             setCenterY(val);
-            self.autoSave("center",1,val);
+            self.autoSave("center",index,val);
         },
         changePositionX:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val) || val<0){
-                setPosX(0);
-                self.autoSave("position",0,0);
+            const index=0,min=0;
+            const limit=400;        //最大的X轴，需要计算
+
+            if(isNaN(val) || val<min){
+                setPosX(min);
+                self.autoSave("position",index,min);
                 return false;
             }
+
+            if(val > limit){
+                setPosX(limit);
+                self.autoSave("position",index,limit);
+                return true;
+            }
+
             setPosX(val);
-            self.autoSave("position",0,val);
+            self.autoSave("position",index,val);
         },
         changePositionY:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(isNaN(val) || val<0){
-                setPosY(0);
-                self.autoSave("position",1,0);
+            const index=1,min=0;
+            const limit=400;        //最大的X轴，需要计算
+            if(isNaN(val) || val<min){
+                setPosY(min);
+                self.autoSave("position",index,min);
                 return false;
             }
+
+            if(val > limit){
+                setPosY(limit);
+                self.autoSave("position",index,limit);
+                return true;
+            }
+
             setPosY(val);
-            self.autoSave("position",1,val);
+            self.autoSave("position",index,val);
         },
+        changeRotation:(ev)=>{
+            const val=parseInt(ev.target.value);
+            console.log(val);
+            const index=0,min=0;
+            const limit=Math.PI*2;        //最大的X轴，需要计算
+
+            if(isNaN(val) || val<min){
+                setRotation(min);
+                self.autoSave("rotation",index,min);
+                return false;
+            }
+
+            if(val > limit){
+                setRotation(limit);
+                self.autoSave("rotation",index,limit);
+                return true;
+            }
+            
+            setRotation(val);
+            self.autoSave("rotation",index,val);
+        },
+
+        //TODO,这里来计算part的位置
+        getPositionLimit:()=>{
+
+        },
+        
 
         setValues:(dt)=>{
             setValueStart(dt.value[0]);
@@ -379,6 +456,8 @@ function Detail(props) {
 
             setPosX(dt.position[0]);
             setPosY(dt.position[1]);
+
+            setRotation(dt.rotation[0]);
         },
     }
     
@@ -391,15 +470,7 @@ function Detail(props) {
             self.setValues(dt);
 
             setRare(<Rarity fresh={props.fresh} update={props.update} index={active}/>);
-
-            // const hash=Data.get("hash");
-            // if(hash){
-            //     const [hash_start,hash_step,amount,offset]=dt.value;
-            //     const str="0x"+hash.substring(hash_start+2,hash_start+2+hash_step);
-            //     const rand=parseInt(str);
-            // }
         }
-
     }, [props.update]);
 
     return (
@@ -464,13 +535,13 @@ function Detail(props) {
             </Col> */}
             <Col lg={size.center[0]} xl={size.center[0]} xxl={size.center[0]}>
                 <small>Center X</small>
-                <input type="number" className="form-control" value={center_x} onChange={(ev)=>{
+                <input type="number" step="0.1" className="form-control" value={center_x} onChange={(ev)=>{
                     self.changeCenterX(ev);
                 }}/>
             </Col>
             <Col lg={size.center[1]} xl={size.center[1]} xxl={size.center[1]}>
                 <small>Center Y</small>
-                <input type="number" className="form-control" value={center_y} onChange={(ev)=>{
+                <input type="number" step="0.1" className="form-control" value={center_y} onChange={(ev)=>{
                     self.changeCenterY(ev);
                 }}/>
             </Col>
@@ -487,6 +558,12 @@ function Detail(props) {
                 <small>Pos Y</small>
                 <input type="number" className="form-control" value={pos_y} onChange={(ev)=>{
                     self.changePositionY(ev);
+                }}/>
+            </Col>
+            <Col hidden={true} lg={size.rotation[0]} xl={size.rotation[0]} xxl={size.rotation[0]}>
+                <small>Rotation</small>
+                <input type="number" disabled={true}  step="0.1" className="form-control" value={rotation} onChange={(ev)=>{
+                    self.changeRotation(ev);
                 }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

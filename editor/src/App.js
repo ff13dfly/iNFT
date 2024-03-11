@@ -1,8 +1,6 @@
 import { Container,Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-//import W3 from "w3api";
-
 import Board from "./component/board";
 import Operation from "./component/operation";
 import Basic from "./component/basic";
@@ -22,14 +20,8 @@ function App() {
     side:[6,4,2],
     opt:[4,8],
   };
-  // let [page, setPage] = useState("");
-  // let [show, setShow] = useState(false);
-  // let [title, setTitle] = useState("配置窗口");
-  // let [content, setContent] = useState(true);
 
   let [update, setUpdate]= useState(0);
-  //console.log(W3);
-  //console.log(Data);
 
   const self={
     fresh:()=>{
@@ -38,6 +30,10 @@ function App() {
     },
   }
   
+  useEffect(() => {
+
+  }, []);
+
   return (
     <div>
       <Container>

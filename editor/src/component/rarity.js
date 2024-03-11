@@ -33,8 +33,6 @@ function Rarity(props) {
                 target[series]=arr;
             }
             def.puzzle[active].rarity=target;
-            //console.log(def);
-
             Data.set("NFT",JSON.parse(JSON.stringify(def)));
             props.fresh();
         },
@@ -80,14 +78,13 @@ function Rarity(props) {
         const dt=def.puzzle[active];
         const sum=def.series===undefined?0:def.series.length;
         const list=self.getMatrix(dt.rarity,dt.value[2],sum);
-        //console.log(list);
         setSeries(list);
     }, [props.index,props.update]);
 
     return (
         <Row className="pt-4">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
-                <h5>iNFT Rarity</h5>
+                <h5>iNFT Part's Rarity</h5>
             </Col>
             <Col  lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {series.map((row, index) => (

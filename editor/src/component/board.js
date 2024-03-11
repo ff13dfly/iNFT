@@ -117,7 +117,8 @@ function Board(props) {
             }
 
             if(index.length===0) return false;
-            return index[0];
+            //console.log(series);
+            return index;
         },
         decode: (hash, pen, img, parts, tpl, active) => {
             const { cell, grid } = tpl;
@@ -185,7 +186,14 @@ function Board(props) {
     
                     const sindex=self.calcResult(hash,def.puzzle,def.series.length);
                     if(sindex!==false){
-                        setWin(`Series ${sindex} winner. Rate: ${tools.toF(100*rlist[sindex].rate,5)} %`)
+                        let min=undefined;
+                        for(let i=0;i<sindex.length;i++){
+                            const tindex=sindex[i];
+                            const rare=rlist[tindex].rate;
+                            if(min===undefined) min=rare;
+                            if(rare < min ) min=rare
+                        }
+                        setWin(`Series ${JSON.stringify(sindex)} winner.Rate: ${tools.toF(100*min,8)} %`)
                     }else{
                         setWin("")
                     }
