@@ -155,20 +155,21 @@ function Board(props) {
                 Render.active(pen, dx, dy, vx, vy, color, pw);
             }
         },
+        reset:()=>{
+            setStart(0);
+            setStep(0);
+            setDivide(1);
+            setOffset(0);
+        },
         autofresh: (hash) => {
-            
-            const pen = Render.create(cfg.id);
-            const bs64 = Data.get("template");
             const def = Data.get("NFT");
-            
-            if(def===null) return false;
+            const bs64 = Data.get("template");
+            const pen = Render.create(cfg.id);
+            if(def===null) self.reset();
 
             const ss = Data.get("size");
             const selected = Data.get("selected");
-
-            //console.log(hash,def,selected);
-
-            if (selected !== null) {
+            if (selected !== null && def!==null) {
                 const part = def.puzzle[selected];
                 const [p_start, p_step, p_divide, p_offset] = part.value;
                 setStart(p_start);
@@ -177,11 +178,10 @@ function Board(props) {
                 setOffset(p_offset);
             }
 
-            if (bs64 === null || def === null) {
+            if(bs64 === null || def === null) {
                 Render.fill(pen);
-                return false;
+                return true;
             }
-
 
             const img = new Image();
             img.src = bs64;
