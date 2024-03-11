@@ -35,8 +35,8 @@ function Preview(props) {
             const NFT=Data.get("NFT");
             const hash=Data.get("hash");
             const def=NFT.puzzle[puzzle_index];
-            const [hash_start,hash_step,amount,offset]=def.value;
-            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,amount,offset));
+            const [hash_start,hash_step,divide,offset]=def.value;
+            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,divide,offset));
             return ck && ck();
         },
         getHelper:(amount,line,w,h,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
@@ -65,16 +65,18 @@ function Preview(props) {
                 return active===index?ac:bc
             }
         },
-        getHash:(hash,order,start,step,max,offset)=>{
-            const top=Math.pow(16,step);         //总数据量
-            const m=Math.floor(top/max)-1;
+        getHash:(hash,order,start,step,divide,offset)=>{
+            const top=Math.pow(16,step);    //总数据量
+            const m=Math.floor((top-offset)/divide)-1;  //根据divde获取的最大multi乘数
             const multi=tools.rand(0,m);
-            const n=multi*max+order-offset;
+            const n=multi*divide+order-offset;
+            console.log(n);
 
+            //2.拼接字符串
             const px=2;     //支付串"0x"前缀
             const prefix=hash.substring(0,start+px);
             const tailor=hash.substring(start+step+px,hash.length+px);
-            return `${prefix}${n.toString(16)}${tailor}`;
+            return `${prefix}${tools.toHex(n)}${tailor}`;
         },
         autoFresh:()=>{
             const width=ref.current.offsetWidth;

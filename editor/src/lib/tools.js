@@ -75,7 +75,10 @@ const self = {
   },
   clone:(obj)=>{
     return JSON.parse(JSON.stringify(obj));
-  }
+  },
+  toHex:(d)=>{
+    return  ("0"+(Number(d).toString(16))).slice(-2);
+  },
 };
 
 module.exports = self;
