@@ -25,8 +25,25 @@ function Template(props) {
                     const fa = e.target.result;
                     Data.set("template",fa);
                     props.fresh();
+
+                    const target=Data.get("size");
+                    if(target!==null){
+                        tools.getImageSize(fa,(w,h)=>{
+                            const line=Math.floor(w/target.cell[0]);
+                            const row=Math.floor(h/target.cell[1]);
+                            target.grid=[line,row];
+                            console.log(target);
+                            Data.set("size",tools.clone(target));
+                            props.fresh();
+                            // const rrow=Math.floor(h/cellY);
+                            // setLine(rline);
+                            // setRow(rrow);
+                            // self.saveSize(cellX,cellY,rline,rrow,width,height);   
+                        });
+                    }
+                    
                   } catch (error) {
-                    console.log(error);
+                    //console.log(error);
                   }
                 };
                 reader.readAsText(fa);
@@ -54,9 +71,9 @@ function Template(props) {
                 <FaFileUpload style={{ color: "rgb(13, 110, 253)", cursor: "pointer"}} onClick={(ev)=>{
                     fileUpload.current.click()
                 }}/>  
-                <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
+                {/* <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
                     self.clickDownload();
-                }}/>
+                }}/> */}
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <input hidden={true} ref={fileUpload} type="file" accept="image/png, image/jpeg" className="form-control" placeholder="The template file." onChange={(ev)=>{

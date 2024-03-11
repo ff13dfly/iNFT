@@ -72,6 +72,9 @@ const self = {
     img.onload = (e) => {
       return ck && ck(img.width, img.height);
     }
+  },
+  clone:(obj)=>{
+    return JSON.parse(JSON.stringify(obj));
   }
 };
 

@@ -77,11 +77,12 @@ function Basic(props) {
             props.fresh();
         },
         saveSize:(cx,cy,gx,gy,w,h)=>{
-            Data.set("size",{
+            const param={
                 target:[w,h],
                 cell:[cx,cy],
                 grid:[gx,gy],
-            });
+            }
+            Data.set("size",param);
             props.fresh();
         },
         updateHash:(order)=>{
@@ -105,16 +106,19 @@ function Basic(props) {
             const tailor=hash.substring(start+step+px,hash.length+px);
             return `${prefix}${n.toString(16)}${tailor}`;
         },
+        autoFresh:()=>{
+            const ss=Data.get("size");
+            setWidth(ss.target[0]);
+            setWidth(ss.target[1]);
+            setCellX(ss.cell[0]);      //cell的X轴像素宽度
+            setCellY(ss.cell[1]);      //cell的Y轴像素宽度
+            setLine(ss.grid[0]);        //X轴，每行多少个
+            setRow(ss.grid[1]);          //Y轴，多少行
+        },
     }
 
     useEffect(() =>{
-        const bs64=Data.get("template");
-        tools.getImageSize(bs64,(w,h)=>{
-            const rline=Math.floor(w/cellX);
-            const rrow=Math.floor(h/cellY);
-            setLine(rline);
-            setRow(rrow);
-        });
+        self.autoFresh();
     }, [props.update]);
 
     return (

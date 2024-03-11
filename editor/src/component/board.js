@@ -193,7 +193,7 @@ function Board(props) {
                             if(min===undefined) min=rare;
                             if(rare < min ) min=rare
                         }
-                        setWin(`Series ${JSON.stringify(sindex)} winner.Rate: ${tools.toF(100*min,8)} %`)
+                        setWin(`Series ${JSON.stringify(sindex)}, rate: ${tools.toF(100*min,8)} %`)
                     }else{
                         setWin("")
                     }
@@ -259,7 +259,7 @@ function Board(props) {
                 ))}
                 <Row className="pt-4">
                     <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        Target result: {win}
+                        Mint Result:<br/> {win}
                     </Col>
                 </Row>
             </Col>
