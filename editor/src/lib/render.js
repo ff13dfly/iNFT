@@ -17,8 +17,8 @@ const self={
 }
 
 const Render= {
-    create:(id,cfg)=>{
-        if(RDS[id]!==undefined) return RDS[id];
+    create:(id,force)=>{
+        if(RDS[id]!==undefined && force!==true) return RDS[id];
         const cvs=document.getElementById(id);		//1.创建好canvas并返回画笔
 		RDS[id]=cvs.getContext("2d");
         self.border(id);
@@ -48,6 +48,12 @@ const Render= {
     },
     clear:(id)=>{
         self.border(id);
+    },
+    fill:(pen,color)=>{
+        const w=pen.canvas.clientWidth;
+        const h=pen.canvas.clientHeight;
+        pen.fillStyle=(color===undefined?config.background:color);
+		pen.fillRect(0,0,w,h);
     },
 };
 

@@ -21,8 +21,6 @@ function NFT(props) {
                 reader.onload = (e) => {
                   try {
                     const fa = JSON.parse(e.target.result);
-                    console.log(fa);
-
                     //1.加载NFT的定义
                     const NFT={
                         puzzle:fa.parts,

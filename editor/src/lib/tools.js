@@ -77,7 +77,13 @@ const self = {
     return JSON.parse(JSON.stringify(obj));
   },
   toHex:(d,len)=>{
-    return (d+0x10000).toString(16).substr(-len);
+    const str=d.toString(16);
+    if(len===undefined) return str;
+    let pre="";
+    for(let i=0;i<len-str.length;i++){
+      pre=pre+"0";
+    }
+    return pre+str;
   },
 };
 

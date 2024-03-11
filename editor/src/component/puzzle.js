@@ -21,7 +21,9 @@ function Puzzle(props) {
     const self={
         clickPuzzle:(index)=>{
             const cur=Data.get("selected");
+            //console.log(index,cur)
             if(cur!==index){
+                //console.log(active,index,cur);
                 setActive(index);
                 Data.set("selected",parseInt(index));
                 Data.set("grid",null);
@@ -101,27 +103,45 @@ function Puzzle(props) {
             for(let i=0;i<def.puzzle.length;i++){
                 if(i!==index) nlist.push(def.puzzle[i]);
             }
-            def.puzzle=nlist;
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
-
             
+            if(nlist.length===0){
+                setActive(0);
+                Data.set("NFT",null);
+                Data.set("selected",0);
+            }else{
+                def.puzzle=nlist;
+                Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            }
             locker=false;
             props.fresh();
         },
         clickAdd:()=>{
-            if(disable) return false;
             if(locker) return false;
             locker=true;
-
             const def=Data.get("NFT");
-            const row=JSON.parse(JSON.stringify(def.puzzle[def.puzzle.length-1]));
             
-            row.value[0]=row.value[0]+4;
-            row.position[0]=row.value[0]+50;
-            row.position[1]=row.value[1]+50;
+            if(def===null){
+                const NFT={puzzle:[],series:[]}
+                const row={
+                    value:[0,2,8,0],
+                    img:[0,0,0,0],
+                    position:[0,0],
+                    center:[0,0],
+                    rotation:[0],
+                    rarity:[] 
+                }
+                NFT.puzzle.push(row);
+                Data.set("selected",null);
+                Data.set("NFT",NFT);
+            }else{
+                const row=JSON.parse(JSON.stringify(def.puzzle[def.puzzle.length-1]));
+                row.value[0]=row.value[0]+4;
+                row.position[0]=row.value[0]+50;
+                row.position[1]=row.value[1]+50;
+                def.puzzle.push(row);
+                Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            }
 
-            def.puzzle.push(row);
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
             locker=false;
             props.fresh();
         }
@@ -129,12 +149,15 @@ function Puzzle(props) {
 
     useEffect(() => {
         const def=Data.get("NFT");
+        //console.log(def);
         if(def && def.puzzle){
             setList(def.puzzle);
             setDisable(false);
             self.clickPuzzle(active);
+        }else{
+            setDisable(true);
+            setList([]);
         }
-
         const hh=Data.get("hash");
         setHash(hh);
     }, [props.update]);
@@ -142,10 +165,10 @@ function Puzzle(props) {
     return (
         <Row className="pt-2">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                <span hidden={disable}>iNFT parts list</span>
+                <span>iNFT parts list</span>
             </Col>
             <Col className="text-end" lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                <FaPlus hidden={disable} style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
+                <FaPlus style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{
                     self.clickAdd(ev);
                 }}/>
             </Col>

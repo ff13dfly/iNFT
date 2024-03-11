@@ -462,15 +462,17 @@ function Detail(props) {
     }
     
     useEffect(() => {
-        const active=Data.get("selected");
-        if(active!==null){
-            setHidden(false);
-            const def=Data.get("NFT");
-            const dt=def.puzzle[active];
-            self.setValues(dt);
 
-            setRare(<Rarity fresh={props.fresh} update={props.update} index={active}/>);
-        }
+        const active=Data.get("selected");
+        const def=Data.get("NFT");
+        if(active===null || def===null) return setHidden(true);
+        
+        setHidden(false);
+        //console.log(active);
+        const dt=def.puzzle[active];
+        self.setValues(dt);
+        setRare(<Rarity fresh={props.fresh} update={props.update} index={active}/>);
+
     }, [props.update]);
 
     return (

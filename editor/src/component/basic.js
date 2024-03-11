@@ -25,10 +25,17 @@ function Basic(props) {
     const self={
         changeWidth:(ev)=>{
             const val=parseInt(ev.target.value);
-            const min=180;
+            //console.log(val);
+            const min=180,max=600;
             if(isNaN(val) || val<min){
                 setWidth(min);
                 self.saveSize(cellX,cellY,line,row,min,height);
+                return true;
+            }
+
+            if(val>max){
+                setWidth(max);
+                self.saveSize(cellX,cellY,line,row,max,height);
                 return true;
             }
 
@@ -37,10 +44,22 @@ function Basic(props) {
         },
         changeHeight:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
-                setHeight(val);
-                self.saveSize(cellX,cellY,line,row,width,val);
+            const min=100,max=600;
+
+            if(isNaN(val) || val<min){
+                setHeight(min);
+                self.saveSize(cellX,cellY,line,row,width,min);
+                return true;
             }
+
+            if(val>max){
+                setHeight(max);
+                self.saveSize(cellX,cellY,line,row,width,max);
+                return true;
+            }
+
+            setHeight(val);
+            self.saveSize(cellX,cellY,line,row,width,val);
         },
         changeCellX:(ev)=>{
             const val=parseInt(ev.target.value);
@@ -82,6 +101,7 @@ function Basic(props) {
                 cell:[cx,cy],
                 grid:[gx,gy],
             }
+            //console.log(param);
             Data.set("size",param);
             props.fresh();
         },
@@ -109,7 +129,7 @@ function Basic(props) {
         autoFresh:()=>{
             const ss=Data.get("size");
             setWidth(ss.target[0]);
-            setWidth(ss.target[1]);
+            setHeight(ss.target[1]);
             setCellX(ss.cell[0]);      //cell的X轴像素宽度
             setCellY(ss.cell[1]);      //cell的Y轴像素宽度
             setLine(ss.grid[0]);        //X轴，每行多少个
