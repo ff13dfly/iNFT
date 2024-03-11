@@ -76,8 +76,8 @@ const self = {
   clone:(obj)=>{
     return JSON.parse(JSON.stringify(obj));
   },
-  toHex:(d)=>{
-    return  ("0"+(Number(d).toString(16))).slice(-2);
+  toHex:(d,len)=>{
+    return (d+0x10000).toString(16).substr(-len);
   },
 };
 

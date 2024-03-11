@@ -67,16 +67,15 @@ function Preview(props) {
         },
         getHash:(hash,order,start,step,divide,offset)=>{
             const top=Math.pow(16,step);    //总数据量
-            const m=Math.floor((top-offset)/divide)-1;  //根据divde获取的最大multi乘数
+            const m=Math.floor((top-offset)/divide);  //根据divde获取的最大multi乘数
             const multi=tools.rand(0,m);
             const n=multi*divide+order-offset;
-            console.log(n);
-
+            console.log(n,tools.toHex(n,step));
             //2.拼接字符串
             const px=2;     //支付串"0x"前缀
             const prefix=hash.substring(0,start+px);
             const tailor=hash.substring(start+step+px,hash.length+px);
-            return `${prefix}${tools.toHex(n)}${tailor}`;
+            return `${prefix}${tools.toHex(n,step)}${tailor}`;
         },
         autoFresh:()=>{
             const width=ref.current.offsetWidth;
