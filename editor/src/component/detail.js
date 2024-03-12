@@ -226,7 +226,7 @@ function Detail(props) {
         },
         changeValueDivide:(ev)=>{
             const val=parseInt(ev.target.value);
-            const min=2,index=2;
+            const min=1,index=2;
             const limit=value_step>2?256:Math.pow(16,value_step);
 
             //1.最小和异常的处理

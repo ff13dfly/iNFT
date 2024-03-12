@@ -71,9 +71,9 @@ function Template(props) {
                 <FaFileUpload style={{ color: "rgb(13, 110, 253)", cursor: "pointer"}} onClick={(ev)=>{
                     fileUpload.current.click()
                 }}/>  
-                {/* <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
+                <FaDownload style={{ color: "rgb(13, 110, 253)", cursor: "pointer",marginLeft:"10px" }} onClick={(ev)=>{
                     self.clickDownload();
-                }}/> */}
+                }}/>
             </Col>
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <input hidden={true} ref={fileUpload} type="file" accept="image/png, image/jpeg" className="form-control" placeholder="The template file." onChange={(ev)=>{

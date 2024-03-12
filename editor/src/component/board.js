@@ -33,10 +33,12 @@ function Board(props) {
     let [rate, setRate] = useState(0);
     let [win, setWin] = useState("");
 
-    let [start, setStart] = useState(0);
-    let [step, setStep] = useState(0);
-    let [divide, setDivide] = useState(1);
-    let [offset, setOffset] = useState(0);
+    // let [start, setStart] = useState(0);
+    // let [step, setStep] = useState(0);
+    // let [divide, setDivide] = useState(1);
+    // let [offset, setOffset] = useState(0);
+
+    let [stage, setStage]=useState(<Value start={0} step={0} divide={8} offset={0} hash={hash} />);
 
     if (Data.get("hash") === null) {
         Data.set("hash", hash);
@@ -155,27 +157,19 @@ function Board(props) {
                 Render.active(pen, dx, dy, vx, vy, color, pw);
             }
         },
-        reset:()=>{
-            setStart(0);
-            setStep(0);
-            setDivide(1);
-            setOffset(0);
-        },
         autofresh: (hash) => {
             const def = Data.get("NFT");
             const bs64 = Data.get("template");
             const pen = Render.create(cfg.id);
-            if(def===null) self.reset();
+            if(def===null) setStage(<Value start={0} step={0} divide={8} offset={0} hash={hash} />);
 
             const ss = Data.get("size");
             const selected = Data.get("selected");
+
             if (selected !== null && def!==null) {
                 const part = def.puzzle[selected];
                 const [p_start, p_step, p_divide, p_offset] = part.value;
-                setStart(p_start);
-                setStep(p_step);
-                setDivide(p_divide);
-                setOffset(p_offset);
+                setStage(<Value start={p_start} step={p_step} divide={p_divide} offset={p_offset} hash={hash} />)
             }
 
             if(bs64 === null || def === null) {
@@ -217,7 +211,6 @@ function Board(props) {
         const { target } = Data.get("size");
         setWidth(target[0]);
         setHeight(target[1]);
-
         setTimeout(()=>{
             self.autofresh(Data.get("hash"));
         },50);
@@ -230,7 +223,8 @@ function Board(props) {
             </Col>
             <Col className="pt-2" lg={size.hash[0]} xl={size.hash[0]} xxl={size.hash[0]} >
                 <small>{hash.length - 2} bytes hexadecimal mock hash.</small>
-                <Value start={start} step={step} divide={divide} offset={offset} hash={hash} />
+                {stage}
+                {/* <Value start={start} step={step} divide={divide} offset={offset} hash={hash} update={props.update}/> */}
             </Col>
             <Col className="pt-2" lg={size.hash[1]} xl={size.hash[1]} xxl={size.hash[1]} >
                 <Row>

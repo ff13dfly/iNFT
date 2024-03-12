@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Data from "../lib/data";
+
 function Value(props) {
     const size = {
         show: [1, 11],
@@ -59,20 +61,40 @@ function Value(props) {
                 <p style={{marginBottom:"0px"}}>
                     Value: 0x{value} , 
                     Offset: {offset},
-                    Result: ( {int} + {offset} )% {divide} = &nbsp;
+                    Result: ( {int} + {offset} ) % {divide} = &nbsp;
                     <span className="bg-warning">&nbsp;{(int+offset)%divide}&nbsp;</span>
                 </p>
             ));
-        }
+        },
+        autoFresh:()=>{
+            // const hash=Data.get("hash");
+            
+            // const def = Data.get("NFT");
+            // if(def===null){
+            //     const [start, step,divide, offset]=[0,1,0,0];
+            // }else{
+            //     const selected = Data.get("selected");
+            //     const part = def.puzzle[selected];
+            //     console.log();
+            //     const [start, step,divide, offset] = part.value;
+                
+            // }
+
+            // const str=hash.slice(2,66);
+            // self.firstRow(str, start, step);
+            // self.secondRow(str, start, step);
+            // self.showResult(str,start,step,divide,offset);
+        },
     }
 
     useEffect(() => {
+       //self.autoFresh()
         const str=hash.slice(2,66);
         self.firstRow(str, start, step);
         self.secondRow(str, start, step);
         self.showResult(str,start,step,divide,offset);
-        //console.log(offset);
-    }, [props.hash, props.start, props.step, props.offset]);
+
+    }, [props.hash,props.start,props.step,props.divide,props.offset]);
 
     const cmap={
         background:"#AAEEEE",
