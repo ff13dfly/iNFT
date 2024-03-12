@@ -66,10 +66,17 @@ function Preview(props) {
             }
         },
         getHash:(hash,order,start,step,divide,offset)=>{
-            const top=Math.pow(16,step);    //总数据量
-            const m=Math.floor((top-offset)/divide)-1;  //根据divde获取的最大multi乘数
+            const hex=16;
+            const top=Math.pow(hex,step);        //总数据量
+            const m=Math.floor(top/divide);  //根据divde获取的最大multi乘数
             const multi=tools.rand(0,m);
-            const n=multi*divide+order-offset;
+
+            //修正输出到指定的范围，写的很尴尬
+            const rand_start=multi*divide;
+            const nn= (rand_start===0?divide:rand_start)+order-offset;
+            const n=nn>=hex?nn-hex:nn;
+
+            //console.log(multi,order,rand_start,n);
             
             //2.拼接字符串
             const px=2;     //支付串"0x"前缀

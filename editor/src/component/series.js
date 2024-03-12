@@ -84,15 +84,21 @@ function Series(props) {
             props.fresh();
         },
         calcRarity:(puzzle,series)=>{
-            //console.log(puzzle,series);
             for(let i=0;i<series.length;i++){
-                series[i].rate=1;
+                //series[i].rate=1;
+                let n=1;
+                let m=1;
                 for(let j=0;j<puzzle.length;j++){
                     const part=puzzle[j];
                     const max=part.value[2];
                     const bingo=part.rarity[i];
-                    //console.log(bingo);
-                    series[i].rate=series[i].rate*(bingo.length/max);
+                    n=n*bingo.length;
+                    m=m*max;
+                    if(n!==0){
+                        series[i].rate=parseInt(m/n);
+                    }else{
+                        series[i].rate=0;
+                    }
                 }
             }
             return series;
@@ -105,7 +111,6 @@ function Series(props) {
             if(def.series===undefined) def.series=[];
             
             const nlist=self.calcRarity(def.puzzle,def.series);
-            //console.log(nlist);
             setSeries(nlist);
         }
     }, [props.update]);

@@ -55,8 +55,7 @@ function NFT(props) {
             const def=Data.get("NFT");
             if(def===null) return false;
             delete def.format;
-            //tools.download("def.json",JSON.stringify(def));
-
+            //console.log(self.getNFTData(2));
             tools.download("iNFT.json",JSON.stringify(self.getNFTData(2)));
         },
         getNFTData: (type) => {
@@ -64,15 +63,28 @@ function NFT(props) {
             const NFT = Data.get("NFT");
             const basic = Data.get("size");
             if (bs64===null || NFT === null || basic == null) return false;
+
+            //1.清理不需要的数据
+
             return {
                 size: basic.target,  //图像的基本配置
                 cell: basic.cell,    //图像的裁切
                 grid: basic.grid,
                 parts: NFT.puzzle,        //图像的组成
-                series:NFT.series,      //rarity的构成
+                series:self.cleanSeries(NFT.series),      //rarity的构成
                 type: type,             //2D的图像， [1.像素化产品;2.2D图像;3.3D模型]
                 image: bs64,         //图像的base64编码，带前缀
+                version:"2024_flamingo",    //增加版本 
             }
+        },
+        cleanSeries:(obj)=>{
+            const arr=tools.clone(obj);
+            const result=[];
+            for(let i=0;i<arr.length;i++){
+                const row=arr[i];
+                result.push({name:row.name,desc:row.desc});
+            }
+            return result;
         },
     };
 

@@ -65,15 +65,20 @@ function Board(props) {
             return hex;
         },
         calcRarity: (puzzle, series) => {
-            //console.log(puzzle,series);
             for (let i = 0; i < series.length; i++) {
-                series[i].rate = 1;
-                for (let j = 0; j < puzzle.length; j++) {
-                    const part = puzzle[j];
-                    const max = part.value[2];
-                    const bingo = part.rarity[i];
-                    //console.log(bingo);
-                    series[i].rate = series[i].rate * (bingo.length / max);
+                let n=1;
+                let m=1;
+                for(let j=0;j<puzzle.length;j++){
+                    const part=puzzle[j];
+                    const max=part.value[2];
+                    const bingo=part.rarity[i];
+                    n=n*bingo.length;
+                    m=m*max;
+                    if(n!==0){
+                        series[i].rate=parseInt(m/n);
+                    }else{
+                        series[i].rate=0;
+                    }
                 }
             }
             return series;
@@ -81,7 +86,7 @@ function Board(props) {
         getTotalRate: (series) => {
             let rate = 0;
             for (let i = 0; i < series.length; i++) {
-                rate += series[i].rate;
+                if(series[i].rate!==0) rate += 1/series[i].rate;
             }
             return rate;
         },
@@ -186,24 +191,37 @@ function Board(props) {
 
                 const rlist = self.calcRarity(def.puzzle, def.series);
                 setSeries(rlist);
-                setRate(tools.toF(100 * self.getTotalRate(rlist), 5));
+                const rt=self.getTotalRate(rlist);
+                setRate(rt===0?"":parseInt(1/rt));
 
-                const sindex = self.calcResult(hash, def.puzzle, def.series.length);
-                if (sindex !== false) {
+                const sarr = self.calcResult(hash, def.puzzle, def.series.length);
+                if (sarr !== false) {
                     let min = undefined;
-                    for (let i = 0; i < sindex.length; i++) {
-                        const tindex = sindex[i];
+                    for (let i = 0; i < sarr.length; i++) {
+                        const tindex = sarr[i];
                         const rare = rlist[tindex].rate;
                         if (min === undefined) min = rare;
-                        if (rare < min) min = rare
+                        if (rare > min) min = rare
                     }
-                    setWin(`Series ${JSON.stringify(sindex)}, rate: ${tools.toF(100 * min, 8)} %`)
+                    setWin((<p>Series {JSON.stringify(sarr)}: <br/>Rate: 1 / {self.getThound(min)}</p>))
                 } else {
                     setWin("")
                 }
             }
 
         },
+        getThound:(n)=>{
+            return n.toLocaleString();
+        },
+        // getShowRate:(rate,len)=>{
+        //     const show=tools.toF(rate, len);
+        //     //console.log(show);
+        //     if(show===0){
+        //         len=len+6;
+        //         return self.getShowRate(rate,len); 
+        //     }
+        //     return parseInt(1/show);
+        // },
     }
 
     useEffect(() => {
@@ -249,7 +267,7 @@ function Board(props) {
             <Col className="pt-2" lg={size.rare[1]} xl={size.rare[1]} xxl={size.rare[1]} >
                 <Row className="pb-2">
                     <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        Total Rarity: {rate}%
+                        Total Rarity:<br />1 / {rate.toLocaleString()}
                     </Col>
                 </Row>
                 {series.map((row, index) => (
@@ -257,8 +275,8 @@ function Board(props) {
                         <Col lg={size.rate[0]} xl={size.rate[0]} xxl={size.rate[0]}>
                             #{index}
                         </Col>
-                        <Col lg={size.rate[1]} xl={size.rate[1]} xxl={size.rate[1]}>
-                            {tools.toF(row.rate * 100, 7)}%
+                        <Col className="text-end" lg={size.rate[1]} xl={size.rate[1]} xxl={size.rate[1]}>
+                            1 / {self.getThound(row.rate)}
                         </Col>
                     </Row>
                 ))}
