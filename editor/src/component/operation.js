@@ -159,7 +159,8 @@ function Operation(props) {
     return (
         <Row className="pt-2">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                <h5>Write iNFT template to Anchor Network</h5>
+                {/* <h5>Write iNFT template to Anchor Network</h5> */}
+                <h5>Write iNFT template to blockchain</h5>
             </Col>
             <Col lg={size.encry[0]} xl={size.encry[0]} xxl={size.encry[0]} >
                 <small>{info}</small>

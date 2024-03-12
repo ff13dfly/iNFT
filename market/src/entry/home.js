@@ -1,5 +1,7 @@
-import { Row, Col } from "react-bootstrap";
+import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
+
+import Header from "../components/header";
 
 let font=14;
 
@@ -21,11 +23,14 @@ function Home(props) {
     }, [props.update]);
 
     return (
-        <Row className="pt-2">
-            <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
-                Home page
-            </Col>
-        </Row>
+        <div>
+            <Header />
+            <Row className="pt-2">
+                <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
+                    Home main content
+                </Col>
+            </Row>
+        </div>
     )
 }
 

@@ -129,7 +129,7 @@ function Series(props) {
                 <Col key={index} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                     <Row className="pb-2 pt-2">
                         <Col lg={size.list[0]} xl={size.list[0]} xxl={size.list[0]}>
-                            #{index} {row.name}
+                            #S_{index} {row.name}
                         </Col>
                         <Col className="text-end" lg={size.list[1]} xl={size.list[1]} xxl={size.list[1]}>
                         <FaTrashAlt style={{ color: "rgb(13, 110, 253)", cursor: "pointer" }} onClick={(ev)=>{

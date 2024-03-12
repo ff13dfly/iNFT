@@ -1,7 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-let font=14;
+
+import Header from "../components/header";
 
 function Template(props) {
     const size = {
@@ -21,11 +22,14 @@ function Template(props) {
     }, [props.update]);
 
     return (
-        <Row className="pt-2">
-            <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
-                Template page
-            </Col>
-        </Row>
+        <div>
+            <Header />
+            <Row className="pt-2">
+                <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
+                    Template page
+                </Col>
+            </Row>
+        </div>
     )
 }
 

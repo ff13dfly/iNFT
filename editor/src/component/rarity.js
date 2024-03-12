@@ -90,7 +90,7 @@ function Rarity(props) {
                 {series.map((row, index) => (
                     <Row key={index}>
                         <Col className="pt-2" lg={size.select[0]} xl={size.select[0]} xxl={size.select[0]}>
-                            #{index} {self.getSeriesName(index)}
+                            #S_{index} {self.getSeriesName(index)}
                         </Col>
                         <Col lg={size.select[1]} xl={size.select[1]} xxl={size.select[1]}>
                             <Row>

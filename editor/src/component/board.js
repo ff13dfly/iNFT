@@ -211,17 +211,10 @@ function Board(props) {
 
         },
         getThound:(n)=>{
+            //console.log(n);
+            if(n===undefined) return "";    //加了这行久好了
             return n.toLocaleString();
-        },
-        // getShowRate:(rate,len)=>{
-        //     const show=tools.toF(rate, len);
-        //     //console.log(show);
-        //     if(show===0){
-        //         len=len+6;
-        //         return self.getShowRate(rate,len); 
-        //     }
-        //     return parseInt(1/show);
-        // },
+        }
     }
 
     useEffect(() => {
@@ -257,7 +250,7 @@ function Board(props) {
                     <Col className="text-end pt-2" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                         <button className="btn btn-sm btn-warning" onClick={(ev) => {
                             self.clickFresh();
-                        }}>Fresh</button>
+                        }}>Mock Mint</button>
                     </Col>
                 </Row>
             </Col>
@@ -273,7 +266,7 @@ function Board(props) {
                 {series.map((row, index) => (
                     <Row key={index}>
                         <Col lg={size.rate[0]} xl={size.rate[0]} xxl={size.rate[0]}>
-                            #{index}
+                            #S_{index}
                         </Col>
                         <Col className="text-end" lg={size.rate[1]} xl={size.rate[1]} xxl={size.rate[1]}>
                             1 / {self.getThound(row.rate)}

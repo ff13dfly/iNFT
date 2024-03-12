@@ -24,7 +24,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route index element={<Home />} />
+          <Route path="home" index element={<Home />} />
           <Route path="template" element={<Template />} />
           <Route path="editor" element={<Editor />} />
           <Route path="minter" element={<Minter />} />
