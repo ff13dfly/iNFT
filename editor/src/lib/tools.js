@@ -22,6 +22,9 @@ const self = {
   copy: (arr_obj) => {
     return JSON.parse(JSON.stringify(arr_obj));
   },
+  clone:(obj)=>{
+    return JSON.parse(JSON.stringify(obj));
+  },
   clean: (arr) => {
     return Array.from(new Set(arr));
   },
@@ -73,9 +76,7 @@ const self = {
       return ck && ck(img.width, img.height);
     }
   },
-  clone:(obj)=>{
-    return JSON.parse(JSON.stringify(obj));
-  },
+  
   toHex:(d,len)=>{
     const str=d.toString(16);
     if(len===undefined) return str;

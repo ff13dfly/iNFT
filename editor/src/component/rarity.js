@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { FaPlus } from "react-icons/fa";
 
 import  Data from "../lib/data";
+import tools from "../lib/tools"
 
 function Rarity(props) {
     const size = {
@@ -33,14 +34,14 @@ function Rarity(props) {
                 target[series]=arr;
             }
             def.puzzle[active].rarity=target;
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            Data.set("NFT",tools.clone(def));
             props.fresh();
         },
         getNewRarity:(old,sum)=>{
             const result=[];
             for(let i=0;i<sum;i++){
                 if(old!==undefined && old[i]!==undefined){
-                    result.push(JSON.parse(JSON.stringify(old[i])));
+                    result.push(tools.clone(old[i]));
                 }else{
                     result.push([]);
                 }

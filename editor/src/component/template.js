@@ -24,22 +24,18 @@ function Template(props) {
                   try {
                     const fa = e.target.result;
                     Data.set("template",fa);
-                    props.fresh();
-
                     const target=Data.get("size");
                     if(target!==null){
                         tools.getImageSize(fa,(w,h)=>{
+                            
                             const line=Math.floor(w/target.cell[0]);
                             const row=Math.floor(h/target.cell[1]);
                             target.grid=[line,row];
-                            console.log(target);
                             Data.set("size",tools.clone(target));
                             props.fresh();
-                            // const rrow=Math.floor(h/cellY);
-                            // setLine(rline);
-                            // setRow(rrow);
-                            // self.saveSize(cellX,cellY,rline,rrow,width,height);   
                         });
+                    }else{
+                        props.fresh();
                     }
                     
                   } catch (error) {

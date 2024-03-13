@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Rarity from "./rarity";
 
 import  Data from "../lib/data";
+import tools from "../lib/tools";
 
 function Detail(props) {
     const size = {
@@ -63,7 +64,7 @@ function Detail(props) {
                 const [key,index,val]=arr[i];
                 def.puzzle[active][key][index]=val;
             }
-            const changed=JSON.parse(JSON.stringify(def));
+            const changed=tools.clone(def);
             Data.set("NFT",changed);
             props.fresh();
         },
@@ -85,12 +86,10 @@ function Detail(props) {
             //console.log(def);
             def.puzzle[active]=data;
             def.puzzle[active][key][index]=val;
-            const changed=JSON.parse(JSON.stringify(def));
+            const changed= tools.clone(def);
             Data.set("NFT",changed);
 
             if(!pending){   //更新数据
-                //const changed=JSON.parse(JSON.stringify(def));
-                //Data.set("NFT",changed);
                 props.fresh();
             }
         },

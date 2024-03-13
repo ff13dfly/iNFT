@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FaPlus,FaTrashAlt } from "react-icons/fa";
 
 import  Data from "../lib/data";
+import tools from "../lib/tools";
 
 function Series(props) {
 
@@ -46,7 +47,7 @@ function Series(props) {
         changeName:(index,ev)=>{
             const val=ev.target.value.trim();
             series[index].name=val;
-            const ns=JSON.parse(JSON.stringify(series));
+            const ns=tools.clone(series);
         
             const def=Data.get("NFT");
             def.series=ns;
@@ -55,7 +56,7 @@ function Series(props) {
         changeDesc:(index,ev)=>{
             const val=ev.target.value.trim();
             series[index].desc=val;
-            const ns=JSON.parse(JSON.stringify(series));
+            const ns=tools.clone(series);
         
             const def=Data.get("NFT");
             def.series=ns;
@@ -72,7 +73,7 @@ function Series(props) {
             const result=[];
             for(let i=0;i<sum;i++){
                 if(old!==undefined && old[i]!==undefined){
-                    result.push(JSON.parse(JSON.stringify(old[i])));
+                    result.push(tools.clone(old[i]));
                 }else{
                     result.push([]);
                 }
@@ -80,7 +81,7 @@ function Series(props) {
             return result;
         },
         save:(def)=>{
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            Data.set("NFT", tools.clone(def));
             props.fresh();
         },
         calcRarity:(puzzle,series)=>{

@@ -63,16 +63,61 @@ function Basic(props) {
         },
         changeCellX:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
+            const min=10,max=300;
+            if(isNaN(val) || val<min){
+                setCellX(min);
+                self.saveSize(min,cellY,line,row,width,height);
+                return true;
+            }
+
+            if(val>max){
+                setCellX(max);
+                self.saveSize(max,cellY,line,row,width,height);
+                return true;
+            }
+
+            const bs64=Data.get("template");
+            if(bs64===null){
+                //不存在图像，仅保存数据
                 setCellX(val);
                 self.saveSize(val,cellY,line,row,width,height);
+            }else{
+                tools.getImageSize(bs64,(w,h)=>{
+                    //console.log(w,h);
+                    const nline=Math.floor(w/val);
+                    setCellX(val);
+                    setLine(nline);
+                    self.saveSize(val,cellY,nline,row,width,height);
+                })
             }
         },
         changeCellY:(ev)=>{
             const val=parseInt(ev.target.value);
-            if(!isNaN(val)){
+            const min=10,max=300;
+            if(isNaN(val) || val<min){
+                setCellY(min);
+                self.saveSize(cellX,min,line,row,width,height);
+                return true;
+            }
+
+            if(val>max){
+                setCellY(max);
+                self.saveSize(cellX,max,line,row,width,height);
+                return true;
+            }
+
+            const bs64=Data.get("template");
+            if(bs64===null){
+                //不存在图像，仅保存数据
                 setCellY(val);
                 self.saveSize(cellX,val,line,row,width,height);
+            }else{
+                tools.getImageSize(bs64,(w,h)=>{
+                    const nrow=Math.floor(h/val);
+                    setCellY(val);
+                    setRow(nrow);
+                    self.saveSize(cellX,val,line,nrow,width,height);
+                })
             }
         },
         changeLine:(ev)=>{

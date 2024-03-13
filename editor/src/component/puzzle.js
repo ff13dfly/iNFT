@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { FaArrowUp,FaArrowDown,FaTrashAlt,FaPlus } from "react-icons/fa";
 import  Data from "../lib/data";
+import tools from "../lib/tools";
 
 let locker=false;
 
@@ -51,7 +52,7 @@ function Puzzle(props) {
             }
             def.puzzle=nlist;
 
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            Data.set("NFT", tools.clone(def));
             Data.set("selected",parseInt(index-1));
             setActive(index-1);
             locker=false;
@@ -81,7 +82,7 @@ function Puzzle(props) {
             }
             def.puzzle=nlist;
 
-            Data.set("NFT",JSON.parse(JSON.stringify(def)));
+            Data.set("NFT",tools.clone(def));
             Data.set("selected",parseInt(index+1));
             setActive(index+1);
             locker=false;
@@ -110,7 +111,7 @@ function Puzzle(props) {
                 Data.set("selected",0);
             }else{
                 def.puzzle=nlist;
-                Data.set("NFT",JSON.parse(JSON.stringify(def)));
+                Data.set("NFT",tools.clone(def));
             }
             locker=false;
             props.fresh();
@@ -134,12 +135,12 @@ function Puzzle(props) {
                 Data.set("selected",null);
                 Data.set("NFT",NFT);
             }else{
-                const row=JSON.parse(JSON.stringify(def.puzzle[def.puzzle.length-1]));
+                const row= tools.clone(def.puzzle[def.puzzle.length-1]);
                 row.value[0]=row.value[0]+4;
                 row.position[0]=row.value[0]+50;
                 row.position[1]=row.value[1]+50;
                 def.puzzle.push(row);
-                Data.set("NFT",JSON.parse(JSON.stringify(def)));
+                Data.set("NFT",tools.clone(def));
             }
 
             locker=false;

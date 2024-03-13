@@ -4,22 +4,24 @@ import { useEffect, useState,useRef } from "react";
 import  Data from "../lib/data";
 import tools from "../lib/tools";
 
-//let selected=0;
-
 function Preview(props) {
     const size = {
         row: [12],
         grid: [6,6],
     };
 
+    let [width,setWidth]=useState(0);
+    let [height,setHeight]=useState(0);
+    let [show,setShow]=useState(false);
+
     let [image,setImage]=useState("image/empty.png");
     let [grid, setGrid] =useState([]);
     let [active, setActive]=useState(null);
 
-    let [cellX,setCellX]=useState(50);      //cell的X轴像素宽度
-    let [cellY,setCellY]=useState(50);      //cell的Y轴像素宽度
-    let [line,setLine]=useState(8);        //X轴，每行多少个
-    let [row,setRow]=useState(10);          //Y轴，多少行
+    //let [cellX,setCellX]=useState(50);      //cell的X轴像素宽度
+    //let [cellY,setCellY]=useState(50);      //cell的Y轴像素宽度
+    //let [line,setLine]=useState(8);        //X轴，每行多少个
+    //let [row,setRow]=useState(10);          //Y轴，多少行
 
     const ref = useRef(null);
 
@@ -84,14 +86,21 @@ function Preview(props) {
             const tailor=hash.substring(start+step+px,hash.length+px);
             return `${prefix}${tools.toHex(n,step)}${tailor}`;
         },
-        autoFresh:()=>{
+        autoFresh:(x,y,cellX,cellY)=>{
+            console.log(cellX,cellY);
             const width=ref.current.offsetWidth;
-            const w=tools.toF(width/line,3);
+            const w=tools.toF(width/x,3);
             const rate=w/cellX;
             const h=cellY*rate;
             const bs64=Data.get("template");
             if(bs64!==null){
                 setImage(bs64);
+                tools.getImageSize(bs64,(w,h)=>{
+                    setWidth(w);
+                    setHeight(h);
+                    setShow(true);
+                });
+                
                 const puzzle_selected=Data.get("selected");
                 const NFT=Data.get("NFT");
                 if(puzzle_selected!==null){
@@ -107,9 +116,11 @@ function Preview(props) {
                         setActive(sel);
     
                         const [gX,gY,eX,eY]=def.img;
-                        const gg=self.getHelper(amount,line,w,h,gX,gY,eX,eY);
+                        const gg=self.getHelper(amount,x,w,h,gX,gY,eX,eY);
                         setGrid(gg);
+                        
                     }
+
                 }
             }
         },
@@ -117,12 +128,9 @@ function Preview(props) {
 
     useEffect(() =>{
         const ss=Data.get("size");
-        setCellX(ss.cell[0]);      //cell的X轴像素宽度
-        setCellY(ss.cell[1]);      //cell的Y轴像素宽度
-        setLine(ss.grid[0]);        //X轴，每行多少个
-        setRow(ss.grid[1]);          //Y轴，多少行
-        
-        self.autoFresh();
+        //setCellX(ss.cell[0]);      //cell的X轴像素宽度
+        //setCellY(ss.cell[1]);      //cell的Y轴像素宽度    
+        self.autoFresh(ss.grid[0],ss.grid[1],ss.cell[0],ss.cell[1]);
     }, [props.update,ref.current]);
 
     return (
@@ -142,6 +150,9 @@ function Preview(props) {
                         }}>{index}</div>
                 ))}
                 {<img id="preview" ref={ref} src={image} alt="Preview of full iNFT" />}
+            </Col>
+            <Col hidden={!show} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                Size: {width}px * {height}px
             </Col>
         </Row>
     )
