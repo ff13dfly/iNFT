@@ -13,6 +13,8 @@ import Puzzle from "./component/puzzle";
 import NFT from "./component/nft";
 import Detail from "./component/detail";
 
+import IPFS from "./lib/IPFS";
+
 function App() {
 
   const size = {
@@ -31,7 +33,13 @@ function App() {
   }
   
   useEffect(() => {
-
+    // const cid="QmXXY5ZxbtuYj6DnfApLiGstzPN7fvSyigrRee3hDWPCaf";
+    // Chain.view(cid,(dt)=>{
+    //   console.log(dt);
+    // });
+    const solana=window.solanaWeb3;
+    const transaction = new solana.Transaction();
+    console.log(transaction);
   }, []);
 
   return (
