@@ -14,6 +14,7 @@ import NFT from "./component/nft";
 import Detail from "./component/detail";
 
 import IPFS from "./lib/IPFS";
+import Solana_test from "./test/solana";
 
 function App() {
 
@@ -33,13 +34,9 @@ function App() {
   }
   
   useEffect(() => {
-    // const cid="QmXXY5ZxbtuYj6DnfApLiGstzPN7fvSyigrRee3hDWPCaf";
-    // Chain.view(cid,(dt)=>{
-    //   console.log(dt);
-    // });
-    const solana=window.solanaWeb3;
-    const transaction = new solana.Transaction();
-    console.log(transaction);
+    Solana_test.auto();
+    
+
   }, []);
 
   return (
