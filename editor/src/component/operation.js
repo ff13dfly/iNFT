@@ -143,11 +143,6 @@ function Operation(props) {
         },
     }
 
-    //const { connection } = useConnection();
-    //const { publicKey } = useWallet();
-
-    //console.log(publicKey);
-
     useEffect(() => {
         const bs64 = Data.get("template");
         const NFT = Data.get("NFT");
@@ -160,11 +155,6 @@ function Operation(props) {
                 setWriteable(true);
             }
         }
-
-        //const publicKey = window.solana.publicKey.toString();
-        //console.log('Connected wallet public key:', publicKey);
-        //window.solana.connect();
-        //console.log(window.solana);
         
     }, [props.update]);
 

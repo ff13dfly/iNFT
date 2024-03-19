@@ -87,7 +87,7 @@ function Preview(props) {
             return `${prefix}${tools.toHex(n,step)}${tailor}`;
         },
         autoFresh:(x,y,cellX,cellY)=>{
-            console.log(cellX,cellY);
+            //console.log(cellX,cellY);
             const width=ref.current.offsetWidth;
             const w=tools.toF(width/x,3);
             const rate=w/cellX;

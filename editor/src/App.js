@@ -12,9 +12,11 @@ import Puzzle from "./component/puzzle";
 
 import NFT from "./component/nft";
 import Detail from "./component/detail";
+import Solana from "./component/solana";
 
 import IPFS from "./lib/IPFS";
 import Solana_test from "./test/solana";
+import AptOS_test from "./test/aptos";
 
 function App() {
 
@@ -34,8 +36,8 @@ function App() {
   }
   
   useEffect(() => {
-    Solana_test.auto();
-    
+    //Solana_test.auto();
+    //AptOS_test.auto();
 
   }, []);
 
@@ -51,7 +53,8 @@ function App() {
                 <Basic fresh={self.fresh} update={update}/>
               </Col>
               <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
-                <Operation fresh={self.fresh} update={update}/>
+                {/* <Operation fresh={self.fresh} update={update}/> */}
+                <Solana fresh={self.fresh} update={update}/>
               </Col>
             </Row>
           </Col>

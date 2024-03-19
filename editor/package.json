@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.10.0",
     "@pixi/react": "^7.1.1",
     "@polkadot/api": "^10.11.2",
     "@solana/wallet-adapter-react": "^0.15.35",
