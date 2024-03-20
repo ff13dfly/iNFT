@@ -10,7 +10,12 @@ function Solana(props) {
 
     const self={
         clickWrite:(ev)=>{
+            //console.log(window.phantom);
             SOL.wallet((signer)=>{
+                // SOL.airdrop(signer.publicKey,3,(res)=>{
+                //     console.log(res);
+                // },"devnet");
+
                 const data={
                     target:"hello world",
                     stamp:0,
@@ -18,7 +23,7 @@ function Solana(props) {
 
                 SOL.storage(data,(txHash)=>{
                     console.log(txHash);
-                },signer);
+                },signer,"devnet");
             });
         },
     };
