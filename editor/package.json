@@ -12,6 +12,7 @@
     "@solana/wallet-standard-features": "^1.2.0",
     "@solana/wallet-standard-util": "^1.1.1",
     "@solana/web3.js": "^1.91.1",
+    "@stdlib/buffer-from-string": "^0.2.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

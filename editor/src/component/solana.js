@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import SOL from "../network/solana";
+
 function Solana(props) {
     const size = {
         row: [12],
@@ -8,32 +10,16 @@ function Solana(props) {
 
     const self={
         clickWrite:(ev)=>{
-            //1.connect to "devnet"
-            // const {Connection,clusterApiUrl} =  window.solanaWeb3;
-            // const connection = new Connection(clusterApiUrl('devnet'));
+            SOL.wallet((signer)=>{
+                const data={
+                    target:"hello world",
+                    stamp:0,
+                };
 
-            //2.connect to localhost
-            const solana=window.solanaWeb3;
-            const uri="http://127.0.0.1:8899";
-            const connection = new solana.Connection(uri, "confirmed");
-            if (typeof window.solana !== 'undefined') {
-                console.log('Phantom wallet is installed and connected');
-                try {
-                    window.solana.connect().then((res)=>{
-                        console.log(res.publicKey.toString());
-                        //console.log(`Sleep 2s to recall.`);
-                        connection.getSignaturesForAddress(res.publicKey,{limit:10}).then((msg)=>{
-                            console.log(msg);
-                        });
-                    });
-
-                } catch (error) {
-                    
-                }
-            } else {
-                // Phantom wallet extension is not installed or not connected
-                console.log('Phantom wallet is not installed or not connected');
-            }
+                SOL.storage(data,(txHash)=>{
+                    console.log(txHash);
+                },signer);
+            });
         },
     };
 
