@@ -42,7 +42,8 @@ const self = {
         }
     },
 
-    storage:(data, ck, signer, network)=>{
+    storage: (data, ck, signer, network) => {
+        console.log(JSON.stringify(funs.toBuffer("你好")));
         //console.log(signer,network);
         self.init(network, (connection) => {
             const {
@@ -61,13 +62,13 @@ const self = {
             const dt = funs.toBuffer(JSON.stringify(data));
 
             //系统的ID，必须要的部分
-            const program_id=new PublicKey('11111111111111111111111111111111');
+            const program_id = new PublicKey('11111111111111111111111111111111');
 
             //1.创建账号的交易指令，再转2个SOL进去
             const createAccountInstruction = SystemProgram.createAccount({
                 fromPubkey: fromPublicKey,
                 newAccountPubkey: accountPublicKey,
-                lamports: 2*LAMPORTS_PER_SOL, // Amount of lamports to allocate (1 SOL)
+                lamports: 3 * LAMPORTS_PER_SOL, // Amount of lamports to allocate (1 SOL)
                 space: dt.length, // Amount of space to allocate
                 programId: program_id,
             });
@@ -78,13 +79,13 @@ const self = {
                     { pubkey: fromPublicKey, isSigner: true, isWritable: true },
                     { pubkey: accountPublicKey, isSigner: false, isWritable: true },
                 ],
-                programId: program_id, 
+                programId: program_id,
                 data: dt,
             });
 
             //const trans = new Transaction().add(createAccountInstruction, writeDataInstruction);
             connection.getRecentBlockhash().then(({ blockhash }) => {
-                const param={
+                const param = {
                     recentBlockhash: blockhash,
                     feePayer: signer.publicKey,
                 }
@@ -93,7 +94,7 @@ const self = {
                 if (typeof window.solana !== 'undefined') {
                     const wallet = window.solana;
                     wallet.connect().then(async (pair) => {
-                        const signedTransaction= await wallet.signTransaction(trans);
+                        const signedTransaction = await wallet.signTransaction(trans);
                         console.log(signedTransaction);
                         //const signedTransaction= await wallet.signAllTransactions(trans);
                         //signAllTransactions
@@ -126,12 +127,62 @@ const self = {
             });
         });
     },
-    run: (target, ck) => {
+    run: (program_id, param, ck, network) => {
+        self.init(network, (connection) => {
+            const {
+                Transaction,
+                TransactionInstruction,
+                PublicKey,
+            } = SOL;
 
+            connection.getRecentBlockhash().then(({ blockhash }) => {
+                if (typeof window.solana !== 'undefined') {
+                    const wallet = window.solana;
+                    wallet.connect().then(async (signer) => {
+                        const accountPublicKey = signer.publicKey;
+                        const cfg = {
+                            recentBlockhash: blockhash,
+                            feePayer: accountPublicKey,
+                        }
+
+                        const dt = funs.toBuffer(JSON.stringify(param));
+                        const programAccount = new PublicKey(program_id);
+                        const ix = new TransactionInstruction({
+                            keys: [
+                                { pubkey: accountPublicKey, isSigner: false, isWritable: true },
+                            ],
+                            programId: programAccount,
+                            data: dt,
+                        });
+                        const trans = new Transaction(cfg).add(ix);
+
+                        wallet.signTransaction(trans).then((signedTransaction) => {
+                            console.log(signedTransaction);
+                            connection.sendRawTransaction(signedTransaction.serialize()).then((signature) => {
+                                console.log('Transaction signature:', signature);
+                                connection.confirmTransaction(signature).then(() => {
+                                    console.log('Account Public Key:', accountPublicKey.toBase58());
+                                });
+
+                            }).catch(error => {
+                                console.error('Failed to send raw transaction: ', error);
+                            });
+
+                        }).catch((error) => {
+                            console.error('Failed to signed transaction:', error);
+                        });
+
+                    }).catch((error) => {
+                        console.error('Failed to connect to Phantom:', error);
+                    });
+                }
+
+            });
+        });
     },
 
-    airdrop: (target,amount, ck,network) => {
-        self.init(network,async (connection)=>{
+    airdrop: (target, amount, ck, network) => {
+        self.init(network, async (connection) => {
             console.log(connection);
             const {
                 LAMPORTS_PER_SOL,
@@ -139,12 +190,12 @@ const self = {
 
             let airdropSignature = await connection.requestAirdrop(
                 target,
-                amount*LAMPORTS_PER_SOL,
+                amount * LAMPORTS_PER_SOL,
             );
 
             console.log(airdropSignature);
-              
-            connection.confirmTransaction({ signature: airdropSignature }).then((res)=>{
+
+            connection.confirmTransaction({ signature: airdropSignature }).then((res) => {
                 //console.log(res);
                 return ck && ck(res);
             }).catch((error) => {
@@ -154,4 +205,4 @@ const self = {
     },
 };
 
-module.exports = self;
+export default self;

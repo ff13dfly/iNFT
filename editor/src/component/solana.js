@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import SOL from "../network/solana";
+import APT from "../network/aptos";
 
 function Solana(props) {
     const size = {
@@ -26,10 +27,16 @@ function Solana(props) {
                 },signer,"devnet");
             });
         },
+        clickRun:(ev)=>{
+            const program_id="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+            SOL.run(program_id,{},(res)=>{
+                console.log(res);
+            },"devnet");
+        },
     };
 
     useEffect(() => {
-        
+        APT.generate();
         
     }, [props.update]);
 
@@ -37,7 +44,8 @@ function Solana(props) {
         <Row className="pt-2">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
-                    self.clickWrite(ev)
+                    self.clickWrite(ev);
+                    //self.clickRun(ev);
                 }}>Write</button>
             </Col>
         </Row>

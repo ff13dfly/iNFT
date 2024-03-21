@@ -38,7 +38,6 @@ function App() {
   useEffect(() => {
     //Solana_test.auto();
     //AptOS_test.auto();
-
   }, []);
 
   return (
