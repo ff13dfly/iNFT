@@ -13,10 +13,11 @@ import Puzzle from "./component/puzzle";
 import NFT from "./component/nft";
 import Detail from "./component/detail";
 import Solana from "./component/solana";
+import AptOS from "./component/aptos";
 
-import IPFS from "./lib/IPFS";
-import Solana_test from "./test/solana";
-import AptOS_test from "./test/aptos";
+// import IPFS from "./lib/IPFS";
+// import Solana_test from "./test/solana";
+// import AptOS_test from "./test/aptos";
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
               <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
                 {/* <Operation fresh={self.fresh} update={update}/> */}
                 <Solana fresh={self.fresh} update={update}/>
+                <AptOS fresh={self.fresh} update={update}/>
               </Col>
             </Row>
           </Col>
@@ -65,7 +67,9 @@ function App() {
           <Col lg={size.side[2]} xl={size.side[2]} xxl={size.side[2]} > 
             
             <Template fresh={self.fresh} update={update}/>
+            
             <Preview fresh={self.fresh} update={update}/>
+            {/* <Basic fresh={self.fresh} update={update}/> */}
             <Series fresh={self.fresh} update={update}/>
           </Col>
         </Row>

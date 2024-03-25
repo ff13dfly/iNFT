@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Data from "../lib/data";
 import config from "../config";
 
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-
 let wsAPI = null;
 let linking = false;
 const server=config.node;
@@ -155,6 +153,7 @@ function Operation(props) {
                 setWriteable(true);
             }
         }
+
         
     }, [props.update]);
 

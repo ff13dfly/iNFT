@@ -67,7 +67,6 @@ const self={
             const param={ accountAddress:hash };
             switch (type) {
                 case 'account':
-                    
                     aptos.getAccountInfo(param).then((obj)=>{
                         return ck && ck(obj);
                     }).catch((error) => {
