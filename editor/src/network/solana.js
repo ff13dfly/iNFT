@@ -26,13 +26,23 @@ const funs = {
 }
 
 const self = {
-
+    // not sure this can work
     ss58ToHex:(ss58Address)=>{
         const decodedAddress = bs58.decode(ss58Address).slice(1, -4);
         console.log(decodedAddress);
         //console.log(JSON.stringify(decodedAddress) );
         const hexAddress = decodedAddress.reduce((acc, byte) => acc + byte.toString(16).padStart(2, '0'), '');
         return '0x' + hexAddress;
+    },
+
+    // not work
+    accountToHex:(ss58)=>{
+        const {
+            PublicKey,
+        } = SOL;
+        const pub = new PublicKey(ss58);
+        //console.log(pub);
+        //console.log(pub.toString(),pub.toJSON());
     },
     //create connection to Solana node
     init: (network, ck) => {
@@ -228,6 +238,9 @@ const self = {
     view:(value,type,ck,network)=>{
         self.init(network,(connection)=>{
             //console.log(connection);
+            const {
+                PublicKey,
+            } = SOL;
             switch (type) {
                 case 'block':
                     const cfg={"maxSupportedTransactionVersion": 0};
@@ -254,8 +267,13 @@ const self = {
                     });
                     break;
 
-                case 'token':
-
+                case 'program':
+                    const program_id = new PublicKey(value);
+                    connection.getProgramAccounts(program_id).then((info)=>{
+                        return ck && ck(info);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
                     break;
 
                 

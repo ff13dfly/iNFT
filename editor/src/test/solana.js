@@ -114,19 +114,30 @@ const self={
         // SOL.view(hash,"transaction",(res)=>{
         //     console.log(res,hash);
         // },"devnet");
-        
+
+        //3.get program details
+        const program_id="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+        SOL.view(program_id,"program",(res)=>{
+            console.log(res,program_id);
+        },"devnet");
+
     },
+    test_convert:()=>{
+        const acc="HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
+        SOL.accountToHex(acc);
+    }
 }
 
 const Solana_test= {
     auto:()=>{
         //self.test_1();
-        // self.test_2();
-        // self.test_3();
+        //self.test_2();
+        //self.test_3();
         //self.test_4();
-        // self.test_5();
-        // self.test_6();
-        self.test_basic();
+        //self.test_5();
+        //self.test_6();
+        //self.test_basic();
+        //self.test_convert();
     },
     
 }
