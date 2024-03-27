@@ -16,7 +16,7 @@ import Solana from "./component/solana";
 import AptOS from "./component/aptos";
 
 // import IPFS from "./lib/IPFS";
-// import Solana_test from "./test/solana";
+import Solana_test from "./test/solana";
 // import AptOS_test from "./test/aptos";
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
   }
   
   useEffect(() => {
-    //Solana_test.auto();
+    Solana_test.auto();
     //AptOS_test.auto();
   }, []);
 

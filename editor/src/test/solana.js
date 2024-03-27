@@ -1,5 +1,6 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { verifySignIn } from '@solana/wallet-standard-util';
+import tools from "../lib/tools";
 
 const solana=window.solanaWeb3;
 
@@ -99,6 +100,11 @@ const self={
     test_6:()=>{    //部署数据到Accounts（template的模拟）
 
     },
+    test_basic:()=>{
+        console.log("Not running?");
+        const account="HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
+        console.log(tools.b64ToHex(account),account);
+    },
 }
 
 const Solana_test= {
@@ -106,9 +112,10 @@ const Solana_test= {
         //self.test_1();
         // self.test_2();
         // self.test_3();
-         self.test_4();
+        //self.test_4();
         // self.test_5();
         // self.test_6();
+        self.test_basic();
     },
     
 }

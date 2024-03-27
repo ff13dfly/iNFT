@@ -17,9 +17,8 @@ const self={
         return ck && ck(link);
     },
     generate:(ck,seed)=>{
-        //console.log(Account);
         const acc = Account.generate();
-        console.log(acc);
+        //console.log(acc);
     },
     wallet:(ck)=>{
 

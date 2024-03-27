@@ -86,6 +86,16 @@ const self = {
     }
     return pre+str;
   },
+
+  b64ToHex:(base64)=>{
+    const binary = atob(base64);
+    let hex = '';
+    for (let i = 0; i < binary.length; i++) {
+        const charCode = binary.charCodeAt(i).toString(16);
+        hex += charCode.length === 1 ? '0' + charCode : charCode;
+    }
+    return hex;
+  }
 };
 
 module.exports = self;
