@@ -1,6 +1,8 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { verifySignIn } from '@solana/wallet-standard-util';
-import tools from "../lib/tools";
+
+//import tools from "../lib/tools";
+import SOL from "../network/solana";
 
 const solana=window.solanaWeb3;
 
@@ -101,9 +103,18 @@ const self={
 
     },
     test_basic:()=>{
-        console.log("Not running?");
-        const account="HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
-        console.log(tools.b64ToHex(account),account);
+        //1.check block details
+        // const num=276469318;
+        // SOL.view(num,"block",(res)=>{
+        //     console.log(res);
+        // },"devnet");
+
+        //2.check transaction details
+        // const hash="2iHGfS6XJKr6AA8TkzWe4zhDX7PxxGuzi6mhrqEEGuxxAXV8vUv48otSCf3ERS1byV822gZNr8zwnV3strQTq28M";
+        // SOL.view(hash,"transaction",(res)=>{
+        //     console.log(res,hash);
+        // },"devnet");
+        
     },
 }
 

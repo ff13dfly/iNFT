@@ -1,3 +1,4 @@
+import bs58 from 'bs58';
 const SOL = window.solanaWeb3;
 
 let link = null;
@@ -7,9 +8,32 @@ const funs = {
     toBuffer: (str) => {
         return Uint8Array.from(Array.from(str).map(letter => letter.charCodeAt(0)));
     },
+
+    //TODO, heret to check the input type
+    check:(value,type)=>{
+        switch (type) {
+            case 'account':
+                
+                break;
+        
+            default:
+                break;
+        }
+
+        //mock true result
+        return true;
+    },
 }
 
 const self = {
+
+    ss58ToHex:(ss58Address)=>{
+        const decodedAddress = bs58.decode(ss58Address).slice(1, -4);
+        console.log(decodedAddress);
+        //console.log(JSON.stringify(decodedAddress) );
+        const hexAddress = decodedAddress.reduce((acc, byte) => acc + byte.toString(16).padStart(2, '0'), '');
+        return '0x' + hexAddress;
+    },
     //create connection to Solana node
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
@@ -183,7 +207,7 @@ const self = {
 
     airdrop: (target, amount, ck, network) => {
         self.init(network, async (connection) => {
-            console.log(connection);
+            //console.log(connection);
             const {
                 LAMPORTS_PER_SOL,
             } = SOL;
@@ -193,14 +217,51 @@ const self = {
                 amount * LAMPORTS_PER_SOL,
             );
 
-            console.log(airdropSignature);
-
+            //console.log(airdropSignature);
             connection.confirmTransaction({ signature: airdropSignature }).then((res) => {
-                //console.log(res);
                 return ck && ck(res);
             }).catch((error) => {
                 return ck && ck(error);
             });
+        });
+    },
+    view:(value,type,ck,network)=>{
+        self.init(network,(connection)=>{
+            //console.log(connection);
+            switch (type) {
+                case 'block':
+                    const cfg={"maxSupportedTransactionVersion": 0};
+                    connection.getBlock(value,cfg).then((res)=>{
+                        return ck && ck(res);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+
+                case 'account':
+                    connection.getAccountInfo(value).then((info)=>{
+                        return ck && ck(info);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+                
+                case 'transaction':
+                    connection.getTransaction(value).then((info)=>{
+                        return ck && ck(info);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+
+                case 'token':
+
+                    break;
+
+                
+                default:
+                    break;
+            }
         });
     },
 };
