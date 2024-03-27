@@ -124,7 +124,11 @@ const self={
     },
     test_convert:()=>{
         const acc="HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
-        SOL.accountToHex(acc);
+        const hex= SOL.accountToHex(acc);
+        console.log(hex);
+
+        const hh=SOL.ss58ToHex(acc);
+        console.log(hh);
     }
 }
 
@@ -137,7 +141,7 @@ const Solana_test= {
         //self.test_5();
         //self.test_6();
         //self.test_basic();
-        //self.test_convert();
+        self.test_convert();
     },
     
 }
