@@ -1,11 +1,48 @@
 # iNFT
 
+## Overview
+
 - It is a new way to mint NFT by block hash and unmodified template file on chain.
 
 - The design of template can make iNFT identifiable.
 
 - As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
+- Networks supported.
+    1. Anchor Network - Dev
+    2. Aptos Network - Dev
+    3. Solana Network - Dev 
+
+- Try yourself.
+    1. [iNFT Template Editor]("https://");
+    2. [iNFT Minter]("https://");
+    3. [iNFT Market]("https://");
+
+## Dapps
+
+### Editor
+
+- It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
+
+- Multi networks support, you can write the iNFT template on different blockchain network.
+
+- Single iNFT file upload/download support.
+
+### Minter
+
+- The client Dapp for normal users. 
+
+- Customer can explorer the templates, then mint on selected template.
+
+- The list of result can be checked from minter.
+
+- In some network, you can manage your account here.
+
+### Market
+
+- Selling market of iNFT result. Customers can price the NFT themselves.
+
+- Different networks supported.
 
 ## Definition of iNFT
 
@@ -66,14 +103,6 @@
             auth:["AUTH_NAME"]      //auth name list
         }
     ```
-
-## Dapps
-
-### Editor
-
-### Minter
-
-### Market
 
 ## Resource
 
