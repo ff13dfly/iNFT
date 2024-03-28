@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Result from "./result";
+import Networks from "./network";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
@@ -183,6 +184,7 @@ function Mine(props) {
 
     return (
         <Row>
+            <Networks />
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
