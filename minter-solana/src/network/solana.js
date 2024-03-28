@@ -318,6 +318,14 @@ const self = {
                     });
                     break;
 
+                case 'balance':
+                    connection.getBalance(value).then((info) => {
+                        return ck && ck(info);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+
                 case 'token':
 
                     break;
