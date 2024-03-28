@@ -14,8 +14,8 @@ import Multi from "./component/multi";
 
 import NFT from "./component/nft";
 import Detail from "./component/detail";
-import Solana from "./component/solana";
-import AptOS from "./component/aptos";
+import Solana from "./component/opt_solana";
+import AptOS from "./component/opt_aptos";
 
 // import IPFS from "./lib/IPFS";
 import Solana_test from "./test/solana";
@@ -58,7 +58,7 @@ function App() {
                 {/* <Operation fresh={self.fresh} update={update}/> */}
                 <Multi fresh={self.fresh} update={update}/>
                 {/* <Solana fresh={self.fresh} update={update}/> */}
-                <AptOS fresh={self.fresh} update={update}/>
+                {/* <AptOS fresh={self.fresh} update={update}/> */}
               </Col>
             </Row>
           </Col>

@@ -247,8 +247,8 @@ function Board(props) {
                             }} />
                         </Form>
                     </Col>
-                    <Col className="text-end pt-2" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                        <button className="btn btn-sm btn-warning" onClick={(ev) => {
+                    <Col className="text-center pt-4" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                        <button className="btn btn-md btn-warning" onClick={(ev) => {
                             self.clickFresh();
                         }}>Mock Mint</button>
                     </Col>

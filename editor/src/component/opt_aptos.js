@@ -28,9 +28,12 @@ function AptOS(props) {
     return (
         <Row className="pt-2">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                Check Aptos information here to confirm the operation of storage validly.
+            </Col>
+            <Col className="text-end pt-2" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickView(ev);
-                }}>View</button>
+                }}>Wallet</button>
             </Col>
         </Row>
     )

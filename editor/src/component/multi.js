@@ -1,8 +1,8 @@
 import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Solana from "./solana";
-import AptOS from "./aptos";
+import Solana from "./opt_solana";
+import AptOS from "./opt_aptos";
 
 
 let selected_network="APT";     //keep the network select state, avoid to be freshed.
@@ -35,6 +35,11 @@ function Multi(props) {
             desc: "IPFS Network",
             tpl: <Solana fresh={props.fresh} update={props.update} />,
             SDK: null,
+        },
+        ANK:{
+            desc: "Anchor Network",
+            tpl: <Solana fresh={props.fresh} update={props.update} />,
+            SDK: null, 
         }
     }
 
@@ -76,12 +81,15 @@ function Multi(props) {
 
     return (
         <Row className="pt-2">
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                <h5>Storage to Chain</h5>
+            </Col>
             <Col lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
                 <select className="form-control" onChange={(ev)=>{
                     self.changeNetwork(ev)
-                }}>
+                }} defaultValue={selected_network}>
                     {list.map((row, index) => (
-                        <option key={index} value={row.name} selected={selected_network===row.name}>{row.desc}</option>
+                        <option key={index} value={row.name}>{row.desc}</option>
                     ))}
                 </select>
             </Col>
