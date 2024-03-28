@@ -129,6 +129,17 @@ const self={
 
         const hh=SOL.ss58ToHex(acc);
         console.log(hh);
+    },
+    test_subscribe:()=>{
+        //No subscribe will effect the request limitation of network.
+        
+        // SOL.subscribe("devnet",(res)=>{
+        //     console.log(res);
+        // });
+
+        // SOL.subscribe("",(res)=>{
+        //     console.log(res);
+        // });
     }
 }
 
@@ -141,7 +152,8 @@ const Solana_test= {
         //self.test_5();
         //self.test_6();
         //self.test_basic();
-        self.test_convert();
+        //self.test_convert();
+        self.test_subscribe();
     },
     
 }

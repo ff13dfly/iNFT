@@ -10,6 +10,8 @@ import Network from "./component/network";
 import Preview from "./component/preview";
 import Puzzle from "./component/puzzle";
 
+import Multi from "./component/multi";
+
 import NFT from "./component/nft";
 import Detail from "./component/detail";
 import Solana from "./component/solana";
@@ -54,7 +56,8 @@ function App() {
               </Col>
               <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >
                 {/* <Operation fresh={self.fresh} update={update}/> */}
-                <Solana fresh={self.fresh} update={update}/>
+                <Multi fresh={self.fresh} update={update}/>
+                {/* <Solana fresh={self.fresh} update={update}/> */}
                 <AptOS fresh={self.fresh} update={update}/>
               </Col>
             </Row>

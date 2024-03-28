@@ -1,7 +1,11 @@
 const SOL = window.solanaWeb3;
 
+let checker=null;
 let link = null;
-const default_local_uri = "http://127.0.0.1:8899";
+const config={
+    interval:400,
+    defaultNode:"http://127.0.0.1:8899",
+}
 
 const funs = {
     toBuffer: (str) => {
@@ -53,7 +57,6 @@ const funs = {
 const self = {
     ss58ToHex: (base58String) => {
         const bs58 = require('bs58');
-        // Decode the Base58 string into a Uint8Array
         const uint8Array = bs58.decode(base58String);
 
         // Convert the Uint8Array to a hexadecimal string
@@ -70,7 +73,6 @@ const self = {
         } = SOL;
         const pub = new PublicKey(ss58);
         const u8arr=pub.toBytes();
-        //console.log(funs.uint8ArrayToBase58(u8arr));
         return '0x' + Array.from(u8arr)
             .map(byte => byte.toString(16).padStart(2, '0'))
             .join('');
@@ -85,7 +87,7 @@ const self = {
                 break;
 
             default:
-                link = new Connection(default_local_uri, "confirmed");
+                link = new Connection(config.defaultNode, "confirmed");
                 break;
         }
         return ck && ck(link);
@@ -107,9 +109,17 @@ const self = {
         }
     },
 
+    //TODO,support generating account from seed;
+    generate:(ck,seed)=>{
+        const {
+            Keypair,
+        } = SOL;
+        const acc = Keypair.generate();
+        return ck && ck(acc);
+    },
+
     storage: (data, ck, signer, network) => {
-        console.log(JSON.stringify(funs.toBuffer("你好")));
-        //console.log(signer,network);
+        //console.log(JSON.stringify(funs.toBuffer("你好")));
         self.init(network, (connection) => {
             const {
                 Transaction,
@@ -258,7 +268,6 @@ const self = {
                 amount * LAMPORTS_PER_SOL,
             );
 
-            //console.log(airdropSignature);
             connection.confirmTransaction({ signature: airdropSignature }).then((res) => {
                 return ck && ck(res);
             }).catch((error) => {
@@ -268,7 +277,6 @@ const self = {
     },
     view: (value, type, ck, network) => {
         self.init(network, (connection) => {
-            //console.log(connection);
             const {
                 PublicKey,
             } = SOL;
@@ -307,9 +315,27 @@ const self = {
                     });
                     break;
 
+                case 'token':
+
+                    break;
 
                 default:
                     break;
+            }
+        });
+    },
+    subscribe:(network,ck)=>{
+        self.init(network, (connection) => {
+            if(checker===null){
+                checker=setInterval(()=>{
+                    connection.getSlot().then((block)=>{
+                        //console.log('New block received:', block);
+                        self.view(block,"block",(block)=>{
+                            //console.log(block.blockhash);
+                            return ck && ck(self.ss58ToHex(block.blockhash));
+                        },network);
+                    })
+                },config.interval);
             }
         });
     },
