@@ -21,6 +21,9 @@ const Router={
   wallet:(ck)=>{     //connect to wallet
 
   },
+  balance:()=>{     //get the balance value of account
+
+  },
   storage:(data,ck)=>{  //save data to different networks
 
   },

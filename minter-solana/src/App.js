@@ -1,8 +1,8 @@
 import { Container, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Preview from "./component/render";
-import Action from "./component/action";
+// import Preview from "./component/render";
+// import Action from "./component/action";
 import Header from "./component/header";
 
 import Data from "./lib/data";
@@ -61,7 +61,6 @@ function App() {
       }
     },
     countdown:()=>{
-      //console.log(`Ready to countdown 18s`);
       let n=9;
       const tt=setInterval(()=>{
         if(n <= 0) return clearInterval(tt);
@@ -94,17 +93,17 @@ function App() {
 
   useEffect(() => {
     //1.连接服务器
-    Chain.link(config.node[0], (API) => {
-      self.start();
-    });
+    // Chain.link(config.node[0], (API) => {
+    //   self.start();
+    // });
   }, []);
 
   return (
     <div>
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update} />
-        <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/>
+        {/* <Preview fresh={self.fresh} update={update} node={config.node[0]} />
+        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/> */}
       </Container>
       <Modal show={show} size="lg" onHide={
           (ev) => {
