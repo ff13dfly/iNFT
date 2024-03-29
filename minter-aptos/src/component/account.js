@@ -45,7 +45,7 @@ function Account(props) {
         },
         clickAirdrop:(ev)=>{
             setAirdropDisable(true);
-            setAir("Processing");
+            setAir("Trying");
             const divide=Chain.divide();
             Chain.airdrop(address,divide,(res)=>{
                 Chain.balance(address,(amount)=>{ 
@@ -134,7 +134,7 @@ function Account(props) {
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address,16)}
+                        {tools.shorten(address,12)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                         <strong>{balance}</strong> unit
@@ -144,7 +144,7 @@ function Account(props) {
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickDownload(ev);
-                }}>Download Key</button>
+                }}>Save</button>
                 <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button>

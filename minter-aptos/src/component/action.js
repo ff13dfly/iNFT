@@ -1,12 +1,14 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Result from "./result";
+//import Result from "./result";
 
 import Local from "../lib/local";
 import Account from "./account";
 import tools from "../lib/tools"
 import Chain from "../network/aptos";
+
+import Encry from "../lib/encry";
 
 function Action(props) {
     const size = {
@@ -59,38 +61,55 @@ function Action(props) {
                     return false;
                 }
                 setDisable(true);
-                Chain.load(fa,password,(pair)=>{
-                    if(pair.error!==undefined){
-                        setInfo(pair.error);
+                try {
+                    const acc=JSON.parse(fa);
+                    const privateKey=Encry.decode(acc.private,password);
+                    if(!privateKey){
+                        setInfo("Invalid password");
                         setPassword("");
                         return false;
                     }
-
-                    self.getAnchorName((name)=>{
-                        const list=Local.get("template");
-                        try {
-                            const tpls=JSON.parse(list);
-                            const target=tpls[0];
-                            const raw=self.getRaw(target);
-                            const protocol=self.getProtocol();
-                            props.countdown();
-                            Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
-                                setInfo(res.message);
-                                if(res.step==="Finalized"){
-                                    setDisable(false);
-                                    props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
-                                    setTimeout(()=>{
-                                        setInfo("");
-                                    },400);
-                                }
-                            });
-                        } catch (error) {
-                            console.log(error);
-                            Local.remove("template");
-                        }
-                       
+                    
+                    Chain.recover(privateKey,(pair)=>{
+                        console.log(pair);
+                        console.log(`Here to call the contract`);
                     });
-                });
+                } catch (error) {
+                    
+                }
+                
+                // Chain.load(fa,password,(pair)=>{
+                //     if(pair.error!==undefined){
+                //         setInfo(pair.error);
+                //         setPassword("");
+                //         return false;
+                //     }
+
+                //     self.getAnchorName((name)=>{
+                //         const list=Local.get("template");
+                //         try {
+                //             const tpls=JSON.parse(list);
+                //             const target=tpls[0];
+                //             const raw=self.getRaw(target);
+                //             const protocol=self.getProtocol();
+                //             props.countdown();
+                //             Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
+                //                 setInfo(res.message);
+                //                 if(res.step==="Finalized"){
+                //                     setDisable(false);
+                //                     props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
+                //                     setTimeout(()=>{
+                //                         setInfo("");
+                //                     },400);
+                //                 }
+                //             });
+                //         } catch (error) {
+                //             console.log(error);
+                //             Local.remove("template");
+                //         }
+                       
+                //     });
+                // });
             }
         },
     }

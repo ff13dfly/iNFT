@@ -1,6 +1,12 @@
 import { Aptos, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
 
 let link = null;
+let timer = null;
+
+const config={
+    interval:800,
+}
+
 const self = {
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
@@ -91,7 +97,7 @@ const self = {
     },
     view: (value, type, ck, network) => {
         self.init(network, (aptos) => {
-            console.log(aptos);
+            //console.log(aptos);
             switch (type) {
                 case 'resource':
                     const rcfg = { accountAddress: value[0], resourceType: value[1] };
@@ -163,13 +169,22 @@ const self = {
         });
     },
     subscribe: (ck, network) => {
-        //getLedgerInfo
         self.init(network, (aptos) => {
-            aptos.getLedgerInfo().then((obj) => {
-                ck && ck(obj);
-            }).catch((error) => {
-                return ck && ck(error);
-            });
+            if(timer===null){
+                aptos.getLedgerInfo().then((obj) => {
+                    ck && ck(obj);
+                }).catch((error) => {
+                    return ck && ck(error);
+                });
+
+                timer=setInterval(()=>{
+                    aptos.getLedgerInfo().then((obj) => {
+                        ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                },config.interval);
+            }
         });
     }
 };
