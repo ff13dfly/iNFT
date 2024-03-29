@@ -28,6 +28,9 @@ function Account(props) {
 
     let [copy, setCopy]=useState("Copy");
     let [dis_copy,setCopyDisable]= useState(false);
+
+    let [dis_airdrop, setAirdropDisable]=useState(false);
+    let [air,setAir]=useState("Airdrop");
     
     const self = {
         newAccount: (mnemonic,ck) => {
@@ -40,8 +43,17 @@ function Account(props) {
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
         },
-        test:()=>{
-            
+        clickAirdrop:(ev)=>{
+            setAirdropDisable(true);
+            setAir("Processing");
+            const divide=Chain.divide();
+            Chain.airdrop(address,divide,(res)=>{
+                Chain.balance(address,(amount)=>{ 
+                    setAir("Airdrop");
+                    setAirdropDisable(false);                 
+                    setBalance(amount/Chain.divide());
+                });
+            });
         },
         clickNewAccount: (ev) => {
             setNewDisable(true);
@@ -92,8 +104,9 @@ function Account(props) {
                 //console.log(account);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
-                Chain.balance(account.address,(res)=>{
-                    setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
+                Chain.balance(account.address,(amount)=>{
+                    const divide=Chain.divide();
+                    setBalance(amount/divide);
                 });
             } catch (error) {
                 
@@ -135,6 +148,9 @@ function Account(props) {
                 <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button>
+                <button disabled={dis_airdrop} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                    self.clickAirdrop(ev);
+                }}>{air}</button>
                 
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>

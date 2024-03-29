@@ -71,9 +71,11 @@ function Template(props) {
             props.fresh(true);
         },
         cacheData: (alinks, ck, dels) => {
+            //console.log(alinks);
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
+            console.log(single);
             //console.log(Data.exsistHash("cache",single));
             if (!Data.exsistHash("cache", single)) {
                 // return Chain.view(single, (res) => {

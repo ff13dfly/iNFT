@@ -1,4 +1,4 @@
-import { Aptos, AptosAccount, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
 
 let link = null;
 const self = {
@@ -24,6 +24,18 @@ const self = {
         const privateKey = new Ed25519PrivateKey(u8arr);
         const account = Account.fromPrivateKey({ privateKey });
         return ck && ck(account);
+    },
+    balance:(address,ck, network)=>{
+        self.init(network, async (aptos) => {
+            //console.log(aptos);
+            aptos.getAccountCoinAmount({
+                accountAddress: address,
+            }).then((amount) => {
+                return ck && ck(amount);
+            }).catch((error) => {
+                return ck && ck(error);
+            });
+        });
     },
     wallet: (ck) => {
 
@@ -59,6 +71,9 @@ const self = {
     },
     run: (program_id, param, ck, network) => {
 
+    },
+    divide:()=>{
+        return 100000000;
     },
     //get airdrop when create a new account
     airdrop: (u8Address, amount, ck, network) => {
