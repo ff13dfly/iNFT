@@ -18,7 +18,7 @@ const self={
     },
     generate:(ck,seed)=>{
         const acc = Account.generate();
-        
+        return ck && ck(acc);
     },
     keyless:(ck)=>{
 

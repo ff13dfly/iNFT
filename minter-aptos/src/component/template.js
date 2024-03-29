@@ -21,7 +21,7 @@ function Template(props) {
     };
 
     let [list, setList] = useState([]);
-    let [alink, setAlink] = useState("anchor://");
+    let [alink, setAlink] = useState("");
     //let [image, setImage] = useState("image/empty.png");
 
     const zero = "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -164,7 +164,7 @@ function Template(props) {
     return (
         <Row>
             <Col className="pb-2" sm={size.add[0]} xs={size.add[0]}>
-                <input className="form-control" type="text" placeholder="The template anchor link" value={alink} onChange={(ev) => {
+                <input className="form-control" type="text" placeholder="The template storage account" value={alink} onChange={(ev) => {
                     self.changeAlink(ev);
                 }} />
             </Col>

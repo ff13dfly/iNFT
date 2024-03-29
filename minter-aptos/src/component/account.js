@@ -25,7 +25,7 @@ function Account(props) {
     let [info, setInfo] = useState("");
 
     let [password, setPassword]= useState("");
-    let [dis_new, setNewDisable] = useState(true);
+    let [dis_new, setNewDisable] = useState(false);
 
     let [copy, setCopy]=useState("Copy");
     let [dis_copy,setCopyDisable]= useState(false);
@@ -45,6 +45,11 @@ function Account(props) {
             console.log(`Connect to keyless`);
         },
         clickNewAccount: (ev) => {
+            Chain.generate((acc)=>{
+                console.log(acc);
+                console.log("address",acc.accountAddress,tools.u8aToBs58(acc.accountAddress.data));
+                //console.log("private",acc.privateKey.signingKeyPair.secretKey,tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey));
+            });
             // setNewDisable(true);
             // const mnemonic = mnemonicGenerate();
             // self.newAccount(mnemonic,(fa) => {
