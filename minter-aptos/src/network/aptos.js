@@ -1,7 +1,7 @@
-import {Aptos,AptosConfig,Network,Account} from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
 
 let link = null;
-const self={
+const self = {
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
         switch (network) {
@@ -16,18 +16,23 @@ const self={
         }
         return ck && ck(link);
     },
-    generate:(ck,seed)=>{
-        const acc = Account.generate();
-        return ck && ck(acc);
+    generate: (ck, cfg) => {
+        return ck && ck(cfg === undefined ? Account.generate() : Account.generate(cfg));
     },
-    keyless:(ck)=>{
+    recover: (base58, ck) => {
+        const privateKeyBytes = [];
+        const privateKey = new Ed25519PrivateKey(base58);
+        const account = Account.fromPrivateKey({ privateKey });
+        return ck && ck(account);
+    },
+    keyless: (ck) => {
 
     },
-    wallet:(ck)=>{
+    wallet: (ck) => {
 
     },
-    storage:(data, ck, network)=>{
-        self.init(network,async (aptos)=>{
+    storage: (data, ck, network) => {
+        self.init(network, async (aptos) => {
             // build a transaction
             // const transaction = await aptos.transaction.build.simple({
             //     sender: alice.accountAddress,
@@ -37,7 +42,7 @@ const self={
             //     functionArguments: [bobAddress, 100],
             //     },
             // });
-            
+
             // // using sign and submit separately
             // const senderAuthenticator = aptos.transaction.sign({
             //     signer: alice,
@@ -47,7 +52,7 @@ const self={
             //     transaction,
             //     senderAuthenticator,
             // });
-            
+
             // // using signAndSubmit combined
             // const committedTransaction = await aptos.signAndSubmitTransaction({
             //     signer: alice,
@@ -58,35 +63,50 @@ const self={
     run: (program_id, param, ck, network) => {
 
     },
-    airdrop: (target, amount, ck, network) => {
-        // const transaction = await aptos.fundAccount({
-        //     accountAddress: account.accountAddress,
-        //     amount: 100,
-        // });
+    //get airdrop when create a new account
+    airdrop: (u8Address, amount, ck, network) => {
+        self.init(network, (aptos) => {
+            aptos.fundAccount({
+                accountAddress: u8Address,
+                amount: amount,
+            }).then((transaction) => {
+                console.log(transaction);
+                return ck && ck(true);
+            }).catch((error) => {
+                return ck && ck(error);
+            });
+        });
     },
-    view:(hash,type,ck,network)=>{
-        self.init(network,(aptos)=>{
-            const param={ accountAddress:hash };
+    view: (value, type, ck, network) => {
+        self.init(network, (aptos) => {
+            const param = { accountAddress:value};
             switch (type) {
                 case 'account':
-                    aptos.getAccountInfo(param).then((obj)=>{
+                    aptos.getAccountInfo(param).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
-                
+
                 case 'transaction':
-                    aptos.getAccountTransactions(param).then((obj)=>{
+                    aptos.getAccountTransactions(param).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
                 case 'token':
-                    aptos.getAccountOwnedTokens(param).then((obj)=>{
+                    aptos.getAccountOwnedTokens(param).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+                case 'block':
+                    aptos.getBlockByHeight({blockHeight:value}).then((obj)=>{
+                        return ck && ck(obj);
+                    }).catch((error)=>{
                         return ck && ck(error);
                     });
                     break;

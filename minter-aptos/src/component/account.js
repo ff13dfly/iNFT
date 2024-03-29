@@ -1,13 +1,11 @@
 import { Row, Col, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-// import { mnemonicGenerate } from "@polkadot/util-crypto";
-
-
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
 import Chain from "../network/aptos";
+import Encry from "../lib/encry";
 
 function Account(props) {
     const size = {
@@ -26,7 +24,7 @@ function Account(props) {
     let [info, setInfo] = useState("");
 
     let [password, setPassword]= useState("");
-    let [dis_new, setNewDisable] = useState(false);
+    let [dis_new, setNewDisable] = useState(true);
 
     let [copy, setCopy]=useState("Copy");
     let [dis_copy,setCopyDisable]= useState(false);
@@ -42,23 +40,36 @@ function Account(props) {
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
         },
+
         clickKeyless:(ev)=>{
             console.log(`Connect to keyless`);
         },
+
         clickNewAccount: (ev) => {
+            setNewDisable(true);
             Chain.generate((acc)=>{
                 console.log(acc);
-                console.log("address",acc.accountAddress,tools.u8aToBs58(acc.accountAddress.data));
+                //console.log("address",acc.accountAddress,tools.u8aToBs58(acc.accountAddress.data));
                 //console.log("private",acc.privateKey.signingKeyPair.secretKey,tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey));
+                const base58=tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey);
+
+                const fa=Encry.encode(base58,password);
+                const de=Encry.decode(fa,password);
+                //console.log(base58,fa,de);
+
+                //console.log(acc.privateKey.signingKeyPair.secretKey.toString());
+
+                Chain.recover(acc.privateKey.signingKeyPair.publicKey,(res)=>{
+                    console.log(res);
+                });
+
+                if(fa!==undefined){
+                    // Local.set("login", JSON.stringify(fa));
+                    // setLogin(true);
+                    // self.show();
+                    // props.fresh();
+                }
             });
-            // setNewDisable(true);
-            // const mnemonic = mnemonicGenerate();
-            // self.newAccount(mnemonic,(fa) => {
-            //     Local.set("login", JSON.stringify(fa));
-            //     setLogin(true);
-            //     self.show();
-            //     props.fresh();
-            // });
         },
         clickLogout:(ev)=>{
             Local.remove("login");
@@ -139,12 +150,12 @@ function Account(props) {
             </Col>
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 1</Badge> Keyless to google account.</h4>
+                <h4><Badge className="bg-info">Way 1</Badge> Keyless to Google Account.</h4>
             </Col>
             <Col className="pt-4 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickKeyless(ev);
-                }}>Connect</button>
+                }}>Create</button>
                 <p>{info}</p>
             </Col>
             <Col className="pt-4" hidden={login} sm={size.row[0]} xs={size.row[0]}>

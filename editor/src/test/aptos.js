@@ -4,7 +4,7 @@ const self={
     test_1:()=>{    //连接到目标网络，并获取到基础数据
         const aptosConfig = new AptosConfig({ network: Network.DEVNET });
         const aptos = new Aptos(aptosConfig);
-        console.log(aptos);
+        //console.log(aptos);
         aptos.getLedgerInfo().then((res)=>{
             console.log(aptos.getAccountInfo);
 
@@ -12,13 +12,28 @@ const self={
             aptos.getAccountInfo({ accountAddress:hash }).then((obj)=>{
                 console.log(obj);
             });
+        }).catch((error)=>{
+            console.log(error);
+        });
+    },
+    test_block_hash:()=>{
+        const aptosConfig = new AptosConfig({ network: Network.DEVNET });
+        const aptos = new Aptos(aptosConfig);
+        console.log(aptos);
+        const block=409021;
+        //const hash="0x34a71c1f9e35656a05ab135180fab871303bd2e86fb742e1febf58be8f7ae8b1";
+        aptos.getBlockByHeight({blockHeight:block}).then((res)=>{
+            console.log(res);
+        }).catch((error)=>{
+            console.log(error);
         });
     },
 }
 
 const AptOS_test= {
     auto:()=>{
-        self.test_1();
+        //self.test_1();
+        self.test_block_hash();
     },
     
 }
