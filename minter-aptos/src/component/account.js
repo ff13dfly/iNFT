@@ -40,49 +40,29 @@ function Account(props) {
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
         },
+        test:()=>{
+            
+        },
         clickNewAccount: (ev) => {
-            // const hash="0xf3bb69b6b1e680a87818f2c6178fc092a7036d5465f2ad2c18cad41bc9641e4c";
-            // return Chain.view(hash,"transaction",(res)=>{
-            //     console.log(res);
-            // });
-
-            // const token="0x7193bf917cb1ef0d657d6ec6df37ccd46b036e96ab06edc2899fad11405e49da";
-            // const acc="0x37b6d7677b65520139e1749157b319a424608b7e0b80dcf20044cb610537c632";
-            // return Chain.view(acc,"token",(res)=>{
-            //     console.log(res);
-            // });
-
             setNewDisable(true);
             Chain.generate((acc)=>{
-                console.log(acc);
-                //const arr=acc.privateKey.signingKeyPair.secretKey;
-                //const arr=acc.privateKey.signingKeyPair.publicKey;
-                //const arr=acc.accountAddress.data;
-                const pBytes=acc.privateKey.toString();
-                //const pBytes=tools.u8ToHex(arr);
-                console.log(2,pBytes);
-                const rU8=tools.hexToU8(pBytes);
-                console.log(rU8);
-                
-                // const base58=tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey);
-                // console.log(base58,acc.privateKey.signingKeyPair.secretKey);
-                // console.log(tools.bs58ToU8a(base58))
+                //console.log(acc);
+                //return false
+                const privateKey=acc.privateKey.toString();
+                const fa=Encry.encode(privateKey,password);
 
-                // const fa=Encry.encode(base58,password);
-                // const de=Encry.decode(fa,password);
+                const user={
+                    address:acc.accountAddress.toString(),
+                    name:`iNFT_user_${tools.rand(100000,999999)}`,
+                    private:fa,
+                }
 
-                //console.log(acc.privateKey.signingKeyPair.secretKey.toString());
-                //console.log(acc.privateKey.signingKeyPair.publicKey);
-                Chain.recover(pBytes,(res)=>{
-                    console.log(res);
-                });
-
-                //if(fa!==undefined){
-                    // Local.set("login", JSON.stringify(fa));
-                    // setLogin(true);
-                    // self.show();
-                    // props.fresh();
-                //}
+                if(fa!==undefined){
+                    Local.set("login", JSON.stringify(user));
+                    setLogin(true);
+                    self.show();
+                    props.fresh();
+                }
             });
         },
         clickLogout:(ev)=>{
@@ -109,11 +89,12 @@ function Account(props) {
             if(fa!==undefined) setLogin(true);
             try {
                 const account=JSON.parse(fa);
+                //console.log(account);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
                 Chain.balance(account.address,(res)=>{
                     setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
-                })
+                });
             } catch (error) {
                 
             }
@@ -122,7 +103,6 @@ function Account(props) {
 
     useEffect(() => {
         self.show();
-
     }, [props.update]);
 
 
@@ -141,7 +121,7 @@ function Account(props) {
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address)}
+                        {tools.shorten(address,16)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                         <strong>{balance}</strong> unit
@@ -188,6 +168,7 @@ function Account(props) {
             <Col hidden={login} className="pt-4 pb-4 text-end" sm={size.new[1]} xs={size.new[1]}>
                 <button disabled={dis_new} className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickNewAccount(ev)
+                    //self.test();
                 }}>Create</button>
             </Col>
         </Row>

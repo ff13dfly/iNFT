@@ -6,7 +6,7 @@ import Result from "./result";
 import Local from "../lib/local";
 import Account from "./account";
 import tools from "../lib/tools"
-import Chain from "../lib/chain";
+import Chain from "../network/aptos";
 
 function Action(props) {
     const size = {

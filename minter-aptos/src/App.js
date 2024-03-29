@@ -7,7 +7,7 @@ import Header from "./component/header";
 
 import Data from "./lib/data";
 import Local from "./lib/local";
-import Chain from "./lib/chain";
+import Chain from "./network/aptos";
 import config from "./default";
 
 // iNFT definition

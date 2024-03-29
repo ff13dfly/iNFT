@@ -7,7 +7,7 @@ import Local from "../lib/local";
 import Render from "../lib/render";
 import Data from "../lib/data";
 import tools from "../lib/tools";
-import Chain from "../lib/chain";
+import Chain from "../network/aptos";
 
 import { FaBackspace } from "react-icons/fa";
 

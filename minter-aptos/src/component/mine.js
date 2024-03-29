@@ -5,8 +5,8 @@ import Result from "./result";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
-import Chain from "../lib/chain";
 import Data from "../lib/data";
+import Chain from "../network/aptos";
 
 import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
 

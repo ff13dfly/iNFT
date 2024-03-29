@@ -1,4 +1,4 @@
-import { Aptos, AptosAccount,AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosAccount, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
 
 let link = null;
 const self = {
@@ -77,30 +77,47 @@ const self = {
     view: (value, type, ck, network) => {
         self.init(network, (aptos) => {
             console.log(aptos);
-            
-            switch (type){
+            switch (type) {
+                case 'resource':
+                    const rcfg = { accountAddress: value[0], resourceType: value[1] };
+                    //accountAddress: testAccount.accountAddress,
+                    //resourceType: "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+                    //path: `accounts/${account}/resource/${resourceType}`,
+                    aptos.getAccountResource(rcfg).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
                 case 'account':
-                    const param = { accountAddress:value};
+                    const param = { accountAddress: value };
                     aptos.getAccountInfo(param).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
-
-                case 'transaction':
-                    const tcfg={"transactionHash":value}
-                    aptos.getTransactionByHash(tcfg).then((obj) => {
+                case 'transaction_hash':
+                    const hcfg = { "transactionHash": value }
+                    aptos.getTransactionByHash(hcfg).then((obj) => {
                         return ck && ck(obj);
                     })
                     // .catch((error) => {
                     //     return ck && ck(error);
                     // });
                     break;
+                case 'transaction_version':
+                    const vcfg = { "ledgerVersion": value }
+                    aptos.getTransactionByVersion(vcfg).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
                 case 'token':
                     //console.log(aptos);
-                    const kcfg={
-                        accountAddress:value
+                    const kcfg = {
+                        accountAddress: value
                     }
                     aptos.getAccountOwnedTokens(kcfg).then((obj) => {
                         return ck && ck(obj);
@@ -111,31 +128,31 @@ const self = {
 
                     break;
                 case 'block':
-                    aptos.getBlockByHeight({blockHeight:value}).then((obj)=>{
+                    aptos.getBlockByHeight({ blockHeight: value }).then((obj) => {
                         return ck && ck(obj);
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
                 case 'height':
-                    aptos.getName({chain_name:network}).then((obj)=>{
+                    aptos.getName({ chain_name: network }).then((obj) => {
                         return ck && ck(obj);
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
                 default:
-                    
+
                     break;
             }
         });
     },
-    subscribe:(ck,network)=>{
+    subscribe: (ck, network) => {
         //getLedgerInfo
         self.init(network, (aptos) => {
-            aptos.getLedgerInfo().then((obj)=>{
+            aptos.getLedgerInfo().then((obj) => {
                 ck && ck(obj);
-            }).catch((error)=>{
+            }).catch((error) => {
                 return ck && ck(error);
             });
         });
