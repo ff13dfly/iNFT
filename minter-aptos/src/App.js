@@ -8,7 +8,7 @@ import Header from "./component/header";
 import Data from "./lib/data";
 import Local from "./lib/local";
 import Chain from "./lib/chain";
-import config from "./config";
+import config from "./default";
 
 // iNFT definition
 // anchor://aabb/217148

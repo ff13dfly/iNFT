@@ -18,8 +18,9 @@ import Solana from "./component/opt_solana";
 import AptOS from "./component/opt_aptos";
 
 // import IPFS from "./lib/IPFS";
-import Solana_test from "./test/solana";
+// import Solana_test from "./test/solana";
 // import AptOS_test from "./test/aptos";
+import IPFS_test from "./test/ipfs";
 
 function App() {
 
@@ -39,8 +40,9 @@ function App() {
   }
   
   useEffect(() => {
-    Solana_test.auto();
+    //Solana_test.auto();
     //AptOS_test.auto();
+    //IPFS_test.auto();
   }, []);
 
   return (
