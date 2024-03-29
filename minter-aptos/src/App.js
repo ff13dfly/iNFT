@@ -2,7 +2,7 @@ import { Container, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Preview from "./component/render";
-// import Action from "./component/action";
+import Action from "./component/action";
 import Header from "./component/header";
 
 import Data from "./lib/data";
@@ -103,8 +103,7 @@ function App() {
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update} />
         <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-        {/* <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/> */}
+        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/>
       </Container>
       <Modal show={show} size="lg" onHide={
           (ev) => {

@@ -40,11 +40,6 @@ function Account(props) {
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
         },
-
-        clickKeyless:(ev)=>{
-            console.log(`Connect to keyless`);
-        },
-
         clickNewAccount: (ev) => {
             setNewDisable(true);
             Chain.generate((acc)=>{
@@ -148,33 +143,20 @@ function Account(props) {
                     self.clickLogout(ev);
                 }}>Logout</button>
             </Col>
-
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 1</Badge> Keyless to Google Account.</h4>
+                <h4><Badge className="bg-info">Way 1</Badge> Link to wallet.</h4>
             </Col>
-            <Col className="pt-4 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
-                <button className="btn btn-md btn-primary" onClick={(ev)=>{
-                    self.clickKeyless(ev);
-                }}>Create</button>
-                <p>{info}</p>
-            </Col>
-            <Col className="pt-4" hidden={login} sm={size.row[0]} xs={size.row[0]}>
-                <hr />
-            </Col>
-            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 2</Badge> Link to wallet.</h4>
-            </Col>
-            <Col className="pt-4 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
+            <Col className="pt-2 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickWallet(ev);
                 }}>Connect</button>
                 <p>{info}</p>
             </Col>
-            <Col className="pt-4" hidden={login} sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2" hidden={login} sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 3</Badge> Create a new account.</h4>
+                <h4><Badge className="bg-info">Way 2</Badge> Create a new account.</h4>
             </Col>
             <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
                 <input className="form-control" type="password" placeholder="Password for new account" 

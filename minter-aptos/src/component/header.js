@@ -9,7 +9,7 @@ import Mine from "./mine";
 function Header(props) {
     const size = {
         row: [12],
-        title:[2,7,3]
+        title:[1,8,3]
     };
 
     const dialog=props.dialog;
@@ -33,19 +33,19 @@ function Header(props) {
     return (
         <Row className="pt-4">
             <Col sm={size.title[0]} xs={size.title[0]}>
-                <FaList size={26} onClick={(ev)=>{
-                    self.clickMine(ev);
+                <FaRegUser size={30}  onClick={(ev)=>{
+                    self.clickAccount(ev);
                 }}/>
             </Col>
             <Col sm={size.title[1]} xs={size.title[1]}>
-               <h3>Aptos iNFT Minter</h3> 
+               <h3 style={{marginLeft:"10px"}}>Aptos iNFT Minter</h3> 
             </Col>
             <Col className="text-end" sm={size.title[2]} xs={size.title[2]}>
                 <FaRegImage size={30} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
-                <FaRegUser size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
-                    self.clickAccount(ev);
+                <FaList size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
+                    self.clickMine(ev);
                 }}/>
             </Col>
         </Row>
