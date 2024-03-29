@@ -110,7 +110,15 @@ const self = {
                         return ck && ck(error);
                     });
                     break;
+                case 'height':
+                    aptos.getName({chain_name:network}).then((obj)=>{
+                        return ck && ck(obj);
+                    }).catch((error)=>{
+                        return ck && ck(error);
+                    });
+                    break;
                 default:
+                    
                     break;
             }
         });

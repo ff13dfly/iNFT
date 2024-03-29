@@ -28,13 +28,25 @@ const self={
             console.log(error);
         });
     },
+    test_height:()=>{
+        const aptosConfig = new AptosConfig({ network: Network.DEVNET });
+        const aptos = new Aptos(aptosConfig);
+        console.log(aptos);
+        //const block=409021;
+        //const hash="0x34a71c1f9e35656a05ab135180fab871303bd2e86fb742e1febf58be8f7ae8b1";
+        // aptos.getName({name:Network.DEVNET}).then((res)=>{
+        //     console.log(res);
+        // }).catch((error)=>{
+        //     console.log(error);
+        // });
+    },
 }
 
 const AptOS_test= {
     auto:()=>{
         //self.test_1();
-        self.test_block_hash();
+        //self.test_block_hash();
+        self.test_height();
     },
-    
 }
 export default AptOS_test;

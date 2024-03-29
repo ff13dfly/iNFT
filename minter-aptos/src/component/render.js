@@ -7,7 +7,10 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 import Local from "../lib/local";
-import Chain from "../lib/chain";
+import Chain from "../network/aptos";
+
+import {  Network} from "@aptos-labs/ts-sdk";
+
 
 function Preview(props) {
     const size = {
@@ -37,17 +40,26 @@ function Preview(props) {
                     grid: tpl.grid,
                     target: tpl.size
                 }
-                Chain.subscribe("preview", (bk, bhash) => {
-                    setBlock(bk);
+                const block="409021";
+                Chain.view(block,"block",(res)=>{
+                    //console.log(res);
+                    const bhash=res.block_hash;
+                    setBlock(block);
                     setHash(bhash);
-                    const style={font:"13px serif",color:"#000000"}
                     Render.clear(dom_id);
-                    Render.text(pen,bhash,[0,24],style);
-                    Render.text(pen,bk,[10,380],style);
-                    Render.text(pen,alink,[100,380],style);
-                    Render.text(pen,props.node,[280,380],style);
                     Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
-                });
+                },Network.DEVNET);
+                // Chain.subscribe("preview", (bk, bhash) => {
+                //     setBlock(bk);
+                //     setHash(bhash);
+                //     const style={font:"13px serif",color:"#000000"}
+                //     Render.clear(dom_id);
+                //     Render.text(pen,bhash,[0,24],style);
+                //     Render.text(pen,bk,[10,380],style);
+                //     Render.text(pen,alink,[100,380],style);
+                //     Render.text(pen,props.node,[280,380],style);
+                //     Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
+                // });
             }, 50);
         }
 
