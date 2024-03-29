@@ -7,9 +7,9 @@ import tools from "../lib/tools";
 import Local from "../lib/local";
 import Chain from "../network/aptos";
 
-import {  Network} from "@aptos-labs/ts-sdk";
+import { Network } from "@aptos-labs/ts-sdk";
 
-let internal_fresh=null;
+let internal_fresh = null;
 
 function Preview(props) {
     const size = {
@@ -23,7 +23,7 @@ function Preview(props) {
     let [alink, setAlink] = useState("");
 
     const self = {
-        
+
     }
 
     const dom_id = "previewer";
@@ -40,23 +40,31 @@ function Preview(props) {
                     target: tpl.size
                 }
 
-                if(internal_fresh===null){
-                    let bk=408021;
-                    internal_fresh=setInterval(() => {
-                        bk++;
-                        Chain.view(bk,"block",(res)=>{
-                            //console.log(res);
-                            const bhash=res.block_hash;
-                            setBlock(bk);
-                            setHash(bhash);
-                            //const style={font:"13px serif",color:"#FFFFFF"}
-                            //Render.clear(dom_id);
-                            Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
-                            //Render.text(pen,bhash,[0,24],style);
-                            //Render.text(pen,block,[10,380],style);
-                        },Network.DEVNET);
-                    }, 2000);
-                }
+                Chain.subscribe((res) => {
+                    console.log(res);
+                    let bk = res.block_height;
+                    Chain.view(bk, "block", (res) => {
+                        //console.log(res);
+                        const bhash = res.block_hash;
+                        setBlock(bk);
+                        setHash(bhash);
+                        Render.preview(pen, tpl.image, bhash, tpl.parts, basic);
+                    }, Network.DEVNET);
+                }, Network.DEVNET);
+
+                // if(internal_fresh===null){
+                //     let bk=408021;
+                //     internal_fresh=setInterval(() => {
+                //         bk++;
+                //         Chain.view(bk,"block",(res)=>{
+                //             //console.log(res);
+                //             const bhash=res.block_hash;
+                //             setBlock(bk);
+                //             setHash(bhash);
+                //             Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
+                //         },Network.DEVNET);
+                //     }, 2000);
+                // }
             }, 50);
         }
 
@@ -77,7 +85,7 @@ function Preview(props) {
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                <br/>The iNFT created from the block hash when mint, click the button to try.
+                <br />The iNFT created from the block hash when mint, click the button to try.
             </Col>
         </Row>
     )

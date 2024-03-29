@@ -94,7 +94,22 @@ const self = {
   },
   bs58ToU8a: (str) => {
     return Uint8Array.from(Array.from(str).map(letter => letter.charCodeAt(0)));
-},
+  },
+  u8ToHex: (u8array) => {
+    return Array.prototype.map.call(u8array, function (byte) {
+      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('');
+  },
+  hexToU8: (hexString) => {
+    if (hexString.length % 2 !== 0) {
+      throw new Error('Hex string must have an even number of characters');
+    }
+    const u8array = new Uint8Array(hexString.length / 2);
+    for (let i = 0; i < hexString.length; i += 2) {
+      u8array[i / 2] = parseInt(hexString.substr(i, 2), 16);
+    }
+    return u8array;
+  }
 };
 
 module.exports = self;

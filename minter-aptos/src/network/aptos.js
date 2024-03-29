@@ -1,4 +1,4 @@
-import { Aptos, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosAccount,AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk";
 
 let link = null;
 const self = {
@@ -11,7 +11,8 @@ const self = {
                 break;
 
             default:
-
+                const acfg = new AptosConfig({ network: Network.DEVNET });
+                link = new Aptos(acfg);
                 break;
         }
         return ck && ck(link);
@@ -19,14 +20,10 @@ const self = {
     generate: (ck, cfg) => {
         return ck && ck(cfg === undefined ? Account.generate() : Account.generate(cfg));
     },
-    recover: (base58, ck) => {
-        const privateKeyBytes = [];
-        const privateKey = new Ed25519PrivateKey(base58);
+    recover: (u8arr, ck) => {
+        const privateKey = new Ed25519PrivateKey(u8arr);
         const account = Account.fromPrivateKey({ privateKey });
         return ck && ck(account);
-    },
-    keyless: (ck) => {
-
     },
     wallet: (ck) => {
 
@@ -79,9 +76,11 @@ const self = {
     },
     view: (value, type, ck, network) => {
         self.init(network, (aptos) => {
-            const param = { accountAddress:value};
-            switch (type) {
+            console.log(aptos);
+            
+            switch (type){
                 case 'account':
+                    const param = { accountAddress:value};
                     aptos.getAccountInfo(param).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
@@ -90,18 +89,26 @@ const self = {
                     break;
 
                 case 'transaction':
-                    aptos.getAccountTransactions(param).then((obj) => {
+                    const tcfg={"transactionHash":value}
+                    aptos.getTransactionByHash(tcfg).then((obj) => {
                         return ck && ck(obj);
-                    }).catch((error) => {
-                        return ck && ck(error);
-                    });
+                    })
+                    // .catch((error) => {
+                    //     return ck && ck(error);
+                    // });
                     break;
                 case 'token':
-                    aptos.getAccountOwnedTokens(param).then((obj) => {
+                    //console.log(aptos);
+                    const kcfg={
+                        accountAddress:value
+                    }
+                    aptos.getAccountOwnedTokens(kcfg).then((obj) => {
                         return ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
+
+
                     break;
                 case 'block':
                     aptos.getBlockByHeight({blockHeight:value}).then((obj)=>{
@@ -123,6 +130,16 @@ const self = {
             }
         });
     },
+    subscribe:(ck,network)=>{
+        //getLedgerInfo
+        self.init(network, (aptos) => {
+            aptos.getLedgerInfo().then((obj)=>{
+                ck && ck(obj);
+            }).catch((error)=>{
+                return ck && ck(error);
+            });
+        });
+    }
 };
 
 export default self;

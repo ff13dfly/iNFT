@@ -41,29 +41,48 @@ function Account(props) {
             console.log(`Connect to wallet`);
         },
         clickNewAccount: (ev) => {
+            // const hash="0xf3bb69b6b1e680a87818f2c6178fc092a7036d5465f2ad2c18cad41bc9641e4c";
+            // return Chain.view(hash,"transaction",(res)=>{
+            //     console.log(res);
+            // });
+
+            // const token="0x7193bf917cb1ef0d657d6ec6df37ccd46b036e96ab06edc2899fad11405e49da";
+            // const acc="0x37b6d7677b65520139e1749157b319a424608b7e0b80dcf20044cb610537c632";
+            // return Chain.view(acc,"token",(res)=>{
+            //     console.log(res);
+            // });
+
             setNewDisable(true);
             Chain.generate((acc)=>{
                 console.log(acc);
-                //console.log("address",acc.accountAddress,tools.u8aToBs58(acc.accountAddress.data));
-                //console.log("private",acc.privateKey.signingKeyPair.secretKey,tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey));
-                const base58=tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey);
+                //const arr=acc.privateKey.signingKeyPair.secretKey;
+                //const arr=acc.privateKey.signingKeyPair.publicKey;
+                //const arr=acc.accountAddress.data;
+                const pBytes=acc.privateKey.toString();
+                //const pBytes=tools.u8ToHex(arr);
+                console.log(2,pBytes);
+                const rU8=tools.hexToU8(pBytes);
+                console.log(rU8);
+                
+                // const base58=tools.u8aToBs58(acc.privateKey.signingKeyPair.secretKey);
+                // console.log(base58,acc.privateKey.signingKeyPair.secretKey);
+                // console.log(tools.bs58ToU8a(base58))
 
-                const fa=Encry.encode(base58,password);
-                const de=Encry.decode(fa,password);
-                //console.log(base58,fa,de);
+                // const fa=Encry.encode(base58,password);
+                // const de=Encry.decode(fa,password);
 
                 //console.log(acc.privateKey.signingKeyPair.secretKey.toString());
-
-                Chain.recover(acc.privateKey.signingKeyPair.publicKey,(res)=>{
+                //console.log(acc.privateKey.signingKeyPair.publicKey);
+                Chain.recover(pBytes,(res)=>{
                     console.log(res);
                 });
 
-                if(fa!==undefined){
+                //if(fa!==undefined){
                     // Local.set("login", JSON.stringify(fa));
                     // setLogin(true);
                     // self.show();
                     // props.fresh();
-                }
+                //}
             });
         },
         clickLogout:(ev)=>{
