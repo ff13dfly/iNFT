@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-//import Result from "./result";
+import Result from "./result";
 
 import Local from "../lib/local";
 import Account from "./account";
@@ -87,55 +87,44 @@ function Action(props) {
                     Chain.recover(privateKey,(pair)=>{
                         const tpl = self.getTemplate();
                         if(tpl===false) return false;
+
+                        setInfo("Ready to mint");
+                        const NFT_name=`iNFT_${tools.rand(100000,999999)}`;
+                        const contact="0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0"
                         const args={
-                            hash:"0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0",
+                            hash:contact,
                             method:"::birds_nft::mint",
                             params:[
+                                NFT_name,   //Mint result name
                                 tpl,        //template uri | storage hash
-                                "0xca151f5aaf90a5d06dcd1f655851760e72a9ca662195ae84f6cae62a002d8d77"
                             ],
                         }
 
                         Chain.contact(pair,args,(res)=>{
                             console.log(res);
+                            if(res.error){
+                                setDisable(false);
+                                return setInfo(res.error);
+                            }
+                            setInfo("Done, checking...");
+                            const hash=res.hash;
+                            Chain.view(hash,"transaction_hash",(trans)=>{
+                                //console.log(trans);
+
+                                setInfo("Done, checking...");
+                                const NFT_hash=trans.events[0].data.token;
+                                //console.log(NFT_hash);
+                                props.dialog(<Result anchor={NFT_hash} />,"iNFT Result");
+                                setDisable(false);
+                                setTimeout(()=>{
+                                    setInfo("");
+                                },400);
+                            });
                         });
                     });
                 } catch (error) {
                     
                 }
-                
-                // Chain.load(fa,password,(pair)=>{
-                //     if(pair.error!==undefined){
-                //         setInfo(pair.error);
-                //         setPassword("");
-                //         return false;
-                //     }
-
-                //     self.getAnchorName((name)=>{
-                //         const list=Local.get("template");
-                //         try {
-                //             const tpls=JSON.parse(list);
-                //             const target=tpls[0];
-                //             const raw=self.getRaw(target);
-                //             const protocol=self.getProtocol();
-                //             props.countdown();
-                //             Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
-                //                 setInfo(res.message);
-                //                 if(res.step==="Finalized"){
-                //                     setDisable(false);
-                //                     props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
-                //                     setTimeout(()=>{
-                //                         setInfo("");
-                //                     },400);
-                //                 }
-                //             });
-                //         } catch (error) {
-                //             console.log(error);
-                //             Local.remove("template");
-                //         }
-                       
-                //     });
-                // });
             }
         },
     }

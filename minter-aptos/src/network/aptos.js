@@ -168,9 +168,19 @@ const self = {
                     }).catch((error) => {
                         return ck && ck(error);
                     });
-
-
                     break;
+
+                // case 'token_hash':   //get account tokens, get NFTs
+                //     const thcfg = {
+                //         hash: value
+                //     }
+                //     aptos.getAccountOwnedTokens(thcfg).then((obj) => {
+                //         return ck && ck(obj);
+                //     }).catch((error) => {
+                //         return ck && ck(error);
+                //     });
+                //     break;
+
                 case 'block':
                     aptos.getBlockByHeight({ blockHeight: value }).then((obj) => {
                         return ck && ck(obj);

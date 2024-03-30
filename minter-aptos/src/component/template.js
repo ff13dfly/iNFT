@@ -81,9 +81,12 @@ function Template(props) {
                         dels.push(left);
                         return self.cacheData(alinks, ck, dels);
                     }
-                    res.image=tools.hexToString(res.image.substr(2));
-                    Data.setHash("cache", single, res);
-                    return self.cacheData(alinks, ck, dels);
+
+                    if(res.image!==undefined){
+                        res.image=tools.hexToString(res.image.substr(2));
+                        Data.setHash("cache", single, res);
+                        return self.cacheData(alinks, ck, dels);
+                    }
                 });
             } else {
                 return self.cacheData(alinks, ck, dels);
@@ -124,7 +127,7 @@ function Template(props) {
                 con.innerHTML = "";
 
                 return self.getThumbs(arr, dom_id, ck, todo);
-            }, 1500);
+            }, 200);
         },
         clickClean: (ev) => {
             Local.remove("template");
