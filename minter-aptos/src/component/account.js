@@ -137,7 +137,7 @@ function Account(props) {
                         {tools.shorten(address,12)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        <strong>{balance}</strong> unit
+                        <strong>{balance}</strong> APTOS
                     </Col>
                 </Row>
             </Col>

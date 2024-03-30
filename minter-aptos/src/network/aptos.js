@@ -29,6 +29,7 @@ const self = {
     recover: (u8arr, ck) => {
         const privateKey = new Ed25519PrivateKey(u8arr);
         const account = Account.fromPrivateKey({ privateKey });
+        console.log(account);
         return ck && ck(account);
     },
     balance:(address,ck, network)=>{
@@ -75,12 +76,35 @@ const self = {
             // });
         });
     },
-    run: (program_id, param, ck, network) => {
+    contact:(from,args, ck, network)=>{
+        self.init(network,async (aptos)=>{
+            const transaction = await aptos.transaction.build.simple({
+                sender: from.accountAddress,
+                data: {
+                    function: `${args.hash}${args.method}`,    
+                    functionArguments: args.params,   //传给合约的信息
+                    //functionArguments: [bobAddress, 100],
+                    //typeArguments: ["0x1::aptos_coin::AptosCoin"],
+                },
+            });
+            
+            // using sign and submit separately
+            const senderAuthenticator = aptos.transaction.sign({
+                signer: from,
+                transaction,
+            });
 
+            const committedTransaction = await aptos.transaction.submit.simple({
+                transaction,
+                senderAuthenticator,
+            });
+            return ck && ck(committedTransaction);
+        });
     },
     divide:()=>{
-        return 100000000;
+        return 100000000;       //return the float accuracy
     },
+
     //get airdrop when create a new account
     airdrop: (u8Address, amount, ck, network) => {
         self.init(network, (aptos) => {
@@ -88,18 +112,18 @@ const self = {
                 accountAddress: u8Address,
                 amount: amount,
             }).then((transaction) => {
-                console.log(transaction);
-                return ck && ck(true);
+                return ck && ck(transaction);
             }).catch((error) => {
                 return ck && ck(error);
             });
         });
     },
+
     view: (value, type, ck, network) => {
         self.init(network, (aptos) => {
             //console.log(aptos);
             switch (type) {
-                case 'resource':
+                case 'resource':        //get template resource
                     const rcfg = { accountAddress: value[0], resourceType: value[1] };
                     //accountAddress: testAccount.accountAddress,
                     //resourceType: "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
@@ -135,8 +159,7 @@ const self = {
                         return ck && ck(error);
                     });
                     break;
-                case 'token':
-                    //console.log(aptos);
+                case 'token':   //get account tokens, get NFTs
                     const kcfg = {
                         accountAddress: value
                     }

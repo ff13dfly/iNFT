@@ -109,6 +109,14 @@ const self = {
       u8array[i / 2] = parseInt(hexString.substr(i, 2), 16);
     }
     return u8array;
+  },
+  hexToString:(hexString)=>{
+    let str = '';
+    for (let i = 0; i < hexString.length; i += 2) {
+        const charCode = parseInt(hexString.substr(i, 2), 16);
+        str += String.fromCharCode(charCode);
+    }
+    return str;
   }
 };
 

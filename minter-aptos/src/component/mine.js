@@ -142,8 +142,21 @@ function Mine(props) {
             const my = JSON.parse(ls);
             const dt = my[addr][index];
             const alink = dt.link.toLocaleLowerCase();
-            //console.log(alink);
             props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+        },
+        autoCheck:(addr,ck)=>{
+            Chain.view(addr,"token",(tks)=>{
+                const rs=[];
+                for(let i=0;i<tks.length;i++){
+                    const row=tks[i];
+                    //console.log(row)
+                    rs.push({
+                        hash:row.token_data_id,                    // random hash
+                        tpl:row.current_token_data.token_uri,      // template hash
+                    });
+                }
+                Local.set("list",JSON.stringify(rs));
+            });
         },
     }
 
@@ -153,17 +166,15 @@ function Mine(props) {
         if (fa !== undefined) {
             const login = JSON.parse(fa);
             const addr = login.address;
+            //console.log(addr);
             const ls = Local.get("list");
             if (ls !== undefined) {
                 try {
                     const nlist = JSON.parse(ls);
                     const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
                     self.cacheData(self.getAlinks(plist), (tpls) => {
-                        //console.log(tpls);
                         self.cacheTemplate(tpls, (dels) => {
-                            //console.log(JSON.stringify(plist));
                             self.getThumbs(plist, dom_id, (glist) => {
-                                //console.log(glist);
                                 setPageShow(true);
                                 setList(glist);
                             });
@@ -173,6 +184,9 @@ function Mine(props) {
                     console.log(error);
                 }
             } else {
+                self.autoCheck(addr,(tks)=>{
+
+                });
                 setInfo("Not iNFT record.");
             }
         } else {
