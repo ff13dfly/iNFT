@@ -42,9 +42,7 @@ function Preview(props) {
     
                     Chain.subscribe((res) => {
                         let bk = res.block_height;
-                        console.log(bk);
                         Chain.view(bk, "block", (res) => {
-                            //console.log(res);
                             const bhash = res.block_hash;
                             setBlock(bk);
                             setHash(bhash);

@@ -77,7 +77,9 @@ function App() {
         }
         res.image = tools.hexToString(res.image.substr(2));
         Data.set("template", res);
-        Data.setHash("cache", tpl, res.image);
+        
+        //TODO, new a image to cache the base64 data
+        //Data.setHash("cache", tpl, res.image);
       });
     },
   }

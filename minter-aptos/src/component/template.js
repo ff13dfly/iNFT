@@ -176,9 +176,9 @@ function Template(props) {
                     self.clickAdd(ev);
                 }}>Add</button>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col sm={size.row[0]} xs={size.row[0]}>
                 <Upload fresh={props.fresh} update={props.update}/>
-            </Col>
+            </Col> */}
             
             <Col hidden={true} id="tpl_handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}

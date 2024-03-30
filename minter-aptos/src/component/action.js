@@ -50,6 +50,18 @@ function Action(props) {
                 stamp:[],           //辅助证明的各个链的数据
             }
         },
+        getTemplate: () => {
+            const ts = Local.get("template");
+            if (!ts) return false;
+
+            try {
+                const tpls = JSON.parse(ts);
+                //console.log(tpls);
+                return tpls[0].alink;
+            }catch (error) {
+                return false;
+            }
+          },
 
         clickMint:(ev)=>{
             const fa = Local.get("login");
@@ -72,17 +84,18 @@ function Action(props) {
 
                     //mint contract
                     //0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0
-
                     Chain.recover(privateKey,(pair)=>{
-                        
+                        const tpl = self.getTemplate();
+                        if(tpl===false) return false;
                         const args={
                             hash:"0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0",
                             method:"::birds_nft::mint",
                             params:[
-                                "hello",        //template uri | storage hash
+                                tpl,        //template uri | storage hash
                                 "0xca151f5aaf90a5d06dcd1f655851760e72a9ca662195ae84f6cae62a002d8d77"
                             ],
                         }
+
                         Chain.contact(pair,args,(res)=>{
                             console.log(res);
                         });
