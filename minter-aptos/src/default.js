@@ -4,8 +4,6 @@ module.exports = {
         "wss://dev2.metanchor.net",
     ],
     default:[
-        "anchor://legs/273400",
-        "anchor://single/265468",
-        "anchor://aabb/217148",
+        "0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0",
     ],
 }

@@ -23,43 +23,49 @@ function Preview(props) {
     let [alink, setAlink] = useState("");
 
     const self = {
-
+        autoCheck:()=>{
+            const tpl = Data.get("template");
+            //console.log(tpl);
+            if(tpl===null) return setTimeout(()=>{
+                self.autoCheck();
+            },2000);
+            if (tpl !== null) {
+                setWidth(tpl.size[0]);
+                setHeight(tpl.size[1]);
+                setTimeout(() => {
+                    const pen = Render.create(dom_id);
+                    const basic = {
+                        cell: tpl.cell,
+                        grid: tpl.grid,
+                        target: tpl.size
+                    }
+    
+                    Chain.subscribe((res) => {
+                        let bk = res.block_height;
+                        console.log(bk);
+                        Chain.view(bk, "block", (res) => {
+                            //console.log(res);
+                            const bhash = res.block_hash;
+                            setBlock(bk);
+                            setHash(bhash);
+                            Render.preview(pen, tpl.image, bhash, tpl.parts, basic);
+                        }, Network.DEVNET);
+                    }, Network.DEVNET);
+                }, 50);
+            }
+    
+            const tpls = Local.get("template");
+            if (tpls !== undefined) {
+                const list = JSON.parse(tpls);
+                const tpl = list[0];
+                setAlink(tpl.alink);
+            }
+        },
     }
 
     const dom_id = "previewer";
     useEffect(() => {
-        const tpl = Data.get("template");
-        if (tpl !== null) {
-            setWidth(tpl.size[0]);
-            setHeight(tpl.size[1]);
-            setTimeout(() => {
-                const pen = Render.create(dom_id);
-                const basic = {
-                    cell: tpl.cell,
-                    grid: tpl.grid,
-                    target: tpl.size
-                }
-
-                Chain.subscribe((res) => {
-                    //console.log(res);
-                    let bk = res.block_height;
-                    Chain.view(bk, "block", (res) => {
-                        //console.log(res);
-                        const bhash = res.block_hash;
-                        setBlock(bk);
-                        setHash(bhash);
-                        Render.preview(pen, tpl.image, bhash, tpl.parts, basic);
-                    }, Network.DEVNET);
-                }, Network.DEVNET);
-            }, 50);
-        }
-
-        const tpls = Local.get("template");
-        if (tpls !== undefined) {
-            const list = JSON.parse(tpls);
-            const tpl = list[0];
-            setAlink(tpl.alink);
-        }
+        self.autoCheck();
     }, [props.update]);
 
     return (

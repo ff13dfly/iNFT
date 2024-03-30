@@ -90,14 +90,14 @@ function Template(props) {
             }
         },
         getThumbs: (arr, dom_id, ck, todo) => {
-            
+
             if (todo === undefined) todo = [];
             if (arr.length === 0) return ck && ck(todo);
 
             //1.get cache data
             const me = arr.shift();
             const dt = Data.getHash("cache", me.alink.toLocaleLowerCase());
-            console.log(dt);
+            //console.log(dt);
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
@@ -124,7 +124,7 @@ function Template(props) {
                 con.innerHTML = "";
 
                 return self.getThumbs(arr, dom_id, ck, todo);
-            }, 50);
+            }, 1500);
         },
         clickClean: (ev) => {
             Local.remove("template");
@@ -150,7 +150,8 @@ function Template(props) {
                 }
 
                 self.getThumbs(last, dom_id, (glist) => {
-                    console.log(glist);
+                    //console.log(glist[0]);
+                    //console.log(glist[0].bs64.length);
                     setList(glist);
                     //console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
                 });

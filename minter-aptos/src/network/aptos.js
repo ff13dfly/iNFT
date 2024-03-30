@@ -29,7 +29,7 @@ const self = {
     recover: (u8arr, ck) => {
         const privateKey = new Ed25519PrivateKey(u8arr);
         const account = Account.fromPrivateKey({ privateKey });
-        console.log(account);
+        //console.log(account);
         return ck && ck(account);
     },
     balance:(address,ck, network)=>{

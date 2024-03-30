@@ -9,6 +9,7 @@ import Data from "./lib/data";
 import Local from "./lib/local";
 import Chain from "./network/aptos";
 import config from "./default";
+import tools from "./lib/tools";
 
 // iNFT definition
 // anchor://aabb/217148
@@ -35,14 +36,14 @@ function App() {
     fresh: (force) => {
       update++;
       setUpdate(update);
-      if(force) self.start();
+      if (force) self.start();
     },
     subscribe: (key, fun) => {
       subs[key] = fun;
     },
     getTemplate: () => {
       const ts = Local.get("template");
-      if (!ts){
+      if (!ts) {
         const data = []
         data.push({
           alink: config.default[0],
@@ -51,7 +52,7 @@ function App() {
         })
         Local.set("template", JSON.stringify(data));
         return config.default[0];
-      } 
+      }
       try {
         const tpls = JSON.parse(ts);
         if (tpls[0] && tpls[0].alink) return tpls[0].alink
@@ -60,42 +61,29 @@ function App() {
         return config.default[0];
       }
     },
-    countdown:()=>{
-      let n=9;
-      const tt=setInterval(()=>{
-        if(n <= 0) return clearInterval(tt);
+    countdown: () => {
+      let n = 9;
+      const tt = setInterval(() => {
+        if (n <= 0) return clearInterval(tt);
         n--;
-      },1000);
+      }, 1000);
     },
-    start:()=>{
+    start: () => {
       const tpl = self.getTemplate();
-      Chain.read(tpl, (res) => {
-        const key = `${res.location[0]}_${res.location[1]}`;
-        if (res.data && res.data[key] !== undefined) {
-          const dt = res.data[key];
-          try {
-            const raw = JSON.parse(dt.raw);
-            Data.set("template", raw);
-
-            console.log(raw);
-
-            dt.raw = JSON.parse(dt.raw);
-            Data.setHash("cache", config.default, dt);
-
-            self.fresh();
-          } catch (error) {
-            console.log(error);
-          }
+      //console.log(tpl);
+      Chain.view([tpl, `${tpl}::birds_nft::InftJson`], "resource", (res) => {
+        if (res.error) {
+          return console.log(res);
         }
+        res.image = tools.hexToString(res.image.substr(2));
+        Data.set("template", res);
+        Data.setHash("cache", tpl, res.image);
       });
     },
   }
 
   useEffect(() => {
-    //1.连接服务器
-    // Chain.link(config.node[0], (API) => {
-    //   self.start();
-    // });
+    self.start();
   }, []);
 
   return (
@@ -103,13 +91,13 @@ function App() {
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update} />
         <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/>
+        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
       </Container>
       <Modal show={show} size="lg" onHide={
-          (ev) => {
-            setShow(false);
-          }
+        (ev) => {
+          setShow(false);
         }
+      }
         centered={false}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
