@@ -142,9 +142,10 @@ function Mine(props) {
             const ls = Local.get("list");
             const my = JSON.parse(ls);
             const dt = my[addr][index];
-            const alink = dt.link.toLocaleLowerCase();
+            //console.log(dt);
+            //const alink = dt.link.toLocaleLowerCase();
             //console.log(alink);
-            props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+            props.dialog(<Result anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
         },
     }
 

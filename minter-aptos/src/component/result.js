@@ -129,7 +129,10 @@ function Result(props) {
         const login = JSON.parse(fa);
         const addr = login.address;
         Chain.view(addr, "token", (res) => {
+            console.log(res);
             const target = self.filterNFT(props.anchor, res);
+            //console.log(target);
+            if(target===undefined) return false;
 
             //1.render iNFT
             const tpl = Data.get("template");
@@ -175,7 +178,7 @@ function Result(props) {
                 }} />
             </Col>
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
-                <canvas width={width} height={height} id={dom_id}></canvas>
+                <canvas width={width} height={height} id={dom_id} style={{width:"100%"}}></canvas>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Hash: {tools.shorten(block_hash, 16)}

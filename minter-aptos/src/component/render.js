@@ -73,9 +73,9 @@ function Preview(props) {
         //     console.log(res);
         // })
 
-        Chain.view([hash,mod],"view",(res)=>{
-            console.log(res);
-        })
+        // Chain.view([hash,mod],"view",(res)=>{
+        //     console.log(res);
+        // })
 
 
     }, [props.update]);

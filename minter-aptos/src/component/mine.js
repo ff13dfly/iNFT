@@ -219,7 +219,7 @@ function Mine(props) {
                             }}>
                                 <Row>
                                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                                        <img className="mine" src={row.bs64} alt="" />
+                                        <img className="mine" src="image/logo.png" alt="" />
                                     </Col>
                                     {/* <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
                                         {row.block.toLocaleString()}

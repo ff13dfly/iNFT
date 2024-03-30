@@ -21,7 +21,7 @@ const self = {
                 link = new Aptos(acfg);
                 break;
         }
-        console.log(link);
+        //console.log(link);
         return ck && ck(link);
     },
     generate: (ck, cfg) => {
@@ -50,31 +50,6 @@ const self = {
     },
     storage: (data, ck, network) => {
         self.init(network, async (aptos) => {
-            // build a transaction
-            // const transaction = await aptos.transaction.build.simple({
-            //     sender: alice.accountAddress,
-            //     data: {
-            //     function: "0x1::coin::transfer",
-            //     typeArguments: ["0x1::aptos_coin::AptosCoin"],
-            //     functionArguments: [bobAddress, 100],
-            //     },
-            // });
-
-            // // using sign and submit separately
-            // const senderAuthenticator = aptos.transaction.sign({
-            //     signer: alice,
-            //     transaction,
-            // });
-            // const committedTransaction = await aptos.transaction.submit.simple({
-            //     transaction,
-            //     senderAuthenticator,
-            // });
-
-            // // using signAndSubmit combined
-            // const committedTransaction = await aptos.signAndSubmitTransaction({
-            //     signer: alice,
-            //     transaction,
-            // });
         });
     },
     contact: (from, args, ck, network) => {
