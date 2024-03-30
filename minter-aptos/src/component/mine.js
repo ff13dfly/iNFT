@@ -146,8 +146,9 @@ function Mine(props) {
             const ls = Local.get("list");
             const my = JSON.parse(ls);
             const dt = my[addr][index];
-            const alink = dt.link.toLocaleLowerCase();
-            props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+            //const alink = dt.link.toLocaleLowerCase();
+            //console.log(dt);
+            props.dialog(<Result anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
         },
         // autoCheck:(addr,ck)=>{
         //     Chain.view(addr,"token",(tks)=>{

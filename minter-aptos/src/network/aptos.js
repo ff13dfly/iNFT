@@ -3,8 +3,8 @@ import { Aptos, AptosConfig, Network, Account, Ed25519PrivateKey } from "@aptos-
 let link = null;
 let timer = null;
 
-const config={
-    interval:800,
+const config = {
+    interval: 800,
 }
 
 const self = {
@@ -21,6 +21,7 @@ const self = {
                 link = new Aptos(acfg);
                 break;
         }
+        console.log(link);
         return ck && ck(link);
     },
     generate: (ck, cfg) => {
@@ -32,7 +33,7 @@ const self = {
         //console.log(account);
         return ck && ck(account);
     },
-    balance:(address,ck, network)=>{
+    balance: (address, ck, network) => {
         self.init(network, async (aptos) => {
             //console.log(aptos);
             aptos.getAccountCoinAmount({
@@ -76,18 +77,18 @@ const self = {
             // });
         });
     },
-    contact:(from,args, ck, network)=>{
-        self.init(network,async (aptos)=>{
+    contact: (from, args, ck, network) => {
+        self.init(network, async (aptos) => {
             const transaction = await aptos.transaction.build.simple({
                 sender: from.accountAddress,
                 data: {
-                    function: `${args.hash}${args.method}`,    
+                    function: `${args.hash}${args.method}`,
                     functionArguments: args.params,   //传给合约的信息
                     //functionArguments: [bobAddress, 100],
                     //typeArguments: ["0x1::aptos_coin::AptosCoin"],
                 },
             });
-            
+
             // using sign and submit separately
             const senderAuthenticator = aptos.transaction.sign({
                 signer: from,
@@ -101,7 +102,7 @@ const self = {
             return ck && ck(committedTransaction);
         });
     },
-    divide:()=>{
+    divide: () => {
         return 100000000;       //return the float accuracy
     },
 
@@ -195,6 +196,47 @@ const self = {
                         return ck && ck(error);
                     });
                     break;
+                case 'module':
+                    //console.log(aptos.getAccountModule);
+                    aptos.getAccountModule({ accountAddress: value[0], moduleName: value[1] }).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+                case 'module_view':
+                    //console.log(aptos.getAccountModule);
+                    const mvcfg = { accountAddress: value[0], moduleName: value[1], options: {} }
+                    aptos.getAccountModule(mvcfg).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+
+                case 'modules':
+                    //console.log(aptos.getAccountModule);
+                    aptos.getAccountModules({ accountAddress: value }).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
+
+                case 'view':
+                    const vvcfg={
+                        payload: {
+                          function: `${value[0]}${value[1]}`,
+                          //typeArguments: [tokenOneType, tokenTwoType],
+                          functionArguments: [],
+                        },
+                      }
+                    aptos.view(vvcfg).then((obj) => {
+                        return ck && ck(obj);
+                    }).catch((error) => {
+                        return ck && ck(error);
+                    });
+                    break;
                 default:
 
                     break;
@@ -203,20 +245,20 @@ const self = {
     },
     subscribe: (ck, network) => {
         self.init(network, (aptos) => {
-            if(timer===null){
+            if (timer === null) {
                 aptos.getLedgerInfo().then((obj) => {
                     ck && ck(obj);
                 }).catch((error) => {
                     return ck && ck(error);
                 });
 
-                timer=setInterval(()=>{
+                timer = setInterval(() => {
                     aptos.getLedgerInfo().then((obj) => {
                         ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
-                },config.interval);
+                }, config.interval);
             }
         });
     }

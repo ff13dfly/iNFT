@@ -4,6 +4,6 @@ module.exports = {
         "wss://dev2.metanchor.net",
     ],
     default:[
-        "0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0",
+        "0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069",
     ],
 }

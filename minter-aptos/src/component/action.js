@@ -88,39 +88,55 @@ function Action(props) {
                         const tpl = self.getTemplate();
                         if(tpl===false) return false;
 
-                        setInfo("Ready to mint");
-                        const NFT_name=`iNFT_${tools.rand(100000,999999)}`;
-                        const contact="0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0"
+                        const NFT="0x19009a519e6efabcecf18c2aed3b922a86ce7f44e7f874f04941ae73bd024c96";
+                        const contact="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
+                        const price=2;
                         const args={
                             hash:contact,
-                            method:"::birds_nft::mint",
+                            method:"::birds_nft::sellBird",
+                            //method:"::birds_nft::queryTable",
                             params:[
-                                NFT_name,   //Mint result name
-                                tpl,        //template uri | storage hash
+                                NFT,   //Mint result name
+                                price,   //price
                             ],
                         }
-
-                        Chain.contact(pair,args,(res)=>{
+                        return Chain.contact(pair,args,(res)=>{
                             console.log(res);
-                            if(res.error){
-                                setDisable(false);
-                                return setInfo(res.error);
-                            }
-                            setInfo("Done, checking...");
-                            const hash=res.hash;
-                            Chain.view(hash,"transaction_hash",(trans)=>{
-                                //console.log(trans);
-
-                                setInfo("Done, checking...");
-                                const NFT_hash=trans.events[0].data.token;
-                                //console.log(NFT_hash);
-                                props.dialog(<Result anchor={NFT_hash} />,"iNFT Result");
-                                setDisable(false);
-                                setTimeout(()=>{
-                                    setInfo("");
-                                },400);
-                            });
+                            //"0xf6c19daf94da2df1b77ac5e9db6890d2876de93d03b92ed70a586901223cc9a1"
                         });
+
+
+
+                        // setInfo("Ready to mint");
+                        // const NFT_name=`iNFT_${tools.rand(100000,999999)}`;
+                        // const contact="0xcb4b4da9380ccca7a7a22b09c67368ba51e72b602fa47b27bb8aaf2a12b46ea0"
+                        // const args={
+                        //     hash:contact,
+                        //     method:"::birds_nft::mint",
+                        //     params:[
+                        //         NFT_name,   //Mint result name
+                        //         tpl,        //template uri | storage hash
+                        //     ],
+                        // }
+
+                        // Chain.contact(pair,args,(res)=>{
+                        //     console.log(res);
+                        //     if(res.error){
+                        //         setDisable(false);
+                        //         return setInfo(res.error);
+                        //     }
+                        //     setInfo("Done, checking...");
+                        //     const hash=res.hash;
+                        //     Chain.view(hash,"transaction_hash",(trans)=>{
+                        //         setInfo("Done, checking...");
+                        //         const NFT_hash=trans.events[0].data.token;
+                        //         props.dialog(<Result anchor={NFT_hash} />,"iNFT Result");
+                        //         setDisable(false);
+                        //         setTimeout(()=>{
+                        //             setInfo("");
+                        //         },400);
+                        //     });
+                        // });
                     });
                 } catch (error) {
                     

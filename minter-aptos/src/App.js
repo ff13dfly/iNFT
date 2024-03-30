@@ -68,6 +68,23 @@ function App() {
         n--;
       }, 1000);
     },
+  //   getImageBase64:(img)=>{
+  //     // Create a canvas element
+  //     const canvas = document.createElement('canvas');
+  //     const ctx = canvas.getContext('2d');
+      
+  //     // Set the canvas dimensions to match the image
+  //     canvas.width = img.width;
+  //     canvas.height = img.height;
+      
+  //     // Draw the image onto the canvas
+  //     ctx.drawImage(img, 0, 0);
+      
+  //     // Get the base64-encoded data URL
+  //     const base64 = canvas.toDataURL('image/png');
+      
+  //     return base64;
+  // },
     start: () => {
       const tpl = self.getTemplate();
       //console.log(tpl);
@@ -76,10 +93,11 @@ function App() {
           return console.log(res);
         }
         res.image = tools.hexToString(res.image.substr(2));
-        Data.set("template", res);
-        
-        //TODO, new a image to cache the base64 data
-        //Data.setHash("cache", tpl, res.image);
+        const img = new Image();
+        img.src = res.image;
+        img.onload = (e) => {
+          Data.set("template", res);
+        }
       });
     },
   }
