@@ -9,6 +9,7 @@ import Data from "../lib/data";
 import tools from "../lib/tools";
 import Chain from "../network/aptos";
 
+import Encry from "../lib/encry";
 import { FaBackspace } from "react-icons/fa";
 
 function Result(props) {
@@ -17,8 +18,6 @@ function Result(props) {
         sell: [8, 4],
         back: [8, 4],
     };
-
-    const anchor = props.anchor;
 
     let [width, setWidth] = useState(100);
     let [height, setHeight] = useState(100);
@@ -31,10 +30,8 @@ function Result(props) {
     let [password, setPassword] = useState("");
     let [price, setPrice] = useState(0);
     let [info, setInfo] = useState("");
-    let [name, setName] = useState("");
 
     const dom_id = "pre_result";
-    const fix = 40;
 
     const self = {
         changePrice: (ev) => {
@@ -45,56 +42,63 @@ function Result(props) {
         },
         clickUnSell: (ev) => {
             if (!password) return setInfo("Please input the password");
-            if (!name) return setInfo("Internal error: missing anchor name.");
+            //if (!name) return setInfo("Internal error: missing anchor name.");
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
-            Chain.load(fa, password, (pair) => {
-                Chain.read(anchor, (res) => {
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    const target_link = `anchor://${res.location[0]}/${res.location[1]}`;
-                    const dt = res.data[key];
-                    if (dt.owner !== pair.address) return setInfo("Only owner can sell the iNFT.");
-                    Chain.unsell(pair, name, (res) => {
-                        setInfo(res.message);
-                        if (res.step === "Finalized") {
-                            setTimeout(() => {
-                                setInfo("");
-                                setSelling(false);
-                                Data.removeHash("cache", target_link);
-                            }, 400);
-                        }
-                    });
-                });
-            });
+            // Chain.load(fa, password, (pair) => {
+            //     Chain.read(anchor, (res) => {
+            //         const key = `${res.location[0]}_${res.location[1]}`;
+            //         const target_link = `anchor://${res.location[0]}/${res.location[1]}`;
+            //         const dt = res.data[key];
+            //         if (dt.owner !== pair.address) return setInfo("Only owner can sell the iNFT.");
+            //         Chain.unsell(pair, name, (res) => {
+            //             setInfo(res.message);
+            //             if (res.step === "Finalized") {
+            //                 setTimeout(() => {
+            //                     setInfo("");
+            //                     setSelling(false);
+            //                     Data.removeHash("cache", target_link);
+            //                 }, 400);
+            //             }
+            //         });
+            //     });
+            // });
         },
         clickSell: (ev) => {
             console.log(`Ready to selling`);
 
             if (price === 0) return setInfo("Please set a price to sell");
             if (!password) return setInfo("Please input the password");
-            if (!name) return setInfo("Internal error: missing anchor name.");
+            //if (!name) return setInfo("Internal error: missing anchor name.");
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
-            Chain.load(fa, password, (pair) => {
-                //console.log(pair);
-                Chain.read(anchor, (res) => {
-                    //console.log(res);
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    const target_link = `anchor://${res.location[0]}/${res.location[1]}`;
-                    const dt = res.data[key];
-                    if (dt.owner !== pair.address) return setInfo("Only owner can sell the iNFT.");
-                    Chain.sell(pair, name, price, (res) => {
-                        setInfo(res.message);
-                        if (res.step === "Finalized") {
-                            setTimeout(() => {
-                                //console.log(name);
-                                setInfo("");
-                                setSelling(true);
-                                Data.removeHash("cache", target_link);
-                            }, 400);
-                        }
-                    })
-                })
+
+            const acc = JSON.parse(fa);
+            const privateKey = Encry.decode(acc.private, password);
+            if (!privateKey) {
+                setInfo("Invalid password");
+                setPassword("");
+                return false;
+            }
+            Chain.recover(privateKey, (pair) => {
+                const NFT = props.anchor;
+                const contact = "0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
+                const args = {
+                    hash: contact,
+                    method: "::birds_nft::sellBird",
+                    params: [
+                        NFT,    //Mint result name
+                        price,   //price
+                    ],
+                }
+                console.log(args);
+                
+                return Chain.contact(pair, args, (res) => {
+                    if(res.error) return setInfo("Error");
+                    setInfo("Please check on market");
+                    setSelling(true);
+                    props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
+                });
             });
         },
         clickHome: (ev) => {
@@ -124,15 +128,19 @@ function Result(props) {
     }
 
     useEffect(() => {
+
+        setBlockHash(props.anchor);
+
         const fa = Local.get("login");
         if (!fa) return false;
         const login = JSON.parse(fa);
         const addr = login.address;
+        console.log(addr);
         Chain.view(addr, "token", (res) => {
             console.log(res);
             const target = self.filterNFT(props.anchor, res);
-            //console.log(target);
-            if(target===undefined) return false;
+            console.log(props.anchor);
+            if (target === undefined) return false;
 
             //1.render iNFT
             const tpl = Data.get("template");
@@ -151,26 +159,26 @@ function Result(props) {
             }, 50);
 
             //2.save the list
-            if(!props.skip){
-                const its=Local.get("list");
-                const nlist=its===undefined?{}:JSON.parse(its);
-                if(nlist[addr]===undefined)nlist[addr]=[];
+            if (!props.skip) {
+                const its = Local.get("list");
+                const nlist = its === undefined ? {} : JSON.parse(its);
+                if (nlist[addr] === undefined) nlist[addr] = [];
 
                 nlist[addr].unshift({
-                    hash:target.token_data_id,                    // random hash
-                    name:target.current_token_data.token_uri,      // template hash
+                    hash: target.token_data_id,                    // random hash
+                    name: target.current_token_data.token_uri,      // template hash
                 });
 
-                Local.set("list",JSON.stringify(nlist));
+                Local.set("list", JSON.stringify(nlist));
             }
         });
-        
+
     }, [props.update, props.anchor]);
 
     return (
         <Row>
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                Block: {block.toLocaleString()}
+                {/* Block: {block.toLocaleString()} */}
             </Col>
             <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace size={40} color={"#FFAABB"} onClick={(ev) => {
@@ -178,14 +186,14 @@ function Result(props) {
                 }} />
             </Col>
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
-                <canvas width={width} height={height} id={dom_id} style={{width:"100%"}}></canvas>
+                <canvas width={width} height={height} id={dom_id} style={{ width: "100%" }}></canvas>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Hash: {tools.shorten(block_hash, 16)}
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col sm={size.row[0]} xs={size.row[0]}>
                 Recommand Price: <strong>$AC 100</strong>; Rarity: <strong>0.15%</strong>
-            </Col>
+            </Col> */}
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>

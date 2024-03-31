@@ -1,4 +1,4 @@
-import { Container, Modal } from "react-bootstrap";
+import { Container, Modal,Row,Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Preview from "./component/render";
@@ -26,6 +26,7 @@ function App() {
   let [show, setShow] = useState(false);
   let [title, setTitle] = useState("");
   let [content, setContent] = useState("");
+
 
   const self = {
     dialog: (ctx, title) => {
@@ -114,6 +115,7 @@ function App() {
       <Container>
         <Header fresh={self.fresh} dialog={self.dialog} update={update} />
         <Preview fresh={self.fresh} update={update} node={config.node[0]} />
+        
         <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
       </Container>
       <Modal show={show} size="lg" onHide={

@@ -59,8 +59,6 @@ const self = {
                 data: {
                     function: `${args.hash}${args.method}`,
                     functionArguments: args.params,   //传给合约的信息
-                    //functionArguments: [bobAddress, 100],
-                    //typeArguments: ["0x1::aptos_coin::AptosCoin"],
                 },
             });
 

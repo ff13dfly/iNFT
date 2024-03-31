@@ -7,6 +7,7 @@ import Local from "../lib/local";
 import Render from "../lib/render";
 import Data from "../lib/data";
 import Chain from "../network/aptos";
+import tools from "../lib/tools"
 
 import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
 
@@ -93,7 +94,7 @@ function Mine(props) {
 
             //1.获取数据内容
             const me = arr.shift();
-            console.log(me);
+            //console.log(me);
             //const me_anchor = Data.getHash("cache", me.link.toLocaleLowerCase());
   
             const dt = Data.get("template");
@@ -119,7 +120,7 @@ function Mine(props) {
 
             //3.获取生成的图像
             return setTimeout(() => {
-                me.bs64 = pen.canvas.toDataURL("image/jpeg");
+                //me.bs64 = pen.canvas.toDataURL("image/jpeg");
                 
                 //me.block = me_anchor.block;
                 //me.sell=me_anchor.sell;     //附加销售的信息
@@ -221,6 +222,9 @@ function Mine(props) {
                                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                                         <img className="mine" src="image/logo.png" alt="" />
                                     </Col>
+                                    <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                                        {tools.shorten(row.hash,5)}
+                                    </Col>
                                     {/* <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
                                         {row.block.toLocaleString()}
                                     </Col>
@@ -239,7 +243,7 @@ function Mine(props) {
                         <FaAngleLeft size={36} />
                     </Col>
                     <Col className="pt-2 text-center" sm={size.page[1]} xs={size.page[1]}>
-                        <h3> 3 / 10 </h3>
+                        <h3> 1 / 1 </h3>
                     </Col>
                     <Col className="pt-2 text-end" sm={size.page[2]} xs={size.page[2]}>
                         <FaAngleRight size={36} />

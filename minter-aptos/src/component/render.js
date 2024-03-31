@@ -21,6 +21,7 @@ function Preview(props) {
     let [block, setBlock] = useState(0);
     let [hash, setHash] = useState("0x0000000000000000000000000000000000000000000000000000000000000000");
     let [alink, setAlink] = useState("");
+    let [loading, setLoading]=useState(true);
 
     const self = {
         autoCheck:()=>{
@@ -29,6 +30,7 @@ function Preview(props) {
             if(tpl===null) return setTimeout(()=>{
                 self.autoCheck();
             },2000);
+
             if (tpl !== null) {
                 setWidth(tpl.size[0]);
                 setHeight(tpl.size[1]);
@@ -43,6 +45,7 @@ function Preview(props) {
                     Chain.subscribe((res) => {
                         let bk = res.block_height;
                         Chain.view(bk, "block", (res) => {
+                            setLoading(false);
                             const bhash = res.block_hash;
                             setBlock(bk);
                             setHash(bhash);
@@ -82,10 +85,13 @@ function Preview(props) {
 
     return (
         <Row className="pt-2">
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-4 text-center" hidden={!loading} sm={size.row[0]} xs={size.row[0]}>
+                <h3>Loading...</h3>
+            </Col>
+            <Col hidden={loading} sm={size.row[0]} xs={size.row[0]}>
                 Aptos block {block.toLocaleString()}: {tools.shorten(hash, 20)}
             </Col>
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col hidden={loading} className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
