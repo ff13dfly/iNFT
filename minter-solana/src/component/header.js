@@ -40,7 +40,7 @@ function Header(props) {
                 }}/>
             </Col>
             <Col sm={size.title[1]} xs={size.title[1]}>
-               <h3 style={{marginLeft:"10px"}}>Aptos iNFT Minter</h3> 
+               <h3 style={{marginLeft:"10px"}}>Solana iNFT Minter</h3> 
             </Col>
             <Col className="text-end" sm={size.title[2]} xs={size.title[2]}>
                 <FaYenSign size={24} onClick={(ev)=>{

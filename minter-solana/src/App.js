@@ -7,7 +7,7 @@ import Header from "./component/header";
 
 import Data from "./lib/data";
 import Local from "./lib/local";
-import Chain from "./network/aptos";
+import Chain from "./network/solana";
 import config from "./default";
 import tools from "./lib/tools";
 
@@ -88,21 +88,7 @@ function App() {
     },
     start: () => {
       const tpl = self.getTemplate();
-      //console.log(tpl);
-      Chain.view([tpl, `${tpl}::birds_nft::InftJson`], "resource", (res) => {
-        if (res.error) {
-          return console.log(res);
-        }
-        res.image = tools.hexToString(res.image.substr(2));
-        const img = new Image();
-        img.src = res.image;
-        //img.crossorigin="anonymous"
-        img.onload = (e) => {
-          //const bs64=self.getImageBase64(img);
-          //console.log(bs64);
-          Data.set("template", res);
-        }
-      });
+      console.log(tpl);
     },
   }
 

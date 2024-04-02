@@ -1,4 +1,4 @@
-const prefix="apt_";
+const prefix="sol_";
 const keys={
     login:`${prefix}user`,
     list:`${prefix}list`,
