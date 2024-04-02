@@ -88,6 +88,7 @@ const Render= {
         pen.fillRect(0,0,w,h);
     },
     preview:(pen,bs64,hash,parts,basic)=>{
+        //console.log(bs64);
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {

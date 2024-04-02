@@ -1,12 +1,11 @@
 import { Row, Col, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-// import { mnemonicGenerate } from "@polkadot/util-crypto";
-
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
-import Chain from "../lib/chain";
+import Chain from "../network/solana";
+import Encry from "../lib/encry";
 
 function Account(props) {
     const size = {
@@ -29,31 +28,54 @@ function Account(props) {
 
     let [copy, setCopy]=useState("Copy");
     let [dis_copy,setCopyDisable]= useState(false);
-    
-    const {Keyring}=window.Polkadot;
 
+    let [dis_airdrop, setAirdropDisable]=useState(false);
+    let [air,setAir]=useState("Airdrop");
+    
     const self = {
         newAccount: (mnemonic,ck) => {
-            const keyring = new Keyring({ type: "sr25519" });
-            const pair = keyring.addFromUri(mnemonic);
-            const sign = pair.toJson(password);
-            sign.meta.from = "minter";
-
-            return ck && ck(sign);
+            Chain.generate(ck,mnemonic);
         },
         changePassword:(ev)=>{
             setPassword(ev.target.value);
             setNewDisable(!ev.target.value?true:false);
         },
+        clickWallet:(ev)=>{
+            console.log(`Connect to wallet`);
+        },
+        clickAirdrop:(ev)=>{
+            setAirdropDisable(true);
+            setAir("Trying");
+            const divide=Chain.divide();
+            Chain.airdrop(address,divide,(res)=>{
+                Chain.balance(address,(amount)=>{ 
+                    setAir("Airdrop");
+                    setAirdropDisable(false);                 
+                    setBalance(amount/Chain.divide());
+                });
+            });
+        },
         clickNewAccount: (ev) => {
-            // setNewDisable(true);
-            // const mnemonic = mnemonicGenerate();
-            // self.newAccount(mnemonic,(fa) => {
-            //     Local.set("login", JSON.stringify(fa));
-            //     setLogin(true);
-            //     self.show();
-            //     props.fresh();
-            // });
+            setNewDisable(true);
+            Chain.generate((acc)=>{
+                //console.log(acc);
+                //return false
+                const privateKey=acc.privateKey.toString();
+                const fa=Encry.encode(privateKey,password);
+
+                const user={
+                    address:acc.accountAddress.toString(),
+                    name:`iNFT_user_${tools.rand(100000,999999)}`,
+                    private:fa,
+                }
+
+                if(fa!==undefined){
+                    Local.set("login", JSON.stringify(user));
+                    setLogin(true);
+                    self.show();
+                    props.fresh();
+                }
+            });
         },
         clickLogout:(ev)=>{
             Local.remove("login");
@@ -74,43 +96,18 @@ function Account(props) {
                 setCopyDisable(false);
             }, 300);
         },
-        changeFile: (ev) => {
-            try {
-                const fa = ev.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const sign = JSON.parse(e.target.result);
-                        if (!sign.address || !sign.encoded)
-                            return setInfo("Error encry JSON file");
-                        if (sign.address.length !== 48)
-                            return setInfo("Error SS58 address");
-                        if (sign.encoded.length !== 268)
-                            return setInfo("Error encoded verification");
-                        setInfo("Encoded account file loaded");
-                        Local.set("login",e.target.result);
-                        setLogin(true);
-                        self.show();
-                        props.fresh();
-                    } catch (error) {
-                        setInfo("Not encry JSON file");
-                    }
-                };
-                reader.readAsText(fa);
-            } catch (error) {
-                setInfo("Can not load target file");
-            }
-        },
         show:()=>{
             const fa = Local.get("login");
             if(fa!==undefined) setLogin(true);
             try {
                 const account=JSON.parse(fa);
+                //console.log(account);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
-                Chain.balance(account.address,(res)=>{
-                    setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
-                })
+                Chain.balance(account.address,(amount)=>{
+                    const divide=Chain.divide();
+                    setBalance(amount/divide);
+                });
             } catch (error) {
                 
             }
@@ -119,7 +116,6 @@ function Account(props) {
 
     useEffect(() => {
         self.show();
-
     }, [props.update]);
 
 
@@ -138,20 +134,23 @@ function Account(props) {
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address)}
+                        {tools.shorten(address,12)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        <strong>{balance}</strong> unit
+                        <strong>{balance}</strong> APTOS
                     </Col>
                 </Row>
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickDownload(ev);
-                }}>Download Key</button>
+                }}>Save</button>
                 <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button>
+                <button disabled={dis_airdrop} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                    self.clickAirdrop(ev);
+                }}>{air}</button>
                 
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
@@ -159,18 +158,16 @@ function Account(props) {
                     self.clickLogout(ev);
                 }}>Logout</button>
             </Col>
-
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                
-                <h4><Badge className="bg-info">Way 1</Badge> Upload the encry JSON file.</h4>
+                <h4><Badge className="bg-info">Way 1</Badge> Link to wallet.</h4>
             </Col>
-            <Col sm={size.row[0]} hidden={login} className="pt-4" xs={size.row[0]}>
-                <input type="file" onChange={(ev) => {
-                    self.changeFile(ev);
-                }} />
+            <Col className="pt-2 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
+                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickWallet(ev);
+                }}>Connect</button>
                 <p>{info}</p>
             </Col>
-            <Col className="pt-4" hidden={login} sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2" hidden={login} sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
@@ -187,6 +184,7 @@ function Account(props) {
             <Col hidden={login} className="pt-4 pb-4 text-end" sm={size.new[1]} xs={size.new[1]}>
                 <button disabled={dis_new} className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickNewAccount(ev)
+                    //self.test();
                 }}>Create</button>
             </Col>
         </Row>

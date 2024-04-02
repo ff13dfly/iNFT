@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@solana/web3.js": "^1.91.3",
     "bootstrap": "^5.3.2",
     "crypto-js": "^4.2.0",
     "react": "^18.2.0",

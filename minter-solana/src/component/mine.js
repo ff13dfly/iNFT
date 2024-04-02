@@ -2,12 +2,12 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Result from "./result";
-import Networks from "./network";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
-import Chain from "../lib/chain";
 import Data from "../lib/data";
+import Chain from "../network/solana";
+import tools from "../lib/tools"
 
 import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
 
@@ -40,6 +40,9 @@ function Mine(props) {
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
+
+            console.log(single);
+
             if (!Data.exsistHash("cache", single)) {
                 return Chain.read(single, (res) => {
                     const key = `${res.location[0]}_${res.location[1]}`;
@@ -91,14 +94,16 @@ function Mine(props) {
 
             //1.获取数据内容
             const me = arr.shift();
-            const me_anchor = Data.getHash("cache", me.link.toLocaleLowerCase());
-            //console.log(me_anchor);
-            const row = Data.getHash("cache", me_anchor.raw.tpl);
-            const dt = row.raw;
+            //console.log(me);
+            //const me_anchor = Data.getHash("cache", me.link.toLocaleLowerCase());
+  
+            const dt = Data.get("template");
+            if(dt===null) return false;
+
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
-                target: dt.size
+                target: dt.size,
             }
 
             //2.准备绘图用的canvas
@@ -115,18 +120,18 @@ function Mine(props) {
 
             //3.获取生成的图像
             return setTimeout(() => {
-                me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                me.block = me_anchor.block;
-
-                me.sell=me_anchor.sell;     //附加销售的信息
-                me.price=me_anchor.cost;
+                //me.bs64 = pen.canvas.toDataURL("image/jpeg");
+                
+                //me.block = me_anchor.block;
+                //me.sell=me_anchor.sell;     //附加销售的信息
+                //me.price=me_anchor.cost;
 
                 //console.log(me_anchor);
                 todo.push(me);
                 con.innerHTML = "";
 
                 return self.getThumbs(arr, dom_id, ck, todo);
-            }, 50);
+            }, 400);
         },
         clickClean: (ev) => {
             Local.remove("list");
@@ -142,10 +147,23 @@ function Mine(props) {
             const ls = Local.get("list");
             const my = JSON.parse(ls);
             const dt = my[addr][index];
-            const alink = dt.link.toLocaleLowerCase();
-            //console.log(alink);
-            props.dialog(<Result anchor={alink} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+            //const alink = dt.link.toLocaleLowerCase();
+            //console.log(dt);
+            props.dialog(<Result anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
         },
+        // autoCheck:(addr,ck)=>{
+        //     Chain.view(addr,"token",(tks)=>{
+        //         const rs=[];
+        //         for(let i=0;i<tks.length;i++){
+        //             const row=tks[i];
+        //             rs.push({
+        //                 hash:row.token_data_id,                    // random hash
+        //                 name:row.current_token_data.token_uri,      // template hash
+        //             });
+        //         }
+        //         Local.set("list",JSON.stringify(rs));
+        //     });
+        // },
     }
 
     const dom_id = "pre_mine";
@@ -159,16 +177,11 @@ function Mine(props) {
                 try {
                     const nlist = JSON.parse(ls);
                     const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
-                    self.cacheData(self.getAlinks(plist), (tpls) => {
-                        //console.log(tpls);
-                        self.cacheTemplate(tpls, (dels) => {
-                            //console.log(JSON.stringify(plist));
-                            self.getThumbs(plist, dom_id, (glist) => {
-                                //console.log(glist);
-                                setPageShow(true);
-                                setList(glist);
-                            });
-                        });
+
+                    //console.log(plist);
+                    self.getThumbs(plist, dom_id, (glist) => {
+                        setPageShow(true);
+                        setList(glist);
                     });
                 } catch (error) {
                     console.log(error);
@@ -184,7 +197,6 @@ function Mine(props) {
 
     return (
         <Row>
-            <Networks />
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
@@ -208,14 +220,17 @@ function Mine(props) {
                             }}>
                                 <Row>
                                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                                        <img className="mine" src={row.bs64} alt="" />
+                                        <img className="mine" src="image/logo.png" alt="" />
                                     </Col>
-                                    <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
+                                    <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                                        {tools.shorten(row.hash,5)}
+                                    </Col>
+                                    {/* <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
                                         {row.block.toLocaleString()}
                                     </Col>
                                     <Col className="text-end" sm={size.selling[1]} xs={size.selling[1]}>
                                         {row.sell?row.price:""}
-                                    </Col>
+                                    </Col> */}
                                 </Row>
                             </Col>
                         ))}
@@ -228,7 +243,7 @@ function Mine(props) {
                         <FaAngleLeft size={36} />
                     </Col>
                     <Col className="pt-2 text-center" sm={size.page[1]} xs={size.page[1]}>
-                        <h3> 3 / 10 </h3>
+                        <h3> 1 / 1 </h3>
                     </Col>
                     <Col className="pt-2 text-end" sm={size.page[2]} xs={size.page[2]}>
                         <FaAngleRight size={36} />
