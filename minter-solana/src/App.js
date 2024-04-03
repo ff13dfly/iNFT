@@ -94,6 +94,25 @@ function App() {
 
   useEffect(() => {
     self.start();
+
+    // const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+    // const auth="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
+    
+    // Chain.view(auth,"account",(res)=>{
+    //   console.log(res);
+    // },"devnet");
+
+
+    // const trans="5B3BqVPm7Hr7UVvuM3GrHyxtmU75bNAvgoWMFvRJospMkeR5G9fMF6ugGhwpwmUb1MzL2PKTwG6FRLAs7hTB9qPq";
+    // Chain.view(trans,"transaction",(res)=>{
+    //   console.log(res);
+    // },"devnet");
+
+    const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+    const owner="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
+    Chain.run(appkey,owner,{hello:"word"},(res)=>{
+      console.log(res);
+    },"devnet");
   }, []);
 
   return (

@@ -1,10 +1,10 @@
-const SOL = window.solanaWeb3;
+import * as SOL from "@solana/web3.js";
 
-let checker=null;
+let checker = null;
 let link = null;
-const config={
-    interval:400,
-    defaultNode:"http://127.0.0.1:8899",
+const config = {
+    interval: 400,
+    defaultNode: "http://127.0.0.1:8899",
 }
 
 const funs = {
@@ -64,7 +64,7 @@ const self = {
             .map(byte => byte.toString(16).padStart(2, '0'))
             .join('');
 
-        return "0x"+hexString;
+        return "0x" + hexString;
     },
 
     accountToHex: (ss58) => {
@@ -72,7 +72,7 @@ const self = {
             PublicKey,
         } = SOL;
         const pub = new PublicKey(ss58);
-        const u8arr=pub.toBytes();
+        const u8arr = pub.toBytes();
         return '0x' + Array.from(u8arr)
             .map(byte => byte.toString(16).padStart(2, '0'))
             .join('');
@@ -90,6 +90,8 @@ const self = {
                 link = new Connection(config.defaultNode, "confirmed");
                 break;
         }
+
+        console.log(link);
         return ck && ck(link);
     },
 
@@ -108,110 +110,125 @@ const self = {
             return ck && ck({ error: "No Phantom wallet found." });
         }
     },
-    balance:(pub,ck)=>{     //get balance from base58 account
+    balance: (pub, ck) => {     //get balance from base58 account
 
     },
 
     //TODO,support generating account from seed;
-    generate:(ck,seed)=>{
+    generate: (ck, seed) => {
         const {
             Keypair,
         } = SOL;
         const acc = Keypair.generate();
         return ck && ck(acc);
     },
-
-    storage: (data, ck, signer, network) => {
-        //console.log(JSON.stringify(funs.toBuffer("你好")));
+    transfer: (amount, to, ck, network) => {
+        const {
+            Transaction,
+            SystemProgram,
+            sendAndConfirmTransaction,
+            PublicKey,
+            LAMPORTS_PER_SOL
+        } = SOL;
         self.init(network, (connection) => {
-            const {
-                Transaction,
-                TransactionInstruction,
-                SystemProgram,
-                Keypair,
-                PublicKey,
-                LAMPORTS_PER_SOL,
-            } = SOL;
-
-            const storageAccount = Keypair.generate();
-
-            const fromPublicKey = signer.publicKey;
-            const accountPublicKey = storageAccount.publicKey;
-            const dt = funs.toBuffer(JSON.stringify(data));
-
-            //系统的ID，必须要的部分
-            const program_id = new PublicKey('11111111111111111111111111111111');
-
-            //1.创建账号的交易指令，再转2个SOL进去
-            const createAccountInstruction = SystemProgram.createAccount({
-                fromPubkey: fromPublicKey,
-                newAccountPubkey: accountPublicKey,
-                lamports: 3 * LAMPORTS_PER_SOL, // Amount of lamports to allocate (1 SOL)
-                space: dt.length, // Amount of space to allocate
-                programId: program_id,
-            });
-
-            //2.写入数据的交易指令
-            const writeDataInstruction = new TransactionInstruction({
-                keys: [
-                    { pubkey: fromPublicKey, isSigner: true, isWritable: true },
-                    { pubkey: accountPublicKey, isSigner: false, isWritable: true },
-                ],
-                programId: program_id,
-                data: dt,
-            });
-
-            //const trans = new Transaction().add(createAccountInstruction, writeDataInstruction);
             connection.getRecentBlockhash().then(({ blockhash }) => {
-                const param = {
-                    recentBlockhash: blockhash,
-                    feePayer: signer.publicKey,
-                }
-                const trans = new Transaction(param).add(createAccountInstruction, writeDataInstruction);
-                //console.log(trans);
                 if (typeof window.solana !== 'undefined') {
                     const wallet = window.solana;
-                    wallet.connect().then(async (pair) => {
-                        const signedTransaction = await wallet.signTransaction(trans);
-                        console.log(signedTransaction);
-                        //const signedTransaction= await wallet.signAllTransactions(trans);
-                        //signAllTransactions
-                        //const signature=connection.sendRawTransaction(signedTransaction.serialize())
-                        //console.log(signature);
-                        // wallet.signAndSendTransaction(trans).then(({signature}) => {
+                    wallet.connect().then(async (from) => {
+                        const toAccount = new PublicKey(to);
+                        const transaction = new Transaction().add(
+                            SystemProgram.transfer({
+                                fromPubkey: from.publicKey,
+                                toPubkey: toAccount,
+                                lamports: amount * LAMPORTS_PER_SOL,
+                            }),
+                        );
 
-                        // }).catch(error => {
-                        //     console.error('Failed signAndSendTransaction: ', error);
-                        // });
-                        //2.之前的版本
-                        //wallet.signTransaction(trans)
-                        // wallet.signTransaction(trans).then((signedTransaction) => {
-                        //     //console.log(signedTransaction.serialize());
-                        //     connection.sendRawTransaction(signedTransaction.serialize()).then((signature) => {
-                        //         console.log('Transaction signature:', signature);
-                        //         connection.confirmTransaction(signature).then(()=>{
-                        //             console.log('Account Public Key:', accountPublicKey.toBase58());
-                        //         });
-                        //     }).catch(error => {
-                        //         console.error('Failed to send raw transaction: ', error);
-                        //     });
-                        // }).catch(error => {
-                        //     console.error('Failed to sign transaction: ', error);
-                        // });
-                    }).catch((error) => {
-                        console.error('Failed to connect to Phantom:', error);
+                        const signature = await sendAndConfirmTransaction(
+                            connection,
+                            transaction,
+                            [from],
+                        );
+                        return ck && ck(signature);
                     });
                 }
             });
         });
     },
-    run: (program_id, param, ck, network) => {
+    run: (program_id, owner, param, ck, network) => {
+        self.init(network, async (connection) => {
+            const {
+                Account,
+                PublicKey,
+                Transaction,
+                TransactionInstruction,
+                sendAndConfirmTransaction,
+            } = SOL;
+            //console.log(new TransactionInstruction());
+            connection.getRecentBlockhash().then(({ blockhash }) => {
+                if (typeof window.solana !== 'undefined') {
+                    const wallet = window.solana;
+                    wallet.connect().then(async (signerAccount) => {
+                        const acc=new Account();
+                        console.log(signerAccount);
+                        console.log(wallet.signer);
+                        console.log(acc);
+                        
+                        // const accountPublicKey = signerAccount.publicKey;
+
+                        const programId = new PublicKey(program_id);
+                        // Public key of the account owner
+                        const ownerPublicKey = new PublicKey(owner);
+
+                        // Parameters to pass to the program
+                        const stringParam = "Hello, Solana!";
+                        const intParam = 123;
+                        const stringParamBytes = new TextEncoder().encode(stringParam);
+                        const instructionData = new Uint8Array([
+                            0, // Function selector
+                            ...stringParamBytes, // String parameter as bytes
+                            intParam >> 24 & 0xff, // Integer parameter bytes
+                            intParam >> 16 & 0xff,
+                            intParam >> 8 & 0xff,
+                            intParam & 0xff,
+                        ]);
+
+                        const instruction = new TransactionInstruction({
+                            keys: [
+                                { pubkey: ownerPublicKey, isSigner: true, isWritable: false },
+                            ],
+                            programId,
+                            data: instructionData,
+                        });
+
+                        const transaction = new Transaction();
+                        transaction.feePayer=signerAccount.publicKey;
+                        transaction.recentBlockhash=blockhash;
+                        transaction.add(instruction);
+
+                        const trans =  await wallet.signTransaction(transaction);
+                        //const signature = await sendAndConfirmTransaction(connection, trans,[]);
+                        const signature = await sendAndConfirmTransaction(connection,trans,[wallet.signer])
+                        return ck && ck(signature);
+                    })
+                    // .catch((err)=>{
+                    //     console.log(err);
+                    // });
+                }
+            });
+        });
+
+    },
+    run_back: (program_id, param, ck, network) => {
         self.init(network, (connection) => {
             const {
                 Transaction,
                 TransactionInstruction,
                 PublicKey,
+                SystemProgram
             } = SOL;
+
+            //return console.log(SystemProgram);
 
             connection.getRecentBlockhash().then(({ blockhash }) => {
                 if (typeof window.solana !== 'undefined') {
@@ -225,14 +242,18 @@ const self = {
 
                         const dt = funs.toBuffer(JSON.stringify(param));
                         const programAccount = new PublicKey(program_id);
+                        console.log(programAccount);
                         const ix = new TransactionInstruction({
                             keys: [
                                 { pubkey: accountPublicKey, isSigner: false, isWritable: true },
+                                { pubkey: programAccount, isSigner: false, isWritable: false },     //prog
                             ],
                             programId: programAccount,
                             data: dt,
                         });
                         const trans = new Transaction(cfg).add(ix);
+
+                        //return console.log(trans);
 
                         wallet.signTransaction(trans).then((signedTransaction) => {
                             console.log(signedTransaction);
@@ -294,7 +315,8 @@ const self = {
                     break;
 
                 case 'account':
-                    connection.getAccountInfo(value).then((info) => {
+                    const publicKey = new PublicKey(value);
+                    connection.getAccountInfo(publicKey).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
                         return ck && ck(error);
@@ -335,18 +357,18 @@ const self = {
             }
         });
     },
-    subscribe:(network,ck)=>{
+    subscribe: (network, ck) => {
         self.init(network, (connection) => {
-            if(checker===null){
-                checker=setInterval(()=>{
-                    connection.getSlot().then((block)=>{
+            if (checker === null) {
+                checker = setInterval(() => {
+                    connection.getSlot().then((block) => {
                         //console.log('New block received:', block);
-                        self.view(block,"block",(block)=>{
+                        self.view(block, "block", (block) => {
                             //console.log(block.blockhash);
                             return ck && ck(self.ss58ToHex(block.blockhash));
-                        },network);
+                        }, network);
                     })
-                },config.interval);
+                }, config.interval);
             }
         });
     },
