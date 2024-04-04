@@ -4,36 +4,36 @@ import { verifySignIn } from '@solana/wallet-standard-util';
 //import tools from "../lib/tools";
 import SOL from "../network/solana";
 
-const solana=window.solanaWeb3;
+const solana = window.solanaWeb3;
 
-const self={
-    test_1:()=>{    //测试连接到Solana的节点
-        const uri="http://127.0.0.1:8899";
+const self = {
+    test_1: () => {    //测试连接到Solana的节点
+        const uri = "http://127.0.0.1:8899";
         const connection = new solana.Connection(uri, "confirmed");
         console.log(connection.getBalance);
 
         //a.获取区块高度
-        connection.getBlockHeight().then((data)=>{
-          console.log(data);
+        connection.getBlockHeight().then((data) => {
+            console.log(data);
         });
 
         //b.账号相关的操作
         const pair = solana.Keypair.fromSeed("1234567812345678123456781234567812345678123456781234567812345678");
-        const addr=pair.publicKey;
-        connection.getBalance(addr).then((amount)=>{
-            console.log(addr.toString(),amount);
+        const addr = pair.publicKey;
+        connection.getBalance(addr).then((amount) => {
+            console.log(addr.toString(), amount);
         });
 
-        connection.getAccountInfo(addr).then((info)=>{
-            console.log(addr,info);
+        connection.getAccountInfo(addr).then((info) => {
+            console.log(addr, info);
         });
     },
-    test_2:()=>{    //Account创建账号
+    test_2: () => {    //Account创建账号
         //console.log(solana.Account);
         //const addr="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
         //const seed="12345678123456781234567812345678";
-        const seed="";
-        const pair=new solana.Account(seed);
+        const seed = "";
+        const pair = new solana.Account(seed);
         console.log(pair.publicKey.toBase58());
 
         //方法一
@@ -49,16 +49,16 @@ const self={
         ]);
         let pair_2 = Keypair.fromSecretKey(secretKey);
     },
-    test_3:()=>{    //拉起Phantom的钱包
+    test_3: () => {    //拉起Phantom的钱包
 
-        const secret = [246,102,161,30,149,80,90,24,193,39,201,74,111,214,72,243,1,35,102,157,226,221,243,197,107,161,11,9,48,181,38,31,25,123,35,223,233,51,157,29,182,193,194,247,76,17,238,67,239,7,123,132,168,146,199,23,95,104,21,37,49,193,220,206];
+        const secret = [246, 102, 161, 30, 149, 80, 90, 24, 193, 39, 201, 74, 111, 214, 72, 243, 1, 35, 102, 157, 226, 221, 243, 197, 107, 161, 11, 9, 48, 181, 38, 31, 25, 123, 35, 223, 233, 51, 157, 29, 182, 193, 194, 247, 76, 17, 238, 67, 239, 7, 123, 132, 168, 146, 199, 23, 95, 104, 21, 37, 49, 193, 220, 206];
         const SIGNER_WALLET = solana.Keypair.fromSecretKey(new Uint8Array(secret));
         console.log(secret.length);
         console.log(SIGNER_WALLET);
         //const payer = solana.Keypair.generate();
         //console.log(payer);
     },
-    test_4:()=>{    //call一个部署的合约
+    test_4: () => {    //call一个部署的合约
         const { Connection, PublicKey, Transaction, TransactionInstruction, Account } = solana;
         const connection = new Connection('http://api.devnet.solana.com');
         const programId = new PublicKey('9AzXSN81r45BAqs6EpRfa3qHSsz5ZjfJHXzeVA4tMNuL');
@@ -92,17 +92,17 @@ const self={
         //     });
 
         // });
-        solana.sendAndConfirmTransaction(connection,transaction,[signer]).then((res)=>{
+        solana.sendAndConfirmTransaction(connection, transaction, [signer]).then((res) => {
             console.log(res);
         })
     },
-    test_5:()=>{    //Mint测试，获取到交易hash
+    test_5: () => {    //Mint测试，获取到交易hash
 
     },
-    test_6:()=>{    //部署数据到Accounts（template的模拟）
+    test_6: () => {    //部署数据到Accounts（template的模拟）
 
     },
-    test_basic:()=>{
+    test_basic: () => {
         //1.check block details
         // const num=276469318;
         // SOL.view(num,"block",(res)=>{
@@ -116,23 +116,23 @@ const self={
         // },"devnet");
 
         //3.get program details
-        const program_id="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
-        SOL.view(program_id,"program",(res)=>{
-            console.log(res,program_id);
-        },"devnet");
+        const program_id = "k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+        SOL.view(program_id, "program", (res) => {
+            console.log(res, program_id);
+        }, "devnet");
 
     },
-    test_convert:()=>{
-        const acc="HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
-        const hex= SOL.accountToHex(acc);
+    test_convert: () => {
+        const acc = "HcoN1wBrQBciVcK3f5G1NU2ZAiXyZFAh9M3qAXg98pWK";
+        const hex = SOL.accountToHex(acc);
         console.log(hex);
 
-        const hh=SOL.ss58ToHex(acc);
+        const hh = SOL.ss58ToHex(acc);
         console.log(hh);
     },
-    test_subscribe:()=>{
+    test_subscribe: () => {
         //No subscribe will effect the request limitation of network.
-        
+
         // SOL.subscribe("devnet",(res)=>{
         //     console.log(res);
         // });
@@ -140,11 +140,18 @@ const self={
         // SOL.subscribe("",(res)=>{
         //     console.log(res);
         // });
-    }
+    },
+    test_contract: () => {
+        const appkey = "k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+        const owner = "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
+        SOL.run(appkey, owner, { hello: "word" }, (res) => {
+            console.log(res);
+        }, "devnet");
+    },
 }
 
-const Solana_test= {
-    auto:()=>{
+const Solana_test = {
+    auto: () => {
         //self.test_1();
         //self.test_2();
         //self.test_3();
@@ -155,6 +162,6 @@ const Solana_test= {
         //self.test_convert();
         self.test_subscribe();
     },
-    
+
 }
 export default Solana_test;

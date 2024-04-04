@@ -95,25 +95,22 @@ function App() {
   useEffect(() => {
     self.start();
 
-    // const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
-    // const auth="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
-    
-    // Chain.view(auth,"account",(res)=>{
+    //1.call the target contract
+    //const appkey = "k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+    const napp="7N1CUpr3xe7K6bikS47FaiXXxxzSuboXZ9fiArdpTtU6";
+    //const napp="2RKUqkzNWdi5o8i2ynWDxk3V4wDoLFVMbzbm4gTjtfHA";
+    //const napp="Di3VKXKbLiFFDhXNJW7Ki1NLrNy7b78TAbvfceDsHDNw"
+    Chain.run(napp, { hello: "my word" }, (res) => {
+      console.log(res);
+    }, "devnet");
+
+    //2.get the transaction details
+    // const txHash="38d2tMmwSJgQKQhEQevXW4xmFLjw5h85itK8tHUnYdtJn9K7tvPMJKA8MsLfazCLaWfauWY5vq9qCuvSg9ztid21";
+    // Chain.view(txHash,"transaction",(res) => {
     //   console.log(res);
-    // },"devnet");
+    // }, "devnet");
 
-
-    // const trans="5B3BqVPm7Hr7UVvuM3GrHyxtmU75bNAvgoWMFvRJospMkeR5G9fMF6ugGhwpwmUb1MzL2PKTwG6FRLAs7hTB9qPq";
-    // Chain.view(trans,"transaction",(res)=>{
-    //   console.log(res);
-    // },"devnet");
-
-  //   const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
-  //   const owner="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
-  //   Chain.run(appkey,owner,{hello:"word"},(res)=>{
-  //     console.log(res);
-  //   },"devnet");
-  // }, []);
+  }, []);
 
   return (
     <div>

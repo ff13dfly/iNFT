@@ -52,7 +52,24 @@ const funs = {
         }
 
         return base58String;
-    }
+    },
+    encode:(string)=>{
+        const encoder = new TextEncoder();
+        const stringBytes = encoder.encode(string);
+    
+        const stringLengthBytes = new Uint8Array(4);
+        stringLengthBytes[0] = stringBytes.length & 0xff;
+        stringLengthBytes[1] = (stringBytes.length >> 8) & 0xff;
+        stringLengthBytes[2] = (stringBytes.length >> 16) & 0xff;
+        stringLengthBytes[3] = (stringBytes.length >> 24) & 0xff;
+    
+        // Concatenate length bytes with string bytes
+        const instructionData = new Uint8Array(stringBytes.length + 4);
+        instructionData.set(stringLengthBytes, 0);
+        instructionData.set(stringBytes, 4);
+    
+        return instructionData;
+    },
 }
 
 const self = {
@@ -161,123 +178,57 @@ const self = {
             });
         });
     },
-    run: (program_id, owner, param, ck, network) => {
+    run: (program_id, param, ck, network) => {
         self.init(network, async (connection) => {
             const {
                 PublicKey,
                 Transaction,
                 TransactionInstruction,
             } = SOL;
-
             connection.getRecentBlockhash().then(({ blockhash }) => {
                 if (window.phantom !== undefined && window.phantom.solana !== undefined) {
                     const wallet = window.phantom.solana;
-                    
                     wallet.connect().then(async (signerAccount) => {
-                        const programId = new PublicKey(program_id);
-                        const ownerPublicKey = new PublicKey(owner);
+                        self.view(program_id, "account", (obj) => {
 
-                        // Parameters to pass to the program
-                        const stringParam = "Hello, Solana!";
-                        const intParam = 123;
-                        const stringParamBytes = new TextEncoder().encode(stringParam);
-                        const instructionData = new Uint8Array([
-                            0, // Function selector
-                            ...stringParamBytes, // String parameter as bytes
-                            intParam >> 24 & 0xff, // Integer parameter bytes
-                            intParam >> 16 & 0xff,
-                            intParam >> 8 & 0xff,
-                            intParam & 0xff,
-                        ]);
+                            const programId = new PublicKey(program_id);
+                            const ownerPublicKey = obj.owner;
+                            console.log(obj);
+                            console.log(obj.owner.toString());
+                            // Parameters to pass to the program
+                            const instructionData=funs.encode(JSON.stringify(param));
+                            console.log(instructionData.toString());
+                            // const instruction = new TransactionInstruction({
+                            //     keys: [
+                            //         { pubkey: ownerPublicKey, isSigner: false, isWritable: true },
+                            //     ],
+                            //     programId,
+                            //     data: instructionData,
+                            // });
 
-                        const instruction = new TransactionInstruction({
-                            keys: [
-                                { pubkey: ownerPublicKey, isSigner: false, isWritable: true },
-                            ],
-                            programId,
-                            data: instructionData,
-                        });
+                            // //transaction data structure
+                            // const transaction = new Transaction();
+                            // transaction.feePayer = signerAccount.publicKey;
+                            // transaction.recentBlockhash = blockhash;
+                            // transaction.add(instruction);
 
-                        //transaction data structure
-                        const transaction = new Transaction();
-                        transaction.feePayer=signerAccount.publicKey;
-                        transaction.recentBlockhash=blockhash;
-                        transaction.add(instruction);
-
-                        //sign the transactions and get the ABI
-                        wallet.signTransaction(transaction).then(async (trans)=>{
-
-                            const txHash= await connection.sendRawTransaction(trans.serialize(), {});
-                            return ck && ck(txHash);
-                        });
-                    }).catch((err)=>{
+                            // //sign the transactions and get the ABI
+                            // wallet.signTransaction(transaction).then(async (trans) => {
+                            //     const txHash = await connection.sendRawTransaction(trans.serialize(), {});
+                            //     console.log(txHash);
+                            //     self.view(txHash,"transaction",(res)=>{
+                            //         console.log(res);
+                            //         return ck && ck(res);
+                            //     },network);
+                            // });
+                        }, network);
+                    }).catch((err) => {
                         console.log(err);
                     });
                 }
             });
         });
     },
-    run_back: (program_id, param, ck, network) => {
-        self.init(network, (connection) => {
-            const {
-                Transaction,
-                TransactionInstruction,
-                PublicKey,
-                SystemProgram
-            } = SOL;
-
-            //return console.log(SystemProgram);
-
-            connection.getRecentBlockhash().then(({ blockhash }) => {
-                if (typeof window.solana !== 'undefined') {
-                    const wallet = window.solana;
-                    wallet.connect().then(async (signer) => {
-                        const accountPublicKey = signer.publicKey;
-                        const cfg = {
-                            recentBlockhash: blockhash,
-                            feePayer: accountPublicKey,
-                        }
-
-                        const dt = funs.toBuffer(JSON.stringify(param));
-                        const programAccount = new PublicKey(program_id);
-                        console.log(programAccount);
-                        const ix = new TransactionInstruction({
-                            keys: [
-                                { pubkey: accountPublicKey, isSigner: false, isWritable: true },
-                                { pubkey: programAccount, isSigner: false, isWritable: false },     //prog
-                            ],
-                            programId: programAccount,
-                            data: dt,
-                        });
-                        const trans = new Transaction(cfg).add(ix);
-
-                        //return console.log(trans);
-
-                        wallet.signTransaction(trans).then((signedTransaction) => {
-                            console.log(signedTransaction);
-                            connection.sendRawTransaction(signedTransaction.serialize()).then((signature) => {
-                                console.log('Transaction signature:', signature);
-                                connection.confirmTransaction(signature).then(() => {
-                                    console.log('Account Public Key:', accountPublicKey.toBase58());
-                                });
-
-                            }).catch(error => {
-                                console.error('Failed to send raw transaction: ', error);
-                            });
-
-                        }).catch((error) => {
-                            console.error('Failed to signed transaction:', error);
-                        });
-
-                    }).catch((error) => {
-                        console.error('Failed to connect to Phantom:', error);
-                    });
-                }
-
-            });
-        });
-    },
-
     airdrop: (target, amount, ck, network) => {
         self.init(network, async (connection) => {
             //console.log(connection);
@@ -331,6 +282,7 @@ const self = {
 
                 case 'program':
                     const program_id = new PublicKey(value);
+                    //console.log(program_id.toString(),value);
                     connection.getProgramAccounts(program_id).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
