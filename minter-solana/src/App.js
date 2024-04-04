@@ -88,7 +88,7 @@ function App() {
     },
     start: () => {
       const tpl = self.getTemplate();
-      console.log(tpl);
+      //console.log(tpl);
     },
   }
 
@@ -108,12 +108,12 @@ function App() {
     //   console.log(res);
     // },"devnet");
 
-    const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
-    const owner="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
-    Chain.run(appkey,owner,{hello:"word"},(res)=>{
-      console.log(res);
-    },"devnet");
-  }, []);
+  //   const appkey="k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
+  //   const owner="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
+  //   Chain.run(appkey,owner,{hello:"word"},(res)=>{
+  //     console.log(res);
+  //   },"devnet");
+  // }, []);
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import * as SOL from "@solana/web3.js";
+// import { Adapter } from "@solana/wallet-adapter-base";
 
 let checker = null;
 let link = null;
@@ -118,7 +119,12 @@ const self = {
     generate: (ck, seed) => {
         const {
             Keypair,
+            //Account,
         } = SOL;
+
+        // const acc=new Account();
+        // return ck && ck(acc);
+
         const acc = Keypair.generate();
         return ck && ck(acc);
     },
@@ -158,26 +164,17 @@ const self = {
     run: (program_id, owner, param, ck, network) => {
         self.init(network, async (connection) => {
             const {
-                Account,
                 PublicKey,
                 Transaction,
                 TransactionInstruction,
-                sendAndConfirmTransaction,
             } = SOL;
-            //console.log(new TransactionInstruction());
-            connection.getRecentBlockhash().then(({ blockhash }) => {
-                if (typeof window.solana !== 'undefined') {
-                    const wallet = window.solana;
-                    wallet.connect().then(async (signerAccount) => {
-                        const acc=new Account();
-                        console.log(signerAccount);
-                        console.log(wallet.signer);
-                        console.log(acc);
-                        
-                        // const accountPublicKey = signerAccount.publicKey;
 
+            connection.getRecentBlockhash().then(({ blockhash }) => {
+                if (window.phantom !== undefined && window.phantom.solana !== undefined) {
+                    const wallet = window.phantom.solana;
+                    
+                    wallet.connect().then(async (signerAccount) => {
                         const programId = new PublicKey(program_id);
-                        // Public key of the account owner
                         const ownerPublicKey = new PublicKey(owner);
 
                         // Parameters to pass to the program
@@ -195,29 +192,30 @@ const self = {
 
                         const instruction = new TransactionInstruction({
                             keys: [
-                                { pubkey: ownerPublicKey, isSigner: true, isWritable: false },
+                                { pubkey: ownerPublicKey, isSigner: false, isWritable: true },
                             ],
                             programId,
                             data: instructionData,
                         });
 
+                        //transaction data structure
                         const transaction = new Transaction();
                         transaction.feePayer=signerAccount.publicKey;
                         transaction.recentBlockhash=blockhash;
                         transaction.add(instruction);
 
-                        const trans =  await wallet.signTransaction(transaction);
-                        //const signature = await sendAndConfirmTransaction(connection, trans,[]);
-                        const signature = await sendAndConfirmTransaction(connection,trans,[wallet.signer])
-                        return ck && ck(signature);
-                    })
-                    // .catch((err)=>{
-                    //     console.log(err);
-                    // });
+                        //sign the transactions and get the ABI
+                        wallet.signTransaction(transaction).then(async (trans)=>{
+
+                            const txHash= await connection.sendRawTransaction(trans.serialize(), {});
+                            return ck && ck(txHash);
+                        });
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 }
             });
         });
-
     },
     run_back: (program_id, param, ck, network) => {
         self.init(network, (connection) => {

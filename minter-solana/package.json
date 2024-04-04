@@ -4,6 +4,8 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/web3.js": "^1.91.3",
     "bootstrap": "^5.3.2",
     "crypto-js": "^4.2.0",
