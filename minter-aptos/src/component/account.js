@@ -58,8 +58,6 @@ function Account(props) {
         clickNewAccount: (ev) => {
             setNewDisable(true);
             Chain.generate((acc)=>{
-                //console.log(acc);
-                //return false
                 const privateKey=acc.privateKey.toString();
                 const fa=Encry.encode(privateKey,password);
 

@@ -97,17 +97,22 @@ function App() {
 
     //1.call the target contract
     //const appkey = "k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF";
-    const napp="7N1CUpr3xe7K6bikS47FaiXXxxzSuboXZ9fiArdpTtU6";
+    //const napp="7N1CUpr3xe7K6bikS47FaiXXxxzSuboXZ9fiArdpTtU6";
     //const napp="2RKUqkzNWdi5o8i2ynWDxk3V4wDoLFVMbzbm4gTjtfHA";
     //const napp="Di3VKXKbLiFFDhXNJW7Ki1NLrNy7b78TAbvfceDsHDNw"
-    Chain.run(napp, { hello: "my word" }, (res) => {
-      console.log(res);
-    }, "devnet");
+    // Chain.run(napp, { hello: "my word" }, (res) => {
+    //   console.log(res);
+    // }, "devnet");
 
     //2.get the transaction details
     // const txHash="38d2tMmwSJgQKQhEQevXW4xmFLjw5h85itK8tHUnYdtJn9K7tvPMJKA8MsLfazCLaWfauWY5vq9qCuvSg9ztid21";
     // Chain.view(txHash,"transaction",(res) => {
     //   console.log(res);
+    // }, "devnet");
+
+    // const hash="DhTkaBobnRowSoaC75wgtAmnw5zqYWZ7dUEpQ7Ujab5b";
+    // Chain.view(hash,"account",(res) => {
+    //   console.log(res.data);
     // }, "devnet");
 
   }, []);

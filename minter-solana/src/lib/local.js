@@ -1,4 +1,4 @@
-const prefix="sol_";
+const prefix="SOL_";
 const keys={
     login:`${prefix}user`,
     list:`${prefix}list`,

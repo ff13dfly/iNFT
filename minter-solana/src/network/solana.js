@@ -1,5 +1,4 @@
 import * as SOL from "@solana/web3.js";
-// import { Adapter } from "@solana/wallet-adapter-base";
 
 let checker = null;
 let link = null;
@@ -84,7 +83,6 @@ const self = {
 
         return "0x" + hexString;
     },
-
     accountToHex: (ss58) => {
         const {
             PublicKey,
@@ -95,7 +93,6 @@ const self = {
             .map(byte => byte.toString(16).padStart(2, '0'))
             .join('');
     },
-    //create connection to Solana node
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
         const { Connection, clusterApiUrl } = SOL;
@@ -109,7 +106,7 @@ const self = {
                 break;
         }
 
-        console.log(link);
+        //console.log(link);
         return ck && ck(link);
     },
 
@@ -131,17 +128,10 @@ const self = {
     balance: (pub, ck) => {     //get balance from base58 account
 
     },
-
-    //TODO,support generating account from seed;
     generate: (ck, seed) => {
         const {
             Keypair,
-            //Account,
         } = SOL;
-
-        // const acc=new Account();
-        // return ck && ck(acc);
-
         const acc = Keypair.generate();
         return ck && ck(acc);
     },
@@ -182,8 +172,8 @@ const self = {
         self.init(network, async (connection) => {
             const {
                 PublicKey,
-                Transaction,
-                TransactionInstruction,
+                //Transaction,
+                //TransactionInstruction,
             } = SOL;
             connection.getRecentBlockhash().then(({ blockhash }) => {
                 if (window.phantom !== undefined && window.phantom.solana !== undefined) {
@@ -231,7 +221,6 @@ const self = {
     },
     airdrop: (target, amount, ck, network) => {
         self.init(network, async (connection) => {
-            //console.log(connection);
             const {
                 LAMPORTS_PER_SOL,
             } = SOL;

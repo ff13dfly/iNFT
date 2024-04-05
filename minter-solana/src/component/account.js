@@ -42,6 +42,8 @@ function Account(props) {
         },
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
+
+
         },
         clickAirdrop:(ev)=>{
             setAirdropDisable(true);
@@ -56,25 +58,27 @@ function Account(props) {
             });
         },
         clickNewAccount: (ev) => {
+            if(!password) return false;
             setNewDisable(true);
             Chain.generate((acc)=>{
-                //console.log(acc);
-                //return false
-                const privateKey=acc.privateKey.toString();
-                const fa=Encry.encode(privateKey,password);
+                console.log(acc);
+                console.log(acc.publicKey.toString())
+                console.log(acc.secretKey)
+                //const privateKey=acc.toString();
+                // const fa=Encry.encode(privateKey,password);
 
-                const user={
-                    address:acc.accountAddress.toString(),
-                    name:`iNFT_user_${tools.rand(100000,999999)}`,
-                    private:fa,
-                }
+                // const user={
+                //     address:acc.accountAddress.toString(),
+                //     name:`iNFT_user_${tools.rand(100000,999999)}`,
+                //     private:fa,
+                // }
 
-                if(fa!==undefined){
-                    Local.set("login", JSON.stringify(user));
-                    setLogin(true);
-                    self.show();
-                    props.fresh();
-                }
+                // if(fa!==undefined){
+                //     Local.set("login", JSON.stringify(user));
+                //     setLogin(true);
+                //     self.show();
+                //     props.fresh();
+                // }
             });
         },
         clickLogout:(ev)=>{
