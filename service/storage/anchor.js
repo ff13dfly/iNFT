@@ -24,8 +24,8 @@ const self={
         const privateKey=bs58.decode(base58String)
         const arr=Buffer.from(privateKey);
         return  SOL.Keypair.fromSecretKey(arr);
+        
     },
-    
 }
 
 //key value from Phantom wallet
@@ -36,17 +36,16 @@ self.init("devnet",async (connection)=>{
     console.log(`Signer account public key: ${signer.publicKey.toString()}`)
     console.log(`Signer account secret key: ${bs58.encode(signer.secretKey)}`);
 
-
     //const app_id = "83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm";
-    const app_id="DmzB3oGk8hEdadakwLnLib8QBSAJFoU6KZJuB9uELhP2";
+    const app_id="GB3PUfNVpGx5BQ3JuSpE3dcMs7HfBHnYheELAobWkuvV";
     const programId = new SOL.PublicKey(app_id);
 
     //const owner = "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
-    const owner ="AUSY6wFjr4UKJfbDrqEG2SNyUqSUDnZnsM7H4NGZb4AT"
+    const owner ="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ"
     const programOwnerPublicKey = new SOL.PublicKey(owner);
 
     //const data_id = "Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
-    const data_id ="3PaNb8c2XqvEzF9x3gJzK5o98pftXKVCpGUjZzTPKiE2";
+    const data_id ="GnCofcUAbaMsWfqE4i5X2QELZ1oseMqb5XyUraoQQScW";
     const dataPublicKey = new SOL.PublicKey(data_id);
 
     const root_id = "11111111111111111111111111111111";
@@ -62,11 +61,12 @@ self.init("devnet",async (connection)=>{
     ];
 
     const transaction = new SOL.Transaction();
+    const data={hello:"Are you OK?"};
     transaction.add(
         new SOL.TransactionInstruction({
             keys: keys,
             programId: app_id,
-            //data:Buffer.from(""),
+            data:Buffer.from(JSON.stringify(data)),
         })
     );
     const txid = await SOL.sendAndConfirmTransaction(connection, transaction, [signer]);

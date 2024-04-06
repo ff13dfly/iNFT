@@ -117,12 +117,12 @@ function App() {
     //   console.log(res.data.toString());
     // }, "devnet");
 
-    const hash="AsC5q38UmK9879eczUa1UmYoyKEjXbJwqmf1L2g4QCmi";
-    Chain.view(hash,"account",(res) => {
-      console.log(hash);
-      console.log(res);
-      console.log(res.data.toString())
-    }, "devnet");
+    // const hash="GnCofcUAbaMsWfqE4i5X2QELZ1oseMqb5XyUraoQQScW";
+    // Chain.view(hash,"account",(res) => {
+    //   console.log(hash);
+    //   console.log(res);
+    //   console.log(res.data.toString())
+    // }, "devnet");
 
     // const program_id="83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm";
     // const data_id="Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";

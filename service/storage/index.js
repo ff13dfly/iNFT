@@ -28,7 +28,18 @@ const self={
     balance: (pub, ck) => {     //get balance from base58 account
 
     },
-    create:async(feePayer,connection)=>{
+    task:async(trans,signer,connection,ck,more)=>{
+        const cfg={
+            skipPreflight: true,
+            preflightCommitment: "confirmed",
+            confirmation: "confirmed",
+          }
+        const sns=[signer];
+        if(more!==undefined) sns.push(more);
+        const txid = await SOL.sendAndConfirmTransaction(connection, trans, sns,cfg);
+        return ck && ck(txid);
+    },
+    create:async(feePayer,connection,ck)=>{
         const [createIx, dataAccountKP] = await DataProgram.createDataAccount(
             connection,
             feePayer.publicKey,
@@ -36,9 +47,14 @@ const self={
         );
         const createTx = new SOL.Transaction();
         createTx.add(createIx);
-        return dataAccountKP;
+
+        //console.log(createIx);
+
+        self.task(createTx,feePayer,connection,(tx)=>{
+            return ck && ck(dataAccountKP,tx);
+        },dataAccountKP);
     },
-    initialize:async(feePayer,dataAccountKP)=>{
+    initialize:(feePayer,dataAccountKP,ck)=>{
         // get the associated Metadata PDA Account
         const [pdaData] = DataProgram.getPDA(dataAccountKP.publicKey);
         // ix to initialize the Data Account and Metadata Account
@@ -58,22 +74,28 @@ const self={
         console.log(`Storage PDA account public key: ${pdaData.toString()}`)
         //console.log(`Storage account secret key: ${bs58.encode(pdaData.secretKey)}`);
 
-        return pdaData;
+        return  ck && ck(pdaData);
     },
-    update:async(feePayer,dataAccountKP,data)=>{
+    update:async(feePayer,dataAccountKP,connection,data,ck)=>{
         const updateIx = DataProgram.updateDataAccount(
             feePayer.publicKey,
             dataAccountKP.publicKey,
             1,     //DataType, 1 = JSON
             Buffer.from(JSON.stringify(data)),      //Need to convert to String  
+            //data,
             0,      //offset
-            false, // reallocDown is false. Set to true if Data Account is dynamic and should realloc down
-            false // verifyFlag is false. Set to true to see if the data conforms to its data type
+            false,  // reallocDown is false. Set to true if Data Account is dynamic and should realloc down
+            true   // verifyFlag is false. Set to true to see if the data conforms to its data type
         );
         // create transaction with instruction
-        const updateTx = new SOL.Transaction();
-        updateTx.add(updateIx);
-        return updateTx;
+        const trans = new SOL.Transaction();
+        trans.add(updateIx);
+
+        console.log(updateIx);
+
+        self.task(trans,feePayer,connection,(tx)=>{
+            return ck && ck(tx);
+        });
     },
     authority:async()=>{
         // ix to update authority of Data Account
@@ -123,39 +145,38 @@ const test_privateKey="Mp6UoMT9vUeLudtehxyLPNupJrFeMs6QWGtPwXKGR7Lsj5vK3YUbxMKJk
 
 self.init("devnet",(connection)=>{
     const signer=self.recover(test_privateKey);
-    const authority=SOL.Keypair.generate();
-    console.log(`Authority account public key: ${authority.publicKey.toString()}`)
-    console.log(`Authority account secret key: ${bs58.encode(authority.secretKey)}`);
+    console.log(`Signer account public key: ${signer.publicKey.toString()}`)
+    console.log(`Signer account secret key: ${bs58.encode(signer.secretKey)}`);
 
     connection.getAccountInfo(signer.publicKey).then((accountInfo)=>{
         const balance = accountInfo.lamports / 1000000000;
-        console.log(balance);
+        console.log(`Account ${signer.publicKey.toString()}:`,balance);
     });
 
     connection.getSlot().then((block) => {
-        
         console.log('New block received:', block);
         // const dataKey="ECQd7f4sYhcWX5G9DQ7Hgcf3URZTfgwVwjKzH2sMQeFW";
         // const pubData=new SOL.PublicKey(dataKey);
         // self.view(pubData,connection);
-        
-        self.create(signer,connection).then((dataAccountKP)=>{
-            console.log(`Storage account public key: ${dataAccountKP.publicKey.toString()}`)
-            console.log(`Storage account secret key: ${bs58.encode(dataAccountKP.secretKey)}`);
-            const pdaData=self.initialize(signer,dataAccountKP);
-            self.update(signer,dataAccountKP,{"hello":"good day"}).then(async (trans)=>{
-                //console.log(updateIx);
-                //const cfg=SOL.ConfirmOptions;
-                //console.log(cfg);
-                const cfg={
-                    skipPreflight: true,
-                    preflightCommitment: "confirmed",
-                    confirmation: "confirmed",
-                  }
-                const txid = await SOL.sendAndConfirmTransaction(connection, trans, [signer],cfg);
-                console.log(txid);
+
+        self.create(signer,connection,(dataAccountKP,txHash)=>{
+            console.log(`New data account publish key: ${dataAccountKP.publicKey.toString()}, transaction: ${txHash}`);
+            const data={"hello":"good day"};
+            self.update(signer,dataAccountKP,connection,data,(hash)=>{
+                console.log(`Saving ${JSON.stringify(data)}, transaction: ${hash}`);
             })
         });
+        
+        // self.create(signer,connection).then((dataAccountKP)=>{
+        //     console.log(`Storage account public key: ${dataAccountKP.publicKey.toString()}`)
+        //     console.log(`Storage account secret key: ${bs58.encode(dataAccountKP.secretKey)}`);
+        //     self.initialize(signer,dataAccountKP,(pdaData)=>{
+        //         console.log(pdaData);
+        //         self.update(signer,dataAccountKP,{"hello":"good day"}).then(async (trans)=>{
+                    
+        //         });
+        //     });
+        // });
     })
 });
 
