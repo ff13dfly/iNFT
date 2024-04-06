@@ -110,10 +110,28 @@ function App() {
     //   console.log(res);
     // }, "devnet");
 
-    // const hash="DhTkaBobnRowSoaC75wgtAmnw5zqYWZ7dUEpQ7Ujab5b";
+    // const hash="EZTgEHD3DiftqDL3FcHGcZNKwmwD7inj5YN9epBJVghv";
     // Chain.view(hash,"account",(res) => {
-    //   console.log(res.data);
+    //   console.log(res.data.toString());
     // }, "devnet");
+
+    // const hash="Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
+    // Chain.view(hash,"account",(res) => {
+    //   console.log(hash);
+    //   console.log(res);
+    //   console.log(res.data.toString())
+    // }, "devnet");
+
+    // const program_id="83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm";
+    // const data_id="Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
+    // const owner_id="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
+    // Chain.test(program_id,data_id, owner_id, (res) => {
+    //   console.log(res);
+    // }, "devnet");
+
+    Chain.storage({hello:"world peace"},(obj)=>{
+
+    });
 
   }, []);
 

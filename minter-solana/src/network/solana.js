@@ -1,4 +1,6 @@
 import * as SOL from "@solana/web3.js";
+//import { DataProgram } from "solana-data-program";
+import * as solanaDataProgram from "solana-data-program";
 
 let checker = null;
 let link = null;
@@ -72,6 +74,7 @@ const funs = {
 }
 
 const self = {
+    u8ToBs58:funs.uint8ArrayToBase58,
     ss58ToHex: (base58String) => {
         const bs58 = require('bs58');
         const uint8Array = bs58.decode(base58String);
@@ -129,11 +132,28 @@ const self = {
 
     },
     generate: (ck, seed) => {
+        //return console.log(SOL);
         const {
             Keypair,
         } = SOL;
         const acc = Keypair.generate();
         return ck && ck(acc);
+    },
+    recover: (u8arr, ck) => {
+        const {
+            Keypair,
+        } = SOL;
+        const  acc=Keypair.fromSecretKey(u8arr);
+        console.log(acc.publicKey.toString());
+        // const privateKey = new Ed25519PrivateKey(u8arr);
+        // const account = Account.fromPrivateKey({ privateKey });
+        // return ck && ck(account);
+    },
+    storage:(json,ck,network)=>{
+        console.log(solanaDataProgram);
+        self.init(network, (connection) => {
+
+        });
     },
     transfer: (amount, to, ck, network) => {
         const {
@@ -309,6 +329,52 @@ const self = {
                     })
                 }, config.interval);
             }
+        });
+    },
+    test: (program_id, data_id,owner_id, ck, network) => {
+        self.init(network, async (connection) => {
+            const {
+                PublicKey,
+                TransactionInstruction,
+                Transaction
+            } = SOL;
+            connection.getRecentBlockhash().then(({ blockhash }) => {
+                if (window.phantom !== undefined && window.phantom.solana !== undefined) {
+                    const wallet = window.phantom.solana;
+                    wallet.connect().then(async (signerAccount) => {
+
+                            const programId = new PublicKey(program_id);
+                            const dataId=new PublicKey(data_id);
+                            const ownerId=new PublicKey(owner_id);
+                            
+                            const instruction = new TransactionInstruction({
+                                keys: [
+                                    { pubkey: programId, isSigner: false, isWritable: true },
+                                    { pubkey: dataId, isSigner: false, isWritable: true },
+                                    { pubkey: ownerId, isSigner: false, isWritable: false },
+                                    { pubkey: signerAccount.publicKey, isSigner: true, isWritable: false },
+                                ],
+                                programId,
+                            });
+
+                            // transaction data structure
+                            const transaction = new Transaction();
+                            transaction.feePayer = signerAccount.publicKey;
+                            transaction.recentBlockhash = blockhash;
+                            transaction.add(instruction);
+
+                            // sign the transactions and get the ABI
+                            wallet.signTransaction(transaction).then(async (trans) => {
+                                const txHash = await connection.sendRawTransaction(trans.serialize(), {});
+                                console.log(txHash);
+                                self.view(txHash,"transaction",(res)=>{
+                                    console.log(res);
+                                    return ck && ck(res);
+                                },network);
+                            });
+                        }, network);
+                }
+            });
         });
     },
 };

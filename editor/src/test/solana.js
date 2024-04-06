@@ -147,7 +147,7 @@ const self = {
         SOL.run(appkey, owner, { hello: "word" }, (res) => {
             console.log(res);
         }, "devnet");
-    },
+    }
 }
 
 const Solana_test = {

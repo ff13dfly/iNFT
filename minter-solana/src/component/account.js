@@ -63,7 +63,10 @@ function Account(props) {
             Chain.generate((acc)=>{
                 console.log(acc);
                 console.log(acc.publicKey.toString())
-                console.log(acc.secretKey)
+                //console.log(Chain.u8ToBs58(acc.publicKey))
+                //console.log(Chain.u8ToBs58(acc.secretKey))
+
+                Chain.recover(acc.secretKey);
                 //const privateKey=acc.toString();
                 // const fa=Encry.encode(privateKey,password);
 
