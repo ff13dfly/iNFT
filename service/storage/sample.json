@@ -1,0 +1,36 @@
+{
+    "createAccount": {
+        "info": {
+            "lamports": 1398960,
+            "newAccount": "83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm",
+            "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+            "source": "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ",
+            "space": 36
+        },
+        "type": "createAccount"
+    },
+    "mine_createAccount":{
+        "info": {
+          "lamports": 1880000000,
+          "newAccount": "5rmPwBxxgrZZrgnZLaPiHJEaiiEzSxx4LjYc8Mt8weQQ",
+          "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+          "source": "FugK2yJg9Ss6gsN8FKJVheytX5MKM8d96Fzx8sB6gWi3",
+          "space": 23
+        },
+        "type": "createAccount"
+      },
+    "deployWithMaxDataLen": {
+        "info": {
+            "authority": "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ",
+            "bufferAccount": "FYzAzhkG6jyGcPLM54U4tLUbU5Zgc1eKDnBZGjLhGkhK",
+            "clockSysvar": "SysvarC1ock11111111111111111111111111111111",
+            "maxDataLen": 105200,
+            "payerAccount": "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ",
+            "programAccount": "83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm",
+            "programDataAccount": "Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y",
+            "rentSysvar": "SysvarRent111111111111111111111111111111111",
+            "systemProgram": "11111111111111111111111111111111"
+        },
+        "type": "deployWithMaxDataLen"
+    }
+}

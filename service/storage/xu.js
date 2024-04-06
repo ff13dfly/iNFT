@@ -39,7 +39,7 @@ self.init("devnet",async (connection)=>{
 
 
     //const app_id = "83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm";
-    const app_id="DmzB3oGk8hEdadakwLnLib8QBSAJFoU6KZJuB9uELhP2";
+    const app_id="Cp3kneMmaehwUHYDzRscrWcURSTpS8LnxrBWut3ag3ga";
     const programId = new SOL.PublicKey(app_id);
 
     //const owner = "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
@@ -47,12 +47,11 @@ self.init("devnet",async (connection)=>{
     const programOwnerPublicKey = new SOL.PublicKey(owner);
 
     //const data_id = "Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
-    const data_id ="3PaNb8c2XqvEzF9x3gJzK5o98pftXKVCpGUjZzTPKiE2";
+    const data_id ="EZTgEHD3DiftqDL3FcHGcZNKwmwD7inj5YN9epBJVghv";
     const dataPublicKey = new SOL.PublicKey(data_id);
 
     const root_id = "11111111111111111111111111111111";
     const rootPublicKey = new SOL.PublicKey(root_id);
-
 
     const keys = [
         { pubkey: signer.publicKey, isSigner: true, isWritable: true },

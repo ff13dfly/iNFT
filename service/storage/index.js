@@ -147,7 +147,12 @@ self.init("devnet",(connection)=>{
                 //console.log(updateIx);
                 //const cfg=SOL.ConfirmOptions;
                 //console.log(cfg);
-                const txid = await SOL.sendAndConfirmTransaction(connection, trans, [signer]);
+                const cfg={
+                    skipPreflight: true,
+                    preflightCommitment: "confirmed",
+                    confirmation: "confirmed",
+                  }
+                const txid = await SOL.sendAndConfirmTransaction(connection, trans, [signer],cfg);
                 console.log(txid);
             })
         });
