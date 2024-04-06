@@ -1,6 +1,4 @@
 import * as SOL from "@solana/web3.js";
-//import { DataProgram } from "solana-data-program";
-import * as solanaDataProgram from "solana-data-program";
 
 let checker = null;
 let link = null;
@@ -54,27 +52,27 @@ const funs = {
 
         return base58String;
     },
-    encode:(string)=>{
+    encode: (string) => {
         const encoder = new TextEncoder();
         const stringBytes = encoder.encode(string);
-    
+
         const stringLengthBytes = new Uint8Array(4);
         stringLengthBytes[0] = stringBytes.length & 0xff;
         stringLengthBytes[1] = (stringBytes.length >> 8) & 0xff;
         stringLengthBytes[2] = (stringBytes.length >> 16) & 0xff;
         stringLengthBytes[3] = (stringBytes.length >> 24) & 0xff;
-    
+
         // Concatenate length bytes with string bytes
         const instructionData = new Uint8Array(stringBytes.length + 4);
         instructionData.set(stringLengthBytes, 0);
         instructionData.set(stringBytes, 4);
-    
+
         return instructionData;
     },
 }
 
 const self = {
-    u8ToBs58:funs.uint8ArrayToBase58,
+    u8ToBs58: funs.uint8ArrayToBase58,
     ss58ToHex: (base58String) => {
         const bs58 = require('bs58');
         const uint8Array = bs58.decode(base58String);
@@ -99,6 +97,7 @@ const self = {
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
         const { Connection, clusterApiUrl } = SOL;
+        //console.log(SOL);
         switch (network) {
             case "devnet":
                 link = new Connection(clusterApiUrl('devnet'));
@@ -143,14 +142,13 @@ const self = {
         const {
             Keypair,
         } = SOL;
-        const  acc=Keypair.fromSecretKey(u8arr);
+        const acc = Keypair.fromSecretKey(u8arr);
         console.log(acc.publicKey.toString());
         // const privateKey = new Ed25519PrivateKey(u8arr);
         // const account = Account.fromPrivateKey({ privateKey });
         // return ck && ck(account);
     },
-    storage:(json,ck,network)=>{
-        console.log(solanaDataProgram);
+    storage: (json, ck, network) => {
         self.init(network, (connection) => {
 
         });
@@ -206,7 +204,7 @@ const self = {
                             console.log(obj);
                             console.log(obj.owner.toString());
                             // Parameters to pass to the program
-                            const instructionData=funs.encode(JSON.stringify(param));
+                            const instructionData = funs.encode(JSON.stringify(param));
                             console.log(instructionData.toString());
                             // const instruction = new TransactionInstruction({
                             //     keys: [
@@ -331,7 +329,7 @@ const self = {
             }
         });
     },
-    test: (program_id, data_id,owner_id, ck, network) => {
+    test: (program_id, data_id, owner_id, ck, network) => {
         self.init(network, async (connection) => {
             const {
                 PublicKey,
@@ -343,40 +341,96 @@ const self = {
                     const wallet = window.phantom.solana;
                     wallet.connect().then(async (signerAccount) => {
 
-                            const programId = new PublicKey(program_id);
-                            const dataId=new PublicKey(data_id);
-                            const ownerId=new PublicKey(owner_id);
-                            
-                            const instruction = new TransactionInstruction({
-                                keys: [
-                                    { pubkey: programId, isSigner: false, isWritable: true },
-                                    { pubkey: dataId, isSigner: false, isWritable: true },
-                                    { pubkey: ownerId, isSigner: false, isWritable: false },
-                                    { pubkey: signerAccount.publicKey, isSigner: true, isWritable: false },
-                                ],
-                                programId,
-                            });
+                        const programId = new PublicKey(program_id);
+                        const dataId = new PublicKey(data_id);
+                        const ownerId = new PublicKey(owner_id);
 
-                            // transaction data structure
-                            const transaction = new Transaction();
-                            transaction.feePayer = signerAccount.publicKey;
-                            transaction.recentBlockhash = blockhash;
-                            transaction.add(instruction);
+                        const instruction = new TransactionInstruction({
+                            keys: [
+                                { pubkey: programId, isSigner: false, isWritable: true },
+                                { pubkey: dataId, isSigner: false, isWritable: true },
+                                { pubkey: ownerId, isSigner: false, isWritable: false },
+                                { pubkey: signerAccount.publicKey, isSigner: true, isWritable: false },
+                            ],
+                            programId,
+                        });
 
-                            // sign the transactions and get the ABI
-                            wallet.signTransaction(transaction).then(async (trans) => {
-                                const txHash = await connection.sendRawTransaction(trans.serialize(), {});
-                                console.log(txHash);
-                                self.view(txHash,"transaction",(res)=>{
-                                    console.log(res);
-                                    return ck && ck(res);
-                                },network);
-                            });
-                        }, network);
+                        // transaction data structure
+                        const transaction = new Transaction();
+                        transaction.feePayer = signerAccount.publicKey;
+                        transaction.recentBlockhash = blockhash;
+                        transaction.add(instruction);
+
+                        // sign the transactions and get the ABI
+                        wallet.signTransaction(transaction).then(async (trans) => {
+                            const txHash = await connection.sendRawTransaction(trans.serialize(), {});
+                            console.log(txHash);
+                            self.view(txHash, "transaction", (res) => {
+                                console.log(res);
+                                return ck && ck(res);
+                            }, network);
+                        });
+                    }, network);
                 }
             });
         });
     },
+    data: {
+        // save:(data,ck,network)=>{
+        //     self.init(network, async (connection) => {
+        //         const authority=SOL.Keypair.generate();
+        //         console.log(`Authority account public key: ${authority.publicKey.toString()}`)
+        //         console.log(`Authority account secret key: ${bs58.encode(authority.secretKey)}`);
+        //     });
+        // },
+        // create: async (feePayer, connection) => {
+        //     const [createIx, dataAccountKP] = await DataProgram.createDataAccount(
+        //         connection,
+        //         feePayer.publicKey,
+        //         200
+        //     );
+        //     const createTx = new SOL.Transaction();
+        //     createTx.add(createIx);
+        //     return dataAccountKP;
+        // },
+        // initialize: async (feePayer, dataAccountKP) => {
+        //     // get the associated Metadata PDA Account
+        //     const [pdaData] = DataProgram.getPDA(dataAccountKP.publicKey);
+        //     // ix to initialize the Data Account and Metadata Account
+        //     const initializeIx = DataProgram.initializeDataAccount(
+        //         feePayer.publicKey,
+        //         dataAccountKP.publicKey,
+        //         feePayer.publicKey,       //Authority account?
+        //         true, // This assumes the Data Account is precreated. Change this to false if you want to create and initialize Data Account
+        //         true, // The Data Account is set to be dynamic (i.e., can be realloc-ed up or down)
+        //         200
+        //     );
+        //     const initializeTx = new SOL.Transaction();
+        //     initializeTx.add(initializeIx);
+
+        //     //console.log(pdaData);
+
+        //     console.log(`Storage PDA account public key: ${pdaData.toString()}`)
+        //     //console.log(`Storage account secret key: ${bs58.encode(pdaData.secretKey)}`);
+
+        //     return pdaData;
+        // },
+        // update: async (feePayer, dataAccountKP, data) => {
+        //     const updateIx = DataProgram.updateDataAccount(
+        //         feePayer.publicKey,
+        //         dataAccountKP.publicKey,
+        //         1,     //DataType, 1 = JSON
+        //         Buffer.from(JSON.stringify(data)),      //Need to convert to String  
+        //         0,      //offset
+        //         false, // reallocDown is false. Set to true if Data Account is dynamic and should realloc down
+        //         false // verifyFlag is false. Set to true to see if the data conforms to its data type
+        //     );
+        //     // create transaction with instruction
+        //     const updateTx = new SOL.Transaction();
+        //     updateTx.add(updateIx);
+        //     return updateIx;
+        // },
+    }
 };
 
 export default self;

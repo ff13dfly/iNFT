@@ -92,6 +92,8 @@ function App() {
     },
   }
 
+
+
   useEffect(() => {
     self.start();
 
@@ -115,7 +117,7 @@ function App() {
     //   console.log(res.data.toString());
     // }, "devnet");
 
-    // const hash="Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
+    // const hash="ECQd7f4sYhcWX5G9DQ7Hgcf3URZTfgwVwjKzH2sMQeFW";
     // Chain.view(hash,"account",(res) => {
     //   console.log(hash);
     //   console.log(res);
@@ -129,9 +131,13 @@ function App() {
     //   console.log(res);
     // }, "devnet");
 
-    Chain.storage({hello:"world peace"},(obj)=>{
+    // Chain.storage({hello:"world peace"},(obj)=>{
 
-    });
+    // });
+
+    // Chain.data.save({hello:"world peace"},(hash)=>{
+    //   console.log(hash);
+    // },"devnet");
 
   }, []);
 
