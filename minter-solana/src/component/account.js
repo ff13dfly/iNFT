@@ -1,4 +1,4 @@
-import { Row, Col, Badge } from "react-bootstrap";
+import { Row, Col, Badge,Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Copy from "../lib/clipboard";
@@ -12,7 +12,9 @@ function Account(props) {
         row: [12],
         user: [4, 8],
         logout:[8,4],
-        new:[9,3]
+        new:[9,3],
+        recover:[8,4],
+        file:[6,6]
     };
 
     let [login, setLogin] = useState(false);
@@ -22,6 +24,7 @@ function Account(props) {
     let [address, setAddress] = useState("");
 
     let [info, setInfo] = useState("");
+    let [recover, setRecover]= useState("");
 
     let [password, setPassword]= useState("");
     let [dis_new, setNewDisable] = useState(true);
@@ -31,6 +34,8 @@ function Account(props) {
 
     let [dis_airdrop, setAirdropDisable]=useState(false);
     let [air,setAir]=useState("Airdrop");
+
+    let [encryPrivate,setEncryPrivate]=useState("");
     
     const self = {
         newAccount: (mnemonic,ck) => {
@@ -40,15 +45,57 @@ function Account(props) {
             setPassword(ev.target.value);
             setNewDisable(!ev.target.value?true:false);
         },
+        changeRecover:(ev)=>{
+            setRecover(ev.target.value);
+        },
         clickWallet:(ev)=>{
             console.log(`Connect to wallet`);
-
-
         },
+        clickRecover:(ev)=>{
+            if(!encryPrivate) return setInfo("No private file");
+            if(!recover) return setInfo("Need password to decode");
+            //const bs58=window.bs58;
+            //const privateKey=bs58.encode(acc.secretKey);
+            const privateKey=Encry.decode(encryPrivate.private,recover);
+            //console.log(encryPrivate.private,recover)
+            if(!privateKey) return setInfo("Invalid password");
+            //console.log(privateKey);
+            Chain.recover(privateKey,(acc)=>{
+                if(acc.publicKey.toString()!==encryPrivate.address) return setInfo("Invalid account");
+                //console.log(acc);
+
+                Local.set("login", JSON.stringify(encryPrivate));
+                setLogin(true);
+                self.show();
+                props.fresh();
+            });
+        },
+        changeFile: (ev) => {
+            //1.这里需要对文件内容进行处理
+            try {
+              const fa = ev.target.files[0];
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                try {
+                  const sign = JSON.parse(e.target.result);
+                  if (!sign.address || !sign.private)
+                    return setInfo("Error encry JSON file");
+                  setInfo("Encoded account file loaded");
+                  setEncryPrivate(sign);
+                } catch (error) {
+                  setInfo("Not encry JSON file");
+                }
+              };
+              reader.readAsText(fa);
+            } catch (error) {
+              setInfo("Can not load target file");
+            }
+          },
         clickAirdrop:(ev)=>{
             setAirdropDisable(true);
             setAir("Trying");
             const divide=Chain.divide();
+            //console.log(3*divide);
             Chain.airdrop(address,3*divide,(res)=>{
                 Chain.balance(address,(amount)=>{ 
                     setAir("Airdrop");
@@ -160,20 +207,37 @@ function Account(props) {
                     self.clickLogout(ev);
                 }}>Logout</button>
             </Col>
-            {/* <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 1</Badge> Link to wallet.</h4>
+            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+                <h4><Badge className="bg-info">Way 1</Badge> From private file.</h4>
             </Col>
-            <Col className="pt-2 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
-                <button className="btn btn-md btn-primary" onClick={(ev)=>{
-                    self.clickWallet(ev);
-                }}>Connect</button>
+            <Col hidden={login} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                <Form.Control
+                    size="md"
+                    type="file"
+                    placeholder="Recover from private file..."
+                    onChange={self.changeFile}
+                />
                 <p>{info}</p>
+            </Col>
+            <Col className="pt-2 text-end"  sm={size.recover[0]} hidden={login} xs={size.recover[0]}>
+                <input className="form-control" type="password" placeholder="Password for new account" 
+                    value={recover} 
+                    onChange={(ev)=>{
+                        self.changeRecover(ev);
+                    }}
+                />
+            </Col>
+            <Col className="pt-2 text-end"  sm={size.recover[1]} hidden={login} xs={size.recover[1]}>
+                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                    self.clickRecover(ev);
+                }}>Recover</button>
+                
             </Col>
             <Col className="pt-2" hidden={login} sm={size.row[0]} xs={size.row[0]}>
                 <hr />
-            </Col> */}
+            </Col>
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4>Create a new account.</h4>
+                <h4><Badge className="bg-info">Way 2</Badge> Create a new account.</h4>
             </Col>
             <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
                 <input className="form-control" type="password" placeholder="Password for new account" 

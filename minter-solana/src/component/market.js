@@ -15,12 +15,17 @@ function Market(props) {
 
     const self={
         getSelling:(ck)=>{
-            const hash="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069";
-            const mod="::birds_nft::queryTable";
-            Chain.view([hash,mod],"view",(res)=>{
-                if(!res || !res[0]) return [];
-                return ck && ck(res[0]);
-            })
+            // const hash="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069";
+            // const mod="::birds_nft::queryTable";
+            // Chain.view([hash,mod],"view",(res)=>{
+            //     if(!res || !res[0]) return [];
+            //     return ck && ck(res[0]);
+            // })
+            const mock=[
+                {account:"GnCofcUAbaMsWfqE4i5X2QELZ1oseMqb5XyUraoQQScW",price:3.123},
+                {account:"GB3PUfNVpGx5BQ3JuSpE3dcMs7HfBHnYheELAobWkuvV",price:2.888},
+            ]
+            return ck && ck(mock);
         }
     }
     useEffect(() => {
@@ -46,7 +51,10 @@ function Market(props) {
                                 <img className="mine" src="image/logo.png" alt="" />
                             </Col>
                             <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                                {tools.shorten(row,5)}
+                                {tools.shorten(row.account,5)}
+                            </Col>
+                            <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+                                <strong>{row.price}</strong>  SOL
                             </Col>
                         </Row>
                     </Col>

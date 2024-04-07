@@ -235,9 +235,7 @@ const self = {
                 target,
                 amount * LAMPORTS_PER_SOL,
             );
-
             connection.confirmTransaction({ signature: airdropSignature }).then((res) => {
-                console.log(res);
                 return ck && ck(res);
             }).catch((error) => {
                 return ck && ck(error);

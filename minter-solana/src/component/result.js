@@ -116,11 +116,6 @@ function Result(props) {
         if (!fa) return false;
         const login = JSON.parse(fa);
         const addr = login.address;
-        //const all=
-
-        //const target = self.filterNFT(props.anchor, all);
-        //console.log(props.anchor);
-        //if (target === undefined) return false;
 
         //1.render iNFT
         const tpl = Data.get("template");
@@ -139,18 +134,20 @@ function Result(props) {
         }, 50);
 
         //2.save the list
-        // if (!props.skip) {
-        //     const its = Local.get("list");
-        //     const nlist = its === undefined ? {} : JSON.parse(its);
-        //     if (nlist[addr] === undefined) nlist[addr] = [];
+        if (!props.skip) {
+            const its = Local.get("list");
+            const nlist = its === undefined ? {} : JSON.parse(its);
+            if (nlist[addr] === undefined) nlist[addr] = [];
 
-        //     nlist[addr].unshift({
-        //         hash: target.token_data_id,                    // random hash
-        //         name: target.current_token_data.token_uri,      // template hash
-        //     });
+            nlist[addr].unshift({
+                hash: props.anchor,         // random hash
+                slot: props.block,
+                transaction:props.transaction,
+                tpl:"k6cgN7HWWcZwAXAuguSZu6SWTiVxPM6hsXNzjQtuFPF",      //template hash
+            });
 
-        //     Local.set("list", JSON.stringify(nlist));
-        // }
+            Local.set("list", JSON.stringify(nlist));
+        }
 
     }, [props.update, props.anchor]);
 

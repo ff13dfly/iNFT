@@ -101,7 +101,7 @@ function Action(props) {
                         if (tpl === false) return false;
 
                         setInfo("Ready to mint");
-                        const NFT_name = `iNFT_${tools.rand(100000, 999999)}`;
+                        //const NFT_name = `iNFT_${tools.rand(100000, 999999)}`;
                         const program_bs48 = "E4PzkEaDhtToPvtHUh4Lp5KAR8wzcmscFm9ARiv6fD5D";
                         const params = {};
                         Chain.run(program_bs48, params, pair, (txHash) => {
@@ -116,7 +116,7 @@ function Action(props) {
                                 setInfo("Got transaction,check slot hash ...");
                                 const slot=trans.slot;
                                 Chain.view(trans.slot, "block", (bk) => {
-                                    //console.log(bk);
+                                    
                                     const block_hash=Chain.bs58ToHex(bk.blockhash);
                                     props.dialog(<Result 
                                         anchor={block_hash} 
