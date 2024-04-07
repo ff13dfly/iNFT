@@ -46,24 +46,6 @@ function Result(props) {
             //if (!name) return setInfo("Internal error: missing anchor name.");
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
-            // Chain.load(fa, password, (pair) => {
-            //     Chain.read(anchor, (res) => {
-            //         const key = `${res.location[0]}_${res.location[1]}`;
-            //         const target_link = `anchor://${res.location[0]}/${res.location[1]}`;
-            //         const dt = res.data[key];
-            //         if (dt.owner !== pair.address) return setInfo("Only owner can sell the iNFT.");
-            //         Chain.unsell(pair, name, (res) => {
-            //             setInfo(res.message);
-            //             if (res.step === "Finalized") {
-            //                 setTimeout(() => {
-            //                     setInfo("");
-            //                     setSelling(false);
-            //                     Data.removeHash("cache", target_link);
-            //                 }, 400);
-            //             }
-            //         });
-            //     });
-            // });
         },
         clickSell: (ev) => {
             console.log(`Ready to selling`);
@@ -74,33 +56,33 @@ function Result(props) {
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
-            const acc = JSON.parse(fa);
-            const privateKey = Encry.decode(acc.private, password);
-            if (!privateKey) {
-                setInfo("Invalid password");
-                setPassword("");
-                return false;
-            }
-            Chain.recover(privateKey, (pair) => {
-                const NFT = props.anchor;
-                const contact = "0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
-                const args = {
-                    hash: contact,
-                    method: "::birds_nft::sellBird",
-                    params: [
-                        NFT,    //Mint result name
-                        price,   //price
-                    ],
-                }
-                console.log(args);
-                
-                return Chain.contact(pair, args, (res) => {
-                    if(res.error) return setInfo("Error");
-                    setInfo("Please check on market");
-                    setSelling(true);
-                    props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
-                });
-            });
+            // const acc = JSON.parse(fa);
+            // const privateKey = Encry.decode(acc.private, password);
+            // if (!privateKey) {
+            //     setInfo("Invalid password");
+            //     setPassword("");
+            //     return false;
+            // }
+            // Chain.recover(privateKey, (pair) => {
+            //     const NFT = props.anchor;
+            //     const contact = "0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
+            //     const args = {
+            //         hash: contact,
+            //         method: "::birds_nft::sellBird",
+            //         params: [
+            //             NFT,    //Mint result name
+            //             price,   //price
+            //         ],
+            //     }
+            //     console.log(args);
+
+            //     return Chain.contact(pair, args, (res) => {
+            //         if(res.error) return setInfo("Error");
+            //         setInfo("Please check on market");
+            //         setSelling(true);
+            //         props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
+            //     });
+            // });
         },
         clickHome: (ev) => {
             props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
@@ -119,60 +101,56 @@ function Result(props) {
                 return ck && ck(dt);
             }
         },
-        filterNFT: (hash, arr) => {
-            for (let i = 0; i < arr.length; i++) {
-                const row = arr[i];
-                //console.log(row);
-                if (row.token_data_id === hash) return row;
-            }
-        },
+        // filterNFT: (hash, arr) => {
+        //     for (let i = 0; i < arr.length; i++) {
+        //         const row = arr[i];
+        //         //console.log(row);
+        //         if (row.token_data_id === hash) return row;
+        //     }
+        // },
     }
 
     useEffect(() => {
-
         setBlockHash(props.anchor);
-
         const fa = Local.get("login");
         if (!fa) return false;
         const login = JSON.parse(fa);
         const addr = login.address;
-        console.log(addr);
-        Chain.view(addr, "token", (res) => {
-            console.log(res);
-            const target = self.filterNFT(props.anchor, res);
-            console.log(props.anchor);
-            if (target === undefined) return false;
+        //const all=
 
-            //1.render iNFT
-            const tpl = Data.get("template");
-            setWidth(tpl.size[0]);
-            setHeight(tpl.size[1]);
+        //const target = self.filterNFT(props.anchor, all);
+        //console.log(props.anchor);
+        //if (target === undefined) return false;
 
-            setTimeout(() => {
-                const pen = Render.create(dom_id, true);
-                const basic = {
-                    cell: tpl.cell,
-                    grid: tpl.grid,
-                    target: tpl.size
-                }
-                Render.clear(dom_id);
-                Render.preview(pen, tpl.image, target.token_data_id, tpl.parts, basic);
-            }, 50);
+        //1.render iNFT
+        const tpl = Data.get("template");
+        setWidth(tpl.size[0]);
+        setHeight(tpl.size[1]);
 
-            //2.save the list
-            if (!props.skip) {
-                const its = Local.get("list");
-                const nlist = its === undefined ? {} : JSON.parse(its);
-                if (nlist[addr] === undefined) nlist[addr] = [];
-
-                nlist[addr].unshift({
-                    hash: target.token_data_id,                    // random hash
-                    name: target.current_token_data.token_uri,      // template hash
-                });
-
-                Local.set("list", JSON.stringify(nlist));
+        setTimeout(() => {
+            const pen = Render.create(dom_id, true);
+            const basic = {
+                cell: tpl.cell,
+                grid: tpl.grid,
+                target: tpl.size
             }
-        });
+            Render.clear(dom_id);
+            Render.preview(pen, tpl.image, props.anchor, tpl.parts, basic);
+        }, 50);
+
+        //2.save the list
+        // if (!props.skip) {
+        //     const its = Local.get("list");
+        //     const nlist = its === undefined ? {} : JSON.parse(its);
+        //     if (nlist[addr] === undefined) nlist[addr] = [];
+
+        //     nlist[addr].unshift({
+        //         hash: target.token_data_id,                    // random hash
+        //         name: target.current_token_data.token_uri,      // template hash
+        //     });
+
+        //     Local.set("list", JSON.stringify(nlist));
+        // }
 
     }, [props.update, props.anchor]);
 

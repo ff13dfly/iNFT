@@ -38,17 +38,18 @@ self.init("devnet",async (connection)=>{
 
 
     //const app_id = "83EAcYs5J9PoGUvkxyiB4axaMPRCUa6paBmov2A2L4Pm";
-    const app_id="DmzB3oGk8hEdadakwLnLib8QBSAJFoU6KZJuB9uELhP2";
+    const app_id="E4PzkEaDhtToPvtHUh4Lp5KAR8wzcmscFm9ARiv6fD5D";
     const programId = new SOL.PublicKey(app_id);
 
     //const owner = "EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
-    const owner ="AUSY6wFjr4UKJfbDrqEG2SNyUqSUDnZnsM7H4NGZb4AT"
+    const owner ="Ffkw37RbBWAYmEHSKXSzQRrVKBXXt9XLWShcB1zewVtG"
     const programOwnerPublicKey = new SOL.PublicKey(owner);
 
     //const data_id = "Fw23tEb632ytFPA8XPYhKRYi2584tphexcMpsLw4hc6y";
-    const data_id ="3PaNb8c2XqvEzF9x3gJzK5o98pftXKVCpGUjZzTPKiE2";
+    const data_id ="EmEY2LbCJT5Povwo96bP88A1e6mAaADKhZ4P1xY7zHWJ";
     const dataPublicKey = new SOL.PublicKey(data_id);
 
+    //const root_id = "BPFLoaderUpgradeab1e11111111111111111111111";
     const root_id = "11111111111111111111111111111111";
     const rootPublicKey = new SOL.PublicKey(root_id);
 

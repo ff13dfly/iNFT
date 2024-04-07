@@ -52,6 +52,12 @@ const self = {
             console.log(hash);
         }, "devnet");
     },
+    test_transaction:()=>{
+        const hash = "41MitaazWq25vRKRG3be21p9dDtBf8th6JhJp9ScJZ97tucWKKTRyEtyH4ro6NA4tPHUQdK9TiE7Phc3KgH6pNS6";
+        Chain.view(hash, "transaction", (res) => {
+            console.log(res);
+        }, "devnet");
+    }
 }
 
 export default self;

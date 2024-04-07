@@ -11,6 +11,8 @@ import Chain from "./network/solana";
 import config from "./default";
 import tools from "./lib/tools";
 
+import demo from "./test/demo"
+
 // iNFT definition
 // anchor://aabb/217148
 let subs = {};            //加载订阅的方法
@@ -98,8 +100,10 @@ function App() {
 
   useEffect(() => {
     self.start();
-  }, []);
+    
+    //demo.test_transaction();
 
+  }, []);
   return (
     <div>
       <Container>

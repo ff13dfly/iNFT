@@ -143,15 +143,13 @@ const self = {
         } = SOL;
         return LAMPORTS_PER_SOL;
     },
-    recover: (u8arr, ck) => {
+    recover: (bs58Private, ck) => {
         const {
             Keypair,
         } = SOL;
-        const acc = Keypair.fromSecretKey(u8arr);
-        console.log(acc.publicKey.toString());
-        // const privateKey = new Ed25519PrivateKey(u8arr);
-        // const account = Account.fromPrivateKey({ privateKey });
-        // return ck && ck(account);
+        const u8arr=window.bs58.decode(bs58Private);
+        const account = Keypair.fromSecretKey(u8arr);
+        return ck && ck(account);
     },
     storage: (json, ck, network) => {
         self.init(network, (connection) => {
@@ -191,55 +189,36 @@ const self = {
             });
         });
     },
-    run: (program_id, param, ck, network) => {
+    run: (program_bs58, param,signer ,ck, network) => {
+        const {
+            PublicKey,
+            Transaction,
+            sendAndConfirmTransaction,
+        } = SOL;
         self.init(network, async (connection) => {
-            const {
-                PublicKey,
-                //Transaction,
-                //TransactionInstruction,
-            } = SOL;
-            connection.getRecentBlockhash().then(({ blockhash }) => {
-                if (window.phantom !== undefined && window.phantom.solana !== undefined) {
-                    const wallet = window.phantom.solana;
-                    wallet.connect().then(async (signerAccount) => {
-                        self.view(program_id, "account", (obj) => {
+            const programId = new PublicKey(program_bs58);
 
-                            const programId = new PublicKey(program_id);
-                            const ownerPublicKey = obj.owner;
-                            console.log(obj);
-                            console.log(obj.owner.toString());
-                            // Parameters to pass to the program
-                            const instructionData = funs.encode(JSON.stringify(param));
-                            console.log(instructionData.toString());
-                            // const instruction = new TransactionInstruction({
-                            //     keys: [
-                            //         { pubkey: ownerPublicKey, isSigner: false, isWritable: true },
-                            //     ],
-                            //     programId,
-                            //     data: instructionData,
-                            // });
+            const root_id = "11111111111111111111111111111111";
+            const rootPublicKey = new PublicKey(root_id);
 
-                            // //transaction data structure
-                            // const transaction = new Transaction();
-                            // transaction.feePayer = signerAccount.publicKey;
-                            // transaction.recentBlockhash = blockhash;
-                            // transaction.add(instruction);
+            const keys = [
+                { pubkey: signer.publicKey, isSigner: true, isWritable: true },
+                { pubkey: programId, isSigner: false, isWritable: true },
+                { pubkey: rootPublicKey, isSigner: false, isWritable: false },
+            ];
 
-                            // //sign the transactions and get the ABI
-                            // wallet.signTransaction(transaction).then(async (trans) => {
-                            //     const txHash = await connection.sendRawTransaction(trans.serialize(), {});
-                            //     console.log(txHash);
-                            //     self.view(txHash,"transaction",(res)=>{
-                            //         console.log(res);
-                            //         return ck && ck(res);
-                            //     },network);
-                            // });
-                        }, network);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                }
-            });
+            const transaction = new Transaction();
+            transaction.add(
+                new SOL.TransactionInstruction({
+                    keys: keys,
+                    programId: program_bs58,
+                })
+            );
+            const txid = await sendAndConfirmTransaction(connection, transaction, [signer]);
+            return ck && ck(txid);
+            // self.view(txid,"transaction",(tx)=>{
+            //     return ck && ck(tx);
+            // },network);
         });
     },
     airdrop: (ss58, amount, ck, network) => {
@@ -326,13 +305,6 @@ const self = {
     },
     subscribe: (ck,network) => {
         self.init(network, (connection) => {
-            // connection.getSlot().then((block) => {
-            //     self.view(block, "block", (info) => {
-            //         info.hash=self.bs58ToHex(info.blockhash);
-            //         return ck && ck(info);
-            //     }, network);
-            // })
-
             if (checker === null) {
                 checker = setInterval(() => {
                     connection.getSlot().then((block) => {

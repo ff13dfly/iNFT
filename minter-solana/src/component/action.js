@@ -63,22 +63,15 @@ function Action(props) {
             }
         },
         sell: () => {
-            // const NFT="0x19009a519e6efabcecf18c2aed3b922a86ce7f44e7f874f04941ae73bd024c96";
-            // const contact="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
-            // const price=2;
-            // const args={
-            //     hash:contact,
-            //     method:"::birds_nft::sellBird",
-            //     //method:"::birds_nft::queryTable",
-            //     params:[
-            //         NFT,   //Mint result name
-            //         price,   //price
-            //     ],
-            // }
-            // return Chain.contact(pair,args,(res)=>{
-            //     console.log(res);
-            //     //"0xf6c19daf94da2df1b77ac5e9db6890d2876de93d03b92ed70a586901223cc9a1"
-            // });
+
+        },
+        checkTransaction: (hash, ck, network) => {
+            setTimeout(() => {
+                Chain.view(hash, "transaction", (res) => {
+                    if (res === null) return self.checkTransaction(hash, ck, network);
+                    return ck && ck(res);
+                }, network);
+            },600);
         },
         clickMint: (ev) => {
             const fa = Local.get("login");
@@ -92,7 +85,9 @@ function Action(props) {
                 setDisable(true);
                 try {
                     const acc = JSON.parse(fa);
+                    //console.log(acc);
                     const privateKey = Encry.decode(acc.private, password);
+                    //console.log(privateKey);
                     if (!privateKey) {
                         setInfo("Invalid password");
                         setPassword("");
@@ -100,40 +95,43 @@ function Action(props) {
                     }
 
                     //mint contract
+                    const net = "devnet";
                     Chain.recover(privateKey, (pair) => {
                         const tpl = self.getTemplate();
                         if (tpl === false) return false;
 
                         setInfo("Ready to mint");
-                        const NFT_name=`iNFT_${tools.rand(100000,999999)}`;
-                        const contact="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069"
-                        const args={
-                            hash:contact,
-                            method:"::birds_nft::mint",
-                            params:[
-                                NFT_name,   //Mint result name
-                                tpl,        //template uri | storage hash
-                            ],
-                        }
-
-                        Chain.contact(pair,args,(res)=>{
-                            console.log(res);
-                            if(res.error){
+                        const NFT_name = `iNFT_${tools.rand(100000, 999999)}`;
+                        const program_bs48 = "E4PzkEaDhtToPvtHUh4Lp5KAR8wzcmscFm9ARiv6fD5D";
+                        const params = {};
+                        Chain.run(program_bs48, params, pair, (txHash) => {
+                            if (!txHash) {
                                 setDisable(false);
-                                return setInfo(res.error);
+                                return setInfo("Failed to mint");
                             }
+
                             setInfo("Done, checking...");
-                            const hash=res.hash;
-                            Chain.view(hash,"transaction_hash",(trans)=>{
-                                setInfo("Done, checking...");
-                                const NFT_hash=trans.events[0].data.token;
-                                props.dialog(<Result anchor={NFT_hash} />,"iNFT Result");
-                                setDisable(false);
-                                setTimeout(()=>{
-                                    setInfo("");
-                                },400);
+                            self.checkTransaction(txHash, (trans) => {
+                                //console.log(trans);
+                                setInfo("Got transaction,check slot hash ...");
+                                const slot=trans.slot;
+                                Chain.view(trans.slot, "block", (bk) => {
+                                    //console.log(bk);
+                                    const block_hash=Chain.bs58ToHex(bk.blockhash);
+                                    props.dialog(<Result 
+                                        anchor={block_hash} 
+                                        transaction={txHash} 
+                                        block={slot} 
+                                        //target={}
+                                    />, "iNFT Result");
+                                    setDisable(false);
+                                    setTimeout(() => {
+                                        setInfo("");
+                                    }, 400);
+                                }, net);
+
                             });
-                        });
+                        }, net);
                     });
                 } catch (error) {
 
