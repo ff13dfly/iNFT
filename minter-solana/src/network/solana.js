@@ -72,19 +72,7 @@ const funs = {
 }
 
 const self = {
-    u8ToBs58: funs.uint8ArrayToBase58,
-    ss58ToHex: (base58String) => {
-        const bs58 = require('bs58');
-        const uint8Array = bs58.decode(base58String);
-
-        // Convert the Uint8Array to a hexadecimal string
-        const hexString = Array.from(uint8Array)
-            .map(byte => byte.toString(16).padStart(2, '0'))
-            .join('');
-
-        return "0x" + hexString;
-    },
-    accountToHex: (ss58) => {
+    bs58ToHex: (ss58) => {
         const {
             PublicKey,
         } = SOL;
@@ -127,8 +115,20 @@ const self = {
             return ck && ck({ error: "No Phantom wallet found." });
         }
     },
-    balance: (pub, ck) => {     //get balance from base58 account
-
+    balance: (ss58, ck,network) => {     //get balance from base58 account
+        //console.log(ss58);
+        const {
+            PublicKey,
+        } = SOL;
+        const acc = new PublicKey(ss58);
+        //console.log(acc);
+        self.init(network, (connection) => {
+            connection.getBalance(acc).then((info) => {
+                return ck && ck(info);
+            }).catch((error) => {
+                return ck && ck(error);
+            });
+        });
     },
     generate: (ck, seed) => {
         //return console.log(SOL);
@@ -137,6 +137,12 @@ const self = {
         } = SOL;
         const acc = Keypair.generate();
         return ck && ck(acc);
+    },
+    divide:()=>{
+        const {
+            LAMPORTS_PER_SOL,
+        } = SOL;
+        return LAMPORTS_PER_SOL;
     },
     recover: (u8arr, ck) => {
         const {
@@ -237,7 +243,11 @@ const self = {
             });
         });
     },
-    airdrop: (target, amount, ck, network) => {
+    airdrop: (ss58, amount, ck, network) => {
+        const {
+            PublicKey,
+        } = SOL;
+        const target = new PublicKey(ss58);
         self.init(network, async (connection) => {
             const {
                 LAMPORTS_PER_SOL,
@@ -249,6 +259,7 @@ const self = {
             );
 
             connection.confirmTransaction({ signature: airdropSignature }).then((res) => {
+                console.log(res);
                 return ck && ck(res);
             }).catch((error) => {
                 return ck && ck(error);
@@ -375,62 +386,6 @@ const self = {
             });
         });
     },
-    data: {
-        // save:(data,ck,network)=>{
-        //     self.init(network, async (connection) => {
-        //         const authority=SOL.Keypair.generate();
-        //         console.log(`Authority account public key: ${authority.publicKey.toString()}`)
-        //         console.log(`Authority account secret key: ${bs58.encode(authority.secretKey)}`);
-        //     });
-        // },
-        // create: async (feePayer, connection) => {
-        //     const [createIx, dataAccountKP] = await DataProgram.createDataAccount(
-        //         connection,
-        //         feePayer.publicKey,
-        //         200
-        //     );
-        //     const createTx = new SOL.Transaction();
-        //     createTx.add(createIx);
-        //     return dataAccountKP;
-        // },
-        // initialize: async (feePayer, dataAccountKP) => {
-        //     // get the associated Metadata PDA Account
-        //     const [pdaData] = DataProgram.getPDA(dataAccountKP.publicKey);
-        //     // ix to initialize the Data Account and Metadata Account
-        //     const initializeIx = DataProgram.initializeDataAccount(
-        //         feePayer.publicKey,
-        //         dataAccountKP.publicKey,
-        //         feePayer.publicKey,       //Authority account?
-        //         true, // This assumes the Data Account is precreated. Change this to false if you want to create and initialize Data Account
-        //         true, // The Data Account is set to be dynamic (i.e., can be realloc-ed up or down)
-        //         200
-        //     );
-        //     const initializeTx = new SOL.Transaction();
-        //     initializeTx.add(initializeIx);
-
-        //     //console.log(pdaData);
-
-        //     console.log(`Storage PDA account public key: ${pdaData.toString()}`)
-        //     //console.log(`Storage account secret key: ${bs58.encode(pdaData.secretKey)}`);
-
-        //     return pdaData;
-        // },
-        // update: async (feePayer, dataAccountKP, data) => {
-        //     const updateIx = DataProgram.updateDataAccount(
-        //         feePayer.publicKey,
-        //         dataAccountKP.publicKey,
-        //         1,     //DataType, 1 = JSON
-        //         Buffer.from(JSON.stringify(data)),      //Need to convert to String  
-        //         0,      //offset
-        //         false, // reallocDown is false. Set to true if Data Account is dynamic and should realloc down
-        //         false // verifyFlag is false. Set to true to see if the data conforms to its data type
-        //     );
-        //     // create transaction with instruction
-        //     const updateTx = new SOL.Transaction();
-        //     updateTx.add(updateIx);
-        //     return updateIx;
-        // },
-    }
 };
 
 export default self;

@@ -49,7 +49,7 @@ function Account(props) {
             setAirdropDisable(true);
             setAir("Trying");
             const divide=Chain.divide();
-            Chain.airdrop(address,divide,(res)=>{
+            Chain.airdrop(address,3*divide,(res)=>{
                 Chain.balance(address,(amount)=>{ 
                     setAir("Airdrop");
                     setAirdropDisable(false);                 
@@ -61,27 +61,21 @@ function Account(props) {
             if(!password) return false;
             setNewDisable(true);
             Chain.generate((acc)=>{
-                console.log(acc);
-                console.log(acc.publicKey.toString())
-                //console.log(Chain.u8ToBs58(acc.publicKey))
-                //console.log(Chain.u8ToBs58(acc.secretKey))
+                const bs58=window.bs58;
+                const privateKey=bs58.encode(acc.secretKey);
+                const fa=Encry.encode(privateKey,password);
+                const user={
+                    address:acc.publicKey.toString(),
+                    name:`iNFT_user_${tools.rand(100000,999999)}`,
+                    private:fa,
+                }
 
-                Chain.recover(acc.secretKey);
-                //const privateKey=acc.toString();
-                // const fa=Encry.encode(privateKey,password);
-
-                // const user={
-                //     address:acc.accountAddress.toString(),
-                //     name:`iNFT_user_${tools.rand(100000,999999)}`,
-                //     private:fa,
-                // }
-
-                // if(fa!==undefined){
-                //     Local.set("login", JSON.stringify(user));
-                //     setLogin(true);
-                //     self.show();
-                //     props.fresh();
-                // }
+                if(fa!==undefined){
+                    Local.set("login", JSON.stringify(user));
+                    setLogin(true);
+                    self.show();
+                    props.fresh();
+                }
             });
         },
         clickLogout:(ev)=>{
@@ -108,13 +102,14 @@ function Account(props) {
             if(fa!==undefined) setLogin(true);
             try {
                 const account=JSON.parse(fa);
-                //console.log(account);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
+
+
                 Chain.balance(account.address,(amount)=>{
                     const divide=Chain.divide();
                     setBalance(amount/divide);
-                });
+                },"devnet");
             } catch (error) {
                 
             }
@@ -144,7 +139,7 @@ function Account(props) {
                         {tools.shorten(address,12)}
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        <strong>{balance}</strong> APTOS
+                        <strong>{balance}</strong> SOL
                     </Col>
                 </Row>
             </Col>
@@ -165,7 +160,7 @@ function Account(props) {
                     self.clickLogout(ev);
                 }}>Logout</button>
             </Col>
-            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <h4><Badge className="bg-info">Way 1</Badge> Link to wallet.</h4>
             </Col>
             <Col className="pt-2 text-end"  sm={size.row[0]} hidden={login} xs={size.row[0]}>
@@ -176,9 +171,9 @@ function Account(props) {
             </Col>
             <Col className="pt-2" hidden={login} sm={size.row[0]} xs={size.row[0]}>
                 <hr />
-            </Col>
+            </Col> */}
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 2</Badge> Create a new account.</h4>
+                <h4>Create a new account.</h4>
             </Col>
             <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
                 <input className="form-control" type="password" placeholder="Password for new account" 
