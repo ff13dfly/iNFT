@@ -38,16 +38,14 @@ function Preview(props) {
                         target: tpl.size
                     }
     
-                    Chain.subscribe((res) => {
-                        let bk = res.block_height;
-                        Chain.view(bk, "block", (res) => {
-                            setLoading(false);
-                            const bhash = res.block_hash;
-                            setBlock(bk);
-                            setHash(bhash);
-                            Render.preview(pen, tpl.image, bhash, tpl.parts, basic);
-                        });
-                    });
+                    Chain.subscribe((slot) => {
+                        const bk = slot.blockHeight;
+                        const bhash = slot.hash;
+                        setLoading(false);
+                        setBlock(bk);
+                        setHash(bhash);
+                        Render.preview(pen, tpl.image, bhash, tpl.parts, basic);
+                    },"devnet");
                 }, 50);
             }
     
@@ -63,20 +61,6 @@ function Preview(props) {
     const dom_id = "previewer";
     useEffect(() => {
         self.autoCheck();
-
-        //const hash="0xa834276dbacaf280858140d92bd158d7a0787693959fd03c18c93462a8da1f11";
-        const hash="0xa69ddda382a348869159f1ed42eb2fd978a5a9b5e741a5f144be4b2ff9ffd069";
-        const mod="::birds_nft::queryTable";
-        //const mod="birds_nft";
-        // Chain.view([hash,mod],"module_view",(res)=>{
-        //     console.log(res);
-        // })
-
-        // Chain.view([hash,mod],"view",(res)=>{
-        //     console.log(res);
-        // })
-
-
     }, [props.update]);
 
     return (
@@ -85,7 +69,7 @@ function Preview(props) {
                 <h3>Loading...</h3>
             </Col>
             <Col hidden={loading} sm={size.row[0]} xs={size.row[0]}>
-                Aptos block {block.toLocaleString()}: {tools.shorten(hash, 20)}
+                Solana slot {block.toLocaleString()}: {tools.shorten(hash, 20)}
             </Col>
             <Col hidden={loading} className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>

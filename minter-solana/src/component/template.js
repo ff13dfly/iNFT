@@ -73,20 +73,19 @@ function Template(props) {
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
-            if (!Data.exsistHash("cache", single)) {
-                return Chain.view([single,`${single}::birds_nft::InftJson`],"resource",(res)=>{
-                    if(res.error){
+            console.log(single);
+            if (!Data.exsistHash("cache", single)){
+                const res=window.mock_template(single);
+                    if(res===false){
                         const left = alinks.length;
                         dels.push(left);
                         return self.cacheData(alinks, ck, dels);
                     }
-
                     if(res.image!==undefined){
-                        res.image=tools.hexToString(res.image.substr(2));
+                        //res.image=tools.hexToString(res.image.substr(2));
                         Data.setHash("cache", single, res);
                         return self.cacheData(alinks, ck, dels);
                     }
-                });
             } else {
                 return self.cacheData(alinks, ck, dels);
             }
@@ -152,10 +151,7 @@ function Template(props) {
                 }
 
                 self.getThumbs(last, dom_id, (glist) => {
-                    //console.log(glist[0]);
-                    //console.log(glist[0].bs64.length);
                     setList(glist);
-                    //console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
                 });
             });
         }

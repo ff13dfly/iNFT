@@ -3,7 +3,7 @@ import * as SOL from "@solana/web3.js";
 let checker = null;
 let link = null;
 const config = {
-    interval: 400,
+    interval: 800,
     defaultNode: "http://127.0.0.1:8899",
 }
 
@@ -121,7 +121,6 @@ const self = {
             PublicKey,
         } = SOL;
         const acc = new PublicKey(ss58);
-        //console.log(acc);
         self.init(network, (connection) => {
             connection.getBalance(acc).then((info) => {
                 return ck && ck(info);
@@ -325,15 +324,21 @@ const self = {
             }
         });
     },
-    subscribe: (network, ck) => {
+    subscribe: (ck,network) => {
         self.init(network, (connection) => {
+            // connection.getSlot().then((block) => {
+            //     self.view(block, "block", (info) => {
+            //         info.hash=self.bs58ToHex(info.blockhash);
+            //         return ck && ck(info);
+            //     }, network);
+            // })
+
             if (checker === null) {
                 checker = setInterval(() => {
                     connection.getSlot().then((block) => {
-                        //console.log('New block received:', block);
-                        self.view(block, "block", (block) => {
-                            //console.log(block.blockhash);
-                            return ck && ck(self.ss58ToHex(block.blockhash));
+                        self.view(block, "block", (info) => {
+                            info.hash=self.bs58ToHex(info.blockhash);
+                            return ck && ck(info);
                         }, network);
                     })
                 }, config.interval);
