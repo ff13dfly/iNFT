@@ -1,4 +1,4 @@
-const map={
+let map={
     template:null,      //模版image文件, BS64编码
     size:{              //模版对应的数据
         cell:[50,50],       //组件的基础尺寸
@@ -11,6 +11,8 @@ const map={
     grid:null,          //选中的NFT的次序
     subcribe:{},        //挂载的sub的funs
 }
+
+const backup=JSON.stringify(map);
 
 const self={
     set:(key,value)=>{
@@ -26,10 +28,7 @@ const self={
         return map[key];
     },
     reset:()=>{
-        map.template=null;
-        map.NFT=null;
-        map.hash="";
-        map.selected=null;
+        map=JSON.parse(backup);
     },
 };
 

@@ -220,11 +220,20 @@ function Board(props) {
     useEffect(() => {
         setHash(Data.get("hash"));
         const { target } = Data.get("size");
-        setWidth(target[0]);
-        setHeight(target[1]);
-        setTimeout(()=>{
-            self.autofresh(Data.get("hash"));
-        },50);
+        if(target!==undefined){
+            setWidth(target[0]);
+            setHeight(target[1]);
+            setTimeout(()=>{
+                self.autofresh(Data.get("hash"));
+            },50);
+        }else{
+            setStage(<Value start={0} step={0} divide={8} offset={0} hash={hash} />);
+            setSeries([]);
+            setRate(0);
+            setWin("");
+            //const pen = Render.create(cfg.id);
+            Render.clear(cfg.id);
+        }
     }, [props.update]);
 
     return (

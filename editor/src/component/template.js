@@ -55,8 +55,8 @@ function Template(props) {
     };
 
     useEffect(() => {
-
-    }, []);
+        
+    }, [props.update]);
 
     return (
         <Row>

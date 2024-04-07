@@ -11,16 +11,14 @@ function Basic(props) {
         row: [12],
         grid: [6,6],
     };
-
     const ss=Data.get("size");
-    let [width,setWidth]=useState(ss.target[0]);
-    let [height,setHeight]=useState(ss.target[1]);
-    let [cellX,setCellX]=useState(ss.cell[0]);      //cell的X轴像素宽度
-    let [cellY,setCellY]=useState(ss.cell[1]);      //cell的Y轴像素宽度
-    let [line,setLine]=useState(ss.grid[0]);        //X轴，每行多少个
-    let [row,setRow]=useState(ss.grid[1]);          //Y轴，多少行
-
-    //const ref = useRef(null);
+    console.log(ss);
+    let [width,setWidth]=useState((ss.target===undefined || !ss.target[0])?360:ss.target[0]);
+    let [height,setHeight]=useState((ss.target===undefined || !ss.target[1])?360:ss.target[1]);
+    let [cellX,setCellX]=useState((ss.cell===undefined || !ss.cell[0])?50:ss.cell[0]);      //cell的X轴像素宽度
+    let [cellY,setCellY]=useState((ss.cell===undefined || !ss.cell[1])?50:ss.cell[1]);      //cell的Y轴像素宽度
+    let [line,setLine]=useState((ss.grid===undefined || !ss.grid[0])?8:ss.grid[0]);        //X轴，每行多少个
+    let [row,setRow]=useState((ss.grid===undefined || !ss.grid[1])?8:ss.grid[1]);          //Y轴，多少行
 
     const self={
         changeWidth:(ev)=>{
@@ -173,12 +171,20 @@ function Basic(props) {
         },
         autoFresh:()=>{
             const ss=Data.get("size");
-            setWidth(ss.target[0]);
-            setHeight(ss.target[1]);
-            setCellX(ss.cell[0]);      //cell的X轴像素宽度
-            setCellY(ss.cell[1]);      //cell的Y轴像素宽度
-            setLine(ss.grid[0]);        //X轴，每行多少个
+            if(ss.target!==undefined){
+                setWidth(ss.target[0]);
+                setHeight(ss.target[1]);
+            }
+
+            if(ss.cell!==undefined){
+                setCellX(ss.cell[0]);      //cell的X轴像素宽度
+                setCellY(ss.cell[1]);      //cell的Y轴像素宽度
+            }
+
+            if(ss.grid!==undefined){
+                setLine(ss.grid[0]);        //X轴，每行多少个
             setRow(ss.grid[1]);          //Y轴，多少行
+            }
         },
     }
 

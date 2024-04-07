@@ -41,14 +41,14 @@ function App() {
   
   useEffect(() => {
     //Solana_test.auto();
-    AptOS_test.auto();
+    //AptOS_test.auto();
     //IPFS_test.auto();
   }, []);
 
   return (
     <div>
       <Container>
-        <Network />
+        <Network fresh={self.fresh} update={update}/>
         <Row>
           <Col lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
             <Board fresh={self.fresh} update={update}/>

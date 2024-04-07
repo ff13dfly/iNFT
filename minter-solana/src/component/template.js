@@ -73,7 +73,7 @@ function Template(props) {
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
-            console.log(single);
+            //console.log(single);
             if (!Data.exsistHash("cache", single)){
                 const res=window.mock_template(single);
                     if(res===false){

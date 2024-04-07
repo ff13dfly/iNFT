@@ -185,7 +185,7 @@ function Mine(props) {
 
     return (
         <Row>
-            <Networks />
+            <Networks fresh={self.fresh} update={props.update}/>
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>

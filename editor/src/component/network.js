@@ -1,11 +1,13 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Mocker from "./mock";
+
 function Network(props) {
     const size = {
         row: [12],
         opt:[2,2,1,7],
-        head:[2,10],
+        head:[2,4,6],
     };
 
     //const nets=["anchor","btc","eth"];
@@ -43,6 +45,9 @@ function Network(props) {
                 <h3>iNFT Editor</h3>
             </Col>
             <Col className="text-left" lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
+                <Mocker fresh={props.fresh} update={props.update} />
+            </Col>
+            <Col className="text-left" lg={size.head[2]} xl={size.head[2]} xxl={size.head[2]} >
                
             </Col>
             {/* <Col lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]} >

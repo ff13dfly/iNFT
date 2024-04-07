@@ -120,7 +120,6 @@ function Preview(props) {
                         setGrid(gg);
                         
                     }
-
                 }
             }
         },
@@ -128,9 +127,13 @@ function Preview(props) {
 
     useEffect(() =>{
         const ss=Data.get("size");
-        //setCellX(ss.cell[0]);      //cell的X轴像素宽度
-        //setCellY(ss.cell[1]);      //cell的Y轴像素宽度    
-        self.autoFresh(ss.grid[0],ss.grid[1],ss.cell[0],ss.cell[1]);
+        if(ss.grid!==undefined && ss.cell!==undefined){
+            self.autoFresh(ss.grid[0],ss.grid[1],ss.cell[0],ss.cell[1]);
+        }else{
+            setGrid([]);
+            setShow(false);
+            setImage("image/empty.png");
+        }
     }, [props.update,ref.current]);
 
     return (
