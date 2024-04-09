@@ -6,8 +6,6 @@
 
 - No wallet needed at first stage, just a password to encode and decode the private key.
 
-- 
-
 ## Todo
 
 - The program is not ready, just call an empty one to get the transaction result then have the slot hash to render the iNFT result.
