@@ -14,18 +14,16 @@ function Multi(props) {
     };
 
     const map = {
-        APT: {
-            desc: "Aptos Network",
-            tpl: <AptOS fresh={props.fresh} update={props.update} />,
-            SDK: null,
-        },
-
         SOL: {
             desc: "Solana Network",
             tpl: <Solana fresh={props.fresh} update={props.update} />,
             SDK: null,
         },
-
+        APT: {
+            desc: "Aptos Network",
+            tpl: <AptOS fresh={props.fresh} update={props.update} />,
+            SDK: null,
+        },
         DOT: {
             desc: "Polkadot Network",
             tpl: <Solana fresh={props.fresh} update={props.update} />,
@@ -85,7 +83,7 @@ function Multi(props) {
                 <h5>Storage to Chain</h5>
             </Col>
             <Col lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
-                <select className="form-control" onChange={(ev)=>{
+                <select className="form-control" disabled={true} onChange={(ev)=>{
                     self.changeNetwork(ev)
                 }} defaultValue={selected_network}>
                     {list.map((row, index) => (
