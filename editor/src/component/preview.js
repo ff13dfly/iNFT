@@ -28,6 +28,7 @@ function Preview(props) {
     const self={
         clickGrid:(index)=>{
             Data.set("grid",index);
+            //console.log(index);
             self.updateHash(index,()=>{
                 props.fresh();
             });
@@ -37,8 +38,10 @@ function Preview(props) {
             const NFT=Data.get("NFT");
             const hash=Data.get("hash");
             const def=NFT.puzzle[puzzle_index];
+            console.log(def);
             const [hash_start,hash_step,divide,offset]=def.value;
-            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,divide,offset));
+            const [line_x,line_y,extend_x,extend_y]=def.img;
+            Data.set("hash",self.getHash(hash,order,hash_start,hash_step,divide,offset,line_x));
             return ck && ck();
         },
         getHelper:(amount,line,w,h,gX,gY,eX,eY)=>{       //gX没用到，默认从0开始
@@ -67,15 +70,16 @@ function Preview(props) {
                 return active===index?ac:bc
             }
         },
-        getHash:(hash,order,start,step,divide,offset)=>{
+        getHash:(hash,order,start,step,divide,offset,line_x)=>{
+            //console.log(line_x);
             const hex=16;
-            const top=Math.pow(hex,step);        //总数据量
+            const top=Math.pow(hex,step);    //总数据量
             const m=Math.floor(top/divide);  //根据divde获取的最大multi乘数
             const multi=tools.rand(0,m);
 
             //修正输出到指定的范围，写的很尴尬
             const rand_start=multi*divide;
-            const nn= (rand_start===0?divide:rand_start)+order-offset;
+            const nn= ((rand_start===0?divide:rand_start)+order-offset)+line_x;
             const n=nn>=hex?nn-hex:nn;
 
             //console.log(multi,order,rand_start,n);

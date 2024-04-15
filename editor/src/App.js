@@ -2,7 +2,7 @@ import { Container,Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Board from "./component/board";
-import Operation from "./component/operation";
+//import Operation from "./component/operation";
 import Basic from "./component/basic";
 import Series from "./component/series";
 import Template from "./component/template";
@@ -14,8 +14,8 @@ import Multi from "./component/multi";
 
 import NFT from "./component/nft";
 import Detail from "./component/detail";
-import Solana from "./component/opt_solana";
-import AptOS from "./component/opt_aptos";
+//import Solana from "./component/opt_solana";
+//import AptOS from "./component/opt_aptos";
 
 // import IPFS from "./lib/IPFS";
 // import Solana_test from "./test/solana";

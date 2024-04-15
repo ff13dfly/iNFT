@@ -12,7 +12,7 @@ function Basic(props) {
         grid: [6,6],
     };
     const ss=Data.get("size");
-    console.log(ss);
+    //console.log(ss);
     let [width,setWidth]=useState((ss.target===undefined || !ss.target[0])?360:ss.target[0]);
     let [height,setHeight]=useState((ss.target===undefined || !ss.target[1])?360:ss.target[1]);
     let [cellX,setCellX]=useState((ss.cell===undefined || !ss.cell[0])?50:ss.cell[0]);      //cell的X轴像素宽度
