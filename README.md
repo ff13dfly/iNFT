@@ -1,4 +1,4 @@
-# iNFT
+# iNFT, identifiable NFT
 
 ## Overview
 
