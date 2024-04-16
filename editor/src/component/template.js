@@ -26,8 +26,8 @@ function Template(props) {
                     Data.set("template",fa);
                     const target=Data.get("size");
                     if(target!==null){
+                        //console.log(JSON.stringify(target));
                         tools.getImageSize(fa,(w,h)=>{
-                            
                             const line=Math.floor(w/target.cell[0]);
                             const row=Math.floor(h/target.cell[1]);
                             target.grid=[line,row];
@@ -55,7 +55,8 @@ function Template(props) {
     };
 
     useEffect(() => {
-        
+        //const target=Data.get("size");
+        //console.log(JSON.stringify(target));
     }, [props.update]);
 
     return (

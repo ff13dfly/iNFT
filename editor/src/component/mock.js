@@ -13,7 +13,7 @@ function Mocker(props) {
         changeTemplate:(ev)=>{
             const val=ev.target.value;
             setSelected(val);
-            if(val===0){
+            if(val==="0"){
                 Data.reset();
                 props.fresh();
             }else{

@@ -220,7 +220,8 @@ function Board(props) {
     useEffect(() => {
         setHash(Data.get("hash"));
         const { target } = Data.get("size");
-        if(target!==undefined){
+        const tpl=Data.get("template");
+        if(tpl!==null){
             setWidth(target[0]);
             setHeight(target[1]);
             setTimeout(()=>{
@@ -231,9 +232,10 @@ function Board(props) {
             setSeries([]);
             setRate(0);
             setWin("");
-            //const pen = Render.create(cfg.id);
+            Render.create(cfg.id);
             Render.clear(cfg.id);
         }
+
     }, [props.update]);
 
     return (

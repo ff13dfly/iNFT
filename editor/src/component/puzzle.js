@@ -150,7 +150,6 @@ function Puzzle(props) {
 
     useEffect(() => {
         const def=Data.get("NFT");
-        //console.log(def);
         if(def && def.puzzle){
             setList(def.puzzle);
             setDisable(false);

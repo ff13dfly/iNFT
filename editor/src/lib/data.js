@@ -1,15 +1,15 @@
 let map={
-    template:null,      //模版image文件, BS64编码
-    size:{              //模版对应的数据
-        cell:[50,50],      //组件的基础尺寸
-        grid:[8,1],        //图像的尺寸(row,line)
-        target:[360,360]   //显示图像的尺寸
+    template:null,      //template image file, Base64 codec
+    size:{              //template basic parameters
+        cell:[50,50],      //image grid size as cell
+        grid:[8,1],        //image line and row amounts
+        target:[360,360]   //NFT target size
     },
-    NFT:null,           //NFT的JSON文件
-    hash:null,          //用于显示NFT的Hash
-    selected:null,      //选中的NFT的片段
-    grid:null,          //选中的NFT的次序
-    subcribe:{},        //挂载的sub的funs
+    NFT:null,           //iNFT definition JSON file without image
+    hash:null,          //mock hash to render iNFT
+    selected:null,      //selected iNFT parts index
+    grid:null,          //selected index of iNFT part's image array
+    subcribe:{},        //subcribes funs added here to check iNFT template
 }
 
 const backup=JSON.stringify(map);

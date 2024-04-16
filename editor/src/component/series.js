@@ -107,13 +107,16 @@ function Series(props) {
     };
 
     useEffect(() => {
+        const tpl=Data.get("template");
         const def=Data.get("NFT");
-        if(def!==null){
+        if(tpl!==null && def!==null){
             if(def.series===undefined) def.series=[];
-            
             const nlist=self.calcRarity(def.puzzle,def.series);
             setSeries(nlist);
+        }else{
+            setSeries([]);
         }
+
     }, [props.update]);
 
     return (

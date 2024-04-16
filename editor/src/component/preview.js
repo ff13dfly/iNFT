@@ -18,11 +18,6 @@ function Preview(props) {
     let [grid, setGrid] =useState([]);
     let [active, setActive]=useState(null);
 
-    //let [cellX,setCellX]=useState(50);      //cell的X轴像素宽度
-    //let [cellY,setCellY]=useState(50);      //cell的Y轴像素宽度
-    //let [line,setLine]=useState(8);        //X轴，每行多少个
-    //let [row,setRow]=useState(10);          //Y轴，多少行
-
     const ref = useRef(null);
 
     const self={
@@ -130,13 +125,14 @@ function Preview(props) {
     }
 
     useEffect(() =>{
-        const ss=Data.get("size");
-        if(ss.grid!==undefined && ss.cell!==undefined){
-            self.autoFresh(ss.grid[0],ss.grid[1],ss.cell[0],ss.cell[1]);
-        }else{
+        const tpl=Data.get("template");
+        if(tpl===null){
             setGrid([]);
             setShow(false);
             setImage("image/empty.png");
+        }else{
+            const ss=Data.get("size");
+            self.autoFresh(ss.grid[0],ss.grid[1],ss.cell[0],ss.cell[1]);
         }
     }, [props.update,ref.current]);
 
