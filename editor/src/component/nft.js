@@ -40,7 +40,7 @@ function NFT(props) {
                         target:fa.size,
                     };
                     Data.set("size",imp_size);
-
+                    ev.target.value=null;           //reset the uploader
                     props.fresh();
                   } catch (error) {
                     

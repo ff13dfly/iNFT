@@ -101,9 +101,9 @@ function Preview(props) {
                 });
                 
                 const puzzle_selected=Data.get("selected");
-                console.log(puzzle_selected);
                 const NFT=Data.get("NFT");
-                if(puzzle_selected!==null){
+                //console.log(NFT);
+                if(NFT!==null && puzzle_selected!==null){
                     const def=NFT.puzzle[puzzle_selected];
                     const hash=Data.get("hash");
                     

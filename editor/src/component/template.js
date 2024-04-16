@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState,useRef } from "react";
+import { useEffect,useRef } from "react";
 import { FaDownload,FaFileUpload } from "react-icons/fa";
 
 import  Data from "../lib/data";
@@ -25,6 +25,7 @@ function Template(props) {
                     const fa = e.target.result;
                     Data.set("template",fa);
                     const target=Data.get("size");
+                    ev.target.value=null;           //reset the uploader
                     if(target!==null){
                         //console.log(JSON.stringify(target));
                         tools.getImageSize(fa,(w,h)=>{
@@ -39,7 +40,7 @@ function Template(props) {
                     }
                     
                   } catch (error) {
-                    //console.log(error);
+
                   }
                 };
                 reader.readAsText(fa);
