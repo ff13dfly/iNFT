@@ -22,7 +22,6 @@ function Puzzle(props) {
     const self={
         clickPuzzle:(index)=>{
             const cur=Data.get("selected");
-            //console.log(index,cur)
             if(cur!==index){
                 //console.log(active,index,cur);
                 setActive(index);
@@ -153,7 +152,14 @@ function Puzzle(props) {
         if(def && def.puzzle){
             setList(def.puzzle);
             setDisable(false);
-            self.clickPuzzle(active);
+            
+            //here to fix the mock data change issue
+            if(active > def.puzzle.length-1){
+                setActive(0)
+                self.clickPuzzle(0);
+            }else{
+                self.clickPuzzle(active);
+            }
         }else{
             setDisable(true);
             setList([]);

@@ -16,9 +16,17 @@ const backup=JSON.stringify(map);
 
 const self={
     set:(key,value)=>{
-        //console.log(key,value);
+
+        // if(key==="selected"){
+        //     console.log(`Ready to set selected`);
+        // }   
+
         if(map[key]===undefined) return false;
         map[key]=value;
+
+        // if(key==="selected"){
+        //     console.log(map[key]);
+        // }
         
         return true;
     },

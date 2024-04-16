@@ -19,18 +19,19 @@ function Mocker(props) {
             }else{
                 const fa=window.mock_template(val);
                 if(fa!==undefined){
+                    //1.set the iNFT definition without image
                     const NFT={
                         puzzle:fa.parts,
                         series:fa.series,
                     }
                     Data.set("NFT",NFT);
 
-                    //2.加载图像文件
+                    //2.set the image files.
                     if(fa.image){
                         Data.set("template",fa.image);
                     }
 
-                    //3.更新基本参数
+                    //3.set the new iNFT basice parameters
                     const imp_size={
                         cell:fa.cell,
                         grid:fa.grid,
@@ -38,6 +39,10 @@ function Mocker(props) {
                     };
                     Data.set("size",imp_size);
 
+                    //4.set the selected part to 0;
+                    //Data.set("selected",null);
+                    //console.log(`Here?`);
+                    
                     props.fresh();
                 }
             }
