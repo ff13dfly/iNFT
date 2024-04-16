@@ -2,7 +2,7 @@
 
 ## Overview
 
-- It is a new way to mint NFT by block hash and unmodified template file on chain.
+- It is a new way to mint NFT by block hash and unmodified template file on chain. 
 
 - The design of template can make iNFT identifiable.
 
@@ -11,12 +11,12 @@
 - Networks supported.
     1. Anchor Network - Dev
     2. Aptos Network - Dev
-    3. Solana Network - Dev 
+    3. Solana Network - Dev
 
 - Try yourself.
-    1. [iNFT Template Editor]("https://");
-    2. [iNFT Minter]("https://");
-    3. [iNFT Market]("https://");
+    1. [iNFT Template Editor](https://android.im/solana/editor);
+    2. [iNFT Minter](https://android.im/solana/minter);
+    3. [iNFT Market](https://android.im/solana/market);
 
 ## Dapps
 
@@ -46,15 +46,19 @@
 
 ## Definition of iNFT
 
-- The template of iNFT definition as follow.
+- The template of iNFT definition as follow. 
 
     ```Javascript
         //iNFT template
         {
-            type:"2D",
+            type:"2D",              //2D identifiable NFT.
             size:[
-                "OUTPUT_SIZE_X",
-                "OUTPUT_SIZE_Y"
+                "OUTPUT_SIZE_X",    //iNFT output size X
+                "OUTPUT_SIZE_Y"     //iNFT output size Y
+            ],
+            cell:[
+                "CELL_X",    //image grid size X
+                "CELL_Y"     //image grid size Y
             ],
             puzzle:[        //pieces of iNFT. Will render by the array order, 0 is the background
                     {
@@ -69,7 +73,7 @@
                             "ROW",          //row number of iNFT resource
                             "LINE_EXT",     //default is 0,optional, line extend 
                             "ROW_EXT"       //default is 0,optional, row extend 
-                            ],    //LINE_EXT and ROW_EXT is optional
+                            ],
                         position:[  //Position of this piece
                             "POSITION_X",   // The X position of this piece on iNFT
                             "POSITION_Y"    // The Y position of this piece on iNFT
@@ -83,8 +87,8 @@
                             "ROTATION_POSITION_X",
                             "ROTATION_POSITION_Y",
                         ],      
-                        scale:1,                        //this is optional        
-                        fill:1,                         //this is optional, wether fill the empty background     
+                        scale:1,    //this is optional        
+                        fill:1,     //this is optional, wether fill the empty background     
                         color:[     //this is optional
                             "START",        //start position of hash string 
                             "STEP",         //default is 6,optional
@@ -105,5 +109,3 @@
     ```
 
 ## Resource
-
-- How to mint a NFT [https://support.opensea.io/hc/en-us/articles/360063498313-How-do-I-create-an-NFT](https://support.opensea.io/hc/en-us/articles/360063498313-How-do-I-create-an-NFT)

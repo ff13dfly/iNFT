@@ -1,41 +1,109 @@
-# Identifiable NFT ( iNFT in short ) Viewer
+# iNFT
 
-- Identifiable NFT Editor, can create iNFT template from single image. It is a powerful tools to deal with every detail of iNFT.
+## Overview
 
-## Feather
+- It is a new way to mint NFT by block hash and unmodified template file on chain.
 
-- Need to load **W3API** from local, need to link the API folder to `node_modules`. Be careful, when new package is added to the project, you need to relink the folder.
+- The design of template can make iNFT identifiable.
 
-    ```SHELL
-        # change to node_modules folder of UI
-        cd node_modules
-        
-        # add link to NPM
-        ln -s ../../../APIs ./w3api
-    ```
+- As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
-## Scarcity Calculation
+- Networks supported.
+    1. Anchor Network - Dev
+    2. Aptos Network - Dev
+    3. Solana Network - Dev 
 
-- Designer need to category image parts to special series. When all the parts in the same series, the iNFT result is a perfect one.
+- Try yourself.
+    1. [iNFT Template Editor]("https://");
+    2. [iNFT Minter]("https://");
+    3. [iNFT Market]("https://");
+
+## Dapps
+
+### Editor
+
+- It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
+
+- Multi networks support, you can write the iNFT template on different blockchain network.
+
+- Single iNFT file upload/download support.
+
+### Minter
+
+- The client Dapp for normal users. 
+
+- Customer can explorer the templates, then mint on selected template.
+
+- The list of result can be checked from minter.
+
+- In some network, you can manage your account here.
+
+### Market
+
+- Selling market of iNFT result. Customers can price the NFT themselves.
+
+- Different networks supported.
+
+## Definition of iNFT
+
+- The template of iNFT definition as follow.
 
     ```Javascript
-        //parts的divide值
-        const parts=[16,8,12,4]
-
-        //if there is 3 series, how to categray the parts.
-        //a single part of image can be categoried to different series
-        const rare=[
-                [0,1,2,3,4],    //part 1 , n0=5
-                [0,4],          //part 2 , n1=2
-                [0,1,12],       //part 3 , n2=3
-                [0,1]           //part 4 , n3=2
+        //iNFT template
+        {
+            type:"2D",
+            size:[
+                "OUTPUT_SIZE_X",
+                "OUTPUT_SIZE_Y"
             ],
-            [...],  //Series 2, same as series 1
-            [...]   //Series 3, same as series 1
-        ]
-        const target=rare[0]; 
-        const rate=(target[0].length/parts[0])
-            *(target[1].length/parts[1])
-            *(target[2].length/parts[2])
-            *(target[3].length/parts[3])
+            puzzle:[        //pieces of iNFT. Will render by the array order, 0 is the background
+                    {
+                        value:[      //where to get the number of hash
+                            "START",        //start position of hash string
+                            "STEP",         //how many string to get from
+                            "DIVIDE" ,      //how to divide, result%n, the value of "n"
+                            "OFFSET",       //Random number offset to avoid same result
+                            ],
+                        img:[       //the position of image start, get by order, related ti "hash"
+                            "LINE",         //line number of iNFT resource
+                            "ROW",          //row number of iNFT resource
+                            "LINE_EXT",     //default is 0,optional, line extend 
+                            "ROW_EXT"       //default is 0,optional, row extend 
+                            ],    //LINE_EXT and ROW_EXT is optional
+                        position:[  //Position of this piece
+                            "POSITION_X",   // The X position of this piece on iNFT
+                            "POSITION_Y"    // The Y position of this piece on iNFT
+                            ],
+                        center:[    //this is optional, default is center of cell
+                            "X",            //center X position        
+                            "Y"             //center Y position     
+                        ],
+                        rotation:[  //this is optional 
+                            "IMAGE_ROTATION",
+                            "ROTATION_POSITION_X",
+                            "ROTATION_POSITION_Y",
+                        ],      
+                        scale:1,                        //this is optional        
+                        fill:1,                         //this is optional, wether fill the empty background     
+                        color:[     //this is optional
+                            "START",        //start position of hash string 
+                            "STEP",         //default is 6,optional
+                            "DIVIDE",       //optional, reduce the color amount. 
+                            ["RED_OFFSET","GREEN_OFFSET","BLUE_OFFSET"]     //optional, adjust the color
+                        ],
+                        rarity:[            //How the part categoried to series. Parts can be multi used.
+                            ["INDEX","INDEX", ... ],    //index parts, such as [0,2,3]
+                            ["INDEX","INDEX", ... ],
+                            ["INDEX","INDEX", ... ],
+                        ]
+                    },
+                    ...         //iNFT is combined by pieces
+                ]
+            version:"VERSTION",     //iNFT template
+            auth:["AUTH_NAME"]      //auth name list
+        }
     ```
+
+## Resource
+
+- How to mint a NFT [https://support.opensea.io/hc/en-us/articles/360063498313-How-do-I-create-an-NFT](https://support.opensea.io/hc/en-us/articles/360063498313-How-do-I-create-an-NFT)

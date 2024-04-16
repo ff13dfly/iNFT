@@ -1,9 +1,9 @@
 let map={
     template:null,      //模版image文件, BS64编码
     size:{              //模版对应的数据
-        cell:[50,50],       //组件的基础尺寸
+        cell:[50,50],      //组件的基础尺寸
         grid:[8,1],        //图像的尺寸(row,line)
-        target:[360,360]    //显示图像的尺寸
+        target:[360,360]   //显示图像的尺寸
     },
     NFT:null,           //NFT的JSON文件
     hash:null,          //用于显示NFT的Hash
