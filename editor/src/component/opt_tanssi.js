@@ -2,10 +2,12 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Data from "../lib/data";
+import tools from  "../lib/tools";
 
 let wsAPI = null;
 let linking = false;
 const server="wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network";  //Tanssi appchain URI
+const max=360;      //anchor raw max data length 
 
 function Tanssi(props) {
     const size = {
@@ -19,6 +21,7 @@ function Tanssi(props) {
     let [encryFile, setEncryFile] = useState(null);
     let [anchor, setAnchor] = useState("");
     let [password, setPassword] = useState("");
+    let [hash, setHash]=useState("");
     
     let [final, setFinal]= useState("");
     let [info, setInfo] = useState("Encry JSON file");
@@ -72,39 +75,131 @@ function Tanssi(props) {
                 //auth:"",          //权限设置的地方，可以免费供使用，否则采用白名单的方式来处理
             }
         },
+        getRandomSizeString:(n)=>{
+            let str="";
+            for(let i=0;i<n;i++) str+=tools.rand(0,9);
+            return str;
+        },
         clickWrite: (ev) => {
-            self.link(server, (WS) => {
-                const keyring = new window.Polkadot.Keyring({ type: "sr25519" });
-                const pair = keyring.createFromJson(encryFile);
+            const keyring = new window.Polkadot.Keyring({ type: "sr25519" });
+            const pair = keyring.createFromJson(encryFile);
+            try {
+                pair.decodePkcs8(password);
+                const anchor="test_04";     
+                const raw=self.getRandomSizeString(360); 
+                //const bs64 = Data.get("template");
+                //console.log(bs64);
+                const pre=0;
+                const protocol=JSON.stringify({type:"data",fmt:"image"});
+                wsAPI.tx.anchor.setAnchor(anchor,raw, protocol, pre).signAndSend(pair, (res) => {
+                    console.log(res);
+                });
 
-                try {
-                    pair.decodePkcs8(password);
-                    //console.log(WS);
-                    const ankr = window.AnchorJS;
-                    ankr.set(WS);
-                    const raw = self.getNFTData(2);
-                    const protocol = self.getNFTProtocol();
+            } catch (error) {
+                
+            }
 
-                    ankr.write(pair, anchor, JSON.stringify(raw), JSON.stringify(protocol), (res) => {
-                        //console.log(res);
-                        setFinal(res.message);
-                        if(res.step==="Finalized"){
-                            //start: 20478
-                            //end: 
-                            ankr.search(anchor,(data)=>{
-                                console.log(data);
-                                setFinal(`Template link: anchor://${anchor}/${data.block}`);
-                            });
-                        }
-                    });
-                } catch (error) {
 
-                }
-            })
+            // self.link(server, (WS) => {
+            //     const keyring = new window.Polkadot.Keyring({ type: "sr25519" });
+            //     const pair = keyring.createFromJson(encryFile);
+
+            //     try {
+            //         pair.decodePkcs8(password);
+            //         const ankr = window.AnchorJS;
+            //         ankr.set(WS);
+            //         const raw = self.getNFTData(2);
+            //         const protocol = self.getNFTProtocol();
+
+            //         ankr.write(pair, anchor, JSON.stringify(raw), JSON.stringify(protocol), (res) => {
+            //             //console.log(res);
+            //             setFinal(res.message);
+            //             if(res.step==="Finalized"){
+            //                 //start: 20478
+            //                 //end: 
+            //                 ankr.search(anchor,(data)=>{
+            //                     console.log(data);
+            //                     setFinal(`Template link: anchor://${anchor}/${data.block}`);
+            //                 });
+            //             }
+            //         });
+            //     } catch (error) {
+
+            //     }
+            // })
+        },
+        balance:(addr,ck)=>{
+            let unsub=null;
+            wsAPI.query.system.account(addr, (res) => {
+                if(unsub!=null) unsub();
+                const data=res.toJSON().data;
+                return ck && ck(data);
+            }).then((fun)=>{
+                unsub=fun;
+            });
+        },
+        getAmount:(val)=>{
+            const ifree=val*0.000000000001;
+            return ifree.toLocaleString();
+        },
+        changeJSON: (ev) => {
+            setEncryFile(ev.target.value);
+            props.fresh();
+            //1.这里需要对文件内容进行处理
+            try {
+                const fa = ev.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const sign = JSON.parse(e.target.result);
+                        if (!sign.address || !sign.encoded)
+                            return setInfo("Error encry JSON file");
+                        if (sign.address.length !== 48)
+                            return setInfo("Error SS58 address");
+                        if (sign.encoded.length !== 268)
+                            return setInfo("Error encoded verification");
+                        setInfo("Encoded account file loaded");
+                        setEncryFile(sign);
+
+                        self.balance(sign.address,(val)=>{
+                            console.log(val);
+                            setHash(self.getAmount(val.free));
+                        });
+                        
+                    } catch (error) {
+                        console.log(error);
+                        setInfo("Not encry JSON file");
+                    }
+                };
+                reader.readAsText(fa);
+            } catch (error) {
+                setInfo("Can not load target file");
+            }
+        },
+        changePassword: (ev) => {
+            setPassword(ev.target.value);
+            props.fresh();
         },
         changeAnchor: (ev) => {
             setAnchor(ev.target.value.trim());
             props.fresh();
+        },
+        autoSet:()=>{
+            self.link(server, () => {
+                // Owner of Anchor
+                // wsAPI.query.anchor.anchorOwner("good", (res) => {
+                //     const owner=res.value[0].toHuman();
+			    //     const block = res.value[1].words[0];
+                //     console.log(owner,block);
+                // }).then((fun)=>{
+
+                // });
+
+                //subscribe
+                // wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
+                //     console.log(JSON.stringify(lastHeader));
+                // });
+            });
         },
     }
 
@@ -120,22 +215,43 @@ function Tanssi(props) {
                 setWriteable(true);
             }
         }
+
+        self.autoSet();
+
+        // const aa=self.getRandomSizeString(1024*10);
+        // console.log(aa.length);
+        
     }, [props.update]);
 
     return (
         <Row className="pt-4">
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                Write iNFT definition to Tanssi Appchain
+                Write iNFT definition to Tanssi Appchain.
+            </Col>
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                {hash}
+            </Col>
+            <Col lg={size.encry[0]} xl={size.encry[0]} xxl={size.encry[0]} >
+                <small>{info}</small>
+                <input className="form-control" type="file" onChange={(ev) => {
+                    self.changeJSON(ev);
+                }} />
+            </Col>
+            <Col lg={size.encry[1]} xl={size.encry[1]} xxl={size.encry[1]} >
+                <small>Password</small>
+                <input  className="form-control" type="password" placeholder="Password..." onChange={(ev) => {
+                    self.changePassword(ev);
+                }} />
             </Col>
             <Col className="pt-2" lg={size.write[0]} xl={size.write[0]} xxl={size.write[0]} >
-                <input disabled={disable} className="form-control" type="text" placeholder="Anchor Name..." onChange={(ev) => {
+                <input  className="form-control" type="text" placeholder="Anchor Name..." onChange={(ev) => {
                     self.changeAnchor(ev);
                 }} />
             </Col>
             <Col className="pt-2 text-end" lg={size.write[1]} xl={size.write[1]} xxl={size.write[1]} >
-                <button disabled={writeable} className="btn btn-md btn-primary" onClick={(ev) => {
+                <button  className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickWrite(ev);
-                }}>Wallet</button>
+                }}>Write</button>
             </Col>
             <Col className="pt-2 text-end" lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 {final}

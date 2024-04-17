@@ -138,6 +138,16 @@ function Local(props) {
             setAnchor(ev.target.value.trim());
             props.fresh();
         },
+        autoSet:()=>{
+            self.link(server, (WS) => {
+                const ankr = window.AnchorJS;
+                ankr.set(WS);
+                //console.log(ankr);
+                ankr.subcribe((list,block,hash)=>{
+                    console.log(block,hash);
+                });
+            });
+        },
     }
 
     useEffect(() => {
@@ -152,6 +162,8 @@ function Local(props) {
                 setWriteable(true);
             }
         }
+
+        self.autoSet();
     }, [props.update]);
 
     return (
