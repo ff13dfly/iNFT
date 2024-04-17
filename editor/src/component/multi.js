@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 import Solana from "./opt_solana";
 import AptOS from "./opt_aptos";
+import Tanssi from "./opt_tanssi";
+import Local from "./opt_local";
 
-
-let selected_network="APT";     //keep the network select state, avoid to be freshed.
+let selected_network="INFT";     //keep the network select state, avoid to be freshed.
 
 function Multi(props) {
     const size = {
@@ -14,6 +15,16 @@ function Multi(props) {
     };
 
     const map = {
+        INFT: {
+            desc: "Tanssi Appchain",
+            tpl: <Tanssi fresh={props.fresh} update={props.update} />,
+            SDK: null,
+        },
+        DOT: {
+            desc: "Local Substrate",
+            tpl: <Local fresh={props.fresh} update={props.update} />,
+            SDK: null,
+        },
         SOL: {
             desc: "Solana Network",
             tpl: <Solana fresh={props.fresh} update={props.update} />,
@@ -22,11 +33,6 @@ function Multi(props) {
         APT: {
             desc: "Aptos Network",
             tpl: <AptOS fresh={props.fresh} update={props.update} />,
-            SDK: null,
-        },
-        DOT: {
-            desc: "Polkadot Network",
-            tpl: <Solana fresh={props.fresh} update={props.update} />,
             SDK: null,
         },
         IPFS: {
@@ -82,8 +88,8 @@ function Multi(props) {
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <h5>Storage to Chain</h5>
             </Col>
-            <Col lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
-                <select className="form-control" disabled={true} onChange={(ev)=>{
+            <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                <select className="form-control" onChange={(ev)=>{
                     self.changeNetwork(ev)
                 }} defaultValue={selected_network}>
                     {list.map((row, index) => (
@@ -91,7 +97,7 @@ function Multi(props) {
                     ))}
                 </select>
             </Col>
-            <Col className="text-end" lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
+            {/* <Col className="text-end" lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
                 <Form className="pt-2">
                     <Form.Check type="checkbox" 
                         label={`Enable Subscribe.`} 
@@ -101,7 +107,7 @@ function Multi(props) {
                         }}
                     />
                 </Form>
-            </Col>
+            </Col> */}
             <Col lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 {panel}
             </Col>

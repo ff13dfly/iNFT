@@ -1,13 +1,13 @@
 module.exports={
   slide:[
     {
-      title:"Self Bootstrap Network",
-      desc:"Access the whole Web3.0 via Anchor Network.",
+      title:"Identifiable NFT",
+      desc:"NFT can be identified by human eyes.",
       thumb:"imgs/Banner_01.jpg",
     },
     {
-      title:"Deployment Network for Dapps",
-      desc:"Full-on-chain Network for the Dapp UI and APIs.",
+      title:"Scarcity of Mathematics",
+      desc:"Scarcity base on blockchain hash only.",
       thumb:"imgs/Banner_02.jpg",
     },
   ],
