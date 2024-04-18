@@ -5,8 +5,9 @@ import Solana from "./opt_solana";
 import AptOS from "./opt_aptos";
 import Tanssi from "./opt_tanssi";
 import Local from "./opt_local";
+import Web3storage from "./opt_web3storage";
 
-let selected_network="INFT";     //keep the network select state, avoid to be freshed.
+let selected_network="WEB3";     //keep the network select state, avoid to be freshed.
 
 function Multi(props) {
     const size = {
@@ -15,6 +16,11 @@ function Multi(props) {
     };
 
     const map = {
+        WEB3:{
+            desc: "Web3 storage (IPFS)",
+            tpl: <Web3storage fresh={props.fresh} update={props.update} />,
+            SDK: null,
+        },
         INFT: {
             desc: "Tanssi Appchain",
             tpl: <Tanssi fresh={props.fresh} update={props.update} />,

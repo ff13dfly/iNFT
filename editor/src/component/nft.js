@@ -1,6 +1,6 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect,useRef } from "react";
-import { FaDownload,FaFileUpload,FaPuzzlePiece } from "react-icons/fa";
+import { FaDownload,FaFileUpload } from "react-icons/fa";
 
 import  Data from "../lib/data";
 import  tools from "../lib/tools";
