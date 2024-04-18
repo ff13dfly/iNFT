@@ -8,6 +8,9 @@ import Chain from "../lib/chain";
 import Data from "../lib/data";
 import Render from "../lib/render";
 import Copy from "../lib/clipboard";
+import tools from "../lib/tools";
+
+import IPFS from "../network/ipfs";
 
 import { FaExchangeAlt, FaTrashAlt, FaCopy,FaFolderOpen } from "react-icons/fa";
 
@@ -67,37 +70,16 @@ function Template(props) {
             self.showTemplate();
             props.fresh(true);
         },
-        cacheData: (alinks, ck, dels) => {
-            if (dels === undefined) dels = [];
-            if (alinks.length === 0) return ck && ck(dels);
-            const single = alinks.pop();
-            //console.log(Data.exsistHash("cache",single));
-            if (!Data.exsistHash("cache", single)) {
-                return Chain.read(single, (res) => {
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    if (res.data[key] === undefined) {
-                        //console.log(alinks)
-                        const left = alinks.length;
-                        dels.push(left);
-                        return self.cacheData(alinks, ck, dels);
-                    }
-                    res.data[key].raw = JSON.parse(res.data[key].raw);
-                    Data.setHash("cache", single, res.data[key]);
-                    return self.cacheData(alinks, ck, dels);
-                });
-            } else {
-                return self.cacheData(alinks, ck, dels);
-            }
-        },
         getThumbs: (arr, dom_id, ck, todo) => {
-            //console.log(arr);
+            console.log(arr);
             if (todo === undefined) todo = [];
             if (arr.length === 0) return ck && ck(todo);
 
             //1.获取数据内容
             const me = arr.shift();
-            const row = Data.getHash("cache", me.alink.toLocaleLowerCase());
-            const dt = row.raw;
+            //const row = Data.getHash("cache", me.alink.toLocaleLowerCase());
+            console.log(JSON.stringify(me));
+            const dt = me.data;
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
@@ -119,7 +101,8 @@ function Template(props) {
             //3.获取生成的图像
             return setTimeout(() => {
                 me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                me.block = row.block;
+                //me.block = row.block;
+                //delete me.data;
                 todo.push(me);
                 con.innerHTML = "";
 
@@ -139,20 +122,40 @@ function Template(props) {
                 arr.push(nlist[i].alink);
             }
 
-            self.cacheData(arr, (dels) => {
-
+            //console.log(arr);
+            self.cacheIPFS(arr,(dels)=>{
+                //console.log(dels);
                 const last = []
                 for (let i = 0; i < nlist.length; i++) {
                     nlist[i].data = Data.getHash("cache", nlist[i].alink);
                     if (!dels.includes(i)) last.push(nlist[i]);
                 }
-
+                //console.log(JSON.stringify(last));
                 self.getThumbs(last, dom_id, (glist) => {
                     setList(glist);
-                    //console.log(`Here to remove the invalid templates ${JSON.stringify(dels)}`);
                 });
             });
-        }
+        },
+        cacheIPFS:(alinks, ck, dels)=>{
+            if (dels === undefined) dels = [];
+            if (alinks.length === 0) return ck && ck(dels);
+            const single = alinks.pop();
+            if(Data.exsistHash("cache", single)){
+                console.log(`Here to go`);
+                return self.cacheIPFS(alinks, ck, dels);
+            }else{
+                return IPFS.read(single, (ctx) => {
+                    if(!ctx || ctx.error!==undefined){
+                        const left = alinks.length;
+                        dels.push(left);
+                        return self.cacheIPFS(alinks, ck, dels);
+                    }else{
+                        Data.setHash("cache", single, ctx);
+                        return self.cacheIPFS(alinks, ck, dels);
+                    }
+                });
+            }
+        },
     }
 
     const dom_id = "pre_image";
@@ -181,8 +184,8 @@ function Template(props) {
                         <Row>
                             <Col className="" sm={size.row[0]} xs={size.row[0]}><hr /></Col>
                             <Col sm={size.alink[0]} xs={size.alink[0]}>
-                                Alink: <strong>{row.alink}</strong> <br />
-                                {row.data.raw.parts.length} parts.
+                                IPFS CID: <strong>{tools.shorten(row.alink,10)}</strong> <br />
+                                {row.data.parts.length} parts.
                             </Col>
                             <Col className="text-end pt-2" sm={size.alink[1]} xs={size.alink[1]}>
                                 <FaCopy size={28} className="text-primary" onClick={(ev)=>{
