@@ -1,6 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import IPFS from "ipfs-mini";
+//import { Bee } from "@ethersphere/bee-js"
+
 import Data from "../lib/data";
 import tools from  "../lib/tools";
 
@@ -8,6 +11,9 @@ let wsAPI = null;
 let linking = false;
 const server="wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network";  //Tanssi appchain URI
 const max=360;      //anchor raw max data length 
+
+//IPFS QmcXZGRpfpbyDCgZQwzZC9CGbAzirfBqSTx8Yqonw3RiC4
+//https://crustipfs.xyz/ipfs/QmcXZGRpfpbyDCgZQwzZC9CGbAzirfBqSTx8Yqonw3RiC4?filename=iNFT.json
 
 function Tanssi(props) {
     const size = {
@@ -98,35 +104,6 @@ function Tanssi(props) {
             } catch (error) {
                 
             }
-
-
-            // self.link(server, (WS) => {
-            //     const keyring = new window.Polkadot.Keyring({ type: "sr25519" });
-            //     const pair = keyring.createFromJson(encryFile);
-
-            //     try {
-            //         pair.decodePkcs8(password);
-            //         const ankr = window.AnchorJS;
-            //         ankr.set(WS);
-            //         const raw = self.getNFTData(2);
-            //         const protocol = self.getNFTProtocol();
-
-            //         ankr.write(pair, anchor, JSON.stringify(raw), JSON.stringify(protocol), (res) => {
-            //             //console.log(res);
-            //             setFinal(res.message);
-            //             if(res.step==="Finalized"){
-            //                 //start: 20478
-            //                 //end: 
-            //                 ankr.search(anchor,(data)=>{
-            //                     console.log(data);
-            //                     setFinal(`Template link: anchor://${anchor}/${data.block}`);
-            //                 });
-            //             }
-            //         });
-            //     } catch (error) {
-
-            //     }
-            // })
         },
         balance:(addr,ck)=>{
             let unsub=null;
@@ -184,8 +161,23 @@ function Tanssi(props) {
             setAnchor(ev.target.value.trim());
             props.fresh();
         },
+        getContentFromURL:async (url)=>{
+            try {
+              const response = await fetch(url);
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              const content = await response.text();
+              //console.log('Content from URL:', content);
+              return content;
+            } catch (error) {
+              console.error('Error fetching content from URL:', error);
+              throw error;
+            }
+        },
         autoSet:()=>{
-            self.link(server, () => {
+            self.link(server, async () => {
+                //console.log(wsAPI);
                 // Owner of Anchor
                 // wsAPI.query.anchor.anchorOwner("good", (res) => {
                 //     const owner=res.value[0].toHuman();
@@ -199,6 +191,43 @@ function Tanssi(props) {
                 // wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                 //     console.log(JSON.stringify(lastHeader));
                 // });
+
+                //IPFS
+                // const host="ipfs.w3s.link";
+                // const ipfs = new IPFS({ host: host, protocol: 'https' });
+                // const cid="bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a";
+                // console.log(host);
+                // ipfs.cat(cid, (err, result) => {
+                //     console.log(err, result);
+                // });
+
+                const url = 'https://bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a.ipfs.w3s.link/';
+                self.getContentFromURL(url)
+                .then((content) => {
+                    //console.log(content);
+                    const def=JSON.parse(content);
+                    console.log(def);
+                    // Do something with the content
+                })
+                .catch((error) => {
+                    // Handle error
+                });
+
+                //Swarm bee.js
+                //console.log(Bee);
+                // const bee_uri="https://swarm-gateways.net/";
+                // const bee = new Bee(bee_uri);
+                // console.log(bee);
+
+                // const data=JSON.stringify({hello:"iNFT"})
+                // const postageBatchId = await bee.createPostageBatch("100", 17);
+                
+                // const result = await bee.uploadData(postageBatchId,data);
+                // console.log(result.reference) 
+
+                // const retrievedData = await bee.downloadData(result.reference)
+
+                // console.log(retrievedData.text())
             });
         },
     }
