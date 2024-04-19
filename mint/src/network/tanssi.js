@@ -33,6 +33,9 @@ const self={
     read:(block,ck)=>{
         
     },
+    balance:(address,ck)=>{
+
+    },
     subscribe:(key,fun)=>{
         self.init(()=>{
             wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {

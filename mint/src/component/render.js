@@ -7,9 +7,8 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 import Local from "../lib/local";
-import Chain from "../lib/chain";
 
-import Tanssi from "../network/tanssi";
+import Network from "../network/router";
 
 function Preview(props) {
     const size = {
@@ -23,59 +22,48 @@ function Preview(props) {
     let [alink, setAlink] = useState("");
 
     const self = {
-        
+        fresh:()=>{
+            const tpl = Data.get("template");
+            if (tpl !== null) {
+                setWidth(tpl.size[0]);
+                setHeight(tpl.size[1]);
+                setTimeout(() => {
+                    const pen = Render.create(dom_id);
+                    const basic = {
+                        cell: tpl.cell,
+                        grid: tpl.grid,
+                        target: tpl.size
+                    };
+                    Network("tanssi").subscribe("preview",(bk, bhash)=>{
+                        console.log(bk,bhash);
+                        setBlock(bk);
+                        setHash(bhash);
+                        Render.clear(dom_id);
+                        Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
+                    });
+                }, 50);
+            }
+
+            const tpls = Local.get("template");
+            if (tpls !== undefined) {
+                const list = JSON.parse(tpls);
+                const tpl = list[0];
+                setAlink(tpl.alink);
+            }
+
+        }
     }
 
     const dom_id = "previewer";
     useEffect(() => {
-        const tpl = Data.get("template");
-        //console.log(tpl);
-        if (tpl !== null) {
-            setWidth(tpl.size[0]);
-            setHeight(tpl.size[1]);
-            setTimeout(() => {
-                const pen = Render.create(dom_id);
-                const basic = {
-                    cell: tpl.cell,
-                    grid: tpl.grid,
-                    target: tpl.size
-                };
-
-                Tanssi.subscribe("preview",(bk, bhash)=>{
-                    console.log(bk,bhash);
-                    setBlock(bk);
-                    setHash(bhash);
-                    Render.clear(dom_id);
-                    Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
-                });
-
-                // Chain.subscribe("preview", (bk, bhash) => {
-                //     setBlock(bk);
-                //     setHash(bhash);
-                //     Render.clear(dom_id);
-                //     const style={font:"13px serif",color:"#000000"}
-                //     Render.text(pen,bhash,[0,24],style);
-                //     Render.text(pen,bk,[10,380],style);
-                //     Render.text(pen,alink,[100,380],style);
-                //     Render.text(pen,props.node,[280,380],style);
-                //     Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
-                // });
-            }, 50);
-        }
-
-        const tpls = Local.get("template");
-        if (tpls !== undefined) {
-            const list = JSON.parse(tpls);
-            const tpl = list[0];
-            setAlink(tpl.alink);
-        }
+        self.fresh();
     }, [props.update]);
 
     return (
         <Row className="pt-2">
-            {/* <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 Block {block.toLocaleString()}: {tools.shorten(hash, 12)}
-            </Col> */}
+            </Col>
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
