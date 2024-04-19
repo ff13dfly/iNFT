@@ -171,7 +171,7 @@ function Detail(props) {
     return (
         <Row className="pt-1">
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                Alink: <strong>{props.alink}</strong> 
+                IPFS CID: <strong>{tools.shorten(props.alink)}</strong> 
             </Col>
              <Col className="text-end" sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace size={40} color={"#FFAABB"} onClick={(ev)=>{

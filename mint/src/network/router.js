@@ -6,7 +6,7 @@ const format={
         const link={};
         return link;
     },                      
-    divide:(ck)=>{                          //The max divide of single unit
+    divide:()=>{                            //The max divide of single unit
         return 1000000000;      
     },                            
     wallet:(ck)=>{                          //connet to special wallet

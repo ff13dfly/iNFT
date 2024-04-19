@@ -32,7 +32,7 @@ function Template(props) {
             setAlink(ev.target.value.trim());
         },
         clickAdd: (ev) => {
-            console.log(`Add a template`);
+            if(!alink) return false;
             const tpls = Local.get("template");
             const nlist = !tpls ? [] : JSON.parse(tpls);
             nlist.unshift({

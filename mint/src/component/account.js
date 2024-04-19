@@ -6,7 +6,8 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
-import Chain from "../lib/chain";
+//import Chain from "../lib/chain";
+import Network from "../network/router";
 
 function Account(props) {
     const size = {
@@ -108,8 +109,9 @@ function Account(props) {
                 const account=JSON.parse(fa);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
-                Chain.balance(account.address,(res)=>{
-                    setBalance(parseFloat(res.free * 0.000000000001).toLocaleString());
+                Network("tanssi").balance(account.address,(res)=>{
+                    const divide=Network("tanssi").divide();
+                    setBalance(parseFloat(res.free*(1/divide)).toLocaleString());
                 })
             } catch (error) {
                 
