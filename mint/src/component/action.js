@@ -8,6 +8,8 @@ import Account from "./account";
 import tools from "../lib/tools"
 import Chain from "../lib/chain";
 
+import Network from "../network/router";
+
 function Action(props) {
     const size = {
         row: [12],
@@ -26,26 +28,28 @@ function Action(props) {
         },
 
         getAnchorName:(ck)=>{
-            const name=`iNFT_${tools.char(14)}`;
-            Chain.read(`anchor://${name}`,(res)=>{
-                //console.log(res);
-                if(res.location[1]===0) return ck && ck(name);
-                return self.getAnchorName(ck);
-            });
+            const name=`inft_${tools.char(14).toLocaleLowerCase()}`;
+            // Chain.read(`anchor://${name}`,(res)=>{
+            //     //console.log(res);
+            //     if(res.location[1]===0) return ck && ck(name);
+            //     return self.getAnchorName(ck);
+            // });
+            return ck && ck(name);
         },
 
         getProtocol:()=>{
             return {
-                type: "data",        //数据类型的格式
-                fmt: "json",
-                tpl: "iNFT",
+                type: "data",       //inft is type of data
+                fmt: "json",        //json data
+                tpl: "inft",        //inft format
             }
         },
 
         getRaw:(tpl)=>{
             return {
-                tpl:tpl.alink,      //使用的mint模版
-                stamp:[],           //辅助证明的各个链的数据
+                tpl:tpl.alink,          //ipfs cid
+                from:"ipfs",            //storage way
+                origin:"web3.storage",   //storage origianl
             }
         },
 
@@ -59,30 +63,33 @@ function Action(props) {
                     return false;
                 }
                 setDisable(true);
+                setInfo("Processing start.");
                 Chain.load(fa,password,(pair)=>{
                     if(pair.error!==undefined){
                         setInfo(pair.error);
                         setPassword("");
                         return false;
                     }
-
+                    setInfo("Vertified.");
                     self.getAnchorName((name)=>{
+                        setInfo(`Name: ${name}`);
                         const list=Local.get("template");
+                        console.log(list);
                         try {
                             const tpls=JSON.parse(list);
                             const target=tpls[0];
                             const raw=self.getRaw(target);
                             const protocol=self.getProtocol();
                             props.countdown();
-                            Chain.write(pair,{name:name,raw:raw,protocol:protocol},(res)=>{
-                                setInfo(res.message);
-                                if(res.step==="Finalized"){
-                                    setDisable(false);
-                                    props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
-                                    setTimeout(()=>{
-                                        setInfo("");
-                                    },400);
-                                }
+                            Network("tanssi").write(pair,{anchor:name,raw:raw,protocol:protocol},(res)=>{
+                                // setInfo(res.message);
+                                // if(res.step==="Finalized"){
+                                //     setDisable(false);
+                                //     props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
+                                //     setTimeout(()=>{
+                                //         setInfo("");
+                                //     },400);
+                                // }
                             });
                         } catch (error) {
                             console.log(error);

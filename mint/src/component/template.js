@@ -17,18 +17,21 @@ import { FaExchangeAlt, FaTrashAlt, FaCopy,FaFolderOpen } from "react-icons/fa";
 function Template(props) {
     const size = {
         row: [12],
-        add: [8, 4],
+        add: [9, 3],
         detail: [9, 3],
         alink: [9, 3],
     };
 
     let [list, setList] = useState([]);
     let [alink, setAlink] = useState("");
+    let [disableAdd,setDisableAdd] = useState(true);
     //let [image, setImage] = useState("image/empty.png");
 
     const zero = "0x0000000000000000000000000000000000000000000000000000000000000000";
     const self = {
         changeAlink: (ev) => {
+            const val=ev.target.value.trim();
+            setDisableAdd(!val?true:false);
             setAlink(ev.target.value.trim());
         },
         clickAdd: (ev) => {
@@ -168,7 +171,7 @@ function Template(props) {
                 }} />
             </Col>
             <Col className="text-end pb-2" sm={size.add[1]} xs={size.add[1]}>
-                <button className="btn btn-md btn-primary" onClick={(ev) => {
+                <button className="btn btn-md btn-primary" disabled={disableAdd} onClick={(ev) => {
                     self.clickAdd(ev);
                 }}>Add</button>
             </Col>

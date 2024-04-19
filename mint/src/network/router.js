@@ -39,7 +39,7 @@ const format={
         return hash;
     },
     view:(value,type,ck,network)=>{         //view data of blockchain network
-        const types=["transaction","account","block","....."];
+        const types=["transaction","account","block","anchor","....."];
         if(!types.includes(type)) return false;
         const data={};
         return data;
@@ -47,6 +47,10 @@ const format={
     subscribe:(ck,filter_fun,network)=>{    //subscribe the latest block details
         const data={}
         return data;
+    },
+    write:(pair,obj,ck,network)=>{          //write object to chain
+        const hash="0x00000000000000000000000000000000";
+        return hash;
     },
 }
 
