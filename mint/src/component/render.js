@@ -35,7 +35,7 @@ function Preview(props) {
                         target: tpl.size
                     };
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
-                        console.log(bk,bhash);
+                        console.log(tools.stamp(),bk,bhash,);
                         setBlock(bk);
                         setHash(bhash);
                         Render.clear(dom_id);

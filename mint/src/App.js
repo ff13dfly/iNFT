@@ -73,7 +73,8 @@ function App() {
     start:()=>{
       const tpl = self.getTemplate();
       IPFS.read(tpl,(json)=>{
-        Data.set("template", json);
+        Data.set("template", json);         //set to default template
+        Data.setHash("cache", tpl, json);   //set to cache
         self.fresh();
       });
     },

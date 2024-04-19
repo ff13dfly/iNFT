@@ -100,13 +100,10 @@ function Detail(props) {
         //ipart: 选中的组件
         //iselect, 选中的零件
         autoFresh:(ipart,iselect)=>{
-            const tpl = Data.getHash("cache", alink.toLocaleLowerCase());
-
-            //console.log(tpl);
-            setOwner(tpl.owner);
+            const def = Data.getHash("cache", alink.toLocaleLowerCase());
             
             //0.获取基本的参数
-            const def=tpl.raw;
+            //const def=tpl.raw;
             const target=def.parts[ipart];
             const w=def.cell[0],h=def.cell[1];
             const [gX,gY,eX,eY]=target.img;

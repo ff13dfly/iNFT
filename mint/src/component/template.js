@@ -71,14 +71,11 @@ function Template(props) {
             props.fresh(true);
         },
         getThumbs: (arr, dom_id, ck, todo) => {
-            console.log(arr);
             if (todo === undefined) todo = [];
             if (arr.length === 0) return ck && ck(todo);
 
             //1.获取数据内容
             const me = arr.shift();
-            //const row = Data.getHash("cache", me.alink.toLocaleLowerCase());
-            console.log(JSON.stringify(me));
             const dt = me.data;
             const basic = {
                 cell: dt.cell,
@@ -141,7 +138,7 @@ function Template(props) {
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
             if(Data.exsistHash("cache", single)){
-                console.log(`Here to go`);
+                //console.log(`Here to go`);
                 return self.cacheIPFS(alinks, ck, dels);
             }else{
                 return IPFS.read(single, (ctx) => {
@@ -195,7 +192,7 @@ function Template(props) {
                             <Col sm={size.detail[0]} xs={size.detail[0]} onClick={(ev)=>{
                                 self.clickOpen(index);
                             }}>
-                                <img className="template" src={row.bs64} alt="" />
+                                <img className="template" src={row.data.image} alt="" />
                             </Col>
                             <Col sm={size.detail[1]} xs={size.detail[1]}>
                                 <Row className="pt-2">

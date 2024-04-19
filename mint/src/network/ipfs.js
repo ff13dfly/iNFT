@@ -33,6 +33,9 @@ const self={
             return ck && ck({error:error});
           }
     },
+    write:(data,ck)=>{
+
+    },
 }
 
 export default self;
