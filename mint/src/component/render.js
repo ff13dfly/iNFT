@@ -9,6 +9,8 @@ import tools from "../lib/tools";
 import Local from "../lib/local";
 import Chain from "../lib/chain";
 
+import Tanssi from "../network/tanssi";
+
 function Preview(props) {
     const size = {
         row: [12],
@@ -27,6 +29,7 @@ function Preview(props) {
     const dom_id = "previewer";
     useEffect(() => {
         const tpl = Data.get("template");
+        //console.log(tpl);
         if (tpl !== null) {
             setWidth(tpl.size[0]);
             setHeight(tpl.size[1]);
@@ -36,18 +39,27 @@ function Preview(props) {
                     cell: tpl.cell,
                     grid: tpl.grid,
                     target: tpl.size
-                }
-                Chain.subscribe("preview", (bk, bhash) => {
+                };
+
+                Tanssi.subscribe("preview",(bk, bhash)=>{
+                    console.log(bk,bhash);
                     setBlock(bk);
                     setHash(bhash);
-                    const style={font:"13px serif",color:"#000000"}
                     Render.clear(dom_id);
-                    Render.text(pen,bhash,[0,24],style);
-                    Render.text(pen,bk,[10,380],style);
-                    Render.text(pen,alink,[100,380],style);
-                    Render.text(pen,props.node,[280,380],style);
                     Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
                 });
+
+                // Chain.subscribe("preview", (bk, bhash) => {
+                //     setBlock(bk);
+                //     setHash(bhash);
+                //     Render.clear(dom_id);
+                //     const style={font:"13px serif",color:"#000000"}
+                //     Render.text(pen,bhash,[0,24],style);
+                //     Render.text(pen,bk,[10,380],style);
+                //     Render.text(pen,alink,[100,380],style);
+                //     Render.text(pen,props.node,[280,380],style);
+                //     Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
+                // });
             }, 50);
         }
 

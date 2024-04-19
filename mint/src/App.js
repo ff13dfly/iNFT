@@ -73,30 +73,9 @@ function App() {
     start:()=>{
       const tpl = self.getTemplate();
       IPFS.read(tpl,(json)=>{
-
         Data.set("template", json);
         self.fresh();
       });
-      console.log(tpl);
-      // Chain.read(tpl, (res) => {
-      //   const key = `${res.location[0]}_${res.location[1]}`;
-      //   if (res.data && res.data[key] !== undefined) {
-      //     const dt = res.data[key];
-      //     try {
-      //       const raw = JSON.parse(dt.raw);
-      //       Data.set("template", raw);
-
-      //       console.log(raw);
-
-      //       dt.raw = JSON.parse(dt.raw);
-      //       Data.setHash("cache", config.default, dt);
-
-      //       self.fresh();
-      //     } catch (error) {
-      //       console.log(error);
-      //     }
-      //   }
-      // });
     },
   }
 
