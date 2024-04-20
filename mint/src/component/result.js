@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import { FaBackspace } from "react-icons/fa";
+
 import Mine from "./mine";
 
 import Local from "../lib/local";
@@ -9,7 +11,7 @@ import Data from "../lib/data";
 import tools from "../lib/tools";
 import Chain from "../lib/chain";
 
-import { FaBackspace } from "react-icons/fa";
+import Network from "../network/router";
 
 function Result(props) {
     const size = {
@@ -113,7 +115,57 @@ function Result(props) {
                 const dt=Data.getHash("cache", alink);
                 return ck && ck(dt);
             }
-        }
+        },
+        fresh:(addr)=>{
+            
+            Chain.read(anchor,(res)=>{
+                const bk=res.location[1];
+                const alink=`anchor://${res.location[0]}/${res.location[1]}`;
+                //console.log(res);
+                const key=`${res.location[0]}_${bk}`.toLocaleLowerCase();
+                const adata=res.data[key];
+                const raw=JSON.parse(adata.raw);
+    
+                if(adata.sell) setSelling(true);
+    
+                setName(res.location[0]);
+    
+                Chain.hash(bk,(hash)=>{
+                    setBlock(bk);
+                    setBlockHash(hash);
+    
+                    //1.保存数据
+                    if(!props.skip){
+                        const its=Local.get("list");
+                        const nlist=its===undefined?{}:JSON.parse(its);
+                        if(nlist[addr]===undefined)nlist[addr]=[];
+                        nlist[addr].unshift({link:alink,hash:hash});
+    
+                        Local.set("list",JSON.stringify(nlist));
+                    }
+                    
+                    
+                    //2.显示数据
+                    const tpl_link=raw.tpl;
+                    self.getTemplate(raw.tpl,(res)=>{
+                        //console.log(tpl);
+                        const tpl = res.raw;
+                        setWidth(tpl.size[0]-fix);
+                        setHeight(tpl.size[1]-fix);
+                        setTimeout(() => {
+                            const pen = Render.create(dom_id,true);
+                            const basic = {
+                                cell: tpl.cell,
+                                grid: tpl.grid,
+                                target: tpl.size
+                            }
+                            Render.clear(dom_id);
+                            Render.preview(pen,tpl.image,hash,tpl.parts,basic);
+                        }, 50);
+                    });
+                });
+            });
+        },
     }
 
     useEffect(() => {
@@ -121,54 +173,21 @@ function Result(props) {
         if(!fa) return false;
         const login=JSON.parse(fa);
         const addr=login.address;
-        //console.log(anchor);
-        Chain.read(anchor,(res)=>{
-            const bk=res.location[1];
-            const alink=`anchor://${res.location[0]}/${res.location[1]}`;
-            //console.log(res);
-            const key=`${res.location[0]}_${bk}`.toLocaleLowerCase();
-            const adata=res.data[key];
-            const raw=JSON.parse(adata.raw);
 
-            if(adata.sell) setSelling(true);
+        // const its=Local.get("list");
+        // const nlist=its===undefined?{}:JSON.parse(its);
+        // if(nlist[addr]===undefined)nlist[addr]=[];
+        // nlist[addr].unshift({
+        //     link:"inft_ggnccgdewoolfc",
+        //     tpl:"bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a",
+        //     hash:"0x81928bc803aa323693c5a3ca72e93d2c3fa7f34100298e83bf7d859cd5b28202"
+        // });    
+        // Local.set("list",JSON.stringify(nlist));
 
-            setName(res.location[0]);
-
-            Chain.hash(bk,(hash)=>{
-                setBlock(bk);
-                setBlockHash(hash);
-
-                //1.保存数据
-                if(!props.skip){
-                    const its=Local.get("list");
-                    const nlist=its===undefined?{}:JSON.parse(its);
-                    if(nlist[addr]===undefined)nlist[addr]=[];
-                    nlist[addr].unshift({link:alink,hash:hash});
-
-                    Local.set("list",JSON.stringify(nlist));
-                }
-                
-                
-                //2.显示数据
-                const tpl_link=raw.tpl;
-                self.getTemplate(raw.tpl,(res)=>{
-                    //console.log(tpl);
-                    const tpl = res.raw;
-                    setWidth(tpl.size[0]-fix);
-                    setHeight(tpl.size[1]-fix);
-                    setTimeout(() => {
-                        const pen = Render.create(dom_id,true);
-                        const basic = {
-                            cell: tpl.cell,
-                            grid: tpl.grid,
-                            target: tpl.size
-                        }
-                        Render.clear(dom_id);
-                        Render.preview(pen,tpl.image,hash,tpl.parts,basic);
-                    }, 50);
-                });
-            });
-        });
+        // Network("tanssi").view(props.name,"anchor",(obj)=>{
+        //     console.log(obj);
+        // });
+        
     }, [props.update,props.anchor]);
 
     return (

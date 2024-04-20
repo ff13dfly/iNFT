@@ -74,7 +74,7 @@ function Action(props) {
                     self.getAnchorName((name)=>{
                         setInfo(`Name: ${name}`);
                         const list=Local.get("template");
-                        console.log(list);
+                        //console.log(list);
                         try {
                             const tpls=JSON.parse(list);
                             const target=tpls[0];
@@ -82,14 +82,14 @@ function Action(props) {
                             const protocol=self.getProtocol();
                             props.countdown();
                             Network("tanssi").write(pair,{anchor:name,raw:raw,protocol:protocol},(res)=>{
-                                // setInfo(res.message);
-                                // if(res.step==="Finalized"){
-                                //     setDisable(false);
-                                //     props.dialog(<Result anchor={`anchor://${name}`} />,"iNFT Result");
-                                //     setTimeout(()=>{
-                                //         setInfo("");
-                                //     },400);
-                                // }
+                                console.log(res);
+                                if(res && res.status && res.status.Finalized){
+                                    setDisable(false);
+                                    props.dialog(<Result name={name} anchor={`anchor://${name}`} />,"iNFT Result");
+                                    setTimeout(()=>{
+                                        setInfo("");
+                                    },400);
+                                }
                             });
                         } catch (error) {
                             console.log(error);

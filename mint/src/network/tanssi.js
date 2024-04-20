@@ -27,7 +27,7 @@ const self={
     init: (ck) => {
         const uri=config.node;
         if (linking) return setTimeout(() => {
-            self.init(uri, ck);
+            self.init(ck);
         }, 500);
 
         if (wsAPI !== null) return ck && ck(wsAPI);
@@ -85,7 +85,9 @@ const self={
             const pre=0;
             console.log(anchor, raw, protocol, pre);
             wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
-                console.log(res.status.toHuman());
+                //console.log(res.status.toHuman());
+                const dt=res.toHuman();
+                return ck && ck(dt);
             });
         })
         

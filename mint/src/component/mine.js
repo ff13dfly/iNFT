@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
+
 import Result from "./result";
 import Networks from "./network";
 
@@ -9,7 +11,8 @@ import Render from "../lib/render";
 import Chain from "../lib/chain";
 import Data from "../lib/data";
 
-import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
+import IPFS from "../network/ipfs";
+
 
 function Mine(props) {
     const size = {
@@ -145,7 +148,67 @@ function Mine(props) {
             //console.log(dt);
             //const alink = dt.link.toLocaleLowerCase();
             //console.log(alink);
-            props.dialog(<Result anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+            props.dialog(<Result name={dt.link} anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+        },
+
+        autoCache:(plist,ck)=>{
+            const nfts=[],tpls={};
+            for(let i=0;i<plist.length;i++){
+                nfts.push(plist[i].link);
+                tpls[plist[i].tpl]=true;
+            }
+
+            const ts=[];
+            for(var k in tpls) ts.push(k);
+            self.autoTemplate(ts,()=>{
+                self.autoThumbs(plist,(glist)=>{
+                    return ck && ck(glist);
+                });
+            });
+        },
+        autoTemplate:(arr,ck)=>{
+            if(arr.length===0) return ck && ck();
+            const single=arr.pop();
+            if (!Data.exsistHash("cache", single)) {
+                return IPFS.read(single, (ctx) => {
+                    Data.setHash("cache", single, ctx);
+                    return self.autoTemplate(arr, ck);
+                });
+            } else {
+                return self.autoTemplate(arr, ck);
+            }
+        },
+        autoThumbs:(arr,ck,todo)=>{
+            if(todo===undefined) todo=[];
+            if(arr.length===0) return ck && ck(todo);
+            const me = arr.shift();
+            const dt = Data.getHash("cache", me.tpl);
+
+            const basic = {
+                cell: dt.cell,
+                grid: dt.grid,
+                target: dt.size
+            }
+
+            //2.prepare the canvas
+            const con = document.getElementById("handle");
+            const cvs = document.createElement('canvas');
+            cvs.id = dom_id;
+            cvs.width = 400;
+            cvs.height = 400;
+            con.appendChild(cvs);
+
+            const pen = Render.create(dom_id, true);
+            Render.reset(pen);
+            Render.preview(pen, dt.image, me.hash, dt.parts, basic);
+
+            return setTimeout(() => {
+                me.bs64 = pen.canvas.toDataURL("image/jpeg");
+                todo.push(me);
+                con.innerHTML = "";
+
+                return self.getThumbs(arr, dom_id, ck, todo);
+            }, 50);
         },
     }
 
@@ -160,17 +223,23 @@ function Mine(props) {
                 try {
                     const nlist = JSON.parse(ls);
                     const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
-                    self.cacheData(self.getAlinks(plist), (tpls) => {
-                        //console.log(tpls);
-                        self.cacheTemplate(tpls, (dels) => {
-                            //console.log(JSON.stringify(plist));
-                            self.getThumbs(plist, dom_id, (glist) => {
-                                //console.log(glist);
-                                setPageShow(true);
-                                setList(glist);
-                            });
-                        });
+                    console.log(plist);
+
+                    self.autoCache(plist,(glist)=>{
+                        setPageShow(true);
+                        setList(glist);
                     });
+                    // self.cacheData(self.getAlinks(plist), (tpls) => {
+                    //     //console.log(tpls);
+                    //     self.cacheTemplate(tpls, (dels) => {
+                    //         //console.log(JSON.stringify(plist));
+                    //         self.getThumbs(plist, dom_id, (glist) => {
+                    //             //console.log(glist);
+                    //             setPageShow(true);
+                    //             setList(glist);
+                    //         });
+                    //     });
+                    // });
                 } catch (error) {
                     console.log(error);
                 }
@@ -211,12 +280,12 @@ function Mine(props) {
                                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                                         <img className="mine" src={row.bs64} alt="" />
                                     </Col>
-                                    <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
+                                    {/* <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
                                         {row.block.toLocaleString()}
                                     </Col>
                                     <Col className="text-end" sm={size.selling[1]} xs={size.selling[1]}>
                                         {row.sell?row.price:""}
-                                    </Col>
+                                    </Col> */}
                                 </Row>
                             </Col>
                         ))}
