@@ -5,13 +5,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #000000;
+  background-color: #444444;
   color: #FFFFFF;
 }
 
 .modal-content{
   background-color: #444444;
   counter-reset: #FFFFFF;
+}
+
+.modal-header{
+  padding: 5px 15px 5px 5px;
+}
+
+.container{
+  background-color: #000000;
 }
 
 code {
@@ -26,7 +34,7 @@ code {
 #footer{
   position: fixed;
   width: 100%;
-  left: 0px;
+  max-width: 450px;
   bottom: 35px;
 }
 .cover{

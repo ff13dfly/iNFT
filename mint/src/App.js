@@ -37,14 +37,14 @@ function App() {
     fresh: (force) => {
       update++;
       setUpdate(update);
-      if(force) self.start();
+      if (force) self.start();
     },
     subscribe: (key, fun) => {
       subs[key] = fun;
     },
     getTemplate: () => {
       const ts = Local.get("template");
-      if (!ts){
+      if (!ts) {
         const data = []
         data.push({
           alink: config.default[0],
@@ -53,7 +53,7 @@ function App() {
         })
         Local.set("template", JSON.stringify(data));
         return config.default[0];
-      } 
+      }
       try {
         const tpls = JSON.parse(ts);
         if (tpls[0] && tpls[0].alink) return tpls[0].alink
@@ -62,17 +62,17 @@ function App() {
         return config.default[0];
       }
     },
-    countdown:()=>{
+    countdown: () => {
       //console.log(`Ready to countdown 18s`);
-      let n=9;
-      const tt=setInterval(()=>{
-        if(n <= 0) return clearInterval(tt);
+      let n = 9;
+      const tt = setInterval(() => {
+        if (n <= 0) return clearInterval(tt);
         n--;
-      },1000);
+      }, 1000);
     },
-    start:()=>{
+    start: () => {
       const tpl = self.getTemplate();
-      IPFS.read(tpl,(json)=>{
+      IPFS.read(tpl, (json) => {
         Data.set("template", json);         //set to default template
         Data.setHash("cache", tpl, json);   //set to cache
         self.fresh();
@@ -87,25 +87,28 @@ function App() {
     });
   }, []);
 
-  return (
-    <div>
-      <Container>
-        <Header fresh={self.fresh} dialog={self.dialog} update={update} />
-        <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-        {/* <div className="countdown">
-          <svg viewBox="-50 -50 100 100" strokeWidth="10" className="circle">
-            <circle r="45" className="circle-01"></circle>
-            <circle r="45" className="circle-02" pathLength="1"></circle>
-          </svg>
-        </div> */}
-        <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown}/>
-      </Container>
+  const cmap = {
+    maxWidth: "450px",
+  }
 
-      <Modal show={show} size="lg" onHide={
-          (ev) => {
-            setShow(false);
-          }
+  const mmap = {
+    maxWidth: "450px",
+    margin: "0 auto",
+    display: 'block',
+    //position: "relative"
+    //position: 'initial'
+  }
+
+  return (
+    <Container style={cmap}>
+      <Header fresh={self.fresh} dialog={self.dialog} update={update} />
+      <Preview fresh={self.fresh} update={update} node={config.node[0]} />
+      <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
+      <Modal style={mmap} show={show} size="lg" backdrop="static" onHide={
+        (ev) => {
+          setShow(false);
         }
+      }
         centered={false}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
@@ -114,7 +117,7 @@ function App() {
           {content}
         </Modal.Body>
       </Modal>
-    </div>
+    </Container>
   );
 }
 
