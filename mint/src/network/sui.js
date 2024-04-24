@@ -24,8 +24,16 @@ const self = {
     wallet: (ck) => {
         
     },
-    balance: (ss58, ck,network) => {     //get balance from base58 account
-        
+    balance: (addr, ck, net) => {     //get balance from base58 account
+        const network=net!==undefined?net:"testnet";
+        const client = new SuiClient({
+            url: getFullnodeUrl(network),
+        });
+        client.getBalance({owner:addr}).then((res)=>{
+            return ck && ck(res);
+        }).catch((error)=>{
+            return ck && ck(error);
+        });
     },
     generate: (ck, seed) => {
         const pair = new Ed25519Keypair();
@@ -68,8 +76,6 @@ const self = {
         const client = new SuiClient({
             url: getFullnodeUrl(network),
         });
-
-        console.log(client);
         
         const txb = new TransactionBlock();
         const nargs=[]
@@ -83,26 +89,18 @@ const self = {
         });
 
         //console.log(keypair);
-        //console.log(txb);
-        const cfg={client, signer: keypair };
-        console.log(cfg);
-
-        const bdata =await txb.build(cfg);
-        console.log(bdata);
-        // const abc=txb.sign(cfg);
-        // console.log(abc);
-
-        // const { bytes, signature } = txb.sign({ client, signer: keypair });
-        // console.log(bytes);
-        // const result = await client.executeTransactionBlock({
-        //     transactionBlock: bytes,
-        //     signature,
-        //     requestType: 'WaitForLocalExecution',
-        //     options: {
-        //         showEffects: true,
-        //     },
-        // });
-        // return ck && ck(result);
+        console.log(client);
+        //const cfg={client, signer: keypair,onlyTransactionKind:true};
+        //const { bytes, signature } = await txb.sign(cfg);
+        const result = await client.signAndExecuteTransactionBlock({
+            transactionBlock: txb,
+            signer: keypair,
+            requestType: 'WaitForLocalExecution',
+            options: {
+                showEffects: true,
+            },
+        });
+        return ck && ck(result);
     },
 
     //0xc61afbaf7240f61007c6a2ea5d23924a4efc509aed9e49641d59254adf72a72d
@@ -115,21 +113,10 @@ const self = {
         return ck && ck(res);
     },
     view: (value, type, ck, net) => {
-        const network=net!==undefined?net:"testnet";
-        const client = new SuiClient({
-            url: getFullnodeUrl(network),
-        });
+        
         switch (type) {
             case "account":
                 
-                break;
-
-            case "balance":
-                client.getBalance({owner:value}).then((res)=>{
-                    return ck && ck(res);
-                }).catch((error)=>{
-                    return ck && ck(error);
-                });
                 break;
             case "transaction":
                 
@@ -142,33 +129,6 @@ const self = {
     subscribe: (ck,network) => {
         
     },
-    test: (program_id, data_id, owner_id, ck, network) => {
-        const client = new SuiClient({ url: getFullnodeUrl('devnet') });
-        console.log(client);
-        const txb = new TransactionBlock();
-
-        // Object IDs can be passed to some methods like (transferObjects) directly
-        txb.transferObjects(['0xSomeObject'], 'OxSomeAddress');
-        // txb.object can be used anywhere an object is accepted
-        txb.transferObjects([txb.object('0xSomeObject')], 'OxSomeAddress');
-        
-        txb.moveCall({
-            target: '0x2::nft::mint',
-            // object IDs must be wrapped in moveCall arguments
-            arguments: [txb.object('0xSomeObject')],
-        });
-        
-        // txb.object automaically converts the object ID to receiving transaction arguments if the moveCall expects it
-        txb.moveCall({
-            target: '0xSomeAddress::example::receive_object',
-            // 0xSomeAddress::example::receive_object expects a receiving argument and has a Move definition that looks like this:
-            // public fun receive_object<T: key>(parent_object: &mut ParentObjectType, receiving_object: Receiving<ChildObjectType>) { ... }
-            arguments: [txb.object('0xParentObjectID'), txb.object('0xReceivingObjectID')],
-        });
-
-
-    },
-
     backup:()=>{
         const Sui=self;
         //Sui.test();

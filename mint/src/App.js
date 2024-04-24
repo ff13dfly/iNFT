@@ -106,16 +106,15 @@ function App() {
     // },network);
 
     //6eENLu9nsEBy6nzpGByXuJFza5RjTbUSoLKVucKju23A
-    Sui.recover(tools.hexToU8(signer_private),(acc)=>{
-      const contract="0xd0e626176c05ae3aff2e06719de40367b5bfa37821f5db5b8ea0921ec0260422::bird_nft::mint_to_sender";
-      const args=["cc","dd","ee"];
-      console.log(acc.raw.keypair);
-      Sui.run(contract,args,acc.raw.keypair,()=>{
+    // Sui.recover(tools.hexToU8(signer_private),(acc)=>{
+    //   const contract="0xd0e626176c05ae3aff2e06719de40367b5bfa37821f5db5b8ea0921ec0260422::bird_nft::mint_to_sender";
+    //   const args=["cc","dd","ee"];
+    //   Sui.run(contract,args,acc.raw.keypair,(res)=>{
+    //     console.log(res);
+    //   },network);
+    // });
 
-      },network);
-    });
-
-    // Sui.view(signer_address,"balance",(res)=>{
+    // Sui.balance(signer_address,(res)=>{
     //   console.log(res);
     // },network);
   }, []);
