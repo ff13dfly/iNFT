@@ -9,6 +9,8 @@ import tools from "../lib/tools";
 //import Chain from "../lib/chain";
 import Network from "../network/router";
 
+import Faucet from "./faucet";
+
 function Account(props) {
     const size = {
         row: [12],
@@ -126,15 +128,15 @@ function Account(props) {
 
 
     const amap = {
-        width: "60px",
-        height: "60px",
-        borderRadius: "30px",
+        width: "90px",
+        height: "90px",
+        borderRadius: "45px",
         background: "#FFAABB",
     };
 
     return (
         <Row>
-            <Col hidden={!login} sm={size.user[0]} xs={size.user[0]}>
+            <Col className="text-center" hidden={!login} sm={size.user[0]} xs={size.user[0]}>
                 <img style={amap} src={avatar} alt="user logo" />
             </Col>
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
@@ -154,19 +156,20 @@ function Account(props) {
                 <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button>
-                
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev)=>{
                     self.clickLogout(ev);
                 }}>Logout</button>
             </Col>
+            <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+                <Faucet fresh={self.fresh} update={props.update}/>
+            </Col>
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                
                 <h4><Badge className="bg-info">Way 1</Badge> Upload the encry JSON file.</h4>
             </Col>
-            <Col sm={size.row[0]} hidden={login} className="pt-4" xs={size.row[0]}>
+            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <input type="file" onChange={(ev) => {
                     self.changeFile(ev);
                 }} />

@@ -87,11 +87,6 @@ const self = {
             target: sui_contract,
             arguments: nargs,
         });
-
-        //console.log(keypair);
-        console.log(client);
-        //const cfg={client, signer: keypair,onlyTransactionKind:true};
-        //const { bytes, signature } = await txb.sign(cfg);
         const result = await client.signAndExecuteTransactionBlock({
             transactionBlock: txb,
             signer: keypair,
