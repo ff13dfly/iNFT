@@ -18,6 +18,10 @@ body {
   padding: 5px 15px 5px 5px;
 }
 
+.modal-minter{
+  max-width: 430px;
+}
+
 .container{
   background-color: #000000;
 }

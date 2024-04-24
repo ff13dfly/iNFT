@@ -137,7 +137,7 @@ function App() {
   }
 
   const mmap = {
-    maxWidth: "450px",
+    //maxWidth: "450px",
     //margin: "0 auto",
     marginLeft:`${left}px`,
     display: 'block',
@@ -150,7 +150,7 @@ function App() {
       <Header fresh={self.fresh} dialog={self.dialog} update={update} />
       <Preview fresh={self.fresh} update={update} node={config.node[0]} />
       <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
-      <Modal style={mmap} show={show} size="lg" backdrop="static" onHide={
+      <Modal dialogClassName="modal-minter" show={show} size="lg" backdrop="static" onHide={
         (ev) => {
           setShow(false);
         }
