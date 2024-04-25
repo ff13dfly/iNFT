@@ -33,7 +33,7 @@ function Header(props) {
     return (
         <Row className="pt-4">
             <Col sm={size.title[0]} xs={size.title[0]}>
-                <FaList size={26} onClick={(ev)=>{
+                <FaList className="pointer" size={26} onClick={(ev)=>{
                     self.clickMine(ev);
                 }}/>
             </Col>
@@ -41,10 +41,10 @@ function Header(props) {
                <h3>iNFT Minter</h3> 
             </Col>
             <Col className="text-end" sm={size.title[2]} xs={size.title[2]}>
-                <FaRegImage size={30} onClick={(ev)=>{
+                <FaRegImage className="pointer" size={30} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
-                <FaRegUser size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
+                <FaRegUser className="pointer" size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
                     self.clickAccount(ev);
                 }}/>
             </Col>

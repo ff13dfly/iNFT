@@ -10,6 +10,7 @@ import tools from "../lib/tools";
 import Network from "../network/router";
 
 import Faucet from "./faucet";
+import System from "./system";
 
 function Account(props) {
     const size = {
@@ -164,6 +165,10 @@ function Account(props) {
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Faucet fresh={self.fresh} update={props.update}/>
+            </Col>
+
+            <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+                <System fresh={self.fresh} update={props.update}/>
             </Col>
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>

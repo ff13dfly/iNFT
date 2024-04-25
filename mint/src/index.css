@@ -31,6 +31,43 @@ code {
     monospace;
 }
 
+.app{
+  max-width: 450px;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+@media screen and (max-width: 450px) {
+  body{
+    background-color: #000000;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .app{
+    max-width: 450px;
+    margin-top: 40px;
+    border-radius: 30px;
+    min-height: 840px;
+    border: #463d2b solid 8px;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0,1);
+  }
+
+  .modal-minter{
+    max-width: 430px;
+    margin-top: 65px;
+  }
+
+  body{
+    background-image: url('image/web3.jpg');
+    background-size: cover; /* or contain, auto, etc. */
+    background-position: center center; /* or top left, bottom right, etc. */
+    
+  }
+}
+
 /**************************************************************************/
 /***************************** Customize CSS ******************************/
 /**************************************************************************/

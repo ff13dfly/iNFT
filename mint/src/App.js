@@ -136,17 +136,10 @@ function App() {
     maxWidth: "450px",
   }
 
-  const mmap = {
-    //maxWidth: "450px",
-    //margin: "0 auto",
-    marginLeft:`${left}px`,
-    display: 'block',
-    //position: "relative"
-    //position: 'initial'
-  }
+
 
   return (
-    <Container style={cmap} id="minter">
+    <Container className="app" id="minter">
       <Header fresh={self.fresh} dialog={self.dialog} update={update} />
       <Preview fresh={self.fresh} update={update} node={config.node[0]} />
       <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
