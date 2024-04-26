@@ -109,7 +109,7 @@ function Action(props) {
 
     return (
 
-        <Row style={{ marginTop: "200px",paddingBottom:"100px"}}>
+        <Row className="operation">
             <Col className="text-center" hidden={hidden} sm={size.row[0]} xs={size.row[0]}>
                 <small>{info}</small>
             </Col>

@@ -81,6 +81,18 @@ const self = {
     }
     return u8array;
   },
+  checkDevice:()=>{
+    const con = document.getElementById("minter");
+    var computedStyle = window.getComputedStyle(con);
+
+    // Extract the margin values
+    var marginTop = parseFloat(computedStyle.marginTop);
+    var marginRight = parseFloat(computedStyle.marginRight);
+    var marginBottom = parseFloat(computedStyle.marginBottom);
+    var marginLeft = parseFloat(computedStyle.marginLeft);
+    //console.log(marginTop,marginRight,marginBottom,marginLeft);
+    return {margin:[marginTop,marginRight,marginBottom,marginLeft]}
+  },  
 };
 
 module.exports = self;

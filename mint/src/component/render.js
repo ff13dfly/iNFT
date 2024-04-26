@@ -1,6 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Hash from "./hash";
+import Counter from "./counter";
+
 import Flow from "./flow";
 
 import Data from "../lib/data";
@@ -13,6 +16,7 @@ import Network from "../network/router";
 function Preview(props) {
     const size = {
         row: [12],
+        header:[4,8],
     };
 
     let [width, setWidth] = useState(100);
@@ -61,21 +65,28 @@ function Preview(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                Block {block.toLocaleString()}: {tools.shorten(hash, 12)}
+            <Col className="text-end" sm={size.header[0]} xs={size.header[0]}>
+                <Counter />
             </Col>
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="" sm={size.header[1]} xs={size.header[1]}>
+                <Hash from={""} to={""} at={4} color_orgin={""} color_new={""} />
+            </Col>
+            <Col className="text-center pt-3" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
             
+            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
+                Block {block.toLocaleString()}, Tanssi Network
+            </Col>
+
             {/* <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 Current Template: <strong>{alink}</strong><br/>
                 Current Network URL: <strong>{props.node}</strong>
             </Col> */}
-            <Flow />
-            <Col className="" sm={size.row[0]} xs={size.row[0]}>
+            {/* <Flow /> */}
+            {/* <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <br/>The iNFT created from the block hash when mint, click the button to try.
-            </Col>
+            </Col> */}
         </Row>
     )
 }
