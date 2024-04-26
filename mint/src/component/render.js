@@ -25,6 +25,8 @@ function Preview(props) {
     let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
     let [alink, setAlink] = useState("");
 
+    let [start, setStart]=useState(false);
+
     const self = {
         fresh:()=>{
             const tpl = Data.get("template");
@@ -40,6 +42,7 @@ function Preview(props) {
                     };
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
                         console.log(tools.stamp(),bk,bhash,);
+                        setStart(true);
                         setBlock(bk);
                         setHash(bhash);
                         Render.clear(dom_id);
@@ -69,9 +72,8 @@ function Preview(props) {
             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
-
-            <Col className="text-end pt-3" sm={size.header[0]} xs={size.header[0]}>
-                <Counter />
+            <Col className="pt-3" sm={size.header[0]} xs={size.header[0]}>
+                <Counter start={start}/>
             </Col>
             <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
                 <Hash hash={hash} at={4}/>

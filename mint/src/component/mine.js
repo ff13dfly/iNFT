@@ -223,7 +223,7 @@ function Mine(props) {
                 try {
                     const nlist = JSON.parse(ls);
                     const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
-                    console.log(plist);
+                    //console.log(plist);
 
                     self.autoCache(plist,(glist)=>{
                         setPageShow(true);

@@ -102,6 +102,122 @@ code {
   }
 }
 
+
+/**************************************************************************/
+/******************************* Hash Board *******************************/
+/**************************************************************************/
+.circle-box {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  /* border:1px solid #ddd; */
+  margin-left: 10px;
+}
+
+.circle-text{
+  width: 120px;
+  line-height: 120px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.circle-item {
+  width: 60px;
+  height: 120px;
+  position: absolute;
+  top:0;
+  overflow: hidden;
+}
+.right{
+  right:0;
+}
+.left{
+  left:0;
+}
+
+.circle-pro{
+  width: 120px;
+  height: 120px;
+  border:10px solid rgb(232, 232, 12);
+  border-radius: 50%;
+  position: absolute;
+  top:0;
+  -webkit-transform: rotate(45deg);
+  transform:rotate(45deg);
+}
+
+.rightstatic{
+  border-top:10px solid green;
+  border-right:10px solid green;
+  right:0;
+}
+.rightcircle{
+  border-top:10px solid green;
+  border-right:10px solid green;
+  right:0;
+  -webkit-animation: circleProgressLoad_right 12s linear infinite;
+  animation:circleProgressLoad_right 12s linear infinite;
+}
+.leftstatic{
+  border-bottom:10px solid green;
+  border-left:10px solid green;
+  left:0;
+}
+.leftcircle{
+  border-bottom:10px solid green;
+  border-left:10px solid green;
+  left:0;
+  -webkit-animation: circleProgressLoad_left 12s linear infinite;
+  animation:circleProgressLoad_left 12s linear infinite;
+}
+
+.act{
+  -webkit-animation: circleProgressLoad_right 12s linear infinite;
+  animation:circleProgressLoad_right 12s linear infinite;
+}
+
+@keyframes circleProgressLoad_right{
+  0%{
+      border-top:10px solid #ED1A1A;
+      border-right:10px solid #ED1A1A;
+      -webkit-transform: rotate(45deg);
+  }
+  50%{
+      border-top:10px solid rgb(232, 232, 12);
+      border-right:10px solid rgb(232, 232, 12);
+      border-left:10px solid rgb(81, 197, 81);
+      border-bottom:10px solid rgb(81, 197, 81);
+      -webkit-transform: rotate(225deg);
+  }
+  100%{
+      border-left:10px solid green;
+      border-bottom:10px solid green;
+      -webkit-transform: rotate(225deg);
+  }
+}
+@keyframes circleProgressLoad_left{
+  0%{
+      border-bottom:10px solid #ED1A1A;
+      border-left:10px solid #ED1A1A;
+      -webkit-transform: rotate(45deg);
+  }
+  50%{
+      border-bottom:10px solid rgb(232, 232, 12);
+      border-left:10px solid rgb(232, 232, 12);
+      border-top:10px solid rgb(81, 197, 81);
+      border-right:10px solid rgb(81, 197, 81);
+      -webkit-transform: rotate(45deg);
+  }
+  100%{
+      border-top:10px solid green;
+      border-right:10px solid green;
+      border-bottom:10px solid green;
+      border-left:10px solid green;
+      -webkit-transform: rotate(225deg);
+  }
+}
+
+
 /**************************************************************************/
 /******************************* Hash Board *******************************/
 /**************************************************************************/
