@@ -7,7 +7,8 @@ import RowPart from "./row_part";
 
 //show the hash used by iNFT.
 
-let last="";
+let from="";
+let to="";
 
 function Hash(props) {
     const size = {
@@ -15,9 +16,10 @@ function Hash(props) {
     };
 
     const config={
-        single:16,       //single char width
-        step:16,
-        warning:"#ffc107",
+        single:16,              //single char width
+        grid:16,                //the amount of a row
+        warning:"#ffc107",      //warning color
+        animation:3000,         //slide in animation total time
     };
 
     let [list, setList]=useState([]);
@@ -81,21 +83,30 @@ function Hash(props) {
             }
             return arr;
         },
+
+        //convert the interval to ats;
+
+        speed:(n,step)=>{
+            const single=parseInt(n/step);
+            return Array(step).fill(single);
+        },
+
+        fresh:()=>{
+            const pure= props.hash.slice(2);
+            const matrix=self.toArray(pure,config.grid);
+            const tpl=Data.get("template");
+            if(tpl!==null){
+                matrix.group=self.calcPosition(matrix.group,tpl.parts,config.grid); 
+                matrix.color=self.calcColor(matrix.color,matrix.group,config.warning);
+            }
+
+            const nlist=self.group(matrix);
+            setList(nlist);
+        },
     }
 
     useEffect(() => {
-        const pure= props.hash.slice(2);
-        const matrix=self.toArray(pure,config.step);
-        //console.log(pure,matrix);
-        const tpl=Data.get("template");
-        if(tpl!==null){
-            matrix.group=self.calcPosition(matrix.group,tpl.parts,config.step); 
-            matrix.color=self.calcColor(matrix.color,matrix.group,config.warning);
-        }
-
-        const nlist=self.group(matrix);
-        //console.log(nlist);
-        setList(nlist);
+        self.fresh();
 
     }, [props.update,props.hash]);
 

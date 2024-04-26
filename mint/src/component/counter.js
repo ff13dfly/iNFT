@@ -39,15 +39,19 @@ function Counter(props) {
                 }
             },100);
         },
-        stop:()=>{
+        stop:(ck)=>{
             if(timer!==null) clearInterval(timer);
             setLeft("circle-pro leftstatic");
             setRight("circle-pro rightstatic");
+            return ck && ck();
         },
     }
+    //console.log(props);
 
     useEffect(() => {
-        if(props.start) self.start();
+        if(props.start!==0)self.stop(()=>{
+            self.start();
+        })
     }, [props.start]);
 
     return (

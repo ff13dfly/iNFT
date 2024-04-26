@@ -25,7 +25,9 @@ function Preview(props) {
     let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
     let [alink, setAlink] = useState("");
 
-    let [start, setStart]=useState(false);
+    let [start, setStart]=useState(0);
+
+    let first=true;
 
     const self = {
         fresh:()=>{
@@ -42,7 +44,17 @@ function Preview(props) {
                     };
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
                         console.log(tools.stamp(),bk,bhash,);
-                        setStart(true);
+
+                        //force to fresh counter 
+                        if(!first){
+                            start++;
+                            setStart(start);
+                        }else{
+                            first=false;
+                        }
+                        
+
+                        //fresh the iNFT result
                         setBlock(bk);
                         setHash(bhash);
                         Render.clear(dom_id);
