@@ -6,9 +6,10 @@ function RowPart(props) {
     };
 
     const config={
-        width:16,   //single character width;
+        size:30,
+        width:15.9,   //single character width;
         tag:8,
-        padding:6.8,
+        padding:5.3,
         start:0,
     }
 
@@ -53,20 +54,18 @@ function RowPart(props) {
             //3.calc the position
             for(let i=0;i<arr.length;i++){
                 const cur=arr[i];
-                const c_len=cur.data.length;
-                const index=`#${cur.index}`;
-                const badge_width=index.length*config.tag+config.padding*2;
-                console.log(badge_width);
+                const c_len=cur.data.length;        //value width
+                const center=config.width*c_len*0.5;
                 if(i===0){
-                    //arr[i].position=config.start+config.width*(cur.data[c_len-1])*0.5-badge_width*0.5;
-                    arr[i].position=config.width*(cur.data[c_len-1])*0.5-badge_width*0.5;
+                    arr[i].position=center-config.size*0.5;
                 }else{
                     const pre=arr[i-1];
                     const p_len=pre.data.length;
-                    arr[i].position=config.width*(cur.data[0]-pre.data[p_len-1])-badge_width*0.5;
+                    const delta=cur.data[0]-pre.data[p_len-1];
+                    const d_center=(delta+c_len*0.5)*config.width;
+                    arr[i].position=d_center-config.size;
                 }
             }
-
             return arr;
         }
     };
@@ -74,7 +73,7 @@ function RowPart(props) {
     return (
         <Col className="part" sm={size.row[0]} xs={size.row[0]}>
             {parts.map((row, index) => (
-                <Badge key={index} style={{marginLeft:`${row.position}px`}}>#{row.index}</Badge>
+                <Badge key={index} style={{marginLeft:`${row.position}px`,width:`${config.size}px`}}>#{row.index}</Badge>
             ))}
             {/* <Badge style={{marginLeft:"50px"}}>#2</Badge>
             <Badge style={{marginLeft:"84px"}}>#3</Badge> */}

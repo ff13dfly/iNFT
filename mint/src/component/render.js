@@ -65,17 +65,19 @@ function Preview(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="text-end" sm={size.header[0]} xs={size.header[0]}>
-                <Counter />
-            </Col>
-            <Col className="" sm={size.header[1]} xs={size.header[1]}>
-                <Hash hash={hash} at={4}/>
-            </Col>
-            <Col className="text-center pt-3" sm={size.row[0]} xs={size.row[0]}>
+            
+            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
+
+            <Col className="text-end pt-3" sm={size.header[0]} xs={size.header[0]}>
+                <Counter />
+            </Col>
+            <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
+                <Hash hash={hash} at={4}/>
+            </Col>
             
-            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Block {block.toLocaleString()}, Tanssi Network
             </Col>
 
