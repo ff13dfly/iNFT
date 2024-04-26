@@ -69,7 +69,7 @@ function Preview(props) {
                 <Counter />
             </Col>
             <Col className="" sm={size.header[1]} xs={size.header[1]}>
-                <Hash from={""} to={""} at={4} color_orgin={""} color_new={""} />
+                <Hash hash={hash} at={4}/>
             </Col>
             <Col className="text-center pt-3" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>

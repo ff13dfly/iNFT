@@ -115,6 +115,7 @@ code {
   letter-spacing: 4px;
 }
 .part{
+  height: 20px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
   line-height: 14px;

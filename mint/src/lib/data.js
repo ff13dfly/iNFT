@@ -1,8 +1,7 @@
 const map={
-    template:null,      //当前模版image文件
-    cache:{             //缓存的模版文件
-
-    }
+    template:null, 
+    cache:{},
+    version:3,          //version to autoclean the localstorage data
 }
 
 const self={
