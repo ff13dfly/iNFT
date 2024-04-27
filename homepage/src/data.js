@@ -13,54 +13,54 @@ module.exports={
   ],
   points:[
     {
-      title:"Identifiable",
-      desc:"可以肉眼识别.",
+      title:"Enhanced Randomness",
+      desc:"By deeply integrating the random characteristics of the XXX blockchain and combining them with the inherent random computing features of INFT, each minting of an INFT is ensured to be unpredictable, thus enhancing its uniqueness and unpredictability.",
       thumb:"imgs/p_name_service.jpg",
     },
     {
-      title:"不可预测的hash",
-      desc:"基于区块链的不可预测的hash",
+      title:"High Tradeability",
+      desc:"INFT is designed with minimal resource usage, thereby reducing transaction costs. This facilitates easier trading of INFTs and provides a lower barrier to entry for a wider range of users.",
       thumb:"imgs/p_key_value.jpg",
     },
     {
-      title:"公开公平",
-      desc:"公开公平的规则，不可篡改的发布",
+      title:"Increased Transparency",
+      desc:"All data of INFTs is stored on the blockchain, ensuring immutability of data and verifiability of scarcity.",
       thumb:"imgs/p_linked_list.jpg",
     },
     {
-      title:"有趣的图层组合",
-      desc:"基于图层组合来生成NFT图像.",
+      title:"Multi-Layer Composition",
+      desc:"Supporting the combination of multiple layers, users can create unique INFTs by combining different layers, thus enhancing creativity and personalization.",
       thumb:"imgs/p_anchor_link.jpg",
     },
     {
-      title:"极小图像资源",
-      desc:"只依赖一张图片来进行组合",
+      title:"Image Stitching",
+      desc:"Allowing users to combine different images, creating more complex and unique INFT artworks.",
       thumb:"imgs/p_easy_protocol.jpg",
     },
     {
-      title:"多种玩法",
-      desc:"基于各种Web3.0各种玩法，可以进行配套和辅助",
+      title:"Plug-and-Play",
+      desc:"Supporting plug-and-play functionality, users can quickly integrate into the INFT ecosystem, including generating their own INFT assets and using them in gaming, roulette, card games, and other scenarios.",
       thumb:"imgs/p_full_chain.jpg",
     }
   ],
   protocol:{
     subject:{
-      title:"灵活的图层组合",
-      desc:"A simple protocol to group Web3.0 resource.",
+      title:"Flexible Layer Combinations",
+      desc:"Allows users to overlay different layers to create unique INFT artworks. Each layer can contain elements of different styles, which users can freely choose and combine to create works that suit their personalized needs..",
       background:"imgs/protocol.jpg",
     },
     list:[
       {
-        title:"单一资源图像",
-        sub:"Only loader needed to run the dApps.",
+        title:"Single Resource Image",
+        sub:"Simplifies the operation of dApps, requiring only one loader to load all related resources. INFTs can be quickly accessed and utilized through a single resource image without additional complex operations.",
       },
       {
-        title:"多块灵活组合",
-        sub:"Pretty simple way to link resource on chain.",
+        title:"Flexible Composition of Multiple Blocks",
+        sub:"Enhances the flexibility of creating and managing INFTs by linking resources from multiple blockchains. Users can select resources from different chains according to their preferences and needs to create truly unique artworks.",
       },
       {
-        title:"叠加玩法",
-        sub:"A way to hide blockchain data.",
+        title:"Overlay Mechanics",
+        sub:"Provides a technique for concealing blockchain data. By overlaying blockchain data on top of other layers, users can protect the privacy of their data while still enjoying the various functionalities and pleasures offered by INFTs.",
       },
     ]
   },
