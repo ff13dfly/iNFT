@@ -54,6 +54,24 @@ function Action(props) {
             }
         },
 
+        decodeProcess:(obj,ck)=>{
+            if(!obj || obj.dispatchError!==undefined) return ck && ck({error:"Failed to write to chain."});
+            if(!obj.status) return ck && ck({error:"Invalid format"});
+            if(obj.status==="Ready"){
+                return ck && ck({msg:"Ready to write to network.",success:true,status:"Ready"});
+            }else if(obj.status.Broadcast){
+                return ck && ck({msg:"Broadcast to nodes.",success:true,status:"Broadcast"});
+            }else if(obj.status.InBlock){
+                return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock"});
+            }else if(obj.status.Retracted){
+                return ck && ck({msg:"Trying to write.",success:true,status:"Retracted"});
+            }else if(obj.status.Finalized){
+                return ck && ck({msg:"Done, write to network",success:true,status:"Finalized"});
+            }else{
+                return ck && ck({error:"Unknow result"});
+            }
+        },
+
         clickMint: (ev) => {
             const fa = Local.get("login");
             if (fa === undefined) {
@@ -75,7 +93,6 @@ function Action(props) {
                     self.getAnchorName((name) => {
                         setInfo(`Name: ${name}`);
                         const list = Local.get("template");
-                        //console.log(list);
                         try {
                             const tpls = JSON.parse(list);
                             const target = tpls[0];
@@ -83,14 +100,22 @@ function Action(props) {
                             const protocol = self.getProtocol();
                             props.countdown();
                             Network("tanssi").write(pair, { anchor: name, raw: raw, protocol: protocol }, (res) => {
-                                console.log(res);
-                                if (res && res.status && res.status.Finalized) {
-                                    setDisable(false);
-                                    props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
-                                    setTimeout(() => {
-                                        setInfo("");
-                                    }, 400);
-                                }
+                                //console.log(res);
+                                self.decodeProcess(res,(process)=>{
+                                    if(process.error){
+                                        setDisable(false);
+                                        return setInfo(process.error);
+                                    }
+                                    setInfo(process.msg);
+
+                                    if(process.status==="Finalized"){
+                                        setDisable(false);
+                                        props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
+                                        setTimeout(() => {
+                                            setInfo("");
+                                        }, 400);
+                                    }
+                                });
                             });
                         } catch (error) {
                             console.log(error);
@@ -109,7 +134,6 @@ function Action(props) {
         if(fa!==undefined){
             try {
                 const addr=JSON.parse(fa);
-                //console.log(addr);
                 setHolder(`Password of ${tools.shorten(addr.address,5)}`);
             } catch (error) {
                 
