@@ -38,6 +38,22 @@ function Action(props) {
             return ck && ck(name);
         },
 
+        getInftLocal:(name,tpl,hash,block,creator)=>{
+            return {
+                anchor:name,
+                hash:hash,
+                block:block,
+                template:{
+                    hash:tpl,
+                    type: "ipfs",            //storage way
+                    origin: "web3.storage",   //storage origianl
+                },
+                network:"tanssi",
+                creator:creator,
+                stamp:tools.stamp(),
+            }
+        },
+
         getProtocol: () => {
             return {
                 type: "data",       //inft is type of data
@@ -70,6 +86,29 @@ function Action(props) {
             }else{
                 return ck && ck({error:"Unknow result"});
             }
+        },  
+
+        getCurrentTemplate:()=>{
+            const str=Local.get("template");
+            try {
+                const tpls=JSON.parse(str);
+                return tpls[0].alink;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        saveResult:(name,hash,creator,ck)=>{
+            //console.log(name,hash);
+            const tpl=self.getCurrentTemplate();
+            Network("tanssi").view(hash,"block",(data)=>{
+                console.log(tpl,data.block);
+                const inft=self.getInftLocal(name,tpl,hash,data.block,creator);
+                console.log(inft);
+
+                return ck && ck();
+            })
+            
         },
 
         clickMint: (ev) => {
@@ -113,12 +152,13 @@ function Action(props) {
 
                                         setDisable(false);
 
-                                        //Save the 
-
-                                        props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
-                                        setTimeout(() => {
-                                            setInfo("");
-                                        }, 400);
+                                        //Save the iNFT result here;
+                                        self.saveResult(name,process.hash,pair.address,()=>{
+                                            props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
+                                            setTimeout(() => {
+                                                setInfo("");
+                                            }, 400);
+                                        });
                                     }
                                 });
                             });
@@ -144,6 +184,8 @@ function Action(props) {
                 
             }
         }
+
+        
     }, [props.update]);
 
     return (

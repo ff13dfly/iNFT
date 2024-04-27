@@ -113,14 +113,27 @@ const self={
 		// });
     },
     view:(value,type,ck)=>{
-        switch (type) {
-            case "anchor":
-                
-                break;
-        
-            default:
-                break;
-        }
+        self.init(()=>{
+            switch (type) {
+                case "anchor":
+                    
+                    break;
+    
+                case "block":
+                    //console.log(wsAPI);
+                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
+                        const obj=dt.toJSON();
+                        return ck && ck({block:obj.block.header.number});
+                    });
+                    
+                    break;
+            
+                default:
+                    break;
+            }
+
+            
+        });
     },
 }
 
