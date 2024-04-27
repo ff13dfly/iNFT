@@ -174,6 +174,9 @@ function Result(props) {
         const login=JSON.parse(fa);
         const addr=login.address;
 
+        console.log(addr,props);
+
+
         // const its=Local.get("list");
         // const nlist=its===undefined?{}:JSON.parse(its);
         // if(nlist[addr]===undefined)nlist[addr]=[];

@@ -66,7 +66,7 @@ function Action(props) {
             }else if(obj.status.Retracted){
                 return ck && ck({msg:"Trying to write.",success:true,status:"Retracted"});
             }else if(obj.status.Finalized){
-                return ck && ck({msg:"Done, write to network",success:true,status:"Finalized"});
+                return ck && ck({msg:"Done, write to network",success:true,status:"Finalized",hash:obj.status.Finalized});
             }else{
                 return ck && ck({error:"Unknow result"});
             }
@@ -109,7 +109,12 @@ function Action(props) {
                                     setInfo(process.msg);
 
                                     if(process.status==="Finalized"){
+                                        console.log(process);
+
                                         setDisable(false);
+
+                                        //Save the 
+
                                         props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
                                         setTimeout(() => {
                                             setInfo("");
