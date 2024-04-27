@@ -45,20 +45,21 @@ function Preview(props) {
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
                         console.log(tools.stamp(),bk,bhash,);
 
-                        //force to fresh counter 
+                        setBlock(bk);
+                        setHash(bhash);
+
+                        
                         if(!first){
+                            //force to fresh counter 
                             start++;
                             setStart(start);
+
+                            //fresh the iNFT result
+                            Render.clear(dom_id);
+                            Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
                         }else{
                             first=false;
                         }
-                        
-
-                        //fresh the iNFT result
-                        setBlock(bk);
-                        setHash(bhash);
-                        Render.clear(dom_id);
-                        Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
                     });
                 }, 50);
             }
@@ -84,7 +85,7 @@ function Preview(props) {
             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
-            <Col className="pt-3" sm={size.header[0]} xs={size.header[0]}>
+            <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>
             </Col>
             <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>

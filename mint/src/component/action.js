@@ -20,6 +20,7 @@ function Action(props) {
     let [password, setPassword] = useState("");
     let [hidden, setHidden] = useState(true);
     let [disable, setDisable] = useState(false);
+    let [holder,setHolder]= useState("Password");
 
     const self = {
         changePassword: (ev) => {
@@ -104,7 +105,16 @@ function Action(props) {
     useEffect(() => {
         const fa = Local.get("login");
         setHidden(fa !== undefined ? false : true);
-        setDisable(fa !== undefined ? true : false)
+        setDisable(fa !== undefined ? true : false);
+        if(fa!==undefined){
+            try {
+                const addr=JSON.parse(fa);
+                //console.log(addr);
+                setHolder(`Password of ${tools.shorten(addr.address,5)}`);
+            } catch (error) {
+                
+            }
+        }
     }, [props.update]);
 
     return (
@@ -117,7 +127,7 @@ function Action(props) {
 
             </Col>
             <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}>
-                <input className="form-control" type="password" placeholder="Password of account"
+                <input className="form-control" type="password" placeholder={holder}
                     value={password}
                     onChange={(ev) => {
                         self.changePassword(ev);
