@@ -1,10 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaAngleLeft, FaAngleRight,FaHeart,FaGripHorizontal,FaBars,FaImages } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal, FaBars, FaImages } from "react-icons/fa";
 
 import Result from "./result";
-import Networks from "./network";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
@@ -19,14 +18,15 @@ function Mine(props) {
         row: [12],
         list: [4],
         page: [4, 4, 4],
-        filter:[6,6],
-        selling:[6,6],
+        filter: [6, 6],
+        selling: [6, 6],
     };
 
     let [list, setList] = useState([]);
     let [info, setInfo] = useState("");
-    let [page_show,setPageShow]=useState(false);
+    let [page_show, setPageShow] = useState(false);
 
+    const dom_id = "pre_mine";
     const self = {
         page: (arr, page, step) => {
             //console.log(arr);
@@ -92,24 +92,22 @@ function Mine(props) {
             if (todo === undefined) todo = [];
             if (arr.length === 0) return ck && ck(todo);
 
-            //1.获取数据内容
+            //1.get iNFT and template
             const me = arr.shift();
-            const me_anchor = Data.getHash("cache", me.link.toLocaleLowerCase());
-            //console.log(me_anchor);
-            const row = Data.getHash("cache", me_anchor.raw.tpl);
-            const dt = row.raw;
+            const dt = Data.getHash("cache", me.template.hash);
+            //console.log(dt);
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
                 target: dt.size
             }
 
-            //2.准备绘图用的canvas
+            //2.prepare the canvas
             const con = document.getElementById("handle");
             const cvs = document.createElement('canvas');
             cvs.id = dom_id;
-            cvs.width = 400;
-            cvs.height = 400;
+            cvs.width = dt.size[0]; 
+            cvs.height = dt.size[1];
             con.appendChild(cvs);
 
             const pen = Render.create(dom_id, true);
@@ -119,10 +117,8 @@ function Mine(props) {
             //3.获取生成的图像
             return setTimeout(() => {
                 me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                me.block = me_anchor.block;
-
-                me.sell=me_anchor.sell;     //附加销售的信息
-                me.price=me_anchor.cost;
+                //me.sell = me_anchor.sell;     //附加销售的信息
+                //me.price = me_anchor.cost;
 
                 //console.log(me_anchor);
                 todo.push(me);
@@ -146,29 +142,28 @@ function Mine(props) {
             const my = JSON.parse(ls);
             const dt = my[addr][index];
             //console.log(dt);
-            //const alink = dt.link.toLocaleLowerCase();
-            //console.log(alink);
             props.dialog(<Result name={dt.link} anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
         },
 
-        autoCache:(plist,ck)=>{
-            const nfts=[],tpls={};
-            for(let i=0;i<plist.length;i++){
-                nfts.push(plist[i].link);
-                tpls[plist[i].tpl]=true;
+        autoCache: (plist, ck) => {
+            const nfts = [], tpls = {};
+            for (let i = 0; i < plist.length; i++) {
+                nfts.push(plist[i].anchor);                 //nft list  
+                tpls[plist[i].template.hash] = true;        //set template
             }
 
-            const ts=[];
-            for(var k in tpls) ts.push(k);
-            self.autoTemplate(ts,()=>{
-                self.autoThumbs(plist,(glist)=>{
+            const ts = [];
+            for (var k in tpls) ts.push(k);
+            self.autoTemplate(ts, () => {
+                self.autoThumbs(plist, (glist) => {
                     return ck && ck(glist);
                 });
             });
         },
-        autoTemplate:(arr,ck)=>{
-            if(arr.length===0) return ck && ck();
-            const single=arr.pop();
+        autoTemplate: (arr, ck) => {
+            //console.log(arr);
+            if (arr.length === 0) return ck && ck();
+            const single = arr.pop();
             if (!Data.exsistHash("cache", single)) {
                 return IPFS.read(single, (ctx) => {
                     Data.setHash("cache", single, ctx);
@@ -178,12 +173,11 @@ function Mine(props) {
                 return self.autoTemplate(arr, ck);
             }
         },
-        autoThumbs:(arr,ck,todo)=>{
-            if(todo===undefined) todo=[];
-            if(arr.length===0) return ck && ck(todo);
+        autoThumbs: (arr, ck, todo) => {
+            if (todo === undefined) todo = [];
+            if (arr.length === 0) return ck && ck(todo);
             const me = arr.shift();
-            const dt = Data.getHash("cache", me.tpl);
-
+            const dt = Data.getHash("cache", me.template.hash);
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
@@ -210,64 +204,54 @@ function Mine(props) {
                 return self.getThumbs(arr, dom_id, ck, todo);
             }, 50);
         },
-    }
+        showList: () => {
+            const fa = Local.get("login");
+            if (fa !== undefined) {
+                const login = JSON.parse(fa);
+                const addr = login.address;
+                const ls = Local.get("list");
+                if (ls !== undefined) {
+                    try {
+                        const nlist = JSON.parse(ls);
+                        const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
+                        //console.log(JSON.stringify(plist));
 
-    const dom_id = "pre_mine";
-    useEffect(() => {
-        const fa = Local.get("login");
-        if (fa !== undefined) {
-            const login = JSON.parse(fa);
-            const addr = login.address;
-            const ls = Local.get("list");
-            if (ls !== undefined) {
-                try {
-                    const nlist = JSON.parse(ls);
-                    const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
-                    //console.log(plist);
-
-                    self.autoCache(plist,(glist)=>{
-                        setPageShow(true);
-                        setList(glist);
-                    });
-                    // self.cacheData(self.getAlinks(plist), (tpls) => {
-                    //     //console.log(tpls);
-                    //     self.cacheTemplate(tpls, (dels) => {
-                    //         //console.log(JSON.stringify(plist));
-                    //         self.getThumbs(plist, dom_id, (glist) => {
-                    //             //console.log(glist);
-                    //             setPageShow(true);
-                    //             setList(glist);
-                    //         });
-                    //     });
-                    // });
-                } catch (error) {
-                    console.log(error);
+                        self.autoCache(plist, (glist) => {
+                            setPageShow(true);
+                            setList(glist);
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    setInfo("Not iNFT record.");
                 }
             } else {
-                setInfo("Not iNFT record.");
+                setInfo("Not login yet.");
             }
-        } else {
-            setInfo("Not login yet.");
-        }
+        },
+    }
+
+    useEffect(() => {
+        self.showList();
 
     }, [props.update]);
 
     return (
         <Row>
-            <Networks fresh={self.fresh} update={props.update}/>
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
             <Col className="pb-2" sm={size.filter[0]} xs={size.filter[0]}>
-                <FaGripHorizontal size="28"/>
+                <FaGripHorizontal size="28" />
                 {/*切换每行显示的数量*/}
             </Col>
             <Col className="text-end pb-2" sm={size.filter[1]} xs={size.filter[1]}>
-                <FaImages className="pr-2" size="24"/>
-                <FaBars className="pr-2" size="24"/>
-                <FaHeart size="24"/>
+                <FaImages className="pr-2" size="24" />
+                <FaBars className="pr-2" size="24" />
+                <FaHeart size="24" />
             </Col>
-            
+
             <Col sm={size.row[0]} xs={size.row[0]}>{info}</Col>
             <div className="limited">
                 <Col sm={size.row[0]} xs={size.row[0]}>

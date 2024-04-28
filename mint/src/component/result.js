@@ -174,7 +174,7 @@ function Result(props) {
         const login=JSON.parse(fa);
         const addr=login.address;
 
-        console.log(addr,props);
+        //console.log(addr,props);
 
 
         // const its=Local.get("list");
