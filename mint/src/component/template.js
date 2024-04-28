@@ -185,35 +185,41 @@ function Template(props) {
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 <p>
                                 IPFS CID: <br />
-                                <strong>{tools.shorten(row.alink,9)}</strong> <br />
+                                <strong>{tools.shorten(row.alink,7)}</strong> <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                                    Copy(row.alink);
+                                }}><FaCopy /></button><br />
                                 {row.data.parts.length} parts.
                                 </p>
                             </Col>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                                <div className="thumbnail" style={{ backgroundImage:`url(${row.data.image})`}}
+                                <div className="thumbnail" 
+                                    style={{ backgroundImage:`url(${row.data.image})`}}
                                     onClick={(ev)=>{
                                         self.clickOpen(index);
                                     }}></div>
                             </Col>
-                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
-                                <FaCopy className="pointer text-primary" size={28} onClick={(ev)=>{
+                            {/* <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                                     Copy(row.alink);
-                                }}/>
-                            </Col>
-                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
-                                <FaExchangeAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
-                                    self.clickTry(index);
-                                }}/>
-                            </Col>
-                            {/* <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
-                                <FaFolderOpen className="pointer text-primary" size={28}  onClick={(ev)=>{
-                                    self.clickOpen(index);
-                                }}/>
+                                }}><FaCopy /></button>
                             </Col> */}
-                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
-                                <FaTrashAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
+                            <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                                    self.clickTry(index);
+                                }}><FaExchangeAlt /></button>
+                            </Col>
+                            <Col className="pt-3" sm={size.opt[0]} xs={size.opt[0]}>
+                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                                    self.clickOpen(index);
+                                }}><FaFolderOpen /></button>
+                            </Col>
+                            <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                                {/* <FaTrashAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
                                     self.clickRemove(index);
-                                }}/>
+                                }}/> */}
+                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                                    self.clickRemove(index);
+                                }}><FaTrashAlt /></button>
                             </Col>
                         </Row>
                     </Col>

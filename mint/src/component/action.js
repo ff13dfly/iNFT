@@ -104,7 +104,7 @@ function Action(props) {
                     Local.set("list",JSON.stringify(nlist));
                 }
 
-                return ck && ck();
+                return ck && ck(data.block);
             }); 
         },
 
@@ -147,8 +147,14 @@ function Action(props) {
                                     setDisable(false);
 
                                     //Save the iNFT result here;
-                                    self.saveResult(name,process.hash,pair.address,()=>{
-                                        props.dialog(<Result name={name} anchor={`anchor://${name}`} />, "iNFT Result");
+                                    self.saveResult(name,process.hash,pair.address,(block)=>{
+                                        props.dialog(<Result 
+                                            name={name} 
+                                            hash={process.hash} 
+                                            block={block}
+                                            price={0}
+                                            template={target.alink}
+                                        />, "iNFT Result");
                                         setTimeout(() => {
                                             setInfo("");
                                         }, 400);
