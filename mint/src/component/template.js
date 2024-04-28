@@ -20,12 +20,13 @@ function Template(props) {
         add: [9, 3],
         detail: [9, 3],
         alink: [9, 3],
+        list:[6],
+        opt:[3],
     };
 
     let [list, setList] = useState([]);
     let [alink, setAlink] = useState("");
     let [disableAdd,setDisableAdd] = useState(true);
-    //let [image, setImage] = useState("image/empty.png");
 
     const zero = "0x0000000000000000000000000000000000000000000000000000000000000000";
     const self = {
@@ -175,54 +176,49 @@ function Template(props) {
                     self.clickAdd(ev);
                 }}>Add</button>
             </Col>
-            <Col hidden={true} id="tpl_handle" sm={size.row[0]} xs={size.row[0]}>
-                {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
-            </Col>
+            <Col hidden={true} id="tpl_handle" sm={size.row[0]} xs={size.row[0]}></Col>
             <div className="limited">
+                <Row>
                 {list.map((row, index) => (
-                    <Col className="pt-2" key={index} sm={size.row[0]} xs={size.row[0]}>
+                    <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]}>
                         <Row>
-                            <Col className="" sm={size.row[0]} xs={size.row[0]}><hr /></Col>
-                            <Col sm={size.alink[0]} xs={size.alink[0]}>
-                                IPFS CID: <strong>{tools.shorten(row.alink,10)}</strong> <br />
+                            <Col sm={size.row[0]} xs={size.row[0]}>
+                                <p>
+                                IPFS CID: <br />
+                                <strong>{tools.shorten(row.alink,9)}</strong> <br />
                                 {row.data.parts.length} parts.
+                                </p>
                             </Col>
-                            <Col className="text-end pt-2" sm={size.alink[1]} xs={size.alink[1]}>
-                                <FaCopy size={28} className="text-primary" onClick={(ev)=>{
+                            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
+                                <div className="thumbnail" style={{ backgroundImage:`url(${row.data.image})`}}
+                                    onClick={(ev)=>{
+                                        self.clickOpen(index);
+                                    }}></div>
+                            </Col>
+                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
+                                <FaCopy className="pointer text-primary" size={28} onClick={(ev)=>{
                                     Copy(row.alink);
                                 }}/>
                             </Col>
-                            <Col sm={size.detail[0]} xs={size.detail[0]} onClick={(ev)=>{
-                                self.clickOpen(index);
-                            }}>
-                                <img className="template" src={row.data.image} alt="" />
+                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
+                                <FaExchangeAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
+                                    self.clickTry(index);
+                                }}/>
                             </Col>
-                            <Col sm={size.detail[1]} xs={size.detail[1]}>
-                                <Row className="pt-2">
-                                    <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
-                                    <Col className="text-end pt-4" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaExchangeAlt size={28} className="text-primary" onClick={(ev)=>{
-                                            self.clickTry(index);
-                                        }}/>
-                                    </Col>
-                                    <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
-                                    <Col className="text-end pt-4" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaFolderOpen size={28} className="text-primary" onClick={(ev)=>{
-                                            self.clickOpen(index);
-                                        }}/>
-                                    </Col>
-                                    <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}></Col>
-                                    <Col className="pt-4 text-end" sm={size.row[0]} xs={size.row[0]}>
-                                        <FaTrashAlt size={28} className="text-danger" onClick={(ev)=>{
-                                            self.clickRemove(index);
-                                        }}/>
-                                    </Col>
-                                </Row>
+                            {/* <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
+                                <FaFolderOpen className="pointer text-primary" size={28}  onClick={(ev)=>{
+                                    self.clickOpen(index);
+                                }}/>
+                            </Col> */}
+                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
+                                <FaTrashAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
+                                    self.clickRemove(index);
+                                }}/>
                             </Col>
-                            
                         </Row>
                     </Col>
                 ))}
+                </Row>
             </div>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <hr />

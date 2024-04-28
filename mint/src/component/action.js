@@ -50,6 +50,7 @@ function Action(props) {
                 },
                 network:"tanssi",
                 creator:creator,
+                fav:false,                  //wether faved
                 stamp:tools.stamp(),
             }
         },

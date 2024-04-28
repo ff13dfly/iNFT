@@ -18,6 +18,7 @@ function Result(props) {
         row: [12],
         sell:[7,5],
         back:[10,2],
+        info:[10,2],
     };
 
     let [holder,setHolder]= useState("Password");
@@ -66,25 +67,6 @@ function Result(props) {
                     }
                 });
             });
-
-            // Chain.load(fa,password,(pair)=>{
-            //     Chain.read(anchor,(res)=>{
-            //         const key = `${res.location[0]}_${res.location[1]}`;
-            //         const target_link=`anchor://${res.location[0]}/${res.location[1]}`;
-            //         const dt = res.data[key];
-            //         if(dt.owner!==pair.address) return setInfo("Only owner can sell the iNFT."); 
-            //         Chain.unsell(pair,name,(res)=>{
-            //             setInfo(res.message);
-            //             if(res.step==="Finalized"){
-            //                 setTimeout(()=>{
-            //                     setInfo("");
-            //                     setSelling(false);
-            //                     Data.removeHash("cache",target_link);
-            //                 },400);
-            //             }
-            //         });
-            //     });
-            // });
         },
         clickSell:(ev)=>{
             //console.log(`Ready to selling`);
@@ -260,25 +242,21 @@ function Result(props) {
                             self.changePrice(ev);
                         }}/>
                     </Col>
-                    <Col sm={size.sell[0]} xs={size.sell[0]}>
-                        {info}
-                    </Col>
-                    <Col hidden={selling} className="text-end" sm={size.sell[1]} xs={size.sell[1]}>
-                        <button className="btn btn-md btn-primary" onClick={(ev)=>{
-                            self.clickSell();
-                        }}>Sell</button>
-                    </Col>
-
-                    <Col hidden={!selling} sm={size.sell[0]} xs={size.sell[0]}>{info}</Col>
                     <Col hidden={!selling} className="text-end" sm={size.sell[1]} xs={size.sell[1]}>
                         <button className="btn btn-md btn-primary" onClick={(ev)=>{
                             self.clickUnSell();
                         }}>Revoke</button>
                     </Col>
-                    
+                    <Col sm={size.info[0]} xs={size.info[0]}>
+                        {info}
+                    </Col>
+                    <Col hidden={selling} className="text-end" sm={size.info[1]} xs={size.info[1]}>
+                        <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                            self.clickSell();
+                        }}>Sell</button>
+                    </Col>
                 </Row>
             </Col>
-            
         </Row>
     )
 }

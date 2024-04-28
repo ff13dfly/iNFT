@@ -109,28 +109,7 @@ const self={
                     return ck && ck(status);
                 });
             });
-        })
-        
-
-        // if (!self.ready()) return ck && ck({error:"No websocke link."});
-		// if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-		// if (typeof raw !== 'string') raw = JSON.stringify(raw);
-		// if(self.limited(anchor,raw,protocol)) return ck && ck({error:"Params error"});
-
-		// self.owner(anchor,(owner,block)=>{
-		// 	if(owner!==false &&  owner!==pair.address) return ck && ck({error:`Not the owner of ${anchor}`});
-		// 	self.balance(pair.address,(amount)=>{
-		// 		if(amount.free<100*1000000000000) return ck && ck({error:'Low balance'});
-		// 		const pre = owner===false?0:block;
-		// 		try {
-		// 			wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
-		// 				return ck && ck(self.process(res));
-		// 			});
-		// 		} catch (error) {
-		// 			return ck && ck({error:error});
-		// 		}
-		// 	});
-		// });
+        });
     },
     sell:(pair,name,price,ck,target)=>{
         self.init(()=>{

@@ -276,8 +276,14 @@ code {
 }
 
 .template{
-  width: 300px;
-  height: 300px;
+  width: 100%;
+}
+
+.thumbnail {
+  width: 150px; /* Width of the thumbnail */
+  height: 150px; /* Height of the thumbnail */
+  background-size: cover; /* Scale the background image to cover the entire element */
+  background-position: 50% 50%; /* Position the center of the background image */
 }
 
 .mine{
