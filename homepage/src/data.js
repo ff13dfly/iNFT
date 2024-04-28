@@ -67,20 +67,20 @@ module.exports={
   loader:{
     subject:{
       desc:[
-        "肉眼可识别的NFT，是基于图像的设计和组合",
-        "依赖数学的随机性，来确定稀缺性",
-        "只能通过PoW的方式来获取稀缺性的NFT"
+        "Open API",
+        "The system provides an open API that is compatible with all chain calls and accesses. ",
+        "This means developers can easily interact with the INFT ecosystem through API interfaces, whether it's creating INFT assets or using them ."
       ],
       background:"imgs/loader.png",
     },
     frontend:{
-      title:"稀缺性样例1",
-      desc:"By deploy the loader of frontend, you can run Anchor application directly by html hash. It is a simple way, the url as follow :",
+      title:"Open Configuration Parameters",
+      desc:"The system offers open configuration parameters, allowing users to define diverse ways of image acquisition. This enables users to customize and adjust the image generation process according to their needs and preferences, thus creating INFT assets that meet personalized requirements.",
       code:"loader.html#hello@wss://dev.metanchor.net",
     },
     backend:{
-      title:"稀缺性样例2",
-      desc:"The backend need NodeJS support, please make sure your system can run NodeJS properly.",
+      title:"Comprehensive Profit-sharing Model",
+      desc:"The system establishes a comprehensive profit-sharing model, enabling creators to quickly monetize their works. Through a well-designed profit-sharing mechanism, creators can share the value of their works in the INFT ecosystem, thereby incentivizing more creation and participation.",
       code:"node loader.js anchor://hello/",
     }
   },
