@@ -142,7 +142,15 @@ function Mine(props) {
             const my = JSON.parse(ls);
             const dt = my[addr][index];
             //console.log(dt);
-            props.dialog(<Result name={dt.link} anchor={dt.hash} skip={true} back={true} dialog={props.dialog} />, "iNFT Details");
+            props.dialog(<Result 
+                name={dt.anchor} 
+                hash={dt.hash} 
+                block={dt.block} 
+                template={dt.template.hash}
+                skip={true} 
+                back={true} 
+                dialog={props.dialog}
+            />, "iNFT Details");
         },
 
         autoCache: (plist, ck) => {

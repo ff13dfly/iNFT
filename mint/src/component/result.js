@@ -117,11 +117,10 @@ function Result(props) {
             }
         },
         fresh:(addr)=>{
-            
             Chain.read(anchor,(res)=>{
                 const bk=res.location[1];
                 const alink=`anchor://${res.location[0]}/${res.location[1]}`;
-                //console.log(res);
+
                 const key=`${res.location[0]}_${bk}`.toLocaleLowerCase();
                 const adata=res.data[key];
                 const raw=JSON.parse(adata.raw);
@@ -166,31 +165,29 @@ function Result(props) {
                 });
             });
         },
+        show:()=>{
+            setName(props.anchor);
+            setBlock(props.block);
+            setBlockHash(props.hash);
+
+            const tpl = Data.getHash("cache", props.template);
+            setWidth(tpl.size[0]);
+            setHeight(tpl.size[1]);
+            setTimeout(() => {
+                const pen = Render.create(dom_id,true);
+                const basic = {
+                    cell: tpl.cell,
+                    grid: tpl.grid,
+                    target: tpl.size
+                }
+                Render.clear(dom_id);
+                Render.preview(pen,tpl.image,props.hash,tpl.parts,basic);
+            }, 50);
+        },
     }
 
     useEffect(() => {
-        const fa = Local.get("login");
-        if(!fa) return false;
-        const login=JSON.parse(fa);
-        const addr=login.address;
-
-        //console.log(addr,props);
-
-
-        // const its=Local.get("list");
-        // const nlist=its===undefined?{}:JSON.parse(its);
-        // if(nlist[addr]===undefined)nlist[addr]=[];
-        // nlist[addr].unshift({
-        //     link:"inft_ggnccgdewoolfc",
-        //     tpl:"bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a",
-        //     hash:"0x81928bc803aa323693c5a3ca72e93d2c3fa7f34100298e83bf7d859cd5b28202"
-        // });    
-        // Local.set("list",JSON.stringify(nlist));
-
-        // Network("tanssi").view(props.name,"anchor",(obj)=>{
-        //     console.log(obj);
-        // });
-        
+        self.show();
     }, [props.update,props.anchor]);
 
     return (

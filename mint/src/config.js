@@ -10,4 +10,5 @@ module.exports = {
         //"anchor://single/265468",
         //"anchor://aabb/217148",
     ],
+    unit:"$INFT",
 }
