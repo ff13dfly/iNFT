@@ -19,6 +19,25 @@ const funs={
 		if(address!==undefined) return address.length!==limits.address?true:false;
         return false;
     },
+
+    // there are two "InBlock" functions.
+    decodeProcess:(obj,ck)=>{
+        if(!obj || obj.dispatchError!==undefined) return ck && ck({error:"Failed to write to chain."});
+        if(!obj.status) return ck && ck({error:"Invalid format"});
+        if(obj.status==="Ready"){
+            return ck && ck({msg:"Ready to write to network.",success:true,status:"Ready"});
+        }else if(obj.status.Broadcast){
+            return ck && ck({msg:"Broadcast to nodes.",success:true,status:"Broadcast"});
+        }else if(obj.status.InBlock){
+            return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock"});
+        }else if(obj.status.Retracted){
+            return ck && ck({msg:"Trying to write.",success:true,status:"Retracted"});
+        }else if(obj.status.Finalized){
+            return ck && ck({msg:"Done, write to network",success:true,status:"Finalized",hash:obj.status.Finalized});
+        }else{
+            return ck && ck({error:"Unknow result"});
+        }
+    },  
 }
 
 let wsAPI = null;
@@ -85,9 +104,10 @@ const self={
             const pre=0;
             console.log(anchor, raw, protocol, pre);
             wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
-                //console.log(res.status.toHuman());
                 const dt=res.toHuman();
-                return ck && ck(dt);
+                funs.decodeProcess(dt,(status)=>{
+                    return ck && ck(status);
+                });
             });
         })
         
@@ -112,15 +132,74 @@ const self={
 		// 	});
 		// });
     },
+    sell:(pair,name,price,ck,target)=>{
+        self.init(()=>{
+            self.view(name,"owner",(signer)=>{
+                if(signer===false || pair.address!==signer.address) return ck && ck({error:"Invalid owner of iNFT."});
+                try {
+                    wsAPI.tx.anchor.sellAnchor(name,price,!target?signer.address:target).signAndSend(pair, (res) => {
+                        const dt=res.toHuman();
+                        funs.decodeProcess(dt,(status)=>{
+                            return ck && ck(status);
+                        });
+                    });
+                } catch (error) {
+                    return ck && ck({error:error});
+                }
+            });
+        });
+    },
+    revoke:(pair,name,ck)=>{
+        self.init(()=>{
+            self.view(name,"owner",(signer)=>{
+                if(signer===false || pair.address!==signer.address) return ck && ck({error:"Invalid owner of iNFT."});
+                try {
+                    wsAPI.tx.anchor.unsellAnchor(name).signAndSend(pair, (res) => {
+                        const dt=res.toHuman();
+                        funs.decodeProcess(dt,(status)=>{
+                            return ck && ck(status);
+                        });
+                    });
+                } catch (error) {
+                    return ck && ck({error:error});
+                }
+            });
+        });
+    },
     view:(value,type,ck)=>{
         self.init(()=>{
             switch (type) {
                 case "anchor":
                     
                     break;
-    
+
+                case "selling":
+                    let unselling = null;
+                    wsAPI.query.anchor.sellList(value, (res) => {
+                        unselling();
+                        const dt=res.toJSON();
+                        if(!dt) return ck && ck(false);
+
+                        return ck && ck(dt);
+                    }).then((fun)=>{
+                        unselling = fun;
+                    });
+                    break;
+
+                case "owner":
+                    let unsub = null;
+                    wsAPI.query.anchor.anchorOwner(value, (res) => {
+                        unsub();
+                        const dt=res.toJSON();
+                        if(!dt) return ck && ck(false);
+
+                        return ck && ck({address:dt[0],block:dt[1]});
+                    }).then((fun)=>{
+                        unsub = fun;
+                    });
+                    break;
+
                 case "block":
-                    //console.log(wsAPI);
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const obj=dt.toJSON();
                         return ck && ck({block:obj.block.header.number});

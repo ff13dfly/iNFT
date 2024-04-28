@@ -147,6 +147,7 @@ function Mine(props) {
                 hash={dt.hash} 
                 block={dt.block} 
                 template={dt.template.hash}
+                price={!dt.price?0:dt.price}
                 skip={true} 
                 back={true} 
                 dialog={props.dialog}
