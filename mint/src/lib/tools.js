@@ -92,7 +92,7 @@ const self = {
     var marginLeft = parseFloat(computedStyle.marginLeft);
     //console.log(marginTop,marginRight,marginBottom,marginLeft);
     return {margin:[marginTop,marginRight,marginBottom,marginLeft]}
-  },  
+  },
 };
 
 module.exports = self;

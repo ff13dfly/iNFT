@@ -192,18 +192,13 @@ function Template(props) {
                                 </p>
                             </Col>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                                <div className="thumbnail" 
+                                <div className="thumbnail pointer" 
                                     style={{ backgroundImage:`url(${row.data.image})`}}
                                     onClick={(ev)=>{
                                         self.clickOpen(index);
                                     }}></div>
                             </Col>
-                            {/* <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
-                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
-                                    Copy(row.alink);
-                                }}><FaCopy /></button>
-                            </Col> */}
-                            <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                            <Col hidden={index===0} className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
                                 <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                                     self.clickTry(index);
                                 }}><FaExchangeAlt /></button>

@@ -6,11 +6,12 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
-//import Chain from "../lib/chain";
 import Network from "../network/router";
 
 import Faucet from "./faucet";
 import System from "./system";
+
+import {  FaCopy } from "react-icons/fa";
 
 function Account(props) {
     const size = {
@@ -114,7 +115,8 @@ function Account(props) {
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
                 Network("tanssi").balance(account.address,(res)=>{
                     const divide=Network("tanssi").divide();
-                    setBalance(parseFloat(res.free*(1/divide)).toLocaleString());
+
+                    setBalance(tools.toF(res.free*(1/divide),8));
                 })
             } catch (error) {
                 
@@ -143,10 +145,13 @@ function Account(props) {
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address)}
+                        {tools.shorten(address,8)}
+                        <button className="btn btn-sm btn-secondary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                            self.clickCopy(ev);
+                        }}><FaCopy /></button>
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        <strong>{balance}</strong> unit
+                        <strong>{balance}</strong> $INFT
                     </Col>
                 </Row>
             </Col>
@@ -154,9 +159,9 @@ function Account(props) {
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickDownload(ev);
                 }}>Download Key</button>
-                <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                {/* <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
-                }}>{copy}</button>
+                }}>{copy}</button> */}
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev)=>{
