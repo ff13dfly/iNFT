@@ -16,7 +16,7 @@ function Action(props) {
         password: [2, 8, 2]
     };
 
-    let [info, setInfo] = useState("");
+    let [info, setInfo] = useState(" ");
     let [password, setPassword] = useState("");
     let [hidden, setHidden] = useState(true);
     let [disable, setDisable] = useState(false);
@@ -98,17 +98,32 @@ function Action(props) {
             }
         },
 
+        isSaved:(name,list)=>{
+            for(let i=0;i<list.length;i++){
+                const row=list[i];
+                if(name===row.anchor) return true;
+            }
+            return false;
+        },
+
         saveResult:(name,hash,creator,ck)=>{
             //console.log(name,hash);
             const tpl=self.getCurrentTemplate();
             Network("tanssi").view(hash,"block",(data)=>{
-                console.log(tpl,data.block);
                 const inft=self.getInftLocal(name,tpl,hash,data.block,creator);
-                console.log(inft);
+
+                const its=Local.get("list");
+                const nlist=its===undefined?{}:JSON.parse(its);
+                if(nlist[creator]===undefined)nlist[creator]=[];
+
+                //avoid double writing
+                if(!self.isSaved(name,nlist[creator])){
+                    nlist[creator].unshift(inft);
+                    Local.set("list",JSON.stringify(nlist));
+                }
 
                 return ck && ck();
-            })
-            
+            }); 
         },
 
         clickMint: (ev) => {
