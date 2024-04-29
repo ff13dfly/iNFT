@@ -27,6 +27,7 @@ function Template(props) {
     let [list, setList] = useState([]);
     let [alink, setAlink] = useState("");
     let [disableAdd,setDisableAdd] = useState(true);
+    let [recover,setRecover]=useState({});
 
     const zero = "0x0000000000000000000000000000000000000000000000000000000000000000";
     const self = {
@@ -73,6 +74,16 @@ function Template(props) {
             Local.set("template",JSON.stringify(nlist))
             self.showTemplate();
             props.fresh(true);
+        },
+        clickRecover:(key,at)=>{
+            if(!recover[key]){
+                recover[key]="text-info";
+                setRecover(tools.copy(recover));
+                setTimeout(()=>{
+                    delete recover[key];
+                    setRecover(tools.copy(recover));
+                },!at?1500:at);
+            }
         },
         getThumbs: (arr, dom_id, ck, todo) => {
             if (todo === undefined) todo = [];
@@ -187,7 +198,8 @@ function Template(props) {
                                 IPFS CID: <br />
                                 <strong>{tools.shorten(row.alink,7)}</strong> <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
                                     Copy(row.alink);
-                                }}><FaCopy /></button><br />
+                                    self.clickRecover(`copy_${index}`);
+                                }}><FaCopy className={!recover[`copy_${index}`]?"":recover[`copy_${index}`]}/></button><br />
                                 {row.data.parts.length} parts.
                                 </p>
                             </Col>
@@ -201,7 +213,8 @@ function Template(props) {
                             <Col hidden={index===0} className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
                                 <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                                     self.clickTry(index);
-                                }}><FaExchangeAlt /></button>
+                                    self.clickRecover(`try_${index}`,200);
+                                }}><FaExchangeAlt className={!recover[`try_${index}`]?"":recover[`try_${index}`]}/></button>
                             </Col>
                             <Col className="pt-3" sm={size.opt[0]} xs={size.opt[0]}>
                                 <button className="btn btn-md btn-secondary" onClick={(ev)=>{

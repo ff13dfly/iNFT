@@ -10,6 +10,8 @@ import Chain from "../lib/chain";
 
 import Network from "../network/router";
 
+import { FaMenorah } from "react-icons/fa";
+
 function Action(props) {
     const size = {
         row: [12],
@@ -153,6 +155,7 @@ function Action(props) {
                                             hash={process.hash} 
                                             block={block}
                                             price={0}
+                                            fav={false}
                                             template={target.alink}
                                         />, "iNFT Result");
                                         setTimeout(() => {
@@ -183,8 +186,6 @@ function Action(props) {
                 
             }
         }
-
-        
     }, [props.update]);
 
     return (
@@ -193,17 +194,21 @@ function Action(props) {
             <Col className="text-center" hidden={hidden} sm={size.row[0]} xs={size.row[0]}>
                 <small>{info}</small>
             </Col>
-            <Col className="text-center" hidden={hidden} sm={size.password[0]} xs={size.password[0]}>
-
+            <Col className="text-end" hidden={hidden} sm={size.password[0]} xs={size.password[0]}>
             </Col>
-            <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}>
-                <input className="form-control" type="password" placeholder={holder}
+            <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}>   
+                <input className="form-control" style={{width:"100%"}} type="password" placeholder={holder}
                     value={password}
                     onChange={(ev) => {
                         self.changePassword(ev);
                     }}
                 />
             </Col>
+            {/* <Col hidden={hidden} sm={size.password[2]} xs={size.password[2]}>
+                <button className="btn btn-md btn-secondary">
+                    <FaMenorah />
+                </button>
+            </Col> */}
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-lg btn-primary" disabled={disable} onClick={(ev) => {
                     setInfo("");

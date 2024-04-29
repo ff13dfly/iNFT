@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaBackspace } from "react-icons/fa";
+import { FaBackspace,FaRegHeart,FaHeart } from "react-icons/fa";
 
 import Mine from "./mine";
 
@@ -19,6 +19,7 @@ function Result(props) {
         sell:[7,5],
         back:[10,2],
         info:[10,2],
+        fav:[10,2],
     };
 
     let [holder,setHolder]= useState("Password");
@@ -38,6 +39,8 @@ function Result(props) {
     let [price, setPrice] = useState("");
     let [info, setInfo] =useState("");
     let [name,setName]=useState("");
+
+    let [fav, setFav]=useState(props.fav);
 
     const dom_id="pre_result";
     const fix=40;
@@ -87,6 +90,32 @@ function Result(props) {
                     }
                 });
             });
+        },
+        clickFav:(ev)=>{
+            const name=props.name;
+            const fa = Local.get("login");
+            const ls = Local.get("list");
+            
+            try {
+                const user=JSON.parse(fa);
+                const nlist = JSON.parse(ls);
+                if(!nlist[user.address]) return console.log("Invalid account record.");
+
+                let index=null;
+                for(let i=0;i<nlist[user.address].length;i++){
+                    const row=nlist[user.address][i];
+                    if(row.anchor===name) index=i;
+                }
+
+                if(index!==null){
+                    const nfav=!nlist[user.address][index].fav;
+                    nlist[user.address][index].fav=nfav;
+                    Local.set("list",JSON.stringify(nlist));
+                    setFav(nfav);
+                }
+            }catch (error) {
+                console.log(error);
+            }
         },
         updateSelling:(name,price,target,ck)=>{
             const fa = Local.get("login");
@@ -203,7 +232,7 @@ function Result(props) {
             }
         });
 
-    }, [props.update,props.anchor]);
+    }, [props.update]);
 
     return (
         <Row>
@@ -218,8 +247,13 @@ function Result(props) {
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{minHeight:"300px"}}>
                 <canvas width={width} height={height} id={dom_id}></canvas>
             </Col>
-            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2" sm={size.fav[0]} xs={size.fav[0]}>
                 Block hash: {tools.shorten(block_hash,12)}
+            </Col>
+            <Col className="pt-1 text-end" sm={size.fav[1]} xs={size.fav[1]}>
+                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                    self.clickFav(ev);
+                }}>{fav?<FaHeart color={"#FFAABB"}/>:<FaRegHeart color={"#FFAABB"}/>}</button>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 {market}

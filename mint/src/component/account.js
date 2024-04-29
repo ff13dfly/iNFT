@@ -32,8 +32,7 @@ function Account(props) {
     let [password, setPassword]= useState("");
     let [dis_new, setNewDisable] = useState(true);
 
-    let [copy, setCopy]=useState("Copy");
-    let [dis_copy,setCopyDisable]= useState(false);
+    let [recover,setRecover]=useState({});
     
     const {Keyring}=window.Polkadot;
 
@@ -72,12 +71,25 @@ function Account(props) {
         },
         clickCopy:(ev)=>{
             Copy(address);
-            setCopy("Copied");
-            setCopyDisable(true);
-            setTimeout(() => {
-                setCopy("Copy");
-                setCopyDisable(false);
-            }, 300);
+            // setCopy("Copied");
+            // setCopyDisable(true);
+            // setTimeout(() => {
+            //     setCopy("Copy");
+            //     setCopyDisable(false);
+            // }, 300);
+        },
+        clickRecover:(key,at)=>{
+            if(!recover[key]){
+                recover[key]="text-info";
+                setRecover(tools.copy(recover));
+                setTimeout(()=>{
+                    delete recover[key];
+                    setRecover(tools.copy(recover));
+                },!at?1000:at);
+            }
+        },
+        clickFaucet:(ev)=>{
+            console.log(`Getting faucet...`);
         },
         changeFile: (ev) => {
             try {
@@ -148,7 +160,8 @@ function Account(props) {
                         {tools.shorten(address,8)}
                         <button className="btn btn-sm btn-secondary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                             self.clickCopy(ev);
-                        }}><FaCopy /></button>
+                            self.clickRecover("copy");
+                        }}><FaCopy className={!recover.copy?"":recover.copy}/></button>
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                         <strong>{balance}</strong> $INFT

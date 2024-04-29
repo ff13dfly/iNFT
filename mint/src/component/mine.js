@@ -141,13 +141,14 @@ function Mine(props) {
             const ls = Local.get("list");
             const my = JSON.parse(ls);
             const dt = my[addr][index];
-            //console.log(dt);
+
             props.dialog(<Result 
                 name={dt.anchor} 
                 hash={dt.hash} 
                 block={dt.block} 
                 template={dt.template.hash}
                 price={!dt.price?0:dt.price}
+                fav={dt.fav}
                 skip={true} 
                 back={true} 
                 dialog={props.dialog}
