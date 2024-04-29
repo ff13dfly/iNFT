@@ -206,7 +206,7 @@ function Detail(props) {
                 }} />
             </Col>
             <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
-                <h5>Value: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`)%dvd}</span> </h5>
+                <h5>Val: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`)%dvd}</span> </h5>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
@@ -217,7 +217,7 @@ function Detail(props) {
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                                Mock hash
+                                Mock hash ( {hash.length-2} )
                             </Col>
                         </Row>
                         <SmallHash hash={hash} start={start} step={step} />
@@ -255,7 +255,7 @@ function Detail(props) {
                 ))}
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                iNFT template parts list
+                iNFT template {parts.length} parts selector.
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
@@ -265,7 +265,7 @@ function Detail(props) {
                                 self.clickPart(index);
                             }}>
                                 {/* <FaPuzzlePiece size="20" color={"#AAAAAA"} style={{marginTop:"-5px"}}/> */}
-                                <strong>#{index}</strong>
+                                <strong>#{index+1}</strong>
                             </button>
                         </Col>
                     ))}

@@ -51,7 +51,7 @@ function SmallHash(props) {
                 matrix.color[row+Math.floor((index+i)/config.grid)][(index+i)%config.grid]=config.warning;
             } 
             const nlist=self.group(matrix);
-            console.log(props,nlist);
+            //console.log(props,nlist);
             setList(nlist)
         },
     }

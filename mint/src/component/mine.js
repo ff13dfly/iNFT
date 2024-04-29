@@ -135,44 +135,6 @@ function Mine(props) {
             }
             return alist;
         },
-        getThumbs: (arr, dom_id, ck, todo) => {
-            if (todo === undefined) todo = [];
-            if (arr.length === 0) return ck && ck(todo);
-
-            //1.get iNFT and template
-            const me = arr.shift();
-            const dt = Data.getHash("cache", me.template.hash);
-            const basic = {
-                cell: dt.cell,
-                grid: dt.grid,
-                target: dt.size
-            }
-
-            //2.prepare the canvas
-            const con = document.getElementById("handle");
-            const cvs = document.createElement('canvas');
-            cvs.id = config.dom_id;
-            cvs.width = dt.size[0]; 
-            cvs.height = dt.size[1];
-            con.appendChild(cvs);
-
-            const pen = Render.create(config.dom_id, true);
-            Render.reset(pen);
-            Render.preview(pen, dt.image, me.hash, dt.parts, basic);
-
-            //3.获取生成的图像
-            return setTimeout(() => {
-                me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                //me.sell = me_anchor.sell;     //附加销售的信息
-                //me.price = me_anchor.cost;
-
-                //console.log(me_anchor);
-                todo.push(me);
-                con.innerHTML = "";
-
-                return self.getThumbs(arr, config.dom_id, ck, todo);
-            }, 50);
-        },
         autoCache: (plist, ck) => {
             const nfts = [], tpls = {};
             for (let i = 0; i < plist.length; i++) {
@@ -221,23 +183,25 @@ function Mine(props) {
 
             //2.prepare the canvas
             const con = document.getElementById("handle");
-            const cvs = document.createElement('canvas');
-            cvs.id = config.dom_id;
-            cvs.width = 400;
-            cvs.height = 400;
-            con.appendChild(cvs);
+            if(con!==null){     //invoid to render after the dialog is closed
+                const cvs = document.createElement('canvas');
+                cvs.id = config.dom_id;
+                cvs.width = 400;
+                cvs.height = 400;
+                con.appendChild(cvs);
 
-            const pen = Render.create(config.dom_id, true);
-            Render.reset(pen);
-            Render.preview(pen, dt.image, me.hash, dt.parts, basic);
+                const pen = Render.create(config.dom_id, true);
+                Render.reset(pen);
+                Render.preview(pen, dt.image, me.hash, dt.parts, basic);
 
-            return setTimeout(() => {
-                me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                todo.push(me);
-                con.innerHTML = "";
+                return setTimeout(() => {
+                    me.bs64 = pen.canvas.toDataURL("image/jpeg");
+                    todo.push(me);
+                    con.innerHTML = "";
 
-                return self.getThumbs(arr, config.dom_id, ck, todo);
-            }, 50);
+                    return self.autoThumbs(arr, ck, todo);
+                }, 50);
+            }
         },
         page: (arr) => {
             //console.log(`Page:${page}`)
