@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal, FaBars, FaImages } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal, FaMapMarkerAlt } from "react-icons/fa";
 
 import Result from "./result";
 
@@ -318,15 +318,13 @@ function Mine(props) {
                                 self.clickSingle(index);
                             }}>
                                 <Row>
-                                    <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                                        <img className="mine" src={row.bs64} alt="" />
+                                    <Col className="grid" sm={size.row[0]} xs={size.row[0]} >
+                                        <img className="mine"  src={row.bs64} alt="" />
                                     </Col>
-                                    {/* <Col className="" sm={size.selling[0]} xs={size.selling[0]}>
-                                        {row.block.toLocaleString()}
+                                    <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                                        {/* <FaMapMarkerAlt size={12}/> */}
+                                        <span>{row.block.toLocaleString()}</span> 
                                     </Col>
-                                    <Col className="text-end" sm={size.selling[1]} xs={size.selling[1]}>
-                                        {row.sell?row.price:""}
-                                    </Col> */}
                                 </Row>
                             </Col>
                         ))}

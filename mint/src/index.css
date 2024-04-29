@@ -287,9 +287,11 @@ code {
 }
 
 .mine{
-  /* width: 180px; */
   width: 100%;
-  /* height: 180px; */
+}
+
+.grid{
+  min-height: 120px;
 }
 
 .monospaced{

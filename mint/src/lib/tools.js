@@ -35,13 +35,6 @@ const self = {
   toDate: (stamp) => {
     return new Date(stamp).toLocaleString();
   },
-  device:()=>{
-    return {
-      width:window.screen.width,
-      height:window.screen.height,
-      rate:window.devicePixelRatio,
-    }
-  },
   toF: (a,fix)=>{
     fix=fix||3;return parseFloat(a.toFixed(fix))
   },
@@ -81,17 +74,21 @@ const self = {
     }
     return u8array;
   },
-  checkDevice:()=>{
-    const con = document.getElementById("minter");
-    var computedStyle = window.getComputedStyle(con);
+  device:()=>{
+    // const con = document.getElementById("minter");
+    // var computedStyle = window.getComputedStyle(con);
 
-    // Extract the margin values
-    var marginTop = parseFloat(computedStyle.marginTop);
-    var marginRight = parseFloat(computedStyle.marginRight);
-    var marginBottom = parseFloat(computedStyle.marginBottom);
-    var marginLeft = parseFloat(computedStyle.marginLeft);
-    //console.log(marginTop,marginRight,marginBottom,marginLeft);
-    return {margin:[marginTop,marginRight,marginBottom,marginLeft]}
+    // var marginTop = parseFloat(computedStyle.marginTop);
+    // var marginRight = parseFloat(computedStyle.marginRight);
+    // var marginBottom = parseFloat(computedStyle.marginBottom);
+    // var marginLeft = parseFloat(computedStyle.marginLeft);
+
+    return {
+      //margin:[marginTop,marginRight,marginBottom,marginLeft],
+      width:window.screen.width,
+      height:window.screen.height,
+      rate:window.devicePixelRatio,
+    }
   },
 };
 
