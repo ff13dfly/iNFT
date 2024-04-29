@@ -13,6 +13,8 @@ import Data from "../lib/data";
 import IPFS from "../network/ipfs";
 
 
+let page=1;
+
 function Mine(props) {
     const size = {
         row: [12],
@@ -22,22 +24,67 @@ function Mine(props) {
         selling: [6, 6],
     };
 
+    const config={
+        dom_id:"pre_mine",
+        page_count:9,
+    }
+
     let [list, setList] = useState([]);
     let [info, setInfo] = useState("");
-    let [page_show, setPageShow] = useState(false);
 
-    const dom_id = "pre_mine";
+    let [progress, setProgress]=useState("");
+    let [done, setDone] = useState(false);
+
+    //let [page, setPage]=useState(1);
+    let [sum, setSum]=useState(1);
+
+    let [filter, setFilter]=useState({fav:false,template:""});  //filter value, get list by this filter
+
+    //const dom_id = "pre_mine";
     const self = {
-        page: (arr, page, step) => {
-            //console.log(arr);
-            const nlist = [];
-            const max = arr.length;
-            if ((page - 1) * step > max) return nlist;
-            for (let i = 0; i < step; i++) {
-                const key = (page - 1) * step + i;
-                if (arr[key] !== undefined) nlist.push(arr[key]);
+        clickClean: (ev) => {
+            Local.remove("list");
+            props.fresh();
+        },
+        clickPrevious: (ev) => {
+            if(page<1){
+                page=1
+            }else{
+                page--;
             }
-            return nlist;
+            
+            self.showList();
+        },
+        clickNext: (ev) => {
+            if(page>sum){
+                page=sum
+            }else{
+                page++;
+            }
+            self.showList();
+        },
+        clickSingle: (index) => {
+
+            const fa = Local.get("login");
+            if (!fa) return false;
+            const login = JSON.parse(fa);
+            const addr = login.address;
+
+            const ls = Local.get("list");
+            const my = JSON.parse(ls);
+            const dt = my[addr][index];
+
+            props.dialog(<Result 
+                name={dt.anchor} 
+                hash={dt.hash} 
+                block={dt.block} 
+                template={dt.template.hash}
+                price={!dt.price?0:dt.price}
+                fav={dt.fav}
+                skip={true} 
+                back={true} 
+                dialog={props.dialog}
+            />, "iNFT Details");
         },
         cacheTemplate: (alinks, ck, dels) => {
             if (dels === undefined) dels = [];
@@ -95,7 +142,6 @@ function Mine(props) {
             //1.get iNFT and template
             const me = arr.shift();
             const dt = Data.getHash("cache", me.template.hash);
-            //console.log(dt);
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
@@ -105,12 +151,12 @@ function Mine(props) {
             //2.prepare the canvas
             const con = document.getElementById("handle");
             const cvs = document.createElement('canvas');
-            cvs.id = dom_id;
+            cvs.id = config.dom_id;
             cvs.width = dt.size[0]; 
             cvs.height = dt.size[1];
             con.appendChild(cvs);
 
-            const pen = Render.create(dom_id, true);
+            const pen = Render.create(config.dom_id, true);
             Render.reset(pen);
             Render.preview(pen, dt.image, me.hash, dt.parts, basic);
 
@@ -124,37 +170,9 @@ function Mine(props) {
                 todo.push(me);
                 con.innerHTML = "";
 
-                return self.getThumbs(arr, dom_id, ck, todo);
+                return self.getThumbs(arr, config.dom_id, ck, todo);
             }, 50);
         },
-        clickClean: (ev) => {
-            Local.remove("list");
-            props.fresh();
-        },
-        clickSingle: (index) => {
-            //console.log(`${index} is clicked`);
-            const fa = Local.get("login");
-            if (!fa) return false;
-            const login = JSON.parse(fa);
-            const addr = login.address;
-
-            const ls = Local.get("list");
-            const my = JSON.parse(ls);
-            const dt = my[addr][index];
-
-            props.dialog(<Result 
-                name={dt.anchor} 
-                hash={dt.hash} 
-                block={dt.block} 
-                template={dt.template.hash}
-                price={!dt.price?0:dt.price}
-                fav={dt.fav}
-                skip={true} 
-                back={true} 
-                dialog={props.dialog}
-            />, "iNFT Details");
-        },
-
         autoCache: (plist, ck) => {
             const nfts = [], tpls = {};
             for (let i = 0; i < plist.length; i++) {
@@ -164,10 +182,17 @@ function Mine(props) {
 
             const ts = [];
             for (var k in tpls) ts.push(k);
+
+            if(ts.length!==0){
+                setProgress(`Getting ${ts.length===1?"1 template":(ts.length+" templates")} from IPFS ...`);
+            }
             self.autoTemplate(ts, () => {
-                self.autoThumbs(plist, (glist) => {
-                    return ck && ck(glist);
-                });
+                setProgress("Rending the thumbs of iNFTs ...");
+                setTimeout(()=>{
+                    self.autoThumbs(plist, (glist) => {
+                        return ck && ck(glist);
+                    });
+                },800);
             });
         },
         autoTemplate: (arr, ck) => {
@@ -197,12 +222,12 @@ function Mine(props) {
             //2.prepare the canvas
             const con = document.getElementById("handle");
             const cvs = document.createElement('canvas');
-            cvs.id = dom_id;
+            cvs.id = config.dom_id;
             cvs.width = 400;
             cvs.height = 400;
             con.appendChild(cvs);
 
-            const pen = Render.create(dom_id, true);
+            const pen = Render.create(config.dom_id, true);
             Render.reset(pen);
             Render.preview(pen, dt.image, me.hash, dt.parts, basic);
 
@@ -211,11 +236,27 @@ function Mine(props) {
                 todo.push(me);
                 con.innerHTML = "";
 
-                return self.getThumbs(arr, dom_id, ck, todo);
+                return self.getThumbs(arr, config.dom_id, ck, todo);
             }, 50);
         },
+        page: (arr) => {
+            //console.log(`Page:${page}`)
+            const nlist = [];
+            const step=config.page_count;
+            if ((page - 1) * step > arr.length) return nlist;
+
+            for (let i = 0; i < step; i++) {
+                const key = (page - 1) * step + i;
+                if (arr[key] !== undefined) nlist.push(arr[key]);
+            }
+            //console.log(page,JSON.stringify(nlist));
+            return nlist;
+        },
         showList: () => {
+            setDone(false);
             const fa = Local.get("login");
+            setProgress("Loading ...");
+
             if (fa !== undefined) {
                 const login = JSON.parse(fa);
                 const addr = login.address;
@@ -223,11 +264,15 @@ function Mine(props) {
                 if (ls !== undefined) {
                     try {
                         const nlist = JSON.parse(ls);
-                        const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr], 1, 10);
-                        //console.log(JSON.stringify(plist));
+                        
+                        const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr]);
+                        if(nlist[addr]!==undefined){
+                            const total=Math.ceil(nlist[addr].length/config.page_count);
+                            setSum(total);
+                        }
 
                         self.autoCache(plist, (glist) => {
-                            setPageShow(true);
+                            setDone(true);
                             setList(glist);
                         });
                     } catch (error) {
@@ -244,7 +289,6 @@ function Mine(props) {
 
     useEffect(() => {
         self.showList();
-
     }, [props.update]);
 
     return (
@@ -253,19 +297,22 @@ function Mine(props) {
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
             <Col className="pb-2" sm={size.filter[0]} xs={size.filter[0]}>
-                <FaGripHorizontal size="28" />
+                <FaGripHorizontal size="28" className="pointer"/>
                 {/*切换每行显示的数量*/}
             </Col>
             <Col className="text-end pb-2" sm={size.filter[1]} xs={size.filter[1]}>
-                <FaImages className="pr-2" size="24" />
-                <FaBars className="pr-2" size="24" />
-                <FaHeart size="24" />
+                {/* <FaImages className="pr-2" size="24" />
+                <FaBars className="pr-2" size="24" /> */}
+                <FaHeart size="24" className="pointer"/>
             </Col>
 
             <Col sm={size.row[0]} xs={size.row[0]}>{info}</Col>
             <div className="limited">
-                <Col sm={size.row[0]} xs={size.row[0]}>
-                    <Row>
+                <Col hidden={done} sm={size.row[0]} xs={size.row[0]}>
+                    <h4>{progress}</h4>
+                </Col>
+                <Col hidden={!done} sm={size.row[0]} xs={size.row[0]}>
+                    <Row >
                         {list.map((row, index) => (
                             <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]} onClick={(ev) => {
                                 self.clickSingle(index);
@@ -286,21 +333,25 @@ function Mine(props) {
                     </Row>
                 </Col>
             </div>
-            <Col hidden={!page_show} sm={size.row[0]} xs={size.row[0]}>
+            <Col  sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="pt-2" sm={size.page[0]} xs={size.page[0]}>
-                        <FaAngleLeft size={36} />
+                        <FaAngleLeft className="pointer" size={36} hidden={page===1} onClick={(ev)=>{
+                            self.clickPrevious(ev);
+                        }}/>
                     </Col>
-                    <Col className="pt-2 text-center" sm={size.page[1]} xs={size.page[1]}>
-                        <h3> 3 / 10 </h3>
+                    <Col className="pt-2 text-center unselect" sm={size.page[1]} xs={size.page[1]}>
+                        <h4> {page} / {sum} </h4>
                     </Col>
                     <Col className="pt-2 text-end" sm={size.page[2]} xs={size.page[2]}>
-                        <FaAngleRight size={36} />
+                        <FaAngleRight className="pointer" size={36} hidden={page===sum} onClick={(ev)=>{
+                            self.clickNext(ev);
+                        }}/>
                     </Col>
                 </Row>
             </Col>
 
-            <Col className="pt-4 text-end" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickClean(ev);
                 }}>Clean</button>
