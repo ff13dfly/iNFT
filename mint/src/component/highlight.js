@@ -63,10 +63,10 @@ function Hightlight(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <small>Mock the block hash</small>
             </Col>
-            <Col className="Monospaced" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="monospaced" sm={size.row[0]} xs={size.row[0]}>
                 <strong>{first}</strong>
             </Col>
-            <Col className="Monospaced" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="monospaced" sm={size.row[0]} xs={size.row[0]}>
                 <strong>{second}</strong>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>

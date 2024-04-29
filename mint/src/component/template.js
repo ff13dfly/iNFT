@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Detail from "./detail";
 
 import Local from "../lib/local";
-import Chain from "../lib/chain";
 import Data from "../lib/data";
 import Render from "../lib/render";
 import Copy from "../lib/clipboard";

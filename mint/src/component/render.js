@@ -95,15 +95,6 @@ function Preview(props) {
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Block {block.toLocaleString()}, Tanssi Network
             </Col>
-
-            {/* <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                Current Template: <strong>{alink}</strong><br/>
-                Current Network URL: <strong>{props.node}</strong>
-            </Col> */}
-            {/* <Flow /> */}
-            {/* <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                <br/>The iNFT created from the block hash when mint, click the button to try.
-            </Col> */}
         </Row>
     )
 }
