@@ -37,9 +37,9 @@ function App() {
       setShow(true);
     },
     fresh: (force) => {
+      if (force) return self.start();
       update++;
       setUpdate(update);
-      if (force) self.start();
     },
     subscribe: (key, fun) => {
       subs[key] = fun;
@@ -77,11 +77,18 @@ function App() {
 
       //2.get target template;
       const tpl = self.getTemplate();
-      IPFS.read(tpl, (json) => {
-        Data.set("template", json);         //set to default template
-        Data.setHash("cache", tpl, json);   //set to cache
+
+      if(!Data.exsistHash("cache",tpl)){
+        IPFS.read(tpl, (json) => {
+          Data.set("template", json);         //set to default template
+          Data.setHash("cache", tpl, json);   //set to cache
+          self.fresh();
+        });
+      }else{
+        const def=Data.getHash("cache", tpl);
+        Data.set("template", def);
         self.fresh();
-      });
+      }
     },
   }
 

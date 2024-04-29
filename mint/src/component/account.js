@@ -8,10 +8,10 @@ import Local from "../lib/local";
 import tools from "../lib/tools";
 import Network from "../network/router";
 
-import Faucet from "./faucet";
+// import Faucet from "./faucet";
 import System from "./system";
 
-import {  FaCopy } from "react-icons/fa";
+import {  FaCopy,FaDownload,FaSignInAlt,FaBitcoin } from "react-icons/fa";
 
 function Account(props) {
     const size = {
@@ -156,9 +156,12 @@ function Account(props) {
                 </Row>
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
-                <button className="btn btn-md btn-primary" onClick={(ev)=>{
+                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                     self.clickDownload(ev);
-                }}>Download Key</button>
+                }}><FaDownload /> Encried Key</button>
+                <button className="btn btn-md btn-secondary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                    self.clickFaucet(ev);
+                }}><FaBitcoin /> Faucet</button>
                 {/* <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
                     self.clickCopy(ev);
                 }}>{copy}</button> */}
@@ -166,11 +169,11 @@ function Account(props) {
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev)=>{
                     self.clickLogout(ev);
-                }}>Logout</button>
+                }}><FaSignInAlt /> Logout</button>
             </Col>
-            <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Faucet fresh={self.fresh} update={props.update}/>
-            </Col>
+            </Col> */}
 
             <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <System fresh={self.fresh} update={props.update}/>
