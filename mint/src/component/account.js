@@ -193,7 +193,7 @@ function Account(props) {
             </Col>
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 1</Badge> Upload the encry JSON file.</h4>
+                <h4><Badge className="bg-info">Option 1</Badge> Upload the encry JSON file.</h4>
             </Col>
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <input type="file" onChange={(ev) => {
@@ -205,7 +205,7 @@ function Account(props) {
                 <hr />
             </Col>
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Way 2</Badge> Create a new account.</h4>
+                <h4><Badge className="bg-info">Option 2</Badge> Create a new account.</h4>
             </Col>
             <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
                 <input className="form-control" type="password" placeholder="Password for new account" 

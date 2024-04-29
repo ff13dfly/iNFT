@@ -99,26 +99,28 @@ function Template(props) {
 
             //2.准备绘图用的canvas
             const con = document.getElementById("tpl_handle");
-            const cvs = document.createElement('canvas');
-            cvs.id = dom_id;
-            cvs.width = 400;
-            cvs.height = 400;
-            con.appendChild(cvs);
+            if(con!==null){
+                const cvs = document.createElement('canvas');
+                cvs.id = dom_id;
+                cvs.width = 400;
+                cvs.height = 400;
+                con.appendChild(cvs);
 
-            const pen = Render.create(dom_id, true);
-            Render.reset(pen);
-            Render.preview(pen, dt.image, zero, dt.parts, basic);
+                const pen = Render.create(dom_id, true);
+                Render.reset(pen);
+                Render.preview(pen, dt.image, zero, dt.parts, basic);
 
-            //3.获取生成的图像
-            return setTimeout(() => {
-                me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                //me.block = row.block;
-                //delete me.data;
-                todo.push(me);
-                con.innerHTML = "";
+                //3.获取生成的图像
+                return setTimeout(() => {
+                    me.bs64 = pen.canvas.toDataURL("image/jpeg");
+                    //me.block = row.block;
+                    //delete me.data;
+                    todo.push(me);
+                    con.innerHTML = "";
 
-                return self.getThumbs(arr, dom_id, ck, todo);
-            }, 50);
+                    return self.getThumbs(arr, dom_id, ck, todo);
+                }, 50);
+            }
         },
         clickClean: (ev) => {
             Local.remove("template");
