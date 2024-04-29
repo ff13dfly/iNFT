@@ -85,7 +85,6 @@ function Hash(props) {
         },
 
         //convert the interval to ats;
-
         speed:(n,step)=>{
             const single=parseInt(n/step);
             return Array(step).fill(single);

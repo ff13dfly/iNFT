@@ -231,6 +231,15 @@ code {
   color: #3c4440;
   letter-spacing: 4px;
 }
+
+.hash_small{
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+  letter-spacing: 8px;
+}
+
 .part{
   height: 20px;
   font-family: 'Courier New', Courier, monospace;
@@ -288,6 +297,7 @@ code {
 
 .mine{
   width: 100%;
+  cursor: pointer;
 }
 
 .grid{

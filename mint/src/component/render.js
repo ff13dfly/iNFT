@@ -22,7 +22,7 @@ function Preview(props) {
     let [width, setWidth] = useState(100);
     let [height, setHeight] = useState(100);
     let [block, setBlock] = useState(0);
-    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
+    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
     let [alink, setAlink] = useState("");
 
     let [start, setStart]=useState(0);

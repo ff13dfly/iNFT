@@ -27,7 +27,7 @@ function Board(props) {
     let [width, setWidth] = useState(400);
     let [height, setHeight] = useState(400);
 
-    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
+    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891");
     let [highlight, setHighlight] = useState(true);
     let [series, setSeries] = useState([]);
     let [rate, setRate] = useState(0);

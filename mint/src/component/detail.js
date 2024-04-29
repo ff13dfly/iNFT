@@ -14,13 +14,13 @@ import Copy from "../lib/clipboard";
 import { FaBackspace, FaCopy, FaSyncAlt } from "react-icons/fa";
 
 let current = 0;
-
+let hash="0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb";
 function Detail(props) {
     const size = {
         row: [12],
         back: [10, 2],
         title: [2, 7, 3],
-        thumb: [6, 6],
+        thumb: [7, 5],
         hash: [10, 2],
         part: [2],
     };
@@ -31,9 +31,10 @@ function Detail(props) {
     let [width, setWidth] = useState(400);
     let [height, setHeight] = useState(400);
 
-    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891c0486");
-    let [start, setStart]=useState(0);
-    let [step, setStep]=useState(0);
+    let [start, setStart] = useState(0);
+    let [step, setStep] = useState(0);
+    let [value, setValue] = useState("00");
+    let [dvd, setDvd]=useState(8);
 
     let [bs64, setBS64] = useState("image/empty.png");
     let [img_part, setImagePart] = useState("");
@@ -45,7 +46,7 @@ function Detail(props) {
 
     let [selected, setSelected] = useState(0);        //selected iNFT parts
     let [active, setActive] = useState(null);         //index of selected image range
-    let [grid, setGrid] = useState([]);
+    let [grid, setGrid] = useState([]);             //mask grid on the selected image
 
     let [recover, setRecover] = useState({});
 
@@ -63,7 +64,7 @@ function Detail(props) {
             self.autoFresh(index, active);
         },
         clickHashFresh: (ev) => {
-            setHash(self.randomHash(64));
+            hash=self.randomHash(64);
             self.autoFresh(current, active);
         },
         clickCopy: (cid) => {
@@ -117,20 +118,27 @@ function Detail(props) {
         },
         //ipart: 选中的组件
         //iselect, 选中的零件
-        autoFresh: (ipart, iselect) => {
+        autoFresh: (ipart, iselect, nhash) => {
             const def = Data.getHash("cache", alink.toLocaleLowerCase());
 
             //0.get template parameters
             //const def=tpl.raw;
             const target = def.parts[ipart];
             const w = def.cell[0], h = def.cell[1];
-            const [gX, gY, eX, eY] = target.img;
-            const [start, step, divide, offset] = target.value;
-            const [line, row] = def.grid;
+            const [ gX, gY, eX, eY ] = target.img;
+            const [ start, step, divide, offset ] = target.value;
+            const [ line, row ] = def.grid;
             const max = line / (1 + eX);
             const br = Math.ceil((gX + divide) / max);
             const height = h * 24;      //这里的行数出错了，需要修正
             const rate = 1.0526;
+
+            //1. set hash board
+            setStart(start);
+            setStep(step);
+            setDvd(divide);
+            setValue(nhash===undefined?hash.slice(start+2,start+2+step):nhash.slice(start+2,start+2+step));
+            //console.log(hash);
 
             //2.get the image part from origanal image
             const ch = h * (1 + eY) * br / rate;
@@ -197,6 +205,9 @@ function Detail(props) {
                     self.clickBack(ev);
                 }} />
             </Col>
+            <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
+                <h5>Value: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`)%dvd}</span> </h5>
+            </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
@@ -204,21 +215,23 @@ function Detail(props) {
                         <img src={bs64} alt="" style={{ width: "100%", minHeight: "150px" }} />
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
-                        <SmallHash hash={hash} start={start} step={step}/>
                         <Row>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
+                                Mock hash
+                            </Col>
+                        </Row>
+                        <SmallHash hash={hash} start={start} step={step} />
+                        <Row>
+                            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
                                 <button className="btn btn-md btn-secondary" onClick={(ev) => {
                                     self.clickHashFresh(ev);
                                 }}>
-                                    <FaSyncAlt className="pointer" size={16} />
+                                    <FaSyncAlt className="pointer" size={16} color={"#FFAABB"} />
                                 </button>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
-            </Col>
-            <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
-                <h5>Value: 0x0e , Result: 14 % 8 =  6 </h5>
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <small>Range of part at orgin image.</small>
