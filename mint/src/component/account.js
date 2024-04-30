@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 
+import config from "../config";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
@@ -11,14 +12,15 @@ import Network from "../network/router";
 // import Faucet from "./faucet";
 import System from "./system";
 
-import {  FaCopy,FaDownload,FaSignInAlt,FaBitcoin } from "react-icons/fa";
+
+import { FaCopy, FaDownload, FaSignInAlt, FaBitcoin } from "react-icons/fa";
 
 function Account(props) {
     const size = {
         row: [12],
         user: [4, 8],
-        logout:[8,4],
-        new:[9,3]
+        logout: [8, 4],
+        new: [9, 3]
     };
 
     let [login, setLogin] = useState(false);
@@ -28,16 +30,17 @@ function Account(props) {
     let [address, setAddress] = useState("");
 
     let [info, setInfo] = useState("");
+    let [faucet, setFaucet] = useState("");
 
-    let [password, setPassword]= useState("");
+    let [password, setPassword] = useState("");
     let [dis_new, setNewDisable] = useState(true);
 
-    let [recover,setRecover]=useState({});
-    
-    const {Keyring}=window.Polkadot;
+    let [recover, setRecover] = useState({});
+
+    const { Keyring } = window.Polkadot;
 
     const self = {
-        newAccount: (mnemonic,ck) => {
+        newAccount: (mnemonic, ck) => {
             const keyring = new Keyring({ type: "sr25519" });
             const pair = keyring.addFromUri(mnemonic);
             const sign = pair.toJson(password);
@@ -45,51 +48,71 @@ function Account(props) {
 
             return ck && ck(sign);
         },
-        changePassword:(ev)=>{
+        changePassword: (ev) => {
             setPassword(ev.target.value);
-            setNewDisable(!ev.target.value?true:false);
+            setNewDisable(!ev.target.value ? true : false);
         },
         clickNewAccount: (ev) => {
             setNewDisable(true);
             const mnemonic = mnemonicGenerate();
-            self.newAccount(mnemonic,(fa) => {
+            self.newAccount(mnemonic, (fa) => {
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
                 self.show();
                 props.fresh();
             });
         },
-        clickLogout:(ev)=>{
+        clickLogout: (ev) => {
             Local.remove("login");
             setLogin(false);
             props.fresh();
         },
-        clickDownload:(ev)=>{
-            const fa=Local.get("login");
-            if(!fa) return false;
-            tools.download(`${address}.json`,fa);
+        clickDownload: (ev) => {
+            const fa = Local.get("login");
+            if (!fa) return false;
+            tools.download(`${address}.json`, fa);
         },
-        clickCopy:(ev)=>{
+        clickCopy: (ev) => {
             Copy(address);
-            // setCopy("Copied");
-            // setCopyDisable(true);
-            // setTimeout(() => {
-            //     setCopy("Copy");
-            //     setCopyDisable(false);
-            // }, 300);
         },
-        clickRecover:(key,at)=>{
-            if(!recover[key]){
-                recover[key]="text-info";
+        clickRecover: (key, at) => {
+            if (!recover[key]) {
+                recover[key] = "text-info";
                 setRecover(tools.copy(recover));
-                setTimeout(()=>{
+                setTimeout(() => {
                     delete recover[key];
                     setRecover(tools.copy(recover));
-                },!at?1000:at);
+                }, !at ? 1000 : at);
             }
         },
-        clickFaucet:(ev)=>{
-            console.log(`Getting faucet...`);
+        clickFaucet: async (ev) => {
+            const fa = Local.get("login");
+            if (fa === undefined) return self.faucetMessage("Account information missed.");
+
+            try {
+                const login = JSON.parse(fa);
+                const furl=`${config.faucet}?${login.address}`;
+                const response = await fetch(furl);
+                if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
+
+                const ctx = await response.text();
+                const rep=JSON.parse(ctx);
+                console.log(rep);
+                if(rep.error) return self.faucetMessage(rep.error);
+                return self.faucetMessage(rep.message);
+            } catch (error) {
+                setFaucet("Cors issue.");
+                return setTimeout(() => {
+                    setFaucet("");
+                }, 3000);
+            }
+        },
+        faucetMessage:(ctx)=>{
+            console.log(ctx);
+            setFaucet(ctx);
+            return setTimeout(() => {
+                setFaucet("");
+            }, 3000);
         },
         changeFile: (ev) => {
             try {
@@ -105,7 +128,7 @@ function Account(props) {
                         if (sign.encoded.length !== 268)
                             return setInfo("Error encoded verification");
                         setInfo("Encoded account file loaded");
-                        Local.set("login",e.target.result);
+                        Local.set("login", e.target.result);
                         setLogin(true);
                         self.show();
                         props.fresh();
@@ -118,20 +141,20 @@ function Account(props) {
                 setInfo("Can not load target file");
             }
         },
-        show:()=>{
+        show: () => {
             const fa = Local.get("login");
-            if(fa!==undefined) setLogin(true);
+            if (fa !== undefined) setLogin(true);
             try {
-                const account=JSON.parse(fa);
+                const account = JSON.parse(fa);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
-                Network("tanssi").balance(account.address,(res)=>{
-                    const divide=Network("tanssi").divide();
+                Network("tanssi").balance(account.address, (res) => {
+                    const divide = Network("tanssi").divide();
 
-                    setBalance(tools.toF(res.free*(1/divide),8));
+                    setBalance(tools.toF(res.free * (1 / divide), 8));
                 })
             } catch (error) {
-                
+
             }
         },
     }
@@ -157,11 +180,11 @@ function Account(props) {
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address,8)}
-                        <button className="btn btn-sm btn-secondary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                        {tools.shorten(address, 8)}
+                        <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
                             self.clickCopy(ev);
                             self.clickRecover("copy");
-                        }}><FaCopy className={!recover.copy?"":recover.copy}/></button>
+                        }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                         <strong>{balance}</strong> $INFT
@@ -169,28 +192,22 @@ function Account(props) {
                 </Row>
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
-                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                <button className="btn btn-md btn-secondary" onClick={(ev) => {
                     self.clickDownload(ev);
                 }}><FaDownload /> Encried Key</button>
-                <button className="btn btn-md btn-secondary" style={{marginLeft:"10px"}} onClick={(ev)=>{
+                <button className="btn btn-md btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
                     self.clickFaucet(ev);
                 }}><FaBitcoin /> Faucet</button>
-                {/* <button disabled={dis_copy} className="btn btn-md btn-primary" style={{marginLeft:"10px"}} onClick={(ev)=>{
-                    self.clickCopy(ev);
-                }}>{copy}</button> */}
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
-                <button className="btn btn-md btn-danger" onClick={(ev)=>{
+                <button className="btn btn-md btn-danger" onClick={(ev) => {
                     self.clickLogout(ev);
                 }}><FaSignInAlt /> Logout</button>
             </Col>
+            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
             {/* <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <Faucet fresh={self.fresh} update={props.update}/>
+                <System fresh={self.fresh} update={props.update} />
             </Col> */}
-
-            <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <System fresh={self.fresh} update={props.update}/>
-            </Col>
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <h4><Badge className="bg-info">Option 1</Badge> Upload the encry JSON file.</h4>
@@ -208,9 +225,9 @@ function Account(props) {
                 <h4><Badge className="bg-info">Option 2</Badge> Create a new account.</h4>
             </Col>
             <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
-                <input className="form-control" type="password" placeholder="Password for new account" 
-                    value={password} 
-                    onChange={(ev)=>{
+                <input className="form-control" type="password" placeholder="Password for new account"
+                    value={password}
+                    onChange={(ev) => {
                         self.changePassword(ev);
                     }}
                 />

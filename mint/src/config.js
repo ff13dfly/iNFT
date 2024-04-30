@@ -10,5 +10,6 @@ module.exports = {
         //"anchor://single/265468",
         //"anchor://aabb/217148",
     ],
+    faucet:"https://faucet.w3os.net",
     unit:"$INFT",
 }

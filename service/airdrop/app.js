@@ -150,7 +150,9 @@ const self = {
 
 const express = require('express');
 const bodyParser = require('body-parser');
+//const cors = require('cors');
 const app = express();
+//app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
@@ -159,14 +161,15 @@ app.use(bodyParser.json());
 self.init(()=>{
     self.backup(()=>{
         self.run(config.server,()=>{
+            self.output(`Cors supported by Nginx.`);
             //console.log(`Here to link to Tanssi appchain`);
             app.use((req, res)=>{
                 const uri=req.url;
                 self.output(`Request URI:${uri}(${uri.length})`,"primary");
-                if(uri.length!==49) return res.send({error:'Invalid request.'});
+                if(uri.length!==50) return res.send({error:'Invalid request.'});
                 if(exhoused) return res.send({error:'Faucet pool is exhoused today.'});
 
-                const addr=uri.slice(1,uri.length);
+                const addr=uri.slice(2,uri.length);
                 const range=!map[addr]?config.amount.first:config.amount.normal;
                 const day=tools.day();
                 if(!map[addr]){
