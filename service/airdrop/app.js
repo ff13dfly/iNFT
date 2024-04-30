@@ -45,7 +45,9 @@ const self = {
         const target=config.cache;
         if(timer===null){
             timer=setInterval(()=>{
-                console.log(`Saving history to cache: ${config.cache}`);
+                IO.save(config.cache,JSON.stringify(map),()=>{
+                    self.output(`Saving history to cache: ${config.cache}`);
+                });
             },config.autosaving);
         }
         return ck && ck();
@@ -104,9 +106,25 @@ const self = {
     },
     load:(address,pass,ck)=>{
         IO.read(`./account/${address}.json`,(fa)=>{
-            console.log(fa);
+            self.getPair(fa,pass,ck);
         });
         return ck && ck();
+    },
+    getPair:(fa,password,ck)=>{
+        const {Keyring}=require("@polkadot/api");
+        try {
+            const acc=JSON.parse(fa);
+            const keyring = new Keyring({ type: "sr25519" });
+            const pair = keyring.createFromJson(acc);
+            try {
+                pair.decodePkcs8(password);
+                return  ck && ck(pair);
+            } catch (error) {
+                return ck && ck({error:"Invalid passoword"});
+            }
+        } catch (error) {
+            return ck && ck({error:"Invalid file"}); 
+        }
     },
     transfer:(amount,target,day,ck)=>{
         //1.check balance is enough;
@@ -114,34 +132,17 @@ const self = {
             if(exhoused || pair===false) return false;      //wethe low balance
             self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
             const m=self.getMulti();
-            // setTimeout(()=>{
-            //     console.log(`Done! transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`);
-            //     map[target][day].confirmed=true;
-            //     return ck && ck();
-            // },24000);
-
+            //console.log(wsAPI.tx.balances)
             try {
-                // let unsub = null;
-                // wsAPI.query.system.account(pair.address, ({ nonce, data: balance }) => {
-                //     unsub();
-                //     //console.log(`balance.free: ${balance.free}`);
-                //     if (balance.free < self.tranform(200)) return ck && ck(false);
-                //     try {
-                //         //注意，如果目标账户的coin小于100的时候，会转账失败
-                //         wsAPI.tx.balances.transfer(ss58, self.tranform(amount)).signAndSend(pair, (res) => {
-                //             var status = res.status;
-                //             if (status.type === 'InBlock') {
-                //                 return ck && ck(amount);
-                //             }
-                //         });
-                //     } catch (error) {
-                //         return ck && ck(false);
-                //     }
-                // }).then((fun) => {
-                //     unsub = fun;
-                // });
+                wsAPI.tx.balances.forceTransfer(target,parseInt(amount*m)).signAndSend(pair, (res) => {
+                    const status = res.status.toJSON();
+                    console.log(status);
+                    // if (status.type === 'InBlock') {
+                    //     return ck && ck(amount);
+                    // }
+                });
             } catch (error) {
-                
+                console.log(error);
             }
         });
     },

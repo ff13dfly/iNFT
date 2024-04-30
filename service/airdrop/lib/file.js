@@ -18,8 +18,12 @@ const file = {
             });
         });
     },
-    save:(target,obj,ck)=>{
-
+    save:(name,data,ck)=>{
+        const target = `./${name}`;
+        fs.writeFile(target, data, 'utf8', function (err) {
+            if (err) return ck && ck({ error: err });
+            return ck && ck();
+        });
     },
 };
 
