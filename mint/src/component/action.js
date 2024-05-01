@@ -2,6 +2,8 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Result from "./result";
+import Setting from "./setting";
+import Progress from "./progress";
 
 import Local from "../lib/local";
 import Account from "./account";
@@ -10,13 +12,13 @@ import Chain from "../lib/chain";
 
 import Network from "../network/router";
 
-import { FaCogs } from "react-icons/fa";
+import { FaCogs,FaCoins,FaIndent } from "react-icons/fa";
 
 function Action(props) {
     const size = {
         row: [12],
-        password: [2, 8, 2],
-        more:[2,10]
+        password: [1, 10, 1],
+        more:[2,2,8]
     };
 
     let [info, setInfo] = useState(" ");
@@ -110,7 +112,12 @@ function Action(props) {
                 return ck && ck(data.block);
             }); 
         },
-
+        clickSetting:()=>{
+            props.dialog(<Setting />, "Mint setting");
+        },
+        clickPanel:()=>{
+            props.dialog(<Progress />, "Mint progress");
+        },
         clickMint: (ev) => {
             const fa = Local.get("login");
             if (fa === undefined) {
@@ -182,7 +189,7 @@ function Action(props) {
         if(fa!==undefined){
             try {
                 const addr=JSON.parse(fa);
-                setHolder(`Password of ${tools.shorten(addr.address,5)}`);
+                setHolder(`Password of ${tools.shorten(addr.address,4)}`);
             } catch (error) {
                 
             }
@@ -200,9 +207,16 @@ function Action(props) {
             <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}> 
                 <Row>
                     <Col className="text-end" sm={size.more[0]} xs={size.more[0]}>
-                        <button className="btn btn-md btn-secondary"><FaCogs/></button> 
+                        <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                            self.clickPanel();
+                        }}><FaIndent/></button> 
                     </Col>
-                    <Col className="" sm={size.more[1]} xs={size.more[1]}>
+                    <Col className="text-end" sm={size.more[1]} xs={size.more[1]}>
+                        <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                            self.clickSetting();
+                        }}><FaCogs/></button> 
+                    </Col>
+                    <Col className="" sm={size.more[2]} xs={size.more[2]}>
                         <input className="form-control" style={{width:"100%"}} type="password" placeholder={holder}
                             value={password}
                             onChange={(ev) => {
@@ -211,15 +225,8 @@ function Action(props) {
                         /> 
                     </Col>
                 </Row>
-                
-                
             </Col>
-            {/* <Col hidden={hidden} sm={size.password[2]} xs={size.password[2]}>
-                <button className="btn btn-md btn-secondary">
-                    <FaMenorah />
-                </button>
-            </Col> */}
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center pt-3" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-lg btn-primary" disabled={disable} onClick={(ev) => {
                     setInfo("");
                     self.clickMint(ev);

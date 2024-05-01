@@ -9,11 +9,7 @@ import Local from "../lib/local";
 import tools from "../lib/tools";
 import Network from "../network/router";
 
-// import Faucet from "./faucet";
-import System from "./system";
-
-
-import { FaCopy, FaDownload, FaSignInAlt, FaBitcoin } from "react-icons/fa";
+import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
 
 function Account(props) {
     const size = {
@@ -197,7 +193,7 @@ function Account(props) {
                 }}><FaDownload /> Encried Key</button>
                 <button className="btn btn-md btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
                     self.clickFaucet(ev);
-                }}><FaBitcoin /> Faucet</button>
+                }}><FaFaucet /> Faucet</button>
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev) => {

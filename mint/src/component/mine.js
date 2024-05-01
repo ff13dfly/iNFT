@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal, FaMapMarkerAlt } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal } from "react-icons/fa";
 
 import Result from "./result";
 
