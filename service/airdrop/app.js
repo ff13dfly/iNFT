@@ -132,14 +132,16 @@ const self = {
             if(exhoused || pair===false) return false;      //wethe low balance
             self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
             const m=self.getMulti();
-            //console.log(wsAPI.tx.balances)
+            console.log(wsAPI.tx.balances)
             try {
-                wsAPI.tx.balances.forceTransfer(target,parseInt(amount*m)).signAndSend(pair, (res) => {
+                //const { encodeAddress } = require('@polkadot/util-crypto');
+                //const multiAddress = encodeAddress(target);
+
+                const dest={Id:target,Index:"?"};
+                
+                wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
                     const status = res.status.toJSON();
                     console.log(status);
-                    // if (status.type === 'InBlock') {
-                    //     return ck && ck(amount);
-                    // }
                 });
             } catch (error) {
                 console.log(error);
@@ -150,14 +152,12 @@ const self = {
 
 const express = require('express');
 const bodyParser = require('body-parser');
-//const cors = require('cors');
 const app = express();
-//app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-//curl http://127.0.0.1:8888/5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
-
+//curl http://127.0.0.1:8888/?5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
+//curl http://127.0.0.1:8888/?5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV
 self.init(()=>{
     self.backup(()=>{
         self.run(config.server,()=>{
@@ -166,7 +166,7 @@ self.init(()=>{
             app.use((req, res)=>{
                 const uri=req.url;
                 self.output(`Request URI:${uri}(${uri.length})`,"primary");
-                if(uri.length!==50) return res.send({error:'Invalid request.'});
+                if(uri.length!==49) return res.send({error:'Invalid request.'});
                 if(exhoused) return res.send({error:'Faucet pool is exhoused today.'});
 
                 const addr=uri.slice(2,uri.length);

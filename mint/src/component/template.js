@@ -42,10 +42,10 @@ function Template(props) {
             nlist.unshift({
                 alink: alink,
                 name: "",
+                offset:[],              //customized offset value
                 tags: []
             });
             Local.set("template", JSON.stringify(nlist));
-            //setList(nlist);
             self.showTemplate();
         },
         clickTry:(index)=>{
@@ -149,12 +149,18 @@ function Template(props) {
                 });
             });
         },
+        getRandomOffset:(parts)=>{
+            const arr=[]
+            for(let i=0;i<parts.length;i++){
+                
+            }
+            return arr;
+        },
         cacheIPFS:(alinks, ck, dels)=>{
             if (dels === undefined) dels = [];
             if (alinks.length === 0) return ck && ck(dels);
             const single = alinks.pop();
             if(Data.exsistHash("cache", single)){
-                //console.log(`Here to go`);
                 return self.cacheIPFS(alinks, ck, dels);
             }else{
                 return IPFS.read(single, (ctx) => {
@@ -164,6 +170,8 @@ function Template(props) {
                         return self.cacheIPFS(alinks, ck, dels);
                     }else{
                         Data.setHash("cache", single, ctx);
+                        //here to set the offset;
+
                         return self.cacheIPFS(alinks, ck, dels);
                     }
                 });

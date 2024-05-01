@@ -10,12 +10,13 @@ import Chain from "../lib/chain";
 
 import Network from "../network/router";
 
-import { FaMenorah } from "react-icons/fa";
+import { FaCogs } from "react-icons/fa";
 
 function Action(props) {
     const size = {
         row: [12],
-        password: [2, 8, 2]
+        password: [2, 8, 2],
+        more:[2,10]
     };
 
     let [info, setInfo] = useState(" ");
@@ -196,13 +197,22 @@ function Action(props) {
             </Col>
             <Col className="text-end" hidden={hidden} sm={size.password[0]} xs={size.password[0]}>
             </Col>
-            <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}>   
-                <input className="form-control" style={{width:"100%"}} type="password" placeholder={holder}
-                    value={password}
-                    onChange={(ev) => {
-                        self.changePassword(ev);
-                    }}
-                />
+            <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}> 
+                <Row>
+                    <Col className="text-end" sm={size.more[0]} xs={size.more[0]}>
+                        <button className="btn btn-md btn-secondary"><FaCogs/></button> 
+                    </Col>
+                    <Col className="" sm={size.more[1]} xs={size.more[1]}>
+                        <input className="form-control" style={{width:"100%"}} type="password" placeholder={holder}
+                            value={password}
+                            onChange={(ev) => {
+                                self.changePassword(ev);
+                            }}
+                        /> 
+                    </Col>
+                </Row>
+                
+                
             </Col>
             {/* <Col hidden={hidden} sm={size.password[2]} xs={size.password[2]}>
                 <button className="btn btn-md btn-secondary">
