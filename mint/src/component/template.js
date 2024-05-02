@@ -220,7 +220,7 @@ function Template(props) {
                                     }}></div>
                             </Col>
                             <Col hidden={index===0} className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
-                                <button className="btn btn-md btn-secondary" onClick={(ev)=>{
+                                <button className="btn btn-md btn-primary" onClick={(ev)=>{
                                     self.clickTry(index);
                                     self.clickRecover(`try_${index}`,200);
                                 }}><FaExchangeAlt className={!recover[`try_${index}`]?"":recover[`try_${index}`]}/></button>

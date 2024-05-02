@@ -10,6 +10,8 @@ import Local from "./lib/local";
 import Chain from "./lib/chain";
 import config from "./config";
 
+import plugin from "./lib/plugin";
+
 import IPFS from "./network/ipfs";
 import Sui from "./network/sui";
 import tools from "./lib/tools";
@@ -29,6 +31,21 @@ function App() {
   let [show, setShow] = useState(false);
   let [title, setTitle] = useState("");
   let [content, setContent] = useState("");
+
+  const QR={
+    view:(anchor)=>{
+      console.log(anchor);
+      setTitle("iNFT viewer");
+      setContent("hello");
+      setShow(true);
+    },
+    template:(cid)=>{
+      setTitle("iNFT template previewer");
+      setContent("template here");
+      setShow(true);
+    },
+  }
+
 
   const self = {
     dialog: (ctx, title) => {
@@ -74,6 +91,18 @@ function App() {
         n--;
       }, 1000);
     },
+    checking:()=>{
+      const req=window.location.hash;
+      if(!req) return true;
+      plugin.run("template",["aa","bb"]);
+    },
+    regQR:()=>{
+      for(var key in QR){
+        plugin.reg(key,QR[key]);
+      }
+      console.log(`QR function set successful.`);
+      return true;
+    },
     start: () => {
       //1.check network status;
 
@@ -98,7 +127,13 @@ function App() {
     },
   }
 
+  
   useEffect(() => {
+    self.regQR();
+
+    //0.checking the hash to confirm next action.
+    self.checking();
+
     //1.linke to server to fresh the iNFT result
     Chain.link(config.node[0], (API) => {
       self.start();
