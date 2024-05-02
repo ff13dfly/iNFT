@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaIdBadge } from "react-icons/fa";
 
 import Network from "../network/router";
+import Local from "../lib/local";
 
 function Progress(props) {
     const size = {
@@ -12,14 +13,7 @@ function Progress(props) {
         step:[1,2,2,1,2],
     };
 
-    const format=[
-        {name:"ancor_name",hash:"0x",now:6},
-        {name:"ancor_name",hash:"0x",now:2},
-        {name:"ancor_name",hash:"0x",now:0},
-        {name:"ancor_name",hash:"0x",now:0},
-        {name:"ancor_name",hash:"0x",now:0},
-    ]
-
+    let [block, setBlock]=useState(0);
     let [list,setList]=useState([]);
 
     const self={
@@ -32,20 +26,38 @@ function Progress(props) {
             if(order<now) return "pt-3 done";
             return "pt-3 waiting";
         },
+        getDone:(arr)=>{
+            return 0;
+        },
+        showTask:()=>{
+            console.log(`update task status`);
+            const dt=Local.get("task");
+            if(!dt) return false;
+            
+            try {
+                const task=JSON.parse(dt);
+                setList(task);
+            } catch (error) {
+                
+            }
+        },
     }
 
     useEffect(() => {
-        setList(format);
+        self.showTask();
+        setBlock(props.block);
+       
         Network("tanssi").subscribe("progress",(bk, bhash)=>{
-            //format[1].now++;
-            //setList(JSON.parse(JSON.stringify(format)));
+            setBlock(bk);
+            setTimeout(self.showTask,1500); //update task after finalized new block
         });
-
     }, [props.update]);
 
     return (
         <Row>
-            <Col sm={size.row[0]} xs={size.row[0]}>10 mint, 4 done.</Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                {list.length} mint, {self.getDone(list)} done. Block {!block?0:block.toLocaleString()}
+            </Col>
             {list.map((row, index) => (  
             <Col key={index} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
