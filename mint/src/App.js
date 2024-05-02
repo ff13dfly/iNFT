@@ -51,7 +51,9 @@ function App() {
         data.push({
           alink: config.default[0],
           name: "",
-          tags: []
+          tags: [],
+          multi:1,
+          offset:[],    //minter default offset
         })
         Local.set("template", JSON.stringify(data));
         return config.default[0];
@@ -80,6 +82,7 @@ function App() {
 
       if(!Data.exsistHash("cache",tpl)){
         IPFS.read(tpl, (json) => {
+          json.cid=tpl;
           Data.set("template", json);         //set to default template
           Data.setHash("cache", tpl, json);   //set to cache
           self.fresh();

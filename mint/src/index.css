@@ -304,6 +304,10 @@ code {
   min-height: 120px;
 }
 
+.offset{
+  width: 36px;;
+}
+
 .monospaced{
   font-family: 'Courier New', Courier, monospace;
 }
@@ -312,6 +316,13 @@ code {
 .limited{
   max-height: 480px;
   min-height: 480px;
+  width: 100%;
+  overflow: auto;
+}
+
+.setting{
+  max-height: 240px;
+  min-height: 240px;
   width: 100%;
   overflow: auto;
 }
