@@ -79,8 +79,9 @@ function App() {
 
       //2.get target template;
       const tpl = self.getTemplate();
-
+      //console.log(`Force to fresh template`);
       if(!Data.exsistHash("cache",tpl)){
+        //console.log(`Not cached template`);
         IPFS.read(tpl, (json) => {
           json.cid=tpl;
           Data.set("template", json);         //set to default template
@@ -88,7 +89,9 @@ function App() {
           self.fresh();
         });
       }else{
+        //console.log(`Cached template`);
         const def=Data.getHash("cache", tpl);
+        def.cid=tpl;
         Data.set("template", def);
         self.fresh();
       }

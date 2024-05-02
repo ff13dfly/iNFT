@@ -24,24 +24,28 @@ function Setting(props) {
         clickSingleOffset:(index,val)=>{
             const active=Data.get("template");
             const max=active.parts[index].value[2];
-            //console.log(max);
             list[index]=(val+1>max)?0:val+1;
             const nlist=tools.clone(list);
             setList(nlist);
-            self.updateOffset(active.cid,nlist);
+            self.updateTemplate(active.cid,"offset",nlist);
         },
         clickIncMulti:(ev)=>{
-            
             if(multi!==config.multiMax){
                 const n=multi+1;
                 console.log(n);
                 setMulti(n);
+
+                const active=Data.get("template");
+                self.updateTemplate(active.cid,"multi",n);
             }
         },
         clickDecMulti:(ev)=>{
             if(multi!==1){
                 const n=multi-1;
                 setMulti(n);
+
+                const active=Data.get("template");
+                self.updateTemplate(active.cid,"multi",n);
             }
         },
         getTemplate:(cid)=>{
@@ -57,22 +61,19 @@ function Setting(props) {
                return false; 
             }
         },
-        updateOffset:(cid,offset)=>{
+        updateTemplate:(cid,key,offset)=>{
             const ts = Local.get("template");
             if(!ts) return false;
             try {
                 const tpls=JSON.parse(ts);
                 //console.log(cid,offset);
                 for(let i=0;i<tpls.length;i++){
-                    if(tpls[i].alink===cid) tpls[i].offset=offset;
+                    if(tpls[i].alink===cid) tpls[i][key]=offset;
                 }
                 Local.set("template",JSON.stringify(tpls));
             } catch (error) {
                return false; 
             }
-        },
-        updateMulti:(cid,n)=>{
-
         },
         getOffset: (tpl,parts) => {
             if(!tpl.offset || tpl.offset.length!==parts.length){
@@ -100,18 +101,21 @@ function Setting(props) {
                 self.autoShow();
             },1000);
 
+            console.log(active.cid);
             const tpl=self.getTemplate(active.cid);
+            if(!tpl) return setTimeout(()=>{
+                self.autoShow();
+            },1000);
+
             const offset=self.getOffset(tpl,active.parts);
             setList(offset);
+            setMulti(tpl.multi!==undefined?tpl.multi:1);
         },
         
     }
 
     useEffect(() => {
-        
         self.autoShow();
-        
-
     }, [props.update]);
 
     return (
