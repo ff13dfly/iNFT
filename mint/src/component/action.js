@@ -32,17 +32,86 @@ function Action(props) {
             setPassword(ev.target.value);
             setDisable(!ev.target.value ? true : false);
         },
+        clickSetting:()=>{
+            props.dialog(<Setting />, "Mint setting");
+        },
+        clickPanel:()=>{
+            props.dialog(<Progress />, "Mint progress");
+        },
+        clickTask:()=>{
+            const fa = Local.get("login");
+            if (fa === undefined) return props.dialog(<Account fresh={props.fresh} dialog={props.dialog} />, "Account Management");
+            if (!password) {
+                setDisable(true);
+                return false;
+            }
+            setDisable(true);
+            setInfo("Processing start.");
 
+            Chain.load(fa, password, (pair) => {
+                if (pair.error !== undefined) {
+                    setInfo(pair.error);
+                    setPassword("");
+                    return false;
+                }
+                setInfo("Vertified.");
+                
+                const tpl=self.getCurrentTemplate(true);
+                const multi=!tpl.multi?1:parseInt(tpl.multi);
+
+                const prefix=Local.get("prefix");
+                const pointer=Local.get("pointer");
+                const task=self.getTask(prefix,parseInt(pointer),tpl.alink,multi);
+                Local.set("pointer",parseInt(pointer)+multi);
+                Local.set("task",JSON.stringify(task));
+                self.runTask(pair);
+            });
+        },
+        getTask:(prefix,pointer,template,n)=>{
+            const arr=[];
+            for(let i=0;i<n;i++){
+                arr.push({
+                    name:`${prefix}_${pointer+i}`,
+                    tpl:template,
+                    hash:"0x",
+                    block:0,
+                    now:0,
+                });
+            }
+            return arr;
+        },
+        runTask:(pair)=>{
+            const dt=Local.get("task");
+            if(!dt) return setInfo("Failed to get task data.");
+            try {
+                const task=JSON.parse(dt);
+
+                //1.get current task;
+                let index=0;
+                for(let i=0;i<task.length;i++){
+                    const row=task[i];
+                    if(row.now===0){
+                        index=i;
+                        break;
+                    }
+                }
+
+                //2.run mint from index data;
+                const target=task[index];
+                console.log(target);
+                // Network("tanssi").write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
+
+                // });
+                
+            }catch (error) {
+                Local.remove("task");
+                return setInfo("Invalid task.");
+            }
+        },
         getAnchorName: (ck) => {
             const name = `inft_${tools.char(14).toLocaleLowerCase()}`;
-            // Chain.read(`anchor://${name}`,(res)=>{
-            //     //console.log(res);
-            //     if(res.location[1]===0) return ck && ck(name);
-            //     return self.getAnchorName(ck);
-            // });
             return ck && ck(name);
         },
-
         getInftLocal:(name,tpl,hash,block,creator)=>{
             return {
                 anchor:name,
@@ -59,7 +128,6 @@ function Action(props) {
                 stamp:tools.stamp(),
             }
         },
-
         getProtocol: () => {
             return {
                 type: "data",       //inft is type of data
@@ -67,7 +135,7 @@ function Action(props) {
                 tpl: "inft",        //inft format
             }
         },
-
+        
         getRaw: (tpl) => {
             return {
                 tpl: tpl.alink,          //ipfs cid
@@ -75,11 +143,11 @@ function Action(props) {
                 origin: "web3.storage",   //storage origianl
             }
         }, 
-        getCurrentTemplate:()=>{
+        getCurrentTemplate:(full)=>{
             const str=Local.get("template");
             try {
                 const tpls=JSON.parse(str);
-                return tpls[0].alink;
+                return full?tpls[0]:tpls[0].alink;
             } catch (error) {
                 return false;
             }
@@ -94,11 +162,9 @@ function Action(props) {
         },
 
         saveResult:(name,hash,creator,ck)=>{
-            //console.log(name,hash);
             const tpl=self.getCurrentTemplate();
             Network("tanssi").view(hash,"block",(data)=>{
                 const inft=self.getInftLocal(name,tpl,hash,data.block,creator);
-
                 const its=Local.get("list");
                 const nlist=its===undefined?{}:JSON.parse(its);
                 if(nlist[creator]===undefined)nlist[creator]=[];
@@ -108,16 +174,11 @@ function Action(props) {
                     nlist[creator].unshift(inft);
                     Local.set("list",JSON.stringify(nlist));
                 }
-
                 return ck && ck(data.block);
             }); 
         },
-        clickSetting:()=>{
-            props.dialog(<Setting />, "Mint setting");
-        },
-        clickPanel:()=>{
-            props.dialog(<Progress />, "Mint progress");
-        },
+
+        
         clickMint: (ev) => {
             const fa = Local.get("login");
             if (fa === undefined) {
@@ -144,7 +205,6 @@ function Action(props) {
                             const target = tpls[0];
                             const raw = self.getRaw(target);
                             const protocol = self.getProtocol();
-                            props.countdown();
                             Network("tanssi").write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
                                 if(process.error){
                                     setDisable(false);
@@ -153,10 +213,7 @@ function Action(props) {
                                 setInfo(process.msg);
 
                                 if(process.status==="Finalized"){
-                                    //console.log(process);
                                     setDisable(false);
-
-                                    //Save the iNFT result here;
                                     self.saveResult(name,process.hash,pair.address,(block)=>{
                                         props.dialog(<Result 
                                             name={name} 
@@ -176,7 +233,6 @@ function Action(props) {
                             console.log(error);
                             Local.remove("template");
                         }
-
                     });
                 });
             }
@@ -209,7 +265,7 @@ function Action(props) {
                     <Col className="text-end" sm={size.more[0]} xs={size.more[0]}>
                         <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                             self.clickPanel();
-                        }}><FaIndent/></button> 
+                        }}><FaIndent className="text-warning"/></button> 
                     </Col>
                     <Col className="text-end" sm={size.more[1]} xs={size.more[1]}>
                         <button className="btn btn-md btn-secondary" onClick={(ev)=>{
@@ -229,7 +285,8 @@ function Action(props) {
             <Col className="text-center pt-3" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-lg btn-primary" disabled={disable} onClick={(ev) => {
                     setInfo("");
-                    self.clickMint(ev);
+                    self.clickTask(ev);
+                    //self.clickMint(ev);
                 }}>Mint Now!</button>
             </Col>
         </Row>

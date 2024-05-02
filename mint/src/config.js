@@ -12,4 +12,5 @@ module.exports = {
     ],
     faucet:"https://faucet.w3os.net",
     unit:"$INFT",
+    version:20240101,
 }

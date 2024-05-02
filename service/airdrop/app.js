@@ -182,7 +182,7 @@ self.init(()=>{
                 }else{
                     if(!map[addr][day]){
                         const amount=tools.rand(range[0],range[1]);
-                        map[addr][day]={amount:first,confirmed:false};
+                        map[addr][day]={amount:amount,confirmed:false};
                         self.output(`Normal faucet: ${amount}`)
                         self.transfer(amount,addr,day);
                         return res.send({message:'Faucet daily is sending.'});

@@ -13,20 +13,9 @@ import config from "./config";
 import plugin from "./lib/plugin";
 
 import IPFS from "./network/ipfs";
-import Sui from "./network/sui";
 import tools from "./lib/tools";
 
-// iNFT definition
-// anchor://aabb/217148
-let subs = {};            //加载订阅的方法
-
 function App() {
-
-  const size = {
-    row: [12],
-    side: [6, 3, 3],
-  };
-
   let [update, setUpdate] = useState(0);
   let [show, setShow] = useState(false);
   let [title, setTitle] = useState("");
@@ -46,7 +35,6 @@ function App() {
     },
   }
 
-
   const self = {
     dialog: (ctx, title) => {
       setTitle(title);
@@ -57,9 +45,6 @@ function App() {
       if (force) return self.start();
       update++;
       setUpdate(update);
-    },
-    subscribe: (key, fun) => {
-      subs[key] = fun;
     },
     getTemplate: () => {
       const ts = Local.get("template");
@@ -83,14 +68,6 @@ function App() {
         return config.default[0];
       }
     },
-    countdown: () => {
-      //console.log(`Ready to countdown 18s`);
-      let n = 9;
-      const tt = setInterval(() => {
-        if (n <= 0) return clearInterval(tt);
-        n--;
-      }, 1000);
-    },
     checking:()=>{
       const req=window.location.hash;
       if(!req) return true;
@@ -103,10 +80,21 @@ function App() {
       console.log(`QR function set successful.`);
       return true;
     },
+    init:()=>{      //first run iNFT minter;
+      const version=Local.get("version");
+      if(!version){
+        Local.set("prefix",`i${tools.char(10).toLocaleLowerCase()}`);
+        Local.set("pointer",0);
+        Local.set("version",config.version);
+      }else{
+        const pre_ver=parseInt(version);
+        if(config.version>pre_ver){
+          console.log(`Minter version updated, ready to run update`);
+        }
+      }
+    },
     start: () => {
-      //1.check network status;
-
-      //2.get target template;
+      //1.get target template;
       const tpl = self.getTemplate();
       //console.log(`Force to fresh template`);
       if(!Data.exsistHash("cache",tpl)){
@@ -118,7 +106,6 @@ function App() {
           self.fresh();
         });
       }else{
-        //console.log(`Cached template`);
         const def=Data.getHash("cache", tpl);
         def.cid=tpl;
         Data.set("template", def);
@@ -129,12 +116,14 @@ function App() {
 
   
   useEffect(() => {
+    //1.basice setting of Minter
+    self.init();
     self.regQR();
 
-    //0.checking the hash to confirm next action.
+    //1.checking the hash to confirm next action.
     self.checking();
 
-    //1.linke to server to fresh the iNFT result
+    //2.linke to server to fresh the iNFT result
     Chain.link(config.node[0], (API) => {
       self.start();
     });
@@ -144,7 +133,7 @@ function App() {
     <Container className="app" id="minter">
       <Header fresh={self.fresh} dialog={self.dialog} update={update} />
       <Preview fresh={self.fresh} update={update} node={config.node[0]} />
-      <Action fresh={self.fresh} dialog={self.dialog} update={update} countdown={self.countdown} />
+      <Action fresh={self.fresh} dialog={self.dialog} update={update} />
       <Modal dialogClassName="modal-minter" show={show} size="lg" backdrop="static" onHide={
         (ev) => {
           setShow(false);

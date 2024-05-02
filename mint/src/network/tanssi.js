@@ -94,6 +94,9 @@ const self={
 			unsub=fun;
 		});
     },
+    unsubscribe:(key)=>{
+        delete subs[key];
+    },
     subscribe:(key,fun)=>{
         self.init(()=>{
             subs[key]=fun;     //add the subcribe function to the map

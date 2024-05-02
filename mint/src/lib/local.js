@@ -4,6 +4,12 @@ const keys={
     list:`${prefix}list`,
     template:`${prefix}tpl`,
     down:`${prefix}download`,
+
+    prefix:`${prefix}prefix`,       //iNFT prefix
+    pointer:`${prefix}index`,       //iNFT record index pointer
+    version:`${prefix}version`,     //iNFT minter version
+
+    task: `${prefix}task`
 }
 
 const self={
