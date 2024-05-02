@@ -2,6 +2,7 @@ const config={
     node:"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
     target:12000,           //How long to create a new block
 }
+
 const subs={};      //subscribe funs
 
 const limits={
@@ -59,6 +60,16 @@ const self={
                 console.log(`Linked to node.`);
                 wsAPI = api;
                 linking = false;
+
+                //add the listener;
+                wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
+                    const data=JSON.parse(JSON.stringify(lastHeader));
+                    const block=data.number-1;      //get the right block number
+                    const hash=data.parentHash;     //get the finalized hash
+                    for(let k in subs){
+                        subs[k](block,hash);
+                    }
+                });
                 return ck && ck(wsAPI);
             });
         } catch (error) {
@@ -67,6 +78,8 @@ const self={
             return ck && ck(error);
         }
     },
+
+    
     divide:()=>{
         return 1000000000000;
     },
@@ -83,15 +96,7 @@ const self={
     },
     subscribe:(key,fun)=>{
         self.init(()=>{
-            wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
-                const data=JSON.parse(JSON.stringify(lastHeader));
-                const block=data.number-1;      //get the right block number
-                const hash=data.parentHash;     //get the finalized hash
-                for(let k in subs){
-                    subs[k](block,hash);
-                }
-            });
-            subs[key]=fun;
+            subs[key]=fun;     //add the subcribe function to the map
         });
     },
     write:(pair,obj,ck)=>{
