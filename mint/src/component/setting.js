@@ -146,6 +146,9 @@ function Setting(props) {
                 </div>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
+                Set up your offset to win rare iNFT.
+            </Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
