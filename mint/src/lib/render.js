@@ -13,19 +13,19 @@ const self={
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
-    decode: (hash, pen, img, parts, tpl, active) => {
+    decode: (hash, pen, img, parts, tpl, offset) => {
         const { cell, grid } = tpl;
         //const multi=window.devicePixelRatio;
-        const multi = 1;        //这里需要处理Mac的高精度显示问题
+        const multi = 1;    //solve Apple device here.
         for (let i = 0; i < parts.length; i++) {
-            //获取不同的图像
+            //get the image part from parameters
             const part = parts[i];
             const [hash_start, hash_step, amount] = part.value;
             const [gX, gY, eX, eY] = part.img;
             const [px, py] = part.position;
             const [zx, zy] = part.center;
 
-            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step));
+            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) + (!offset[i]?0:parseInt(offset[i]));
             const index = num % amount;     //图像的位次
             const max = grid[0] / (1 + eX);
             const br = Math.floor((index+gX)/max);
@@ -86,11 +86,12 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         pen.fillRect(0,0,w,h);
     },
-    preview:(pen,bs64,hash,parts,basic)=>{
+    preview:(pen,bs64,hash,parts,basic,offset)=>{
+        //console.log(offset);
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
-            self.decode(hash, pen, img, parts, basic);
+            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck)=>{
@@ -122,43 +123,6 @@ const Render= {
         pen.fillText(txt, pos[0], pos[1]);
         pen.stroke();
     },
-
-    // getThumbs: (arr, dom_id, ck, todo) => {
-    //     if (todo === undefined) todo = [];
-    //     if (arr.length === 0) return ck && ck(todo);
-
-    //     //1.获取数据内容
-    //     const me = arr.shift();
-    //     const dt = me.data;
-    //     const basic = {
-    //         cell: dt.cell,
-    //         grid: dt.grid,
-    //         target: dt.size
-    //     }
-
-    //     //2.准备绘图用的canvas
-    //     const con = document.getElementById("tpl_handle");
-    //     const cvs = document.createElement('canvas');
-    //     cvs.id = dom_id;
-    //     cvs.width = 400;
-    //     cvs.height = 400;
-    //     con.appendChild(cvs);
-
-    //     const pen = Render.create(dom_id, true);
-    //     Render.reset(pen);
-    //     Render.preview(pen, dt.image, zero, dt.parts, basic);
-
-    //     //3.获取生成的图像
-    //     return setTimeout(() => {
-    //         me.bs64 = pen.canvas.toDataURL("image/jpeg");
-    //         //me.block = row.block;
-    //         //delete me.data;
-    //         todo.push(me);
-    //         con.innerHTML = "";
-
-    //         return self.getThumbs(arr, dom_id, ck, todo);
-    //     }, 50);
-    // },
 };
 
 export default Render;

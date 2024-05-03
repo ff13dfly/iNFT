@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Hash from "./hash";
 import Counter from "./counter";
 
-import Flow from "./flow";
-
 import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
@@ -44,22 +42,18 @@ function Preview(props) {
                     };
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
                         console.log(tools.stamp(),bk,bhash,);
-
                         setBlock(bk);
                         setHash(bhash);
 
-                        
                         if(!first){
-                            //force to fresh counter 
                             start++;
                             setStart(start);
-
-                            //fresh the iNFT result
-                            Render.clear(dom_id);
-                            Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
                         }else{
                             first=false;
                         }
+
+                        Render.clear(dom_id);
+                        Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
                     });
                 }, 50);
             }

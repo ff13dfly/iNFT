@@ -32,10 +32,11 @@ function Action(props) {
             const name = `inft_${tools.char(14).toLocaleLowerCase()}`;
             return ck && ck(name);
         },
-        getInftLocal: (name, tpl, hash, block, creator) => {
+        getINFTLocal: (name, tpl, hash, block, creator,offset) => {
             return {
                 anchor: name,
                 hash: hash,
+                offset:offset,
                 block: block,
                 template: {
                     hash: tpl,
@@ -170,6 +171,12 @@ function Action(props) {
                         console.log(process);
                         target.now++;
                         self.updateProgress(task_index,target);
+
+                        if (process.status === "Finalized") {
+                            self.saveResult(target.name, process.hash,raw.offset,pair.address,(block)=>{
+
+                            });
+                        }
                     });
                 })(index,target);
             });
@@ -196,10 +203,10 @@ function Action(props) {
 
         },
 
-        saveResult: (name, hash, creator, ck) => {
+        saveResult: (name, hash,offset, creator, ck) => {
             const tpl = self.getCurrentTemplate();
             Network("tanssi").view(hash, "block", (data) => {
-                const inft = self.getInftLocal(name, tpl, hash, data.block, creator);
+                const inft = self.getINFTLocal(name, tpl, hash, data.block, creator,offset);
                 const its = Local.get("list");
                 const nlist = its === undefined ? {} : JSON.parse(its);
                 if (nlist[creator] === undefined) nlist[creator] = [];
@@ -248,7 +255,7 @@ function Action(props) {
 
                                 if (process.status === "Finalized") {
                                     setDisable(false);
-                                    self.saveResult(name, process.hash, pair.address, (block) => {
+                                    self.saveResult(name, process.hash, raw.offset,pair.address, (block) => {
                                         props.dialog(<Result
                                             name={name}
                                             hash={process.hash}

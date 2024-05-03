@@ -183,7 +183,6 @@ function Result(props) {
             }
         },
         show:()=>{
-            //console.log(props);
             setName(props.name);
             setBlock(props.block);
             setBlockHash(props.hash);
@@ -199,7 +198,7 @@ function Result(props) {
                     target: tpl.size
                 }
                 Render.clear(dom_id);
-                Render.preview(pen,tpl.image,props.hash,tpl.parts,basic);
+                Render.preview(pen,tpl.image,props.hash,tpl.parts,basic,props.offset);
             }, 50);
         },
     }

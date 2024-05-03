@@ -64,7 +64,7 @@ function Mine(props) {
             self.showList();
         },
         clickSingle: (index) => {
-
+            //console.log(index,page,config.page_count);
             const fa = Local.get("login");
             if (!fa) return false;
             const login = JSON.parse(fa);
@@ -73,11 +73,12 @@ function Mine(props) {
             const ls = Local.get("list");
             const my = JSON.parse(ls);
             const dt = my[addr][index];
-
+            //console.log(dt);
             props.dialog(<Result 
                 name={dt.anchor} 
                 hash={dt.hash} 
                 block={dt.block} 
+                offset={dt.offset}
                 template={dt.template.hash}
                 price={!dt.price?0:dt.price}
                 fav={dt.fav}
@@ -180,6 +181,7 @@ function Mine(props) {
                 grid: dt.grid,
                 target: dt.size
             }
+            //console.log(me)
 
             //2.prepare the canvas
             const con = document.getElementById("handle");
@@ -192,7 +194,7 @@ function Mine(props) {
 
                 const pen = Render.create(config.dom_id, true);
                 Render.reset(pen);
-                Render.preview(pen, dt.image, me.hash, dt.parts, basic);
+                Render.preview(pen, dt.image, me.hash, dt.parts, basic,me.offset);
 
                 return setTimeout(() => {
                     me.bs64 = pen.canvas.toDataURL("image/jpeg");
@@ -279,7 +281,7 @@ function Mine(props) {
                     <Row >
                         {list.map((row, index) => (
                             <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]} onClick={(ev) => {
-                                self.clickSingle(index);
+                                self.clickSingle((page-1)*config.page_count+index);
                             }}>
                                 <Row>
                                     <Col className="grid" sm={size.row[0]} xs={size.row[0]} >
