@@ -40,6 +40,17 @@ function Preview(props) {
                         grid: tpl.grid,
                         target: tpl.size
                     };
+
+                    //view anchor by anchor link
+                    // Network("tanssi").view({name:"incbcgkuovq_88",block:149658},"anchor",(obj)=>{
+                    //     console.log(obj);
+                    // });
+
+                    Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
+                        console.log(obj);
+                    });
+
+                    //add the subscribe
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
                         console.log(tools.stamp(),bk,bhash,);
                         setBlock(bk);
@@ -64,7 +75,6 @@ function Preview(props) {
                 const tpl = list[0];
                 setAlink(tpl.alink);
             }
-
         }
     }
 

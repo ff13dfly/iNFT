@@ -64,7 +64,7 @@ function Template(props) {
         clickOpen:(index)=>{
             const tpls = JSON.parse(Local.get("template"));
             const tpl=tpls[index];
-            props.dialog(<Detail alink={tpl.alink} skip={true} back={true} dialog={props.dialog} fresh={props.fresh}/>,"Tempalate Details");
+            props.dialog(<Detail alink={tpl.alink} dialog={props.dialog} fresh={props.fresh}/>,"Tempalate Details");
         },
         clickRemove:(index)=>{
             const tpls = JSON.parse(Local.get("template"));

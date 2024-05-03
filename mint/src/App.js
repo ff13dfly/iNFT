@@ -102,7 +102,7 @@ function App() {
       
       const io=QR.decode(window.location.hash);
       window.location.hash="";        //clear the hash after decode
-      console.log(io);
+      //console.log(io);
       if(io===false) return true;
       plugin.run(io.act,io.param);
     },

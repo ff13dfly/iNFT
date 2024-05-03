@@ -157,9 +157,49 @@ const self={
         self.init(()=>{
             switch (type) {
                 case "anchor":
-                    
-                    break;
+                    //1.if set block,search directly
+                    if(value.block!==undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
+                        const hash=res.toJSON();
+                        
+                        wsAPI.rpc.chain.getBlock(hash).then((full) => {
+                            let data=null;
+                            full.block.extrinsics.forEach((ex, index) => {
+                                const row=ex.toHuman();
+                                const dt=row.method;
 
+                                if (dt.method === "setAnchor" && dt.args.key===value.name) {
+                                    data={
+                                        owner:row.signer.Id,
+                                        name:dt.args.key,
+                                        raw:dt.args.raw,
+                                        protocol:dt.args.protocol,
+                                        pre:parseInt(dt.args.pre),
+                                        block:value.block
+                                    }
+                                }
+                            });
+
+                            if(data!==null){
+                                try {
+                                    data.raw=JSON.parse(data.raw);
+                                    data.protocol=JSON.parse(data.protocol);
+                                    return ck && ck(data);
+                                } catch (error) {
+                                    return ck && ck(data);
+                                }
+                            }else{
+                                return ck && ck(false);
+                            }
+                        });
+                    });
+
+                    //2.check the latest block of the name
+                    self.view(value.name,"owner",(owner)=>{
+                        //console.log(owner);
+                        return self.view({name:value.name,block:owner.block},"anchor",ck);
+                    });
+
+                    break;
                 case "selling":
                     let unselling = null;
                     wsAPI.query.anchor.sellList(value, (res) => {
@@ -187,6 +227,7 @@ const self={
                     break;
 
                 case "block":
+                    //value: hash(64)
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const obj=dt.toJSON();
                         return ck && ck({block:obj.block.header.number});
