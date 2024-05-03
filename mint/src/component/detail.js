@@ -6,6 +6,8 @@ import Template from "./template";
 import SmallHash from "./hash_small";
 
 //import Chain from "../lib/chain";
+import IPFS from "../network/ipfs";
+
 import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
@@ -14,7 +16,7 @@ import Copy from "../lib/clipboard";
 import { FaBackspace, FaCopy, FaSyncAlt } from "react-icons/fa";
 
 let current = 0;
-let hash="0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb";
+let hash = "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb";
 function Detail(props) {
     const size = {
         row: [12],
@@ -34,7 +36,7 @@ function Detail(props) {
     let [start, setStart] = useState(0);
     let [step, setStep] = useState(0);
     let [value, setValue] = useState("00");
-    let [dvd, setDvd]=useState(8);
+    let [dvd, setDvd] = useState(8);
 
     let [bs64, setBS64] = useState("image/empty.png");
     let [img_part, setImagePart] = useState("");
@@ -64,7 +66,7 @@ function Detail(props) {
             self.autoFresh(index, active);
         },
         clickHashFresh: (ev) => {
-            hash=self.randomHash(64);
+            hash = self.randomHash(64);
             self.autoFresh(current, active);
         },
         clickCopy: (cid) => {
@@ -116,71 +118,79 @@ function Detail(props) {
             //console.log(list);
             return list;
         },
+
+        getTemplate: (cid, ck) => {
+            const def = Data.getHash("cache", alink.toLocaleLowerCase());
+            if (def !== false) return ck && ck(def);
+            IPFS.read(cid, (json) => {
+                json.cid=cid;
+                Data.set("template", json);         //set to default template
+                Data.setHash("cache", cid, json);   //set to cache
+                return ck && ck(json);
+            });
+        },
         //ipart: 选中的组件
         //iselect, 选中的零件
         autoFresh: (ipart, iselect, nhash) => {
-            const def = Data.getHash("cache", alink.toLocaleLowerCase());
+            self.getTemplate(alink.toLocaleLowerCase(), (def) => {
+                //0.get template parameters
+                //const def=tpl.raw;
+                const target = def.parts[ipart];
+                const w = def.cell[0], h = def.cell[1];
+                const [gX, gY, eX, eY] = target.img;
+                const [start, step, divide, offset] = target.value;
+                const [line, row] = def.grid;
+                const max = line / (1 + eX);
+                const br = Math.ceil((gX + divide) / max);
+                const height = h * 24;      //这里的行数出错了，需要修正
+                const rate = 1.0526;
 
-            //0.get template parameters
-            //const def=tpl.raw;
-            const target = def.parts[ipart];
-            const w = def.cell[0], h = def.cell[1];
-            const [ gX, gY, eX, eY ] = target.img;
-            const [ start, step, divide, offset ] = target.value;
-            const [ line, row ] = def.grid;
-            const max = line / (1 + eX);
-            const br = Math.ceil((gX + divide) / max);
-            const height = h * 24;      //这里的行数出错了，需要修正
-            const rate = 1.0526;
+                //1. set hash board
+                setStart(start);
+                setStep(step);
+                setDvd(divide);
+                setValue(nhash === undefined ? hash.slice(start + 2, start + 2 + step) : nhash.slice(start + 2, start + 2 + step));
+                //console.log(hash);
 
-            //1. set hash board
-            setStart(start);
-            setStep(step);
-            setDvd(divide);
-            setValue(nhash===undefined?hash.slice(start+2,start+2+step):nhash.slice(start+2,start+2+step));
-            //console.log(hash);
+                //2.get the image part from origanal image
+                const ch = h * (1 + eY) * br / rate;
+                setCutHeight(ch);
+                setCutWidth(def.size[0]);
 
-            //2.get the image part from origanal image
-            const ch = h * (1 + eY) * br / rate;
-            setCutHeight(ch);
-            setCutWidth(def.size[0]);
+                setHideMask(true);  //close the mask ?
 
-            setHideMask(true);  //close the mask ?
+                const cpen = Render.create(cut_id);
+                Render.clear(cut_id);
+                Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (b64) => {
+                    setImagePart(b64);
+                    setTimeout(() => {
+                        setHideMask(false);
+                    }, 50);
+                });
 
-            const cpen = Render.create(cut_id);
-            Render.clear(cut_id);
-            Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (b64) => {
-                setImagePart(b64);
+                //3.显示组件列表
+                setParts(def.parts);
+
+                //4.显示组件的按钮
+                const ns = self.getHelper(divide, line, w, h, gX, gY, eX, eY, rate)
+                setGrid(ns);
+
+                //5.渲染图像
+                const basic = {
+                    cell: def.cell,
+                    grid: def.grid,
+                    target: def.size
+                }
+
+                const pen = Render.create(dom_id, true);
+                Render.reset(pen);
+                Render.preview(pen, def.image, hash, def.parts, basic);
+                Render.active(pen, w * (1 + eX), h * (1 + eY), target.position[0], target.position[1], "#FFFFFF", 2);
                 setTimeout(() => {
-                    setHideMask(false);
+                    const img = pen.canvas.toDataURL("image/jpeg");
+                    setBS64(img);
                 }, 50);
             });
-
-            //3.显示组件列表
-            setParts(def.parts);
-
-            //4.显示组件的按钮
-            const ns = self.getHelper(divide, line, w, h, gX, gY, eX, eY, rate)
-            setGrid(ns);
-
-            //5.渲染图像
-            const basic = {
-                cell: def.cell,
-                grid: def.grid,
-                target: def.size
-            }
-
-            const pen = Render.create(dom_id, true);
-            Render.reset(pen);
-            Render.preview(pen, def.image, hash, def.parts, basic);
-            Render.active(pen, w * (1 + eX), h * (1 + eY), target.position[0], target.position[1], "#FFFFFF", 2);
-            setTimeout(() => {
-                const img = pen.canvas.toDataURL("image/jpeg");
-                setBS64(img);
-            }, 50);
-        },
-        getHashArray: (hash, line) => {
-
         },
     }
 
@@ -206,7 +216,7 @@ function Detail(props) {
                 }} />
             </Col>
             <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
-                <h5>Val: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`)%dvd}</span> </h5>
+                <h5>Val: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`) % dvd}</span> </h5>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
@@ -217,7 +227,7 @@ function Detail(props) {
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                                Mock hash ( {hash.length-2} )
+                                Mock hash ( {hash.length - 2} )
                             </Col>
                         </Row>
                         <SmallHash hash={hash} start={start} step={step} />
@@ -265,7 +275,7 @@ function Detail(props) {
                                 self.clickPart(index);
                             }}>
                                 {/* <FaPuzzlePiece size="20" color={"#AAAAAA"} style={{marginTop:"-5px"}}/> */}
-                                <strong>#{index+1}</strong>
+                                <strong>#{index + 1}</strong>
                             </button>
                         </Col>
                     ))}

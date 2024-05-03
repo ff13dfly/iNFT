@@ -5,6 +5,9 @@ import Preview from "./component/render";
 import Action from "./component/action";
 import Header from "./component/header";
 
+import Viewer from "./component/viewer";
+import Detail from "./component/detail";
+
 import Data from "./lib/data";
 import Local from "./lib/local";
 import Chain from "./lib/chain";
@@ -22,16 +25,42 @@ function App() {
   let [content, setContent] = useState("");
 
   const QR={
-    view:(anchor)=>{
-      console.log(anchor);
+    view:(anlink)=>{
       setTitle("iNFT viewer");
-      setContent("hello");
+      setContent(<Viewer anchor={anlink}/>);
       setShow(true);
     },
     template:(cid)=>{
       setTitle("iNFT template previewer");
-      setContent("template here");
+      //setContent("template here:"+cid);
+      setContent(<Detail alink={cid} dialog={self.dialog} fresh={self.fresh}/>)
       setShow(true);
+    },
+    decode:(str)=>{
+      if(!str || str==="#") return false;
+      const pure=str.slice(1,str.length);
+      const arr=pure.split("/");
+
+      const io={
+        act:"template",
+        param:[],
+      }
+      switch (arr.length) {
+        case 1:
+          if(arr[0].length!==59) return false;
+          io.param.push(arr[0]);
+          break;
+
+        case 2:
+          io.act=arr[0];
+          io.param.push(arr[1]); 
+          break;
+
+        default:
+
+          break;
+      }
+      return io;
     },
   }
 
@@ -69,9 +98,13 @@ function App() {
       }
     },
     checking:()=>{
-      const req=window.location.hash;
-      if(!req) return true;
-      plugin.run("template",["aa","bb"]);
+      //const req=window.location.hash;
+      
+      const io=QR.decode(window.location.hash);
+      window.location.hash="";        //clear the hash after decode
+      console.log(io);
+      if(io===false) return true;
+      plugin.run(io.act,io.param);
     },
     regQR:()=>{
       for(var key in QR){
@@ -121,7 +154,7 @@ function App() {
     self.regQR();
 
     //1.checking the hash to confirm next action.
-    self.checking();
+    self.checking();  //check input from hash
 
     //2.linke to server to fresh the iNFT result
     Chain.link(config.node[0], (API) => {
