@@ -28,6 +28,8 @@ function Template(props) {
     let [disableAdd,setDisableAdd] = useState(true);
     let [recover,setRecover]=useState({});
 
+    let [show, setShow]=useState(false);
+
     const zero = "0x0000000000000000000000000000000000000000000000000000000000000000";
     const self = {
         changeAlink: (ev) => {
@@ -127,6 +129,7 @@ function Template(props) {
             props.fresh();
         },
         showTemplate: () => {
+            setShow(false);
             const tpls = Local.get("template");
             const nlist = !tpls ? [] : JSON.parse(tpls);
 
@@ -134,8 +137,6 @@ function Template(props) {
             for (let i = 0; i < nlist.length; i++) {
                 arr.push(nlist[i].alink);
             }
-
-            //console.log(arr);
             self.cacheIPFS(arr,(dels)=>{
                 //console.log(dels);
                 const last = []
@@ -145,6 +146,7 @@ function Template(props) {
                 }
                 //console.log(JSON.stringify(last));
                 self.getThumbs(last, dom_id, (glist) => {
+                    setShow(true);
                     setList(glist);
                 });
             });
@@ -197,8 +199,11 @@ function Template(props) {
                 }}>Add</button>
             </Col>
             <Col hidden={true} id="tpl_handle" sm={size.row[0]} xs={size.row[0]}></Col>
+            <Col hidden={show} sm={size.row[0]} xs={size.row[0]}>
+                 <h4>Loading templates ...</h4>
+            </Col>
             <div className="limited">
-                <Row>
+                <Row hidden={!show}>
                 {list.map((row, index) => (
                     <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]}>
                         <Row>

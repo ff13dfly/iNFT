@@ -24,7 +24,7 @@ function Setting(props) {
         clickSingleOffset:(index,val)=>{
             const active=Data.get("template");
             const max=active.parts[index].value[2];
-            list[index]=(val+1>max)?0:val+1;
+            list[index]=(val>max-2)?0:val+1;
             const nlist=tools.clone(list);
             setList(nlist);
             self.updateTemplate(active.cid,"offset",nlist);
@@ -32,7 +32,7 @@ function Setting(props) {
         clickIncMulti:(ev)=>{
             if(multi!==config.multiMax){
                 const n=multi+1;
-                console.log(n);
+                //console.log(n);
                 setMulti(n);
 
                 const active=Data.get("template");
@@ -83,7 +83,7 @@ function Setting(props) {
                     const part=parts[i];
                     const divide=part.value[2];
                     //console.log(divide);
-                    os.push(tools.rand(0,divide));
+                    os.push(tools.rand(0,divide-1));
                 }
 
                 //update to template;

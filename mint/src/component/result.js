@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaBackspace,FaRegHeart,FaHeart } from "react-icons/fa";
 
 import Mine from "./mine";
+import Progress from "./progress";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
@@ -44,6 +45,13 @@ function Result(props) {
 
     const dom_id="pre_result";
     const fix=40;
+
+    const router={
+        progress:{
+            title:"Mint progress",
+            content:<Progress dialog={props.dialog} />,
+        } 
+    }
 
     const self={
         changePrice:(ev)=>{
@@ -166,7 +174,11 @@ function Result(props) {
             }
         },
         clickHome:(ev)=>{
-            props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />,"My iNFT list");
+            if(props.from && router[props.from]){
+                props.dialog(router[props.from].content,router[props.from].title);
+            }else{
+                props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />,"My iNFT list");
+            }
         },
         getTemplate:(alink,ck)=>{
             if (!Data.exsistHash("cache", alink)) {

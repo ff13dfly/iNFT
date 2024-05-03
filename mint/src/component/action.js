@@ -90,7 +90,7 @@ function Action(props) {
             props.dialog(<Setting />, "Mint setting");
         },
         clickPanel: () => {
-            props.dialog(<Progress block={props.block} />, "Mint progress");
+            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint progress");
         },
         clickTask: () => {
             const fa = Local.get("login");
@@ -100,7 +100,7 @@ function Action(props) {
                 return false;
             }
             setDisable(true);
-            setInfo("Processing start.");
+            //setInfo("Processing start.");
 
             Chain.load(fa, password, (pair) => {
                 if (pair.error !== undefined) {
@@ -108,7 +108,9 @@ function Action(props) {
                     setPassword("");
                     return false;
                 }
-                setInfo("Vertified.");
+                //setInfo("Vertified.");
+
+                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint progress");
 
                 const tpl = self.getCurrentTemplate(true);
                 const multi = !tpl.multi ? 1 : parseInt(tpl.multi);
@@ -169,7 +171,8 @@ function Action(props) {
                             return setInfo(process.error);
                         }
                         console.log(process);
-                        target.now++;
+
+                        if(process.code) target.now=process.code;
                         self.updateProgress(task_index,target);
 
                         if (process.status === "Finalized") {

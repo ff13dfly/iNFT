@@ -26,15 +26,15 @@ const funs={
         if(!obj || obj.dispatchError!==undefined) return ck && ck({error:"Failed to write to chain."});
         if(!obj.status) return ck && ck({error:"Invalid format"});
         if(obj.status==="Ready"){
-            return ck && ck({msg:"Ready to write to network.",success:true,status:"Ready"});
+            return ck && ck({msg:"Ready to write to network.",success:true,status:"Ready",code:2});
         }else if(obj.status.Broadcast){
-            return ck && ck({msg:"Broadcast to nodes.",success:true,status:"Broadcast"});
+            return ck && ck({msg:"Broadcast to nodes.",success:true,status:"Broadcast",code:3});
         }else if(obj.status.InBlock){
-            return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock"});
+            return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock",code:4});
         }else if(obj.status.Retracted){
-            return ck && ck({msg:"Trying to write.",success:true,status:"Retracted"});
+            return ck && ck({msg:"Trying to write.",success:true,status:"Retracted",code:5});
         }else if(obj.status.Finalized){
-            return ck && ck({msg:"Done, write to network",success:true,status:"Finalized",hash:obj.status.Finalized});
+            return ck && ck({msg:"Done, write to network",success:true,status:"Finalized",hash:obj.status.Finalized,code:8});
         }else{
             return ck && ck({error:"Unknow result"});
         }
