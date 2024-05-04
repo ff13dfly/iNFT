@@ -20,12 +20,14 @@ const self={
         for (let i = 0; i < parts.length; i++) {
             //get the image part from parameters
             const part = parts[i];
-            const [hash_start, hash_step, amount] = part.value;
+            const [hash_start, hash_step, amount, tpl_offset] = part.value;
             const [gX, gY, eX, eY] = part.img;
             const [px, py] = part.position;
             const [zx, zy] = part.center;
 
-            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) + (!offset[i]?0:parseInt(offset[i]));
+            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) 
+                + (!tpl_offset?0:parseInt(tpl_offset))
+                + (!offset[i]?0:parseInt(offset[i]));
             const index = num % amount;     //图像的位次
             const max = grid[0] / (1 + eX);
             const br = Math.floor((index+gX)/max);
