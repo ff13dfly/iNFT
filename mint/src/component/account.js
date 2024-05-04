@@ -190,15 +190,15 @@ function Account(props) {
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
                 <button className="btn btn-md btn-secondary" onClick={(ev) => {
                     self.clickDownload(ev);
-                }}><FaDownload /> Encried Key</button>
-                <button className="btn btn-md btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
+                }}><FaDownload className="pb-1"/> Encried Key</button>
+                <button className="btn btn-md btn-secondary" style={{ marginLeft: "10px"}} onClick={(ev) => {
                     self.clickFaucet(ev);
-                }}><FaFaucet /> Faucet</button>
+                }}><FaFaucet className="pb-1" /> Faucet</button>
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev) => {
                     self.clickLogout(ev);
-                }}><FaSignInAlt /> Logout</button>
+                }}><FaSignInAlt className="pb-1"/> Logout</button>
             </Col>
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
             {/* <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>

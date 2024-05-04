@@ -7,7 +7,7 @@ function SmallHash(props) {
     };
 
     const config={
-        grid:8,                //the amount of a row
+        grid:!props.grid?8:props.grid,                //the amount of a row
         warning:"#ffc107",      //warning color
         default:"#666666"
     };

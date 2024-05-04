@@ -5,9 +5,13 @@ import Data from "../lib/data";
 import Local from "../lib/local";
 import tools from "../lib/tools"
 
+import SmallHash from "./hash_small";
+
 import Tpl from "../lib/tpl";
 
-import Network from "../network/router";
+// import Network from "../network/router";
+
+import { FaAngleDoubleUp,FaAngleDoubleDown } from "react-icons/fa";
 
 function Setting(props) {
     const size = {
@@ -16,7 +20,8 @@ function Setting(props) {
         multi:[4,4,4],
         calc:[8,1,2],
         grid:1,
-        head:[7,5]
+        head:[9,3],
+        detail:[10,2],
     };
 
     const config={
@@ -24,8 +29,8 @@ function Setting(props) {
     }
 
     let [hash, setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
-    
-    let [grid,setGrid]=useState([]);
+
+    let [hidden, setHidden]=useState(true);
 
     let [amount, setAmount]=useState(0);
     let [cid, setCid]=useState("");
@@ -33,10 +38,18 @@ function Setting(props) {
     let [list,setList]=useState([]);
     let [multi, setMulti]=useState(1);
 
+    let [start, setStart]=useState(0);
+    let [step, setStep]=useState(0);
+
     const self={
         clickSingleOffset:(index,val)=>{
             const active=Data.get("template");
-            const max=active.parts[index].value[2];
+            const single=active.parts[index];
+            const max=single.value[2];
+
+            setStart(single.value[0]);
+            setStep(single.value[1]);
+
             list[index]=(val>max-2)?0:val+1;
             const nlist=tools.clone(list);
             setList(nlist);
@@ -61,17 +74,13 @@ function Setting(props) {
                 self.updateTemplate(active.cid,"multi",n);
             }
         },
-        getHashGrid:(str,divide)=>{
-            const pure=str.slice(2);
-            const n=Math.ceil(pure.length/divide);
-            //console.log(pure,n);
-            const arr=[];
-            for(let i=0;i<n;i++){
-                //console.log(str.slice(i*divide,i*divide+divide))
-                arr.push(pure.slice(i*divide,i*divide+divide))
-            }
-            return arr;
+        clickHidden:(ev)=>{
+            setHidden(true);
         },
+        clickShow:(ev)=>{
+            setHidden(false);
+        },
+
         getTemplate:(cid)=>{
             const ts = Local.get("template");
             if(!ts) return false;
@@ -106,19 +115,18 @@ function Setting(props) {
                 for(let i=0;i<parts.length;i++){
                     const part=parts[i];
                     const divide=part.value[2];
-                    //console.log(divide);
                     os.push(tools.rand(0,divide-1));
                 }
 
                 //update to template;
-                self.updateOffset(tpl.alink,os);
+                self.updateTemplate(tpl.alink,"offset",os);
 
                 return os;
             }else{
-                //confirm the offset;
                 return tpl.offset;
             }   
         },
+
         autoShow:()=>{
             const active=Data.get("template");
             if(active===null) return setTimeout(()=>{
@@ -179,8 +187,6 @@ function Setting(props) {
 
     useEffect(() => {
         self.autoShow();
-        const arr=self.getHashGrid(hash,16);
-        setGrid(arr);
         // Network("tanssi").subscribe("setting",(bk, bhash)=>{
         //     const arr=self.getHashGrid(bhash,16);
         //     setGrid(arr);
@@ -195,34 +201,45 @@ function Setting(props) {
 
     return (
         <Row>
-            <Col className="text-center board" style={cmap} sm={size.head[0]} xs={size.head[0]}>
-                <Row>
-                    <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                    Mock hash
-                    </Col>
-                    <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
-                        {grid.map((row, index) => (
-                            <p className="hash_setting" key={index}>{row}</p>
-                        ))}
-                    </Col>
-                </Row>
-            </Col>
-            <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
-                <Row>
-                    <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                    Selected part
-                    </Col>
-                    <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
-                        
-                    </Col>
-                </Row>
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Image thumb here to show select part.
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            
+
+            <Col className="pb-2" sm={size.detail[0]} xs={size.detail[0]}>
                 <strong>{amount}</strong> parts of template <strong>{tools.shorten(cid,8)}</strong>
             </Col>
+            <Col hidden={!hidden} className="pb-2 text-end" sm={size.detail[1]} xs={size.detail[1]}>
+                <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                    self.clickShow(ev);
+                }}><FaAngleDoubleDown /></button>
+            </Col>
+            <Col hidden={hidden} className="pb-2 text-end" sm={size.detail[1]} xs={size.detail[1]}>
+                <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                    self.clickHidden(ev);
+                }}><FaAngleDoubleUp /></button>
+            </Col>
+            <Col hidden={hidden} sm={size.row[0]} xs={size.row[0]}>
+                <Row>
+                    <Col className="text-center board pb-2" style={cmap} sm={size.head[0]} xs={size.head[0]}>
+                        <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+                            Mock hash
+                        </Col>
+                        <SmallHash hash={hash} start={start} step={step} grid={16}/>
+                    </Col>
+                    <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
+                        <Row>
+                            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
+                            Image
+                            </Col>
+                            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
+                                
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col sm={size.row[0]} xs={size.row[0]}>
+                        Image thumb here to show select part.
+                    </Col>
+                </Row>
+            </Col>
+            
             <Col className="pt-2 pb-2" style={cmap} sm={size.row[0]} xs={size.row[0]}>
                 <div className="setting">
                 {list.map((row, index) => (        
@@ -255,7 +272,7 @@ function Setting(props) {
                 </div>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                Set up your offset to win iNFT.
+                ( random_value + template_offset + mint_offset ) % template_divide = selected_image_part
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />

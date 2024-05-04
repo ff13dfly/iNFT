@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaAngleLeft, FaAngleRight, FaHeart, FaGripHorizontal } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaHeart, FaRegHeart } from "react-icons/fa";
 
 import Result from "./result";
 
@@ -22,6 +22,7 @@ function Mine(props) {
         page: [4, 4, 4],
         filter: [6, 6],
         selling: [6, 6],
+        detail:[9,3]
     };
 
     const config={
@@ -43,8 +44,9 @@ function Mine(props) {
     //const dom_id = "pre_mine";
     const self = {
         clickClean: (ev) => {
-            Local.remove("list");
-            props.fresh();
+            console.log(`Clean the unfav list of this page.`);
+            //Local.remove("list");
+            //props.fresh();
         },
         clickPrevious: (ev) => {
             if(page<1){
@@ -250,7 +252,6 @@ function Mine(props) {
                         break;
                 }
             }
-            console.log(arr);
             return arr;
         },
         
@@ -325,9 +326,11 @@ function Mine(props) {
                                     <Col className="grid" sm={size.row[0]} xs={size.row[0]} >
                                         <img className="mine"  src={row.bs64} alt="" />
                                     </Col>
-                                    <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>
-                                        {/* <FaMapMarkerAlt size={12}/> */}
-                                        <span>{row.block.toLocaleString()}</span> 
+                                    <Col className="pt-1" sm={size.detail[0]} xs={size.detail[0]}>
+                                        {row.fav?<FaRegHeart/>:""} <span>{row.block.toLocaleString()}</span> 
+                                    </Col>
+                                    <Col className="pt-1" sm={size.detail[1]} xs={size.detail[1]}>
+                                        
                                     </Col>
                                 </Row>
                             </Col>
@@ -356,7 +359,7 @@ function Mine(props) {
             <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickClean(ev);
-                }}>Clean</button>
+                }}>Clean Unfav</button>
             </Col>
         </Row>
     )

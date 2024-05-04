@@ -67,7 +67,7 @@ function Progress(props) {
             />, "iNFT Details");
         },
         showTask:()=>{
-            console.log(`update task status`);
+            //console.log(`update task status`);
             const dt=Local.get("task");
             if(!dt) return false;
             
@@ -90,35 +90,45 @@ function Progress(props) {
         });
     }, [props.update]);
 
+    const cmap={
+        background:"#555555",
+        borderRadius:"10px"
+    }
+
     return (
         <Row>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 {list.length} mint, {self.getDone(list)} done. Block {!block?0:block.toLocaleString()}
             </Col>
-            {list.map((row, index) => (  
-                <Col key={index} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                    <Row>
-                        <Col className="pt-1" sm={size.bar[0]} xs={size.bar[0]}>
-                            <h5>#{index+1}</h5>
-                        </Col>
-                        <Col className="pt-1" sm={size.bar[1]} xs={size.bar[1]}>
-                            <Row className="pt-2">
-                                <Col className={self.getStatus(0,row.now)} sm={size.step[0]} xs={size.step[0]}></Col>
-                                <Col className={self.getStatus(1,row.now)} sm={size.step[1]} xs={size.step[1]}></Col>
-                                <Col className={self.getStatus(2,row.now)} sm={size.step[2]} xs={size.step[2]}></Col>
-                                <Col className={self.getStatus(3,row.now)} sm={size.step[3]} xs={size.step[3]}></Col>
-                                <Col className={self.getStatus(4,row.now)} sm={size.step[4]} xs={size.step[4]}></Col>
-                                <Col className={self.getStatus(5,row.now)}></Col>
-                            </Row>
-                        </Col>
-                        <Col className="pt-1 text-end" sm={size.bar[2]} xs={size.bar[2]}>
-                            <button hidden={row.now<def_progress.FINALIZED} className="btn btn-sm btn-secondary" onClick={(ev)=>{
-                                self.clickSingle(row.name,row.hash);
-                            }}><FaIdBadge /></button>
-                        </Col>
-                    </Row>
-                </Col>
-            ))}
+            <Col className="pt-2 pb-4" style={cmap} sm={size.row[0]} xs={size.row[0]}>
+                <Row>
+                {list.map((row, index) => (  
+                    <Col key={index} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                        <Row>
+                            <Col className="pt-1" sm={size.bar[0]} xs={size.bar[0]}>
+                                <h5>#{index+1}</h5>
+                            </Col>
+                            <Col className="pt-1" sm={size.bar[1]} xs={size.bar[1]}>
+                                <Row className="pt-2">
+                                    <Col className={self.getStatus(0,row.now)} sm={size.step[0]} xs={size.step[0]}></Col>
+                                    <Col className={self.getStatus(1,row.now)} sm={size.step[1]} xs={size.step[1]}></Col>
+                                    <Col className={self.getStatus(2,row.now)} sm={size.step[2]} xs={size.step[2]}></Col>
+                                    <Col className={self.getStatus(3,row.now)} sm={size.step[3]} xs={size.step[3]}></Col>
+                                    <Col className={self.getStatus(4,row.now)} sm={size.step[4]} xs={size.step[4]}></Col>
+                                    <Col className={self.getStatus(5,row.now)}></Col>
+                                </Row>
+                            </Col>
+                            <Col className="pt-1 text-end" sm={size.bar[2]} xs={size.bar[2]}>
+                                <button hidden={row.now<def_progress.FINALIZED} className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                                    self.clickSingle(row.name,row.hash);
+                                }}><FaIdBadge /></button>
+                            </Col>
+                        </Row>
+                    </Col>
+                ))}
+                </Row>
+            </Col>
+            
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Info: every mint takes about 36 seconds to finalize.
             </Col>
