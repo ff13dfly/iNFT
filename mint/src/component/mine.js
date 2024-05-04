@@ -9,12 +9,12 @@ import Local from "../lib/local";
 import Render from "../lib/render";
 import Chain from "../lib/chain";
 import Data from "../lib/data";
+import tools from "../lib/tools"
 
 import IPFS from "../network/ipfs";
 
 
 let page=1;
-
 function Mine(props) {
     const size = {
         row: [12],
@@ -86,6 +86,14 @@ function Mine(props) {
                 back={true} 
                 dialog={props.dialog}
             />, "iNFT Details");
+        },
+        clickFav:(ev)=>{
+            page=1;  //reset page value
+
+            filter.fav=!filter.fav;
+            setFilter(tools.clone(filter));
+            
+            self.showList();
         },
         cacheTemplate: (alinks, ck, dels) => {
             if (dels === undefined) dels = [];
@@ -218,6 +226,34 @@ function Mine(props) {
             //console.log(page,JSON.stringify(nlist));
             return nlist;
         },
+
+        filteList:(list,cfg)=>{
+            if(!list) return [];
+            const arr=[];
+            for(let i=0;i<list.length;i++){
+                const row=list[i];
+                const key=`${!cfg.fav?0:1}_${!cfg.template?0:1}`;
+                switch (key) {
+                    case "0_0": //no filter
+                        arr.push(row);
+                        break;
+                    case "1_0": //fav filter
+                        if(row.fav) arr.push(row);
+                        break;
+                    case "0_1": //template filter
+                        if(row.template.hash===cfg.template) arr.push(row);
+                        break;
+                    case "1_1": //fav and template filter
+                        if(row.fav && row.template.hash===cfg.template) arr.push(row);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            console.log(arr);
+            return arr;
+        },
+        
         showList: () => {
             setDone(false);
             const fa = Local.get("login");
@@ -230,12 +266,11 @@ function Mine(props) {
                 if (ls !== undefined) {
                     try {
                         const nlist = JSON.parse(ls);
+                        const flist=self.filteList(nlist[addr],filter);
+                        const plist=self.page(flist);
                         
-                        const plist = nlist[addr] === undefined ? [] : self.page(nlist[addr]);
-                        if(nlist[addr]!==undefined){
-                            const total=Math.ceil(nlist[addr].length/config.page_count);
-                            setSum(total);
-                        }
+                        const total=Math.ceil(flist.length/config.page_count);
+                        setSum(total);
 
                         self.autoCache(plist, (glist) => {
                             setDone(true);
@@ -263,13 +298,16 @@ function Mine(props) {
                 {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
             </Col>
             <Col className="pb-2" sm={size.filter[0]} xs={size.filter[0]}>
-                <FaGripHorizontal size="28" className="pointer"/>
-                {/*切换每行显示的数量*/}
+                {/* <FaGripHorizontal size="28" className="pointer" onClick={(ev)=>{
+                    self.clickGridAmount();
+                }}/> */}
             </Col>
             <Col className="text-end pb-2" sm={size.filter[1]} xs={size.filter[1]}>
                 {/* <FaImages className="pr-2" size="24" />
                 <FaBars className="pr-2" size="24" /> */}
-                <FaHeart size="24" className="pointer"/>
+                <FaHeart color={filter.fav?"#ffaabb":""} size="24" className="pointer" onClick={(ev)=>{
+                    self.clickFav();
+                }}/>
             </Col>
 
             <Col sm={size.row[0]} xs={size.row[0]}>{info}</Col>

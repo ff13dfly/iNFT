@@ -46,9 +46,9 @@ function Preview(props) {
                     //     console.log(obj);
                     // });
 
-                    Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
-                        console.log(obj);
-                    });
+                    // Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
+                    //     console.log(obj);
+                    // });
 
                     //add the subscribe
                     Network("tanssi").subscribe("preview",(bk, bhash)=>{
