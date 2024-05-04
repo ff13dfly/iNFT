@@ -309,7 +309,7 @@ function Action(props) {
                     <Col className="text-end" sm={size.more[0]} xs={size.more[0]}>
                         <button className="btn btn-md btn-secondary" onClick={(ev) => {
                             self.clickPanel();
-                        }}><FaIndent className="text-warning" /></button>
+                        }}><FaIndent className="" /></button>
                     </Col>
                     <Col className="text-end" sm={size.more[1]} xs={size.more[1]}>
                         <button className="btn btn-md btn-secondary" onClick={(ev) => {

@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import Data from "../lib/data";
 import Local from "../lib/local";
 import tools from "../lib/tools"
+import Tpl from "../lib/tpl";
+
 
 import SmallHash from "./hash_small";
-import PartTarget from "./part_target";
 import PartSection from "./part_section";
+import INFT from "./inft";
 
-import Tpl from "../lib/tpl";
 import { FaAngleDoubleUp,FaAngleDoubleDown } from "react-icons/fa";
 
 let selected=-1;
@@ -43,6 +44,8 @@ function Setting(props) {
     let [step, setStep]=useState(0);
     let [index, setIndex]=useState(0);
 
+    let [offset,setOffset]=useState([]);
+
     const self={
         clickSingleOffset:(index,val)=>{
             //const final=self.getFinal(index,offset);
@@ -65,6 +68,7 @@ function Setting(props) {
             //3.update setting 
             list[index]=latest;
             const nlist=tools.clone(list);
+            setOffset(nlist);   //force to fresh result;
             setList(nlist);
             self.updateTemplate(active.cid,"offset",nlist);
         },
@@ -239,14 +243,12 @@ function Setting(props) {
                         <SmallHash hash={hash} start={start} step={step} grid={16}/>
                     </Col>
                     <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
-                        <Row>
-                            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                                Image
-                            </Col>
-                            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
-                                <PartTarget />
-                            </Col>
-                        </Row>
+                        <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+                            <INFT hash={hash} offset={offset} id={"pre_setting"}/>
+                        </Col>
+                        <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+                            Preview
+                        </Col>
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
                         <PartSection index={index} selected={order}/>

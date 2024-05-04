@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 
 import Hash from "./hash";
 import Counter from "./counter";
+import INFT from "./inft";
 
-import Data from "../lib/data";
-import Render from "../lib/render";
 import tools from "../lib/tools";
-import Local from "../lib/local";
 
 import Network from "../network/router";
 
@@ -17,77 +15,48 @@ function Preview(props) {
         header:[4,8],
     };
 
-    let [width, setWidth] = useState(100);
-    let [height, setHeight] = useState(100);
     let [block, setBlock] = useState(0);
     let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
-    let [alink, setAlink] = useState("");
-
     let [start, setStart]=useState(0);
 
     let first=true;
-
     const self = {
         fresh:()=>{
-            const tpl = Data.get("template");
-            if (tpl !== null) {
-                setWidth(tpl.size[0]);
-                setHeight(tpl.size[1]);
-                setTimeout(() => {
-                    const pen = Render.create(dom_id);
-                    const basic = {
-                        cell: tpl.cell,
-                        grid: tpl.grid,
-                        target: tpl.size
-                    };
+            setTimeout(() => {
+                //view anchor by anchor link
+                // Network("tanssi").view({name:"incbcgkuovq_88",block:149658},"anchor",(obj)=>{
+                //     console.log(obj);
+                // });
 
-                    //view anchor by anchor link
-                    // Network("tanssi").view({name:"incbcgkuovq_88",block:149658},"anchor",(obj)=>{
-                    //     console.log(obj);
-                    // });
+                // Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
+                //     console.log(obj);
+                // });
 
-                    // Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
-                    //     console.log(obj);
-                    // });
+                //add the subscribe
+                Network("tanssi").subscribe("preview",(bk, bhash)=>{
+                    console.log(tools.stamp(),bk,bhash,);
+                    setBlock(bk);
+                    setHash(bhash);
 
-                    //add the subscribe
-                    Network("tanssi").subscribe("preview",(bk, bhash)=>{
-                        console.log(tools.stamp(),bk,bhash,);
-                        setBlock(bk);
-                        setHash(bhash);
-
-                        if(!first){
-                            start++;
-                            setStart(start);
-                        }else{
-                            first=false;
-                        }
-
-                        Render.clear(dom_id);
-                        Render.preview(pen,tpl.image,bhash,tpl.parts,basic);
-                    });
-                }, 50);
-            }
-
-            const tpls = Local.get("template");
-            if (tpls !== undefined) {
-                const list = JSON.parse(tpls);
-                const tpl = list[0];
-                setAlink(tpl.alink);
-            }
+                    if(!first){
+                        start++;
+                        setStart(start);
+                    }else{
+                        first=false;
+                    }
+                });
+            }, 50);
         }
     }
 
-    const dom_id = "previewer";
     useEffect(() => {
         self.fresh();
     }, [props.update]);
 
     return (
         <Row className="pt-2">
-            
-            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                <canvas width={width} height={height} id={dom_id}></canvas>
+            <Col className="text-center pb-1" sm={size.row[0]} xs={size.row[0]}>
+                <INFT hash={hash} offset={[]} id={"pre_home"}/>
             </Col>
             <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>
@@ -95,7 +64,6 @@ function Preview(props) {
             <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
                 <Hash hash={hash} at={4}/>
             </Col>
-            
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Block {block.toLocaleString()}, Tanssi Network
             </Col>
