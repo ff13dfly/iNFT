@@ -9,7 +9,9 @@ import Local from "../lib/local";
 import Render from "../lib/render";
 import Chain from "../lib/chain";
 import Data from "../lib/data";
-import tools from "../lib/tools"
+import tools from "../lib/tools";
+
+import TPL from "../lib/tpl";
 
 import IPFS from "../network/ipfs";
 
@@ -96,55 +98,6 @@ function Mine(props) {
             setFilter(tools.clone(filter));
             
             self.showList();
-        },
-        cacheTemplate: (alinks, ck, dels) => {
-            if (dels === undefined) dels = [];
-            if (alinks.length === 0) return ck && ck(dels);
-            const single = alinks.pop();
-            if (!Data.exsistHash("cache", single)) {
-                return Chain.read(single, (res) => {
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    if (res.data[key] === undefined) {
-                        const left = alinks.length;
-                        dels.push(left);
-                        return self.cacheData(alinks, ck, dels);
-                    }
-                    res.data[key].raw = JSON.parse(res.data[key].raw);
-                    Data.setHash("cache", single, res.data[key]);
-                    return self.cacheData(alinks, ck, dels);
-                });
-            } else {
-                return self.cacheData(alinks, ck);
-            }
-        },
-        cacheData: (alinks, ck, tpls) => {
-            if (tpls === undefined) tpls = {};
-            if (alinks.length === 0) {
-                const last = [];
-                for (var k in tpls) last.push(k);
-                return ck && ck(last);
-            }
-            const single = alinks.pop();
-            if (!Data.exsistHash("cache", single)) {
-                return Chain.read(single, (res) => {
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    const raw = JSON.parse(res.data[key].raw);
-                    res.data[key].raw = raw;
-                    if (raw.tpl) tpls[raw.tpl] = true;
-
-                    Data.setHash("cache", single, res.data[key]);
-                    return self.cacheData(alinks, ck, tpls);
-                });
-            } else {
-                return self.cacheData(alinks, ck, tpls);
-            }
-        },
-        getAlinks: (arr) => {
-            const alist = [];
-            for (let i = 0; i < arr.length; i++) {
-                alist.push(arr[i].link.toLocaleLowerCase());
-            }
-            return alist;
         },
         autoCache: (plist, ck) => {
             const nfts = [], tpls = {};

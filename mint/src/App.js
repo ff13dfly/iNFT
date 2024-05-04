@@ -18,6 +18,9 @@ import plugin from "./lib/plugin";
 import IPFS from "./network/ipfs";
 import tools from "./lib/tools";
 
+import TPL from "./lib/tpl";
+import INFT from "./lib/inft";
+
 function App() {
   let [update, setUpdate] = useState(0);
   let [show, setShow] = useState(false);
@@ -149,6 +152,10 @@ function App() {
 
   
   useEffect(() => {
+    //0.init works
+    TPL.auto();     //auto cache iNFT templates from IPFS;
+    INFT.auto();    //auto cache iNFT list
+
     //1.basice setting of Minter
     self.init();
     self.regQR();

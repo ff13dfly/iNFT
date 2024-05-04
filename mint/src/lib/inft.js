@@ -6,6 +6,9 @@ const map={
 }
 
 const self = {
+    auto:()=>{
+
+    },
     list:()=>{
 
     },

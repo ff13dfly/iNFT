@@ -8,6 +8,7 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import Copy from "../lib/clipboard";
 import tools from "../lib/tools";
+import TPL from "../lib/tpl";
 
 import IPFS from "../network/ipfs";
 
@@ -39,25 +40,13 @@ function Template(props) {
         },
         clickAdd: (ev) => {
             if(!alink) return false;
-            const tpls = Local.get("template");
-            const nlist = !tpls ? [] : JSON.parse(tpls);
-            nlist.unshift({
-                alink: alink,
-                name: "",
-                offset:[],              //customized offset value
-                tags: []
+            TPL.add(alink,(res)=>{
+                self.showTemplate();
             });
-            Local.set("template", JSON.stringify(nlist));
-            self.showTemplate();
         },
         clickTry:(index)=>{
             if(index===0) return true;
-            const tpls = JSON.parse(Local.get("template"));
-            const nlist=[tpls[index]];
-            for(let i=0;i<tpls.length;i++){
-                if(i!==index) nlist.push(tpls[i]);
-            }
-            Local.set("template",JSON.stringify(nlist))
+            TPL.change(index);
             self.showTemplate();
             props.fresh(true);
         },
@@ -67,14 +56,12 @@ function Template(props) {
             props.dialog(<Detail alink={tpl.alink} dialog={props.dialog} fresh={props.fresh}/>,"Tempalate Details");
         },
         clickRemove:(index)=>{
-            const tpls = JSON.parse(Local.get("template"));
-            const nlist=[];
-            for(let i=0;i<tpls.length;i++){
-                if(i!==index) nlist.push(tpls[i]);
-            }
-            Local.set("template",JSON.stringify(nlist))
+            TPL.remove(index);
             self.showTemplate();
-            props.fresh(true);
+        },
+        clickClean: (ev) => {
+            TPL.clean();
+            props.fresh();
         },
         clickRecover:(key,at)=>{
             if(!recover[key]){
@@ -124,10 +111,7 @@ function Template(props) {
                 }, 50);
             }
         },
-        clickClean: (ev) => {
-            Local.remove("template");
-            props.fresh();
-        },
+
         showTemplate: () => {
             setShow(false);
             const tpls = Local.get("template");
@@ -137,8 +121,8 @@ function Template(props) {
             for (let i = 0; i < nlist.length; i++) {
                 arr.push(nlist[i].alink);
             }
-            self.cacheIPFS(arr,(dels)=>{
-                //console.log(dels);
+
+            TPL.auto((dels)=>{
                 const last = []
                 for (let i = 0; i < nlist.length; i++) {
                     nlist[i].data = Data.getHash("cache", nlist[i].alink);
@@ -157,27 +141,6 @@ function Template(props) {
                 
             }
             return arr;
-        },
-        cacheIPFS:(alinks, ck, dels)=>{
-            if (dels === undefined) dels = [];
-            if (alinks.length === 0) return ck && ck(dels);
-            const single = alinks.pop();
-            if(Data.exsistHash("cache", single)){
-                return self.cacheIPFS(alinks, ck, dels);
-            }else{
-                return IPFS.read(single, (ctx) => {
-                    if(!ctx || ctx.error!==undefined){
-                        const left = alinks.length;
-                        dels.push(left);
-                        return self.cacheIPFS(alinks, ck, dels);
-                    }else{
-                        Data.setHash("cache", single, ctx);
-                        //here to set the offset;
-
-                        return self.cacheIPFS(alinks, ck, dels);
-                    }
-                });
-            }
         },
     }
 
