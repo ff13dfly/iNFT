@@ -25,7 +25,7 @@ function GridHash(props) {
         const divide=props.grid;
         const arr=self.getHashGrid(hash,divide);
         setGrid(arr);
-    }, [props.hash,props.divide]);
+    }, [props.hash,props.grid]);
 
     return (
         <Row className="unselect pt-2">

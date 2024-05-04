@@ -6,17 +6,17 @@ import Local from "../lib/local";
 import tools from "../lib/tools"
 
 import SmallHash from "./hash_small";
+import PartTarget from "./part_target";
+import PartSection from "./part_section";
 
 import Tpl from "../lib/tpl";
-
-// import Network from "../network/router";
-
 import { FaAngleDoubleUp,FaAngleDoubleDown } from "react-icons/fa";
 
+let selected=-1;
 function Setting(props) {
     const size = {
         row: [12],
-        offset:[1,9,2],
+        offset:[1,2,7,2],
         multi:[4,4,4],
         calc:[8,1,2],
         grid:1,
@@ -31,6 +31,7 @@ function Setting(props) {
     let [hash, setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
 
     let [hidden, setHidden]=useState(true);
+    let [order, setOrder]=useState(-1);        //selected order of section
 
     let [amount, setAmount]=useState(0);
     let [cid, setCid]=useState("");
@@ -40,17 +41,29 @@ function Setting(props) {
 
     let [start, setStart]=useState(0);
     let [step, setStep]=useState(0);
+    let [index, setIndex]=useState(0);
 
     const self={
         clickSingleOffset:(index,val)=>{
+            //const final=self.getFinal(index,offset);
+            selected=index;
+
             const active=Data.get("template");
             const single=active.parts[index];
             const max=single.value[2];
 
+            //1.set how to get value and fresh hash board
+            setIndex(index);
             setStart(single.value[0]);
             setStep(single.value[1]);
 
-            list[index]=(val>max-2)?0:val+1;
+            //2. fresh selected part
+            const latest=(val>max-2)?0:val+1;
+            //console.log(self.getFinal(index,latest));
+            setOrder(self.getPartValue(index,latest));
+
+            //3.update setting 
+            list[index]=latest;
             const nlist=tools.clone(list);
             setList(nlist);
             self.updateTemplate(active.cid,"offset",nlist);
@@ -192,6 +205,9 @@ function Setting(props) {
         //     setGrid(arr);
         //     setHash(bhash);
         // });
+
+        selected=-1;
+
     }, [props.update]);
 
     const cmap={
@@ -201,8 +217,6 @@ function Setting(props) {
 
     return (
         <Row>
-            
-
             <Col className="pb-2" sm={size.detail[0]} xs={size.detail[0]}>
                 <strong>{amount}</strong> parts of template <strong>{tools.shorten(cid,8)}</strong>
             </Col>
@@ -227,15 +241,15 @@ function Setting(props) {
                     <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
                         <Row>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
-                            Image
+                                Image
                             </Col>
                             <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
-                                
+                                <PartTarget />
                             </Col>
                         </Row>
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
-                        Image thumb here to show select part.
+                        <PartSection index={index} selected={order}/>
                     </Col>
                 </Row>
             </Col>
@@ -247,7 +261,10 @@ function Setting(props) {
                         <Col className="pt-2" sm={size.offset[0]} xs={size.offset[0]}>
                             <h5>#{index+1}</h5>
                         </Col>
-                        <Col className="pt-2 text-center" sm={size.offset[1]} xs={size.offset[1]}>
+                        <Col className="pt-2 text-end" sm={size.offset[1]} xs={size.offset[1]}>
+                            <span className={index===selected?"text-warning":""}>{self.getValue(index)}</span>
+                        </Col>
+                        <Col className="pt-2 text-center" sm={size.offset[2]} xs={size.offset[2]}>
                             <Row>
                                 <Col className="text-end" sm={size.calc[0]} xs={size.calc[0]}>
                                     {"( "}{self.getDec(index)}{" + "}{self.getOffetOfTemplate(index)}
@@ -261,7 +278,7 @@ function Setting(props) {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col className="pt-1" sm={size.offset[2]} xs={size.offset[2]}>
+                        <Col className="pt-1 text-end" sm={size.offset[3]} xs={size.offset[3]}>
                             <button className="btn btn-md btn-primary offset" onClick={(ev)=>{
                                 self.clickSingleOffset(index,row);
                             }}>{row}</button> 

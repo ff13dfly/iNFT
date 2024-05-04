@@ -104,7 +104,7 @@ const Render= {
             const vy=0;
             const dx=w*line;
             const dy=h*step;
-            //console.log(cx,cy);
+            
             pen.drawImage(img, cx , cy , dx , dy , vx, vy, dx, dy);
             setTimeout(()=>{
                 const b64=pen.canvas.toDataURL("image/jpeg");

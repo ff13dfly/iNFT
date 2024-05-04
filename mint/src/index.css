@@ -305,6 +305,8 @@ code {
   background-color: #4aab67;
   opacity: 0.6;
   cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .avatar{
