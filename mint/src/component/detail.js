@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Template from "./template";
 
-import SmallHash from "./hash_small";
+
 
 //import Chain from "../lib/chain";
 import IPFS from "../network/ipfs";
@@ -12,6 +12,10 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 import Copy from "../lib/clipboard";
+
+import INFT from "./inft";
+import SmallHash from "./hash_small";
+import PartSection from "./part_section";
 
 import { FaBackspace, FaCopy, FaSyncAlt } from "react-icons/fa";
 
@@ -30,25 +34,16 @@ function Detail(props) {
     const dialog = props.dialog;
     const alink = props.alink;
 
-    let [width, setWidth] = useState(400);
-    let [height, setHeight] = useState(400);
-
     let [start, setStart] = useState(0);
     let [step, setStep] = useState(0);
     let [value, setValue] = useState("00");
     let [dvd, setDvd] = useState(8);
 
-    let [bs64, setBS64] = useState("image/empty.png");
-    let [img_part, setImagePart] = useState("");
-    let [parts, setParts] = useState([]);        //iNFT parts list
 
-    let [cut_width, setCutWidth] = useState(400);
-    let [cut_height, setCutHeight] = useState(50);
-    let [hide_mask, setHideMask] = useState(true);
+    let [parts, setParts] = useState([]);        //iNFT parts list
 
     let [selected, setSelected] = useState(0);        //selected iNFT parts
     let [active, setActive] = useState(null);         //index of selected image range
-    let [grid, setGrid] = useState([]);             //mask grid on the selected image
 
     let [recover, setRecover] = useState({});
 
@@ -140,64 +135,21 @@ function Detail(props) {
                 const [gX, gY, eX, eY] = target.img;
                 const [start, step, divide, offset] = target.value;
                 const [line, row] = def.grid;
-                const max = line / (1 + eX);
-                const br = Math.ceil((gX + divide) / max);
-                const height = h * 24;      //这里的行数出错了，需要修正
-                const rate = 1.0526;
-
+                
                 //1. set hash board
                 setStart(start);
                 setStep(step);
                 setDvd(divide);
                 setValue(nhash === undefined ? hash.slice(start + 2, start + 2 + step) : nhash.slice(start + 2, start + 2 + step));
-                //console.log(hash);
-
-                //2.get the image part from origanal image
-                const ch = h * (1 + eY) * br / rate;
-                setCutHeight(ch);
-                setCutWidth(def.size[0]);
-
-                setHideMask(true);  //close the mask ?
-
-                const cpen = Render.create(cut_id);
-                Render.clear(cut_id);
-                Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (b64) => {
-                    setImagePart(b64);
-                    setTimeout(() => {
-                        setHideMask(false);
-                    }, 50);
-                });
 
                 //3.显示组件列表
                 setParts(def.parts);
 
-                //4.显示组件的按钮
-                const ns = self.getHelper(divide, line, w, h, gX, gY, eX, eY, rate)
-                setGrid(ns);
-
-                //5.渲染图像
-                const basic = {
-                    cell: def.cell,
-                    grid: def.grid,
-                    target: def.size
-                }
-
-                const pen = Render.create(dom_id, true);
-                Render.reset(pen);
-                Render.preview(pen, def.image, hash, def.parts, basic);
-                Render.active(pen, w * (1 + eX), h * (1 + eY), target.position[0], target.position[1], "#FFFFFF", 2);
-                setTimeout(() => {
-                    const img = pen.canvas.toDataURL("image/jpeg");
-                    setBS64(img);
-                }, 50);
             });
         },
     }
 
-    const dom_id = "pre_detail";
-    const cut_id = "pre_cut";
     useEffect(() => {
-        setImagePart("");
         self.autoFresh(selected, active);
 
     }, [props.update]);
@@ -221,8 +173,9 @@ function Detail(props) {
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        <canvas hidden={true} id={dom_id} width={width} height={height} style={{ width: "100%" }}></canvas>
-                        <img src={bs64} alt="" style={{ width: "100%", minHeight: "150px" }} />
+                        {/* <canvas hidden={true} id={dom_id} width={width} height={height} style={{ width: "100%" }}></canvas>
+                        <img src={bs64} alt="" style={{ width: "100%", minHeight: "150px" }} /> */}
+                        <INFT hash={hash} offset={[]} id={"pre_template"} template={props.alink}/>
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>
@@ -245,24 +198,7 @@ function Detail(props) {
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <small>Range of part at orgin image.</small>
-                <canvas hidden={true} id={cut_id} width={cut_width} height={cut_height}></canvas>
-                <img src={img_part} alt="" style={{ width: "100%" }} />
-                {grid.map((row, index) => (
-                    <div hidden={hide_mask} className="cover" key={index} style={{
-                        marginLeft: `${row.mX}px`,
-                        marginTop: `${row.mY}px`,
-                        width: `${row.wX}px`,
-                        height: `${row.wY}px`,
-                        lineHeight: `${row.wY}px`,
-                        backgroundColor: self.getBackground(index),
-                        color: "#FF0000",
-                    }}
-                        onClick={(ev) => {
-                            self.clickGrid(index);
-                        }}>
-                        {index}
-                    </div>
-                ))}
+                <PartSection index={selected} selected={0} template={props.alink}/>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 iNFT template {parts.length} parts selector.

@@ -21,8 +21,17 @@ function PartSection(props) {
 
     const cut_id = "pre_cut";
     const self = {
-        showSection:(index)=>{
-            const def=Data.get("template");
+        getTemplate:(cid)=>{
+            if(cid!==undefined){
+                const def=Data.getHash("cache",cid);
+                def.cid=cid;
+                return def;
+            }else{
+                return Data.get("template");
+            }
+        },
+        showSection:(index,cid)=>{
+            const def=self.getTemplate(cid);
             if(!def || !def.parts ||  !def.parts[index]) return false;
 
             const target=def.parts[index];
@@ -62,7 +71,7 @@ function PartSection(props) {
     }
 
     useEffect(() => {
-        self.showSection(props.index);
+        self.showSection(props.index,props.template);
         self.showCover(4,props.selected);
     }, [props.index,props.selected]);
 

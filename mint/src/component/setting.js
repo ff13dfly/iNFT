@@ -280,7 +280,7 @@ function Setting(props) {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col className="pt-1 text-end" sm={size.offset[3]} xs={size.offset[3]}>
+                        <Col className="pt-1" sm={size.offset[3]} xs={size.offset[3]}>
                             <button className="btn btn-md btn-primary offset" onClick={(ev)=>{
                                 self.clickSingleOffset(index,row);
                             }}>{row}</button> 
