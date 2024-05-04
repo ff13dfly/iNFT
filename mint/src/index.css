@@ -240,6 +240,14 @@ code {
   letter-spacing: 6px;
 }
 
+.hash_setting{
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 18px;
+  letter-spacing: 2px;
+}
+
 .part{
   height: 20px;
   font-family: 'Courier New', Courier, monospace;
