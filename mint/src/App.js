@@ -20,6 +20,7 @@ import tools from "./lib/tools";
 
 import TPL from "./lib/tpl";
 import INFT from "./lib/inft";
+import VERSION from "./lib/version";
 
 function App() {
   let [update, setUpdate] = useState(0);
@@ -155,6 +156,7 @@ function App() {
     //0.init works
     TPL.auto();     //auto cache iNFT templates from IPFS;
     INFT.auto();    //auto cache iNFT list
+    VERSION.auto(config.version); //
 
     //1.basice setting of Minter
     self.init();

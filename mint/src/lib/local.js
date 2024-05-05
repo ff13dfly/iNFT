@@ -9,7 +9,9 @@ const keys={
     pointer:`${prefix}index`,       //iNFT record index pointer
     version:`${prefix}version`,     //iNFT minter version
 
-    task: `${prefix}task`
+    mint:`${prefix}mint`,           //isolate by account
+
+    task: `${prefix}task`,
 }
 
 const self={
