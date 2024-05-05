@@ -86,47 +86,47 @@ module.exports={
   },
   plinth:{
     subject:{
-      title:"自洽体系",
-      desc:"Your Web3.0, You can load it anywhere.",
+      title:"Comprehensive System",
+      desc:"Your Web3.0, Load Anywhere.",
       background:"imgs/plinth.jpg",
     },
     list:[
       {
-        title:"自由交易",
-        sub:"iNFT的编辑器.",
+        title:"Free Editing",
+        sub:"iNFT Editor.",
       },
       {
-        title:"自主定价",
-        sub:"iNFT的铸造工具.",
+        title:"Flexible Pricing",
+        sub:"iNFT Minting Tool.",
       },
       {
-        title:"多链实现",
-        sub:"iNFT的交易市场.",
+        title:"Multi-Chain Trading",
+        sub:"iNFT Marketplace.",
       },
     ]
   },
   demo:[
     {
-      title:"Editor",
-      desc:"iNFT的编辑器，可以从一张图片上创建iNFT",
+      title:"iNFT Editor",
+      desc:"Transform any image into your unique iNFT swiftly",
       thumb:"imgs/d_plinth.jpg",
       link:"http://loader.metanchor.net/#plinth@wss://dev.metanchor.net",
     },
     {
-      title:"Minter",
-      desc:"iNFT铸造工具，简单易用的，免钱包模式",
+      title:"iNFT Minting Tool",
+      desc:"iNFT minting tool, user-friendly with flexible pricing",
       thumb:"imgs/d_freesaying.jpg",
       link:"http://loader.metanchor.net/#freesaying@wss://dev.metanchor.net",
     },
     {
-      title:"Market",
-      desc:"自由的iNFT交易市场，多链支持",
+      title:"iNFT Marketplace",
+      desc:"Free iNFT trading platform with multi-chain support",
       thumb:"imgs/d_vbw.jpg",
       link:"http://loader.metanchor.net/#document@wss://dev.metanchor.net",
     },
   ],
   gateway:{
-    title:"多种创新玩法",
+    title:"Diverse Innovative Approaches",
     details:[
       "The micro-server framework for Anchor network.",
       "Javascript is the only language you need to know.",
@@ -136,23 +136,23 @@ module.exports={
   },
   sample:{
     desc:[
-      "公平不可操控的发行方式，天生可以应用在某些领域",
-      "尤其是和Web3.0的玩法结合，很有趣",
+      "Transparent distribution methods, swiftly integrated into the Web3.0 ecosystem, ",
+      "supporting and accommodating innovative approaches.",
     ],
     list:[
       {
-        title:"捐赠玩法",
-        desc:"The UI of Gateway to manage the whole micro-service system.",
+        title:"Donation Mechanism",
+        desc:"Explore transparent distribution methods, seamlessly integrating with Web3.0, supporting and accommodating novel approaches to donations.",
         thumb:"imgs/gateway_ui.jpg",
       },
       {
-        title:"空投玩法",
-        desc:"The entry application to organize the vService and expose APIs to dApps.",
+        title:"Airdrop Mechanism",
+        desc:"Facilitate transparent airdrop mechanisms, swiftly integrating with Web3.0, and embracing and accommodating emerging distribution strategies.",
         thumb:"imgs/gateway_hub.jpg",
       },
       {
-        title:"资产盘活",
-        desc:" Micro-service, the implement of complex logical, simple and stable.",
+        title:"Asset Revitalization",
+        desc:"Optimize asset revitalization strategies, swiftly integrating with Web3.0, supporting and harmonizing with innovative approaches to asset management.",
         thumb:"imgs/gateway_vservice.jpg",
       },
     ]
