@@ -1,11 +1,9 @@
 const map={};
-
 const self={
 
 }
 
 const plugin = {
-  
   reg:(key,fun)=>{  
     map[key]=fun;
   },
