@@ -168,6 +168,14 @@ function App() {
     //2.linke to server to fresh the iNFT result
     Chain.link(config.node[0], (API) => {
       self.start();
+
+      // transaction test
+      // const pass="123456";
+      // const to="5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg";
+      // const amount=0.7479;
+      // INFT.mint.transfer(pass,to,amount,()=>{
+
+      // });
     });
   }, []);
 

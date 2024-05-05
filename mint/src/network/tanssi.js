@@ -79,7 +79,24 @@ const self={
         }
     },
 
-    
+    unsubscribe:(key)=>{
+        delete subs[key];
+    },
+    subscribe:(key,fun)=>{
+        self.init(()=>{
+            subs[key]=fun;     //add the subcribe function to the map
+        });
+    },
+    transfer:(pair,to,amount,ck)=>{
+        self.init(()=>{
+            const dest={Id:to};
+            const m=self.divide();
+            wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
+                const status = res.status.toJSON();
+                console.log(status);
+            });
+        });
+    },
     divide:()=>{
         return 1000000000000;
     },
@@ -94,14 +111,7 @@ const self={
 			unsub=fun;
 		});
     },
-    unsubscribe:(key)=>{
-        delete subs[key];
-    },
-    subscribe:(key,fun)=>{
-        self.init(()=>{
-            subs[key]=fun;     //add the subcribe function to the map
-        });
-    },
+
     write:(pair,obj,ck)=>{
         self.init(()=>{
             let {anchor,raw,protocol}=obj;

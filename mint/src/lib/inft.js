@@ -2,6 +2,9 @@ import Local from "./local";
 import tools from "./tools";
 import Render from "./render";
 
+import Chain from "./chain";
+import Network from "../network/router";
+
 //This is the lib for iNFT local, cache all data including the filter queue
 
 let basic=null;     //basic iNFTs parameters
@@ -222,6 +225,17 @@ const self = {
         //update task status
         progress:(index,value,ck)=>{      
 
+        },
+
+        transfer:(password,to,amount,ck)=>{
+            const fa = Local.get("login");
+            if (fa === undefined) return false;
+            Chain.load(fa, password, (pair) => {
+                if (pair.error !== undefined) return false;
+                Network("tanssi").transfer(pair,to,amount,()=>{
+
+                });
+            });
         },
 
         //get current task

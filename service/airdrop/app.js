@@ -132,13 +132,10 @@ const self = {
             if(exhoused || pair===false) return false;      //wethe low balance
             self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
             const m=self.getMulti();
-            console.log(wsAPI.tx.balances)
             try {
                 //const { encodeAddress } = require('@polkadot/util-crypto');
                 //const multiAddress = encodeAddress(target);
-
-                const dest={Id:target,Index:"?"};
-                
+                const dest={Id:target};
                 wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
                     const status = res.status.toJSON();
                     console.log(status);

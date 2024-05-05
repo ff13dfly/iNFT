@@ -297,7 +297,6 @@ function Action(props) {
     }, [props.update]);
 
     return (
-
         <Row className="operation">
             <Col className="text-center" hidden={hidden} sm={size.row[0]} xs={size.row[0]}>
                 <small>{info}</small>
