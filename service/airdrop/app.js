@@ -91,10 +91,11 @@ const self = {
         const n=parseInt(day.slice(6,8));
         const index=n%config.account.length;
         const from=config.account[index];
+        self.output(`Day: ${n},JSON.stringify(from)`,"primary");
         wsAPI.query.system.account(from[0], (res) => {
             if (unsub != null) unsub();
             const data = res.toJSON().data;
-            console.log(`Faucet account ${from[0]} free balance: ${tools.toF(data.free/self.getDivide(),8)}`);
+            self.output(`Faucet account ${from[0]} free balance: ${tools.toF(data.free/self.getDivide(),8)}`,"primary");
             if(data.free<config.low){
                 exhoused=true;     //if balance low, 
                 return ck && ck(false);
@@ -105,10 +106,13 @@ const self = {
         });
     },
     load:(address,pass,ck)=>{
-        IO.read(`./account/${address}.json`,(fa)=>{
+        const account_file=`./account/${address}.json`;
+        self.output(account_file,"primary");
+        IO.read(account_file,(fa)=>{
+            //console.log(fa);
+            self.output(`Read ${account_file} successful.`,"primary");
             self.getPair(fa,pass,ck);
         });
-        return ck && ck();
     },
     getPair:(fa,password,ck)=>{
         const {Keyring}=require("@polkadot/api");
@@ -131,17 +135,19 @@ const self = {
         self.balance(day,(pair)=>{
             if(exhoused || pair===false) return false;      //wethe low balance
             self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
+
             const m=self.getMulti();
             try {
-                //const { encodeAddress } = require('@polkadot/util-crypto');
-                //const multiAddress = encodeAddress(target);
-                const dest={Id:target};
-                wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
+                const m=self.getMulti();
+                wsAPI.tx.balances.transferAllowDeath(target,parseInt(amount*m)).signAndSend(pair, (res) => {
                     const status = res.status.toJSON();
-                    console.log(status);
+                    if(status && status.finalized){
+                        map[target][day].confirmed=true;
+                        return ck && ck(status.finalized);
+                    }
                 });
             } catch (error) {
-                console.log(error);
+                self.output(error,"error");
             }
         });
     },
@@ -153,20 +159,27 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-//curl http://127.0.0.1:8888/?5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
-//curl http://127.0.0.1:8888/?5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV
+
+//curl http://127.0.0.1:8888/5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
+//curl http://127.0.0.1:8888/5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV
 self.init(()=>{
     self.backup(()=>{
+        //console.log(wsAPI.tx.balances);
         self.run(config.server,()=>{
-            self.output(`Cors supported by Nginx.`);
+            self.output(`Cors should be supported by Nginx.`);
+
+            app.get('/',(req, res)=>{
+                res.send("");
+            });
+
             //console.log(`Here to link to Tanssi appchain`);
-            app.use((req, res)=>{
-                const uri=req.url;
-                self.output(`Request URI:${uri}(${uri.length})`,"primary");
-                if(uri.length!==49) return res.send({error:'Invalid request.'});
+            app.get('/:address',(req, res)=>{
                 if(exhoused) return res.send({error:'Faucet pool is exhoused today.'});
 
-                const addr=uri.slice(2,uri.length);
+                const addr=req.params.address;
+                self.output(`Request Address:${addr}`,"primary");
+                if(addr.length!==48) return res.send({error:'Invalid request.'});
+
                 const range=!map[addr]?config.amount.first:config.amount.normal;
                 const day=tools.day();
                 if(!map[addr]){
@@ -174,7 +187,9 @@ self.init(()=>{
                     const first=tools.rand(range[0],range[1]);
                     map[addr][day]={amount:first,confirmed:false};
                     self.output(`First faucet: ${first}`)
-                    self.transfer(first,addr,day);
+                    self.transfer(first,addr,day,(txHash)=>{
+                        self.output(`Transaction done. Hash: ${txHash}`,"primary");
+                    });
                     return res.send({message:'Welcome, your faucet is sending.'});
                 }else{
                     if(!map[addr][day]){

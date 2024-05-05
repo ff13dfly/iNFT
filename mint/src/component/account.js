@@ -87,7 +87,7 @@ function Account(props) {
 
             try {
                 const login = JSON.parse(fa);
-                const furl=`${config.faucet}?${login.address}`;
+                const furl=`${config.faucet}/${login.address}`;
                 const response = await fetch(furl);
                 if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
 

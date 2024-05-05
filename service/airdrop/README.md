@@ -17,3 +17,7 @@
         yarn add esbuild
         ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./faucet.min.js --platform=node
     ```
+
+    ```SHELL
+        iptables -I INPUT -p tcp --dport 8888 -j ACCEPT
+    ```
