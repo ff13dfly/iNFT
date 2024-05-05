@@ -26,12 +26,16 @@ const config={
 
 const funs={
     getDay:()=>{
-
+        const dt = new Date();
+        const year = dt.getFullYear();
+        const month = String(dt.getMonth() + 1).padStart(2, '0');
+        const day = String(dt.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
     },
     getBasic:()=>{
         return {
             index:0,
-            pre:`i${tools.char(config.prefix_length)}`,
+            pre:`i${tools.char(config.prefix_length).toLocaleLowerCase()}`,
             stamp:tools.stamp(),
             task:[],                                        //task of last mint
             history:{},                                     //record daily mint history by anchor name
@@ -200,8 +204,9 @@ const self = {
             if(!map[name]) return false
             const index=map[name];
             raw[index].fav=true;
-            self.update();
-            self.auto();            
+            self.update();              //save data to localstorage
+            self.auto();                //recache data and analysis
+            return true;           
         },
         unfav:(name)=>{
             if(!map[name]) return false
@@ -209,34 +214,53 @@ const self = {
             raw[index].fav=false;
             self.update();
             self.auto();
+            return true;
         },
         selling:(name,price,target)=>{
-
+            if(!map[name]) return false
+            const index=map[name];
+            if(!raw[index].market) raw[index].market={price:0,target:""};
+            raw[index].market.price=price;
+            if(target!==undefined) raw[index].target=target;
+            self.update();
+            return true;
         },
         revoke:(name)=>{
-
+            if(!map[name]) return false
+            const index=map[name];
+            if(!raw[index].market) return false;
+            raw[index].market.price=0;
+            raw[index].market.target="";
+            self.update();
+            return true;
         },
     },
     mint:{
         //start a task to mint; create the target task list
         start:(n)=>{
+            const addr=funs.getAddress();
+            if(!addr) return false;
+            const data=funs.getINFTMintDetail(addr);
 
         },
+
         //update task status
         progress:(index,value,ck)=>{      
+            const task=self.mint.task();
 
+            
         },
 
-        transfer:(password,to,amount,ck)=>{
-            const fa = Local.get("login");
-            if (fa === undefined) return false;
-            Chain.load(fa, password, (pair) => {
-                if (pair.error !== undefined) return false;
-                Network("tanssi").transfer(pair,to,amount,()=>{
-
-                });
-            });
-        },
+        // transfer:(password,to,amount,ck)=>{
+        //     const fa = Local.get("login");
+        //     if (fa === undefined) return false;
+        //     Chain.load(fa, password, (pair) => {
+        //         if (pair.error !== undefined) return false;
+        //         Network("tanssi").transfer(pair,to,amount,(status)=>{
+        //             console.log(status);
+        //         });
+        //     });
+        // },
 
         //get current task
         task:()=>{

@@ -118,7 +118,7 @@ function Mine(props) {
                     self.autoThumbs(plist, (glist) => {
                         return ck && ck(glist);
                     });
-                },800);
+                },50);
             });
         },
         autoTemplate: (arr, ck) => {
