@@ -84,16 +84,18 @@ function Account(props) {
         clickFaucet: async (ev) => {
             const fa = Local.get("login");
             if (fa === undefined) return self.faucetMessage("Account information missed.");
-
+            
             try {
                 const login = JSON.parse(fa);
+                self.showBalance(login.address);
+
                 const furl=`${config.faucet}/${login.address}`;
                 const response = await fetch(furl);
                 if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
 
                 const ctx = await response.text();
                 const rep=JSON.parse(ctx);
-                console.log(rep);
+
                 if(rep.error) return self.faucetMessage(rep.error);
                 return self.faucetMessage(rep.message);
             } catch (error) {
@@ -137,6 +139,13 @@ function Account(props) {
                 setInfo("Can not load target file");
             }
         },
+        showBalance:(address)=>{
+            Network("tanssi").balance(address, (res) => {
+                const divide = Network("tanssi").divide();
+
+                setBalance(tools.toF(res.free * (1 / divide), 8));
+            })
+        },
         show: () => {
             const fa = Local.get("login");
             if (fa !== undefined) setLogin(true);
@@ -144,11 +153,8 @@ function Account(props) {
                 const account = JSON.parse(fa);
                 setAddress(account.address);
                 setAvatar(`https://robohash.org/${account.address}?set=set2`);
-                Network("tanssi").balance(account.address, (res) => {
-                    const divide = Network("tanssi").divide();
-
-                    setBalance(tools.toF(res.free * (1 / divide), 8));
-                })
+                
+                self.showBalance(account.address);
             } catch (error) {
 
             }

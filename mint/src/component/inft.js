@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import Render from "../lib/render";
 import Data from "../lib/data";
 
+/* iNFT render component parameters
+*   @param  {string}    id            //the canvas dom ID
+*   @param  {string}    hash          //hash needed to render the iNFT
+*   @param  {array}     [offset]      //customer offset array for rendering
+*   @param  {string}    [template]    //the template CID for rendering
+*/
+
 function INFT(props) {
-    const size = {
-        row: [12],
-        header:[4,8],
-    };
 
     let [width, setWidth] = useState(100);
     let [height, setHeight] = useState(100);
@@ -30,13 +33,11 @@ function INFT(props) {
             };
             Render.clear(props.id);
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset);
-
-            // const bs64=pen.canvas.toDataURL("image/jpeg");
-            // setBS64(bs64);
         },
     }
     
     useEffect(() => {
+        console.log(props);
         if(props.template!==undefined){
             const def=Data.getHash("cache",props.template);
             def.cid=props.template;
@@ -52,7 +53,8 @@ function INFT(props) {
             }
         }
         
-    }, [props.hash,props.offset,props.id]);
+    }, [props.hash,props.offset,props.id,props.template]);
+
     const cmap={width:"100%"}
     return (
         <div>

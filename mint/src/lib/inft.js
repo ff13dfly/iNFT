@@ -100,7 +100,7 @@ const funs={
         if(!ls) return [];
         try {
             const ns=JSON.parse(ls);
-            console.log(ns);
+            //console.log(ns);
             if(!ns[addr]) return false;
             return ns[addr];
         } catch (error) {
@@ -148,7 +148,7 @@ const self = {
 
         //2.cache basic setting of mint
         basic=funs.getINFTMintDetail(addr);
-        console.log(filter,map,basic);
+        //console.log(filter,map,basic);
     },
 
     list:(page,step,filter_cfg)=>{

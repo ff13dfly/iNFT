@@ -23,24 +23,13 @@ function Preview(props) {
     const self = {
         fresh:()=>{
             setTimeout(() => {
-                //view anchor by anchor link
-                // Network("tanssi").view({name:"incbcgkuovq_88",block:149658},"anchor",(obj)=>{
-                //     console.log(obj);
-                // });
-
-                // Network("tanssi").view({name:"incbcgkuovq_88"},"anchor",(obj)=>{
-                //     console.log(obj);
-                // });
-
-                //add the subscribe
                 Network("tanssi").subscribe("preview",(bk, bhash)=>{
-                    console.log(tools.stamp(),bk,bhash,);
                     setBlock(bk);
                     setHash(bhash);
 
                     if(!first){
                         start++;
-                        setStart(start);
+                        setStart(start);        //start counter at right time
                     }else{
                         first=false;
                     }
