@@ -4,10 +4,11 @@ import Render from "../lib/render";
 import Data from "../lib/data";
 
 /* iNFT render component parameters
-*   @param  {string}    id            //the canvas dom ID
-*   @param  {string}    hash          //hash needed to render the iNFT
-*   @param  {array}     [offset]      //customer offset array for rendering
-*   @param  {string}    [template]    //the template CID for rendering
+*   @param  {string}    id              //the canvas dom ID
+*   @param  {string}    hash            //hash needed to render the iNFT
+*   @param  {array}     [offset]        //customer offset array for rendering
+*   @param  {string}    [template]      //the template CID for rendering
+*   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
 */
 
 function INFT(props) {
@@ -26,13 +27,14 @@ function INFT(props) {
             setHeight(tpl.size[1]);
 
             Render.drop(id);
+            const pen=Render.create(id);
             const basic = {
                 cell: tpl.cell,
                 grid: tpl.grid,
                 target: tpl.size
             };
-            Render.preview(Render.create(id),tpl.image,hash,tpl.parts,basic,offset,ck);
-            //return ck && ck();
+            Render.clear(id);
+            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck);
         },
 
         autoFresh:(ck)=>{
@@ -54,7 +56,7 @@ function INFT(props) {
     }
     
     useEffect(() => {
-        console.log(JSON.stringify(props));
+        //console.log(JSON.stringify(props));
         self.autoFresh(()=>{
             setHidden(false);
         });

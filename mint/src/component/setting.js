@@ -244,7 +244,7 @@ function Setting(props) {
                     </Col>
                     <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
                         <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
-                            <INFT hash={hash} offset={offset} id={"pre_setting"}/>
+                            <INFT hash={hash} offset={offset} id={"pre_setting"} hightlight={index}/>
                         </Col>
                         <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                             Preview

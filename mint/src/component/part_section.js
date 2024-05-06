@@ -33,7 +33,6 @@ function PartSection(props) {
         showSection:(index,cid)=>{
             const def=self.getTemplate(cid);
             if(!def || !def.parts ||  !def.parts[index]) return false;
-
             const target=def.parts[index];
             const w = def.cell[0], h = def.cell[1];
             const [gX, gY, eX, eY] = target.img;
@@ -43,8 +42,8 @@ function PartSection(props) {
             const br = Math.ceil((gX + divide) / max);
             
             //1.calc the section size;
-            const s_w=400;      //TODO, need to calc the section width;
-            const s_h=100;      //TODO, need to calc the section height
+            const s_w=def.grid[0]*w;        //section width;
+            const s_h=h*(1+eY)*br;          //section height;
             setWidth(s_w);
             setHeight(s_h);
 
@@ -53,16 +52,22 @@ function PartSection(props) {
             Render.clear(cut_id);
             Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (img_section) => {
                 setBS64(img_section);
+                const cfg={
+                    width:w*(1+eX),         //selected cell width
+                    height:h*(1+eY),        //selected cell height
+                    offset:gX,              //first cell offset amount
+                }
+                self.showCover(divide,props.selected,cfg)
             });
         },
-        showCover:(n,selected)=>{
+        showCover:(n,selected,cfg)=>{
             let arr=[]
             for(let i=0;i<n;i++){
                 arr.push({
-                    wX:100,
-                    wY:100,
-                    mX:i*100,
-                    mY:-100,
+                    wX:cfg.width,         //mask width, w*(1+eX)
+                    wY:cfg.height,         //mask height
+                    mX:(i+cfg.offset)*cfg.width,
+                    mY:-cfg.height,
                     active:i===selected
                 })
             }
@@ -72,14 +77,13 @@ function PartSection(props) {
 
     useEffect(() => {
         self.showSection(props.index,props.template);
-        self.showCover(4,props.selected);
     }, [props.index,props.selected]);
 
     return (
         <Row className="unselect pt-2 pb-2">
             <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
                 <canvas hidden={true} id={cut_id} width={width} height={height}></canvas>
-                <img src={bs64} style={{width:"100%"}} alt="The target section of orgin template"/>
+                <img src={bs64} style={{width:"100%"}} width={width} height={height} alt="The target section of orgin template"/>
                 {grid.map((row, order) => (
                     <div className="cover" key={order} style={{
                         marginLeft: `${row.mX}px`,

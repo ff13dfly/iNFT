@@ -170,7 +170,7 @@ function Action(props) {
                             setDisable(false);
                             return setInfo(process.error);
                         }
-                        console.log(process);
+                        //console.log(process);
 
                         if(process.code) target.now=process.code;
                         self.updateProgress(task_index,target);

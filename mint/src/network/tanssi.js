@@ -120,7 +120,7 @@ const self={
             if(funs.limited(anchor,raw,protocol)) return ck && ck({error:"Params error"});
 
             const pre=0;
-            console.log(anchor, raw, protocol, pre);
+            //console.log(anchor, raw, protocol, pre);
             wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
                 const dt=res.toHuman();
                 funs.decodeProcess(dt,(status)=>{

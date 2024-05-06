@@ -13,10 +13,11 @@ const self={
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
-    decode: (hash, pen, img, parts, tpl, offset,ck) => {
+    decode: (hash, pen, img, parts, tpl, offset,hightlight,ck) => {
         const { cell, grid } = tpl;
         //const multi=window.devicePixelRatio;
         const multi = 1;    //solve Apple device here.
+        let cache=null;
         for (let i = 0; i < parts.length; i++) {
             //get the image part from parameters
             const part = parts[i];
@@ -39,6 +40,15 @@ const self={
             const vx = px - zx * cell[0] * (1 + eX);
             const vy = py - zy * cell[1] * (1 + eY);
             pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
+
+            if (hightlight === i) {
+                cache = [dx, dy, vx, vy, "#FF0000", 1];
+            }
+
+            if (cache !== null) {
+                const [dx, dy, vx, vy, color, pw] = cache
+                Render.active(pen, dx, dy, vx, vy, color, pw);
+            }
         }
         return ck && ck();
     },
@@ -92,11 +102,11 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         pen.fillRect(0,0,w,h);
     },
-    preview:(pen,bs64,hash,parts,basic,offset,ck)=>{
+    preview:(pen,bs64,hash,parts,basic,offset,hightlight,ck)=>{
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
-            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),ck);   
+            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);   
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck)=>{

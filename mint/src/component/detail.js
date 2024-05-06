@@ -128,8 +128,9 @@ function Detail(props) {
         //iselect, 选中的零件
         autoFresh: (ipart, iselect, nhash) => {
             self.getTemplate(alink.toLocaleLowerCase(), (def) => {
+                if(def===null || !def) return false;
+                
                 //0.get template parameters
-                //const def=tpl.raw;
                 const target = def.parts[ipart];
                 const w = def.cell[0], h = def.cell[1];
                 const [gX, gY, eX, eY] = target.img;
@@ -173,9 +174,7 @@ function Detail(props) {
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        {/* <canvas hidden={true} id={dom_id} width={width} height={height} style={{ width: "100%" }}></canvas>
-                        <img src={bs64} alt="" style={{ width: "100%", minHeight: "150px" }} /> */}
-                        <INFT hash={hash} offset={[]} id={"pre_template"} template={props.alink}/>
+                        <INFT hash={hash} offset={[]} id={"pre_template"} template={props.alink} hightlight={selected}/>
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>
@@ -198,7 +197,7 @@ function Detail(props) {
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <small>Range of part at orgin image.</small>
-                <PartSection index={selected} selected={0} template={props.alink}/>
+                <PartSection index={selected} selected={parseInt(`0x${value}`) % dvd} template={props.alink}/>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 iNFT template {parts.length} parts selector.
