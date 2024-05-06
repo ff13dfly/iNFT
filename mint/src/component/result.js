@@ -19,19 +19,13 @@ import Network from "../network/router";
 *   @param  {string}    name        //the anchor name of iNFT
 *   @param  {string}    hash        //hash needed to render the iNFT
 *   @param  {number}    block       //the block which the iNFT is recorded
+*   @param  {function}  dialog      //system show dialog function
 *   @param  {array}     [offset]    //the customer offset array
+*   @param  {string}    [template]  //the template CID
+*   @param  {number}    [price]     //the selling price of iNFT
+*   @param  {boolean}   [fav]       //wether faved by user
+*   @param  {boolean}   [back]      //wether show back icon
 */
-
-// name={dt.anchor} 
-// hash={dt.hash} 
-//             block={dt.block} 
-//             offset={dt.offset}
-//             template={dt.template.hash}
-//             price={!dt.price?0:dt.price}
-//             fav={dt.fav}
-//             skip={true} 
-//             back={true} 
-//             dialog={props.dialog}
 
 function Result(props) {
     const size = {
@@ -251,7 +245,7 @@ function Result(props) {
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
                 <INFT 
                     hash={props.hash} 
-                    id={dom_id} 
+                    id={dom_id}
                     template={!props.template?"":props.template} 
                     offset={!props.offset?[]:props.offset} 
                 />

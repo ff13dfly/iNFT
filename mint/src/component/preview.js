@@ -5,8 +5,6 @@ import Hash from "./hash";
 import Counter from "./counter";
 import INFT from "./inft";
 
-import tools from "../lib/tools";
-
 import Network from "../network/router";
 
 function Preview(props) {
@@ -16,7 +14,8 @@ function Preview(props) {
     };
 
     let [block, setBlock] = useState(0);
-    let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
+    //let [hash, setHash] = useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb");
+    let [hash, setHash] = useState("0x000000000000000000000000000000000000000000000000000000000000000");
     let [start, setStart]=useState(0);
 
     let first=true;
@@ -24,10 +23,9 @@ function Preview(props) {
         fresh:()=>{
             setTimeout(() => {
                 Network("tanssi").subscribe("preview",(bk, bhash)=>{
-                    setBlock(bk);
-                    setHash(bhash);
-
                     if(!first){
+                        setBlock(bk);
+                        setHash(bhash);
                         start++;
                         setStart(start);        //start counter at right time
                     }else{

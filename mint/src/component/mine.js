@@ -7,14 +7,10 @@ import Result from "./result";
 
 import Local from "../lib/local";
 import Render from "../lib/render";
-import Chain from "../lib/chain";
 import Data from "../lib/data";
 import tools from "../lib/tools";
 
-import TPL from "../lib/tpl";
-
 import IPFS from "../network/ipfs";
-
 
 let page=1;
 function Mine(props) {
@@ -67,30 +63,55 @@ function Mine(props) {
             }
             self.showList();
         },
-        clickSingle: (index) => {
-            //console.log(index,page,config.page_count);
+        clickSingle: (name) => {
             const fa = Local.get("login");
             if (!fa) return false;
             const login = JSON.parse(fa);
             const addr = login.address;
-
             const ls = Local.get("list");
             const my = JSON.parse(ls);
-            const dt = my[addr][index];
-            //console.log(dt);
-            props.dialog(<Result 
-                name={dt.anchor} 
-                hash={dt.hash} 
-                block={dt.block} 
-                offset={dt.offset}
-                template={dt.template.hash}
-                price={!dt.price?0:dt.price}
-                fav={dt.fav}
-                skip={true} 
-                back={true} 
-                dialog={props.dialog}
-            />, "iNFT Details");
+            const full = my[addr];
+            for(let i=0;i<full.length;i++){
+                const dt=full[i];
+                if(dt.anchor===name){
+                    return props.dialog(<Result 
+                        name={dt.anchor} 
+                        hash={dt.hash} 
+                        block={dt.block} 
+                        offset={dt.offset}
+                        template={dt.template.hash}
+                        price={!dt.price?0:dt.price}
+                        fav={dt.fav}
+                        back={true} 
+                        dialog={props.dialog}
+                    />, "iNFT Details");
+                }
+            }
+
         },
+        // clickSingle_back: (index) => {
+        //     const fa = Local.get("login");
+        //     if (!fa) return false;
+        //     const login = JSON.parse(fa);
+        //     const addr = login.address;
+
+        //     const ls = Local.get("list");
+        //     const my = JSON.parse(ls);
+        //     const dt = my[addr][index];
+        //     console.log(dt);
+        //     props.dialog(<Result 
+        //         name={dt.anchor} 
+        //         hash={dt.hash} 
+        //         block={dt.block} 
+        //         offset={dt.offset}
+        //         template={dt.template.hash}
+        //         price={!dt.price?0:dt.price}
+        //         fav={dt.fav}
+        //         skip={true} 
+        //         back={true} 
+        //         dialog={props.dialog}
+        //     />, "iNFT Details");
+        // },
         clickFav:(ev)=>{
             page=1;  //reset page value
 
@@ -273,7 +294,8 @@ function Mine(props) {
                     <Row >
                         {list.map((row, index) => (
                             <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]} onClick={(ev) => {
-                                self.clickSingle((page-1)*config.page_count+index);
+                                //self.clickSingle((page-1)*config.page_count+index);
+                                self.clickSingle(row.anchor);
                             }}>
                                 <Row>
                                     <Col className="grid" sm={size.row[0]} xs={size.row[0]} >

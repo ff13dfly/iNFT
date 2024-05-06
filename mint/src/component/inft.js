@@ -20,38 +20,44 @@ function INFT(props) {
 
     //const dom_id = "inft_previewer";
     const self={
-        show:(id,hash,tpl,offset)=>{
+
+        show:(id,hash,tpl,offset,ck)=>{
             setWidth(tpl.size[0]);
             setHeight(tpl.size[1]);
 
             Render.drop(id);
-            const pen = Render.create(id);
             const basic = {
                 cell: tpl.cell,
                 grid: tpl.grid,
                 target: tpl.size
             };
-            Render.clear(props.id);
-            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset);
+            Render.preview(Render.create(id),tpl.image,hash,tpl.parts,basic,offset,ck);
+            //return ck && ck();
+        },
+
+        autoFresh:(ck)=>{
+            if(props.template!==undefined){
+                const def=Data.getHash("cache",props.template);
+                def.cid=props.template;
+                self.show(props.id,props.hash,def,props.offset,ck);
+            }else{
+                const tpl=Data.get("template");
+                if(tpl!==null){
+                    self.show(props.id,props.hash,tpl,props.offset,ck);
+                }else{
+                    return setTimeout(()=>{
+                        self.autoFresh();
+                    },200)
+                }
+            }
         },
     }
     
     useEffect(() => {
-        console.log(props);
-        if(props.template!==undefined){
-            const def=Data.getHash("cache",props.template);
-            def.cid=props.template;
+        console.log(JSON.stringify(props));
+        self.autoFresh(()=>{
             setHidden(false);
-            self.show(props.id,props.hash,def,props.offset);
-        }else{
-            const tpl=Data.get("template");
-            if(tpl!==null){
-                setHidden(false);
-                self.show(props.id,props.hash,tpl,props.offset);
-            }else{
-                setHidden(true);
-            }
-        }
+        });
         
     }, [props.hash,props.offset,props.id,props.template]);
 
@@ -59,7 +65,7 @@ function INFT(props) {
     return (
         <div>
             <canvas hidden={hidden} width={width} height={height} id={props.id} style={cmap}></canvas>
-            <img hidden={!hidden}  src={bs64} alt="" style={cmap}/>
+            <img hidden={!hidden}  src={bs64} alt="iNFT logo" style={cmap}/>
         </div>
     )
 }

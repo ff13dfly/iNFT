@@ -1,7 +1,7 @@
 import { Container, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Preview from "./component/render";
+import Preview from "./component/preview";
 import Action from "./component/action";
 import Header from "./component/header";
 

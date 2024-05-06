@@ -13,7 +13,7 @@ const self={
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
-    decode: (hash, pen, img, parts, tpl, offset) => {
+    decode: (hash, pen, img, parts, tpl, offset,ck) => {
         const { cell, grid } = tpl;
         //const multi=window.devicePixelRatio;
         const multi = 1;    //solve Apple device here.
@@ -40,6 +40,7 @@ const self={
             const vy = py - zy * cell[1] * (1 + eY);
             pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
         }
+        return ck && ck();
     },
 }
 
@@ -91,11 +92,11 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         pen.fillRect(0,0,w,h);
     },
-    preview:(pen,bs64,hash,parts,basic,offset)=>{
+    preview:(pen,bs64,hash,parts,basic,offset,ck)=>{
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
-            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
+            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),ck);   
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck)=>{
