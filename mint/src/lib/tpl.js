@@ -94,6 +94,10 @@ const self = {
             return false;
         }
     },
+    view:(cid,ck)=>{
+        const tpl=Data.getHash("cache", cid);
+        return ck && ck(tpl);
+    },
     target:(index)=>{       //get local storaged template information
         const tpls=self.list();
         if(tpls===false || tpls.length===0) return false;
@@ -133,7 +137,9 @@ const self = {
     clean:()=>{
         Local.remove("template");
     },
-    
-}
+    update:()=>{
+
+    },
+}   
 
 export default self;

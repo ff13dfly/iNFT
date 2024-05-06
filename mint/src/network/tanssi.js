@@ -146,13 +146,16 @@ const self={
             if(funs.limited(anchor,raw,protocol)) return ck && ck({error:"Params error"});
 
             const pre=0;
-            //console.log(anchor, raw, protocol, pre);
-            wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
-                const dt=res.toHuman();
-                funs.decodeProcess(dt,(status)=>{
-                    return ck && ck(status);
+            try {
+                wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
+                    const dt=res.toHuman();
+                    funs.decodeProcess(dt,(status)=>{
+                        return ck && ck(status);
+                    });
                 });
-            });
+            } catch (error) {
+                return ck && ck(false);
+            }
         });
     },
     sell:(pair,name,price,ck,target)=>{

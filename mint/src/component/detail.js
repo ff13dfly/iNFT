@@ -1,19 +1,15 @@
-import { Row, Col, ListGroup } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Template from "./template";
 
-
-
-//import Chain from "../lib/chain";
-import IPFS from "../network/ipfs";
-
 import Data from "../lib/data";
-import Render from "../lib/render";
 import tools from "../lib/tools";
 import Copy from "../lib/clipboard";
 
 import INFT from "./inft";
+import TPL from "../lib/tpl";
+
 import SmallHash from "./hash_small";
 import PartSection from "./part_section";
 
@@ -94,40 +90,10 @@ function Detail(props) {
                 return active === index ? ac : bc
             }
         },
-        getHelper: (amount, line, w, h, gX, gY, eX, eY, rate) => {       //gX没用到，默认从0开始
-            const list = [];
-            const max = line / (1 + eX);
-            const rows = Math.ceil((amount + gX) / max);
-            const ww = w / rate;
-            const hh = h / rate;
-            for (let i = 0; i < amount; i++) {
-                const br = Math.floor((gX + i) / max);
-                list.push({
-                    mX: ww * (eX + 1) * ((gX + i) % max),  //margin的X值
-                    //mY:(br-rows)*hh*(1+eY),    //margin的Y值
-                    mY: (br - rows) * hh * (1 + eY) / rate,         //margin的Y值
-                    wX: ww * (eX + 1),            //block的width
-                    wY: hh * (eY + 1),            //block的height
-                });
-            }
-            //console.log(list);
-            return list;
-        },
-
-        getTemplate: (cid, ck) => {
-            const def = Data.getHash("cache", alink.toLocaleLowerCase());
-            if (def !== false) return ck && ck(def);
-            IPFS.read(cid, (json) => {
-                json.cid=cid;
-                Data.set("template", json);         //set to default template
-                Data.setHash("cache", cid, json);   //set to cache
-                return ck && ck(json);
-            });
-        },
         //ipart: 选中的组件
         //iselect, 选中的零件
         autoFresh: (ipart, iselect, nhash) => {
-            self.getTemplate(alink.toLocaleLowerCase(), (def) => {
+            TPL.view(alink.toLocaleLowerCase(), (def) => {
                 if(def===null || !def) return false;
                 
                 //0.get template parameters
@@ -151,6 +117,7 @@ function Detail(props) {
     }
 
     useEffect(() => {
+        console.log(props);
         self.autoFresh(selected, active);
 
     }, [props.update]);

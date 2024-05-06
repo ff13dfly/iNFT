@@ -7,8 +7,6 @@ import Mine from "./mine";
 import Progress from "./progress";
 
 import Local from "../lib/local";
-import Render from "../lib/render";
-import Data from "../lib/data";
 import tools from "../lib/tools";
 import Chain from "../lib/chain";
 
@@ -180,20 +178,6 @@ function Result(props) {
                 props.dialog(router[props.from].content, router[props.from].title);
             } else {
                 props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
-            }
-        },
-        getTemplate: (alink, ck) => {
-            if (!Data.exsistHash("cache", alink)) {
-                Chain.read(alink, (res) => {
-                    const key = `${res.location[0]}_${res.location[1]}`;
-                    const raw = JSON.parse(res.data[key].raw);
-                    res.data[key].raw = raw;
-                    Data.setHash("cache", alink, res.data[key]);
-                    return ck && ck(res.data[key]);
-                });
-            } else {
-                const dt = Data.getHash("cache", alink);
-                return ck && ck(dt);
             }
         },
         show: () => {

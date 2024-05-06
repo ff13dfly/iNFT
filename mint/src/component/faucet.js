@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { FaDownload } from "react-icons/fa";
 

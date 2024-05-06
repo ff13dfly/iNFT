@@ -10,8 +10,6 @@ import Copy from "../lib/clipboard";
 import tools from "../lib/tools";
 import TPL from "../lib/tpl";
 
-import IPFS from "../network/ipfs";
-
 import { FaExchangeAlt, FaTrashAlt, FaCopy,FaFolderOpen } from "react-icons/fa";
 
 function Template(props) {

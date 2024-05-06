@@ -97,20 +97,6 @@ function Setting(props) {
         clickShow:(ev)=>{
             setHidden(false);
         },
-
-        getTemplate:(cid)=>{
-            const ts = Local.get("template");
-            if(!ts) return false;
-            try {
-                const tpls=JSON.parse(ts);
-                for(let i=0;i<tpls.length;i++){
-                    const row=tpls[i];
-                    if(row.alink===cid) return row;
-                }
-            } catch (error) {
-               return false; 
-            }
-        },
         updateTemplate:(cid,key,offset)=>{
             const ts = Local.get("template");
             if(!ts) return false;
@@ -151,7 +137,8 @@ function Setting(props) {
             },1000);
 
             //console.log(active.cid);
-            const tpl=self.getTemplate(active.cid);
+            //const tpl=self.getTemplate(active.cid);
+            const tpl=Tpl.target();
             if(!tpl) return setTimeout(()=>{
                 self.autoShow();
             },1000);
