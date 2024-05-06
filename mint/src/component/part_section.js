@@ -49,7 +49,7 @@ function PartSection(props) {
 
             //2.cut the section from orgin image
             const cpen = Render.create(cut_id);
-            Render.clear(cut_id);
+            //Render.clear(cut_id);
             Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (img_section) => {
                 setBS64(img_section);
                 const cfg={

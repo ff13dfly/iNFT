@@ -13,8 +13,8 @@ import Data from "../lib/data";
 
 function INFT(props) {
 
-    let [width, setWidth] = useState(100);
-    let [height, setHeight] = useState(100);
+    let [width, setWidth] = useState(400);
+    let [height, setHeight] = useState(400);
     let [hidden, setHidden] =useState(true);
 
     let [bs64, setBS64] = useState("image/logo.png");
@@ -33,18 +33,20 @@ function INFT(props) {
                 grid: tpl.grid,
                 target: tpl.size
             };
-            Render.clear(id);
+            //Render.clear(id);
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck);
         },
 
         autoFresh:(ck)=>{
             if(props.template!==undefined){
+                //setHidden(false);
                 const def=Data.getHash("cache",props.template);
                 def.cid=props.template;
                 self.show(props.id,props.hash,def,props.offset,ck);
             }else{
                 const tpl=Data.get("template");
                 if(tpl!==null){
+                    //setHidden(false);
                     self.show(props.id,props.hash,tpl,props.offset,ck);
                 }else{
                     return setTimeout(()=>{

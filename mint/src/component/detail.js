@@ -117,7 +117,7 @@ function Detail(props) {
     }
 
     useEffect(() => {
-        console.log(props);
+        //console.log(props);
         self.autoFresh(selected, active);
 
     }, [props.update]);

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Data from "../lib/data";
 import Local from "../lib/local";
 import tools from "../lib/tools"
-import Tpl from "../lib/tpl";
+import TPL from "../lib/tpl";
 
 
 import SmallHash from "./hash_small";
@@ -21,7 +21,7 @@ function Setting(props) {
         multi:[4,4,4],
         calc:[8,1,2],
         grid:1,
-        head:[9,3],
+        head:[6,6],
         detail:[10,2],
     };
 
@@ -44,9 +44,25 @@ function Setting(props) {
     let [step, setStep]=useState(0);
     let [index, setIndex]=useState(0);
 
+
     let [offset,setOffset]=useState([]);
 
     const self={
+        clickRow:(index,val)=>{
+            //console.log(`Clicked.${index}`);
+            selected=index;
+
+            const active=Data.get("template");
+            const single=active.parts[index];
+            //const max=single.value[2];
+
+            setIndex(index);
+            setStart(single.value[0]);
+            setStep(single.value[1]);
+
+            //const latest=(val>max-2)?0:val+1;
+            setOrder(self.getPartValue(index,val));
+        },
         clickSingleOffset:(index,val)=>{
             //const final=self.getFinal(index,offset);
             selected=index;
@@ -138,7 +154,7 @@ function Setting(props) {
 
             //console.log(active.cid);
             //const tpl=self.getTemplate(active.cid);
-            const tpl=Tpl.target();
+            const tpl=TPL.target();
             if(!tpl) return setTimeout(()=>{
                 self.autoShow();
             },1000);
@@ -190,14 +206,12 @@ function Setting(props) {
     }
 
     useEffect(() => {
-        self.autoShow();
-        // Network("tanssi").subscribe("setting",(bk, bhash)=>{
-        //     const arr=self.getHashGrid(bhash,16);
-        //     setGrid(arr);
-        //     setHash(bhash);
-        // });
-
         selected=-1;
+        self.autoShow();
+
+        const tpl=TPL.target();
+        setOffset(tpl.offset);
+        //console.log(tpl);
 
     }, [props.update]);
 
@@ -227,15 +241,16 @@ function Setting(props) {
                         <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                             Mock hash
                         </Col>
-                        <SmallHash hash={hash} start={start} step={step} grid={16}/>
+                        <SmallHash hash={hash} start={start} step={step} grid={8}/>
                     </Col>
-                    <Col className="text-center" sm={size.head[1]} xs={size.head[1]}>
-                        <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
-                            <INFT hash={hash} offset={offset} id={"pre_setting"} hightlight={index}/>
-                        </Col>
-                        <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+                    <Col className="pt-3 text-center" sm={size.head[1]} xs={size.head[1]}>
+                        <INFT hash={hash} offset={offset} id={"pre_setting"} hightlight={index}/>
+                        {/* <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
+                            
+                        </Col> */}
+                        {/* <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                             Preview
-                        </Col>
+                        </Col> */}
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
                         <PartSection index={index} selected={order}/>
@@ -246,22 +261,30 @@ function Setting(props) {
             <Col className="pt-2 pb-2" style={cmap} sm={size.row[0]} xs={size.row[0]}>
                 <div className="setting">
                 {list.map((row, index) => (        
-                    <Row key={index}>
-                        <Col className="pt-2" sm={size.offset[0]} xs={size.offset[0]}>
-                            <h5>#{index+1}</h5>
+                    <Row key={index} className="pointer">
+                        <Col className="pt-2" sm={size.offset[0]} xs={size.offset[0]} onClick={(ev)=>{
+                            self.clickRow(index,row)
+                        }}>
+                            <h5 className={index===selected?"text-info":""}>#{index+1}</h5>
                         </Col>
-                        <Col className="pt-2 text-end" sm={size.offset[1]} xs={size.offset[1]}>
-                            <span className={index===selected?"text-warning":""}>{self.getValue(index)}</span>
+                        <Col className="pt-2 text-end" sm={size.offset[1]} xs={size.offset[1]} onClick={(ev)=>{
+                            self.clickRow(index,row)
+                        }}>
+                            <span className={index===selected?"text-info":""}>{self.getValue(index)}</span>
                         </Col>
-                        <Col className="pt-2 text-center" sm={size.offset[2]} xs={size.offset[2]}>
+                        <Col className="pt-2 text-center" sm={size.offset[2]} xs={size.offset[2]} onClick={(ev)=>{
+                            self.clickRow(index,row)
+                        }}>
                             <Row>
                                 <Col className="text-end" sm={size.calc[0]} xs={size.calc[0]}>
-                                    {"( "}{self.getDec(index)}{" + "}{self.getOffetOfTemplate(index)}
-                                    {" + "}
+                                    <span className={index===selected?"text-info":""}>{"( "}{self.getDec(index)}{" + "}{self.getOffetOfTemplate(index)}</span>
+                                    <span className={index===selected?"text-info":""}>{" + "}</span>
                                     <span className="text-primary"><strong>{row}</strong></span>
-                                    {" )"}{" % "}{self.getDivide(index)}
+                                    <span className={index===selected?"text-info":""}>{" )"}{" % "}{self.getDivide(index)}</span>
                                 </Col>
-                                <Col className="text-center" sm={size.calc[1]} xs={size.calc[1]}>=</Col>
+                                <Col className="text-center" sm={size.calc[1]} xs={size.calc[1]}>
+                                    <span className={index===selected?"text-info":""}>=</span>
+                                </Col>
                                 <Col className="" sm={size.calc[2]} xs={size.calc[2]}>
                                     <span className="text-warning"><strong>{self.getPartValue(index,row)}</strong></span>
                                 </Col>

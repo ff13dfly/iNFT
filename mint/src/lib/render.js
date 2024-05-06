@@ -10,6 +10,7 @@ const self={
         const pen=RDS[id];
         const w=pen.canvas.clientWidth;
         const h=pen.canvas.clientHeight;
+        console.log(w,h);
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
@@ -59,7 +60,7 @@ const Render= {
         if(RDS[id]!==undefined && force!==true) return RDS[id];
         const cvs=document.getElementById(id);		//1.创建好canvas并返回画笔
 		RDS[id]=cvs.getContext("2d");
-        self.border(id);
+        //self.border(id);
         return RDS[id];
     },
     active:(pen,w,h,sx,sy,color,width)=>{
@@ -88,7 +89,7 @@ const Render= {
         delete RDS[id];
     },
     clear:(id)=>{
-        self.border(id);
+        //self.border(id);
     },
     fill:(pen,color)=>{
         const w=pen.canvas.clientWidth;

@@ -185,7 +185,7 @@ function Board(props) {
             const img = new Image();
             img.src = bs64;
             img.onload = (e) => {
-                Render.clear(cfg.id);
+                //Render.clear(cfg.id);
                 const active = Data.get("selected");
                 self.decode(hash, pen, img, def.puzzle, ss, highlight ? active : undefined);
 
@@ -233,7 +233,7 @@ function Board(props) {
             setRate(0);
             setWin("");
             Render.create(cfg.id);
-            Render.clear(cfg.id);
+            //Render.clear(cfg.id);
         }
 
     }, [props.update]);
