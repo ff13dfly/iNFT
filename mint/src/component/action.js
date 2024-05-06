@@ -1,15 +1,15 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Result from "./result";
 import Setting from "./setting";
 import Progress from "./progress";
 
 import Local from "../lib/local";
 import Account from "./account";
 import tools from "../lib/tools"
-import Chain from "../lib/chain";
 
+import TPL from "../lib/tpl";
+import INFT from "../lib/inft";
 import Network from "../network/router";
 
 import { FaCogs, FaIndent } from "react-icons/fa";
@@ -65,16 +65,6 @@ function Action(props) {
                 origin: "web3.storage",   //storage origianl
             }
         },
-        getCurrentTemplate: (full) => {
-            const str = Local.get("template");
-            try {
-                const tpls = JSON.parse(str);
-                return full ? tpls[0] : tpls[0].alink;
-            } catch (error) {
-                return false;
-            }
-        },
-
         isSaved: (name, list) => {
             for (let i = 0; i < list.length; i++) {
                 const row = list[i];
@@ -100,26 +90,26 @@ function Action(props) {
                 return false;
             }
             setDisable(true);
-            //setInfo("Processing start.");
 
-            Chain.load(fa, password, (pair) => {
+            Network("tanssi").load(fa, password, (pair) => {
                 if (pair.error !== undefined) {
                     setInfo(pair.error);
                     setPassword("");
                     return false;
                 }
-                //setInfo("Vertified.");
 
                 props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint progress");
 
-                const tpl = self.getCurrentTemplate(true);
+                const tpl=TPL.target();
                 const multi = !tpl.multi ? 1 : parseInt(tpl.multi);
 
-                const prefix = Local.get("prefix");
-                const pointer = Local.get("pointer");
-                const task = self.getTask(prefix, parseInt(pointer), tpl.alink, multi);
-                Local.set("pointer", parseInt(pointer) + multi);
-                Local.set("task", JSON.stringify(task));
+                const mint_detail=INFT.mint.detail();
+                //console.log(mint_detail);
+                //const task = self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.alink, multi);
+                //console.log(task);
+                mint_detail.task=self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.alink, multi);
+                mint_detail.index=parseInt(mint_detail.index)+multi;
+                INFT.mint.update(mint_detail);
                 self.runTask(pair, tpl);
             });
         },
@@ -189,26 +179,20 @@ function Action(props) {
             if(dt===false) return false;
             if(!dt[index]) return false;
             dt[index]=data;
-            Local.set("task",JSON.stringify(dt));
+
+            INFT.mint.update({task:dt});
             return true;
         },  
         getProgress: () => {
-            const dt = Local.get("task");
-            if (!dt) return false;
-
-            try {
-                return JSON.parse(dt);
-            } catch (error) {
-                return false;
-            }
+            const details=INFT.mint.detail();
+            return details.task;
         },
         filterTask: () => {
 
         },
-
         saveResult: (name, hash,offset, creator, ck) => {
-            const tpl = self.getCurrentTemplate();
             Network("tanssi").view(hash, "block", (data) => {
+                const tpl = TPL.current(true);
                 const inft = self.getINFTLocal(name, tpl, hash, data.block, creator,offset);
                 const its = Local.get("list");
                 const nlist = its === undefined ? {} : JSON.parse(its);
@@ -221,65 +205,6 @@ function Action(props) {
                 }
                 return ck && ck(data.block);
             });
-        },
-
-        clickMint: (ev) => {
-            const fa = Local.get("login");
-            if (fa === undefined) {
-                props.dialog(<Account fresh={props.fresh} dialog={props.dialog} />, "Account Management");
-            } else {
-                if (!password) {
-                    setDisable(true);
-                    return false;
-                }
-                setDisable(true);
-                setInfo("Processing start.");
-                Chain.load(fa, password, (pair) => {
-                    if (pair.error !== undefined) {
-                        setInfo(pair.error);
-                        setPassword("");
-                        return false;
-                    }
-                    setInfo("Vertified.");
-                    self.getAnchorName((name) => {
-                        setInfo(`Name: ${name}`);
-                        const list = Local.get("template");
-                        try {
-                            const tpls = JSON.parse(list);
-                            const target = tpls[0];
-                            const raw = self.getRaw(target);
-                            const protocol = self.getProtocol();
-                            Network("tanssi").write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
-                                if (process.error) {
-                                    setDisable(false);
-                                    return setInfo(process.error);
-                                }
-                                setInfo(process.msg);
-
-                                if (process.status === "Finalized") {
-                                    setDisable(false);
-                                    self.saveResult(name, process.hash, raw.offset,pair.address, (block) => {
-                                        props.dialog(<Result
-                                            name={name}
-                                            hash={process.hash}
-                                            block={block}
-                                            price={0}
-                                            fav={false}
-                                            template={target.alink}
-                                        />, "iNFT Result");
-                                        setTimeout(() => {
-                                            setInfo("");
-                                        }, 400);
-                                    });
-                                }
-                            });
-                        } catch (error) {
-                            console.log(error);
-                            Local.remove("template");
-                        }
-                    });
-                });
-            }
         },
     }
     useEffect(() => {

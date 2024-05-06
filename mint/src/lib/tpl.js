@@ -2,7 +2,6 @@ import Local from "./local";
 import Data from "./data";
 import IPFS from "../network/ipfs";
 
-
 let locker_remove=false;     //remove locker;
 let locker_insert=false;    //insert locker
 
@@ -27,6 +26,15 @@ const funs={
             });
         }
     },
+    autosetTemplate:()=>{
+        const list=self.list();
+        if(list===false) return false;
+        const active=list[0];
+        const def=Data.getHash("cache", active.alink);
+        def.cid=active.alink;
+        Data.set("template", def);
+        return true;
+    },
     getFormat:(cid)=>{
         return {
             alink: cid,
@@ -41,9 +49,18 @@ const self = {
     auto:(ck)=>{
         const list=self.list(true);
         if(list===false){
-
+            //no template, need to init it;
+            return ck && ck();
         }else{
             funs.cacheIPFS(list,(dels)=>{
+                //1. need to remove the dels templates
+                if(dels.length!==0){
+                    console.log(`Need to remove invalid templates.`);
+                }
+
+                //2. set template cache
+                funs.autosetTemplate();
+
                 return ck && ck(dels);
             });
         }
@@ -53,7 +70,12 @@ const self = {
             return ck && ck(dels);
         });
     },
-    list:(only_cid)=>{
+    current:(only_cid)=>{
+        const tpl=Data.get("template");
+        if(only_cid) return tpl.cid;
+        return tpl;
+    },
+    list:(only_cid)=>{  //if only_cid=true, filter out the cid from templates.
         const tpls = Local.get("template");
         if(!tpls) return false;
         try {
@@ -71,6 +93,13 @@ const self = {
         } catch (error) {
             return false;
         }
+    },
+    target:(index)=>{       //get local storaged template information
+        const tpls=self.list();
+        if(tpls===false || tpls.length===0) return false;
+        const order=!index?0:index;
+        if(!tpls[order]) return false;
+        return tpls[order];
     },
     remove:(index)=>{
         const arr=self.list();
@@ -104,6 +133,7 @@ const self = {
     clean:()=>{
         Local.remove("template");
     },
+    
 }
 
 export default self;

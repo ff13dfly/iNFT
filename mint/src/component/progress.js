@@ -5,6 +5,8 @@ import { FaIdBadge } from "react-icons/fa";
 
 import Result from "../component/result"
 import Network from "../network/router";
+
+import INFT from "../lib/inft";
 import Local from "../lib/local";
 
 function Progress(props) {
@@ -49,6 +51,7 @@ function Progress(props) {
         },
 
         clickSingle:(name,hash)=>{
+            //const dt=INFT.single.target(name);
             const dt=self.getINFTbyName(name);
 
             //console.log(name,hash);
@@ -67,16 +70,8 @@ function Progress(props) {
             />, "iNFT Details");
         },
         showTask:()=>{
-            //console.log(`update task status`);
-            const dt=Local.get("task");
-            if(!dt) return false;
-            
-            try {
-                const task=JSON.parse(dt);
-                setList(task);
-            } catch (error) {
-                
-            }
+            const details=INFT.mint.detail();
+            setList(details.task);
         },
     }
 
@@ -86,7 +81,7 @@ function Progress(props) {
        
         Network("tanssi").subscribe("progress",(bk, bhash)=>{
             setBlock(bk);
-            setTimeout(self.showTask,1500); //update task after finalized new block
+            setTimeout(self.showTask,1500);  //update task after finalized new block
         });
     }, [props.update]);
 

@@ -234,6 +234,12 @@ const self = {
             self.update();
             return true;
         },
+        target:(name)=>{
+            if(!map[name]) return false
+            const index=map[name];
+            if(!raw[index].market) return false;
+            return raw[index];
+        },
     },
     mint:{
         //start a task to mint; create the target task list
@@ -263,20 +269,22 @@ const self = {
         // },
 
         //get current task
-        task:()=>{
+        detail:()=>{
             const addr=funs.getAddress();
             if(!addr) return false;
             const data=funs.getINFTMintDetail(addr);
-            return data.task;
+            return data;
         },
-        update:()=>{
+        update:(obj)=>{
             const key="mint";
             const addr=funs.getAddress();
             if(!addr) return false;
             const mm = Local.get(key);
             try {
                 const mints=JSON.parse(mm);
-                mints[addr]=basic;
+                for(var k in mints[addr]){
+                    if(obj[k]!==undefined) mints[addr][k]=obj[k];
+                }
                 Local.set(key,JSON.stringify(mints));
                 return true;
             } catch (error) {

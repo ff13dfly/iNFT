@@ -1,12 +1,11 @@
 import { Row, Col, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { mnemonicGenerate } from "@polkadot/util-crypto";
-
 import config from "../config";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
+
 import Network from "../network/router";
 
 import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
@@ -33,30 +32,19 @@ function Account(props) {
 
     let [recover, setRecover] = useState({});
 
-    const { Keyring } = window.Polkadot;
-
     const self = {
-        newAccount: (mnemonic, ck) => {
-            const keyring = new Keyring({ type: "sr25519" });
-            const pair = keyring.addFromUri(mnemonic);
-            const sign = pair.toJson(password);
-            sign.meta.from = "minter";
-
-            return ck && ck(sign);
-        },
         changePassword: (ev) => {
             setPassword(ev.target.value);
             setNewDisable(!ev.target.value ? true : false);
         },
         clickNewAccount: (ev) => {
             setNewDisable(true);
-            const mnemonic = mnemonicGenerate();
-            self.newAccount(mnemonic, (fa) => {
+            Network("tanssi").generate(password,(fa)=>{
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
                 self.show();
                 props.fresh();
-            });
+            })
         },
         clickLogout: (ev) => {
             Local.remove("login");

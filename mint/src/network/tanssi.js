@@ -1,3 +1,7 @@
+import { mnemonicGenerate } from "@polkadot/util-crypto";
+
+const {ApiPromise, WsProvider,Keyring} = window.Polkadot;
+
 const config={
     node:"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
     target:12000,           //How long to create a new block
@@ -53,7 +57,6 @@ const self={
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        const { ApiPromise, WsProvider } = window.Polkadot;
         try {
             const provider = new WsProvider(uri);
             ApiPromise.create({ provider: provider }).then((api) => {
@@ -86,6 +89,29 @@ const self={
         self.init(()=>{
             subs[key]=fun;     //add the subcribe function to the map
         });
+    },
+    load:(fa, password,ck)=>{
+        try {
+            const acc=JSON.parse(fa);
+            const keyring = new Keyring({ type: "sr25519" });
+            const pair = keyring.createFromJson(acc);
+            try {
+                pair.decodePkcs8(password);
+                return  ck && ck(pair);
+            } catch (error) {
+                return ck && ck({error:"Invalid passoword"});
+            }
+        } catch (error) {
+            return ck && ck({error:"Invalid file"}); 
+        }
+    },
+    generate:(password,ck)=>{
+        const mnemonic = mnemonicGenerate();
+        const keyring = new Keyring({ type: "sr25519" });
+        const pair = keyring.addFromUri(mnemonic);
+        const sign = pair.toJson(password);
+        sign.meta.from = "minter";
+        return ck && ck(sign);
     },
     transfer:(pair,to,amount,ck)=>{
         self.init(()=>{
