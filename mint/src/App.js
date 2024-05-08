@@ -30,7 +30,7 @@ function App() {
       setShow(true);
     },
     fresh: (force) => {
-      if (force) return self.start();
+      //if (force) return self.start();
       update++;
       setUpdate(update);
     },

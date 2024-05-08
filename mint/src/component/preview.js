@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Hash from "./hash";
 import Counter from "./counter";
-import INFT from "./inft";
+import RenderiNFT from "./inft";
 
 import Network from "../network/router";
 
@@ -43,7 +43,7 @@ function Preview(props) {
     return (
         <Row className="pt-2">
             <Col className="text-center pb-1" sm={size.row[0]} xs={size.row[0]}>
-                <INFT hash={hash} offset={[]} id={"pre_home"}/>
+                <RenderiNFT hash={hash} offset={[]} id={"pre_home"}/>
             </Col>
             <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>

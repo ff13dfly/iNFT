@@ -39,6 +39,7 @@ const funs={
             stamp:tools.stamp(),
             task:[],                                        //task of last mint
             history:{},                                     //record daily mint history by anchor name
+            template:{},
         }
     },
     getAddress:()=>{
@@ -269,10 +270,14 @@ const self = {
         // },
 
         //get current task
-        detail:()=>{
+        detail:(key)=>{
             const addr=funs.getAddress();
             if(!addr) return false;
             const data=funs.getINFTMintDetail(addr);
+            if(key!==undefined){
+                if(!data[key]) return false;
+                return data[key];
+            }
             return data;
         },
         update:(obj)=>{

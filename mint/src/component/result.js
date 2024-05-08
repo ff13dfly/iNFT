@@ -10,7 +10,7 @@ import Local from "../lib/local";
 import tools from "../lib/tools";
 import Chain from "../lib/chain";
 
-import INFT from "./inft";
+import RenderiNFT from "./inft";
 import Network from "../network/router";
 
 /* iNFT result viewer component
@@ -227,7 +227,7 @@ function Result(props) {
                 }} />
             </Col>
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
-                <INFT 
+                <RenderiNFT 
                     hash={props.hash} 
                     id={dom_id}
                     template={!props.template?"":props.template} 

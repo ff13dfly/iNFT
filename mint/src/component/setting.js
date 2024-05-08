@@ -5,11 +5,12 @@ import Data from "../lib/data";
 import Local from "../lib/local";
 import tools from "../lib/tools"
 import TPL from "../lib/tpl";
+import INFT from "../lib/inft";
 
 
 import SmallHash from "./hash_small";
 import PartSection from "./part_section";
-import INFT from "./inft";
+import RenderiNFT from "./inft";
 
 import { FaAngleDoubleUp,FaAngleDoubleDown } from "react-icons/fa";
 
@@ -43,9 +44,6 @@ function Setting(props) {
     let [start, setStart]=useState(0);
     let [step, setStep]=useState(0);
     let [index, setIndex]=useState(0);
-
-
-    let [offset,setOffset]=useState([]);
 
     const self={
         clickRow:(index,val)=>{
@@ -84,27 +82,25 @@ function Setting(props) {
             //3.update setting 
             list[index]=latest;
             const nlist=tools.clone(list);
-            setOffset(nlist);   //force to fresh result;
+            //setOffset(nlist);   //force to fresh result;
             setList(nlist);
-            self.updateTemplate(active.cid,"offset",nlist);
+
+            self.updateOffset(nlist);
+            //self.updateTemplate(active.cid,"offset",nlist);
         },
         clickIncMulti:(ev)=>{
             if(multi!==config.multiMax){
                 const n=multi+1;
-                //console.log(n);
                 setMulti(n);
-
-                const active=Data.get("template");
-                self.updateTemplate(active.cid,"multi",n);
+                self.updateMulti(n);
             }
         },
+        
         clickDecMulti:(ev)=>{
             if(multi!==1){
                 const n=multi-1;
                 setMulti(n);
-
-                const active=Data.get("template");
-                self.updateTemplate(active.cid,"multi",n);
+                self.updateMulti(n);
             }
         },
         clickHidden:(ev)=>{
@@ -113,57 +109,65 @@ function Setting(props) {
         clickShow:(ev)=>{
             setHidden(false);
         },
-        updateTemplate:(cid,key,offset)=>{
-            const ts = Local.get("template");
-            if(!ts) return false;
-            try {
-                const tpls=JSON.parse(ts);
-                //console.log(cid,offset);
-                for(let i=0;i<tpls.length;i++){
-                    if(tpls[i].alink===cid) tpls[i][key]=offset;
+        updateMulti:(n)=>{
+            const active=TPL.current();
+            const detail=INFT.mint.detail();
+            const cid=active.cid;
+            if(!detail.template[cid]){
+                detail.template[cid]={
+                    multi:n,
+                    offset:self.getMintOffset(active.parts),
                 }
-                Local.set("template",JSON.stringify(tpls));
-            } catch (error) {
-               return false; 
-            }
-        },
-        getOffset: (tpl,parts) => {
-            if(!tpl.offset || tpl.offset.length!==parts.length){
-                //create offset setting, if not;
-                const os=[];
-                for(let i=0;i<parts.length;i++){
-                    const part=parts[i];
-                    const divide=part.value[2];
-                    os.push(tools.rand(0,divide-1));
-                }
-
-                //update to template;
-                self.updateTemplate(tpl.alink,"offset",os);
-
-                return os;
             }else{
-                return tpl.offset;
-            }   
+                detail.template[cid].multi=n;
+            }
+            INFT.mint.update(detail);
+        },
+        updateOffset:(offset)=>{
+            const active=TPL.current();
+            const detail=INFT.mint.detail();
+            const cid=active.cid;
+            if(!detail.template[cid]){
+                detail.template[cid]={
+                    multi:1,
+                    offset:self.getMintOffset(active.parts),
+                }
+            }else{
+                detail.template[cid].offset=offset;
+            }
+            INFT.mint.update(detail);
+        },
+        getMintOffset:(parts)=>{
+            const os=[];
+            for(let i=0;i<parts.length;i++){
+                const part=parts[i];
+                const divide=part.value[2];
+                os.push(tools.rand(0,divide-1));
+            }
+            return os;
         },
 
         autoShow:()=>{
-            const active=Data.get("template");
+            const active=TPL.current();
             if(active===null) return setTimeout(()=>{
                 self.autoShow();
             },1000);
 
-            //console.log(active.cid);
-            //const tpl=self.getTemplate(active.cid);
-            const tpl=TPL.target();
-            if(!tpl) return setTimeout(()=>{
-                self.autoShow();
-            },1000);
+            const os=INFT.mint.detail("template");
+            if(!os[active.cid]){
+                os[active.cid]={
+                    multi:1,
+                    offset:self.getMintOffset(active.parts),
+                }
+                INFT.mint.update({template:os});
+            }
+            const offset=os[active.cid].offset;
+            const multi=os[active.cid].multi;
 
-            const offset=self.getOffset(tpl,active.parts);
             setAmount(active.parts.length);
             setCid(active.cid);
             setList(offset);
-            setMulti(tpl.multi!==undefined?tpl.multi:1);
+            setMulti(multi!==undefined?multi:1);
         },
 
         getValue:(index)=>{
@@ -171,7 +175,6 @@ function Setting(props) {
             const part=active.parts[index];
             const start=part.value[0];
             const step=part.value[1];
-            //console.log(start,step);
             return `0x${hash.slice(2).slice(start,start+step)}`
         },
         getDec:(index)=>{
@@ -179,7 +182,6 @@ function Setting(props) {
             const part=active.parts[index];
             const start=part.value[0];
             const step=part.value[1];
-            //console.log(start,step);
             return  parseInt(`0x${hash.slice(2).slice(start,start+step)}`);
         },
         getDivide:(index)=>{
@@ -208,10 +210,6 @@ function Setting(props) {
     useEffect(() => {
         selected=-1;
         self.autoShow();
-
-        const tpl=TPL.target();
-        setOffset(tpl.offset);
-        //console.log(tpl);
 
     }, [props.update]);
 
@@ -243,14 +241,8 @@ function Setting(props) {
                         </Col>
                         <SmallHash hash={hash} start={start} step={step} grid={8}/>
                     </Col>
-                    <Col className="pt-3 text-center" sm={size.head[1]} xs={size.head[1]}>
-                        <INFT hash={hash} offset={offset} id={"pre_setting"} hightlight={index}/>
-                        {/* <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
-                            
-                        </Col> */}
-                        {/* <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
-                            Preview
-                        </Col> */}
+                    <Col className="pt-2 text-center" sm={size.head[1]} xs={size.head[1]}>
+                        <RenderiNFT hash={hash} offset={list} id={"pre_setting"} hightlight={index}/>
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
                         <PartSection index={index} selected={order}/>

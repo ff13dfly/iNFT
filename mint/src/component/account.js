@@ -94,7 +94,7 @@ function Account(props) {
             }
         },
         faucetMessage:(ctx)=>{
-            console.log(ctx);
+            //console.log(ctx);
             setFaucet(ctx);
             return setTimeout(() => {
                 setFaucet("");

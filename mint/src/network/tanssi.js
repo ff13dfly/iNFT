@@ -3,6 +3,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 const {ApiPromise, WsProvider,Keyring} = window.Polkadot;
 
 const config={
+    //node:"wss://wss.android.im",
     node:"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
     target:12000,           //How long to create a new block
 }
@@ -60,7 +61,7 @@ const self={
         try {
             const provider = new WsProvider(uri);
             ApiPromise.create({ provider: provider }).then((api) => {
-                console.log(`Linked to node.`);
+                console.log(`Linked to node ${uri}`);
                 wsAPI = api;
                 linking = false;
 

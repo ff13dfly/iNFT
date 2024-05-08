@@ -7,7 +7,7 @@ import Data from "../lib/data";
 import tools from "../lib/tools";
 import Copy from "../lib/clipboard";
 
-import INFT from "./inft";
+import RenderiNFT from "./inft";
 import TPL from "../lib/tpl";
 
 import SmallHash from "./hash_small";
@@ -141,7 +141,7 @@ function Detail(props) {
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        <INFT hash={hash} offset={[]} id={"pre_template"} template={props.alink} hightlight={selected}/>
+                        <RenderiNFT hash={hash} offset={[]} id={"pre_template"} template={props.alink} hightlight={selected}/>
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>

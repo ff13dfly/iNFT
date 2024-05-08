@@ -11,7 +11,7 @@ import Data from "../lib/data";
 *   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
 */
 
-function INFT(props) {
+function RenderiNFT(props) {
 
     let [width, setWidth] = useState(400);
     let [height, setHeight] = useState(400);
@@ -63,7 +63,7 @@ function INFT(props) {
             setHidden(false);
         });
         
-    }, [props.hash,props.offset,props.id,props.template]);
+    }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
     const cmap={width:"100%"}
     return (
@@ -74,4 +74,4 @@ function INFT(props) {
     )
 }
 
-export default INFT;
+export default RenderiNFT;
