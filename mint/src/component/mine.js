@@ -168,26 +168,12 @@ function Mine(props) {
             //console.log(me)
 
             //2.prepare the canvas
-            const con = document.getElementById("handle");
-            if(con!==null){     //invoid to render after the dialog is closed
-                const cvs = document.createElement('canvas');
-                cvs.id = config.dom_id;
-                cvs.width = 400;
-                cvs.height = 400;
-                con.appendChild(cvs);
-
-                const pen = Render.create(config.dom_id, true);
-                Render.reset(pen);
-                Render.preview(pen, dt.image, me.hash, dt.parts, basic,me.offset);
-
-                return setTimeout(() => {
-                    me.bs64 = pen.canvas.toDataURL("image/jpeg");
-                    todo.push(me);
-                    con.innerHTML = "";
-
-                    return self.autoThumbs(arr, ck, todo);
-                }, 50);
-            }
+            //console.log(basic);
+            Render.thumb(me.hash,dt.image,dt.parts, basic,me.offset,(dt)=>{
+                me.bs64 = dt
+                todo.push(me);
+                return self.autoThumbs(arr, ck, todo);
+            });
         },
         page: (arr) => {
             //console.log(`Page:${page}`)
@@ -270,7 +256,7 @@ function Mine(props) {
     return (
         <Row>
             <Col hidden={true} id="handle" sm={size.row[0]} xs={size.row[0]}>
-                {/* <canvas hidden={true} width={400} height={400} id={dom_id}></canvas> */}
+
             </Col>
             <Col className="pb-2" sm={size.filter[0]} xs={size.filter[0]}>
                 {/* <FaGripHorizontal size="28" className="pointer" onClick={(ev)=>{

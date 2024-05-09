@@ -138,6 +138,37 @@ const Render= {
         pen.fillText(txt, pos[0], pos[1]);
         pen.stroke();
     },
+    thumb:(hash,bs64,parts,basic,offset,ck)=>{
+        const container_id="thumb_handle";
+        const canvas_id="thumb_canvas"
+
+        let con = document.getElementById(container_id);
+        if(con===null){
+            const div = document.createElement('div');
+            div.id = container_id;
+            document.body.appendChild(div);
+            con = document.getElementById(container_id);
+        }
+
+        let cvs=document.getElementById(canvas_id);
+        if(cvs===null){
+            cvs = document.createElement('canvas');
+            con.appendChild(cvs);
+        }
+        cvs.id = canvas_id;
+        cvs.width =basic.target[0];
+        cvs.height =basic.target[1];
+
+        const pen = Render.create(canvas_id, true);
+        Render.reset(pen);
+        Render.preview(pen,bs64,hash, parts, basic,offset);
+        pen.canvas.toDataURL("image/jpeg");
+
+        setTimeout(() => {
+            const dt=pen.canvas.toDataURL("image/jpeg");
+            return ck && ck(dt);
+        },50);
+    }
 };
 
 export default Render;
