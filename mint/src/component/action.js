@@ -28,10 +28,6 @@ function Action(props) {
     let [holder, setHolder] = useState("Password");
 
     const self = {
-        getAnchorName: (ck) => {
-            const name = `inft_${tools.char(14).toLocaleLowerCase()}`;
-            return ck && ck(name);
-        },
         getINFTLocal: (name, tpl, hash, block, creator,offset) => {
             return {
                 anchor: name,
@@ -80,7 +76,7 @@ function Action(props) {
             props.dialog(<Setting />, "Mint setting");
         },
         clickPanel: () => {
-            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint progress");
+            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint board");
         },
         clickTask: () => {
             const fa = Local.get("login");
@@ -91,27 +87,37 @@ function Action(props) {
             }
             setDisable(true);
 
+            //1.check wether the last task is done;
+            if(!self.done()){
+                setInfo(`There is running task.`);
+                setPassword("");
+                return false;
+            }
+             
+            //2.check the password for account
             Network("tanssi").load(fa, password, (pair) => {
+                setPassword("");
                 if (pair.error !== undefined) {
                     setInfo(pair.error);
-                    setPassword("");
                     return false;
                 }
 
-                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint progress");
+                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint board");
 
-                const tpl=TPL.target();
-                const multi = !tpl.multi ? 1 : parseInt(tpl.multi);
-
+                const tpl=TPL.current();
                 const mint_detail=INFT.mint.detail();
-                //console.log(mint_detail);
-                //const task = self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.alink, multi);
-                //console.log(task);
+                const multi=self.getMulti(mint_detail.template,tpl.cid);
+
                 mint_detail.task=self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.alink, multi);
                 mint_detail.index=parseInt(mint_detail.index)+multi;
                 INFT.mint.update(mint_detail);
                 self.runTask(pair, tpl);
+               
             });
+        },
+        getMulti:(tpls,cid)=>{
+            if(!tpls || !tpls[cid] || !tpls[cid].multi) return 1;
+            return tpls[cid].multi;
         },
         getTask: (prefix, pointer, template, n) => {
             const arr = [];
@@ -127,7 +133,7 @@ function Action(props) {
             return arr;
         },
         runTask: (pair, tpl) => {
-            const task = self.getProgress();
+            const task = INFT.mint.detail("task");
             if (task === false) return setInfo("Failed to get task data.");
 
             Network("tanssi").subscribe("autorun", (bk, bhash) => {
@@ -160,49 +166,50 @@ function Action(props) {
                             setDisable(false);
                             return setInfo(process.error);
                         }
-                        //console.log(process);
-
-                        if(process.code) target.now=process.code;
-                        self.updateProgress(task_index,target);
 
                         if (process.status === "Finalized") {
                             self.saveResult(target.name, process.hash,raw.offset,pair.address,(block)=>{
-
+                                target.now=process.code;
+                                target.hash=process.hash;
+                                target.block=block;
+                                self.updateProgress(task_index,target);
                             });
+                        }else{
+                            if(process.code) target.now=process.code;
+                            self.updateProgress(task_index,target);
                         }
                     });
                 })(index,target);
             });
         },
+        //confirm wether the last task is done;
+        done:(current_block)=>{
+            //1.last mint is done;
+            const task=INFT.mint.detail("task");
+            const last=task[task.length-1];
+
+            if(last.now===8) return true;
+
+            //2.error when minting;
+
+            return false;
+        },
+        showInfo:(txt,at)=>{
+
+        },
         updateProgress:(index,data)=>{
-            const dt=self.getProgress();
+            const dt=INFT.mint.detail("task");
             if(dt===false) return false;
             if(!dt[index]) return false;
             dt[index]=data;
 
             INFT.mint.update({task:dt});
             return true;
-        },  
-        getProgress: () => {
-            const details=INFT.mint.detail();
-            return details.task;
-        },
-        filterTask: () => {
-
         },
         saveResult: (name, hash,offset, creator, ck) => {
             Network("tanssi").view(hash, "block", (data) => {
                 const tpl = TPL.current(true);
-                const inft = self.getINFTLocal(name, tpl, hash, data.block, creator,offset);
-                const its = Local.get("list");
-                const nlist = its === undefined ? {} : JSON.parse(its);
-                if (nlist[creator] === undefined) nlist[creator] = [];
-
-                //avoid double writing
-                if (!self.isSaved(name, nlist[creator])) {
-                    nlist[creator].unshift(inft);
-                    Local.set("list", JSON.stringify(nlist));
-                }
+                INFT.single.add(name, tpl, hash, data.block, creator,offset);
                 return ck && ck(data.block);
             });
         },
@@ -254,7 +261,6 @@ function Action(props) {
                 <button className="btn btn-lg btn-primary" disabled={disable} onClick={(ev) => {
                     setInfo("");
                     self.clickTask(ev);
-                    //self.clickMint(ev);
                 }}>Mint Now!</button>
             </Col>
         </Row>

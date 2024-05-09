@@ -93,7 +93,7 @@ function Progress(props) {
     return (
         <Row>
             <Col sm={size.row[0]} xs={size.row[0]}>
-                {list.length} mint, {self.getDone(list)} done. Block {!block?0:block.toLocaleString()}
+                Current block {!block?0:block.toLocaleString()}
             </Col>
             <Col className="pt-2 pb-4" style={cmap} sm={size.row[0]} xs={size.row[0]}>
                 <Row>

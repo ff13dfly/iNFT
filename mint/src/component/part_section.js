@@ -23,35 +23,45 @@ function PartSection(props) {
     const cut_id = "pre_cut";
     const self = {
         showSection:(index,cid)=>{
-            TPL.view(cid,(def)=>{
-                if(!def) return false;
-                
-                const target=def.parts[index];
-                const w = def.cell[0], h = def.cell[1];
-                const [gX, gY, eX, eY] = target.img;
-                const [start, step, divide, offset] = target.value;
-                const [line, row] = def.grid;
-                const max = line / (1 + eX);
-                const br = Math.ceil((gX + divide) / max);
-                
-                //1.calc the section size;
-                const s_w=def.grid[0]*w;        //section width;
-                const s_h=h*(1+eY)*br;          //section height;
-                setWidth(s_w);
-                setHeight(s_h);
-
-                //2.cut the section from orgin image
-                const cpen = Render.create(cut_id);
-                //Render.clear(cut_id);
-                Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (img_section) => {
-                    setBS64(img_section);
-                    const cfg={
-                        width:w*(1+eX),         //selected cell width
-                        height:h*(1+eY),        //selected cell height
-                        offset:gX,              //first cell offset amount
-                    }
-                    self.showCover(divide,props.selected,cfg)
+            if(!cid){
+                const def=TPL.current();
+                if(!def) return setTimeout(()=>{
+                    self.showSection(index);
+                },500);
+                self.render(def,index);
+            }else{
+                TPL.view(cid,(def)=>{
+                    if(!def) return false;
+                    self.render(def,index);
                 });
+            }
+        },
+        render:(def,index)=>{
+            const target=def.parts[index];
+            const w = def.cell[0], h = def.cell[1];
+            const [gX, gY, eX, eY] = target.img;
+            const [start, step, divide, offset] = target.value;
+            const [line, row] = def.grid;
+            const max = line / (1 + eX);
+            const br = Math.ceil((gX + divide) / max);
+            
+            //1.calc the section size;
+            const s_w=def.grid[0]*w;        //section width;
+            const s_h=h*(1+eY)*br;          //section height;
+            setWidth(s_w);
+            setHeight(s_h);
+
+            //2.cut the section from orgin image
+            const cpen = Render.create(cut_id);
+            //Render.clear(cut_id);
+            Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (img_section) => {
+                setBS64(img_section);
+                const cfg={
+                    width:w*(1+eX),         //selected cell width
+                    height:h*(1+eY),        //selected cell height
+                    offset:gX,              //first cell offset amount
+                }
+                self.showCover(divide,props.selected,cfg)
             });
         },
         showCover:(n,selected,cfg)=>{

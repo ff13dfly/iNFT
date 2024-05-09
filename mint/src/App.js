@@ -62,9 +62,9 @@ function App() {
     },
     checking: () => {
       const io = self.decode(window.location.hash);
-      console.log(io);
-      //window.location.hash = "";        //clear the hash after decode
       if (io === false) return true;
+
+      window.location.hash = "";        //clear the hash after decode
       plugin.run(io.act, io.param);
     },
     regQR: () => {

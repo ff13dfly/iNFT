@@ -1,5 +1,4 @@
 import { mnemonicGenerate } from "@polkadot/util-crypto";
-
 const {ApiPromise, WsProvider,Keyring} = window.Polkadot;
 
 const config={
@@ -88,6 +87,7 @@ const self={
     },
     subscribe:(key,fun)=>{
         self.init(()=>{
+            if(subs[key]!==undefined) delete subs[key];
             subs[key]=fun;     //add the subcribe function to the map
         });
     },
@@ -118,10 +118,15 @@ const self={
         self.init(()=>{
             const dest={Id:to};
             const m=self.divide();
-            wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
-                const status = res.status.toJSON();
-                console.log(status);
-            });
+            try {
+                wsAPI.tx.balances.transferAllowDeath(dest,parseInt(amount*m)).signAndSend(pair, (res) => {
+                    const status = res.status.toJSON();
+                    console.log(status);
+                });
+            } catch (error) {
+                return ck && ck({error:"Internal error."});
+            }
+            
         });
     },
     divide:()=>{

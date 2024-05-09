@@ -105,6 +105,25 @@ const funs={
         
         return nav;
     },
+
+    getINFT:(name, tpl, hash, block, creator,offset)=>{
+        return {
+            anchor: name,
+            hash: hash,
+            offset:offset,
+            block: block,
+            template: {
+                hash: tpl,
+                type: "ipfs",            //storage way
+                origin: "web3.storage",   //storage origianl
+            },
+            network: "tanssi",
+            creator: creator,
+            fav: false,                  //wether faved
+            stamp: tools.stamp(),
+        }
+    },
+
     /* Create thumbs of iNFTs
      * @param  integer[]    list    //list of iNFT index of "raw"
      * @param  function     ck      //callback
@@ -251,7 +270,6 @@ const self = {
             ns[addr]=raw;
             Local.set(key,JSON.stringify(ns));
             return true;
-
         } catch (error) {
             Local.remove(key);
             const ps={};
@@ -281,7 +299,7 @@ const self = {
     },
     single:{    //single iNFT functions here.
         fav:(name)=>{
-            if(!map[name]) return false
+            if(map[name]===undefined) return false
             const index=map[name];
             raw[index].fav=true;
             self.update();              //save data to localstorage
@@ -289,7 +307,7 @@ const self = {
             return true;           
         },
         unfav:(name)=>{
-            if(!map[name]) return false
+            if(map[name]===undefined) return false
             const index=map[name];
             raw[index].fav=false;
             self.update();
@@ -297,7 +315,7 @@ const self = {
             return true;
         },
         selling:(name,price,target)=>{
-            if(!map[name]) return false
+            if(map[name]===undefined) return false
             const index=map[name];
             if(!raw[index].market) raw[index].market={price:0,target:""};
             raw[index].market.price=price;
@@ -306,7 +324,7 @@ const self = {
             return true;
         },
         revoke:(name)=>{
-            if(!map[name]) return false
+            if(map[name]===undefined) return false
             const index=map[name];
             if(!raw[index].market) return false;
             raw[index].market.price=0;
@@ -315,14 +333,18 @@ const self = {
             return true;
         },
         target:(name)=>{
-            if(!map[name]) return false
+            if(map[name]===undefined) return false
             const index=map[name];
-            if(!raw[index].market) return false;
             return raw[index];
         },
+        add:(name, tpl_cid, hash, block, creator,offset)=>{
+            const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset);
+            raw.unshift(single);
+            self.update();
+            return true;
+        }   
     },
     mint:{
-        //start a task to mint; create the target task list
         start:(n)=>{
             const addr=funs.getAddress();
             if(!addr) return false;
@@ -333,11 +355,9 @@ const self = {
         //update task status
         progress:(index,value,ck)=>{      
             const task=self.mint.task();
-
             
         },
     
-        
         //get current task
         detail:(key)=>{
             const addr=funs.getAddress();

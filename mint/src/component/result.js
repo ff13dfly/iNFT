@@ -8,7 +8,7 @@ import Progress from "./progress";
 
 import Local from "../lib/local";
 import tools from "../lib/tools";
-import Chain from "../lib/chain";
+import INFT from "../lib/inft";
 
 import RenderiNFT from "./inft";
 import Network from "../network/router";
@@ -68,16 +68,16 @@ function Result(props) {
             if (!name) return setInfo("Internal error: missing anchor name.");
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
-            Chain.load(fa, password, (pair) => {
+
+            setPassword("");
+            Network("tanssi").load(fa, password, (pair) => {
                 Network("tanssi").revoke(pair, name, (res) => {
                     if (res.error) return setInfo(res.error);
                     setInfo(res.msg);
 
                     if (res.status === "Finalized") {
-                        self.updateRevoking(name, (res) => {
-                            setSelling(false);
-                            setMarket("");
-                        });
+                        INFT.single.revoke(name);
+                        self.show();
                     }
                 });
             });
@@ -88,89 +88,28 @@ function Result(props) {
             if (!name) return setInfo("Internal error: missing anchor name.");
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
-            Chain.load(fa, password, (pair) => {
+
+            Network("tanssi").load(fa, password, (pair) => {
+                setPassword("");
                 Network("tanssi").sell(pair, name, price, (res) => {
                     if (res.error) return setInfo(res.error);
                     setInfo(res.msg);
                     if (res.status === "Finalized") {
-                        //update iNFT status here;
-
+                        INFT.single.selling(name,price,pair.address);
+                        self.show();        //will update the selling information automatically.
                     }
                 });
             });
         },
         clickFav: (ev) => {
             const name = props.name;
-            const fa = Local.get("login");
-            const ls = Local.get("list");
-
-            try {
-                const user = JSON.parse(fa);
-                const nlist = JSON.parse(ls);
-                if (!nlist[user.address]) return console.log("Invalid account record.");
-
-                let index = null;
-                for (let i = 0; i < nlist[user.address].length; i++) {
-                    const row = nlist[user.address][i];
-                    if (row.anchor === name) index = i;
-                }
-
-                if (index !== null) {
-                    const nfav = !nlist[user.address][index].fav;
-                    nlist[user.address][index].fav = nfav;
-                    Local.set("list", JSON.stringify(nlist));
-                    setFav(nfav);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        updateSelling: (name, price, target, ck) => {
-            const fa = Local.get("login");
-            const ls = Local.get("list");
-            try {
-                const user = JSON.parse(fa);
-                const nlist = JSON.parse(ls);
-                if (!nlist[user.address]) return ck && ck(false);
-
-                let index = null;
-                for (let i = 0; i < nlist[user.address].length; i++) {
-                    const row = nlist[user.address][i];
-                    if (row.anchor === name) index = i;
-                }
-
-                if (index !== null) {
-                    nlist[user.address][index].price = price;
-                    nlist[user.address][index].target = target;
-                    Local.set("list", JSON.stringify(nlist));
-                }
-                return ck && ck(true);
-            } catch (error) {
-                return ck && ck({ error: "Invalid data" });
-            }
-        },
-        updateRevoking: (name, ck) => {
-            const fa = Local.get("login");
-            const ls = Local.get("list");
-            try {
-                const user = JSON.parse(fa);
-                const nlist = JSON.parse(ls);
-                if (!nlist[user.address]) return ck && ck(false);
-
-                let index = null;
-                for (let i = 0; i < nlist[user.address].length; i++) {
-                    const row = nlist[user.address][i];
-                    if (row.anchor === name) index = i;
-                }
-
-                if (index !== null) {
-                    delete nlist[user.address][index].price;
-                    delete nlist[user.address][index].target;
-                    Local.set("list", JSON.stringify(nlist));
-                }
-                return ck && ck(true);
-            } catch (error) {
-                return ck && ck({ error: "Invalid data" });
+            const single=INFT.single.target(name);
+            if(!single.fav){
+                INFT.single.fav(name);
+                setFav(true);
+            }else{
+                INFT.single.unfav(name);
+                setFav(false);
             }
         },
         clickHome: (ev) => {
@@ -183,6 +122,19 @@ function Result(props) {
         show: () => {
             setName(props.name);
             setBlock(props.block);
+            setPassword("");
+            setInfo("");
+
+            //3.get selling status; Confirm from network. Fix the data automatically.
+            Network("tanssi").view(props.name, "selling", (dt) => {
+                if (dt && dt.length === 3) {
+                    setMarket(`On selling, price ${dt[1]} unit.`);
+                    setSelling(true);
+                }else{
+                    setMarket("");
+                    setSelling(false);
+                }
+            });
         },
     }
 
@@ -204,15 +156,6 @@ function Result(props) {
         } catch (error) {
 
         }
-
-        //3.get selling status; Confirm from network. Fix the data automatically.
-        Network("tanssi").view(props.name, "selling", (dt) => {
-            if (dt && dt.length === 3) {
-                setMarket(`On selling, price ${dt[1]} unit.`);
-                setSelling(true);
-                self.updateSelling(props.name, dt[1], dt[2]);
-            }
-        });
 
     }, [props.update]);
 
@@ -239,7 +182,7 @@ function Result(props) {
             </Col>
             <Col className="pt-1 text-end" sm={size.fav[1]} xs={size.fav[1]}>
                 <button className="btn btn-md btn-secondary" onClick={(ev) => {
-                    self.clickFav(ev);
+                    self.clickFav(props.name);
                 }}>{fav ? <FaHeart color={"#FFAABB"} /> : <FaRegHeart color={"#FFAABB"} />}</button>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
@@ -251,9 +194,12 @@ function Result(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="pb-2" sm={size.sell[0]} xs={size.sell[0]}>
-                        <input className="form-control" type="password" placeholder={holder} onChange={(ev) => {
-                            self.changePassword(ev);
-                        }} />
+                        <input className="form-control" type="password" 
+                            placeholder={holder} 
+                            value={password}
+                            onChange={(ev) => {
+                                self.changePassword(ev);
+                            }} />
                     </Col>
 
                     <Col hidden={selling} sm={size.sell[1]} xs={size.sell[1]}>
