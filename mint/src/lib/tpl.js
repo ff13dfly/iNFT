@@ -20,7 +20,6 @@ const funs={
                     return funs.cacheIPFS(alinks, ck, dels);
                 }else{
                     Data.setHash("cache", single, ctx);
-
                     return funs.cacheIPFS(alinks, ck, dels);
                 }
             });
@@ -95,8 +94,15 @@ const self = {
         }
     },
     view:(cid,ck)=>{
-        const tpl=Data.getHash("cache", cid);
-        return ck && ck(tpl);
+        //console.log(cid,Data.exsistHash("cache".cid));
+        if(!Data.exsistHash("cache",cid)){
+            funs.cacheIPFS([cid],(dels)=>{
+                self.view(cid.ck);
+            });
+        }else{
+            const tpl=Data.getHash("cache", cid);
+            return ck && ck(tpl);
+        }
     },
     target:(index)=>{       //get local storaged template information
         const tpls=self.list();

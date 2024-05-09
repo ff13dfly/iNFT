@@ -1,7 +1,6 @@
 const map={
-    template:null, 
-    cache:{},
-    version:3,          //version to autoclean the localstorage data
+    template:null,  //current template data, special one, not good
+    cache:{},     
 }
 
 const self={
@@ -19,9 +18,6 @@ const self={
     },
     reset:()=>{
         map.template=null;
-        map.NFT=null;
-        map.hash="";
-        map.selected=null;
     },
 
     setHash:(main,key,value)=>{

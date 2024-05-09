@@ -10,6 +10,8 @@ import Render from "../lib/render";
 import Data from "../lib/data";
 import tools from "../lib/tools";
 
+import INFT from "../lib/inft";
+
 import IPFS from "../network/ipfs";
 
 let page=1;
@@ -52,8 +54,7 @@ function Mine(props) {
             }else{
                 page--;
             }
-            
-            self.showList();
+            self.autoshow();
         },
         clickNext: (ev) => {
             if(page>sum){
@@ -61,7 +62,7 @@ function Mine(props) {
             }else{
                 page++;
             }
-            self.showList();
+            self.autoshow();
         },
         clickSingle: (name) => {
             const fa = Local.get("login");
@@ -89,168 +90,26 @@ function Mine(props) {
             }
 
         },
-        // clickSingle_back: (index) => {
-        //     const fa = Local.get("login");
-        //     if (!fa) return false;
-        //     const login = JSON.parse(fa);
-        //     const addr = login.address;
-
-        //     const ls = Local.get("list");
-        //     const my = JSON.parse(ls);
-        //     const dt = my[addr][index];
-        //     console.log(dt);
-        //     props.dialog(<Result 
-        //         name={dt.anchor} 
-        //         hash={dt.hash} 
-        //         block={dt.block} 
-        //         offset={dt.offset}
-        //         template={dt.template.hash}
-        //         price={!dt.price?0:dt.price}
-        //         fav={dt.fav}
-        //         skip={true} 
-        //         back={true} 
-        //         dialog={props.dialog}
-        //     />, "iNFT Details");
-        // },
         clickFav:(ev)=>{
             page=1;  //reset page value
-
             filter.fav=!filter.fav;
             setFilter(tools.clone(filter));
-            
-            self.showList();
+            self.autoshow();
         },
-        autoCache: (plist, ck) => {
-            const nfts = [], tpls = {};
-            for (let i = 0; i < plist.length; i++) {
-                nfts.push(plist[i].anchor);                 //nft list  
-                tpls[plist[i].template.hash] = true;        //set template
-            }
-
-            const ts = [];
-            for (var k in tpls) ts.push(k);
-
-            if(ts.length!==0){
-                setProgress(`Getting ${ts.length===1?"1 template":(ts.length+" templates")} from IPFS ...`);
-            }
-            self.autoTemplate(ts, () => {
-                setProgress("Rending the thumbs of iNFTs ...");
-                setTimeout(()=>{
-                    self.autoThumbs(plist, (glist) => {
-                        return ck && ck(glist);
-                    });
-                },50);
-            });
-        },
-        autoTemplate: (arr, ck) => {
-            //console.log(arr);
-            if (arr.length === 0) return ck && ck();
-            const single = arr.pop();
-            if (!Data.exsistHash("cache", single)) {
-                return IPFS.read(single, (ctx) => {
-                    Data.setHash("cache", single, ctx);
-                    return self.autoTemplate(arr, ck);
-                });
-            } else {
-                return self.autoTemplate(arr, ck);
-            }
-        },
-        autoThumbs: (arr, ck, todo) => {
-            if (todo === undefined) todo = [];
-            if (arr.length === 0) return ck && ck(todo);
-            const me = arr.shift();
-            const dt = Data.getHash("cache", me.template.hash);
-            const basic = {
-                cell: dt.cell,
-                grid: dt.grid,
-                target: dt.size
-            }
-            //console.log(me)
-
-            //2.prepare the canvas
-            //console.log(basic);
-            Render.thumb(me.hash,dt.image,dt.parts, basic,me.offset,(dt)=>{
-                me.bs64 = dt
-                todo.push(me);
-                return self.autoThumbs(arr, ck, todo);
-            });
-        },
-        page: (arr) => {
-            //console.log(`Page:${page}`)
-            const nlist = [];
-            const step=config.page_count;
-            if ((page - 1) * step > arr.length) return nlist;
-
-            for (let i = 0; i < step; i++) {
-                const key = (page - 1) * step + i;
-                if (arr[key] !== undefined) nlist.push(arr[key]);
-            }
-            //console.log(page,JSON.stringify(nlist));
-            return nlist;
-        },
-
-        filteList:(list,cfg)=>{
-            if(!list) return [];
-            const arr=[];
-            for(let i=0;i<list.length;i++){
-                const row=list[i];
-                const key=`${!cfg.fav?0:1}_${!cfg.template?0:1}`;
-                switch (key) {
-                    case "0_0": //no filter
-                        arr.push(row);
-                        break;
-                    case "1_0": //fav filter
-                        if(row.fav) arr.push(row);
-                        break;
-                    case "0_1": //template filter
-                        if(row.template.hash===cfg.template) arr.push(row);
-                        break;
-                    case "1_1": //fav and template filter
-                        if(row.fav && row.template.hash===cfg.template) arr.push(row);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return arr;
-        },
-        
-        showList: () => {
+        autoshow:()=>{
             setDone(false);
-            const fa = Local.get("login");
             setProgress("Loading ...");
-
-            if (fa !== undefined) {
-                const login = JSON.parse(fa);
-                const addr = login.address;
-                const ls = Local.get("list");
-                if (ls !== undefined) {
-                    try {
-                        const nlist = JSON.parse(ls);
-                        const flist=self.filteList(nlist[addr],filter);
-                        const plist=self.page(flist);
-                        
-                        const total=Math.ceil(flist.length/config.page_count);
-                        setSum(total);
-
-                        self.autoCache(plist, (glist) => {
-                            setDone(true);
-                            setList(glist);
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    }
-                } else {
-                    setInfo("Not iNFT record.");
-                }
-            } else {
-                setInfo("Not login yet.");
-            }
-        },
+            INFT.list(page,config.page_count,(dt)=>{
+                const nav=dt.nav;
+                setSum(nav.sum);
+                setDone(true);
+                setList(dt.data);
+            });
+        }
     }
 
     useEffect(() => {
-        self.showList();
+        self.autoshow();
     }, [props.update]);
 
     return (
@@ -285,7 +144,7 @@ function Mine(props) {
                             }}>
                                 <Row>
                                     <Col className="grid" sm={size.row[0]} xs={size.row[0]} >
-                                        <img className="mine"  src={row.bs64} alt="" />
+                                        <img className="mine"  src={row.thumb} alt="" />
                                     </Col>
                                     <Col className="pt-1" sm={size.detail[0]} xs={size.detail[0]}>
                                         {row.fav?<FaRegHeart/>:""} <span>{row.block.toLocaleString()}</span> 

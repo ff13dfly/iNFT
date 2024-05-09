@@ -1,11 +1,13 @@
 import Local from "./local";
 import tools from "./tools";
 import Render from "./render";
+import TPL from "./tpl";
 
-import Chain from "./chain";
 import Network from "../network/router";
 
 //This is the lib for iNFT local, cache all data including the filter queue
+//!important, page starts from 0 here;
+//!important, "raw" save the data the same as Localstorage, then the thumbs are cached on "imgs"
 
 let basic=null;     //basic iNFTs parameters
 let backup=[];      //backup of iNFTs
@@ -78,22 +80,102 @@ const funs={
     },
 
     getNav:(cfg,page,step)=>{
-        const nav={from:null,start:0,end:0,sum:0,empty:true};
+        const nav={
+            from:null,      //filter key pointer. such as "fav" or ["template",CID]
+            start:0,        //index of start
+            end:0,          //index of end
+            sum:0,          //page sum
+            total:0,        //total result
+            empty:true      //wether data
+        };
+
+        if(!cfg){
+            //no filter, just get the list of raw
+            const len=raw.length;
+            if(len!==0){
+                nav.total=len;
+                nav.sum=Math.ceil(len/step);
+                nav.start=(page-1)*step;
+                nav.end=page*step;
+                nav.empty=false;
+            }
+        }else{
+            //filter the result by cfg parameters
+        }
         
         return nav;
     },
-
-    getData:(start,end,from)=>{
+    /* Create thumbs of iNFTs
+     * @param  integer[]    list    //list of iNFT index of "raw"
+     * @param  function     ck      //callback
+     */
+    getThumb:(list,ck)=>{
+        if(list.length===0) return ck && ck(true);
+        const ii=list.pop();
+        const me=raw[ii];
+        //console.log(iNFT.template.hash);
+        TPL.view(me.template.hash,(dt)=>{
+            const basic = {
+                cell: dt.cell,
+                grid: dt.grid,
+                target: dt.size
+            }
+            Render.thumb(me.hash,dt.image,dt.parts, basic,me.offset,(bs64)=>{
+                imgs[me.anchor]=bs64;
+                return funs.getThumb(list,ck);
+            });
+        });
+    },
+    autoThumb:(list,ck)=>{
+        //1.get the templates;
+        const tpls=[];
+        for(let i=0;i<list.length;i++){
+            const index=list[i];
+            const cid=raw[index].template.hash;
+            if(!tpls.includes(cid)) tpls.push(cid);
+        }
+        //console.log(JSON.stringify(tpls));
+        TPL.cache(tpls,(dels)=>{
+            return funs.getThumb(list,ck);
+        });
+    },
+    getData:(start,end,from,ck)=>{
+        //1. find the indexs of iNFT list
         const arr=[];
+        const uncached=[];
         for(let i=start;i<end;i++){
             if(from===null){
-                arr.push(raw[i]);
+                if(!raw[i]) continue;
+                const single=tools.clone(raw[i]);
+                if(!imgs[single.anchor]){
+                    uncached.push(i);
+                }
+                arr.push(single);
             }else{
                 const index=Array.isArray(from)?filter[from[0]][from[1]][i]:filter[from][i];
-                arr.push(raw[index]);
+                const single=tools.clone(raw[index]);
+                if(!imgs[single.anchor]){
+                    uncached.push(index);
+                }
+                arr.push(single);
             }
         }
-        return arr;
+
+        //2. get the thumbs of iNFT
+        if(uncached.length===0){
+            for(let i=0;i<arr.length;i++){
+                arr[i].thumb=imgs[arr[i].anchor];
+            }
+            return ck && ck(arr);
+        }
+        
+        funs.autoThumb(uncached,(done)=>{
+            if(done===false) return ck && ck({error:`Failed to create thumb for iNFTs.`});
+            for(let i=0;i<arr.length;i++){
+                arr[i].thumb=imgs[arr[i].anchor];
+            }
+            return ck && ck(arr);
+        });
     },
 
     getRaw:(addr)=>{
@@ -108,10 +190,6 @@ const funs={
             return [];
         }
     },
-    getThumb:(iNFT,ck)=>{
-
-    },
-
     cache:(addr)=>{
         funs.init();
         raw = funs.getRaw(addr);
@@ -152,14 +230,16 @@ const self = {
         //console.log(filter,map,basic);
     },
 
-    list:(page,step,filter_cfg)=>{
+    list:(page,step,ck,filter_cfg)=>{
         const addr=funs.getAddress();
         if(!addr) return false;
 
-        const nav=funs.getNav(filter_cfg);
-        if(nav.empty) return [];
+        const nav=funs.getNav(filter_cfg,page,step);
+        if(nav.empty) return {data:[],nav:nav};
 
-        return funs.getData(nav.start,nav.end,nav.from);
+        funs.getData(nav.start,nav.end,nav.from,(list)=>{
+            return ck && ck({data:list,nav:nav});
+        });
     },
 
     update:()=>{        //update the iNFT list on localstorage
