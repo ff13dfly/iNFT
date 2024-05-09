@@ -3,8 +3,6 @@ import tools from "./tools";
 import Render from "./render";
 import TPL from "./tpl";
 
-import Network from "../network/router";
-
 //This is the lib for iNFT local, cache all data including the filter queue
 //!important, page starts from 0 here;
 //!important, "raw" save the data the same as Localstorage, then the thumbs are cached on "imgs"
@@ -287,6 +285,7 @@ const self = {
             const ns=JSON.parse(ls);
             ns[addr]=raw;
             Local.set(key,JSON.stringify(ns));
+            self.auto();
             return true;
         } catch (error) {
             Local.remove(key);
@@ -320,17 +319,13 @@ const self = {
             if(map[name]===undefined) return false
             const index=map[name];
             raw[index].fav=true;
-            self.update();              //save data to localstorage
-            self.auto();                //recache data and analysis
-            return true;           
+            return self.update();           
         },
         unfav:(name)=>{
             if(map[name]===undefined) return false
             const index=map[name];
             raw[index].fav=false;
-            self.update();
-            self.auto();
-            return true;
+            return self.update();
         },
         selling:(name,price,target)=>{
             if(map[name]===undefined) return false
@@ -338,8 +333,7 @@ const self = {
             if(!raw[index].market) raw[index].market={price:0,target:""};
             raw[index].market.price=price;
             if(target!==undefined) raw[index].target=target;
-            self.update();
-            return true;
+            return self.update();
         },
         revoke:(name)=>{
             if(map[name]===undefined) return false
@@ -347,8 +341,7 @@ const self = {
             if(!raw[index].market) return false;
             raw[index].market.price=0;
             raw[index].market.target="";
-            self.update();
-            return true;
+            return self.update();
         },
         target:(name)=>{
             if(map[name]===undefined) return false
@@ -358,8 +351,7 @@ const self = {
         add:(name, tpl_cid, hash, block, creator,offset)=>{
             const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset);
             raw.unshift(single);
-            self.update();
-            return true;
+            return self.update();
         }   
     },
     mint:{

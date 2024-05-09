@@ -2,8 +2,9 @@ import Local from "./local";
 import Data from "./data";
 import IPFS from "../network/ipfs";
 
-let locker_remove=false;     //remove locker;
-let locker_insert=false;    //insert locker
+const config={
+    default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+}
 
 const funs={
     cacheIPFS:(alinks, ck, dels)=>{
@@ -48,8 +49,7 @@ const self = {
     auto:(ck)=>{
         const list=self.list(true);
         if(list===false){
-            //no template, need to init it;
-            return ck && ck();
+            return self.add(config.default,self.auto);
         }else{
             funs.cacheIPFS(list,(dels)=>{
                 //1. need to remove the dels templates

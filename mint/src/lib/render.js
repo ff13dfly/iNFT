@@ -60,6 +60,7 @@ const Render= {
     create:(id,force)=>{
         if(RDS[id]!==undefined && force!==true) return RDS[id];
         const cvs=document.getElementById(id);		//1.创建好canvas并返回画笔
+        if(!cvs) return false;
 		RDS[id]=cvs.getContext("2d");
         //self.border(id);
         return RDS[id];

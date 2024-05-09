@@ -59,6 +59,7 @@ function RenderiNFT(props) {
     
     useEffect(() => {
         //console.log(JSON.stringify(props));
+        //console.log(props.offset);
         self.autoFresh(()=>{
             setHidden(false);
         });

@@ -28,23 +28,6 @@ function Action(props) {
     let [holder, setHolder] = useState("Password");
 
     const self = {
-        getINFTLocal: (name, tpl, hash, block, creator,offset) => {
-            return {
-                anchor: name,
-                hash: hash,
-                offset:offset,
-                block: block,
-                template: {
-                    hash: tpl,
-                    type: "ipfs",            //storage way
-                    origin: "web3.storage",   //storage origianl
-                },
-                network: "tanssi",
-                creator: creator,
-                fav: false,                  //wether faved
-                stamp: tools.stamp(),
-            }
-        },
         getProtocol: () => {
             return {
                 type: "data",       //inft is type of data
@@ -53,20 +36,26 @@ function Action(props) {
             }
         },
 
-        getRaw: (tpl) => {
+        getRaw: (tpl,offset) => {
             return {
                 tpl: tpl.alink,          //ipfs cid
-                offset: !tpl.offset ? [] : tpl.offset,
+                offset: !offset?[]:offset,
                 from: "ipfs",            //storage way
                 origin: "web3.storage",   //storage origianl
             }
         },
-        isSaved: (name, list) => {
-            for (let i = 0; i < list.length; i++) {
-                const row = list[i];
-                if (name === row.anchor) return true;
-            }
-            return false;
+        done:(current_block)=>{
+            //1.last mint is done;
+            const task=INFT.mint.detail("task");
+            if(task.length===0) return true;
+
+            const last=task[task.length-1];
+
+            if(last.now===8) return true;
+
+            //2.error when minting;
+            return true;
+            //return false;
         },
         changePassword: (ev) => {
             setPassword(ev.target.value);
@@ -133,7 +122,8 @@ function Action(props) {
             return arr;
         },
         runTask: (pair, tpl) => {
-            const task = INFT.mint.detail("task");
+            const detail=INFT.mint.detail();
+            const task = detail.task;
             if (task === false) return setInfo("Failed to get task data.");
 
             Network("tanssi").subscribe("autorun", (bk, bhash) => {
@@ -151,8 +141,11 @@ function Action(props) {
                 if (index === -1) return true;
 
                 //2.run mint from index data;
+                const cid=tpl.cid;
+                const offset=(!detail.template || !detail.template[cid])?[]:detail.template[cid].offset
                 const target = task[index];
-                const raw = self.getRaw(tpl);
+                
+                const raw = self.getRaw(tpl,offset);
                 const protocol = self.getProtocol();
 
                 //3.update data and test writing.
@@ -182,27 +175,11 @@ function Action(props) {
                 })(index,target);
             });
         },
-        //confirm wether the last task is done;
-        done:(current_block)=>{
-            //1.last mint is done;
-            const task=INFT.mint.detail("task");
-            const last=task[task.length-1];
-
-            if(last.now===8) return true;
-
-            //2.error when minting;
-
-            return false;
-        },
-        showInfo:(txt,at)=>{
-
-        },
         updateProgress:(index,data)=>{
             const dt=INFT.mint.detail("task");
             if(dt===false) return false;
             if(!dt[index]) return false;
             dt[index]=data;
-
             INFT.mint.update({task:dt});
             return true;
         },
