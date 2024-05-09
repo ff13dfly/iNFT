@@ -79,7 +79,14 @@ const funs={
         }
     },
 
+    isFilter:(cfg)=>{
+        if(!cfg) return false;
+        if(!cfg.fav && !cfg.template && !cfg.selling) return false;
+        return true;
+    },
+
     getNav:(cfg,page,step)=>{
+
         const nav={
             from:null,      //filter key pointer. such as "fav" or ["template",CID]
             start:0,        //index of start
@@ -89,7 +96,7 @@ const funs={
             empty:true      //wether data
         };
 
-        if(!cfg){
+        if(!funs.isFilter(cfg)){
             //no filter, just get the list of raw
             const len=raw.length;
             if(len!==0){
@@ -100,7 +107,17 @@ const funs={
                 nav.empty=false;
             }
         }else{
-            //filter the result by cfg parameters
+            if(cfg.fav){
+                const len=filter.fav.length;
+                if(len!==0){
+                    nav.from="fav";
+                    nav.total=len;
+                    nav.sum=Math.ceil(len/step);
+                    nav.start=(page-1)*step;
+                    nav.end=page*step;
+                    nav.empty=false;
+                }
+            }
         }
         
         return nav;
@@ -172,6 +189,7 @@ const funs={
                 arr.push(single);
             }else{
                 const index=Array.isArray(from)?filter[from[0]][from[1]][i]:filter[from][i];
+                if(index===undefined || !raw[index]) continue;
                 const single=tools.clone(raw[index]);
                 if(!imgs[single.anchor]){
                     uncached.push(index);

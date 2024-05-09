@@ -4,17 +4,15 @@ import { useEffect, useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaHeart, FaRegHeart } from "react-icons/fa";
 
 import Result from "./result";
-
-import Local from "../lib/local";
-import Render from "../lib/render";
-import Data from "../lib/data";
-import tools from "../lib/tools";
-
 import INFT from "../lib/inft";
 
-import IPFS from "../network/ipfs";
-
+//put the filter here to keep the status even the <Mine> freshed.
 let page=1;
+const filter={      
+    fav:false,
+    template:"",
+}
+
 function Mine(props) {
     const size = {
         row: [12],
@@ -31,17 +29,10 @@ function Mine(props) {
     }
 
     let [list, setList] = useState([]);
-    let [info, setInfo] = useState("");
-
     let [progress, setProgress]=useState("");
     let [done, setDone] = useState(false);
-
-    //let [page, setPage]=useState(1);
     let [sum, setSum]=useState(1);
 
-    let [filter, setFilter]=useState({fav:false,template:""});  //filter value, get list by this filter
-
-    //const dom_id = "pre_mine";
     const self = {
         clickClean: (ev) => {
             console.log(`Clean the unfav list of this page.`);
@@ -65,35 +56,25 @@ function Mine(props) {
             self.autoshow();
         },
         clickSingle: (name) => {
-            const fa = Local.get("login");
-            if (!fa) return false;
-            const login = JSON.parse(fa);
-            const addr = login.address;
-            const ls = Local.get("list");
-            const my = JSON.parse(ls);
-            const full = my[addr];
-            for(let i=0;i<full.length;i++){
-                const dt=full[i];
-                if(dt.anchor===name){
-                    return props.dialog(<Result 
-                        name={dt.anchor} 
-                        hash={dt.hash} 
-                        block={dt.block} 
-                        offset={dt.offset}
-                        template={dt.template.hash}
-                        price={!dt.price?0:dt.price}
-                        fav={dt.fav}
-                        back={true} 
-                        dialog={props.dialog}
-                    />, "iNFT Details");
-                }
-            }
+            const dt=INFT.single.target(name);
+            if(!dt) return false;
 
+            return props.dialog(<Result 
+                name={dt.anchor} 
+                hash={dt.hash} 
+                block={dt.block} 
+                offset={dt.offset}
+                template={dt.template.hash}
+                price={!dt.price?0:dt.price}
+                fav={dt.fav}
+                back={true} 
+                dialog={props.dialog}
+            />, "iNFT Details");
         },
         clickFav:(ev)=>{
             page=1;  //reset page value
             filter.fav=!filter.fav;
-            setFilter(tools.clone(filter));
+            //setFilter(tools.clone(filter));
             self.autoshow();
         },
         autoshow:()=>{
@@ -104,7 +85,7 @@ function Mine(props) {
                 setSum(nav.sum);
                 setDone(true);
                 setList(dt.data);
-            });
+            },filter);
         }
     }
 
@@ -129,8 +110,6 @@ function Mine(props) {
                     self.clickFav();
                 }}/>
             </Col>
-
-            <Col sm={size.row[0]} xs={size.row[0]}>{info}</Col>
             <div className="limited">
                 <Col hidden={done} sm={size.row[0]} xs={size.row[0]}>
                     <h4>{progress}</h4>
@@ -139,7 +118,6 @@ function Mine(props) {
                     <Row >
                         {list.map((row, index) => (
                             <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]} onClick={(ev) => {
-                                //self.clickSingle((page-1)*config.page_count+index);
                                 self.clickSingle(row.anchor);
                             }}>
                                 <Row>
@@ -176,11 +154,11 @@ function Mine(props) {
                 </Row>
             </Col>
 
-            <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-md btn-primary" onClick={(ev) => {
                     self.clickClean(ev);
                 }}>Clean Unfav</button>
-            </Col>
+            </Col> */}
         </Row>
     )
 }
