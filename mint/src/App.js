@@ -34,12 +34,36 @@ function App() {
       update++;
       setUpdate(update);
     },
-    checking: () => {
-      //const req=window.location.hash;
+    decode:(str)=>{
+      if(!str || str==="#") return false;
+      const pure=str.slice(1,str.length);
+      const arr=pure.split("/");
 
-      const io = QR.decode(window.location.hash);
-      window.location.hash = "";        //clear the hash after decode
-      //console.log(io);
+      const io={
+        act:"template",
+        param:[],
+      }
+      switch (arr.length) {
+        case 1:
+          if(arr[0].length!==59) return false;
+          io.param.push(arr[0]);
+          break;
+
+        case 2:
+          io.act=arr[0];
+          io.param.push(arr[1]); 
+          break;
+
+        default:
+
+          break;
+      }
+      return io;
+    },
+    checking: () => {
+      const io = self.decode(window.location.hash);
+      console.log(io);
+      //window.location.hash = "";        //clear the hash after decode
       if (io === false) return true;
       plugin.run(io.act, io.param);
     },
@@ -47,6 +71,9 @@ function App() {
       for (var key in QR) {
         plugin.reg(key, QR[key]);
       }
+      
+      const UI={dialog:self.dialog,toast:null,fresh:self.fresh}
+      plugin.setUI(UI);
       console.log(`QR function set successful.`);
       return true;
     },

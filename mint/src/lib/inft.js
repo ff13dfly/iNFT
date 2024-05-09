@@ -227,7 +227,6 @@ const self = {
 
         //2.cache basic setting of mint
         basic=funs.getINFTMintDetail(addr);
-        //console.log(filter,map,basic);
     },
 
     list:(page,step,ck,filter_cfg)=>{
@@ -337,18 +336,8 @@ const self = {
 
             
         },
-
-        // transfer:(password,to,amount,ck)=>{
-        //     const fa = Local.get("login");
-        //     if (fa === undefined) return false;
-        //     Chain.load(fa, password, (pair) => {
-        //         if (pair.error !== undefined) return false;
-        //         Network("tanssi").transfer(pair,to,amount,(status)=>{
-        //             console.log(status);
-        //         });
-        //     });
-        // },
-
+    
+        
         //get current task
         detail:(key)=>{
             const addr=funs.getAddress();
@@ -359,6 +348,9 @@ const self = {
                 return data[key];
             }
             return data;
+        },
+        status:()=>{
+            return self.mint.detail();
         },
         update:(obj)=>{
             const key="mint";

@@ -39,6 +39,7 @@ function Template(props) {
         clickAdd: (ev) => {
             if(!alink) return false;
             TPL.add(alink,(res)=>{
+                setAlink("")
                 self.showTemplate();
             });
         },

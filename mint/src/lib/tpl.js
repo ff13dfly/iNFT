@@ -96,8 +96,13 @@ const self = {
     view:(cid,ck)=>{
         //console.log(cid,Data.exsistHash("cache".cid));
         if(!Data.exsistHash("cache",cid)){
+            //const list=[cid];
             funs.cacheIPFS([cid],(dels)=>{
-                self.view(cid.ck);
+                if(dels.length!==0){
+                    return ck && ck(false);
+                }else{
+                    return self.view(cid,ck);
+                }
             });
         }else{
             const tpl=Data.getHash("cache", cid);
@@ -128,11 +133,18 @@ const self = {
         Local.set("template",JSON.stringify(nlist));
     },
     add:(cid,ck,head)=>{
+        console.log(`Ready to add template`);
         //check data from IPFS first
-        funs.cacheIPFS([cid],(dels)=>{
-            if(dels.length!==0) return ck && ck(false);
+        self.view([cid],(dt)=>{
+            if(!dt) return ck && ck(false);
+            const narr=self.list();
 
-            const arr=self.list();
+            //1.check wether here
+            const arr=[];
+            for(let i=0;i<narr.length;i++){
+                const row=narr[i];
+                if(row.alink!==cid) arr.push(row);
+            }
             const ntpl=funs.getFormat(cid);
             head?arr.unshift(ntpl):arr.push(ntpl);
             Local.set("template",JSON.stringify(arr));

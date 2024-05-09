@@ -1,42 +1,25 @@
 import Viewer from "../component/viewer";
 import Detail from "../component/detail";
+import TPL from "../lib/tpl";
 
-const self={
-    view:(anlink)=>{
-      //setTitle("iNFT viewer");
-      //setContent(<Viewer anchor={anlink}/>);
-      //setShow(true);
+const self={    
+    view:(UI,alink)=>{
+
     },
-    template:(cid)=>{
-      //setTitle("iNFT template previewer");
-      //setContent(<Detail alink={cid} dialog={self.dialog} fresh={self.fresh}/>)
-      //setShow(true);
-    },
-    decode:(str)=>{
-      if(!str || str==="#") return false;
-      const pure=str.slice(1,str.length);
-      const arr=pure.split("/");
+    template:(UI,cid)=>{
+      //1.save the template to local as the first one;
+      TPL.view(cid,(def)=>{
+        if(!def) return false;
 
-      const io={
-        act:"template",
-        param:[],
-      }
-      switch (arr.length) {
-        case 1:
-          if(arr[0].length!==59) return false;
-          io.param.push(arr[0]);
-          break;
+        TPL.add(cid,()=>{
+          
+        },true);
 
-        case 2:
-          io.act=arr[0];
-          io.param.push(arr[1]); 
-          break;
-
-        default:
-
-          break;
-      }
-      return io;
+         //2.show details of the template
+        if(UI.dialog){
+          UI.dialog(<Detail alink={cid} dialog={UI.dialog} fresh={UI.fresh}/>,"iNFT template previewer");
+        }
+      });
     },
   }
 

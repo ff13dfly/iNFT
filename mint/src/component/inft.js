@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Render from "../lib/render";
 import Data from "../lib/data";
+import TPL from "../lib/tpl";
 
 /* iNFT render component parameters
 *   @param  {string}    id              //the canvas dom ID
@@ -39,14 +40,13 @@ function RenderiNFT(props) {
 
         autoFresh:(ck)=>{
             if(props.template!==undefined){
-                //setHidden(false);
-                const def=Data.getHash("cache",props.template);
-                def.cid=props.template;
-                self.show(props.id,props.hash,def,props.offset,ck);
+                TPL.view(props.template,(def)=>{
+                    if(!def) return false;
+                    self.show(props.id,props.hash,def,props.offset,ck);
+                });
             }else{
                 const tpl=Data.get("template");
                 if(tpl!==null){
-                    //setHidden(false);
                     self.show(props.id,props.hash,tpl,props.offset,ck);
                 }else{
                     return setTimeout(()=>{

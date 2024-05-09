@@ -65,20 +65,18 @@ const Render= {
         return RDS[id];
     },
     active:(pen,w,h,sx,sy,color,width)=>{
-        if(color!==undefined){
-            pen.strokeStyle=color;
-        }
-        if(width!==undefined){
-            pen.lineWidth=width;
-        }
+        if(color!==undefined) pen.strokeStyle=color;
+        if(width!==undefined) pen.lineWidth=width;
+
+        //FIXME,here to calc the active rectagle to avoid overrange the canvas
         pen.beginPath();
         pen.moveTo(sx,sy);
         pen.lineTo(sx+w,sy);
         pen.lineTo(sx+w,sy+h);
         pen.lineTo(sx,sy+h);
-        //pen.lineTo(sx,sy);
         pen.closePath();
         pen.stroke();
+
         if(color!==undefined){
             pen.strokeStyle="#000000";
         }
@@ -144,8 +142,6 @@ const Render= {
     //when need to animation for iNFT, try self.preview
     thumb:(hash,bs64,parts,basic,offset,ck,hightlight)=>{
         //0.check parameters before rendering;
-
-
         const container_id=config.container;
         const canvas_id="thumb_canvas"
 
@@ -154,6 +150,7 @@ const Render= {
         if(con===null){
             const div = document.createElement('div');
             div.id = container_id;
+            div.style.display="none";
             document.body.appendChild(div);
             con = document.getElementById(container_id);
         }
