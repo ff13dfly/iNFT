@@ -4,7 +4,7 @@ const RDS={};   //缓存render的方法
 const config={
     container:"thumb_handle",
     background:"#EEEEEE",
-    step_max:18,                //animation showing step
+    step_max:25,                //animation showing step
     animation:80,               //interval of animation
 };
 
@@ -143,6 +143,7 @@ const Render= {
         img.src = bs64;
         img.onload = (e) => {
             if(animate){
+                self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
                 self.animate(hash, pen, img, parts, basic,(offset===undefined?[]:offset),()=>{
                     self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
                 });

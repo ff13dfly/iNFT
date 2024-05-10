@@ -54,6 +54,8 @@ function Hash(props) {
     ]
 
     let [list, setList]=useState([]);
+    //let [grid, setGrid]=useState(16);
+
     let timer=null;
 
     const self={
@@ -171,6 +173,8 @@ function Hash(props) {
             if(timer!==null) clearInterval(timer);
             const pure= props.hash.slice(2);
             const matrix=self.toArray(pure,config.grid);
+            //setGrid(matrix.group[0].length);
+
             const tpl=Data.get("template");
             if(tpl!==null){
                 matrix.group=self.calcPosition(matrix.group,tpl.parts,config.grid); 
@@ -183,7 +187,6 @@ function Hash(props) {
     }
 
     useEffect(() => {
-        //self.fresh();
         if(!running){
             self.fresh();
             pre_hash=props.hash;        //set to default hash
@@ -200,7 +203,7 @@ function Hash(props) {
             {list.map((row, index) => (
                 <div key={index}>
                     <RowHash color={row.color} data={row.section}/>
-                    <RowPart group={row.group} data={row.section} index={""}/>
+                    <RowPart group={row.group} data={row.section} active={props.active}/>
                 </div>
             ))}
         </Row>

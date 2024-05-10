@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import Render from "../lib/render";
-import Data from "../lib/data";
 import TPL from "../lib/tpl";
 
 /* iNFT render component parameters
@@ -11,6 +10,7 @@ import TPL from "../lib/tpl";
 *   @param  {string}    [template]      //the template CID for rendering
 *   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
 *   @param  {boolean}   [animate]       //animate support
+*   @param  {function}  [callback]      //callback function 
 */
 
 function RenderiNFT(props) {
@@ -19,9 +19,6 @@ function RenderiNFT(props) {
     let [height, setHeight] = useState(400);
     let [hidden, setHidden] =useState(true);
 
-    let [bs64, setBS64] = useState("image/logo.png");
-
-    //const dom_id = "inft_previewer";
     const self={
 
         show:(id,hash,tpl,offset,ck)=>{
@@ -46,12 +43,12 @@ function RenderiNFT(props) {
                     self.show(props.id,props.hash,def,props.offset,ck);
                 });
             }else{
-                const tpl=Data.get("template");
+                const tpl=TPL.current();
                 if(tpl!==null){
                     self.show(props.id,props.hash,tpl,props.offset,ck);
                 }else{
                     return setTimeout(()=>{
-                        self.autoFresh();
+                        self.autoFresh(ck);
                     },200)
                 }
             }
@@ -59,19 +56,17 @@ function RenderiNFT(props) {
     }
     
     useEffect(() => {
-        //console.log(JSON.stringify(props));
-        //console.log(props.offset);
         self.autoFresh(()=>{
+            //console.log(`Freshed, ready to run callback.`);
             setHidden(false);
         });
-        
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
     const cmap={width:"100%"}
     return (
         <div>
             <canvas hidden={hidden} width={width} height={height} id={props.id} style={cmap}></canvas>
-            <img hidden={!hidden}  src={bs64} alt="iNFT logo" style={cmap}/>
+            <img hidden={!hidden}  src={"image/logo.png"} alt="iNFT logo" style={cmap}/>
         </div>
     )
 }
