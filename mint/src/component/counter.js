@@ -1,3 +1,4 @@
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
@@ -55,15 +56,19 @@ function Counter(props) {
     }, [props.start]);
 
     return (
-        <div className="circle-box">
-            <div className="circle-item right">
-                <div className={circleRight}></div>
-            </div>
-            <div className="circle-item left">
-                <div className={circleLeft}></div>
-            </div>
-            <p className="circle-text">{info}</p>
-        </div>
+        <Row className="pt-2">
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <div className="circle-box">
+                    <div className="circle-item right">
+                        <div className={circleRight}></div>
+                    </div>
+                    <div className="circle-item left">
+                        <div className={circleLeft}></div>
+                    </div>
+                    <p className="circle-text">{info}</p>
+                </div>
+            </Col>
+        </Row>
     )
 }
 

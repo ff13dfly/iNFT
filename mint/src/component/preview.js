@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import Hash from "./hash";
 import Counter from "./counter";
 import RenderiNFT from "./inft";
+import AnimateHash from "./hash_animate";
 
 import Network from "../network/router";
 
 function Preview(props) {
     const size = {
         row: [12],
-        header:[4,8],
+        header:[3,9],
     };
 
     let [block, setBlock] = useState(0);
@@ -48,9 +49,12 @@ function Preview(props) {
             <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>
             </Col>
-            <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
+            <Col className="pt-1 text-center" sm={size.header[1]} xs={size.header[1]}>
                 <Hash hash={hash} at={4}/>
             </Col>
+            {/* <Col className="text-center pb-1" sm={size.row[0]} xs={size.row[0]}>
+                <AnimateHash hash={hash}/>
+            </Col> */}
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
                 Block {block.toLocaleString()}, Tanssi Network
             </Col>
