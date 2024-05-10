@@ -5,10 +5,11 @@ import Data from "../lib/data";
 import RowHash from "./row_hash";
 import RowPart from "./row_part";
 
-//show the hash used by iNFT.
+import tools from "../lib/tools";
 
-let from="";
-let to="";
+//show the hash used by iNFT.
+let running=false;      //running status, if get new hash, set to true;
+let pre_hash=null;      //default hash
 
 function Hash(props) {
     const size = {
@@ -19,10 +20,42 @@ function Hash(props) {
         single:16,              //single char width
         grid:16,                //the amount of a row
         warning:"#ffc107",      //warning color
-        animation:3000,         //slide in animation total time
+        animation:80,           //slide in animation total time
+        indentation:3,
+        
     };
 
+    const animate_group=[     //animation table
+        [[16,0],[16,0],[16,0],[16,0]],      //step 0
+        [[15,1],[16,0],[16,0],[16,0]],      //step 1
+        [[14,2],[16,0],[16,0],[16,0]],      //step 2
+        [[13,3],[16,0],[16,0],[16,0]],      //step 3
+        [[12,4],[15,1],[16,0],[16,0]],      //step 4
+        [[11,5],[14,2],[16,0],[16,0]],      //step 5
+        [[10,6],[13,3],[16,0],[16,0]],      //step 6
+        [[9,7],[12,4],[15,1],[16,0]],      //step 7
+        [[8,8],[11,5],[14,2],[16,0]],      //step 8
+        [[7,9],[10,6],[13,3],[16,0]],      //step 9
+        [[6,10],[9,7],[12,4],[15,1]],      //step 10
+        [[5,15],[8,8],[11,5],[14,2]],      //step 11
+        [[4,14],[7,9],[10,6],[13,3]],      //step 12
+        [[3,13],[6,10],[9,7],[12,4]],      //step 13
+        [[2,14],[5,11],[8,8],[11,5]],      //step 14
+        [[1,15],[4,12],[7,9],[10,6]],      //step 15
+        [[0,16],[3,13],[6,10],[9,7]],      //step 16
+        [[0,16],[2,14],[5,11],[8,8]],      //step 17
+        [[0,16],[1,15],[4,12],[7,9]],      //step 18
+        [[0,16],[0,16],[3,13],[6,10]],      //step 19
+        [[0,16],[0,16],[2,14],[5,11]],      //step 20
+        [[0,16],[0,16],[1,15],[4,12]],      //step 21
+        [[0,16],[0,16],[0,16],[3,13]],      //step 22
+        [[0,16],[0,16],[0,16],[2,14]],      //step 23
+        [[0,16],[0,16],[0,16],[1,15]],      //step 24
+        [[0,16],[0,16],[0,16],[0,16]],      //step 24
+    ]
+
     let [list, setList]=useState([]);
+    let timer=null;
 
     const self={
         //convert single string hash to render structure.
@@ -83,6 +116,51 @@ function Hash(props) {
             }
             return arr;
         },
+        combine:(m_now,m_old,pointer)=>{
+            const arr=[];
+            for(let i=0;i<m_now.color.length;i++){
+                const sec=pointer[i];
+
+                const color=[];
+                const group=[];
+                for(let ii=0;ii<16;ii++){
+                    if(ii<sec[0]){
+                        group.push(m_old.group[i][ii]);
+                        color.push(m_old.color[i][ii]);
+                    }else{
+                        group.push(m_now.group[i][ii]);
+                        color.push(m_now.color[i][ii]);
+                    } 
+                }
+
+                const atom={
+                    group: group,
+                    section:(m_old.section[i].slice(16-sec[0],16)+m_now.section[i].slice(0,sec[1])),
+                    color:color,
+                }
+                arr.push(atom)
+            }
+            return arr;
+        },
+        animate:(hash_now,ck)=>{
+            const pure_now= hash_now.slice(2);
+            const matrix_now=self.toArray(pure_now,config.grid);
+            const pure_old= pre_hash.slice(2);
+            const matrix_old=self.toArray(pure_old,config.grid);
+
+
+            let step=0;     //major animation actions
+            timer=setInterval(()=>{
+                if(step>=animate_group.length){
+                    pre_hash=hash_now;
+                    clearInterval(timer);
+                    return ck && ck();
+                } 
+                const alist=self.combine(tools.clone(matrix_now),tools.clone(matrix_old),animate_group[step]);
+                setList(alist);
+                step++;
+            },config.animation);
+        },
 
         //convert the interval to ats;
         speed:(n,step)=>{
@@ -91,6 +169,7 @@ function Hash(props) {
         },
 
         fresh:()=>{
+            if(timer!==null) clearInterval(timer);
             const pure= props.hash.slice(2);
             const matrix=self.toArray(pure,config.grid);
             const tpl=Data.get("template");
@@ -105,16 +184,24 @@ function Hash(props) {
     }
 
     useEffect(() => {
-        self.fresh();
-
-    }, [props.update,props.hash]);
+        //self.fresh();
+        if(!running){
+            self.fresh();
+            pre_hash=props.hash;        //set to default hash
+            running=true;
+        }else{
+            self.animate(props.hash,()=>{
+                self.fresh();
+            });
+        }
+    }, [props.hash]);
 
     return (
         <Row className="unselect">
             {list.map((row, index) => (
                 <div key={index}>
                     <RowHash color={row.color} data={row.section}/>
-                    <RowPart group={row.group} data={row.section}/>
+                    <RowPart group={row.group} data={row.section} index={""}/>
                 </div>
             ))}
         </Row>

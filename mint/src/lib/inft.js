@@ -7,8 +7,7 @@ import TPL from "./tpl";
 //!important, page starts from 0 here;
 //!important, "raw" save the data the same as Localstorage, then the thumbs are cached on "imgs"
 
-let basic=null;     //basic iNFTs parameters
-let backup=[];      //backup of iNFTs
+
 let raw=[];         //raw list of iNFT, copy of localstorage data
 const map={};       //iNFT kv cache;  {name:"INDEX_IN_RAW"}
 const imgs={};      //images cache by name, big one.
@@ -245,7 +244,7 @@ const funs={
         return true;
     },
     init:()=>{     //reset cache
-        backup=[];
+        //backup=[];
         raw=[];
         filter.fav=[];
         filter.selling=[];
@@ -261,7 +260,7 @@ const self = {
         if(funs.cache(addr)) funs.analysis();
 
         //2.cache basic setting of mint
-        basic=funs.getINFTMintDetail(addr);
+        funs.getINFTMintDetail(addr);
     },
 
     list:(page,step,ck,filter_cfg)=>{

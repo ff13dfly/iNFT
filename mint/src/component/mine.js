@@ -125,7 +125,7 @@ function Mine(props) {
                                         <img className="mine"  src={row.thumb} alt="" />
                                     </Col>
                                     <Col className="pt-1" sm={size.detail[0]} xs={size.detail[0]}>
-                                        {row.fav?<FaRegHeart/>:""} <span>{row.block.toLocaleString()}</span> 
+                                        {row.fav?<FaRegHeart/>:""} <small>{row.block.toLocaleString()}</small> 
                                     </Col>
                                     <Col className="pt-1" sm={size.detail[1]} xs={size.detail[1]}>
                                         

@@ -73,10 +73,8 @@ function RowPart(props) {
     return (
         <Col className="part" sm={size.row[0]} xs={size.row[0]}>
             {parts.map((row, index) => (
-                <Badge key={index} style={{marginLeft:`${row.position}px`,width:`${config.size}px`}}>#{row.index}</Badge>
+                <Badge className={props.index===index?"bg-danger":""} key={index} style={{marginLeft:`${row.position}px`,width:`${config.size}px`}}>#{row.index}</Badge>
             ))}
-            {/* <Badge style={{marginLeft:"50px"}}>#2</Badge>
-            <Badge style={{marginLeft:"84px"}}>#3</Badge> */}
         </Col>
     )
 }
