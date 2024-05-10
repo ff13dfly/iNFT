@@ -4,6 +4,8 @@ const RDS={};   //缓存render的方法
 const config={
     container:"thumb_handle",
     background:"#EEEEEE",
+    step_max:18,                //animation showing step
+    animation:80,               //interval of animation
 };
 
 const self={
@@ -15,42 +17,75 @@ const self={
         pen.fillStyle=color===undefined?config.background:color;
 		pen.fillRect(0,0,w,h);
     },
+    getImageByPart:(part,hash,offset,cell,grid)=>{
+        //0.get the image part from parameters
+        const [hash_start, hash_step, amount, tpl_offset] = part.value;
+        const [gX, gY, eX, eY] = part.img;
+        const [px, py] = part.position;
+        const [zx, zy] = part.center;
+
+        //1.calc the index of image
+        const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) 
+            + (!tpl_offset?0:parseInt(tpl_offset))
+            + (!offset?0:parseInt(offset));
+        const index = num % amount;
+
+        //2.get the orginal image part and draw;
+        const max = grid[0] / (1 + eX);
+        const br = Math.floor((index+gX)/max);
+        const cx = cell[0] * (eX + 1) * ((index+gX) % max);
+        const cy = cell[1] * gY + br * cell[1] * (1 + eY);
+        const dx = cell[0] * (eX + 1);
+        const dy = cell[1] * (eY + 1);
+        const vx = px - zx * cell[0] * (1 + eX);
+        const vy = py - zy * cell[1] * (1 + eY);
+        return [
+            cx,     //cut start x
+            cy,     //cut start y
+            dx,     //cut part width
+            dy,     //cut part height
+            vx,     //draw position x
+            vy      //draw position y
+        ];
+    },
+    animate:(hash, pen, img, parts, tpl, offset,ck,count)=>{
+        if(!count) count=0;
+        if(count>=config.step_max) return ck && ck();
+        count++;
+        //console.log(`Ready to rending...`);
+        const { cell, grid } = tpl;
+        const multi = 1;    //solve Apple device here.
+        const rate=count/config.step_max;
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            const [cx,cy,dx,dy,vx,vy]=self.getImageByPart(part,hash,(!offset[i]?0:parseInt(offset[i])),cell,grid);
+            pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx*rate, dy*rate);
+        }
+
+        setTimeout(()=>{
+            self.animate(hash, pen, img, parts, tpl, offset,ck,count);
+        },config.animation); 
+    },
     decode: (hash, pen, img, parts, tpl, offset,hightlight,ck) => {
         const { cell, grid } = tpl;
-        //const multi=window.devicePixelRatio;
         const multi = 1;    //solve Apple device here.
         let cache=null;
         for (let i = 0; i < parts.length; i++) {
-            //get the image part from parameters
+            //0.get the image part from parameters
             const part = parts[i];
-            const [hash_start, hash_step, amount, tpl_offset] = part.value;
-            const [gX, gY, eX, eY] = part.img;
-            const [px, py] = part.position;
-            const [zx, zy] = part.center;
-
-            const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) 
-                + (!tpl_offset?0:parseInt(tpl_offset))
-                + (!offset[i]?0:parseInt(offset[i]));
-            const index = num % amount;     //图像的位次
-            const max = grid[0] / (1 + eX);
-            const br = Math.floor((index+gX)/max);
-
-            const cx = cell[0] * (eX + 1) * ((index+gX) % max);
-            const cy = cell[1] * gY + br * cell[1] * (1 + eY);
-            const dx = cell[0] * (eX + 1);
-            const dy = cell[1] * (eY + 1);
-            const vx = px - zx * cell[0] * (1 + eX);
-            const vy = py - zy * cell[1] * (1 + eY);
+            const [cx,cy,dx,dy,vx,vy]=self.getImageByPart(part,hash,(!offset[i]?0:parseInt(offset[i])),cell,grid);
             pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
 
+            //3.if hightlight, set to cache;
+            //TODO, support hightlight array.
             if (hightlight === i) {
                 cache = [dx, dy, vx, vy, "#FF0000", 1];
             }
+        }
 
-            if (cache !== null) {
-                const [dx, dy, vx, vy, color, pw] = cache
-                Render.active(pen, dx, dy, vx, vy, color, pw);
-            }
+        if (cache !== null) {
+            const [dx, dy, vx, vy, color, pw] = cache
+            Render.active(pen, dx, dy, vx, vy, color, pw);
         }
         return ck && ck();
     },
@@ -103,11 +138,17 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         pen.fillRect(0,0,w,h);
     },
-    preview:(pen,bs64,hash,parts,basic,offset,hightlight,ck)=>{
+    preview:(pen,bs64,hash,parts,basic,offset,hightlight,ck,animate)=>{
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
-            self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);   
+            if(animate){
+                self.animate(hash, pen, img, parts, basic,(offset===undefined?[]:offset),()=>{
+                    self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
+                });
+            }else{
+                self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
+            }
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck)=>{

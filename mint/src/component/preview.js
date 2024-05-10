@@ -44,7 +44,7 @@ function Preview(props) {
     return (
         <Row className="pt-2">
             <Col className="text-center pb-1" sm={size.row[0]} xs={size.row[0]}>
-                <RenderiNFT hash={hash} offset={[]} id={"pre_home"}/>
+                <RenderiNFT hash={hash} offset={[]} id={"pre_home"} animate={true}/>
             </Col>
             <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>

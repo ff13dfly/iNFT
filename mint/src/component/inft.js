@@ -10,6 +10,7 @@ import TPL from "../lib/tpl";
 *   @param  {array}     [offset]        //customer offset array for rendering
 *   @param  {string}    [template]      //the template CID for rendering
 *   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
+*   @param  {boolean}   [animate]       //animate support
 */
 
 function RenderiNFT(props) {
@@ -34,8 +35,8 @@ function RenderiNFT(props) {
                 grid: tpl.grid,
                 target: tpl.size
             };
-            //Render.clear(id);
-            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck);
+            const ani=!props.animate?false:true
+            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck,ani);
         },
 
         autoFresh:(ck)=>{

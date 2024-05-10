@@ -22,7 +22,6 @@ function Hash(props) {
         warning:"#ffc107",      //warning color
         animation:80,           //slide in animation total time
         indentation:3,
-        
     };
 
     const animate_group=[     //animation table
