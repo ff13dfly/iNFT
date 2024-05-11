@@ -13,6 +13,8 @@ import TPL from "../lib/tpl";
 *   @param  {function}  [callback]      //callback function 
 */
 
+let pre_hash="";
+
 function RenderiNFT(props) {
 
     let [width, setWidth] = useState(400);
@@ -20,7 +22,6 @@ function RenderiNFT(props) {
     let [hidden, setHidden] =useState(true);
 
     const self={
-
         show:(id,hash,tpl,offset,ck)=>{
             setWidth(tpl.size[0]);
             setHeight(tpl.size[1]);
@@ -33,6 +34,7 @@ function RenderiNFT(props) {
                 target: tpl.size
             };
             const ani=!props.animate?false:true
+            Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck,ani);
         },
 
@@ -59,6 +61,7 @@ function RenderiNFT(props) {
         self.autoFresh(()=>{
             //console.log(`Freshed, ready to run callback.`);
             setHidden(false);
+            pre_hash=props.hash;
         });
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 

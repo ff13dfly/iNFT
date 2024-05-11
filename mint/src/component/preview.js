@@ -16,7 +16,8 @@ let animate=true;   //wether iNFT render animation
 function Preview(props) {
     const size = {
         row: [12],
-        header:[3,9],
+        header:[4,8],
+        single:[1,10,1],
     };
 
     let [block, setBlock] = useState(0);
@@ -33,6 +34,10 @@ function Preview(props) {
                 return false;
             } 
             const tpl=TPL.current();
+            if(tpl===null) return setTimeout(()=>{
+                self.randomActive();
+            },2000);
+            
             setActive(tools.rand(0,tpl.parts.length-1));       //be set multi times, no sure why
             return setTimeout(()=>{
                 self.randomActive();
@@ -79,10 +84,17 @@ function Preview(props) {
                     }}
                     />
             </Col>
+            {/* <Col className="pt-1" sm={size.single[0]} xs={size.single[0]}>
+
+            </Col>
+            <Col className="pt-1" sm={size.single[1]} xs={size.row[1]}>
+                <Hash hash={hash} active={active}/>
+            </Col> */}
             <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>
             </Col>
-            <Col className="pt-1 text-center" sm={size.header[1]} xs={size.header[1]}>
+            <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
+                
                 <Hash hash={hash} active={active}/>
             </Col>
             <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>

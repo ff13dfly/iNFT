@@ -14,7 +14,7 @@ function Counter(props) {
 
     let [circleLeft,setLeft]=useState("circle-pro leftstatic");
     let [circleRight,setRight]=useState("circle-pro rightstatic");
-    let [info,setInfo]=useState("Loading...");
+    let [info,setInfo]=useState("");
 
     const self = {
         start:()=>{

@@ -19,7 +19,7 @@ const self={
     },
     getImageByPart:(part,hash,offset,cell,grid)=>{
         //0.get the image part from parameters
-        const [hash_start, hash_step, amount, tpl_offset] = part.value;
+        const [hash_start, hash_step, divide, tpl_offset] = part.value;
         const [gX, gY, eX, eY] = part.img;
         const [px, py] = part.position;
         const [zx, zy] = part.center;
@@ -28,7 +28,7 @@ const self={
         const num = parseInt("0x" + hash.substring(hash_start + 2, hash_start + 2 + hash_step)) 
             + (!tpl_offset?0:parseInt(tpl_offset))
             + (!offset?0:parseInt(offset));
-        const index = num % amount;
+        const index = num % divide;
 
         //2.get the orginal image part and draw;
         const max = grid[0] / (1 + eX);
@@ -59,7 +59,15 @@ const self={
         for (let i = 0; i < parts.length; i++) {
             const part = parts[i];
             const [cx,cy,dx,dy,vx,vy]=self.getImageByPart(part,hash,(!offset[i]?0:parseInt(offset[i])),cell,grid);
-            pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx*rate, dy*rate);
+            
+            const divide=part.value[2]
+            if(divide>1){
+                const rw=dx*rate;
+                const rh=dy*rate;
+                const rx=vx-0.5*rw;
+                const ry=vy-0.5*rh;
+                pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy,rw, rh);
+            }
         }
 
         setTimeout(()=>{
@@ -143,7 +151,7 @@ const Render= {
         img.src = bs64;
         img.onload = (e) => {
             if(animate){
-                self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
+                //self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
                 self.animate(hash, pen, img, parts, basic,(offset===undefined?[]:offset),()=>{
                     self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
                 });

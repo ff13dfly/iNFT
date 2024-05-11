@@ -96,7 +96,7 @@ const funs={
         if(!funs.isFilter(cfg)){
             //no filter, just get the list of raw
             const len=raw.length;
-            if(len!==0){
+            if(!!len){
                 nav.total=len;
                 nav.sum=Math.ceil(len/step);
                 nav.start=(page-1)*step;
@@ -106,7 +106,7 @@ const funs={
         }else{
             if(cfg.fav){
                 const len=filter.fav.length;
-                if(len!==0){
+                if(!!len){
                     nav.from="fav";
                     nav.total=len;
                     nav.sum=Math.ceil(len/step);
@@ -217,8 +217,7 @@ const funs={
         if(!ls) return [];
         try {
             const ns=JSON.parse(ls);
-            //console.log(ns);
-            if(!ns[addr]) return false;
+            if(!ns[addr]) return [];
             return ns[addr];
         } catch (error) {
             return [];
@@ -265,10 +264,10 @@ const self = {
 
     list:(page,step,ck,filter_cfg)=>{
         const addr=funs.getAddress();
-        if(!addr) return false;
+        if(!addr) return ck && ck(false);
 
         const nav=funs.getNav(filter_cfg,page,step);
-        if(nav.empty) return {data:[],nav:nav};
+        if(nav.empty) return ck && ck({data:[],nav:nav});
 
         funs.getData(nav.start,nav.end,nav.from,(list)=>{
             return ck && ck({data:list,nav:nav});
@@ -354,18 +353,18 @@ const self = {
         }   
     },
     mint:{
-        start:(n)=>{
-            const addr=funs.getAddress();
-            if(!addr) return false;
-            const data=funs.getINFTMintDetail(addr);
+        // start:(n)=>{
+        //     const addr=funs.getAddress();
+        //     if(!addr) return false;
+        //     const data=funs.getINFTMintDetail(addr);
 
-        },
+        // },
 
         //update task status
-        progress:(index,value,ck)=>{      
-            const task=self.mint.task();
+        // progress:(index,value,ck)=>{      
+        //     const task=self.mint.task();
             
-        },
+        // },
     
         //get current task
         detail:(key)=>{

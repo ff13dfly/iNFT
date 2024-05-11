@@ -81,10 +81,19 @@ function Mine(props) {
             setDone(false);
             setProgress("Loading ...");
             INFT.list(page,config.page_count,(dt)=>{
-                const nav=dt.nav;
-                setSum(nav.sum);
-                setDone(true);
-                setList(dt.data);
+                console.log(dt)
+                if(dt===false){
+                    setProgress("Not login yet.");
+                }else{
+                    const nav=dt.nav;
+                    setSum(nav.sum);
+                    if(dt.data.length!==0){
+                        setDone(true);
+                        setList(dt.data);
+                    }else{
+                        setProgress("No iNFTs yet.");
+                    }
+                }
             },filter);
         }
     }
