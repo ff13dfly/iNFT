@@ -2,8 +2,16 @@ import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Header from "../components/header";
+import Board from "../components/board";
+import Slide from "../components/slide";
+import Latest from "../components/latest";
+import BannerMint from "../components/banner_mint";
+import Selling from "../components/selling";
+import BannerSelling from "../components/banner_selling";
+import Template from "../components/template";
+import BannerTemplate from "../components/banner_template";
 
-let font=14;
+import Footer from "../components/footer"
 
 function Home(props) {
     const size = {
@@ -25,11 +33,15 @@ function Home(props) {
     return (
         <div>
             <Header />
-            <Row className="pt-2">
-                <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
-                    Home main content
-                </Col>
-            </Row>
+            <Board />
+            <Slide />
+            <Latest />
+            <BannerMint />
+            <Selling />
+            <BannerSelling />
+            <Template />
+            <BannerTemplate />
+            <Footer />
         </div>
     )
 }
