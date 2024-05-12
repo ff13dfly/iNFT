@@ -9,6 +9,7 @@ import TPL from "../lib/tpl";
 *   @param  {array}     [offset]        //customer offset array for rendering
 *   @param  {string}    [template]      //the template CID for rendering
 *   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
+*   @param  {boolean}   [force]         //force to autofresh the iNFT
 *   @param  {boolean}   [animate]       //animate support
 *   @param  {function}  [callback]      //callback function 
 */
@@ -65,10 +66,19 @@ function RenderiNFT(props) {
     
     useEffect(() => {
         //!important, when animation is going on and the hash is not changed, fresh should be forbidden
-        if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
-            setHidden(false);
-            pre_hash=props.hash;
-        });
+        if(props.force){
+            self.autoFresh(()=>{
+                setHidden(false);
+                pre_hash=props.hash;
+            });
+        }else{
+            if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
+                setHidden(false);
+                pre_hash=props.hash;
+            });
+        }
+
+        
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
     const cmap={width:"100%"}

@@ -24,6 +24,7 @@ function Preview(props) {
     let [hash, setHash] = useState("0x000000000000000000000000000000000000000000000000000000000000000");
     let [start, setStart]=useState(0);
     let [active, setActive]=useState(0);
+    let [force, setForce]=useState(false);
 
     let first=true;
     let timer=null
@@ -39,6 +40,7 @@ function Preview(props) {
             },2000);
             
             setActive(tools.rand(0,tpl.parts.length-1));       //be set multi times, no sure why
+            setForce(true);
             return setTimeout(()=>{
                 self.randomActive();
             },2000);
@@ -47,6 +49,7 @@ function Preview(props) {
             setTimeout(() => {
                 Network("tanssi").subscribe("preview",(bk, bhash)=>{
                     animate=true;
+                    setForce(false);
                     if(!first){
                         setBlock(bk);
                         setHash(bhash);
@@ -77,12 +80,13 @@ function Preview(props) {
                     offset={[]} 
                     id={"pre_home"} 
                     hightlight={active} 
+                    force={force}
                     animate={animate}
                     callback={()=>{
                         animate=false;
                         self.randomActive();
                     }}
-                    />
+                />
             </Col>
             {/* <Col className="pt-1" sm={size.single[0]} xs={size.single[0]}>
 
