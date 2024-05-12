@@ -12,6 +12,14 @@ module.exports = {
         //"anchor://aabb/217148",
     ],
     faucet:"https://faucet.w3os.net",
+    agent:{
+        inft:[
+            "wss://wss.android.im",
+        ],
+        template:[
+            "https://ipfs.w3os.net/web3storage/"
+        ],
+    },
     unit:"$INFT",
     //version:20240101,
     version:20240102,

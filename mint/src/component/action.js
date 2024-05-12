@@ -149,8 +149,6 @@ function Action(props) {
                 const raw = self.getRaw(cid,offset);
                 const protocol = self.getProtocol();
 
-                //console.log(JSON.stringify(raw))
-
                 //3.update data and test writing.
                 target.now = 1;
                 self.updateProgress(index,target);
