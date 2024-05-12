@@ -36,9 +36,9 @@ function Action(props) {
             }
         },
 
-        getRaw: (tpl,offset) => {
+        getRaw: (cid,offset) => {
             return {
-                tpl: tpl.alink,          //ipfs cid
+                tpl: cid,          //ipfs cid
                 offset: !offset?[]:offset,
                 from: "ipfs",            //storage way
                 origin: "web3.storage",   //storage origianl
@@ -97,7 +97,7 @@ function Action(props) {
                 const mint_detail=INFT.mint.detail();
                 const multi=self.getMulti(mint_detail.template,tpl.cid);
 
-                mint_detail.task=self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.alink, multi);
+                mint_detail.task=self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.cid, multi);
                 mint_detail.index=parseInt(mint_detail.index)+multi;
                 INFT.mint.update(mint_detail);
                 self.runTask(pair, tpl);
@@ -109,6 +109,7 @@ function Action(props) {
             return tpls[cid].multi;
         },
         getTask: (prefix, pointer, template, n) => {
+            console.log(template);
             const arr = [];
             for (let i = 0; i < n; i++) {
                 arr.push({
@@ -145,15 +146,17 @@ function Action(props) {
                 const offset=(!detail.template || !detail.template[cid])?[]:detail.template[cid].offset
                 const target = task[index];
                 
-                const raw = self.getRaw(tpl,offset);
+                const raw = self.getRaw(cid,offset);
                 const protocol = self.getProtocol();
+
+                //console.log(JSON.stringify(raw))
 
                 //3.update data and test writing.
                 target.now = 1;
                 self.updateProgress(index,target);
 
                 //when more than one task, need closure to keep the index right.
-                ((task_index,target) => {
+                ((task_index,target,raw,protocol) => {
                     Network("tanssi").write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
                         if (process.error) {
                             setDisable(false);
@@ -172,7 +175,7 @@ function Action(props) {
                             self.updateProgress(task_index,target);
                         }
                     });
-                })(index,target);
+                })(index,target,raw,protocol);
             });
         },
         updateProgress:(index,data)=>{
