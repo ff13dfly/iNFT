@@ -141,7 +141,14 @@ function Detail(props) {
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col sm={size.thumb[0]} xs={size.thumb[0]}>
-                        <RenderiNFT hash={hash} offset={[]} id={"pre_template"} template={props.alink} hightlight={selected}/>
+                        <RenderiNFT 
+                            hash={hash} 
+                            offset={[]} 
+                            id={"pre_template"} 
+                            template={props.alink} 
+                            hightlight={selected}
+                            force={true}
+                        />
                     </Col>
                     <Col sm={size.thumb[1]} xs={size.thumb[1]}>
                         <Row>

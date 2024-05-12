@@ -175,6 +175,7 @@ function Result(props) {
                     id={dom_id}
                     template={!props.template?"":props.template} 
                     offset={!props.offset?[]:props.offset} 
+                    force={true}
                 />
             </Col>
             <Col className="pt-2" sm={size.fav[0]} xs={size.fav[0]}>

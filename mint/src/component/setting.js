@@ -242,7 +242,7 @@ function Setting(props) {
                         <SmallHash hash={hash} start={start} step={step} grid={8}/>
                     </Col>
                     <Col className="pt-2 text-center" sm={size.head[1]} xs={size.head[1]}>
-                        <RenderiNFT hash={hash} offset={list} id={"pre_setting"} hightlight={index}/>
+                        <RenderiNFT hash={hash} offset={list} id={"pre_setting"} hightlight={index} force={true}/>
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
                         <PartSection index={index} selected={order}/>

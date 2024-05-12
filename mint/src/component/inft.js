@@ -62,6 +62,13 @@ function RenderiNFT(props) {
                 }
             }
         },
+        calcWidth:()=>{
+            return {width:"100%"};
+            // return {
+            //     //width:"100%",
+            //     width:`${width/window.devicePixelRatio}px`,
+            // }
+        },
     }
     
     useEffect(() => {
@@ -81,11 +88,11 @@ function RenderiNFT(props) {
         
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
-    const cmap={width:"100%"}
+    
     return (
         <div>
-            <canvas hidden={hidden} width={width} height={height} id={props.id} style={cmap}></canvas>
-            <img hidden={!hidden}  src={"image/logo.png"} alt="iNFT logo" style={cmap}/>
+            <canvas hidden={hidden} width={width} height={height} id={props.id} style={self.calcWidth()}></canvas>
+            <img hidden={!hidden}  src={"image/logo.png"} alt="iNFT logo" style={{width:"100%"}}/>
         </div>
     )
 }
