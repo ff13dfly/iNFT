@@ -46,12 +46,12 @@ const funs={
 }
 
 const self = {
-    auto:(ck)=>{
+    auto:(ck,only_first)=>{
         const list=self.list(true);
         if(list===false){
             return self.add(config.default,self.auto);
         }else{
-            funs.cacheIPFS(list,(dels)=>{
+            funs.cacheIPFS(only_first?[list[0]]:list,(dels)=>{
                 //1. need to remove the dels templates
                 if(dels.length!==0){
                     console.log(`Need to remove invalid templates.`);

@@ -14,7 +14,7 @@ import TPL from "../lib/tpl";
 */
 
 let pre_hash="";
-
+let screen_lock=false;
 function RenderiNFT(props) {
 
     let [width, setWidth] = useState(400);
@@ -34,8 +34,14 @@ function RenderiNFT(props) {
                 target: tpl.size
             };
             const ani=!props.animate?false:true
-            Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
-            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,ck,ani);
+            if(ani){
+                Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
+                screen_lock=true;
+            } 
+            Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,()=>{
+                screen_lock=false;
+                return ck && ck();
+            },ani);
         },
 
         autoFresh:(ck)=>{
@@ -58,8 +64,8 @@ function RenderiNFT(props) {
     }
     
     useEffect(() => {
-        self.autoFresh(()=>{
-            //console.log(`Freshed, ready to run callback.`);
+        //!important, when animation is going on and the hash is not changed, fresh should be forbidden
+        if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
             setHidden(false);
             pre_hash=props.hash;
         });

@@ -98,9 +98,10 @@ function App() {
     VERSION.auto(config.version);   //run version update
 
     //1.cache iNFT templates
+    const only_first=true;
     TPL.auto(() => {
       self.fresh();
-    });
+    },only_first);
 
     //2.auto cache iNFT list
     INFT.auto();

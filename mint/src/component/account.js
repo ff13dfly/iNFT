@@ -7,6 +7,7 @@ import Local from "../lib/local";
 import tools from "../lib/tools";
 
 import Network from "../network/router";
+import INFT from "../lib/inft";
 
 import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
 
@@ -43,12 +44,14 @@ function Account(props) {
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
                 self.show();
+                INFT.auto();
                 props.fresh();
             })
         },
         clickLogout: (ev) => {
             Local.remove("login");
             setLogin(false);
+            INFT.auto();
             props.fresh();
         },
         clickDownload: (ev) => {
@@ -59,6 +62,7 @@ function Account(props) {
         clickCopy: (ev) => {
             Copy(address);
         },
+        //the icon recover function
         clickRecover: (key, at) => {
             if (!recover[key]) {
                 recover[key] = "text-info";
@@ -117,6 +121,7 @@ function Account(props) {
                         Local.set("login", e.target.result);
                         setLogin(true);
                         self.show();
+                        INFT.auto();
                         props.fresh();
                     } catch (error) {
                         setInfo("Not encry JSON file");

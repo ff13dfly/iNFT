@@ -64,9 +64,9 @@ const self={
             if(divide>1){
                 const rw=dx*rate;
                 const rh=dy*rate;
-                const rx=vx-0.5*rw;
-                const ry=vy-0.5*rh;
-                pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy,rw, rh);
+                const rx=vx+0.5*dx-0.5*rw;
+                const ry=vy+0.5*dy-0.5*rh;
+                pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, rx, ry,rw, rh);
             }
         }
 

@@ -81,7 +81,6 @@ function Mine(props) {
             setDone(false);
             setProgress("Loading ...");
             INFT.list(page,config.page_count,(dt)=>{
-                console.log(dt)
                 if(dt===false){
                     setProgress("Not login yet.");
                 }else{

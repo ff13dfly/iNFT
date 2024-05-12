@@ -224,7 +224,7 @@ const funs={
         }
     },
     cache:(addr)=>{
-        funs.init();
+        //funs.init();
         raw = funs.getRaw(addr);
         return true;
     },
@@ -248,11 +248,15 @@ const funs={
         filter.fav=[];
         filter.selling=[];
         filter.template={};
+        filter.other={};
     },
 }
 
 const self = {
     auto:()=>{
+        //0. reset the iNFT data;
+        funs.init();
+
         //1.cache all localstorage data to cache
         const addr=funs.getAddress();
         if(!addr) return false;
