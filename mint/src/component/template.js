@@ -172,7 +172,7 @@ function Template(props) {
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 <span>
                                 IPFS CID: <br />
-                                <strong>{tools.shorten(row.alink,7)}</strong> <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                                <strong>{tools.shorten(row.alink,5)}</strong> <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
                                     Copy(row.alink);
                                     self.clickRecover(`copy_${index}`);
                                 }}><FaCopy className={!recover[`copy_${index}`]?"":recover[`copy_${index}`]}/></button><br />

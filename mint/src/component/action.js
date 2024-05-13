@@ -62,10 +62,10 @@ function Action(props) {
             setDisable(!ev.target.value ? true : false);
         },
         clickSetting: () => {
-            props.dialog(<Setting />, "Mint setting");
+            props.dialog(<Setting />, "Mint Configure");
         },
         clickPanel: () => {
-            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint board");
+            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");
         },
         clickTask: () => {
             const fa = Local.get("login");
@@ -91,7 +91,7 @@ function Action(props) {
                     return false;
                 }
 
-                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint board");
+                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint Board");
 
                 const tpl=TPL.current();
                 const mint_detail=INFT.mint.detail();

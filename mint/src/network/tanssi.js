@@ -87,7 +87,7 @@ const self={
     },
     subscribe:(key,fun)=>{
         self.init(()=>{
-            if(subs[key]!==undefined) delete subs[key];
+            if(subs[key]!==undefined) delete subs[key];     //remove old function 
             subs[key]=fun;     //add the subcribe function to the map
         });
     },

@@ -116,7 +116,7 @@ function Result(props) {
             if (props.from && router[props.from]) {
                 props.dialog(router[props.from].content, router[props.from].title);
             } else {
-                props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT list");
+                props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");
             }
         },
         show: () => {

@@ -40,8 +40,8 @@ code {
 }
 
 .operation{
-  margin-top: 80px;
-  margin-bottom: 50px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 /* PC client support */
 @media screen and (max-width: 450px) {
@@ -61,8 +61,8 @@ code {
   }
 
   .modal-minter{
-    max-width: 430px;
-    margin-top: 65px;
+    max-width: 420px;
+    margin-top: 75px;
   }
 
   body{
@@ -76,6 +76,7 @@ code {
 /**************************************************************************/
 /******************************** Counter *********************************/
 /**************************************************************************/
+
 
 .countdown {
   width: 108px;
@@ -106,45 +107,90 @@ code {
 /**************************************************************************/
 /******************************* Hash Board *******************************/
 /**************************************************************************/
+
+@media screen and (min-width: 414px) {
+  .circle-box {
+    width: 90px;
+    height: 90px;
+  }
+  .circle-text{
+    width: 90px;
+    line-height: 90px;
+  }
+
+  .circle-item {
+    width: 45px;
+    height: 90px;
+  }
+
+  .circle-pro{
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media screen and (max-width: 414px) {
+  .circle-box {
+    width: 70px;
+    height: 70px;
+  }
+  .circle-text{
+    width: 70px;
+    line-height: 70px;
+  }
+
+  .circle-item {
+    width: 35px;
+    height: 70px;
+  }
+
+  .circle-pro{
+    width: 70px;
+    height: 70px;
+  }
+}
+
+
 .circle-box {
-  width: 90px;
-  height: 90px;
+  /* width: 90px;
+  height: 90px; */
   position: relative;
-  /* border:1px solid #ddd; */
   margin-left: 10px;
 }
 
 .circle-text{
-  width: 90px;
-  line-height: 90px;
+  /* width: 90px;
+  line-height: 90px; */
   text-align: center;
   font-size: 16px;
   font-weight: bold;
 }
 
 .circle-item {
-  width: 45px;
-  height: 90px;
+  /* width: 45px;
+  height: 90px; */
   position: absolute;
   top:0;
   overflow: hidden;
 }
-.right{
-  right:0;
-}
-.left{
-  left:0;
-}
+
 
 .circle-pro{
-  width: 90px;
-  height: 90px;
+  /* width: 90px;
+  height: 90px; */
   border:8px solid rgb(232, 232, 12);
   border-radius: 50%;
   position: absolute;
   top:0;
   -webkit-transform: rotate(45deg);
   transform:rotate(45deg);
+}
+
+.right{
+  right:0;
+}
+.left{
+  left:0;
 }
 
 .rightstatic{
@@ -217,7 +263,6 @@ code {
       -webkit-transform: rotate(225deg);
   }
 }
-
 
 /**************************************************************************/
 /******************************* Hash Board *******************************/
@@ -343,7 +388,7 @@ code {
 }
 
 .grid{
-  min-height: 120px;
+  min-height: 90px;
 }
 
 .offset{

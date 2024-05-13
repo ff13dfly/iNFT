@@ -16,7 +16,7 @@ let animate=true;   //wether iNFT render animation
 function Preview(props) {
     const size = {
         row: [12],
-        header:[4,8],
+        header: (window.screen.width>414?[4,8]:[3,9]),      //here to adjust to different device
         single:[1,10,1],
     };
 
@@ -74,7 +74,7 @@ function Preview(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="text-center pb-1" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 <RenderiNFT 
                     hash={hash} 
                     offset={[]} 
@@ -88,21 +88,14 @@ function Preview(props) {
                     }}
                 />
             </Col>
-            {/* <Col className="pt-1" sm={size.single[0]} xs={size.single[0]}>
-
+            <Col className="text-center pb-2" sm={size.row[0]} xs={size.row[0]}>
+                Block {block.toLocaleString()}, Tanssi Network
             </Col>
-            <Col className="pt-1" sm={size.single[1]} xs={size.row[1]}>
-                <Hash hash={hash} active={active}/>
-            </Col> */}
-            <Col className="pt-4" sm={size.header[0]} xs={size.header[0]}>
+            <Col className="text-center pt-3" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>
             </Col>
-            <Col className="pt-1" sm={size.header[1]} xs={size.header[1]}>
-                
+            <Col sm={size.header[1]} xs={size.header[1]}>
                 <Hash hash={hash} active={active}/>
-            </Col>
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]}>
-                Block {block.toLocaleString()}, Tanssi Network
             </Col>
         </Row>
     )

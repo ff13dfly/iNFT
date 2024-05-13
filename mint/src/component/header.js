@@ -1,6 +1,6 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { FaList,FaRegUser,FaRegImage } from "react-icons/fa";
+import { useEffect } from "react";
+import { FaList,FaRegUser,FaRegImage,FaPizzaSlice } from "react-icons/fa";
 
 import Account from "./account";
 import Template from "./template";
@@ -16,7 +16,7 @@ function Header(props) {
 
     const self={
         clickMine:(ev)=>{
-            dialog(<Mine fresh={props.fresh} dialog={props.dialog} />,"My iNFT list");
+            dialog(<Mine fresh={props.fresh} dialog={props.dialog} />,"My iNFT List");
         },
         clickTemplate:(ev)=>{
             dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Template");
@@ -41,7 +41,7 @@ function Header(props) {
                <h3>iNFT Minter</h3> 
             </Col>
             <Col className="text-end" sm={size.title[2]} xs={size.title[2]}>
-                <FaRegImage className="pointer" size={30} onClick={(ev)=>{
+                <FaPizzaSlice className="pointer" size={26} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
                 <FaRegUser className="pointer" size={26} style={{marginLeft:"15px"}} onClick={(ev)=>{
