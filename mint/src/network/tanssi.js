@@ -48,7 +48,7 @@ const funs={
 let wsAPI = null;
 let linking = false;
 const self={
-    init: (ck) => {
+    init: (ck,proxy) => {
         const uri=config.node;
         if (linking) return setTimeout(() => {
             self.init(ck);
@@ -80,6 +80,9 @@ const self={
             linking = false;
             return ck && ck(error);
         }
+    },
+    reset:(ck,proxy)=>{
+        console.log(`Restart system link`);
     },
 
     unsubscribe:(key)=>{

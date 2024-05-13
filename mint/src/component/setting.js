@@ -76,6 +76,14 @@ function Setting(props) {
         updateProxy: (enable) => {
             const px={proxy:enable};
             INFT.mint.update(px);
+
+            console.log(enable);
+
+            TPL.setAgent(enable);
+            TPL.reset(()=>{
+                console.log(`Freshed`);
+                props.fresh();
+            });
         },
         updateMulti: (n) => {
             const active = TPL.current();

@@ -98,6 +98,13 @@ function App() {
     VERSION.auto(config.version);   //run version update
 
     //1.cache iNFT templates
+    const detail=INFT.mint.detail();
+    if(!detail){
+      TPL.setAgent(config.proxy);
+    }else{
+      TPL.setAgent(detail.proxy);
+    }
+
     const only_first=true;
     TPL.auto(() => {
       self.fresh();

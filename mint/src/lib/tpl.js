@@ -6,6 +6,7 @@ const config={
     default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
 }
 
+let agent=true;     //wether use agent
 const funs={
     cacheIPFS:(alinks, ck, dels)=>{
         if (dels === undefined) dels = [];
@@ -14,6 +15,7 @@ const funs={
         if(Data.exsistHash("cache", single)){
             return funs.cacheIPFS(alinks, ck, dels);
         }else{
+            console.log(agent);
             return IPFS.read(single, (ctx) => {
                 if(!ctx || ctx.error!==undefined){
                     const left = alinks.length;
@@ -23,7 +25,7 @@ const funs={
                     Data.setHash("cache", single, ctx);
                     return funs.cacheIPFS(alinks, ck, dels);
                 }
-            });
+            },agent);
         }
     },
     autosetTemplate:()=>{
@@ -46,6 +48,9 @@ const funs={
 }
 
 const self = {
+    setAgent:(enable)=>{
+        agent=enable;
+    },
     auto:(ck,only_first)=>{
         const list=self.list(true);
         if(list===false){
@@ -155,8 +160,10 @@ const self = {
     clean:()=>{
         Local.remove("template");
     },
-    update:()=>{
-
+    reset:(ck)=>{
+        IPFS.reset();               //clean IPFS cache
+        Data.reset();               //clean template cache
+        self.auto(ck,true);         //relink 
     },
 }   
 

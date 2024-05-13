@@ -4,12 +4,18 @@ const map={}
 const config={
     protocol:"https://",
     gateway:".ipfs.w3s.link",
+    proxy:"https://ipfs.w3os.net",
 }
 
 const self={
-    read:async (cid,ck)=>{
+    getURL:(cid,proxy)=>{
+        if(proxy) return `${config.proxy}/${cid}`;
+        return `${config.protocol}${cid}${config.gateway}`;
+    },
+    read:async (cid,ck,proxy)=>{
         //const url=`${config.protocol}${cid}${config.gateway}`;
-        const url=`https://ipfs.w3os.net/${cid}`;
+        const url=self.getURL(cid,proxy);
+        console.log(url);
 
         //if there is cache, return a copy of it;
         if(map[cid]!==undefined) return JSON.parse(JSON.stringify(map[cid])); 
@@ -36,6 +42,10 @@ const self={
     },
     write:(data,ck)=>{
 
+    },
+    reset:()=>{
+        for(var k in map) delete map[k];
+        return true;
     },
 }
 

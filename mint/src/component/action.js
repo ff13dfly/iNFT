@@ -62,7 +62,7 @@ function Action(props) {
             setDisable(!ev.target.value ? true : false);
         },
         clickSetting: () => {
-            props.dialog(<Setting />, "Mint Configure");
+            props.dialog(<Setting fresh={props.fresh} />, "Mint Configure");
         },
         clickPanel: () => {
             props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");

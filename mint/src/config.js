@@ -21,5 +21,6 @@ module.exports = {
         ],
     },
     unit:"$INFT",
+    proxy:true,             //system default proxy setting
     version:20240103,
 }
