@@ -8,7 +8,8 @@ const config={
 
 const self={
     read:async (cid,ck)=>{
-        const url=`${config.protocol}${cid}${config.gateway}`;
+        //const url=`${config.protocol}${cid}${config.gateway}`;
+        const url=`https://ipfs.w3os.net/${cid}`;
 
         //if there is cache, return a copy of it;
         if(map[cid]!==undefined) return JSON.parse(JSON.stringify(map[cid])); 

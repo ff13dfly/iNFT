@@ -17,7 +17,7 @@ module.exports = {
             "wss://wss.android.im",
         ],
         template:[
-            "https://ipfs.w3os.net/web3storage/"
+            "https://ipfs.w3os.net/"
         ],
     },
     unit:"$INFT",

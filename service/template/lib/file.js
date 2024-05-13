@@ -2,10 +2,11 @@ const fs = require('fs');
 const file = {
     read: (target, ck, toJSON, toBase64) => {
         fs.stat(target, (err, stats) => {
-            if (err) return ck && ck({ error: err });
+            if (err) return ck && ck({ error: "Invalid CID." });
             if (!stats.isFile()) return ck && ck(false);
             fs.readFile(target, (err, data) => {
-                if (err) return ck && ck({ error: err });
+                //if (err) return ck && ck({ error: err });
+                if (err) return ck && ck({ error: "Internal error." });
                 if (toBase64) return ck && ck(data.toString("base64"));
                 if (!toJSON) return ck && ck(data.toString());
                 try {
@@ -17,6 +18,9 @@ const file = {
                 }
             });
         });
+    },
+    exsist:(target,ck)=>{
+
     },
     save:(name,data,ck)=>{
         const target = `./${name}`;

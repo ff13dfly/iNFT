@@ -7,7 +7,7 @@ exports.config = {
         ['5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd','123456'],
         ['5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd','123456'],
     ],
-    'cache':'record.json',
+    'folder':"files",
     'autosaving':60000,
     'low':2000000000000,            //balance low than this, failed to faucet
     'server': {

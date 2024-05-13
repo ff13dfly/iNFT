@@ -10,6 +10,10 @@
 
 ## Deployment
 
+- Server URL: https://faucet.w3os.net
+
+- Create task on Jenkins to copy the application and accounts to server.
+
 - Build to min file by `esbuild`.
 
     ```SHELL

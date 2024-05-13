@@ -10,18 +10,27 @@ const theme = {
 };
 
 const map={};           //the template cache
+let server=null;
 const self = {
-
+    getCache:(cid,ck)=>{
+        if(map[cid]) return ck && ck(map[cid]);
+        const target=`${config.folder}/${cid}.json`;
+        IO.read(target,(data)=>{
+            if(!data.error) map[cid]=data;
+            return ck && ck(data);
+        });
+    },
     run: (cfg, ck) => {
         if (server != null) return ck && ck();
         server = app.listen(cfg.port, function () {
             const host = server.address().address;
             const port = server.address().port;
 
-            self.output(`Faucet server start at http://${host}:${port}`, "success", true);
+            self.output(`******************************************************************************************`, "success", true);
+            self.output(`IPFS template cache server start at http://${host}:${port}`, "success", true);
             self.output(`Author: Fuu, copyright 2024.`, "success", true);
             self.output(`******************************************************************************************`, "success", true);
-            //console.log("Faucet server start at http://%s:%s", host, port);
+
             return ck && ck();
         });
     },
@@ -46,7 +55,8 @@ app.use(bodyParser.json());
 
 self.run(config.server, () => {
     self.output(`Cors should be supported by Nginx.`);
-
+    self.output(`Copy the following URL to explorer to test: `,"", true);
+    self.output(`http://localhost:${config.server.port}/bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i`,"primary", true);
     app.get('/', (req, res) => {
         res.send("");
     });
@@ -56,8 +66,14 @@ self.run(config.server, () => {
 
         const cid = req.params.cid;
         self.output(`Request cid:${cid}`, "primary");
-        if (addr.length !== 59) return res.send({ error: 'Invalid web3.storage CID.' });
+        if (cid.length !== 59) return res.send({ error: 'Invalid web3.storage CID.' });
 
-        
+        self.getCache(cid,(data)=>{
+            if(data.error){
+                res.send(JSON.stringify(data));
+            }else{
+                res.send(data);
+            }
+        });
     });
 });
