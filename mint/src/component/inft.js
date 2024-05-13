@@ -90,7 +90,7 @@ function RenderiNFT(props) {
 
     
     return (
-        <div>
+        <div className="backflip">
             <canvas hidden={hidden} width={width} height={height} id={props.id} style={self.calcWidth()}></canvas>
             <img hidden={!hidden}  src={"image/logo.png"} alt="iNFT logo" style={{width:"100%"}}/>
         </div>

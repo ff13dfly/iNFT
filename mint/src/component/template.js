@@ -167,17 +167,17 @@ function Template(props) {
             <div className="limited">
                 <Row hidden={!show}>
                 {list.map((row, index) => (
-                    <Col className="pt-2" key={index} sm={size.list[0]} xs={size.list[0]}>
+                    <Col className="pt-2 pb-4" key={index} sm={size.list[0]} xs={size.list[0]}>
                         <Row>
                             <Col sm={size.row[0]} xs={size.row[0]}>
-                                <p>
+                                <span>
                                 IPFS CID: <br />
                                 <strong>{tools.shorten(row.alink,7)}</strong> <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
                                     Copy(row.alink);
                                     self.clickRecover(`copy_${index}`);
                                 }}><FaCopy className={!recover[`copy_${index}`]?"":recover[`copy_${index}`]}/></button><br />
                                 {row.data.parts.length} parts.
-                                </p>
+                                </span>
                             </Col>
                             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                                 <div className="thumbnail pointer" 
@@ -186,18 +186,18 @@ function Template(props) {
                                         self.clickOpen(index);
                                     }}></div>
                             </Col>
-                            <Col hidden={index===0} className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                            <Col hidden={index===0} className="pt-2 text-center" sm={size.opt[0]} xs={size.opt[0]}>
                                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                                     self.clickTry(index);
                                     self.clickRecover(`try_${index}`,200);
                                 }}><FaExchangeAlt className={!recover[`try_${index}`]?"":recover[`try_${index}`]}/></button>
                             </Col>
-                            <Col className="pt-3" sm={size.opt[0]} xs={size.opt[0]}>
+                            <Col className="pt-2" sm={size.opt[0]} xs={size.opt[0]}>
                                 <button className="btn btn-md btn-secondary" onClick={(ev)=>{
                                     self.clickOpen(index);
                                 }}><FaFolderOpen /></button>
                             </Col>
-                            <Col className="pt-3 text-center" sm={size.opt[0]} xs={size.opt[0]}>
+                            <Col className="pt-2 text-center" sm={size.opt[0]} xs={size.opt[0]}>
                                 {/* <FaTrashAlt className="pointer text-primary" size={28}  onClick={(ev)=>{
                                     self.clickRemove(index);
                                 }}/> */}

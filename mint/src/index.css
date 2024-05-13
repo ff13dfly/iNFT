@@ -277,6 +277,13 @@ code {
   background-color: #ffaabb;
 }
 
+.color_1{background-color: #fc879e;}
+.color_2{background-color: #e4f834;}
+.color_3{background-color: #24dff4;}
+.color_4{background-color: #39f7855e;}
+.color_5{background-color: #b227f8;}
+.color_6{background-color: #dfbc25;}
+
 .shadow{
   box-shadow: 0px 8px 30px rgba(0, 0, 0,1);
 }
@@ -325,11 +332,14 @@ code {
   height: 150px; /* Height of the thumbnail */
   background-size: cover; /* Scale the background image to cover the entire element */
   background-position: 50% 50%; /* Position the center of the background image */
+  background-color: #ffffff;
+  border-radius: 10px;
 }
 
 .mine{
   width: 100%;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .grid{
@@ -338,6 +348,9 @@ code {
 
 .offset{
   width: 36px;;
+}
+.backflip{
+  border-radius: 10px;
 }
 
 .monospaced{
@@ -358,12 +371,14 @@ code {
   width: 100%;
   overflow: auto;
 }
+.pr-1{margin-right: 5px;}
+.pr-2{margin-right: 10px;}
+.pr-3{margin-right: 15px;}
 
-.pr-2{
-  margin-right: 15px;
-}
+.pl-1{margin-left: 5px;}
+.pl-2{margin-left: 10px;}
+.pl-3{margin-left: 15px;}
 
-
-.pl-2{
-  margin-left: 15px;
+.full{
+  width: 100%;
 }
