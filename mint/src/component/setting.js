@@ -19,9 +19,14 @@ function Setting(props) {
         multiMax: 9,
     }
 
+    //get current setting
+    const detail = INFT.mint.detail();
+    const cid = TPL.current(true);
+    const cway=(!detail.template|| !detail.template[cid] || !detail.template[cid].way)?1:detail.template[cid].way
+
     let [multi, setMulti] = useState(1);            //multi task amount
-    let [proxy, setProxy] = useState(true);         //wether use agent to access
-    let [way, setWay]=useState(1);
+    let [proxy, setProxy] = useState(detail.proxy);         //wether use agent to access
+    let [way, setWay]=useState(cway);
 
     const self = {
         clickIncMulti: (ev) => {
@@ -40,16 +45,24 @@ function Setting(props) {
             }
         },
         clickProxy:(ev)=>{
-            setProxy(!proxy);
+            const enable=!proxy;
+            self.updateProxy(enable)
+            setProxy(enable);
         },
         clickRandomWay:(ev)=>{
-            setWay(1);
+            const way=1;
+            setWay(way);
+            self.updateOffset(way);
         },
         clickNoOffsetWay:(ev)=>{
-            setWay(2);
+            const way=2;
+            setWay(way);
+            self.updateOffset(way);
         },
         clickCustomizeWay:(ev)=>{
-            setWay(3);
+            const way=3;
+            setWay(way);
+            self.updateOffset(way);
         },
         getMintOffset:(parts)=>{
             const os=[];
@@ -59,6 +72,10 @@ function Setting(props) {
                 os.push(tools.rand(0,divide-1));
             }
             return os;
+        },
+        updateProxy: (enable) => {
+            const px={proxy:enable};
+            INFT.mint.update(px);
         },
         updateMulti: (n) => {
             const active = TPL.current();
@@ -71,6 +88,22 @@ function Setting(props) {
                 }
             } else {
                 detail.template[cid].multi = n;
+            }
+            INFT.mint.update(detail);
+        },
+        updateOffset:(way)=>{
+            const active=TPL.current();
+            const detail=INFT.mint.detail();
+            const cid=active.cid;
+            if(!detail.template[cid]){
+                detail.template[cid]={
+                    way:way,
+                    multi:1,
+                    offset:self.getMintOffset(active.parts),
+                }
+            }else{
+                if(!detail.template[cid].way) detail.template[cid].way=1;
+                detail.template[cid].way=way;
             }
             INFT.mint.update(detail);
         },
@@ -115,7 +148,7 @@ function Setting(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className={`pt-2 ${way===1?"text-warning":""}`} sm={size.offset[0]} xs={size.offset[0]}>
-                        Default, random offset to get unique result on the same block.
+                        Default, random offset, different result on the same block.
                     </Col>
                     <Col className="pt-2" sm={size.offset[1]} xs={size.offset[1]}>
                         <button className={`btn btn-sm btn-secondary mt-2 full ${way===1?"text-warning":""}`} onClick={(ev)=>{
@@ -126,7 +159,7 @@ function Setting(props) {
                     </Col>
 
                     <Col className={`pt-2 ${way===2?"text-warning":""}`} sm={size.offset[0]} xs={size.offset[0]}>
-                        Only take block hash to mint the iNFT, same result.
+                        All zero offset, same result on the same block.
                     </Col>
                     <Col className="pt-2" sm={size.offset[1]} xs={size.offset[1]}>
                         <button className={`btn btn-sm btn-secondary mt-2 full ${way===2?"text-warning":""}`} onClick={(ev)=>{

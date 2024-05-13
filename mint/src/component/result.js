@@ -51,7 +51,7 @@ function Result(props) {
     const dom_id = "pre_result";
     const router = {
         progress: {
-            title: "Mint progress",
+            title: "Mint Board",
             content: <Progress dialog={props.dialog} />,
         }
     }

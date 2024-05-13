@@ -21,6 +21,5 @@ module.exports = {
         ],
     },
     unit:"$INFT",
-    //version:20240101,
-    version:20240102,
+    version:20240103,
 }

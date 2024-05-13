@@ -1,6 +1,7 @@
 import Local from "./local";
 
 const queue=[
+    20240103,
     20240102,
     20240101
 ];
@@ -8,6 +9,23 @@ const queue=[
 const update={
     20240102:()=>{  //get current version
         console.log(`Run update 20240102`);
+        const fa=Local.get("mint");
+        if(fa){
+            try {
+                const map=JSON.parse(fa);
+                for(var k in map){
+                    map[k].proxy=true;
+                    if(map[k].template){
+                        for(var kk in map[k].template){
+                            map[k].template[kk].way=1;
+                        }
+                    }
+                }
+                Local.set("mint",JSON.stringify(map));
+            } catch (error) {
+                console.log(`Run update 20240102`);
+            }
+        }
     },
     20240101:()=>{  //get current version
         //1.remove the "task" "pointer" "prefix" localstorage

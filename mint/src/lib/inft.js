@@ -36,9 +36,10 @@ const funs={
             index:0,
             pre:`i${tools.char(config.prefix_length).toLocaleLowerCase()}`,
             stamp:tools.stamp(),
-            task:[],                                        //task of last mint
-            history:{},                                     //record daily mint history by anchor name
+            task:[],                //task of last mint
+            history:{},             //record daily mint history by anchor name
             template:{},
+            proxy:true,             //wether proxy
         }
     },
     getAddress:()=>{
