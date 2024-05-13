@@ -15,7 +15,6 @@ const funs={
         if(Data.exsistHash("cache", single)){
             return funs.cacheIPFS(alinks, ck, dels);
         }else{
-            console.log(agent);
             return IPFS.read(single, (ctx) => {
                 if(!ctx || ctx.error!==undefined){
                     const left = alinks.length;
@@ -76,6 +75,7 @@ const self = {
     },
     current:(only_cid)=>{
         const tpl=Data.get("template");
+        if(tpl===null) return tpl;
         if(only_cid) return tpl.cid;
         return tpl;
     },
@@ -162,7 +162,7 @@ const self = {
     },
     reset:(ck)=>{
         IPFS.reset();               //clean IPFS cache
-        Data.reset();               //clean template cache
+        Data.reset(true);               //clean template cache
         self.auto(ck,true);         //relink 
     },
 }   

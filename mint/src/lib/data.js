@@ -16,8 +16,9 @@ const self={
         if(map[key]===undefined) return false;
         return map[key];
     },
-    reset:()=>{
+    reset:(clean_cache)=>{
         map.template=null;
+        if(clean_cache) map.cache={};
     },
 
     setHash:(main,key,value)=>{

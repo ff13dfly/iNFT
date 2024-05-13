@@ -122,6 +122,21 @@ function Action(props) {
             }
             return arr;
         },
+        getMintOffset:(parts)=>{
+            const os=[];
+            for(let i=0;i<parts.length;i++){
+                const part=parts[i];
+                const divide=part.value[2];
+                os.push(tools.rand(0,divide-1));
+            }
+            return os;
+        },
+        getOffset:(cid,parts)=>{
+            const detail=INFT.mint.detail();
+            if(!detail.template || !detail.template[cid] || detail.template[cid].way===1) return self.getMintOffset(parts);
+            if(detail.template[cid].way===3 && detail.template[cid].offset) return detail.template[cid].offset;
+            return [];
+        },
         runTask: (pair, tpl) => {
             const detail=INFT.mint.detail();
             const task = detail.task;
@@ -143,7 +158,8 @@ function Action(props) {
 
                 //2.run mint from index data;
                 const cid=tpl.cid;
-                const offset=(!detail.template || !detail.template[cid])?[]:detail.template[cid].offset
+
+                const offset=self.getOffset(cid,tpl.parts);
                 const target = task[index];
                 
                 const raw = self.getRaw(cid,offset);
