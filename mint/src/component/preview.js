@@ -39,7 +39,7 @@ function Preview(props) {
                 self.randomActive();
             },2000);
             
-            setActive(tools.rand(0,tpl.parts.length-1));       //be set multi times, no sure why
+            setActive(tools.rand(1,tpl.parts.length-1));       //be set multi times, no sure why
             setForce(true);
             return setTimeout(()=>{
                 self.randomActive();

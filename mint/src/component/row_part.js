@@ -51,13 +51,16 @@ function RowPart(props) {
                 arr[order].data=map[k].offset;
             }
 
+            //console.log(JSON.stringify(arr));
+
             //3.calc the position
             for(let i=0;i<arr.length;i++){
                 const cur=arr[i];
                 const c_len=cur.data.length;        //value width
                 const center=config.width*c_len*0.5;
                 if(i===0){
-                    arr[i].position=center-config.size*0.5;
+                    const val=arr[i].data[0];
+                    arr[i].position=center-config.size*0.5+val*config.width;
                 }else{
                     const pre=arr[i-1];
                     const p_len=pre.data.length;
