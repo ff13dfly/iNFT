@@ -32,6 +32,7 @@ const funs={
         if(list===false) return false;
         const active=list[0];
         const def=Data.getHash("cache", active.alink);
+        if(!def) return false;
         def.cid=active.alink;
         Data.set("template", def);
         return true;

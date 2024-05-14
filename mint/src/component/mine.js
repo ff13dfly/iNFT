@@ -130,7 +130,7 @@ function Mine(props) {
                             }}>
                                 <Row>
                                     <Col className="grid" sm={size.row[0]} xs={size.row[0]} >
-                                        <img className="mine"  src={row.thumb} alt="" />
+                                        <img className="mine"  src={!row.thumb?"image/logo.png":row.thumb} alt="" />
                                     </Col>
                                     <Col className="pt-1" sm={size.detail[0]} xs={size.detail[0]}>
                                         {row.fav?<FaRegHeart/>:""} <small>{row.block.toLocaleString()}</small> 

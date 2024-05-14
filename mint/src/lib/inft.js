@@ -149,6 +149,7 @@ const funs={
         const me=raw[ii];
         //console.log(iNFT.template.hash);
         TPL.view(me.template.hash,(dt)=>{
+            if(dt===false) return funs.getThumb(list,ck); 
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
@@ -168,7 +169,7 @@ const funs={
             const cid=raw[index].template.hash;
             if(!tpls.includes(cid)) tpls.push(cid);
         }
-        //console.log(JSON.stringify(tpls));
+        
         TPL.cache(tpls,(dels)=>{
             return funs.getThumb(list,ck);
         });
