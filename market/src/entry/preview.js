@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import Header from "../components/header";
 
-function View(props) {
+function Preview(props) {
 
     let { anchor } = useParams();
     console.log(anchor);
@@ -28,11 +28,11 @@ function View(props) {
             <Header />
             <Row className="pt-2">
                 <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
-                    View page to get hash.
+                    template previewer.
                 </Col>
             </Row>
         </div>
     )
 }
 
-export default View;
+export default Preview;

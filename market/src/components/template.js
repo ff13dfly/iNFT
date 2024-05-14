@@ -16,6 +16,7 @@ function Template(props) {
       
       {
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
+        cid:"bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a",
         title:"Tanssi",
         desc:"tanssi lucky 3",
         thumb:"thumb/template_01.png",
@@ -24,6 +25,7 @@ function Template(props) {
       },
       {
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
+        cid:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
         title:"Ape",
         desc:"rarety ape",
         thumb:"thumb/template_02.png",
@@ -46,8 +48,10 @@ function Template(props) {
         </Col>
         {list.map((row, index) => (
           <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-            <img className='inft_thumb' src={row.thumb} alt={row.alt} />
-            {row.title}, {row.desc}
+            <a href={`template/${row.cid}`}>
+              <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+              {row.title}, {row.desc}
+            </a>
           </Col>
         ))}
     </Row>

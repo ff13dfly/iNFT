@@ -13,6 +13,7 @@ function Latest(props) {
   useEffect(() => {
     const slides=[
       {
+        anchor:"abc_01",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -21,6 +22,7 @@ function Latest(props) {
         alt:"",
       },
       {
+        anchor:"abc_02",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -29,6 +31,7 @@ function Latest(props) {
         alt:"",
       },
       {
+        anchor:"abc_03",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -37,6 +40,7 @@ function Latest(props) {
         alt:"",
       },
       {
+        anchor:"abc_04",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -45,6 +49,7 @@ function Latest(props) {
         alt:"",
       },
       {
+        anchor:"abc_05",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -53,6 +58,7 @@ function Latest(props) {
         alt:"",
       },
       {
+        anchor:"abc_06",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -71,8 +77,10 @@ function Latest(props) {
           <h4>Latest iNFT Mint Result</h4>
         </Col>
         {list.map((row, index) => (
-          <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-            <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+          <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]} >
+            <a href={`view/${row.anchor}`}>
+              <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+            </a>
             {row.block}, price: {row.price} $INFT
           </Col>
         ))}
