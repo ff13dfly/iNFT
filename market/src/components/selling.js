@@ -20,6 +20,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_01.jpg",
         alt:"",
+        anchor:"abc_a"
       },
       {
         block:323446,
@@ -28,6 +29,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_02.jpg",
         alt:"",
+        anchor:"abc_b"
       },
       {
         block:323446,
@@ -36,6 +38,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_03.jpg",
         alt:"",
+        anchor:"abc_c"
       },
       {
         block:323446,
@@ -44,6 +47,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_04.jpg",
         alt:"",
+        anchor:"abc_d"
       },
       {
         block:323446,
@@ -52,6 +56,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_05.jpg",
         alt:"",
+        anchor:"abc_1"
       },
       {
         block:323446,
@@ -60,6 +65,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_06.jpg",
         alt:"",
+        anchor:"abc_2"
       },
       {
         block:323446,
@@ -68,6 +74,7 @@ function Selling(props) {
         price:2,
         thumb:"thumb/inft_07.jpg",
         alt:"",
+        anchor:"abc_3"
       },
       {
         block:323446,
@@ -76,6 +83,7 @@ function Selling(props) {
         price:3,
         thumb:"thumb/inft_08.jpg",
         alt:"",
+        anchor:"abc_4"
       },
     ]
     setList(slides);
@@ -93,8 +101,10 @@ function Selling(props) {
         </Col>
         {list.map((row, index) => (
           <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-            <img className='inft_thumb' src={row.thumb} alt={row.alt} />
-            {row.block}, price: {row.price} $INFT
+              <a href={`detail/${row.anchor}`}>
+                <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+              </a>
+              {row.block}, price: {row.price} $INFT       
           </Col>
         ))}
     </Row>

@@ -13,7 +13,7 @@ function Latest(props) {
   useEffect(() => {
     const slides=[
       {
-        anchor:"abc_01",
+        anchor:"imntvugskaod_280",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -22,7 +22,7 @@ function Latest(props) {
         alt:"",
       },
       {
-        anchor:"abc_02",
+        anchor:"imntvugskaod_279",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -31,7 +31,7 @@ function Latest(props) {
         alt:"",
       },
       {
-        anchor:"abc_03",
+        anchor:"imntvugskaod_278",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -40,7 +40,7 @@ function Latest(props) {
         alt:"",
       },
       {
-        anchor:"abc_04",
+        anchor:"imntvugskaod_277",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -49,7 +49,7 @@ function Latest(props) {
         alt:"",
       },
       {
-        anchor:"abc_05",
+        anchor:"imntvugskaod_276",
         block:123456,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",
@@ -58,7 +58,7 @@ function Latest(props) {
         alt:"",
       },
       {
-        anchor:"abc_06",
+        anchor:"imntvugskaod_275",
         block:323446,
         owner:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
         template:"",

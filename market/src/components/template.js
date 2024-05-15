@@ -48,7 +48,7 @@ function Template(props) {
         </Col>
         {list.map((row, index) => (
           <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-            <a href={`template/${row.cid}`}>
+            <a href={`preview/${row.cid}`}>
               <img className='inft_thumb' src={row.thumb} alt={row.alt} />
               {row.title}, {row.desc}
             </a>

@@ -9,6 +9,7 @@ import Market from "./entry/market";
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
+import Detail from "./entry/detail";
 
 function App() {
   return (
@@ -16,12 +17,17 @@ function App() {
       <Routes>
           <Route path="home" index element={<Home />} />
           <Route path="market" element={<Market />} />
+          <Route path="market/:page" element={<Market />} />
           <Route path="template" element={<Template />} />
+          <Route path="template/:page" element={<Template />} />
           <Route path="editor" element={<Editor />} />
           <Route path="minter" element={<Minter />} />
           <Route path="/" element={<Home />}></Route>
+
           <Route path="view/:anchor" element={<View />}></Route>
-          <Route path="template/:cid" element={<Preview />}></Route>
+          <Route path="detail/:anchor" element={<Detail />}></Route>
+          <Route path="preview/:cid" element={<Preview />}></Route>
+          
           <Route path="*" element={<InvalidPage />}></Route>
       </Routes>
     </BrowserRouter>
