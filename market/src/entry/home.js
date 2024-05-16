@@ -24,10 +24,7 @@ function Home(props) {
     }
 
     useEffect(() => {
-        // setInterval(()=>{
-        //     font += 0.1;
-        //     setCmap([{fontSize:font},{fontSize:font},{fontSize:font}]);
-        // },100)
+        
     }, [props.update]);
 
     return (

@@ -1,33 +1,36 @@
-import { Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { useState } from "react";
 
 import Header from "../components/header";
+import FilterMarket from "../components/filter_market";
+import ListMarket from "../components/list_market";
 
 function Market(props) {
     const size = {
         row: [12],
-        flow:[3,6,3]
+        side:[2,10]
     };
 
+    let [update, setUpdate]=useState(0);
+
     const self={
-
+        fresh:()=>{
+            setUpdate(update+1);
+        },
     }
-
-    useEffect(() => {
-        // setInterval(()=>{
-        //     font += 0.1;
-        //     setCmap([{fontSize:font},{fontSize:font},{fontSize:font}]);
-        // },100)
-    }, [props.update]);
-
     return (
         <div>
-            <Header />
-            <Row className="pt-2">
-                <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
-                    Market list page.
-                </Col>
-            </Row>
+            <Header active={"market"} />
+            <Container>
+                <Row className="pt-2">
+                    <Col md={size.side[0]} lg={size.side[0]} xxl={size.side[0]} >
+                        <FilterMarket update={update} fresh={self.fresh}/>
+                    </Col>
+                    <Col md={size.side[1]} lg={size.side[1]} xxl={size.side[1]}>
+                        <ListMarket update={update} fresh={self.fresh}/>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     )
 }

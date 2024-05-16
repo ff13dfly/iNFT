@@ -25,7 +25,7 @@ function Preview(props) {
 
     return (
         <div>
-            <Header />
+            <Header active={"template"}/>
             <Row className="pt-2">
                 <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
                     template previewer.

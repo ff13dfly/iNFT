@@ -25,7 +25,7 @@ function View(props) {
 
     return (
         <div>
-            <Header />
+            <Header active={"market"} />
             <Row className="pt-2">
                 <Col className="text-center" sm={size.flow[0]} xs={size.flow[0]}>
                     View page to get hash.
