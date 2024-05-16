@@ -35,8 +35,8 @@ function ListMarket(props) {
         <Col className="justify-content-around pt-2" key={index}  lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           
           <Card hidden={!ready} style={{ width: '100%' }}>
-              <a href={`view/${row.name}`}>
-                <Card.Img variant="top" src="imgs/logo.png" />
+              <a href={`/view/${row.name}`}>
+                <Card.Img variant="top" src={`${window.location.origin}/imgs/logo.png`} />
               </a>
               <Card.Body>
                 <Card.Title>iNFT Name</Card.Title>
@@ -48,7 +48,7 @@ function ListMarket(props) {
           </Card>
 
           <Card hidden={ready} style={{ width: '100%' }}>
-            <Card.Img variant="top" src="imgs/logo.png" />
+            <Card.Img variant="top" src={`${window.location.origin}/imgs/logo.png`} />
             <Card.Body>
               <Placeholder as={Card.Title} animation="glow">
                 <Placeholder xs={6} />

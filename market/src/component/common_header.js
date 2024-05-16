@@ -11,16 +11,22 @@ function Header(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/market">
-              <h4 className={props.active==="market"?"text-warning":""}>Market</h4>
+              <h5 className={props.active==="market"?"text-warning":""}>Market</h5>
+            </Nav.Link>
+            <Nav.Link href="/bounty">
+              <h5 className={props.active==="bounty"?"text-warning":""}>Bounty</h5>
             </Nav.Link>
             <Nav.Link href="/template">
-              <h4 className={props.active==="template"?"text-warning":""}>Template</h4>
+              <h5 className={props.active==="template"?"text-warning":""}>Template</h5>
+            </Nav.Link>
+            <Nav.Link href="/playground">
+              <h5 className={props.active==="playground"?"text-warning":""}>Playground</h5>
             </Nav.Link>
             <Nav.Link href="/minter">
-              <h4 className={props.active==="minter"?"text-warning":""}>Minter</h4>
+              <h5 className={props.active==="minter"?"text-warning":""}>Minter</h5>
             </Nav.Link>
             <Nav.Link href="/editor">
-              <h4 className={props.active==="editor"?"text-warning":""}>Editor</h4>
+              <h5 className={props.active==="editor"?"text-warning":""}>Editor</h5>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

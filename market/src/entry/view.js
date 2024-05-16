@@ -1,7 +1,6 @@
-import { useParams } from "react-router-dom";
-
 import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import Header from "../component/common_header";
 import PriveiwINFT from "../component/inft_preview";

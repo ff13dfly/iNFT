@@ -15,9 +15,9 @@ function Minter(props) {
         <div>
             <Header active="minter" />
             <Container>
-                <Row className="pt-2">
+                <Row>
                     <Col md={size.row[0]} lg={size.row[0]} xxl={size.row[0]} >
-                        <iframe id="minter" title="iNFT minter" src="https://inft.w3os.net/minter" frameborder="0"></iframe>
+                        <iframe id="minter" title="iNFT minter" src="https://inft.w3os.net/minter" frameBorder="0"></iframe>
                     </Col>
                 </Row>
             </Container>
