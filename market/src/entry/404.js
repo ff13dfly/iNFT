@@ -1,6 +1,6 @@
 import { Row, Col } from "react-bootstrap";
 
-import Header from "../components/header";
+import Header from "../component/common_header";
 
 function InvalidPage(props) {
 

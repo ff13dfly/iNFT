@@ -1,7 +1,7 @@
 import { Container,Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-function Selling(props) {
+function SectionSelling(props) {
 
   const size = {
     row: [12],
@@ -111,4 +111,4 @@ function Selling(props) {
   </Container>
   );
 }
-export default Selling;
+export default SectionSelling;

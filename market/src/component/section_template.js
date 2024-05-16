@@ -1,7 +1,7 @@
 import { Container,Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-function Template(props) {
+function SectionTemplate(props) {
 
   const size = {
     row: [12],
@@ -58,4 +58,4 @@ function Template(props) {
   </Container>
   );
 }
-export default Template;
+export default SectionTemplate;

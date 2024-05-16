@@ -1,7 +1,7 @@
 import { Container,Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-function Board(props) {
+function BoardOverall(props) {
 
   const size = {
     row: [12],
@@ -51,4 +51,4 @@ function Board(props) {
   </Container>
   );
 }
-export default Board;
+export default BoardOverall;

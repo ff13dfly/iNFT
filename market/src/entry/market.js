@@ -1,9 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 
-import Header from "../components/header";
-import FilterMarket from "../components/filter_market";
-import ListMarket from "../components/list_market";
+import Header from "../component/common_header";
+import FilterMarket from "../component/filter_market";
+import ListMarket from "../component/list_market";
 
 function Market(props) {
     const size = {

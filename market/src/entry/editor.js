@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
 
-import Header from "../components/header";
+import Header from "../component/common_header";
 
 function Editor(props) {
     const size = {

@@ -1,7 +1,7 @@
 import { Container,Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-function Latest(props) {
+function SectionLatest(props) {
 
   const size = {
     row: [12],
@@ -88,4 +88,4 @@ function Latest(props) {
   </Container>
   );
 }
-export default Latest;
+export default SectionLatest;

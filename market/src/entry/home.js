@@ -1,17 +1,15 @@
-import { Container,Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import Header from "../components/header";
-import Board from "../components/board";
-import Slide from "../components/slide";
-import Latest from "../components/latest";
-import BannerMint from "../components/banner_mint";
-import Selling from "../components/selling";
-import BannerSelling from "../components/banner_selling";
-import Template from "../components/template";
-import BannerTemplate from "../components/banner_template";
-
-import Footer from "../components/footer"
+import Header from "../component/common_header";
+import BoardOverall from "../component/board_overall";
+import Slide from "../component/slide";
+import SectionLatest from "../component/section_latest";
+import BannerMint from "../component/banner_mint";
+import SectionSelling from "../component/section_selling";
+import BannerSelling from "../component/banner_selling";
+import SectionTemplate from "../component/section_template";
+import BannerTemplate from "../component/banner_template";
+import Footer from "../component/common_footer"
 
 function Home(props) {
     const size = {
@@ -30,13 +28,13 @@ function Home(props) {
     return (
         <div>
             <Header />
-            <Board />
+            <BoardOverall />
             <Slide />
-            <Latest />
+            <SectionLatest />
             <BannerMint />
-            <Selling />
+            <SectionSelling />
             <BannerSelling />
-            <Template />
+            <SectionTemplate />
             <BannerTemplate />
             <Footer />
         </div>

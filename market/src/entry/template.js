@@ -1,8 +1,8 @@
 import {Container, Row, Col } from "react-bootstrap";
 import { useState,useEffect } from "react";
-import Header from "../components/header";
-import FilterTemplate from "../components/filter_template";
-import ListTemplate from "../components/list_template";
+import Header from "../component/common_header";
+import FilterTemplate from "../component/filter_template";
+import ListTemplate from "../component/list_template";
 
 function Template(props) {
     const size = {
