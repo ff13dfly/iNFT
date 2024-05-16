@@ -1,23 +1,6 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
 function Header(props) {
-  const size = {
-    row: [12],
-    flow: [3, 6, 3]
-  };
-
-  const self = {
-
-  }
-
-  console.log(useParams())
-
-  useEffect(() => {
-
-  }, [props.update]);
-
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>

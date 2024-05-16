@@ -26,7 +26,7 @@ function ListMarket(props) {
 
     setTimeout(()=>{
       setReady(true);
-    },4000)
+    },500)
   }, [props.update]);
 
   return (

@@ -16,6 +16,7 @@ import TPL from "../lib/tpl";
 
 let pre_hash="";
 let screen_lock=false;
+
 function PriveiwINFT(props) {
 
     let [width, setWidth] = useState(400);
@@ -73,18 +74,19 @@ function PriveiwINFT(props) {
     
     useEffect(() => {
         //!important, when animation is going on and the hash is not changed, fresh should be forbidden
-        if(props.force){
-            self.autoFresh(()=>{
-                setHidden(false);
-                pre_hash=props.hash;
-            });
-        }else{
-            if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
-                setHidden(false);
-                pre_hash=props.hash;
-            });
-        }
-
+        // if(props.force){
+        //     self.autoFresh(()=>{
+        //         setHidden(false);
+        //         pre_hash=props.hash;
+        //     });
+        // }else{
+        //     if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
+        //         setHidden(false);
+        //         pre_hash=props.hash;
+        //     });
+        // }
+        //console.log(process)
+        //console.log(window.location)
         
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
@@ -92,7 +94,7 @@ function PriveiwINFT(props) {
     return (
         <div className="backflip">
             <canvas hidden={hidden} width={width} height={height} id={props.id} style={self.calcWidth()}></canvas>
-            <img hidden={!hidden}  src={"image/logo.png"} alt="iNFT logo" style={{width:"100%"}}/>
+            <img hidden={!hidden}  src={`${window.location.origin}/imgs/logo.png`} alt="iNFT logo" style={{width:"100%"}}/>
         </div>
     )
 }
