@@ -71,7 +71,7 @@ function PartSection(props) {
             });
         },
         showCover:(n,selected,cfg)=>{
-            console.log(cfg);
+            //console.log(cfg);
             let arr=[]
             for(let i=0;i<n;i++){
                 arr.push({

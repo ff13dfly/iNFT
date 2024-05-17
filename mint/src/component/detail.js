@@ -13,7 +13,7 @@ import TPL from "../lib/tpl";
 import SmallHash from "./hash_small";
 import PartSection from "./part_section";
 
-import { FaBackspace, FaCopy, FaSyncAlt } from "react-icons/fa";
+import { FaBackspace, FaCopy, FaSyncAlt,FaCalculator } from "react-icons/fa";
 
 let current = 0;
 let hash = "0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f889fea9bb";
@@ -21,6 +21,7 @@ function Detail(props) {
     const size = {
         row: [12],
         back: [10, 2],
+        formula:[10,2],
         title: [2, 7, 3],
         thumb: [7, 5],
         hash: [10, 2],
@@ -34,7 +35,9 @@ function Detail(props) {
     let [step, setStep] = useState(0);
     let [value, setValue] = useState("00");
     let [dvd, setDvd] = useState(8);
-
+    let [dec, setDec] = useState(false);
+    let [offsetTemplate,setOffsetTemplate]=useState(0);
+    let [showFormula,setShowFormula]=useState(false);
 
     let [parts, setParts] = useState([]);        //iNFT parts list
 
@@ -42,6 +45,7 @@ function Detail(props) {
     let [active, setActive] = useState(null);         //index of selected image range
 
     let [recover, setRecover] = useState({});
+
 
     const self = {
         clickBack: () => {
@@ -73,6 +77,12 @@ function Detail(props) {
                 }, !at ? 1000 : at);
             }
         },
+        clickValue:()=>{
+            setDec(!dec);
+        },
+        clickFormula:()=>{
+            setShowFormula(!showFormula);
+        },
         randomHash: (n) => {
             const str = "01234567890abcdef";
             let hex = "0x";
@@ -98,10 +108,12 @@ function Detail(props) {
                 
                 //0.get template parameters
                 const target = def.parts[ipart];
-                const w = def.cell[0], h = def.cell[1];
-                const [gX, gY, eX, eY] = target.img;
+                //const w = def.cell[0], h = def.cell[1];
+                //const [gX, gY, eX, eY] = target.img;
                 const [start, step, divide, offset] = target.value;
-                const [line, row] = def.grid;
+                //const [line, row] = def.grid;
+
+                setOffsetTemplate(offset);
                 
                 //1. set hash board
                 setStart(start);
@@ -125,7 +137,7 @@ function Detail(props) {
     return (
         <Row className="pt-1">
             <Col className="pt-1" sm={size.back[0]} xs={size.back[0]}>
-                IPFS CID: <strong>{tools.shorten(props.alink)}</strong><button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
+                IPFS CID: <strong>{tools.shorten(props.alink,8)}</strong><button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
                     self.clickCopy(props.alink);
                     self.clickRecover("copy");
                 }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
@@ -135,8 +147,23 @@ function Detail(props) {
                     self.clickBack(ev);
                 }} />
             </Col>
-            <Col className="pt-2 text-center" sm={size.row[0]} xs={size.row[0]}>
-                <h5>Val: 0x{value}, Dec:{parseInt(`0x${value}`)}, Result: {parseInt(`0x${value}`)} % {dvd} =  <span className="text-warning">{parseInt(`0x${value}`) % dvd}</span> </h5>
+            <Col className="pt-2" sm={size.formula[0]} xs={size.formula[0]}>
+                <h5>
+                    ( <button className={dec?"btn btn-md btn-secondary":"btn btn-md btn-secondary text-warning"} onClick={()=>{
+                        self.clickValue();
+                    }}><strong>{dec?parseInt(`0x${value}`):`0x${value}`}</strong></button>+ 
+                    <button className="btn btn-md btn-secondary" disabled>{offsetTemplate}</button>+ 
+                    <button className="btn btn-md btn-secondary" disabled>0</button> ) % <button className="btn btn-md btn-secondary" disabled>{dvd}</button> =  
+                    <button className="btn btn-md text-warning pl-2" disabled>{(parseInt(`0x${value}`)+offsetTemplate) % dvd}</button> 
+                </h5>
+            </Col>
+            <Col className="pt-2 text-end" sm={size.formula[1]} xs={size.formula[1]}>
+                <FaCalculator className={showFormula?"pointer pt-2  text-info":"pointer pt-2"} size={30} onClick={(ev) => {
+                    self.clickFormula();
+                }} />
+            </Col>
+            <Col hidden={!showFormula} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                <small>SELECTED_PART = ( <br/>HASH_VALUE + <br/>OFFSET_TEMPLATE + <br/>OFFSET_MINT ) % <br/>PART_DIVIDE </small>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
@@ -171,7 +198,7 @@ function Detail(props) {
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <small>Range of part at orgin image.</small>
-                <PartSection only={false} index={selected} selected={parseInt(`0x${value}`) % dvd} template={props.alink}/>
+                <PartSection only={false} index={selected} selected={(parseInt(`0x${value}`)+offsetTemplate) % dvd} template={props.alink}/>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 iNFT template {parts.length} parts selector.
