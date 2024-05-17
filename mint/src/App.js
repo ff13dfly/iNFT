@@ -17,6 +17,8 @@ import TPL from "./lib/tpl";
 import INFT from "./lib/inft";
 import VERSION from "./lib/version";
 
+import Sui from "./network/sui";
+
 function App() {
   let [update, setUpdate] = useState(0);
   let [show, setShow] = useState(false);
@@ -64,7 +66,7 @@ function App() {
       const io = self.decode(window.location.hash);
       if (io === false) return true;
 
-      window.location.hash = "";        //clear the hash after decode
+      //window.location.hash = "";        //clear the hash after decode
       plugin.run(io.act, io.param);
     },
     regQR: () => {
@@ -74,7 +76,7 @@ function App() {
       
       const UI={dialog:self.dialog,toast:null,fresh:self.fresh}
       plugin.setUI(UI);
-      console.log(`QR function set successful.`);
+      //console.log(`QR function set successful.`);
       return true;
     },
     init: () => {      //first run iNFT minter;
@@ -121,6 +123,8 @@ function App() {
     Network("tanssi").init((API) => {
 
     });
+
+    Sui.test();
   }, []);
 
   return (

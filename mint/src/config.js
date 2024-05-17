@@ -1,4 +1,6 @@
 module.exports = {
+    network:"tanssi",
+    //network:"sui",
     node:[
         "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
         //"wss://wss.android.im",

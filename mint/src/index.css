@@ -410,6 +410,16 @@ code {
   overflow: auto;
 }
 
+.launch{
+  background: #000000;
+  padding: 10px 10px 10px 10px;
+  word-break: break-all;
+}
+
+.launch p{
+  margin-bottom: 5px;
+}
+
 .setting{
   max-height: 240px;
   min-height: 240px;
