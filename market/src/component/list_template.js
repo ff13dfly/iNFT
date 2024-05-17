@@ -4,7 +4,7 @@ import { useEffect,useState } from "react";
 function ListTemplate(props) {
   const size = {
     row: [12],
-    grid:[3],
+    grid:[4],
   };
 
   let [list,setList]=useState([]);

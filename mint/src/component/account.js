@@ -57,7 +57,9 @@ function Account(props) {
         clickDownload: (ev) => {
             const fa = Local.get("login");
             if (!fa) return false;
-            tools.download(`${address}.json`, fa);
+            const json_file=`${address}.json`;
+            tools.download(json_file, fa);
+            self.faucetMessage(`Please keep the private key file safely.`)
         },
         clickCopy: (ev) => {
             Copy(address);
@@ -187,12 +189,14 @@ function Account(props) {
                 </Row>
             </Col>
             <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
-                <button className="btn btn-md btn-secondary" onClick={(ev) => {
+                <button className="btn btn-md btn-secondary" disabled={recover.download} onClick={(ev) => {
+                    self.clickRecover("download");
                     self.clickDownload(ev);
-                }}><FaDownload className="pb-1"/> Encried Key</button>
-                <button className="btn btn-md btn-secondary" style={{ marginLeft: "10px"}} onClick={(ev) => {
+                }}><FaDownload className={!recover.download ? "pb-1" : `pb-1 ${recover.download}`}/> Encried Key</button>
+                <button className="btn btn-md btn-secondary" disabled={recover.faucet} style={{ marginLeft: "10px"}} onClick={(ev) => {
+                    self.clickRecover("faucet");
                     self.clickFaucet(ev);
-                }}><FaFaucet className="pb-1" /> Faucet</button>
+                }}><FaFaucet className={!recover.faucet ? "pb-1" : `pb-1 ${recover.faucet}`} /> Faucet</button>
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev) => {
@@ -200,9 +204,6 @@ function Account(props) {
                 }}><FaSignInAlt className="pb-1"/> Logout</button>
             </Col>
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
-            {/* <Col hidden={!login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <System fresh={self.fresh} update={props.update} />
-            </Col> */}
 
             <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <h4><Badge className="bg-info">Option 1</Badge> Upload the encry JSON file.</h4>
