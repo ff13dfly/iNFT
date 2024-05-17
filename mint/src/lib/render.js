@@ -161,6 +161,7 @@ const Render= {
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck)=>{
+        Render.reset(pen);
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
@@ -178,9 +179,6 @@ const Render= {
             },50)
         }
     },
-    count:(pen,n,back)=>{
-        self.reset(pen);
-    },
     text:(pen,txt,pos,style)=>{
         //console.log(txt);
         if(style!==undefined) pen.font = style.font;
@@ -188,9 +186,6 @@ const Render= {
         pen.fillText(txt, pos[0], pos[1]);
         pen.stroke();
     },
-
-    //can use this as static iNFT show;
-    //when need to animation for iNFT, try self.preview
     thumb:(hash,bs64,parts,basic,offset,ck,hightlight)=>{
         //0.check parameters before rendering;
         const container_id=config.container;

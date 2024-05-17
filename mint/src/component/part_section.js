@@ -1,18 +1,20 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Data from "../lib/data";
 import Render from "../lib/render";
 import TPL from "../lib/tpl";
+
+/* template section with mask support
+*   @param  {string}    template        //CID of showing template
+*   @param  {string}    index           //template parts index
+*   @param  {string}    [selected]      //selected cell of section
+*   @param  {boolean}   [only]          //image showing only
+*/
 
 function PartSection(props) {
     const size = {
         row: [12],
     };  
-
-    const config={
-        board:2,
-    }
 
     let [width, setWidth]=useState(400);
     let [height, setHeight]=useState(50);
@@ -31,7 +33,9 @@ function PartSection(props) {
                 self.render(def,index);
             }else{
                 TPL.view(cid,(def)=>{
-                    if(!def) return false;
+                    if(!def) return setTimeout(()=>{
+                        self.showSection(index);
+                    },500);
                     self.render(def,index);
                 });
             }
@@ -39,8 +43,8 @@ function PartSection(props) {
         render:(def,index)=>{
             const target=def.parts[index];
             const w = def.cell[0], h = def.cell[1];
-            const [gX, gY, eX, eY] = target.img;
             const [start, step, divide, offset] = target.value;
+            const [gX, gY, eX, eY] = target.img;
             const [line, row] = def.grid;
             const max = line / (1 + eX);
             const br = Math.ceil((gX + divide) / max);
@@ -52,6 +56,7 @@ function PartSection(props) {
             setHeight(s_h);
 
             //2.cut the section from orgin image
+            Render.drop(cut_id);
             const cpen = Render.create(cut_id);
             if(cpen===false) return false;
             Render.cut(cpen, def.image, w, h, gY, line, (1 + eY) * br, (img_section) => {
@@ -60,18 +65,20 @@ function PartSection(props) {
                     width:w*(1+eX),         //selected cell width
                     height:h*(1+eY),        //selected cell height
                     offset:gX,              //first cell offset amount
+                    line:max,              //amount per line
                 }
-                self.showCover(divide,props.selected,cfg)
+                if(!props.only)self.showCover(divide,props.selected,cfg)
             });
         },
         showCover:(n,selected,cfg)=>{
+            console.log(cfg);
             let arr=[]
             for(let i=0;i<n;i++){
                 arr.push({
                     wX:cfg.width,         //mask width, w*(1+eX)
                     wY:cfg.height,         //mask height
-                    mX:(i+cfg.offset)*cfg.width,
-                    mY:-cfg.height,
+                    mX:((i+cfg.offset)%cfg.line)*cfg.width,                 //calc the row break
+                    mY:Math.floor((i+cfg.offset)/cfg.line)*cfg.height,      //calc the row break
                     active:i===selected
                 })
             }
@@ -85,9 +92,8 @@ function PartSection(props) {
 
     return (
         <Row className="unselect pt-2 pb-2">
-            <Col className="text-center pt-1" sm={size.row[0]} xs={size.row[0]}>
-                <canvas hidden={true} id={cut_id} width={width} height={height}></canvas>
-                <img src={bs64} style={{width:"100%"}} width={width} height={height} alt="The target section of orgin template"/>
+            <canvas hidden={true} id={cut_id} width={width} height={height}></canvas>
+            <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>    
                 {grid.map((row, order) => (
                     <div className="cover" key={order} style={{
                         marginLeft: `${row.mX}px`,
@@ -99,6 +105,7 @@ function PartSection(props) {
                         color: `${row.active?"#ff0000":"#ffffff"}`,
                     }}>{order}</div>
                 ))}
+                <img src={bs64} width={width} height={height} alt="The target section of orgin template"/>
             </Col>
         </Row>
     )

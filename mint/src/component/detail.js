@@ -171,7 +171,7 @@ function Detail(props) {
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
                 <small>Range of part at orgin image.</small>
-                <PartSection index={selected} selected={parseInt(`0x${value}`) % dvd} template={props.alink}/>
+                <PartSection only={false} index={selected} selected={parseInt(`0x${value}`) % dvd} template={props.alink}/>
             </Col>
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 iNFT template {parts.length} parts selector.
