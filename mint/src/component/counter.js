@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
 
-//block hash interval
 
 let timer=null;
-
 function Counter(props) {
     const size = {
         row: [12],
@@ -16,16 +14,20 @@ function Counter(props) {
     let [circleRight,setRight]=useState("circle-pro rightstatic");
     let [info,setInfo]=useState("");
 
+    const config={
+        duration:6,
+    }
+
     const self = {
         start:()=>{
             setLeft("circle-pro leftcircle");
             setRight("circle-pro rightcircle");
 
-            let count=120;
+            let count=config.duration*10;
             timer=setInterval(()=>{
                 
                 if(count===0){
-                    count=120;
+                    count=config.duration*10;
                     clearInterval(timer);
                     timer=null;
                     return self.stop();

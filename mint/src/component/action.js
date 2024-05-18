@@ -21,6 +21,11 @@ function Action(props) {
         more: [2, 2, 8]
     };
 
+    const config={
+        circle:2,           //how many block to start minting
+        round:40,           //full time to mint one
+    }
+
     let [info, setInfo] = useState(" ");
     let [password, setPassword] = useState("");
     let [hidden, setHidden] = useState(true);
@@ -100,8 +105,7 @@ function Action(props) {
                 mint_detail.task=self.getTask(mint_detail.pre, parseInt(mint_detail.index), tpl.cid, multi);
                 mint_detail.index=parseInt(mint_detail.index)+multi;
                 INFT.mint.update(mint_detail);
-                self.runTask(pair, tpl);
-               
+                self.runTask(pair, tpl);               
             });
         },
         getMulti:(tpls,cid)=>{
@@ -142,8 +146,12 @@ function Action(props) {
             const task = detail.task;
             if (task === false) return setInfo("Failed to get task data.");
 
+            let duration=2;     
+            let timer=null;     //timer to count down the process;
+
             Network("tanssi").subscribe("autorun", (bk, bhash) => {
-                console.log(`Try to run task automatically.`);
+                //console.log(`Try to run task automatically.`);
+
                 //1.get current task;
                 let index = -1;
                 for (let i = 0; i < task.length; i++) {
@@ -153,15 +161,23 @@ function Action(props) {
                         break;
                     }
                 }
-
                 if (index === -1) return true;
+
+                //1.1. check duration to make transactions start in the next 2 block
+                //console.log(`Duration: ${duration}`);
+                if(duration<config.circle){
+                    duration++;
+                    return true;
+                }
+                duration=0;
+
+                //1.2.start the timer to 
 
                 //2.run mint from index data;
                 const cid=tpl.cid;
-
                 const offset=self.getOffset(cid,tpl.parts);
                 const target = task[index];
-                
+
                 const raw = self.getRaw(cid,offset);
                 const protocol = self.getProtocol();
 

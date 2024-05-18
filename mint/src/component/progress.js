@@ -16,14 +16,18 @@ function Progress(props) {
         step:[1,2,2,1,2],
     };
 
+    const config={
+        round:40,           //full time to mint one
+    }
+
     const def_progress={
         START:1,
         READY:2,
         BROADCAST:3,
-        INBLOCK:4,
-        RETRACKED:5,
+        INBLOCK:5,
+        RETRACKED:4,
         FINALIZED:8,
-    }
+    };
 
     let [block, setBlock]=useState(0);
     let [list,setList]=useState([]);
@@ -105,18 +109,21 @@ function Progress(props) {
                             </Col>
                             <Col className="pt-1" sm={size.bar[1]} xs={size.bar[1]}>
                                 <Row className="pt-2">
-                                    <Col className={self.getStatus(0,row.now)} sm={size.step[0]} xs={size.step[0]}></Col>
+                                    <Col className={"cornor-left "+self.getStatus(0,row.now)} sm={size.step[0]} xs={size.step[0]}></Col>
                                     <Col className={self.getStatus(1,row.now)} sm={size.step[1]} xs={size.step[1]}></Col>
                                     <Col className={self.getStatus(2,row.now)} sm={size.step[2]} xs={size.step[2]}></Col>
                                     <Col className={self.getStatus(3,row.now)} sm={size.step[3]} xs={size.step[3]}></Col>
                                     <Col className={self.getStatus(4,row.now)} sm={size.step[4]} xs={size.step[4]}></Col>
-                                    <Col className={self.getStatus(5,row.now)}></Col>
+                                    <Col className={"cornor-right "+self.getStatus(5,row.now)}></Col>
                                 </Row>
                             </Col>
-                            <Col className="pt-1 text-end" sm={size.bar[2]} xs={size.bar[2]}>
-                                <button hidden={row.now<def_progress.FINALIZED} className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                            <Col className="pt-1 text-end" hidden={row.now < def_progress.FINALIZED} sm={size.bar[2]} xs={size.bar[2]}>
+                                <button  className="btn btn-sm btn-secondary" onClick={(ev)=>{
                                     self.clickSingle(row.name,row.hash);
                                 }}><FaIdBadge /></button>
+                            </Col>
+                            <Col className="pt-2 text-end" hidden={row.now >= def_progress.FINALIZED} sm={size.bar[2]} xs={size.bar[2]}>
+                                {100*row.now/def_progress.FINALIZED}%
                             </Col>
                         </Row>
                     </Col>
@@ -125,7 +132,7 @@ function Progress(props) {
             </Col>
             
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                Info: every mint takes about 36 seconds to finalize.
+                Minting takes about {config.round} seconds to finalize.
             </Col>
         </Row>
     )

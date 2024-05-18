@@ -124,7 +124,7 @@ function App() {
 
     });
 
-    Sui.test();
+    //Sui.test();   //Sui network test.
   }, []);
 
   return (

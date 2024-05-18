@@ -91,7 +91,7 @@ code {
   background-color: #cccccc;
   position: absolute;
   clip: rect(0, 200px, 200px, 50px);
-  animation: countdown 12s linear forwards;
+  animation: countdown 6s linear forwards;
 }
 
 @keyframes countdown {
@@ -202,8 +202,8 @@ code {
   border-top:10px solid green;
   border-right:10px solid green;
   right:0;
-  -webkit-animation: circleProgressLoad_right 12s linear infinite;
-  animation:circleProgressLoad_right 12s linear infinite;
+  -webkit-animation: circleProgressLoad_right 6s linear infinite;
+  animation:circleProgressLoad_right 6s linear infinite;
 }
 .leftstatic{
   border-bottom:10px solid green;
@@ -214,13 +214,13 @@ code {
   border-bottom:10px solid green;
   border-left:10px solid green;
   left:0;
-  -webkit-animation: circleProgressLoad_left 12s linear infinite;
-  animation:circleProgressLoad_left 12s linear infinite;
+  -webkit-animation: circleProgressLoad_left 6s linear infinite;
+  animation:circleProgressLoad_left 6s linear infinite;
 }
 
 .act{
-  -webkit-animation: circleProgressLoad_right 12s linear infinite;
-  animation:circleProgressLoad_right 12s linear infinite;
+  -webkit-animation: circleProgressLoad_right 6s linear infinite;
+  animation:circleProgressLoad_right 6s linear infinite;
 }
 
 @keyframes circleProgressLoad_right{
@@ -333,6 +333,15 @@ code {
   box-shadow: 0px 8px 30px rgba(0, 0, 0,1);
 }
 
+.cornor-left{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.cornor-right{
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
 
 /**************************************************************************/
 /***************************** Customize CSS ******************************/

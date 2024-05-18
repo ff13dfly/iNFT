@@ -34,9 +34,9 @@ const funs={
         }else if(obj.status.Broadcast){
             return ck && ck({msg:"Broadcast to nodes.",success:true,status:"Broadcast",code:3});
         }else if(obj.status.InBlock){
-            return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock",code:4});
+            return ck && ck({msg:"Already packed, ready to update.",success:true,status:"InBlock",code:5});
         }else if(obj.status.Retracted){
-            return ck && ck({msg:"Trying to write.",success:true,status:"Retracted",code:5});
+            return ck && ck({msg:"Trying to write.",success:true,status:"Retracted",code:4});       //not everytime
         }else if(obj.status.Finalized){
             return ck && ck({msg:"Done, write to network",success:true,status:"Finalized",hash:obj.status.Finalized,code:8});
         }else{
@@ -158,12 +158,14 @@ const self={
             try {
                 wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
                     const dt=res.toHuman();
+                    console.log(dt);
                     funs.decodeProcess(dt,(status)=>{
+                        console.log(status);
                         return ck && ck(status);
                     });
                 });
             } catch (error) {
-                return ck && ck(false);
+                return ck && ck(error);
             }
         });
     },
