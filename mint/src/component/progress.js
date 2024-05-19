@@ -9,6 +9,8 @@ import Network from "../network/router";
 import INFT from "../lib/inft";
 import Local from "../lib/local";
 
+//let interval_timer=null;
+//const time=[];
 function Progress(props) {
     const size = {
         row: [12],
@@ -18,6 +20,7 @@ function Progress(props) {
 
     const config={
         round:40,           //full time to mint one
+        delay:18,           //interval of transactions
     }
 
     const def_progress={
@@ -75,8 +78,28 @@ function Progress(props) {
         },
         showTask:()=>{
             const details=INFT.mint.detail();
-            setList(details.task);
+            // if(time.length===0){
+            //     self.initTimer(details.task.length,()=>{
+            //         if(interval_timer!==null) clearInterval(interval_timer);
+            //         interval_timer=setInterval(()=>{
+            //             for(let i=0;i<time.length;i++){
+            //                 if(time[i]>0){
+            //                     time[i]--;
+            //                 }
+            //             }
+                        
+            //         },1000);
+            //     });
+            // }
+            setList(details.task);            
         },
+
+        // initTimer:(n,ck)=>{
+        //     for(let i=0;i<n;i++){
+        //         time.push(config.round+config.delay*i);
+        //     }
+        //     return ck && ck();
+        // },
     }
 
     useEffect(() => {
@@ -85,7 +108,7 @@ function Progress(props) {
        
         Network("tanssi").subscribe("progress",(bk, bhash)=>{
             setBlock(bk);
-            setTimeout(self.showTask,1500);  //update task after finalized new block
+            setTimeout(self.showTask,500);  //update task after finalized new block
         });
     }, [props.update]);
 

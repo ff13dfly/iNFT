@@ -158,9 +158,9 @@ const self={
             try {
                 wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
                     const dt=res.toHuman();
-                    console.log(dt);
+                    //console.log(dt);
                     funs.decodeProcess(dt,(status)=>{
-                        console.log(status);
+                        //console.log(status);
                         return ck && ck(status);
                     });
                 });

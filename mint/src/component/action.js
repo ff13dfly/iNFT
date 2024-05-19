@@ -146,9 +146,7 @@ function Action(props) {
             const task = detail.task;
             if (task === false) return setInfo("Failed to get task data.");
 
-            let duration=2;     
-            let timer=null;     //timer to count down the process;
-
+            let duration=2;
             Network("tanssi").subscribe("autorun", (bk, bhash) => {
                 //console.log(`Try to run task automatically.`);
 
@@ -170,8 +168,6 @@ function Action(props) {
                     return true;
                 }
                 duration=0;
-
-                //1.2.start the timer to 
 
                 //2.run mint from index data;
                 const cid=tpl.cid;
