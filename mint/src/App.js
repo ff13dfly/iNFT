@@ -17,7 +17,8 @@ import TPL from "./lib/tpl";
 import INFT from "./lib/inft";
 import VERSION from "./lib/version";
 
-import Sui from "./network/sui";
+//import Sui from "./network/sui";
+import Tanssi from "./network/tanssi";
 
 function App() {
   let [update, setUpdate] = useState(0);
@@ -124,7 +125,7 @@ function App() {
 
     });
 
-    //Sui.test();   //Sui network test.
+    Tanssi.test();   //Sui network test.
   }, []);
 
   return (

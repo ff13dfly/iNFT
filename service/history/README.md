@@ -4,6 +4,10 @@
 
 - Cache the anchors to local.
 
+## Functions
+
+- Cache iNFT to local. Save as file, one file per hour.
+
 ## Deployment
 
 - Server URL: https://api.w3os.net

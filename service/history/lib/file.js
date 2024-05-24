@@ -18,11 +18,13 @@ const file = {
             });
         });
     },
-    save:(name,data,ck)=>{
-        const target = `./${name}`;
+    save:(name,data,ck,folder)=>{
+        const path=!folder?`./`:`./${folder}`;
+        if(!fs.existsSync(path)) fs.mkdirSync(path,{recursive:true});
+        const target = `${path}/${name}`;
         fs.writeFile(target, data, 'utf8', function (err) {
             if (err) return ck && ck({ error: err });
-            return ck && ck();
+            return ck && ck(true);
         });
     },
 };
