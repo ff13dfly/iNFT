@@ -168,7 +168,7 @@ const self={
                         console.log(`Not default: ${exs.length} exs.`);
                         exs.forEach((ex, index) => {
                             if(index<4) return false;
-                            const row=ex.toJSON();
+                            const row=ex.toHuman();     //FIXME, here to 
                             infts.push(row);
                         });
                         return ck && ck(infts);
