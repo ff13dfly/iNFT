@@ -4,7 +4,11 @@
 .AppleDouble
 .LSOverride
 
+nohup.out
 robot_setting.json
 
 node_modules
 account
+
+yarn.lock
+robot.min.js

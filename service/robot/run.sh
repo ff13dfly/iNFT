@@ -1,0 +1,1 @@
+sudo nohup node robot.min.js &

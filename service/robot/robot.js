@@ -7,11 +7,19 @@ const IO = require('./lib/file.js');
 const Tanssi = require('./lib/tanssi.js');
 
 let round=0;
+
+const overview={
+    try:0,
+    success:0,
+    round:0,
+};
+
+
 const self = {
     getBasic: () => {
         return {
             index: 0,
-            prefix: 'abc_',
+            prefix: config.prefix,
             accounts: config.account,
             create: tools.stamp(),
             update: tools.stamp(),
@@ -108,7 +116,7 @@ const self = {
         }
     },
     run: (pairs,tpl,cfg) => {
-        output(`Round (${round}) minting.`, "primary", true);
+        output(`Round (${overview.round}) minting.`, "primary", true);
         const hash=tpl.cid;
         for (let acc in pairs) {
             cfg.index=cfg.index+1;
@@ -119,30 +127,35 @@ const self = {
             const name=`${cfg.prefix}${cfg.index}`;
             ((pair,name,raw,protocol)=>{
                 output(`${name} started to mint.`);
+                overview.try++;
                 Tanssi.write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
                     output(`${name}:${JSON.stringify(process)}`);
+                    if(process.status==="Finalized") overview.success++;
                 });
             })(pair,name,raw,protocol);
         }
         
         return setTimeout(()=>{
-            round++;
-
+            overview.round++;
+            output(`Overview: ${JSON.stringify(overview)}`, "primary", true);
             //0,save the config to file
-            if(round%config.autosave===1){
+            if(overview.round%config.autosave===1){
                 IO.save(config.basic, JSON.stringify(cfg), (rs) => {
                     output(`Setting saved.`, "success", true);
                 });
             }
 
             //1.run minting task
-            self.run(pairs,tpl,cfg);
+            self.check(pairs, (pairs) => {
+                self.run(pairs,tpl,cfg);
+            });
         },config.interval);
     },
 }
 
 //0.load basic setting or init it;
-output(`\n____________i___N___F___T______i___N___F___T______i___N___F___T______i___N___F___T____________`, "success", true);
+output(`\n____________iNFT____________iNFT____________iNFT____________iNFT____________iNFT____________`, "success", true);
+//output(`\n____________i___N___F___T______i___N___F___T______i___N___F___T______i___N___F___T____________`, "success", true);
 output(`Start iNFT robot ( version ${config.version} ), author: Fuu, 2024.05`, "success", true);
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -177,7 +190,7 @@ self.start((cfg) => {
                     if(tpl.error) return  output(`Failed to load template IPFS file.`,'error');
                     //console.log(tpl);
                     output(`Minting robot is ready to go in 2s...`, "success", true);
-                    output(`____________i___N___F___T______i___N___F___T______i___N___F___T______i___N___F___T____________`, "success", true);
+                    output(`____________iNFT____________iNFT____________iNFT____________iNFT____________iNFT____________`, "success", true);
 
                     //4.run minting task    
                     return setTimeout(()=>{

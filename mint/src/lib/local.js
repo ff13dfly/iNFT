@@ -1,4 +1,4 @@
-const prefix="new_";
+const prefix="ii_";
 const keys={
     login:`${prefix}user`,
     list:`${prefix}list`,

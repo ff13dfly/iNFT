@@ -70,6 +70,8 @@ const self = {
             return ck && ck(data);
         }).then((fun) => {
             unsub = fun;
+        }).catch((error) => {
+            return ck && ck(error);
         });
     },
 

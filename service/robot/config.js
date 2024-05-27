@@ -11,6 +11,7 @@ exports.config = {
     'low':10000000,         //low balance
     'interval':40000,
     'autosave':5,           //how many rounds to save setting
+    'prefix':'abc_',
     'folder':'log',
     'basic':'robot_setting.json',
     'version':'1.0.0',
