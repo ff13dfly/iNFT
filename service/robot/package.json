@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "bs58": "^5.0.0",
-    "solana-data-program": "^1.0.4"
+    "@polkadot/api": "^11.1.1",
+    "axios": "^1.7.2",
+    "fs": "^0.0.1-security"
   }
 }

@@ -29,6 +29,9 @@ const self = {
   copy:(arr_obj)=>{
     return JSON.parse(JSON.stringify(arr_obj));
   },
+  clone:(arr_obj)=>{
+    return JSON.parse(JSON.stringify(arr_obj));
+  },
   clean:(arr)=>{
     return Array.from(new Set(arr));
   },

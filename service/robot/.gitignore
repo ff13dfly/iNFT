@@ -4,5 +4,7 @@
 .AppleDouble
 .LSOverride
 
+robot_setting.json
+
 node_modules
 account

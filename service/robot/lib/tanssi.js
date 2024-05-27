@@ -1,44 +1,44 @@
 const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
 
-const subs = {};      //subscribe funs
+const limits = {
+    key: 40,					//Max length of anchor name ( ASCII character )
+    protocol: 256,			//Max length of protocol	
+    raw: 350,		        //Max length of raw data
+    address: 48,				//SS58 address length
+};
 
-const funs = {
-    filter: (exs, method, status) => {
-        console.log(exs);
-        let arr = [];
-        let stamp = 0;
-        exs.forEach((ex, index) => {
-            console.log(ex)
-            // if(index===0){
-            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, '');
-            // }
-            // if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
-            // const dt = ex.toHuman();
-            // if (dt.method.method === method) {
-            // 	const res = dt.method;
-            // 	res.owner = dt.signer.Id;
-            // 	res.stamp = stamp;
-            // 	arr.push(res);
-            // }
-        });
-        return arr;
+
+const funs={
+    limited: (key, raw, protocol, address) => {
+        if (key !== undefined) return key.length > limits.key ? true : false;
+        if (protocol !== undefined) return protocol.length > limits.protocol ? true : false;
+        if (raw !== undefined) return raw.length > limits.raw ? true : false;
+        if (address !== undefined) return address.length !== limits.address ? true : false;
+        return false;
     },
-    status: (list) => {
-        const evs = list.toHuman();
-        const map = {};
-        for (let i = 0; i < evs.length; i++) {
-            const ev = evs[i], index = ev.phase.ApplyExtrinsic;
-            if (ev.event.section !== "system") continue;
-            map[index] = ev.event.method;
+    decodeProcess: (obj, ck) => {
+        if (!obj || obj.dispatchError !== undefined) return ck && ck({ error: "Failed to write to chain." });
+        if (!obj.status) return ck && ck({ error: "Invalid format" });
+        if (obj.status === "Ready") {
+            return ck && ck({ msg: "Ready to write to network.", success: true, status: "Ready", code: 2 });
+        } else if (obj.status.Broadcast) {
+            return ck && ck({ msg: "Broadcast to nodes.", success: true, status: "Broadcast", code: 3 });
+        } else if (obj.status.InBlock) {
+            return ck && ck({ msg: "Already packed, ready to update.", success: true, status: "InBlock", code: 5 });
+        } else if (obj.status.Retracted) {
+            return ck && ck({ msg: "Trying to write.", success: true, status: "Retracted", code: 4 });       //not everytime
+        } else if (obj.status.Finalized) {
+            return ck && ck({ msg: "Done, write to network", success: true, status: "Finalized", hash: obj.status.Finalized, code: 8 });
+        } else {
+            return ck && ck({ error: "Unknow result" });
         }
-        return map;
     },
 }
 
 let wsAPI = null;
 let linking = false;
 const self = {
-    init: (ck,uri) => {
+    init: (ck, uri) => {
         if (linking) return setTimeout(() => {
             self.init(ck);
         }, 500);
@@ -52,17 +52,8 @@ const self = {
             api.rpc.state.getMetadata().then(() => {
                 wsAPI = api;
                 linking = false;
-                wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
-                    const data = JSON.parse(JSON.stringify(lastHeader));
-                    const block = data.number - 1;      //get the right block number
-                    const hash = data.parentHash;     //get the finalized hash
-                    for (let k in subs) {
-                        subs[k](block, hash);
-                    }
-                });
                 return ck && ck(wsAPI);
-
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
             });
         }).catch((error) => {
@@ -71,138 +62,48 @@ const self = {
             return ck && ck(error);
         });
     },
-    reset: (ck, proxy) => {
-        console.log(`Restart system link`);
-    },
-
-    unsubscribe: (key) => {
-        delete subs[key];
-    },
-    subscribe: (key, fun) => {
-        self.init(() => {
-            if (subs[key] !== undefined) delete subs[key];     //remove old function 
-            subs[key] = fun;     //add the subcribe function to the map
+    balance: (address, ck) => {
+        let unsub = null;
+        wsAPI.query.system.account(address, (res) => {
+            if (unsub != null) unsub();
+            const data = res.toJSON().data;
+            return ck && ck(data);
+        }).then((fun) => {
+            unsub = fun;
         });
     },
+
     divide: () => {
         return 1000000000000;
     },
-    view: (value, type, ck) => {
-        self.init((URI) => {
-            switch (type) {
-                case "anchor":
-                    //1.if set block,search directly
-                    if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
-                        const hash = res.toJSON();
+    load: (acc, password, ck) => {
+        const keyring = new Keyring({ type: "sr25519" });
+        const pair = keyring.createFromJson(acc);
+        try {
+            pair.decodePkcs8(password);
+            return ck && ck(pair);
+        } catch (error) {
+            return ck && ck({ error: "Invalid passoword" });
+        }
+    },
+    write: (pair, obj, ck) => {
+        self.init(() => {
+            let { anchor, raw, protocol } = obj;
+            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
+            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
-                        wsAPI.rpc.chain.getBlock(hash).then((full) => {
-                            let data = null;
-                            full.block.extrinsics.forEach((ex, index) => {
-                                const row = ex.toHuman();
-                                const dt = row.method;
-
-                                if (dt.method === "setAnchor" && dt.args.key === value.name) {
-                                    data = {
-                                        owner: row.signer.Id,
-                                        name: dt.args.key,
-                                        raw: dt.args.raw,
-                                        protocol: dt.args.protocol,
-                                        pre: parseInt(dt.args.pre),
-                                        block: value.block
-                                    }
-                                }
-                            });
-
-                            if (data !== null) {
-                                try {
-                                    data.raw = JSON.parse(data.raw);
-                                    data.protocol = JSON.parse(data.protocol);
-                                    return ck && ck(data);
-                                } catch (error) {
-                                    return ck && ck(data);
-                                }
-                            } else {
-                                return ck && ck(false);
-                            }
-                        });
+            const pre = 0;
+            try {
+                wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
+                    const dt = res.toHuman();
+                    funs.decodeProcess(dt, (status) => {
+                        return ck && ck(status);
                     });
-
-                    //2.check the latest block of the name
-                    self.view(value.name, "owner", (owner) => {
-                        //console.log(owner);
-                        return self.view({ name: value.name, block: owner.block }, "anchor", ck);
-                    });
-
-                    break;
-
-                case "owner":
-                    let unsub = null;
-                    wsAPI.query.anchor.anchorOwner(value, (res) => {
-                        unsub();
-                        const dt = res.toJSON();
-                        if (!dt) return ck && ck(false);
-
-                        return ck && ck({ address: dt[0], block: dt[1] });
-                    }).then((fun) => {
-                        unsub = fun;
-                    });
-                    break;
-
-                case "block":   //value: hash(64)
-                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
-                        const obj = dt.toJSON();
-                        return ck && ck({ block: obj.block.header.number });
-                    });
-
-                    break;
-                case "detail":
-                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
-                        const exs = dt.block.extrinsics;
-                        const infts = [];
-                        if (exs.length === 4) return ck && ck(infts);
-                        console.log(`Not default: ${exs.length} exs.`);
-                        exs.forEach((ex, index) => {
-                            if (index < 4) return false;
-                            const row = ex.toHuman();
-                            //console.log(row);
-                            infts.push(row);
-                        });
-                        return ck && ck(infts);
-                    });
-                    // wsAPI.query.system.events.at(value,(evs)=>{
-                    //     const status=funs.status(evs);
-                    //     const arr=funs.filter(evs,"TransactionFeePaid",status);
-                    //     console.log(arr);
-                    // });
-                    break;
-                case "blocknumber":   //value: hash(64)
-                    wsAPI.rpc.chain.getBlockHash(value, (res) => {
-                        const hash = res.toHex();
-                        return self.view(hash, "detail", ck);
-                    });
-
-                    break;
-
-                default:
-                    break;
+                });
+            } catch (error) {
+                return ck && ck(error);
             }
-
-
-        });
-    },
-    test: () => {
-        test.auto();
-    }
-}
-
-const test = {
-    auto: () => {
-        test.test_view();
-    },
-    test_view: () => {
-        const block = 346158;
-        self.view(block, "blocknumber", (dt) => {
-            console.log(dt);
         });
     },
 }
