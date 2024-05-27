@@ -294,7 +294,7 @@ const self = {
         } catch (error) {
             Local.remove(key);
             const ps={};
-            ps[addr]=[];
+            ps[addr]=raw;
             Local.set(key,JSON.stringify(ps));
             return true;
         }
@@ -355,22 +355,12 @@ const self = {
         add:(name, tpl_cid, hash, block, creator,offset)=>{
             const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset);
             raw.unshift(single);
+            //console.log(single);
+            //console.log(JSON.stringify(raw));
             return self.update();
         }   
     },
     mint:{
-        // start:(n)=>{
-        //     const addr=funs.getAddress();
-        //     if(!addr) return false;
-        //     const data=funs.getINFTMintDetail(addr);
-
-        // },
-
-        //update task status
-        // progress:(index,value,ck)=>{      
-        //     const task=self.mint.task();
-            
-        // },
     
         //get current task
         detail:(key)=>{

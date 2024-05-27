@@ -137,7 +137,7 @@ function Action(props) {
         },
         getOffset:(cid,parts)=>{
             const detail=INFT.mint.detail();
-            if(!detail.template || !detail.template[cid] || detail.template[cid].way===1) return self.getMintOffset(parts);
+            if(!detail || !detail.template || !detail.template[cid] || detail.template[cid].way===1) return self.getMintOffset(parts);
             if(detail.template[cid].way===3 && detail.template[cid].offset) return detail.template[cid].offset;
             return [];
         },

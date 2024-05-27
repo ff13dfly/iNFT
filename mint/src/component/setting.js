@@ -124,6 +124,7 @@ function Setting(props) {
             const os = INFT.mint.detail("template");
             if (!os[active.cid]) {
                 os[active.cid] = {
+                    way:1,
                     multi: 1,
                     offset: self.getMintOffset(active.parts),
                 }
