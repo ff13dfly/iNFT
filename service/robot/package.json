@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "bs58": "^5.0.0",
+    "solana-data-program": "^1.0.4"
+  }
+}
