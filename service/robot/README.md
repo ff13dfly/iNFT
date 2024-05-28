@@ -19,7 +19,12 @@
     ```SHELL
         #Need esbuild support
         yarn add esbuild
-        ./node_modules/esbuild/bin/esbuild robot.js --bundle --minify --outfile=./robot.min.js --platform=node
+
+        #Package the Tanssi robot
+        ./node_modules/esbuild/bin/esbuild tanssi_robot.js --bundle --minify --outfile=./robot_tanssi.min.js --platform=node
+
+        #Package the Anchor robot
+        ./node_modules/esbuild/bin/esbuild anchor_robot.js --bundle --minify --outfile=./robot_anchor.min.js --platform=node
     ```
 
     ```SHELL

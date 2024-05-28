@@ -2,8 +2,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 const { ApiPromise, WsProvider, Keyring } = window.Polkadot;
 
 const config = {
-    //node:"wss://wss.android.im/tanssi",
-    node: "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
+    node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
     target: 12000,           //How long to create a new block
 }
 
@@ -46,7 +45,6 @@ const funs = {
     filter: (exs, method, status) => {
         console.log(exs);
         let arr = [];
-        let stamp = 0;
         exs.forEach((ex, index) => {
             console.log(ex)
             // if(index===0){

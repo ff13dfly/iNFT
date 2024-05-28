@@ -1,5 +1,6 @@
 import TANSSI from "./tanssi";
 import SOLANA from "./tanssi";
+import ANCHOR from "./anchor";
 
 const format={
     init:(ck,network)=>{                    //link to network node init function
@@ -57,6 +58,7 @@ const format={
 const map={     //support networks
     tanssi:TANSSI,
     solane:SOLANA,
+    anchor:ANCHOR,
     polkadto:null,
     aptos:null,
     sui:null,

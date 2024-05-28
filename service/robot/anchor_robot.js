@@ -1,10 +1,10 @@
 const axios = require('axios');
 
-const { config } = require('./config.js');
+const { config } = require('./Anchor_config.js');
 const { output } = require('./lib/output.js');
 const tools = require('./lib/tools.js');
 const IO = require('./lib/file.js');
-const Tanssi = require('./lib/tanssi.js');
+const Anchor = require('./network/anchor.js');
 
 let round=0;
 
@@ -68,7 +68,7 @@ const self = {
         const target = `./account/${acc}.json`;
         IO.read(target, (fa) => {
             if (fa.error) return self.load(accounts, ck, pairs);
-            Tanssi.load(fa, password, (pair) => {
+            Anchor.load(fa, password, (pair) => {
                 if (pair.error) {
                     output(`Failed to decode account ${acc}`, 'error', true);
                     return self.load(accounts, ck, pairs);
@@ -104,7 +104,7 @@ const self = {
         let count = 0;
         for (let acc in pairs) {
             count++;
-            Tanssi.balance(acc, (res) => {
+            Anchor.balance(acc, (res) => {
                 count--;
                 output(`Account ${acc} balance: ${res.free.toLocaleString()}`, 'success', true);
                 if (res.free < config.low) {
@@ -128,7 +128,7 @@ const self = {
             ((pair,name,raw,protocol)=>{
                 output(`${name} started to mint.`);
                 overview.try++;
-                Tanssi.write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
+                Anchor.write(pair, { anchor: name, raw: raw, protocol: protocol }, (process) => {
                     output(`${name}:${JSON.stringify(process)}`);
                     if(process.status==="Finalized") overview.success++;
                 });
@@ -154,7 +154,7 @@ const self = {
 }
 
 //0.load basic setting or init it;
-output(`\n____________iNFT____________iNFT____________iNFT____________iNFT____________iNFT____________`, "success", true);
+output(`\n____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
 //output(`\n____________i___N___F___T______i___N___F___T______i___N___F___T______i___N___F___T____________`, "success", true);
 output(`Start iNFT robot ( version ${config.version} ), author: Fuu, 2024.05`, "success", true);
 
@@ -176,10 +176,10 @@ self.start((cfg) => {
     output(`Start to load accounts(${cfg.accounts.length}) for minting.`, "primary", true);
     //1.load all accounts from setting
     self.load(tools.clone(cfg.accounts), (accounts) => {
-        //2.link to Tanssi node;
-        output(`Linking to Tanssi node: ${config.node}`, "primary", true);
-        Tanssi.init(() => {
-            output(`Linked to Tanssi appchain node successful.`, "success", true);
+        //2.link to Anchor node;
+        output(`Linking to Anchor node: ${config.node}`, "primary", true);
+        Anchor.init(() => {
+            output(`Linked to Anchor appchain node successful.`, "success", true);
             //3.check the balance, remove low balance accounts
             self.check(accounts, (pairs) => {
                 // return  output(`No account to mint automatically.`,'error');
@@ -190,12 +190,12 @@ self.start((cfg) => {
                     if(tpl.error) return  output(`Failed to load template IPFS file.`,'error');
                     //console.log(tpl);
                     output(`Minting robot is ready to go in 2s...`, "success", true);
-                    output(`____________iNFT____________iNFT____________iNFT____________iNFT____________iNFT____________`, "success", true);
+                    output(`____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
 
                     //4.run minting task    
-                    return setTimeout(()=>{
-                        self.run(pairs,tpl,cfg);
-                    },2000);
+                    // return setTimeout(()=>{
+                    //     self.run(pairs,tpl,cfg);
+                    // },2000);
                 });
 
             });
