@@ -62,8 +62,6 @@ const map={     //support networks
     sui:null,
 }
 
-
-
 const Network=(name)=>{
     if(!name) return format;
     if(!map[name]) return false;

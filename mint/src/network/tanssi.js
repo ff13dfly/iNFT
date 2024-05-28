@@ -113,6 +113,15 @@ const self = {
             console.error('Unhandled promise rejection:', event.reason);
         });
     },
+    metadata:(ck)=>{
+        self.init(() => {
+            wsAPI.rpc.state.getMetadata().then((res) => {
+                return ck && ck(res);
+            }).catch((error)=>{
+                return ck && ck({error:'Invalid request'});
+            });
+        });
+    },
     reset: (ck, proxy) => {
         console.log(`Restart system link`);
     },
@@ -357,6 +366,12 @@ const self = {
 const test = {
     auto: () => {
         test.test_view();
+        test.test_metadata();
+    },
+    test_metadata:()=>{
+        self.metadata((dt)=>{
+            console.log(dt.toHuman());
+        });
     },
     test_view: () => {
         const block = 384394;

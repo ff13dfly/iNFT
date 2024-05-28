@@ -46,7 +46,7 @@ const self = {
         if(timer===null){
             timer=setInterval(()=>{
                 IO.save(config.cache,JSON.stringify(map),()=>{
-                    self.output(`Saving history to cache: ${config.cache}`);
+                    //self.output(`Saving history to cache: ${config.cache}`);
                 });
             },config.autosaving);
         }
@@ -159,9 +159,16 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+//catch error in order to avoid crashing.
+process.on('unhandledRejection', (reason, promise) => {
+    self.output(`UnhandledRejection`,'error');
+});
+  
+process.on('uncaughtException', (error) => {
+    self.output(`uncaughtException`,'error');
+});
 
-//curl http://127.0.0.1:8888/5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
-//curl http://127.0.0.1:8888/5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV
+
 self.init(()=>{
     self.backup(()=>{
         //console.log(wsAPI.tx.balances);
@@ -189,6 +196,7 @@ self.init(()=>{
                     self.output(`First faucet: ${first}`)
                     self.transfer(first,addr,day,(txHash)=>{
                         self.output(`Transaction done. Hash: ${txHash}`,"primary");
+                        self.output(`---------------------------`,"primary");
                     });
                     return res.send({message:'Welcome, your faucet is sending.'});
                 }else{

@@ -125,7 +125,7 @@ function App() {
 
     });
 
-    //Tanssi.test();   //Sui network test.
+    Tanssi.test();   //Tanssi network test.
   }, []);
 
   return (

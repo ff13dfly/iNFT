@@ -6,3 +6,7 @@
 
 node_modules
 record.json
+
+account
+
+yarn.lock

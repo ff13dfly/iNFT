@@ -4,8 +4,8 @@ exports.config = {
     //'node':'ws://127.0.0.1:9944',       //test  
     'account':[     //select the account by day%account.length
         ['5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd','123456'],
-        ['5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd','123456'],
-        ['5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd','123456'],
+        ['5DcpcBu1J4qpQRkeFy6Qcn9FxUm6knhvufnYpX62oHH1zWCx','123456'],
+        ['5Dt3Diu9becXCqtY2nYucE7DYRaWb7a8V73xuphWeB7MbLVq','123456'],
     ],
     'cache':'record.json',
     'autosaving':60000,

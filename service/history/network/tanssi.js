@@ -55,9 +55,9 @@ const self = {
         const provider = new WsProvider(uri);
         ApiPromise.create({ provider: provider }).then((api) => {
             console.log(`Linked to node ${uri}`);
-            api.rpc.state.getMetadata().then(() => {
-                wsAPI = api;
-                linking = false;
+            wsAPI = api;
+            linking = false;
+            wsAPI.rpc.state.getMetadata().then(() => {
                 wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                     const data = JSON.parse(JSON.stringify(lastHeader));
                     const block = data.number - 1;      //get the right block number
