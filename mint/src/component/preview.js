@@ -8,6 +8,7 @@ import RenderiNFT from "./inft";
 
 import TPL from "../lib/tpl";
 import tools from "../lib/tools";
+import Data from "../lib/data";
 
 import Network from "../network/router";
 
@@ -25,6 +26,7 @@ function Preview(props) {
     let [start, setStart]=useState(0);
     let [active, setActive]=useState(0);
     let [force, setForce]=useState(false);
+    let [network, setNetwork]=useState("");
 
     let first=true;
     let timer=null
@@ -46,8 +48,11 @@ function Preview(props) {
             },2000);
         },
         fresh:()=>{
+            const cur=Data.getHash('cache','network');
+            setNetwork(cur);
             setTimeout(() => {
-                Network("tanssi").subscribe("preview",(bk, bhash)=>{
+                const cur=Data.getHash('cache','network');
+                Network(cur).subscribe("preview",(bk, bhash)=>{
                     animate=true;
                     setForce(false);
                     if(!first){
@@ -89,7 +94,7 @@ function Preview(props) {
                 />
             </Col>
             <Col className="text-center pb-2" sm={size.row[0]} xs={size.row[0]}>
-                Block {block.toLocaleString()}, Tanssi Network
+                Block {block.toLocaleString()}, {tools.toUp(network)} Network
             </Col>
             <Col className="text-center pt-3" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start}/>

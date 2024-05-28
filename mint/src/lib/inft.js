@@ -121,7 +121,7 @@ const funs={
         return nav;
     },
 
-    getINFT:(name, tpl, hash, block, creator,offset)=>{
+    getINFT:(name, tpl, hash, block, creator,offset,network)=>{
         return {
             anchor: name,
             hash: hash,
@@ -132,7 +132,7 @@ const funs={
                 type: "ipfs",            //storage way
                 origin: "web3.storage",   //storage origianl
             },
-            network: "tanssi",
+            network: network,
             creator: creator,
             fav: false,                  //wether faved
             stamp: tools.stamp(),
@@ -352,8 +352,8 @@ const self = {
             const index=map[name];
             return raw[index];
         },
-        add:(name, tpl_cid, hash, block, creator,offset)=>{
-            const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset);
+        add:(name, tpl_cid, hash, block, creator,offset,network)=>{
+            const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset,network);
             raw.unshift(single);
             //console.log(single);
             //console.log(JSON.stringify(raw));

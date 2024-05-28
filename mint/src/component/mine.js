@@ -28,6 +28,11 @@ function Mine(props) {
         page_count:9,
     }
 
+    const icons={
+        tanssi:"T",
+        anchor:"A",
+    }
+
     let [list, setList] = useState([]);
     let [progress, setProgress]=useState("");
     let [done, setDone] = useState(false);
@@ -136,8 +141,11 @@ function Mine(props) {
                                         {row.fav?<FaRegHeart/>:""} <small>{row.block.toLocaleString()}</small> 
                                     </Col>
                                     <Col className="pt-1" sm={size.detail[1]} xs={size.detail[1]}>
-                                        
+                                        {icons[row.network]}
                                     </Col>
+                                    {/* <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                                        {row.network}
+                                    </Col> */}
                                 </Row>
                             </Col>
                         ))}

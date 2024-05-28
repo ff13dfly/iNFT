@@ -35,6 +35,16 @@ function Account(props) {
     let [recover, setRecover] = useState({});
 
     const self = {
+        getUnit:()=>{
+            const cur=Data.getHash('cache','network');
+            if(config.unit && config.unit[cur]) return config.unit[cur];
+            return 'unit';
+        },
+        getFaucetURL:(addr)=>{
+            const cur=Data.getHash('cache','network');
+            if(config.faucet && config.faucet[cur]) return `${config.faucet[cur]}/${addr}`;
+            return false;
+        },
         changePassword: (ev) => {
             setPassword(ev.target.value);
             setNewDisable(!ev.target.value ? true : false);
@@ -85,15 +95,20 @@ function Account(props) {
                 const login = JSON.parse(fa);
                 self.showBalance(login.address);
 
-                const furl=`${config.faucet}/${login.address}`;
-                const response = await fetch(furl);
-                if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
-
-                const ctx = await response.text();
-                const rep=JSON.parse(ctx);
-
-                if(rep.error) return self.faucetMessage(rep.error);
-                return self.faucetMessage(rep.message);
+                const furl=self.getFaucetURL(login.address);
+                if(furl===false){
+                    return self.faucetMessage(`Not support yet.`);
+                }else{
+                    const response = await fetch(furl);
+                    if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
+    
+                    const ctx = await response.text();
+                    const rep=JSON.parse(ctx);
+    
+                    if(rep.error) return self.faucetMessage(rep.error);
+                    return self.faucetMessage(rep.message);
+                }
+                
             } catch (error) {
                 setFaucet("Cors issue.");
                 return setTimeout(() => {
@@ -156,6 +171,7 @@ function Account(props) {
 
             }
         },
+        
     }
 
     useEffect(() => {
@@ -186,7 +202,7 @@ function Account(props) {
                         }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        <strong>{balance}</strong> $INFT
+                        <strong>{balance}</strong> {self.getUnit()}
                     </Col>
                 </Row>
             </Col>

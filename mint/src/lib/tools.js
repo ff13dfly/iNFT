@@ -42,6 +42,10 @@ const self = {
     if (JSON.stringify(obj) === "{}") return true;
     return false;
   },
+  toUp:(word)=>{
+    if (!word) return '';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  },
   toDate: (stamp) => {
     return new Date(stamp).toLocaleString();
   },

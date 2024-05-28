@@ -1,5 +1,6 @@
 module.exports = {
-    network:"tanssi",
+    network:"anchor",
+    //network:"tanssi",
     //network:"sui",
     node:[
         "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
@@ -13,7 +14,10 @@ module.exports = {
         //"anchor://single/265468",
         //"anchor://aabb/217148",
     ],
-    faucet:"https://faucet.w3os.net",
+    faucet:{
+        tanssi:"https://faucet.w3os.net",
+        anchor:"",
+    },
     agent:{
         inft:[
             "wss://wss.android.im",
@@ -22,7 +26,10 @@ module.exports = {
             "https://ipfs.w3os.net/"
         ],
     },
-    unit:"$INFT",
+    unit:{
+        anchor:"$MEKK",
+        tanssi:"$INFT",
+    },
     proxy:true,             //system default proxy setting
     version:20240103,
 }

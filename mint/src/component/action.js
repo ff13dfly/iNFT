@@ -220,7 +220,8 @@ function Action(props) {
             const cur=Data.getHash('cache','network');
             Network(cur).view(hash, "block", (data) => {
                 const tpl = TPL.current(true);
-                INFT.single.add(name, tpl, hash, data.block, creator,offset);
+                const cur=Data.getHash('cache','network');
+                INFT.single.add(name, tpl, hash, data.block, creator,offset,cur);
                 return ck && ck(data.block);
             });
         },
