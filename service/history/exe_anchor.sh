@@ -1,0 +1,1 @@
+nohup /usr/bin/node ~/history/history.anchor.min.js &

@@ -1,0 +1,1 @@
+nohup /usr/bin/node ~/history/history.tanssi.min.js &

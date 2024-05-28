@@ -1,1 +1,0 @@
-nohup /usr/bin/node ~/history/history.min.js &

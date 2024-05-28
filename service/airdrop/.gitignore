@@ -8,5 +8,7 @@ node_modules
 record.json
 
 account
-
 yarn.lock
+
+faucet.tanssi.min.js
+faucet.anchor.min.js

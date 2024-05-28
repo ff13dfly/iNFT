@@ -156,7 +156,7 @@ const self = {
         const pair = keyring.addFromUri(mnemonic);
         const sign = pair.toJson(password);
         sign.meta.from = "minter";
-        return ck && ck(sign);
+        return ck && ck(sign,mnemonic);
     },
     transfer: (pair, to, amount, ck) => {
         self.init(() => {

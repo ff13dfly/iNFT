@@ -9,6 +9,7 @@ import Data from "../lib/data"
 
 import Network from "../network/router";
 import INFT from "../lib/inft";
+import Seed from "./seed";
 
 import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
 
@@ -52,11 +53,13 @@ function Account(props) {
         clickNewAccount: (ev) => {
             setNewDisable(true);
             const cur=Data.getHash('cache','network');
-            Network(cur).generate(password,(fa)=>{
+            Network(cur).generate(password,(fa,mnemonic)=>{
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
                 self.show();
                 INFT.auto();
+
+                props.dialog(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic}/>,"Seed Details");
                 props.fresh();
             })
         },

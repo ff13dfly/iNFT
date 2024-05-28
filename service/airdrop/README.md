@@ -19,7 +19,12 @@
     ```SHELL
         #Need esbuild support
         yarn add esbuild
-        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./faucet.min.js --platform=node
+
+        #Package Tanssi application
+        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./faucet.tanssi.min.js --platform=node
+
+        #Package Anchor Network Application
+        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./faucet.anchor.min.js --platform=node
     ```
 
     ```SHELL

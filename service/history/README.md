@@ -17,7 +17,12 @@
     ```SHELL
         #Need esbuild support
         yarn add esbuild
-        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./history.min.js --platform=node
+
+        #Tanssi Network package
+        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./history.tanssi.min.js --platform=node
+
+        #Anchor Network package
+        ./node_modules/esbuild/bin/esbuild app.js --bundle --minify --outfile=./history.anchor.min.js --platform=node
     ```
 
     ```SHELL

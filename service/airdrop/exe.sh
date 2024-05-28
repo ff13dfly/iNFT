@@ -1,1 +1,0 @@
-nohup /usr/bin/node ~/faucet/faucet.min.js &
