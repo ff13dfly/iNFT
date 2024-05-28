@@ -106,10 +106,6 @@ const self = {
             linking = false;
             return ck && ck(error);
         });
-
-        // window.addEventListener('unhandledrejection', event => {
-        //     console.error('Unhandled promise rejection:', event.reason);
-        // });
     },
     metadata:(ck)=>{
         self.init(() => {
@@ -335,11 +331,6 @@ const self = {
                             //console.log(ex.toJSON());
                         });
                     });
-                    // wsAPI.query.system.events.at(value,(evs)=>{
-                    //     const status=funs.status(evs);
-                    //     const arr=funs.filter(evs,"TransactionFeePaid",status);
-                    //     console.log(arr);
-                    // });
                     break;
                 case "blocknumber":   //value: hash(64)
                     wsAPI.rpc.chain.getBlockHash(value, (res) => {

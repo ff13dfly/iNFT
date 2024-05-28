@@ -6,7 +6,8 @@ import Progress from "./progress";
 
 import Local from "../lib/local";
 import Account from "./account";
-import tools from "../lib/tools"
+import tools from "../lib/tools";
+import Data from "../lib/data";
 
 import TPL from "../lib/tpl";
 import INFT from "../lib/inft";
@@ -89,7 +90,8 @@ function Action(props) {
             }
              
             //2.check the password for account
-            Network("tanssi").load(fa, password, (pair) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).load(fa, password, (pair) => {
                 setPassword("");
                 if (pair.error !== undefined) {
                     setInfo(pair.error);
@@ -147,7 +149,8 @@ function Action(props) {
             if (task === false) return setInfo("Failed to get task data.");
 
             let duration=2;
-            Network("tanssi").subscribe("autorun", (bk, bhash) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).subscribe("autorun", (bk, bhash) => {
                 //console.log(`Try to run task automatically.`);
 
                 //1.get current task;
@@ -183,7 +186,8 @@ function Action(props) {
 
                 //when more than one task, need closure to keep the index right.
                 ((task_index,target,raw,protocol) => {
-                    Network("tanssi").write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
+                    const cur=Data.getHash('cache','network');
+                    Network(cur).write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
                         if (process.error) {
                             setDisable(false);
                             return setInfo(process.error);
@@ -213,7 +217,8 @@ function Action(props) {
             return true;
         },
         saveResult: (name, hash,offset, creator, ck) => {
-            Network("tanssi").view(hash, "block", (data) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).view(hash, "block", (data) => {
                 const tpl = TPL.current(true);
                 INFT.single.add(name, tpl, hash, data.block, creator,offset);
                 return ck && ck(data.block);

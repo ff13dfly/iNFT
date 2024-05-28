@@ -5,6 +5,7 @@ import config from "../config";
 import Copy from "../lib/clipboard";
 import Local from "../lib/local";
 import tools from "../lib/tools";
+import Data from "../lib/data"
 
 import Network from "../network/router";
 import INFT from "../lib/inft";
@@ -40,7 +41,8 @@ function Account(props) {
         },
         clickNewAccount: (ev) => {
             setNewDisable(true);
-            Network("tanssi").generate(password,(fa)=>{
+            const cur=Data.getHash('cache','network');
+            Network(cur).generate(password,(fa)=>{
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
                 self.show();
@@ -135,9 +137,9 @@ function Account(props) {
             }
         },
         showBalance:(address)=>{
-            Network("tanssi").balance(address, (res) => {
-                const divide = Network("tanssi").divide();
-
+            const cur=Data.getHash('cache','network');
+            Network(cur).balance(address, (res) => {
+                const divide = Network(cur).divide();
                 setBalance(tools.toF(res.free * (1 / divide), 8));
             })
         },

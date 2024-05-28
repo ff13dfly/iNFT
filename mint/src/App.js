@@ -5,19 +5,18 @@ import Preview from "./component/preview";
 import Action from "./component/action";
 import Header from "./component/header";
 
-import Local from "./lib/local";
 import Network from "./network/router";
 import config from "./config";
 
 import plugin from "./lib/plugin";
 import QR from "./lib/QR";
-import tools from "./lib/tools";
 
 import TPL from "./lib/tpl";
 import INFT from "./lib/inft";
 import VERSION from "./lib/version";
 
-//import Sui from "./network/sui";
+import Data from "./lib/data";
+
 import Tanssi from "./network/tanssi";
 
 function App() {
@@ -33,10 +32,10 @@ function App() {
       setShow(true);
     },
     fresh: (force) => {
-      //if (force) return self.start();
       update++;
       setUpdate(update);
     },
+
     decode:(str)=>{
       if(!str || str==="#") return false;
       const pure=str.slice(1,str.length);
@@ -80,18 +79,17 @@ function App() {
       //console.log(`QR function set successful.`);
       return true;
     },
-    init: () => {      //first run iNFT minter;
-      const version = Local.get("version");
-      if (!version) {
-        Local.set("prefix", `i${tools.char(10).toLocaleLowerCase()}`);
-        Local.set("pointer", 0);
-        Local.set("version", config.version);
-      } else {
-        const pre_ver = parseInt(version);
-        if (config.version > pre_ver) {
-          console.log(`Minter version updated, ready to run update`);
-        }
+    autosetNetwork:(ck)=>{
+      const ns=Network();
+      const arr=[];
+      for(var key in ns){
+        if(ns[key]!==null) arr.push(key);
       }
+
+      Data.setHash('cache','network',config.network);
+      Data.setHash('cache','support',arr);
+
+      return ck && ck();
     },
   }
 
@@ -121,11 +119,14 @@ function App() {
     self.checking();  //check input from hash
 
     //4.linke to server to subscribe block finalization
-    Network("tanssi").init((API) => {
+    self.autosetNetwork(()=>{
+      const cur=Data.getHash('cache','network');
+      Network(cur).init((API) => {
 
+      });
     });
 
-    Tanssi.test();   //Tanssi network test.
+    //Tanssi.test();   //Tanssi network test.
   }, []);
 
   return (

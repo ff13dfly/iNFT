@@ -8,6 +8,7 @@ import Network from "../network/router";
 
 import INFT from "../lib/inft";
 import Local from "../lib/local";
+import Data from "../lib/data";
 
 //let interval_timer=null;
 //const time=[];
@@ -105,8 +106,8 @@ function Progress(props) {
     useEffect(() => {
         self.showTask();
         setBlock(props.block);
-       
-        Network("tanssi").subscribe("progress",(bk, bhash)=>{
+        const cur=Data.getHash('cache','network');
+        Network(cur).subscribe("progress",(bk, bhash)=>{
             setBlock(bk);
             setTimeout(self.showTask,500);  //update task after finalized new block
         });

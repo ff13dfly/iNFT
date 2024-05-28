@@ -9,6 +9,7 @@ import Progress from "./progress";
 import Local from "../lib/local";
 import tools from "../lib/tools";
 import INFT from "../lib/inft";
+import Data from "../lib/data";
 
 import RenderiNFT from "./inft";
 import Network from "../network/router";
@@ -70,8 +71,9 @@ function Result(props) {
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
             setPassword("");
-            Network("tanssi").load(fa, password, (pair) => {
-                Network("tanssi").revoke(pair, name, (res) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).load(fa, password, (pair) => {
+                Network(cur).revoke(pair, name, (res) => {
                     if (res.error) return setInfo(res.error);
                     setInfo(res.msg);
 
@@ -89,9 +91,10 @@ function Result(props) {
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
-            Network("tanssi").load(fa, password, (pair) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).load(fa, password, (pair) => {
                 setPassword("");
-                Network("tanssi").sell(pair, name, price, (res) => {
+                Network(cur).sell(pair, name, price, (res) => {
                     if (res.error) return setInfo(res.error);
                     setInfo(res.msg);
                     if (res.status === "Finalized") {
@@ -126,7 +129,8 @@ function Result(props) {
             setInfo("");
 
             //3.get selling status; Confirm from network. Fix the data automatically.
-            Network("tanssi").view(props.name, "selling", (dt) => {
+            const cur=Data.getHash('cache','network');
+            Network(cur).view(props.name, "selling", (dt) => {
                 if (dt && dt.length === 3) {
                     setMarket(`On selling, price ${dt[1]} unit.`);
                     setSelling(true);

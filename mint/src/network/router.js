@@ -55,19 +55,21 @@ const format={
     },
 }
 
-const map={     //support networks
-    tanssi:TANSSI,
-    solane:SOLANA,
+//support networks
+const map={     
     anchor:ANCHOR,
+    tanssi:TANSSI,
+    solana:SOLANA,
     polkadto:null,
     aptos:null,
     sui:null,
 }
 
 const Network=(name)=>{
-    if(!name) return format;
+    if(name===undefined) return map;
     if(!map[name]) return false;
     return map[name];
 };
+
 
 export default Network;
