@@ -19,6 +19,9 @@ function Header(props) {
             <Nav.Link href="/template">
               <h5 className={props.active==="template"?"text-warning":""}>Template</h5>
             </Nav.Link>
+            <Nav.Link href="/explorer">
+              <h5 className={props.active==="explorer"?"text-warning":""}>Explorer</h5>
+            </Nav.Link>
             <Nav.Link href="/playground">
               <h5 className={props.active==="playground"?"text-warning":""}>Playground</h5>
             </Nav.Link>

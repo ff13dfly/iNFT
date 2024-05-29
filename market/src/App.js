@@ -7,6 +7,7 @@ import Editor from "./entry/editor";
 import Minter from "./entry/minter";
 import Market from "./entry/market";
 import Bounty from "./entry/bounty";
+import Explorer from "./entry/explorer";
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
@@ -23,6 +24,7 @@ function App() {
           <Route path="bounty" element={<Bounty />} />
           <Route path="bounty/:page" element={<Bounty />} />
           <Route path="template" element={<Template />} />
+          <Route path="explorer" element={<Explorer />} />
           <Route path="template/:page" element={<Template />} />
           <Route path="playground" element={<Playground />} />
           <Route path="playground/:cid" element={<Playground />} />

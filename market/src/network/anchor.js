@@ -1,20 +1,8 @@
-/* 
-*  Tanssi appchain ( substrate ) lib
-*  @auth [ Fuu ]
-*  @creator Fuu
-*  @date 2024-05-15
-*  @functions
-*  1. Link to Tanssi substrate appchain.
-*  2. Basic functions of interaction with substrate chain.
-*  3. Anchor Pallet operation
-*/
-
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
 
 const config = {
-    //node:"wss://wss.android.im/tanssi",
-    node: "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
+    node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
     target: 12000,           //How long to create a new block
 }
 
@@ -45,9 +33,9 @@ const funs = {
         } else if (obj.status.Broadcast) {
             return ck && ck({ msg: "Broadcast to nodes.", success: true, status: "Broadcast", code: 3 });
         } else if (obj.status.InBlock) {
-            return ck && ck({ msg: "Already packed, ready to update.", success: true, status: "InBlock", code: 4 });
+            return ck && ck({ msg: "Already packed, ready to update.", success: true, status: "InBlock", code: 5 });
         } else if (obj.status.Retracted) {
-            return ck && ck({ msg: "Trying to write.", success: true, status: "Retracted", code: 5 });
+            return ck && ck({ msg: "Trying to write.", success: true, status: "Retracted", code: 4 });       //not everytime
         } else if (obj.status.Finalized) {
             return ck && ck({ msg: "Done, write to network", success: true, status: "Finalized", hash: obj.status.Finalized, code: 8 });
         } else {
@@ -57,7 +45,6 @@ const funs = {
     filter: (exs, method, status) => {
         console.log(exs);
         let arr = [];
-        let stamp = 0;
         exs.forEach((ex, index) => {
             console.log(ex)
             // if(index===0){
@@ -89,7 +76,7 @@ const funs = {
 let wsAPI = null;
 let linking = false;
 const self = {
-    init: (ck, proxy) => {
+    init: (ck) => {
         const uri = config.node;
         if (linking) return setTimeout(() => {
             self.init(ck);
@@ -98,29 +85,36 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        try {
-            const provider = new WsProvider(uri);
-            ApiPromise.create({ provider: provider }).then((api) => {
-                console.log(`Linked to node ${uri}`);
-                wsAPI = api;
-                linking = false;
+        const provider = new WsProvider(uri);
+        ApiPromise.create({ provider: provider }).then((api) => {
+            console.log(`Linked to node ${uri}`);
+            wsAPI = api;
+            linking = false;
 
-                //add the listener;
-                wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
-                    const data = JSON.parse(JSON.stringify(lastHeader));
-                    const block = data.number - 1;      //get the right block number
-                    const hash = data.parentHash;     //get the finalized hash
-                    for (let k in subs) {
-                        subs[k](block, hash);
-                    }
-                });
-                return ck && ck(wsAPI);
+            //add the listener;
+            wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
+                const data = JSON.parse(JSON.stringify(lastHeader));
+                const block = data.number - 1;      //get the right block number
+                const hash = data.parentHash;     //get the finalized hash
+                for (let k in subs) {
+                    subs[k](block, hash);
+                }
             });
-        } catch (error) {
+            return ck && ck(wsAPI);
+        }).catch((error) => {
             console.log(error);
             linking = false;
             return ck && ck(error);
-        }
+        });
+    },
+    metadata:(ck)=>{
+        self.init(() => {
+            wsAPI.rpc.state.getMetadata().then((res) => {
+                return ck && ck(res);
+            }).catch((error)=>{
+                return ck && ck({error:'Invalid request'});
+            });
+        });
     },
     reset: (ck, proxy) => {
         console.log(`Restart system link`);
@@ -156,7 +150,7 @@ const self = {
         const pair = keyring.addFromUri(mnemonic);
         const sign = pair.toJson(password);
         sign.meta.from = "minter";
-        return ck && ck(sign);
+        return ck && ck(sign,mnemonic);
     },
     transfer: (pair, to, amount, ck) => {
         self.init(() => {
@@ -199,12 +193,14 @@ const self = {
             try {
                 wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
                     const dt = res.toHuman();
+                    //console.log(dt);
                     funs.decodeProcess(dt, (status) => {
+                        //console.log(status);
                         return ck && ck(status);
                     });
                 });
             } catch (error) {
-                return ck && ck(false);
+                return ck && ck(error);
             }
         });
     },
@@ -315,8 +311,7 @@ const self = {
                     });
                     break;
 
-                case "block":
-                    //value: hash(64)
+                case "block":   //value: hash(64)
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const obj = dt.toJSON();
                         return ck && ck({ block: obj.block.header.number });
@@ -326,29 +321,66 @@ const self = {
                 case "detail":
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const exs = dt.block.extrinsics;
-                        const infts = [];
-                        if (exs.length === 4) return ck && ck(infts);
-                        //console.log(`Not default: ${exs.length} exs.`);
+                        if (exs.length === 1) return [];
+
+                        const infts=[];
                         exs.forEach((ex, index) => {
-                            if (index < 4) return false;
+                            if (index < 2) return false;
                             const row = ex.toHuman();
-                            infts.push(row);
+                            if(row.method && row.method.section==="anchor" && row.method.method==="setAnchor"){
+                                const dt=row.method.args;
+                                try {
+                                    const protocol=JSON.parse(dt.protocol);
+                                    const raw=JSON.parse(dt.raw);
+                                    const inft={
+                                        name:dt.key,
+                                        raw:raw,
+                                        protocol:protocol,
+                                        pre:parseInt(dt.pre),
+                                        valid:true,
+                                    }
+                                    infts.push(inft);
+                                } catch (error) {
+                                    
+                                }
+                            }
                         });
                         return ck && ck(infts);
                     });
                     break;
-                case "blocknumber":
+                case "blocknumber":   //value: hash(64)
                     wsAPI.rpc.chain.getBlockHash(value, (res) => {
                         const hash = res.toHex();
                         return self.view(hash, "detail", ck);
                     });
-
                     break;
+
                 default:
                     break;
             }
 
 
+        });
+    },
+    test: () => {
+        test.auto();
+    }
+}
+
+const test = {
+    auto: () => {
+        test.test_view();
+        test.test_metadata();
+    },
+    test_metadata:()=>{
+        self.metadata((dt)=>{
+            console.log(dt.toHuman());
+        });
+    },
+    test_view: () => {
+        const block = 384394;
+        self.view(block, "blocknumber", (dt) => {
+            console.log(dt);
         });
     },
 }
