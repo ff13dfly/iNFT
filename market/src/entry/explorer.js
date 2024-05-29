@@ -1,13 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 
 import Header from "../component/common_header";
 import SelectNetwork from "../component/select_network";
 
 function Explorer(props) {
-    let { cid } = useParams();
-    console.log(cid);
 
     const size = {
         row: [12],
@@ -15,13 +11,6 @@ function Explorer(props) {
         header: [4,8]
     };
 
-    let [update, setUpdate]=useState(0);
-
-    const self={
-        fresh:()=>{
-            setUpdate(update+1);
-        },
-    }
     return (
         <div>
             <Header active={"explorer"} />

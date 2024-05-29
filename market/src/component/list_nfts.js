@@ -1,6 +1,8 @@
 import { Row,Col,Card,Placeholder } from 'react-bootstrap';
 import { useEffect,useState } from "react";
 
+import TPL from "../lib/tpl";
+
 function ListNFTs(props) {
   const size = {
     row: [12],
@@ -18,16 +20,29 @@ function ListNFTs(props) {
       }
       return arr;
     },
+    getTemplates:(list,ck)=>{
+      //1.filter out all template cid
+      const map={};
+      for(let i=0;i<list.length;i++){
+        const row=list[i];
+        if(row && row.raw && row.raw.tpl) map[row.raw.tpl]=true;
+      }
+
+      //get cid array
+      const tpls=[];
+      for(var cid in map) tpls.push(cid);
+      TPL.cache(tpls,ck);
+    },
   }
 
   useEffect(() => {
-    console.log(props.data.length);
     const nlist=self.getHolder(props.data.length);
     setList(nlist);
 
-    setTimeout(()=>{
+    self.getTemplates(props.data,()=>{
       setReady(true);
-    },5000)
+    });
+
   }, [props.data]);
 
   return (
