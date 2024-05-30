@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
 
+/* iNFT render component parameters
+*   @param  {number}    start           //count start tag
+*   @param  {number}    duration        //duration of the count
+*/
+
 
 let timer=null;
 function Counter(props) {
@@ -14,20 +19,16 @@ function Counter(props) {
     let [circleRight,setRight]=useState("circle-pro rightstatic");
     let [info,setInfo]=useState("");
 
-    const config={
-        duration:6,
-    }
-
     const self = {
         start:()=>{
             setLeft("circle-pro leftcircle");
             setRight("circle-pro rightcircle");
 
-            let count=config.duration*10;
+            let count=props.duration*10;
             timer=setInterval(()=>{
                 
                 if(count===0){
-                    count=config.duration*10;
+                    count=props.duration*10;
                     clearInterval(timer);
                     timer=null;
                     return self.stop();
