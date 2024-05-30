@@ -9,7 +9,8 @@ module.exports = {
         //"wss://dev2.metanchor.net",
     ],
     default:[
-        "bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",  //APE
+        "bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",  //BTC tree
+        //"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",  //APE
         //"bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a",  //Solana logo
         //"anchor://single/265468",
         //"anchor://aabb/217148",

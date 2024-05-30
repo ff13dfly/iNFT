@@ -1,12 +1,9 @@
 import { Col, Badge } from "react-bootstrap";
-//import { useState,useEffect } from "react";
 
 function RowPart(props) {
     const size = {
         row: [12],
     };
-
-    //let [parts,setParts]=useState([]);
 
     const config={
         size:30,      //single tag width?
@@ -76,9 +73,7 @@ function RowPart(props) {
 
                     const fix=pre.data.length/2-1;      //fix the width of single tag, default is 2
                     const delta=cur.data[0]-pre.data[p_len-1]+fix;
-
-                    console.log(`${i}: ${cur.data[0]} - ${pre.data[p_len-1]} = ${delta}`)
-
+                    //console.log(`${i}: ${cur.data[0]} - ${pre.data[p_len-1]} = ${delta}`)
                     const d_center=(delta+c_len*0.5)*config.width;
                     arr[i].position=d_center-config.size;
                 }

@@ -3,7 +3,8 @@ import Data from "./data";
 import IPFS from "../network/ipfs";
 
 const config={
-    default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+    //default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",        //APE
+    default:"bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",          //TREE
 }
 
 let agent=true;     //wether use agent

@@ -30,7 +30,6 @@ function Preview(props) {
     let [force, setForce] = useState(false);      //wether force to fresh the iNFT
     let [network, setNetwork] = useState("");
 
-    let first = true;
     let timer = null
     const self = {
         randomActive: () => {
@@ -62,24 +61,21 @@ function Preview(props) {
         },
         updateHash: () => {
             if(updating===null){
+                start++;
+                setStart(start);        //start counter at right time
                 updating=setInterval(()=>{
                     //1.fresh the hash
                     animate = true;
                     setForce(false);
-                    if (!first) {
-                        setHash(saving_hash);
-                        setBlock(saving_block);
-                        start++;
-                        setStart(start);        //start counter at right time
-                    } else {
-                        first = false;
-                    }
-
+                    setHash(saving_hash);
+                    setBlock(saving_block);
+                    start++;
+                    setStart(start);        //start counter at right time
                     //2.showing random parts of the iNFT
                     timer = setTimeout(() => {
                         animate = false;
                         self.randomActive();
-                    }, 6000);
+                    }, 5000);
                 },12000);
             }
         },

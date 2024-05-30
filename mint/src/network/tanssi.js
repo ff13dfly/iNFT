@@ -1,5 +1,5 @@
 import { mnemonicGenerate } from "@polkadot/util-crypto";
-const { ApiPromise, WsProvider, Keyring } = window.Polkadot;
+import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
 
 const config = {
     //node:"wss://wss.android.im/tanssi",
