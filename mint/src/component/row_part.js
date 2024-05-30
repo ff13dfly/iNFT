@@ -1,12 +1,15 @@
 import { Col, Badge } from "react-bootstrap";
+//import { useState,useEffect } from "react";
 
 function RowPart(props) {
     const size = {
         row: [12],
     };
 
+    //let [parts,setParts]=useState([]);
+
     const config={
-        size:30,
+        size:30,      //single tag width?
         width:15.9,   //single character width;
         tag:8,
         padding:5.3,
@@ -38,6 +41,7 @@ function RowPart(props) {
             return arr;
         },
         struct:(group,section)=>{
+            //console.log(group);
             //1.get target data
             const map=self.combine(group);
             const arr=self.getStruture(map.queue);
@@ -51,8 +55,13 @@ function RowPart(props) {
                 arr[order].data=map[k].offset;
             }
 
-            //console.log(JSON.stringify(arr));
-
+            //sample data of parts position
+            const data=[
+                {"index":1,"position":0,"data":[0,1]},
+                {"index":2,"position":0,"data":[4,5,6,7]},
+                {"index":3,"position":0,"data":[10,11,12]},
+                {"index":4,"position":0,"data":[14,15]}
+            ]
             //3.calc the position
             for(let i=0;i<arr.length;i++){
                 const cur=arr[i];
@@ -64,7 +73,12 @@ function RowPart(props) {
                 }else{
                     const pre=arr[i-1];
                     const p_len=pre.data.length;
-                    const delta=cur.data[0]-pre.data[p_len-1];
+
+                    const fix=pre.data.length/2-1;      //fix the width of single tag, default is 2
+                    const delta=cur.data[0]-pre.data[p_len-1]+fix;
+
+                    console.log(`${i}: ${cur.data[0]} - ${pre.data[p_len-1]} = ${delta}`)
+
                     const d_center=(delta+c_len*0.5)*config.width;
                     arr[i].position=d_center-config.size;
                 }
@@ -72,7 +86,9 @@ function RowPart(props) {
             return arr;
         }
     };
+
     const parts=self.struct(props.group,props.section);
+    
     return (
         <Col className="part" sm={size.row[0]} xs={size.row[0]}>
             {parts.map((row, index) => (

@@ -185,7 +185,7 @@ function Action(props) {
                 self.updateProgress(index,target);
 
                 //when more than one task, need closure to keep the index right.
-                ((task_index,target,raw,protocol) => {
+                ((task_index,target,raw,protocol,cid) => {
                     const cur=Data.getHash('cache','network');
                     Network(cur).write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
                         if (process.error) {
@@ -194,7 +194,7 @@ function Action(props) {
                         }
 
                         if (process.status === "Finalized") {
-                            self.saveResult(target.name, process.hash,raw.offset,pair.address,(block)=>{
+                            self.saveResult(cid,target.name, process.hash,raw.offset,pair.address,(block)=>{
                                 target.now=process.code;
                                 target.hash=process.hash;
                                 target.block=block;
@@ -205,7 +205,7 @@ function Action(props) {
                             self.updateProgress(task_index,target);
                         }
                     });
-                })(index,target,raw,protocol);
+                })(index,target,raw,protocol,cid);
             });
         },
         updateProgress:(index,data)=>{
@@ -216,12 +216,12 @@ function Action(props) {
             INFT.mint.update({task:dt});
             return true;
         },
-        saveResult: (name, hash,offset, creator, ck) => {
+        saveResult: (cid,name, hash,offset, creator, ck) => {
             const cur=Data.getHash('cache','network');
             Network(cur).view(hash, "block", (data) => {
-                const tpl = TPL.current(true);
+                //const tpl = TPL.current(true);
                 const cur=Data.getHash('cache','network');
-                INFT.single.add(name, tpl, hash, data.block, creator,offset,cur);
+                INFT.single.add(name, cid, hash, data.block, creator,offset,cur);
                 return ck && ck(data.block);
             });
         },

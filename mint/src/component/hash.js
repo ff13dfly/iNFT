@@ -1,4 +1,4 @@
-import { Row, Col, Badge } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Data from "../lib/data";
@@ -24,6 +24,7 @@ function Hash(props) {
         indentation:3,
     };
 
+    //FIXME, animation group, need to impl a function
     const animate_group=[     //animation table
         [[16,0],[16,0],[16,0],[16,0]],      //step 0
         [[15,1],[16,0],[16,0],[16,0]],      //step 1
@@ -88,6 +89,7 @@ function Hash(props) {
                 const line=start%step;
                 const index=i+1;
                 for(let j=0;j<offset;j++){
+
                     //FIXME, here to calc the end situation
                     group[row][line+j]=index;
                 }
