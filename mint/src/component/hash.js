@@ -150,8 +150,7 @@ function Hash(props) {
             const matrix_now=self.toArray(pure_now,config.grid);
             const pure_old= pre_hash.slice(2);
             const matrix_old=self.toArray(pure_old,config.grid);
-
-
+            
             let step=0;     //major animation actions
             timer=setInterval(()=>{
                 if(step>=animate_group.length){

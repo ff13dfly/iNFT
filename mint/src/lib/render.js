@@ -62,6 +62,9 @@ const self={
             
             const divide=part.value[2]
             if(divide>1){
+                
+                //TODO,animation can be defined in part ( need editor to support )
+                //1.scale from center
                 const rw=dx*rate;
                 const rh=dy*rate;
                 const rx=vx+0.5*dx-0.5*rw;
@@ -74,7 +77,7 @@ const self={
             self.animate(hash, pen, img, parts, tpl, offset,ck,count);
         },config.animation); 
     },
-    decode: (hash, pen, img, parts, tpl, offset,hightlight,ck) => {
+    decode: (hash, pen, img, parts, tpl, offset,hightlight,ck,color) => {
         const { cell, grid } = tpl;
         const multi = 1;    //solve Apple device here.
         let cache=null;
@@ -86,8 +89,9 @@ const self={
 
             //3.if hightlight, set to cache;
             //TODO, support hightlight array.
+            //console.log(color)
             if (hightlight === i) {
-                cache = [dx, dy, vx, vy, "#FF0000", 1];
+                cache = [dx, dy, vx, vy, !color?"#FF0000":color, 1];
             }
         }
 
@@ -146,17 +150,19 @@ const Render= {
         pen.fillStyle=(color===undefined?config.background:color);
         pen.fillRect(0,0,w,h);
     },
-    preview:(pen,bs64,hash,parts,basic,offset,hightlight,ck,animate)=>{
+    preview:(pen,bs64,hash,parts,basic,offset,hightlight,ck,animate,color)=>{
         const img = new Image();
         img.src = bs64;
         img.onload = (e) => {
             if(animate){
-                //self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
+                //when there is animation, keep the canvas content, after anmation done, redraw it
                 self.animate(hash, pen, img, parts, basic,(offset===undefined?[]:offset),()=>{
-                    self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
+                    self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck,color);
+                    return ck && ck();
                 });
             }else{
-                self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
+                //no animation, redraw directly.
+                self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck,color);
             }
         }
     },

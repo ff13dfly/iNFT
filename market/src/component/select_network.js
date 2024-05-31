@@ -16,6 +16,7 @@ function SelectNetwork(props) {
     let [data, setData]=useState([]);
     let [search, setSearch]=useState("");
     let [list, setList]=useState([]);
+    let [hash, setHash]=useState("");           //search block hash
     let [network,setNetwork]=useState("anchor");        //default network
     let [enable,setEnable]=useState({
         selector:true,
@@ -43,11 +44,15 @@ function SelectNetwork(props) {
             const api=Network(network);
             const num=parseInt(search);
             if(!isNaN(num)){
+                api.view(num,"hash",(res)=>{
+                    setHash(res);
+                });
+
                 api.view(num,"blocknumber",(arr)=>{
-                    //console.log(res)
                     setData(arr);
                     setAmount(arr.length);
-                    setEnable({selector:true,
+                    setEnable({
+                        selector:true,
                         search:true,
                         button:true,
                     })
@@ -104,7 +109,7 @@ function SelectNetwork(props) {
                 Total {amount} iNFTs at block {search}, check raw data on POLKADOT_URL
             </Col>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <ListNFTs data={data}/>
+                <ListNFTs data={data} hash={hash}/>
             </Col>
         </Row>
     );

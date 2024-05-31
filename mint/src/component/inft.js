@@ -9,7 +9,7 @@ import TPL from "../lib/tpl";
 *   @param  {array}     [offset]        //customer offset array for rendering
 *   @param  {string}    [template]      //the template CID for rendering
 *   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
-*   @param  {boolean}   [force]         //force to autofresh the iNFT
+*   @param  {boolean}   [force]         //force to autofresh the iNFT; or leave the last one on canvas
 *   @param  {boolean}   [animate]       //animate support
 *   @param  {function}  [callback]      //callback function 
 */
@@ -34,15 +34,18 @@ function RenderiNFT(props) {
                 grid: tpl.grid,
                 target: tpl.size
             };
+            const color="#dfbc25";
             const ani=!props.animate?false:true
             if(ani){
                 Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
                 screen_lock=true;
-            } 
+            }
+            
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,()=>{
                 screen_lock=false;
                 return ck && ck();
-            },ani);
+            },ani,color);
+            
         },
 
         autoFresh:(ck)=>{
@@ -64,10 +67,6 @@ function RenderiNFT(props) {
         },
         calcWidth:()=>{
             return {width:"100%"};
-            // return {
-            //     //width:"100%",
-            //     width:`${width/window.devicePixelRatio}px`,
-            // }
         },
     }
     

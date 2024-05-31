@@ -46,23 +46,9 @@ function Progress(props) {
         getDone:(arr)=>{
             return 0;
         },
-        getINFTbyName:(name)=>{
-            const fa = Local.get("login");
-            if (!fa) return false;
-            const login = JSON.parse(fa);
-            const addr = login.address;
-            const ls = Local.get("list");
-            const my = JSON.parse(ls);
-            for(let i=0;i<my[addr].length;i++){
-                if(name===my[addr][i].anchor) return my[addr][i];
-            }
-        },
 
         clickSingle:(name,hash)=>{
-            //const dt=INFT.single.target(name);
-            const dt=self.getINFTbyName(name);
-
-            //console.log(name,hash);
+            const dt=INFT.single.target(name);
             props.dialog(<Result 
                 name={dt.anchor} 
                 hash={dt.hash} 
@@ -79,28 +65,8 @@ function Progress(props) {
         },
         showTask:()=>{
             const details=INFT.mint.detail();
-            // if(time.length===0){
-            //     self.initTimer(details.task.length,()=>{
-            //         if(interval_timer!==null) clearInterval(interval_timer);
-            //         interval_timer=setInterval(()=>{
-            //             for(let i=0;i<time.length;i++){
-            //                 if(time[i]>0){
-            //                     time[i]--;
-            //                 }
-            //             }
-                        
-            //         },1000);
-            //     });
-            // }
             setList(details.task);            
         },
-
-        // initTimer:(n,ck)=>{
-        //     for(let i=0;i<n;i++){
-        //         time.push(config.round+config.delay*i);
-        //     }
-        //     return ck && ck();
-        // },
     }
 
     useEffect(() => {

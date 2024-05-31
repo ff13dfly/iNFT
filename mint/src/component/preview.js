@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Hash from "./hash";
 import Counter from "./counter";
 import RenderiNFT from "./inft";
-//import AnimateHash from "./hash_animate";
 
 import TPL from "../lib/tpl";
 import tools from "../lib/tools";
@@ -12,7 +11,7 @@ import Data from "../lib/data";
 
 import Network from "../network/router";
 
-let animate = true;   //wether iNFT render animation
+let animate = false;   //wether iNFT render animation
 let saving_hash = "";
 let saving_block = 0;
 let updating=null;
@@ -33,18 +32,21 @@ function Preview(props) {
     let timer = null
     const self = {
         randomActive: () => {
-            if (animate) {
+            if(animate){
                 clearTimeout(timer);
                 return false;
             }
             const tpl = TPL.current();
-            if (tpl === null) return setTimeout(() => {
-                self.randomActive();
-            }, 2000);
+            if (tpl === null){
+                timer=setTimeout(() => {
+                    self.randomActive();
+                }, 2000);
+                return true;
+            } 
 
             setActive(tools.rand(1, tpl.parts.length - 1));       //be set multi times, no sure why
             setForce(true);
-            return setTimeout(() => {
+            timer=setTimeout(() => {
                 self.randomActive();
             }, 2000);
         },
@@ -60,22 +62,29 @@ function Preview(props) {
             }, 50);
         },
         updateHash: () => {
+            //console.log(`Freshing...`);
             if(updating===null){
+                //console.log(`Set inverval timer to show.`);
                 start++;
-                setStart(start);        //start counter at right time
+                setStart(start);        //start counter at first running
+
                 updating=setInterval(()=>{
-                    //1.fresh the hash
-                    animate = true;
-                    setForce(false);
-                    setHash(saving_hash);
-                    setBlock(saving_block);
+                    //clearTimeout(timer);
                     start++;
                     setStart(start);        //start counter at right time
-                    //2.showing random parts of the iNFT
-                    timer = setTimeout(() => {
+
+                    //1.fresh the hash
+                    if(!saving_hash || !saving_block) return false;
+
+                    setForce(false);
+                    animate = true;
+                    setHash(saving_hash);
+                    setBlock(saving_block);
+
+                    timer=setTimeout(()=>{
                         animate = false;
                         self.randomActive();
-                    }, 5000);
+                    },5000);
                 },12000);
             }
         },
@@ -97,8 +106,7 @@ function Preview(props) {
                     force={force}
                     animate={animate}
                     callback={() => {
-                        animate = false;
-                        self.randomActive();
+                        //animate = false;
                     }}
                 />
             </Col>

@@ -337,6 +337,8 @@ const self = {
                                         raw:raw,
                                         protocol:protocol,
                                         pre:parseInt(dt.pre),
+                                        signer:row.signer.Id,
+                                        block:value,
                                         valid:true,
                                     }
                                     infts.push(inft);
@@ -354,7 +356,12 @@ const self = {
                         return self.view(hash, "detail", ck);
                     });
                     break;
-
+                case "hash":
+                    wsAPI.rpc.chain.getBlockHash(value, (res) => {
+                        const hash = res.toHex();
+                        return ck && ck(hash);
+                    });
+                    break;
                 default:
                     break;
             }
