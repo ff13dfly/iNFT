@@ -5,6 +5,17 @@ import TPL from "../lib/tpl";
 import Render from '../lib/render';
 import tools from '../lib/tools';
 
+/* iNFT list component
+*   @param  {array}     data            //iNFT[], list of iNFT to show
+*   @param  {string}    network         //network
+*/
+
+/*  iNFT data sample
+  {
+
+  }
+*/
+
 function ListNFTs(props) {
   const size = {
     row: [12],
@@ -13,6 +24,7 @@ function ListNFTs(props) {
 
   let [list,setList]=useState([]);
   let [ready,setReady]=useState(false);
+  let [info, setInfo]=useState("");
 
   const self={
     getHolder:(n)=>{
@@ -42,6 +54,7 @@ function ListNFTs(props) {
       }
       if(list.length===0) return ck && ck(imgs);
       const row=list.pop();
+      //console.log(row);
       TPL.view(row.raw.tpl,(def)=>{
         const basic = {
             cell: def.cell,
@@ -49,7 +62,7 @@ function ListNFTs(props) {
             target: def.size
         }
         const offset=!row.raw.offset?[]:row.raw.offset;
-        Render.thumb(props.hash,def.image,def.parts,basic,offset,(img)=>{
+        Render.thumb(row.block,def.image,def.parts,basic,offset,(img)=>{
           imgs[row.name]=img;
           return self.getThumbs(list,ck,imgs)
         });
@@ -62,6 +75,7 @@ function ListNFTs(props) {
         arr.push({
           name:row.name,
           signer:row.signer,
+          network:row.network,
           bs64:imgs[row.name],
         });
       }
@@ -74,25 +88,34 @@ function ListNFTs(props) {
   }
 
   useEffect(() => {
-    const nlist=self.getHolder(props.data.length);
-    setList(nlist);
-
-    self.getTemplates(props.data,(res)=>{
-      self.getThumbs(props.data,(imgs)=>{
-        const narr=self.formatResult(props.data,imgs);
-        setList(narr)
-        setReady(true);
+    const iNFTs=props.data;
+    console.log(iNFTs);
+    if(iNFTs.length===0){
+      setInfo("No iNFT result list.");
+    }else{
+      const nlist=self.getHolder(iNFTs.length);
+      setList(nlist);
+  
+      self.getTemplates(iNFTs,(res)=>{
+        self.getThumbs(iNFTs,(imgs)=>{
+          const narr=self.formatResult(iNFTs,imgs);
+          setList(narr)
+          setReady(true);
+        });
       });
-    });
+    }
   }, [props.data]);
 
   return (
     <Row>
+      <Col className='pt-1' hidden={!info?true:false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <h4>{info}</h4>
+      </Col>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index}  lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           
           <Card hidden={!ready} style={{ width: '100%' }}>
-              <a href={`/view/${row.name}`}>
+              <a href={`/view/${row.name}@${row.network}`}>
                 <Card.Img variant="top" src={self.showThumb(row.bs64)} />
               </a>
               <Card.Body>

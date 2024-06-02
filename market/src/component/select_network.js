@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import Network from '../network/router';
 import ListNFTs from './list_nfts';
+import tools from '../lib/tools';
 
 //Anchor Network 13598
 //Tanssi Network 411191
@@ -10,13 +11,12 @@ import ListNFTs from './list_nfts';
 function SelectNetwork(props) {
     const size = {
         row: [12],
-        search:[2,6,4],
+        search:[3,5,4],
     };
 
     let [data, setData]=useState([]);
     let [search, setSearch]=useState("");
     let [list, setList]=useState([]);
-    let [hash, setHash]=useState("");           //search block hash
     let [network,setNetwork]=useState("anchor");        //default network
     let [enable,setEnable]=useState({
         selector:true,
@@ -44,11 +44,12 @@ function SelectNetwork(props) {
             const api=Network(network);
             const num=parseInt(search);
             if(!isNaN(num)){
-                api.view(num,"hash",(res)=>{
-                    setHash(res);
-                });
-
                 api.view(num,"blocknumber",(arr)=>{
+                    console.log(arr);
+                    for(let i=0;i<arr.length;i++){
+                        arr[i].blocknumber=num;
+                    }
+
                     setData(arr);
                     setAmount(arr.length);
                     setEnable({
@@ -86,7 +87,7 @@ function SelectNetwork(props) {
                         self.changeNetwork(ev);
                     }}>
                     {list.map((row, index) => (
-                        <option value={row} key={index} >{row}</option>
+                        <option value={row} key={index} >{tools.toUp(row)} Network</option>
                     ))}
                 </select>
             </Col>
@@ -109,7 +110,7 @@ function SelectNetwork(props) {
                 Total {amount} iNFTs at block {search}, check raw data on POLKADOT_URL
             </Col>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <ListNFTs data={data} hash={hash}/>
+                <ListNFTs data={data} network={network}/>
             </Col>
         </Row>
     );

@@ -321,9 +321,8 @@ const self = {
                 case "detail":
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const exs = dt.block.extrinsics;
-                        if (exs.length === 1) return [];
-
                         const infts=[];
+                        if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
                             if (index < 2) return false;
                             const row = ex.toHuman();
@@ -340,6 +339,7 @@ const self = {
                                         signer:row.signer.Id,
                                         block:value,
                                         valid:true,
+                                        network:"anchor",
                                     }
                                     infts.push(inft);
                                 } catch (error) {

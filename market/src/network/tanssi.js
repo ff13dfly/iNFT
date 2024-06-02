@@ -332,7 +332,27 @@ const self = {
                         exs.forEach((ex, index) => {
                             if (index < 4) return false;
                             const row = ex.toHuman();
-                            infts.push(row);
+                            if(row.method && row.method.section==="anchor" && row.method.method==="setAnchor"){
+                                const dt=row.method.args;
+                                try {
+                                    const protocol=JSON.parse(dt.protocol);
+                                    const raw=JSON.parse(dt.raw);
+                                    const inft={
+                                        name:dt.key,
+                                        raw:raw,
+                                        protocol:protocol,
+                                        pre:parseInt(dt.pre),
+                                        signer:row.signer.Id,
+                                        block:value,
+                                        valid:true,
+                                        network:"tanssi",
+                                    }
+                                    infts.push(inft);
+                                } catch (error) {
+                                    
+                                }
+                            }
+                            
                         });
                         return ck && ck(infts);
                     });
