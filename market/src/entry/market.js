@@ -4,7 +4,6 @@ import { useState } from "react";
 import Header from "../component/common_header";
 import FilterMarket from "../component/filter_market";
 import ListMarket from "../component/list_market";
-
 function Market(props) {
     const size = {
         row: [12],

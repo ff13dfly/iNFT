@@ -9,7 +9,6 @@
 */
 
 import TANSSI from "./tanssi";
-import SOLANA from "./tanssi";
 import ANCHOR from "./anchor";
 
 const format={
@@ -71,7 +70,7 @@ const format={
 const map={     //support networks
     anchor:ANCHOR,
     tanssi:TANSSI,
-    solana:SOLANA,
+    solana:null,
     polkadto:null,
     aptos:null,
     sui:null,

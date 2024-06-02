@@ -11,79 +11,79 @@ import tools from '../lib/tools';
 function SelectNetwork(props) {
     const size = {
         row: [12],
-        search:[3,5,4],
+        search: [3, 5, 4],
     };
 
-    let [data, setData]=useState([]);
-    let [search, setSearch]=useState("");
-    let [list, setList]=useState([]);
-    let [network,setNetwork]=useState("anchor");        //default network
-    let [enable,setEnable]=useState({
-        selector:true,
-        search:true,
-        button:true,
+    let [data, setData] = useState([]);
+    let [search, setSearch] = useState("");
+    let [list, setList] = useState([]);
+    let [network, setNetwork] = useState("anchor");        //default network
+    let [enable, setEnable] = useState({
+        selector: true,
+        search: true,
+        button: true,
     });
 
-    let [amount,setAmount]=useState(0);
-    
+    let [amount, setAmount] = useState(0);
 
-    const self={
-        changeSearch:(ev)=>{
+
+    const self = {
+        changeSearch: (ev) => {
             setSearch(ev.target.value);
         },
-        changeNetwork:(ev)=>{
+        changeNetwork: (ev) => {
             setNetwork(ev.target.value);
-            
         },
-        clickSearch:(ev)=>{
-            setEnable({selector:false,
-                search:false,
-                button:false,
+        clickSearch: (ev) => {
+            setEnable({
+                selector: false,
+                search: false,
+                button: false,
             })
 
-            const api=Network(network);
-            const num=parseInt(search);
-            if(!isNaN(num)){
-                api.view(num,"blocknumber",(arr)=>{
+            const api = Network(network);
+            const num = parseInt(search);
+            if (!isNaN(num)) {
+                api.view(num, "blocknumber", (arr) => {
                     console.log(arr);
-                    for(let i=0;i<arr.length;i++){
-                        arr[i].blocknumber=num;
+                    for (let i = 0; i < arr.length; i++) {
+                        arr[i].blocknumber = num;
                     }
 
                     setData(arr);
                     setAmount(arr.length);
                     setEnable({
-                        selector:true,
-                        search:true,
-                        button:true,
+                        selector: true,
+                        search: true,
+                        button: true,
                     })
                 });
-            }else{
+            } else {
 
             }
         },
-        getNetworks:()=>{
-            const ns=Network();
-            const arr=[];
-            for(var key in ns){
-              if(ns[key]!==null) arr.push(key);
+        getNetworks: () => {
+            const ns = Network();
+            const arr = [];
+            for (var key in ns) {
+                if (ns[key] !== null) arr.push(key);
             }
             return arr;
         },
     }
 
     useEffect(() => {
-        const ns=self.getNetworks();
+        const ns = self.getNetworks();
         setList(ns);
     }, []);
 
     return (
         <Row className='pb-4'>
             <Col className='pt-1' md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]}>
-                <select name="" className='form-control' 
-                    value={network} 
+                <select name="" className='form-control'
+                    value={network}
                     disabled={!enable.selector}
-                    onChange={(ev)=>{
+                    onChange={(ev) => {
                         self.changeNetwork(ev);
                     }}>
                     {list.map((row, index) => (
@@ -94,23 +94,23 @@ function SelectNetwork(props) {
             <Col className='pt-1' md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]}>
                 <input className='form-control' type="text" placeholder='Input iNFT name or block number to search...'
                     disabled={!enable.search}
-                    value={search} onChange={(ev)=>{
+                    value={search} onChange={(ev) => {
                         self.changeSearch(ev);
                     }}
                 />
             </Col>
             <Col className='pt-1' md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]}>
-                    <button className='btn btn-md btn-primary' 
-                        disabled={!enable.button}
-                        onClick={(ev)=>{
-                            self.clickSearch(ev);
-                        }}>Search</button>
+                <button className='btn btn-md btn-primary'
+                    disabled={!enable.button}
+                    onClick={(ev) => {
+                        self.clickSearch(ev);
+                    }}>Search</button>
             </Col>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Total {amount} iNFTs at block {search}, check raw data on POLKADOT_URL
             </Col>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <ListNFTs data={data} network={network}/>
+                <ListNFTs data={data} network={network} />
             </Col>
         </Row>
     );
