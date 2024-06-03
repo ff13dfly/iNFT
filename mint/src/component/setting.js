@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 import { FaCheck } from "react-icons/fa";
 
+import SettingNetwork from "./setting_network";
+
 import tools from "../lib/tools"
 import TPL from "../lib/tpl";
 import INFT from "../lib/inft";
@@ -151,6 +153,12 @@ function Setting(props) {
 
     return (
         <Row>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <h4>Network</h4>
+            </Col>
+            <Col className="pb-4" sm={size.row[0]} xs={size.row[0]}>
+                <SettingNetwork fresh={props.fresh}/>
+            </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <h4>Offset</h4>
             </Col>
