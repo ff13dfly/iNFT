@@ -144,12 +144,15 @@ const self = {
             return ck && ck({ error: "Invalid file" });
         }
     },
-    generate: (password, ck) => {
+    generate: (password, ck,network) => {
         const mnemonic = mnemonicGenerate();
         const keyring = new Keyring({ type: "sr25519" });
         const pair = keyring.addFromUri(mnemonic);
         const sign = pair.toJson(password);
-        sign.meta.from = "minter";
+        sign.meta.from = "iNFT";
+        sign.meta.support=["anchor","tanssi"];
+        sign.meta.network=!network?"anchor":network;
+
         return ck && ck(sign,mnemonic);
     },
     transfer: (pair, to, amount, ck) => {

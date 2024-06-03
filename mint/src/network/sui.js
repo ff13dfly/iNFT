@@ -14,12 +14,9 @@ const config = {
     defaultNode: "http://127.0.0.1:8899",
 }
 
-
-
 const funs = {
 
 }
-
 
 let client = null;
 const self = {

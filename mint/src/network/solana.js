@@ -130,7 +130,6 @@ const self = {
         });
     },
     generate: (ck, seed) => {
-        //return console.log(SOL);
         const {
             Keypair,
         } = SOL;
