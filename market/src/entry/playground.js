@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import Header from "../component/common_header";
 import PriveiwINFT from "../component/inft_preview";
 import PartsINFT from "../component/inft_parts";
+import SeriesINFT from "../component/inft_series";
 
 import tools from "../lib/tools";
+import IPFS from "../network/ipfs";
 
 const template_orgin = {
     "IPFS": ["web3.storage"],
@@ -18,8 +20,10 @@ function Playground(props) {
 
     const size = {
         row: [12],
-        search: [3, 5, 4],
-        header: [4, 8]
+        search: [3, 6, 3],
+        header: [6, 6],
+        parts:[11,1],
+        mock:[6,6],
     };
 
     let [list, setList] = useState([]);
@@ -32,17 +36,36 @@ function Playground(props) {
         button: true,
     });
 
+    //template values
+    let [hash, setHash]=useState("0x6353bc102e185084671c2c1391cbb7876911e9f65cdfa46e2d9cc5f1a027a0aa");
+    let [full, setFull]=useState("imgs/empty.png");
+    let [parts, setParts]=useState([]);
+    let [series, setSeries]=useState([]);
+
     const self = {
         changeSearch: (ev) => {
             setSearch(ev.target.value);
         },
         changeNetwork: (ev) => {
-            console.log(ev.target.value);
             setNetwork(ev.target.value);
         },
-        clickSearch: (ev) => {
-            console.log(network);
-            console.log(search)
+        changeHash:(ev)=>{
+            setHash(ev.target.value);
+        },
+        clickLoad: (ev) => {
+            //console.log(network);
+            //console.log(search);
+            if(network && search){
+                const proxy=true;
+                IPFS.read(search,(def)=>{
+                    self.show(def);
+                },proxy);
+            }
+        },
+        show:(def)=>{
+            if(def.image) setFull(def.image);
+            if(def.parts) setParts(def.parts);
+            if(def.series) setSeries(def.series);
         },
         getListFromOrgin: (map) => {
             const arr = [];
@@ -65,6 +88,9 @@ function Playground(props) {
     useEffect(() => {
         const nlist = self.getListFromOrgin(template_orgin);
         setList(nlist);
+
+        const selected=nlist[0];
+        setNetwork(`${selected.from}::${selected.orgin}`);
 
     }, [props.data]);
 
@@ -98,12 +124,50 @@ function Playground(props) {
                         <button className='btn btn-md btn-primary'
                             disabled={!enable.button}
                             onClick={(ev) => {
-                                self.clickSearch(ev);
+                                self.clickLoad(ev);
                             }}>Load Template</button>
                     </Col>
                     <Col className="pt-2" md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
                         <PriveiwINFT id={"iNFT_view"} hash={"0x"} />
-                        <PartsINFT />
+
+                        <Row className="pt-2">
+                            <Col md={size.mock[0]} lg={size.mock[0]} xl={size.mock[0]} xxl={size.mock[0]} >
+                                <h5>Mock Hash</h5>
+                                <textarea className="form-control" rows={5} 
+                                    placeholder="Mock hash to test iNFT." 
+                                    value={hash} 
+                                    onChange={(ev)=>{
+                                        self.changeHash(ev);
+                                    }}></textarea>
+                            </Col>
+                            <Col md={size.mock[1]} lg={size.mock[1]} xl={size.mock[1]} xxl={size.mock[1]} >
+                                <h5>Mock Offset</h5>
+                                <textarea className="form-control" rows={5} placeholder="Mock offset to test iNFT."></textarea>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
+                       
+                        <Row className="pt-2">
+                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <h5>iNFT Parts</h5>
+                            </Col>
+                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <PartsINFT data={parts}/>
+                            </Col>
+                            <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <h5>iNFT Series</h5>
+                            </Col>
+                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <SeriesINFT data={series}/>
+                            </Col>
+                            <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <h5>Full Image ( {full.length.toLocaleString()} )</h5>
+                            </Col>
+                            <Col className="pb-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                                <img src={full} style={{width:"100%"}} alt="Full template."/>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Container>

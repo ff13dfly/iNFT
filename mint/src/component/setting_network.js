@@ -39,7 +39,7 @@ function SettingNetwork(props) {
     }, [props.update]);
 
     return(
-        <select className="form-control" id="" value={value} onChange={(ev)=>{
+        <select className="form-control" disabled value={value} onChange={(ev)=>{
             self.changeNetwork(ev);
         }}>
             {list.map((row, index) => (

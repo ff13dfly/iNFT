@@ -1,6 +1,6 @@
 module.exports = {
-    //network:"anchor",
-    network:"tanssi",
+    network:"anchor",
+    //network:"tanssi",
     //network:"sui",
     node:[
         "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
