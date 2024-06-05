@@ -1,12 +1,14 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaCode, FaBuromobelexperte } from "react-icons/fa";
+import { FaCode, FaAlignJustify } from "react-icons/fa";
 
 /* iNFT mock offset
 *   @param  {string}   hash     //hash needed to render the iNFT       
 *   @param  {array}    parts    //iNFT parts raw data
+*   @param  {function}  [callback]      //hash change callback
 */
+
 function MockOffset(props) {
 
   const size = {
@@ -60,7 +62,7 @@ function MockOffset(props) {
         <button className='btn btn-sm btn-secondary' onClick={(ev) => {
           self.switchCode(ev);
         }}>
-          {code ? <FaBuromobelexperte /> : <FaCode />}
+          {!code ? <FaAlignJustify /> : <FaCode />}
         </button>
       </Col>
       <Col hidden={!code} className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

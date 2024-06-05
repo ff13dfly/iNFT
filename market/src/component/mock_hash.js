@@ -70,6 +70,7 @@ function MockHash(props) {
   };
 
   useEffect(() => {
+    console.log(props.active);
     if (props.hash !== hash) {
       console.log(`Ready to show hash: ${props.hash}`);
       setHash(props.hash);
@@ -86,7 +87,7 @@ function MockHash(props) {
         <button className='btn btn-sm btn-secondary' onClick={(ev) => {
           self.switchCode(ev);
         }}>
-        {code ? <FaBuromobelexperte /> : <FaCode />}
+        {!code ? <FaBuromobelexperte /> : <FaCode />}
         </button>
       </Col>
       <Col hidden={!code} className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -99,7 +100,7 @@ function MockHash(props) {
               <Row>
               {row.length !== 0 && row.map((single, key) => (
                 <Col className='pt-1' key={key} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                  <button className='btn btn-sm btn-secondary' onClick={()=>{
+                  <button className={(props.active && props.active.includes(index*row.length+key))?'btn btn-sm btn-warning':'btn btn-sm btn-secondary'} onClick={()=>{
                     self.clickSingle(index*row.length+key,row[key])
                   }}>{row[key]}</button>
                 </Col>

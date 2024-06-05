@@ -39,7 +39,9 @@ function Playground(props) {
         button: true,
     });
     let [show, setShow] = useState(false);
-    let [offset,setOffset]=useState([]);
+
+    let [offset,setOffset]=useState([]);        //for mock offet callback
+    let [active,setActive]=useState([]);        //for mock hash, the selected hash
 
     //template values
     let [hash, setHash] = useState("0x6353bc102e185084671c2c1391cbb7876911e9f65cdfa46e2d9cc5f1a027a0aa");
@@ -58,10 +60,18 @@ function Playground(props) {
             setShow(false);
             if (network && search) {
                 TPL.view(search, (def) => {
-                    //console.log(def);
                     self.show(def);
                 });
             }
+        },
+        changeSelected:(index)=>{
+            const part=parts[index];
+            const [start,step]=part.value;
+            const arr=[]
+            for(let i=0;i<step;i++){
+                arr.push(start+i);
+            }
+            setActive(arr);
         },
         show: (def) => {
             if (def.image) setFull(def.image);
@@ -81,6 +91,7 @@ function Playground(props) {
             }
             return arr;
         },
+
         fresh: () => {
             setUpdate(update + 1);
         },
@@ -137,12 +148,11 @@ function Playground(props) {
                         <Row className="pt-2">
                             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <MockOffset parts={parts} hash={hash} callback={(res) => {
-                                    //console.log(offset);
                                     setOffset(res);
                                 }} />
                             </Col>
                             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <MockHash hash={hash} callback={(nhash) => {
+                                <MockHash hash={hash} active={active} callback={(nhash) => {
                                     setHash(nhash);
                                 }} />
                             </Col>
@@ -154,13 +164,15 @@ function Playground(props) {
                                 <h5>iNFT Parts</h5>
                             </Col>
                             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <PartsINFT data={parts} />
+                                <PartsINFT data={parts} callback={(index)=>{
+                                    self.changeSelected(index);
+                                }}/>
                             </Col>
                             <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <h5>iNFT Series</h5>
                             </Col>
                             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <SeriesINFT data={series} />
+                                <SeriesINFT data={series} parts={parts} />
                             </Col>
                             <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <h5>Full Image ( {full.length.toLocaleString()} )</h5>

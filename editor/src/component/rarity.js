@@ -1,7 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState, useRef } from "react";
-
-import { FaPlus } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 import  Data from "../lib/data";
 import tools from "../lib/tools"

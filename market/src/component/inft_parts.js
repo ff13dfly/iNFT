@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import ParameterINFT from './inft_parameter';
 import tools from "../lib/tools";
 
+/* iNFT parts preview
+*   @param  {array}     data          //parts array
+*   @param  {function}  [callback]    //selected change callback
+*/
+
 function PartsINFT(props) {
   const size = {
     row: [12],
@@ -22,12 +27,16 @@ function PartsINFT(props) {
       const target=parts[index];
       setValue(tools.copy(target));
       setCurrent(index);
+      if(props.callback) props.callback(index);
     },  
   }
 
   useEffect(() => {
     setParts(props.data);
-    if(props.data && props.data[cur]) setValue(tools.copy(props.data[cur]));
+    if(props.data && props.data[cur]){
+      setValue(tools.copy(props.data[cur]));
+      if(props.callback) props.callback(cur);
+    } 
   }, [props.data]);
 
   return (
