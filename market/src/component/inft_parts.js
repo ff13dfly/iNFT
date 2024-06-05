@@ -5,7 +5,6 @@ import ParameterINFT from './inft_parameter';
 import tools from "../lib/tools";
 
 function PartsINFT(props) {
-
   const size = {
     row: [12],
     grid: [2],
@@ -28,7 +27,6 @@ function PartsINFT(props) {
 
   useEffect(() => {
     setParts(props.data);
-    console.log(props.data[cur]);
     if(props.data && props.data[cur]) setValue(tools.copy(props.data[cur]));
   }, [props.data]);
 
@@ -41,7 +39,7 @@ function PartsINFT(props) {
         <Row className='pb-2 text-center'>
           {parts.map((row, index) => (
             <Col className='pt-1' key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-              <button className={index===cur?'btn btn-md btn-primary':'btn btn-md btn-secondary'} onClick={(ev)=>{
+              <button className={index===cur?'btn btn-md btn-warning':'btn btn-md btn-secondary'} onClick={(ev)=>{
                 self.clickPart(index)
               }}>#{index+1}</button>
             </Col>
