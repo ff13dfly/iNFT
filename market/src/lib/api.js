@@ -62,13 +62,42 @@ const self={
         }
     },
 
-    template:(page,ck)=>{
+    template:(page,ck,step)=>{
         self.init((ready)=>{
             if(ready.error) return ck && ck({error:"Internal error."});
+            const param={page:page};
+            if(step) param.step=parseInt(step);
+
             funs.request("template","list",(res)=>{
                 if(res.success) return ck && ck(res);
                 return ck && ck({error:"Failed to get data."});
-            },{page:page});
+            },param);
+        });
+    },
+
+    bounty:(page,ck,step)=>{
+        self.init((ready)=>{
+            if(ready.error) return ck && ck({error:"Internal error."});
+            const param={page:page};
+            if(step) param.step=parseInt(step);
+
+            funs.request("bounty","list",(res)=>{
+                if(res.success) return ck && ck(res);
+                return ck && ck({error:"Failed to get data."});
+            },param);
+        });
+    },
+
+    selling:(page,ck,step)=>{
+        self.init((ready)=>{
+            if(ready.error) return ck && ck({error:"Internal error."});
+            const param={page:page};
+            if(step) param.step=parseInt(step);
+
+            funs.request("selling","list",(res)=>{
+                if(res.success) return ck && ck(res);
+                return ck && ck({error:"Failed to get data."});
+            },param);
         });
     },
 };
