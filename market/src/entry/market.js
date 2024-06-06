@@ -4,7 +4,28 @@ import { useState } from "react";
 import Header from "../component/common_header";
 import FilterMarket from "../component/filter_market";
 import ListMarket from "../component/list_market";
+
+import API from "../lib/api";
+
 function Market(props) {
+
+    //CORS test
+    // const url="http://localhost/inFT/service/api/?mod=system&act=new";
+    // const getData=async ()=>{
+    //     const response = await fetch(url);
+    //     //console.log(response);
+    //     const ctx = await response.text();
+    //     console.log(ctx);
+    // }
+    // getData();
+
+    API.template(1,(res)=>{
+        console.log(res);
+        API.template(2,(res)=>{
+            console.log(res);
+        });
+    });
+
     const size = {
         row: [12],
         side:[2,10]
