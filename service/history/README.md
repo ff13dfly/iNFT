@@ -34,3 +34,78 @@
     ```SHELL
 
     ```
+
+## Data Structure
+
+### Anchor
+
+- Raw anchor data sample, storage as the data on block.
+
+- Sample.
+
+    ```Javascript
+        // redis.hset("raw","ANCHOR_NAME","ANCHOR_DATA")
+        {
+            tpl:"",
+            offset:"",
+            target:"",
+            signer:"",
+            block:0,
+            hash:"0x",
+        }
+    ```
+
+### Block
+
+- Cache the block iNFT list
+
+- Sample.
+
+    ```Javascript
+        // redis.hset("block","BLOCk_NUMBER","SAMPLE")
+        ["INDEX","NAME","ACTION"]
+    ```
+
+### History
+
+- Cache the iNFT history by Anchor name.
+
+- Sample.
+
+    ```Javascript
+        // redis.lPush("ANCHOR_NAME","ACTIONS")
+        ["BLOCK","INDEX","ACTION","ACCOUNT"]
+    ```
+
+### Selling
+
+- Cache the iNFT list by selling status
+
+- Sample.
+
+    ```Javascript
+        // redis.lPush("SELLING","ANCHOR_NAME")
+        ["PRICE","OWNER"]
+    ```
+
+### Template
+
+- Cache the iNFT list by template
+
+- Sample.
+
+    ```Javascript
+        // redis.lPush("TEMPLATE_NAME","ANCHOR_NAME")
+        "ANCHOR_NAME"
+    ```
+
+### Account
+
+- Cache the iNFT list by owner account
+
+- Sample.
+
+    ```Javascript
+        // redis.lPush("ACCOUNT_ADDRESS","ANCHOR_NAME")
+        "ANCHOR_NAME"
+    ```

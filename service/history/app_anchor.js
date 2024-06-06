@@ -1,6 +1,5 @@
 const { config } = require('./config_anchor.js');
 const tools = require('./lib/tools.js');
-const IO = require('./lib/file.js');
 const { output } = require('./lib/output.js');
 const AnchorJS = require('./network/anchor.js');
 const { REDIS } = require('./lib/redis.js');
@@ -66,6 +65,11 @@ const self = {
             }
         });
     },
+    saving:(map,direction)=>{
+        for(var block in map){
+
+        }
+    },
     read:(bks,ck,map)=>{
         if(map===undefined) map={};
         if(bks.length===0) return ck && ck(map);
@@ -78,8 +82,9 @@ const self = {
             });
         });
     },
-    toLeft:(status)=>{
+    toLeft:(status,ck)=>{
         output(`Caching the history iNFTs.`,'primary',true);
+
     },
     toRight:(status,ck)=>{
         if(status.done_right===status.block_subcribe) return ck && ck();
@@ -135,6 +140,7 @@ process.on('uncaughtException', (error) => {
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag
 let map=null;             //subcribe cache, before catchup, cache iNFTs here.
+let gap=null;             //when saving cached iNFTs, new subcribe iNFTs here.
 self.load((status) => {
     if(status===false) return output(`Failed to load status from Redis. Please check the system`,'error',true);
     output(`Load status successful, ready to link to Anchor Network for the next step.`,'primary',true);
