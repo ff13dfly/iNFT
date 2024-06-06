@@ -708,4 +708,6 @@ module.exports={
 	unsell:self.unsell,			//revoke anchor from selling status
 	buy:self.buy,				//buy selling anchor
 	hash:self.hash,				//get hash by block number.
+
+	specific:self.specific,
 };

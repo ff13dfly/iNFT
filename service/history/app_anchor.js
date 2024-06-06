@@ -66,16 +66,54 @@ const self = {
             }
         });
     },
+    read:(bks,ck,map)=>{
+        if(map===undefined) map={};
+        if(bks.length===0) return ck && ck(map);
+        const block=bks.pop();
+        AnchorJS.hash(block,(hash)=>{
+            AnchorJS.specific(hash,(list)=>{
+                if(!list) return self.read(bks,ck,map);
+                console.log(list);
+                return self.read(bks,ck,map);
+            });
+        });
+    },
+    toLeft:(status)=>{
+        output(`Caching the history iNFTs.`,'primary',true);
+    },
+    toRight:(status,ck)=>{
+        if(status.done_right===status.block_subcribe) return ck && ck();
+        output(`Start to catch up the subcribe block. From ${status.done_right} to ${status.block_subcribe}`,'primary',true);
+        const arr=[];
+        for(let i=0;i<status.step;i++){
+            const p=status.done_right+i;
+            
+            if(p>=status.block_subcribe) break;
+            arr.push(status.done_right+i);
+        }
+        const len=arr.length;
+        output(`Last block to cache:${arr[len-1]}`);
+
+        self.read(arr,(map)=>{
+            status.done_right=status.done_right+len;
+            REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                return self.toRight(status,ck);
+            });
+        });
+    },
     autoCache:(status)=>{
         output(`Caching the history started, status:${JSON.stringify(status)}`,'primary',true);
-
         //0.check the done_right data
-
-        //1.start to cache data by step
-        let count=0;
-        setTimeout(()=>{
-            output(`Round[${count}], from `,'primary',true);
-        },1000);
+        if(status.done_right<status.block_subcribe){
+            self.toRight(status,(final)=>{
+                catchup=true;
+                output(`Catch up the subcribe.`,'primary',true);
+                self.toLeft(final);
+            });
+        }else{
+            self.toLeft(status);
+        }
     },
 };
 
@@ -94,8 +132,9 @@ process.on('uncaughtException', (error) => {
     output(`uncaughtException`, 'error');
 });
 
-//1.link to target node
+//1.load the cache status from Redis
 let first = true;         //first subcribe tag
+let map=null;             //subcribe cache, before catchup, cache iNFTs here.
 self.load((status) => {
     if(status===false) return output(`Failed to load status from Redis. Please check the system`,'error',true);
     output(`Load status successful, ready to link to Anchor Network for the next step.`,'primary',true);
@@ -134,9 +173,11 @@ self.load((status) => {
 
             //2.2. record the recent data.
             if(catchup){
-                output(`Storage the iNFTs per block.`);
+                //output(`Storage the iNFTs per block.`);
+
+
             }else{
-                output(`Cache the iNFTs records, when catchup, start to storage.`);
+                //output(`Cache the iNFTs records, when catchup, start to storage.`);
             }
         });
     });
