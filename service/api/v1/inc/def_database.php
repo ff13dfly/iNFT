@@ -3,7 +3,7 @@
 define ('HOST',		'localhost');
 define ('USER',		'root');
 define ('PASS',		'123456');
-define ('DB',		'world');
+define ('DB',		'market');
 define ('PORT',		3306);
 define ('CHARSET',	'utf8');
-define ('PRE',		'wd_');
+define ('PRE',		'mkk_');

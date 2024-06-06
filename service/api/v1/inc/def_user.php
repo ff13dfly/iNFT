@@ -27,9 +27,11 @@ define('USER_ORIGIN_OTHER',	9);
 
 //安全防护
 define('USER_FRESH_INTERVAL',		5);				//5秒检测时间
-define('USER_FRESH_MAX',	   			5);				//时间段内请求次数
+define('USER_FRESH_MAX',	   		5);				//时间段内请求次数
 define('USER_DDOS_STAMP_PRE',	'ddos_');	//IP反复请求生成uuid的上一次时间
 define('USER_DDOS_INTERVAL',		600);			//封IP的时间，10分钟
+define('GLOBAL_TOKEN_EXPIRE', 86400);
+define('GLOBAL_SPAM_EXPIRE',  36000);
 
 //缓存服务器区分，暂未使用
 define('USER_HACK_HOST',	'127.0.0.1');

@@ -1,4 +1,5 @@
 <?php
+
 /*基础配*/
 define('INFTAPI', TRUE);		//基础防止异常访问的方法
 define('DEBUG', TRUE);		//调试模式是否开启

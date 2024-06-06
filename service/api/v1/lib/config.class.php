@@ -1,7 +1,9 @@
 <?php
 class Config extends CORE{
-	private $modlist=array('system','template');		//模块列表
+	private $modlist=array('system','template');		//support modules
+	private $ignor=array('new','fresh','spam');			//user spam access
 	public $_F=array();	
+	private $callback;
 
  	public function __construct(){CORE::dbStart(); }
 	public function __destruct(){CORE::dbClose();}
@@ -16,19 +18,20 @@ class Config extends CORE{
 		$pre=$this->checkRequest();
 		if(!$pre) $this->error('Login Error');
 		$this->_F['pre']=$pre;
-		
-		$info=$this->checkSpam();
-		if(empty($info)) $this->error('wrong spam',ERROR_LEVEL_3,true);
-		
-		$this->_F['uuid']=$info['uuid'];
-		$this->_F['uid']=$info['uid'];
-		
 		$_GET['mod']=isset($_GET['mod'])?$_GET['mod']:DEFAULT_MOD;
 		$_GET['act']=isset($_GET['act'])?$_GET['act']:DEFAULT_ACT;
-		
 		if(!in_array($_GET['mod'], $this->modlist)) $this->error('Not in mod list,error module');
+
+		if($_GET['mod']==="system" && in_array($_GET['act'],$this->ignor)){
+
+		}else{
+			$info=$this->checkSpam();
+			if(empty($info)) $this->error('wrong spam',ERROR_LEVEL_3,true);
+			$this->_F['uuid']=$info['uuid'];
+			$this->_F['uid']=$info['uid'];
+		}
 		
-		//2.处理控制器请求,并获取变量
+		//2.pramaters process
 		foreach($_GET as $k=>$v) $this->_F['request'][$k]=$this->strSafe($v);
 		foreach($_POST as $k=>$v) $this->_F['request'][$k]=$this->strSafe($v);
 		
@@ -36,8 +39,7 @@ class Config extends CORE{
 		if(!file_exists($target)) $this->error('Hack Attemp');
 		$this->_F['target']=$target;
 		
-
-		//3.记录用户的请求,不管记录成功与否
+		//3.user access record
 		$this->access($info['uuid']);
 
 		return $this->_F;
@@ -74,24 +76,22 @@ class Config extends CORE{
 	
 	private function deny($code){
 		$hacklog=json_encode(array('REQUEST'=>$_REQUEST,'SERVER'=>$_SERVER));
-		//$this->hackLog($hacklog,$code);
+		$this->hackLog($hacklog,$code);
 	}
 	
 	private function access(){
 		$json=$this->_F['request'];
 		$json['ip']=$_SERVER['REMOTE_ADDR'];
 		$json['uid']=(isset($this->_F['uid'])&&$this->_F['uid'])?$this->_F['uid']:0;
-		//$this->runLog(json_encode($json));
+		$this->runLog(json_encode($json));
 	}
 	
 	//检查请求，进行匹配的方法
 	private function checkRequest(){
-		$pre=CON_JSONP;
+		$pre=CON_AJAX;
 		if(isset($_GET['callback'])){
 			$pre=CON_JSONP;
 			$this->callback=$_GET['callback'];
-		}else if(isset($_GET['d']) && $_GET['d']='ajax'){
-			$pre=CON_AJAX;
 		}
 		return $pre;
 	}

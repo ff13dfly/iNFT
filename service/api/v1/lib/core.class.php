@@ -30,7 +30,7 @@ class CORE {
 	public function dbStart() {
 		self::loadDefine('database');		//加载基础定义
 		self::loadDefine('cache');			//加载全局定义
-		//$this -> pdoConnect();				//数据库连接
+		$this -> pdoConnect();				//数据库连接
 	}
 	
 	public function dbClose() {

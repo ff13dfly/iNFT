@@ -39,8 +39,8 @@
 			));	
 		}
 		
-		/*生成用户的uuid的操作，带基本的防护
-		 * @param	$og	integer		//注册来源
+		/* uuid created, basic protection
+		 * @param	$og	integer		//reg orgin
 		 * return
 		 * array('uuid'=>$uuid,'token'=>$token,'uid'=>$uid)
 		 * */
@@ -96,6 +96,32 @@
 			return array('uuid'=>$uuid,'token'=>$token,'uid'=>$uid);	
 		}
 
+		/*把新用户数据保存到数据库的实现
+		 * @param	$uuid	string	//唯一的用户uuid
+		 * @param	$info	array	//用户注册的基本信息
+		 * */
+		public function userDBSave($uuid,$info){
+			$table=PRE.'user';
+			$stamp=$info['ctime'];
+			$data=array(
+				'name'		=>USER_UNREG_NAME,		
+				'pass'		=>USER_UNPASS,
+				'uuid'		=>$uuid,
+				'thumb'	=>USER_DEFAULT_AVATAR,
+				'sex'			=>0,
+				'origin'		=>$info['origin'],
+				'mobile'	=>0,
+				'salt'			=>$this->salt(),
+				'email'		=>'noMail',
+				'sign'		=>'noSign',
+				'regIP'		=>$info['regIP'],
+				'last'			=>$info['last'],
+				'mtime'		=>$stamp,
+				'ctime'		=>$stamp,
+				'status'		=>USER_STATUS_UNREG,
+			);
+			return $this->insert($data, $table);
+		}
 
 		/*生成用户的tag,可以显式的传递给url,实现同步登陆
 		 * @param	$uuid	string	//唯一的用户uuid
