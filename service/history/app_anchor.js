@@ -1,23 +1,28 @@
-const { config } = require('./config.js');
-const tools=require('./lib/tools.js');
-const IO=require('./lib/file.js');
+const { config } = require('./config_anchor.js');
+const tools = require('./lib/tools.js');
+const IO = require('./lib/file.js');
+const { output } = require('./lib/output.js');
+const AnchorJS = require('./network/anchor.js');
+const { REDIS } = require('./lib/redis.js');
 
-const theme = {
-    error: '\x1b[31m%s\x1b[0m',
-    success: '\x1b[36m%s\x1b[0m',
-    primary: '\x1b[33m%s\x1b[0m',
-    dark: '\x1b[90m%s\x1b[0m',
+//Redis data sample: Entry data
+const entry = {
+    block_stamp: 0,         //which block start to read iNFT
+    block_subcribe:0,       //current subcribe start block
+    done_left:0,            //left blocknumber cached
+    done_right:0,           //right blocknumber cached
+    step: 20,               //block step to read iNFT
 };
 
-let server=null;        //express instance
-let wsAPI = null;       //polkadot linker  
-let linking = false;    //linking locker for polkadot
-let map={};             //airdrop record
-let timer=null;         //autosave timer
-let exhoused=false;     //wether balance low
+//global tags
+let catchup = false;          //when cache get the block_subcribe, set this tag to true
+
+//functions
+let linking = false;
+let wsAPI = null;
 const self = {
     init: (ck) => {
-        const uri=config.node;
+        const uri = config.node;
         if (linking) return setTimeout(() => {
             self.init(ck);
         }, 500);
@@ -29,8 +34,6 @@ const self = {
         try {
             const provider = new WsProvider(uri);
             ApiPromise.create({ provider: provider }).then((api) => {
-                self.output(`******************************************************************************************`,"success",true);
-                self.output(`Linked to node: ${config.node}`,"success",true);
                 wsAPI = api;
                 linking = false;
                 return ck && ck(wsAPI);
@@ -41,172 +44,100 @@ const self = {
             return ck && ck(error);
         }
     },
-    backup:(ck)=>{
-        const target=config.cache;
-        if(timer===null){
-            timer=setInterval(()=>{
-                IO.save(config.cache,JSON.stringify(map),()=>{
-                    self.output(`Saving history to cache: ${config.cache}`);
-                });
-            },config.autosaving);
-        }
-        return ck && ck();
-    },
-    run:(cfg, ck)=>{
-        if(server !=null) return ck && ck();
-        server = app.listen(cfg.port, function() {
-            const host = server.address().address;
-            const port = server.address().port;
-            
-            self.output(`Faucet server start at http://${host}:${port}`,"success",true);
-            self.output(`Author: Fuu, copyright 2024.`,"success",true);
-            self.output(`******************************************************************************************`,"success",true);
-            //console.log("Faucet server start at http://%s:%s", host, port);
-            return ck && ck();
-        });
-    },
-    getDivide:()=>{
-        return 1000000000000;
-    },
-    getMulti:()=>{
-        //basic:1000000000000, multi: 10000
-        //0000000000000
-        return 100000000;
-    },
-    format:(obj)=>{
-        return JSON.stringify(obj)
-    },
-    output:(ctx, type, skip) => {
-        const stamp = () => { return new Date().toLocaleString(); };
-        if (!type || !theme[type]) {
-            if (skip) return console.log(ctx);
-            console.log(`[${stamp()}] ` + ctx);
-        } else {
-            if (skip) return console.log(theme[type], ctx);
-            console.log(theme[type], `[${stamp()}] ` + ctx);
-        }
-    },
-    balance:(day,ck)=>{
-        let unsub = null;
-        const n=parseInt(day.slice(6,8));
-        const index=n%config.account.length;
-        const from=config.account[index];
-        self.output(`Day: ${n},JSON.stringify(from)`,"primary");
-        wsAPI.query.system.account(from[0], (res) => {
-            if (unsub != null) unsub();
-            const data = res.toJSON().data;
-            self.output(`Faucet account ${from[0]} free balance: ${tools.toF(data.free/self.getDivide(),8)}`,"primary");
-            if(data.free<config.low){
-                exhoused=true;     //if balance low, 
-                return ck && ck(false);
-            } 
-            return self.load(from[0],from[1],ck);
-        }).then((fun) => {
-            unsub = fun;
-        });
-    },
-    load:(address,pass,ck)=>{
-        const account_file=`./account/${address}.json`;
-        self.output(account_file,"primary");
-        IO.read(account_file,(fa)=>{
-            //console.log(fa);
-            self.output(`Read ${account_file} successful.`,"primary");
-            self.getPair(fa,pass,ck);
-        });
-    },
-    getPair:(fa,password,ck)=>{
-        const {Keyring}=require("@polkadot/api");
-        try {
-            const acc=JSON.parse(fa);
-            const keyring = new Keyring({ type: "sr25519" });
-            const pair = keyring.createFromJson(acc);
-            try {
-                pair.decodePkcs8(password);
-                return  ck && ck(pair);
-            } catch (error) {
-                return ck && ck({error:"Invalid passoword"});
-            }
-        } catch (error) {
-            return ck && ck({error:"Invalid file"}); 
-        }
-    },
-    transfer:(amount,target,day,ck)=>{
-        //1.check balance is enough;
-        self.balance(day,(pair)=>{
-            if(exhoused || pair===false) return false;      //wethe low balance
-            self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
-
-            const m=self.getMulti();
-            try {
-                const m=self.getMulti();
-                wsAPI.tx.balances.transferAllowDeath(target,parseInt(amount*m)).signAndSend(pair, (res) => {
-                    const status = res.status.toJSON();
-                    if(status && status.finalized){
-                        map[target][day].confirmed=true;
-                        return ck && ck(status.finalized);
+    load: (ck) => {
+        const key = config.keys.entry;
+        //const key="hello";
+        return REDIS.exsistKey(key, (is, err) => {
+            if(!is) {
+                REDIS.setKey(key, JSON.stringify(entry), (res,err) => {
+                    if(err!==undefined) return ck && ck(false);
+                    return ck && ck(tools.copy(entry));
+                })
+            } else {
+                REDIS.getKey(key, (res,err) => {
+                    if(err!==undefined) return ck && ck(false);
+                    try {
+                        const data=JSON.parse(res);
+                        return ck && ck(data);
+                    } catch (error) {
+                        return ck && ck(false);
                     }
                 });
-            } catch (error) {
-                self.output(error,"error");
             }
         });
+    },
+    autoCache:(status)=>{
+        output(`Caching the history started, status:${JSON.stringify(status)}`,'primary',true);
+
+        //0.check the done_right data
+
+        //1.start to cache data by step
+        let count=0;
+        setTimeout(()=>{
+            output(`Round[${count}], from `,'primary',true);
+        },1000);
     },
 };
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
+output(`\n____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
+output(`Start iNFT history cache robot ( version ${config.version} ), author: Fuu, 2024.06`, "", true);
+output(`Will storage iNFT data to local Redis, then the Market API can use these data.`, "", true);
 
+//0. handle unknown error
+process.on('unhandledRejection', (reason, promise) => {
+    console.log(reason);
+    output(`UnhandledRejection`, 'error');
+});
 
-//curl http://127.0.0.1:8888/5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg
-//curl http://127.0.0.1:8888/5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV
-self.init(()=>{
-    self.backup(()=>{
-        //console.log(wsAPI.tx.balances);
-        self.run(config.server,()=>{
-            self.output(`Cors should be supported by Nginx.`);
+process.on('uncaughtException', (error) => {
+    console.log(error);
+    output(`uncaughtException`, 'error');
+});
 
-            app.get('/',(req, res)=>{
-                res.send("");
-            });
+//1.link to target node
+let first = true;         //first subcribe tag
+self.load((status) => {
+    if(status===false) return output(`Failed to load status from Redis. Please check the system`,'error',true);
+    output(`Load status successful, ready to link to Anchor Network for the next step.`,'primary',true);
+    self.init((wsAPI) => {
+        output(`\nLinked to node: ${config.node}`, "success", true);
+        output(`____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
 
-            //console.log(`Here to link to Tanssi appchain`);
-            app.get('/:address',(req, res)=>{
-                if(exhoused) return res.send({error:'Faucet pool is exhoused today.'});
-
-                const addr=req.params.address;
-                self.output(`Request Address:${addr}`,"primary");
-                if(addr.length!==48) return res.send({error:'Invalid request.'});
-
-                const range=!map[addr]?config.amount.first:config.amount.normal;
-                const day=tools.day();
-                if(!map[addr]){
-                    map[addr]={};
-                    const first=tools.rand(range[0],range[1]);
-                    map[addr][day]={amount:first,confirmed:false};
-                    self.output(`First faucet: ${first}`)
-                    self.transfer(first,addr,day,(txHash)=>{
-                        self.output(`Transaction done. Hash: ${txHash}`,"primary");
-                    });
-                    return res.send({message:'Welcome, your faucet is sending.'});
+        AnchorJS.set(wsAPI);
+        AnchorJS.subcribe((list, block, hash) => {
+            //2.1. if first time to run the robot, start to launch the history process
+            if (first) {
+                first = false;
+                //a.init the status of caching.
+                if(status.block_stamp===0){
+                    output(`History robot start the first time, stamp it at ${block}`,"primary",true);
+                    status.block_stamp=block;
+                    status.done_right=block;
+                    status.done_left=block;
+                    status.block_subcribe=block;
+                    REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    })
                 }else{
-                    if(!map[addr][day]){
-                        const amount=tools.rand(range[0],range[1]);
-                        map[addr][day]={amount:amount,confirmed:false};
-                        self.output(`Normal faucet: ${amount}`)
-                        self.transfer(amount,addr,day);
-                        return res.send({message:'Faucet daily is sending.'});
-                    }else{
-                        if(map[addr][day].confirmed){
-                            return res.send({message:'Try tomorrow.'});
-                        }else{
-                            return res.send({message:'Faucet is on progress.'});
-                        }
-                    }
+                    output(`History robot recover, status: ${JSON.stringify(status)}`,"primary",true);
+                    status.block_subcribe=block;
+                    REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    });
                 }
-            });
+
+                //b. start to run the autocache
+                self.autoCache(status);
+            }
+
+            output(`[${block.toLocaleString()}] ${hash} , ${list.length} iNFTs.`);
+
+            //2.2. record the recent data.
+            if(catchup){
+                output(`Storage the iNFTs per block.`);
+            }else{
+                output(`Cache the iNFTs records, when catchup, start to storage.`);
+            }
         });
-    }); 
+    });
 });
