@@ -68,7 +68,7 @@
 
     ```Javascript
         // redis.hset("block","BLOCk_NUMBER","SAMPLE")
-        ["INDEX","NAME","ACTION"]
+        ["INDEX","NAME","ACTION","SIGNER"]
     ```
 
 ### History

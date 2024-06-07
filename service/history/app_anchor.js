@@ -67,29 +67,95 @@ const self = {
             }
         });
     },
+    getINFT:(obj,block)=>{
+        //console.log(obj);
+        const raw=obj.args.raw;
+        const NFT={
+            tpl:raw.tpl,
+            from:raw.from,              //template source type
+            orgin:raw.orgin,            //storage website
+            offset:raw.offset,          //mint offset
+            signer:obj.signer,          //the signer of this iNFT
+            block:block,                //on which block
+            result:obj.hash,            //result hash
+            index:obj.index,            //index of the iNFT data on block
+            stamp:obj.stamp,            //block create timestamp
+        };
+        if(obj.target) NFT.target=obj.target;   //optional, target block
+        return NFT;
+    },
     saving:(map,left,ck)=>{
         output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
-        
+        const keys=config.keys;
+        const prefix=keys.prefix;
+
         let working=0;     //working tag, when it is 0, callback
         for(let block in map){
             console.log(`Got block [${block}] list`);
             const data=map[block];
+            if(parseInt(block)===13580) console.log(data);
 
             if(data.set!==null){
+                const list_iNFT=[];
                 for(let i=0;i<data.set.length;i++){
-                    working++;
                     const row=data.set[i];
-                    console.log(JSON.stringify(row));
+
+                    const name=row.args.key;
+                    const key=`${name}_${block}`;
+                    
                     //1.1. save raw iNFT data;
+                    working++;
+                    const NFT=self.getINFT(row,parseInt(block));
+                    REDIS.setKey(key,JSON.stringify(NFT),(res,err)=>{
+                        working--;
+                        if(err) output(`Error:${err}`,'error');
+                        if(working<1) return ck && ck();
+                    });
 
                     //1.2. push to template queue;
+                    // working++;
+                    // const qu_template=NFT.tpl;
+                    // console.log(`Template queue: ${qu_template}`);
+                    // REDIS.pushQueue(qu_template,key,(res,err)=>{
+                    //     working--;
+                    //     if(err) output(`Error:${err}`,'error');
+                    //     if(working<1) return ck && ck();
+                    // },left);
 
                     //1.3. push to history queue;
+                    // working++;
+                    // const qu_history=`his_${name}`;
+                    // const history=[block,row.index,"set",row.signer];
+                    // console.log(`History queue: ${qu_history}`);
+                    // REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
+                    //     working--;
+                    //     if(err) output(`Error:${err}`,'error');
+                    //     if(working<1) return ck && ck();
+                    // },left);
 
                     //1.4. push to account queue;
+                    // working++;
+                    // const qu_account=`acc_${row.signer}`;
+                    // console.log(`Account queue: ${qu_account}`);
+                    // REDIS.pushQueue(qu_account,key,(res,err)=>{
+                    //     working--;
+                    //     if(err) output(`Error:${err}`,'error');
+                    //     if(working<1) return ck && ck();
+                    // },left);
 
                     //1.5. push to block queue;
+                    working++;
+                    const qu_block=`block_${block}`;
+                    const block_data=[row.index,name,"set",row.signer];
+                    console.log(`History queue: ${qu_block}`);
+                    REDIS.pushQueue(qu_block,JSON.stringify(block_data),(res,err)=>{
+                        working--;
+                        if(err) output(`Error:${err}`,'error');
+                        if(working<1) return ck && ck();
+                    },left);
                 }
+
+                //1.6. push to iNFT list
             }
 
             if(data.sell!==null){
@@ -136,8 +202,8 @@ const self = {
         if(bks.length===0) return ck && ck(map);
         const block=bks.pop();
         AnchorJS.hash(block,(hash)=>{
-            AnchorJS.full(hash,(list)=>{
-                if(!list) return self.read(bks,ck,map);
+            AnchorJS.full(hash,block,(list)=>{
+                if(!list || list.error) return self.read(bks,ck,map);
                 if(list.set!==null || list.buy!==null || list.sell!==null || list.revoke!==null){
                     map[block]=list;
                 }
@@ -147,7 +213,7 @@ const self = {
     },
     toLeft:(status,ck)=>{
         output(`Caching the history iNFTs.`,'primary',true);
-        
+
     },
     toRight:(status,ck)=>{
         if(status.done_right===status.block_subcribe) return ck && ck();
@@ -164,6 +230,8 @@ const self = {
         self.read(arr,(map)=>{
             const left=false;
             self.saving(map,left,()=>{
+                return output(`Cached data saved to Redis`,'success',true);
+
                 status.done_right=status.done_right+len;
                 REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
                     if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
@@ -201,6 +269,8 @@ process.on('uncaughtException', (error) => {
     console.log(error);
     output(`uncaughtException`, 'error');
 });
+
+//return REDIS.test();
 
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag

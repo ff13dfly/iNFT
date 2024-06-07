@@ -390,7 +390,7 @@ const self = {
 		});
 	},
 
-	getINFTs:(list)=>{
+	getINFTs:(list,block,hash)=>{
 		const arr=[];
 		for(let i=0;i<list.length;i++){
 			const row=list[i].args;
@@ -408,6 +408,8 @@ const self = {
 				row.raw=JSON.parse(row.raw);
 				row.protocol=protocol;
 				row.pre=parseInt(row.pre);
+				list[i].block=block;
+				list[i].hash=hash;
 				list[i].args=row;
 				arr.push(list[i]);
 			} catch (error) {
@@ -417,7 +419,7 @@ const self = {
 		return arr;
 	},
 	
-	full:(hash,ck)=>{
+	full:(hash,block,ck)=>{
 		const result={
 			set:null,
 			sell:null,
@@ -428,7 +430,7 @@ const self = {
 			if (dt.block.extrinsics.length === 1) return ck && ck(result);
 			wsAPI.query.system.events.at(hash,(evs)=>{
 				//1.get setAnchor
-				result.set =self.getINFTs(self.filter(dt, 'setAnchor',self.status(evs)));
+				result.set =self.getINFTs(self.filter(dt, 'setAnchor',self.status(evs)),block,hash);
 				result.sell = self.filter(dt, 'sellAnchor',self.status(evs));
 				result.buy = self.filter(dt, 'buyAnchor',self.status(evs));
 				result.revoke = self.filter(dt, 'revokeAnchor',self.status(evs));
@@ -677,7 +679,7 @@ const self = {
 			const dt = ex.toHuman();
 			if (dt.method.method === method) {
 				const res = dt.method;
-				res.singer = dt.signer.Id;
+				res.signer = dt.signer.Id;
 				res.owner = dt.signer.Id;			//FIXME, leave it here to avoid issue
 				res.stamp = stamp;
 				res.index=index;

@@ -33,30 +33,27 @@ const self={
             return ck && ck(res);
         });
     },
-    keys:(prefix,ck)=>{
-        client.keys(prefix).then((res,err) => {
-            if(err) return ck && ck(err);
-            return ck && ck(res);
-        });
-    },
     remove:(key,ck)=>{
         client.del(key).then((res,err) => {
             if(err) return ck && ck(err);
             return ck && ck(res);
         });
     },
-
-    setPage:(key,n,ck)=>{
-        client.set(key,n).then((res,err) => {
-            if(err) return ck && ck(err);
-            return ck && ck(res);
-        });
+    pushQueue:(queue,value,ck,left)=>{
+        if(left){
+            client.lPush(queue,value).then((res,err) => {
+                if(err) return ck && ck(err);
+                return ck && ck(true);
+            });
+        }else{
+            client.rPush(queue,value).then((res,err) => {
+                if(err) return ck && ck(err);
+                return ck && ck(true);
+            });
+        }
     },
-    getPage:(key,ck)=>{
-        client.get(key).then((res,err) => {
-            if(err) return ck && ck(err);
-            return ck && ck(isNaN(res)?0:parseInt(res));
-        });
+    test:()=>{
+        console.log(client);
     },
 };
 
