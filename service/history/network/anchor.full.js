@@ -1,3 +1,5 @@
+const { output } = require("../lib/output");
+
 let wsAPI = null;
 let keyRing=null;
 let unlistening = null;
@@ -388,6 +390,57 @@ const self = {
 		});
 	},
 
+	getINFTs:(list)=>{
+		const arr=[];
+		for(let i=0;i<list.length;i++){
+			const row=list[i].args;
+			if(row.raw.length>1000) continue;		//skip huge anchor
+			try {
+				const protocol=JSON.parse(row.protocol);
+				if(!protocol.type || 
+					protocol.type!=='data' || 
+					!protocol.fmt || 
+					protocol.fmt!=='json' ||
+					!protocol.tpl ||
+					protocol.tpl!=='inft'
+				) continue;
+
+				row.raw=JSON.parse(row.raw);
+				row.protocol=protocol;
+				row.pre=parseInt(row.pre);
+				list[i].args=row;
+				arr.push(list[i]);
+			} catch (error) {
+				output(`Failed to decode iNFT: ${JSON.stringify(row)}`,'error',true);
+			}
+		}
+		return arr;
+	},
+	
+	full:(hash,ck)=>{
+		const result={
+			set:null,
+			sell:null,
+			buy:null,
+			revoke:null,
+		}
+		wsAPI.rpc.chain.getBlock(hash).then((dt) => {
+			if (dt.block.extrinsics.length === 1) return ck && ck(result);
+			wsAPI.query.system.events.at(hash,(evs)=>{
+				//1.get setAnchor
+				result.set =self.getINFTs(self.filter(dt, 'setAnchor',self.status(evs)));
+				result.sell = self.filter(dt, 'sellAnchor',self.status(evs));
+				result.buy = self.filter(dt, 'buyAnchor',self.status(evs));
+				result.revoke = self.filter(dt, 'revokeAnchor',self.status(evs));
+				return ck && ck(result);
+			}).catch((error)=>{
+				return ck && ck({error:"Failed to events by block hash."})
+			});
+		}).catch((error)=>{
+			return ck && ck({error:"Failed to get block transactions by block hash."})
+		});
+	},
+
 	/**************************/
 	/***Anchor data to chain***/
 	/**************************/
@@ -600,6 +653,7 @@ const self = {
 			}
 		}
 		data.pre=parseInt(data.pre.replace(/,/gi, ''));
+		data.index=parseInt(data.index);
 		
 		//remove the thound seperetor
 		if(data.block && typeof(data.block)==='string') data.block=parseInt(data.block.replace(/,/gi, ''));
@@ -614,7 +668,6 @@ const self = {
 	*/
 	filter: (exs, method,status) => {
 		let arr = [];
-		//console.log(exs[0].toHuman());
 		let stamp=0;
 		exs.block.extrinsics.forEach((ex, index) => {
 			if(index===0){
@@ -624,8 +677,10 @@ const self = {
 			const dt = ex.toHuman();
 			if (dt.method.method === method) {
 				const res = dt.method;
-				res.owner = dt.signer.Id;
+				res.singer = dt.signer.Id;
+				res.owner = dt.signer.Id;			//FIXME, leave it here to avoid issue
 				res.stamp = stamp;
+				res.index=index;
 				arr.push(res);
 			}
 		});
@@ -709,5 +764,5 @@ module.exports={
 	buy:self.buy,				//buy selling anchor
 	hash:self.hash,				//get hash by block number.
 
-	specific:self.specific,
+	full:self.full,				//get all related anchor.
 };

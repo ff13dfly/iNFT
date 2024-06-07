@@ -47,11 +47,16 @@
         // redis.hset("raw","ANCHOR_NAME","ANCHOR_DATA")
         {
             tpl:"",
-            offset:"",
-            target:"",
-            signer:"",
-            block:0,
-            hash:"0x",
+            from:"",            //template source type
+            orgin:"",           //storage website
+            offset:"",          //mint offset
+            
+            signer:"",          //the signer of this iNFT
+            block:0,            //on which block
+            result:"0x",        //result hash
+            index:0,            //index of the iNFT data on block
+
+            target:"",          //optional, target block
         }
     ```
 
@@ -86,6 +91,17 @@
     ```Javascript
         // redis.lPush("SELLING","ANCHOR_NAME")
         ["PRICE","OWNER"]
+    ```
+
+### Done
+
+- Cache the iNFT list by sold status
+
+- Sample.
+
+    ```Javascript
+        // redis.lPush("SELLING","ANCHOR_NAME")
+        ["PRICE","FROM","TO"]
     ```
 
 ### Template

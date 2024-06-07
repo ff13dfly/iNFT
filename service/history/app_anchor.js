@@ -1,15 +1,17 @@
 const { config } = require('./config_anchor.js');
 const tools = require('./lib/tools.js');
 const { output } = require('./lib/output.js');
-const AnchorJS = require('./network/anchor.js');
+const AnchorJS = require('./network/anchor.full.js');
 const { REDIS } = require('./lib/redis.js');
 
+//13598
 //Redis data sample: Entry data
+const DEBUG=true;
 const entry = {
     block_stamp: 0,         //which block start to read iNFT
     block_subcribe:0,       //current subcribe start block
-    done_left:0,            //left blocknumber cached
-    done_right:0,           //right blocknumber cached
+    done_left:0,        //left blocknumber cached
+    done_right:0,       //right blocknumber cached
     step: 20,               //block step to read iNFT
 };
 
@@ -65,9 +67,68 @@ const self = {
             }
         });
     },
-    saving:(map,direction)=>{
-        for(var block in map){
+    saving:(map,left,ck)=>{
+        output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
+        
+        let working=0;     //working tag, when it is 0, callback
+        for(let block in map){
+            console.log(`Got block [${block}] list`);
+            const data=map[block];
 
+            if(data.set!==null){
+                for(let i=0;i<data.set.length;i++){
+                    working++;
+                    const row=data.set[i];
+                    console.log(JSON.stringify(row));
+                    //1.1. save raw iNFT data;
+
+                    //1.2. push to template queue;
+
+                    //1.3. push to history queue;
+
+                    //1.4. push to account queue;
+
+                    //1.5. push to block queue;
+                }
+            }
+
+            if(data.sell!==null){
+                for(let i=0;i<data.sell.length;i++){
+                    working++;
+                    const row=data.sell[i];
+                    //1.1. push to selling queue;
+                    
+                    //1.2. push to history queue;
+
+                    //1.3. push to block queue;
+                }
+            }
+
+            if(data.buy!==null){
+                for(let i=0;i<data.buy.length;i++){
+                    working++;
+                    const row=data.buy[i];
+                    //1.1. remove from selling queue;
+
+                    //1.2. push to done queue;
+                    
+                    //1.2. push to history queue;
+
+                    //1.3. push to block queue;
+                }
+            }
+
+            if(data.revoke!==null){
+                for(let i=0;i<data.buy.length;i++){
+                    working++;
+                    const row=data.buy[i];
+                    //1.1. remove from selling queue;
+                    
+                    //1.2. push to history queue;
+
+                    //1.3. push to block queue;
+                }
+            }
         }
     },
     read:(bks,ck,map)=>{
@@ -75,16 +136,18 @@ const self = {
         if(bks.length===0) return ck && ck(map);
         const block=bks.pop();
         AnchorJS.hash(block,(hash)=>{
-            AnchorJS.specific(hash,(list)=>{
+            AnchorJS.full(hash,(list)=>{
                 if(!list) return self.read(bks,ck,map);
-                console.log(list);
+                if(list.set!==null || list.buy!==null || list.sell!==null || list.revoke!==null){
+                    map[block]=list;
+                }
                 return self.read(bks,ck,map);
             });
         });
     },
     toLeft:(status,ck)=>{
         output(`Caching the history iNFTs.`,'primary',true);
-
+        
     },
     toRight:(status,ck)=>{
         if(status.done_right===status.block_subcribe) return ck && ck();
@@ -98,12 +161,14 @@ const self = {
         }
         const len=arr.length;
         output(`Last block to cache:${arr[len-1]}`);
-
         self.read(arr,(map)=>{
-            status.done_right=status.done_right+len;
-            REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
-                if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
-                return self.toRight(status,ck);
+            const left=false;
+            self.saving(map,left,()=>{
+                status.done_right=status.done_right+len;
+                REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    return self.toRight(status,ck);
+                });
             });
         });
     },
@@ -157,8 +222,15 @@ self.load((status) => {
                 if(status.block_stamp===0){
                     output(`History robot start the first time, stamp it at ${block}`,"primary",true);
                     status.block_stamp=block;
-                    status.done_right=block;
-                    status.done_left=block;
+
+                    //13598
+                    if(DEBUG){
+                        status.done_right=13560;
+                        status.done_left=13560;
+                    }else{
+                        status.done_right=block;
+                        status.done_left=block;
+                    }
                     status.block_subcribe=block;
                     REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
