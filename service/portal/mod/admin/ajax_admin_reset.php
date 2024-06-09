@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 if(!isset($_F['request']['id']) || !is_numeric($_F['request']['id'])) exit('wrong uid');
 $uid=(int)$_F['request']['id'];

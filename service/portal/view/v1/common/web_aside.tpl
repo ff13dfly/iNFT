@@ -4,7 +4,7 @@
 		<nav class="sidebar" data-sidebar-anyclick-close="">
 			<ul class="nav">
 				<li class=" ">
-					<a href="{%BASE_DOMAIN%}{%BASE_URL%}" title=""><em class="icon-info"></em><span>{%SYSTEM_NAME%}[{%DEF_VERSION%}]</span></a>
+					<a href="{%BASE_DOMAIN%}" title=""><em class="icon-info"></em><span>{%SYSTEM_NAME%} [ {%DEF_VERSION%} ]</span></a>
 				</li>
 				<li>
 					<a id="user-block-toggle" href="#user-block" data-toggle="collapse">
@@ -18,19 +18,7 @@
 					</a>
 					<ul class="nav sidebar-subnav collapse" id="trend">
 						<li class="{%if $F.request.mod eq 'trend' && $F.request.act eq 'today'%}active{%/if%}">
-							<a href="?mod=trend&act=today" title="运营概要..."><span>今日状态</span></a>
-                        </li>
-                        <li class="{%if $F.request.mod eq 'setting' && $F.request.act eq 'rebuild'%}active{%/if%}">
-							<a href="?mod=setting&act=rebuild" title="重建虚块世界运行环境..."><span>运行环境重建</span></a>
-                        </li>
-                        <!--<li class="{%if $F.request.mod eq 'trend' && $F.request.act eq 'summary'%}active{%/if%}">
-							<a href="?mod=trend&act=summary" title="运营概要..."><span>运营概要</span></a>
-                        </li>-->
-                         <li class="{%if $F.request.mod eq 'order' && $F.request.act eq 'list'%}active{%/if%}">
-							<a href="?mod=order&act=list" title="购买服务的订单列表..."><span>订单列表</span></a>
-                        </li>
-                        <li class="{%if $F.request.mod eq 'coin' && $F.request.act eq 'list'%}active{%/if%}">
-							<a href="?mod=coin&act=list" title="运营概要..."><span>积分发放</span></a>
+							<a href="?mod=system&act=overview" title="运营概要..."><span>运营状态</span></a>
                         </li>
                         <li class="{%if $F.request.mod eq 'hack' && $F.request.act eq 'list'%}active{%/if%}">
 							<a href="?mod=hack&act=list" title="运营概要..."><span>黑客行为</span></a>

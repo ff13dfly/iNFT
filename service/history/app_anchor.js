@@ -67,6 +67,9 @@ const self = {
             }
         });
     },
+    reset:()=>{
+
+    },
     getINFT:(obj,block)=>{
         //console.log(obj);
         const raw=obj.args.raw;

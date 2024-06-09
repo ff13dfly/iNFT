@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 unset($_SESSION['admin']);
 unset($_SESSION['name']);

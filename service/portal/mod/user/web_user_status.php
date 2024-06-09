@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 //参数处理区域
 if(!isset($_F['request']['uuid'])||strlen($_F['request']['uuid'])!=36) exit('wrong uuid');

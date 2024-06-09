@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 $result=array('success'=>FALSE);
 

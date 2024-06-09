@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 if(!isset($_F['request']['ids'])) exit('wrong ids');
 $ids=json_decode($_F['request']['ids'],true);

@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 //参数处理区域
 $page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
@@ -14,15 +14,11 @@ if(date('W')-$week<10){
 
 $uid=isset($_F['request']['uid'])?(int)$_F['request']['uid']:0;
 
-$a->load('block');
-$a=Block::getInstance();
 //搜索参数配置
 $warr=array();
 if(isset($_F['request']['log_uid']) && $_F['request']['log_uid']>0) $warr['uid']=(int)$_F['request']['log_uid'];
 if(isset($_F['request']['log_mod']) && $_F['request']['log_mod']!='') $warr['m']=$_F['request']['log_mod'];
 if(isset($_F['request']['log_act'])&& $_F['request']['log_act']!='') $warr['a']=$_F['request']['log_act'];
-if(isset($_F['request']['log_x']) && (int)$_F['request']['log_x']>0&&(int)$_F['request']['log_x']<WORLD_MAX_X) $warr['x']=(int)$_F['request']['log_x'];
-if(isset($_F['request']['log_y']) && (int)$_F['request']['log_y']>0&&(int)$_F['request']['log_x']<WORLD_MAX_Y) $warr['y']=(int)$_F['request']['log_y'];
 
 $a->load('log');
 $a=Log::getInstance();

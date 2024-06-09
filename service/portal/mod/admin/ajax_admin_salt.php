@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 if(!isset($_F['request']['name'])) exit('wrong name');
 $result=array('success'=>FALSE);

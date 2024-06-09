@@ -1,5 +1,5 @@
 <?php
-if(!defined('WDD')) exit('error');
+if(!defined('INFTADM')) exit('error');
 
 if(!isset($_F['request']['id'])||!is_numeric($_F['request']['id'])) exit('wrong id');
 if(!isset($_F['request']['m'])||!is_numeric($_F['request']['id'])) exit('wrong month');
