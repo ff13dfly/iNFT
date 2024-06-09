@@ -13,10 +13,10 @@
 		</div>
 		<div class="row" style="margin-bottom: 10px;">
 			<div class="col-lg-12 text-center">
-				<button class="btn btn-xs btn-danger" style="width: 80%;" id="log_out" data="{%$F.uid%}">退出</button>
+				<button class="btn btn-xs btn-danger" style="width: 80%;" id="log_out" data="{%$F.uid%}">Logout</button>
 			</div>
 		</div>
-	</div>
+	</div
 </li>
 <script type="text/javascript">
 	$("#log_out").on('click',function(){

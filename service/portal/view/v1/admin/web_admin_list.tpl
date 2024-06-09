@@ -8,9 +8,7 @@
 				<a class="visible-xs sidebar-toggle" href="#" data-toggle-state="aside-toggled" data-no-persist="true"><em class="fa fa-navicon"></em></a>
 			</li>
 		</ul>
-		<h3>系统管理员管理
-			<small>可以登录后台的管理员管理部分,包括状态修改,位置更改等</small>
-		</h3>
+		<h3>Administrator System Management</h3>
 
 		<div class="row">
 			<div class="col-lg-12">

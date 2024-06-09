@@ -15,13 +15,13 @@
 			<h4 style="margin-bottom: 30px;">Manager System</h4>
 			<div id="info" style="color: #FF6600;"></div>
 			<div class="form-group">
-				<input class="form-control" type="text" id="login_name" name="login_name" placeholder="管理员账户">
+				<input class="form-control" type="text" id="login_name" name="login_name" placeholder="Account name of system">
 			</div>
 			<div class="form-group">
-				<input class="form-control" type="password" id="login_pass" name="login_pass" placeholder="管理员密码">
+				<input class="form-control" type="password" id="login_pass" name="login_pass" placeholder="Password for Administor">
 			</div>
 			<div class="form-group text-right">
-				<button class="btn btn-lg btn-primary" id="btn_login" type="submit">登陆虚块世界管理系统</button>
+				<button class="btn btn-lg btn-primary" id="btn_login" type="submit">Login to iNFT Cache System</button>
 			</div>
 		</div>
 	</div>
@@ -32,7 +32,6 @@
 	var salt="";
 	
 	$("#login_name").on('blur',function(){
-		//console.log('这里进行静态salt的获取');
 		var name=$("#login_name").val();
 		if(!name) return false
 		var cfg={mod:'admin',act:'salt',param:{name:name,d:'ajax'}}
@@ -49,7 +48,7 @@
 		FF.fn.ajax(cfg,false,function(res){
 			console.log(res)
 			if(!res.success){
-				$("#info").html('用户名或密码错误')
+				$("#info").html('Invalid username or password.')
 				$("#login_pass").val('')
 			}
 			if(res.success) location.reload()

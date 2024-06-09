@@ -9,14 +9,14 @@
 			</li>
 		</ul>
 		
-		<h3>黑客攻击行为
-			<small>系统记录的异常请求，用于人工判断是否为黑客行为</small>
+		<h3>Hack Attaction Log
+			<small>Unexcept request from API</small>
 		</h3>
 		<div class="row">
 			<div class="col-lg-12 col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						异常访问列表
+						Hack Trying List
 						<a class="pull-right" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="点击收起操作面板">
 							<em class="fa fa-minus"></em>
 						</a>
@@ -26,10 +26,10 @@
 						<table class="table table-hover">
 							<tr>
 								<th>ID</th>
-								<th>级别</th>
-								<th>数据</th>
-								<th>访问时间</th>
-								<th>操作</th>
+								<th>Level</th>
+								<th>Raw</th>
+								<th>Timestamp</th>
+								<th>Operation</th>
 							</tr>
 
 							{%if count($F.list) neq 0%}{%foreach from=$F.list key=k item=v %}
@@ -39,7 +39,7 @@
 								<td class="">{%$v.json|truncate:100%}</td>
 								<td>{%$v.ctime|date_format:'%H:%M:%S'%}</td>
 								<td class="nobreak">
-									<button class="btn btn-sm btn-primary" data="{%$v.id%}">分析</button>
+									<button class="btn btn-sm btn-primary" data="{%$v.id%}">Analycs</button>
 								</td>
 							</tr>
 							{%/foreach%} {%/if%}

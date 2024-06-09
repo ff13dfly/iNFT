@@ -8,8 +8,8 @@
 				<a class="visible-xs sidebar-toggle" href="#" data-toggle-state="aside-toggled" data-no-persist="true"><em class="fa fa-navicon"></em></a>
 			</li>
 		</ul>
-		<h3>用户管理
-			<small>用户的基本信息,运动轨迹等的管理</small>
+		<h3>Client Management
+			<small>Basic user information.</small>
 		</h3>
 		
 		<div class="row">
@@ -34,7 +34,6 @@
 								<th><a href="?mod=user&act=list&od=name{%if $F.dec%}&dc=0{%/if%}">用户名</a></th>
 								<th><a href="?mod=user&act=list&od=phone{%if $F.dec%}&dc=0{%/if%}">手机</a></th>
 								<th>UUID</th>
-								<th><a href="?mod=user&act=list&od=cash{%if $F.dec%}&dc=0{%/if%}">钻石数</a></th>
 								<th>性别</th>
 								<th><a href="?mod=user&act=list&od=from{%if $F.dec%}&dc=0{%/if%}">来源</a></th>
 								<th><a href="?mod=user&act=list&od=login{%if $F.dec%}&dc=0{%/if%}">最后登录</a></th>
@@ -49,7 +48,6 @@
 								<td class="nobreak"><a href="?mod=user&act=edit&id={%$v.uid%}">{%if $v.cached%}<img src="static/redis.png" style="width: 15px;height: 15px;margin-right: 5px;">{%/if%}{%$v.name%}</a></td>
 								<td>{%$v.mobile%}</td>
 								<td><a href="?mod=user&act=edit&id={%$v.uid%}">{%$v.uuid%}</a></td>
-								<td>{%$v.coin%}</td>
 								<td>{%$v.sex%}</td>
 								<td>{%$v.origin%}</td>
 								<td>{%$v.last|date_format:'%H:%M:%S | %Y-%m-%d'%}</td>
