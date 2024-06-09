@@ -52,6 +52,12 @@ const self={
             });
         }
     },
+    keys:(prefix,ck)=>{
+        client.keys(`${prefix}*`).then((res,err) => {
+            if(err) return ck && ck(err);
+            return ck && ck(res);
+        });
+    },
     test:()=>{
         console.log(client);
     },

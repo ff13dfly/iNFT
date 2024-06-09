@@ -13,8 +13,10 @@ exports.config = {
         'index':'current_index',
         'all':'all_NFT_list',
         'prefix':{              //queue prefix, can use this to remove all
-            'history':'his_',
-            'template':'tpl_',
+            'history':'his_',           //history queue
+            'template':'tpl_',          //template queue prefix
+            'account':'acc_',
+            'block':'block_',
         }
     }
 };

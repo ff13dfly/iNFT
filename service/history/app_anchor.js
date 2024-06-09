@@ -67,8 +67,8 @@ const self = {
             }
         });
     },
-    reset:()=>{
-
+    reset:(force)=>{
+        //1. remove all prefix;
     },
     getINFT:(obj,block)=>{
         //console.log(obj);
