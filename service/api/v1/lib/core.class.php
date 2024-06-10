@@ -250,12 +250,13 @@ class CORE {
 		if(DEBUG)$this->redisCount();
 		return $this->gRedis->get($key);
 	}
+
 	public function ttlGlobalKey($key){
 		if(!$this->gRedis) $this->globalRedisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->gRedis->ttl($key);
 	}
-	//获取全局的缓存
+	
 	public function setGlobalKey($key,$val){
 		if(!$this->gRedis) $this->globalRedisLink();
 		if(DEBUG)$this->redisCount();
@@ -340,7 +341,9 @@ class CORE {
 	}
 	
 	public function getGlobalList($key,$start,$end){
-		
+		if(!$this->gRedis) $this->globalRedisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->gRedis->lrange($key,$start,$end);
 	}
 	
 	public function pushGlobalList($key,$val){

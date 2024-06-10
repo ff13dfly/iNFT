@@ -23,6 +23,8 @@ define('DEFAULT_ADMIN_EXPIRE', 300);
 define('DEFAULT_MOD',	'module');
 define('DEFAULT_ACT',   'list');
 
+define('TOKEN_TIME',   3600);
+
 //默认规则，值约大约危险
 define('ERROR_LEVEL_1',	1);
 define('ERROR_LEVEL_2',	2);

@@ -67,8 +67,25 @@ const self = {
             }
         });
     },
-    reset:(force)=>{
+    reset:(ck,arr)=>{
         //1. remove all prefix;
+        
+        if(arr===undefined){
+            const prefix=config.keys.prefix;
+            console.log(prefix);
+            const ps=[];
+            for(var k in prefix){
+                ps.push(prefix[k]);
+            }
+            return self.reset(ck,ps);
+        }
+
+        if(arr.length===0) return ck && ck();
+
+        const cur=arr.pop();
+        console.log(cur);
+        return self.reset(ck,arr);
+
     },
     getINFT:(obj,block)=>{
         //console.log(obj);
@@ -272,6 +289,8 @@ process.on('uncaughtException', (error) => {
     console.log(error);
     output(`uncaughtException`, 'error');
 });
+
+return self.reset();
 
 //return REDIS.test();
 
