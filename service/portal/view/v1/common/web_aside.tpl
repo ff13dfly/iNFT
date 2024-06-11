@@ -28,6 +28,39 @@
                         </li>
                      </ul>
 				</li>
+
+				<li class=" ">
+					<a href="#template" title="" data-toggle="collapse">
+						<em class="icon-chart"></em><span>Template</span>
+					</a>
+					<ul class="nav sidebar-subnav collapse" id="template">
+                        <li class="{%if $F.request.mod eq 'admin' && $F.request.act eq 'list'%}active{%/if%}">
+							<a href="?mod=template&act=list" title=""><span>Template List</span></a>
+                        </li>
+                        {%if $F.request.mod eq 'template' && $F.request.act eq edit%}
+                        <li class="active">
+                           <a href="?mod=template&act=edit&id={%$F.template.id%}" title=""><span>Template Editing</span></a>
+                        </li>
+                        {%/if%}
+                     </ul>
+				</li>
+
+				<li class=" ">
+					<a href="#bounty" title="" data-toggle="collapse">
+						<em class="icon-bounty"></em><span>Bounty</span>
+					</a>
+					<ul class="nav sidebar-subnav collapse" id="bounty">
+                        <li class="{%if $F.request.mod eq 'bounty' && $F.request.act eq 'list'%}active{%/if%}">
+							<a href="?mod=bounty&act=list" title=""><span>Bounty List</span></a>
+                        </li>
+                        {%if $F.request.mod eq 'bounty' && $F.request.act eq edit%}
+                        <li class="active">
+                           <a href="?mod=bounty&act=edit&id={%$F.bounty.id%}" title=""><span>Bounty Editing</span></a>
+                        </li>
+                        {%/if%}
+                     </ul>
+				</li>
+
 				<li class=" ">
 					<a href="#user" title="" data-toggle="collapse">
 						<em class="icon-people"></em><span>User Management</span>

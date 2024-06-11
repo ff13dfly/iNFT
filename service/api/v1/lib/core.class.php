@@ -415,7 +415,11 @@ class CORE {
 		return $this->cRedis->get($key);
 	}
 	
-	
+	public function keys($prefix){
+		if(!$this->cRedis)$this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->keys($prefix.'*');
+	}
 
 	/*hash的redis部分*/
 	public function getHash($main,$keys=array()){

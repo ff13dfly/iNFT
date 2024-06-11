@@ -1,6 +1,6 @@
 <?php
 class Config extends CORE{
-	private $modlist=array('system','template','list');		//support modules
+	private $modlist=array('system','template','list','selling');		//support modules
 	private $ignor=array('new','fresh','spam');			//user spam access
 	public $_F=array();	
 	private $callback;

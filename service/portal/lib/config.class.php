@@ -1,7 +1,7 @@
 <?php
 class Config extends CORE{
 	
-	private $modlist=array('trend','user','order','module','texture','admin','login','block','info','gift','sky','hack','log','build','quantum','plan','style','range','font','demo','test','stair','meta','setting','item','cat','type','resource','appear','wealther','theme','period','purpose','typeface','three','struct','importer','coin','world','sky','board','param','component','hot','extra','template','chord');		//模块列表
+	private $modlist=array('admin','hack','log','system','user','template','bounty');		//模块列表
 	private $_F=array();					//返回的系统变量,计算后的所有结果
 	private $callback=0;					//js回调的放置位置
 	private $smarty=array(

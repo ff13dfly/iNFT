@@ -4,6 +4,8 @@ import Header from "../component/common_header";
 import FilterTemplate from "../component/filter_template";
 import ListTemplate from "../component/list_template";
 
+import API from "../lib/api";
+
 function Template(props) {
     const size = {
         row: [12],
@@ -11,6 +13,7 @@ function Template(props) {
     };
 
     let [update, setUpdate]=useState(0);
+    let [page, setPage]=useState(1);
 
     const self={
         fresh:()=>{
@@ -19,10 +22,9 @@ function Template(props) {
     }
 
     useEffect(() => {
-        // setInterval(()=>{
-        //     font += 0.1;
-        //     setCmap([{fontSize:font},{fontSize:font},{fontSize:font}]);
-        // },100)
+        API.template(page,(res)=>{
+            console.log(res);
+        });
     }, [props.update]);
 
     return (
