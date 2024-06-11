@@ -15,3 +15,8 @@ define('CACHE_REIDS_HOST',		'127.0.0.1');
 define('CACHE_REIDS_PORT',		6379);
 define('CACHE_REIDS_AUTH',		'authKEY');
 define('CACHE_REIDS_TIMEOUT',	3600);
+
+
+define('REDIS_PREFIX_TEMPLATE', 'tpl_');
+define('REDIS_PREFIX_ACCOUNT', 'acc_');
+define('REDIS_PREFIX_BLOCK', 'block_');

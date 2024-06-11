@@ -1,12 +1,15 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$name=$_F['request']['name'];
+$tpl=$_F['request']['tpl'];
 
 $result=array('success'=>FALSE);
 
+$a->load('cache');
+$a=Cache::getInstance();
 
-$key="acc_5GnWZEWmWTjcP2Qb6jCA6eQJPfm2Mqnk2tMhzmG8LuxFb84J";
+$key=REDIS_PREFIX_TEMPLATE.$tpl;
+
 $start=0;
 $end=20;
 $queue=$a->getGlobalList($key,$start,$end);
