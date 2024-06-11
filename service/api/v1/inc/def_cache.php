@@ -20,3 +20,5 @@ define('CACHE_REIDS_TIMEOUT',	3600);
 define('REDIS_PREFIX_TEMPLATE', 'tpl_');
 define('REDIS_PREFIX_ACCOUNT', 'acc_');
 define('REDIS_PREFIX_BLOCK', 'block_');
+define('REDIS_PREFIX_HISTORY', 'his_');
+define('REDIS_PREFIX_SELLING', 'sel_');

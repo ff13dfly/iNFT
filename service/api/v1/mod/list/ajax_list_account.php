@@ -1,6 +1,7 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
+$page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
 $account=$_F['request']['acc'];
 
 $result=array('success'=>FALSE);

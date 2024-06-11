@@ -2,14 +2,14 @@
 if(!defined('INFTAPI')) exit('error');
 
 $page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
-$tpl=$_F['request']['tpl'];
+$name=$_F['request']['name'];
 
 $result=array('success'=>FALSE);
 
 $a->load('cache');
 $a=Cache::getInstance();
 
-$key=REDIS_PREFIX_TEMPLATE.$tpl;
+$key=REDIS_PREFIX_HISTORY.$name;
 
 $start=0;
 $end=20;
