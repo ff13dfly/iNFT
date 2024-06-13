@@ -31,10 +31,10 @@
 
 				<li class=" ">
 					<a href="#template" title="" data-toggle="collapse">
-						<em class="icon-chart"></em><span>Template</span>
+						<em class="icon-magic-wand"></em><span>Template</span>
 					</a>
 					<ul class="nav sidebar-subnav collapse" id="template">
-                        <li class="{%if $F.request.mod eq 'admin' && $F.request.act eq 'list'%}active{%/if%}">
+                        <li class="{%if $F.request.mod eq 'template' && $F.request.act eq 'list'%}active{%/if%}">
 							<a href="?mod=template&act=list" title=""><span>Template List</span></a>
                         </li>
                         {%if $F.request.mod eq 'template' && $F.request.act eq edit%}
@@ -47,7 +47,7 @@
 
 				<li class=" ">
 					<a href="#bounty" title="" data-toggle="collapse">
-						<em class="icon-bounty"></em><span>Bounty</span>
+						<em class="icon-target"></em><span>Bounty</span>
 					</a>
 					<ul class="nav sidebar-subnav collapse" id="bounty">
                         <li class="{%if $F.request.mod eq 'bounty' && $F.request.act eq 'list'%}active{%/if%}">

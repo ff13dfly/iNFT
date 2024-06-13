@@ -45,7 +45,7 @@ var FF=(function($,G){
 		},
 		
 		/*ajax操作部分 */
-		ajax:function(cfg,isToken,ck){
+		ajax:function(cfg,isToken,ck,isPost){
 			var furl='?d=ajax&mod='+cfg.mod+'&act='+cfg.act
 			if(isToken){
 				furl+='&u='+localStorage['user']+'&t='+localStorage['token']

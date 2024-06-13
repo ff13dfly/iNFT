@@ -10,16 +10,29 @@
 		</ul>
 		
 		<h3>Template List
-			<small>Normal request from API</small>
+			<small>Template for iNFT market</small>
 		</h3>
 		<div class="row">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<input class="form-control" type="text" id="tpl_hash" placeholder="Input the IPFS file hash" value="" required>
+						</div>
+					</div>
+					<div class="col-lg-3 pt-2">
+						<button class="btn btn-sm btn-primary" id="btn_tpl_check">Check</button>
+						<button class="btn btn-sm btn-primary" id="btn_tpl_add" style="display:none;">Add To Market</button>
+					</div>
+					<div class="col-lg-3"></div>
+					<div class="col-lg-12" id="info_con"></div>
+				</div>
+			</div>
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						{%$F.date%}周用户访问记录[共{%$F.pagination.total%}页,每页{%$F.pagination.count%}条记录,共{%$F.pagination.sum%}条记录]
-						<a href="?mod=log&act=list&date={%$F.preWeek%}"><button class="btn btn-md btn-info">上周</button></a>
-						{%if $F.nextWeek >=0%}<a href="?mod=log&act=list&date={%$F.nextWeek%}"><button class="btn btn-md btn-info">下周</button></a>{%/if%}
-						<a class="pull-right" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="点击收起操作面板">
+						Template List
+						<a class="pull-right" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="click">
 							<em class="fa fa-minus"></em>
 						</a>
 					</div>
@@ -27,32 +40,12 @@
 					<div class="panel-body">
 						<table class="table table-hover">
 							<tr>
-								<th>ID</th>
-								<th>UID</th>
-								<th>IP</th>
-								<th>Mod</th>
-								<th>Act</th>
-								<th>数据</th>
-								<th>创建时间</th>
-								<th>操作</th>
+								<th>Hash</th>
 							</tr>
 
 							{%if count($F.list) neq 0%}{%foreach from=$F.list key=k item=v %}
 							<tr class="text-left">
-								<td class="id">{%$v.id%}</td>
-								<td>{%$v.uid%}</td>
-								<td>{%$v.ip%}</td>
-								<td>{%$v.m%}</td>
-								<td>{%$v.a%}</td>
-								<td>
-									{%foreach from=$v.json key=kk item=vv %}
-										{%$kk%}:{%json_encode($vv)|truncate:60%}<br>
-									{%/foreach%}
-								</td>
-								<td>{%$v.ctime|date_format:'%H:%M:%S'%}</td>
-								<td class="nobreak">
-									<button class="btn btn-sm btn-primary" data="{%$v.id%}">查看详情</button>
-								</td>
+								<td>{%$v.hash%}</td>
 							</tr>
 							{%/foreach%} {%/if%}
 						</table>
@@ -70,7 +63,39 @@
 </section>
 
 <script type="text/javascript">
+	//bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4
 
+	var template_data = null;
+	var getData=async function(url,ck){
+		const response = await fetch(url);
+		if (!response.ok) {
+        	return ck && ck({error:"Failed to get IPFS data."});
+        }
+        const ctx = await response.text();
+		return ck && ck(ctx);
+	}
+	$("#btn_tpl_check").off("click").on("click",function(){
+		var hash=$("#tpl_hash").val();
+		var url=`https://${hash}.ipfs.w3s.link`;
+		getData(url,function(res){
+			if(res.error) return console.log(res.error);
+			var info=`Get data from ${url} successful. Total ${res.length.toLocaleString()} bytes.`
+			template_data=res;
+			$("#info_con").html(info);
+
+			$("#btn_tpl_check").hide();
+			$("#btn_tpl_add").show();
+
+		});
+	});
+
+	$("#btn_tpl_add").off("click").on("click",function(){
+		var hash=$("#tpl_hash").val();
+		var cfg = {mod:'template',act:'add',param:{hash:hash}}
+		FF.fn.ajax(cfg, false, function(data) {
+			console.log(data)
+		})
+	});
 </script>
 
 {%include file="{%DEF_VERSION%}/common/web_footer.tpl" title=foo%}

@@ -364,37 +364,38 @@ class CORE {
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->ttl($key);
 	}
+
 	
 	/*string的redis部分*/
 	public function getKey($key){
-		if(!$this->cRedis)$this->redisLink($server,true);
+		if(!$this->cRedis)$this->redisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->get($key);
 	}
 		
 	public function setKey($key,$val) {
-		if(!$this->cRedis)$this->redisLink($server,true);
+		if(!$this->cRedis)$this->redisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->set($key,$val);
 	}
 	
 	public function incKey($key){
-		if(!$this->cRedis)$this->redisLink($server,true);
-		$this->cluster[$server]->incr($key);
+		if(!$this->cRedis)$this->redisLink();
+		$this->cRedis->incr($key);
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->get($key);
 	}
 
 	/*hash的redis部分*/
 	public function getHash($main,$keys=array()){
-		if(!$this->cRedis)$this->redisLink($server,true);
+		if(!$this->cRedis)$this->redisLink();
 		if(DEBUG)$this->redisCount();
 		if(empty($keys)) return $this->cRedis->hgetall($main);
 		return $this->cRedis->hmget($main,$keys);
 	}
 		
 	public function setHash($main,$key,$val){
-		if(!$this->cRedis)$this->redisLink($server,true);
+		if(!$this->cRedis)$this->redisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->hset($main,$key,$val);
 	}
@@ -404,6 +405,18 @@ class CORE {
 		if(DEBUG)$this->redisCount();
 		$this->cRedis->hincrby($main,$key,1);
 		return $this->cRedis->hget($main,$key);
+	}
+
+	public function pushList($main,$value,$toRight=true){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $toRight?$this->cRedis->lpush($main,$value):$this->cRedis->rpush($main,$value);
+	}	
+
+	public function rangeList($main,$start,$end){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->lrange($main,$start,$end);
 	}
 		
 	/*redis服务器的连接*/
