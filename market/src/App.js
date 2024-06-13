@@ -21,8 +21,8 @@ function App() {
           <Route path="home" index element={<Home />} />
           <Route path="market" element={<Market />} />
           <Route path="market/:page" element={<Market />} />
-          <Route path="bounty" element={<Bounty />} />
-          <Route path="bounty/:page" element={<Bounty />} />
+          {/* <Route path="bounty" element={<Bounty />} />
+          <Route path="bounty/:page" element={<Bounty />} /> */}
           <Route path="template" element={<Template />} />
           <Route path="explorer" element={<Explorer />} />
           <Route path="template/:page" element={<Template />} />

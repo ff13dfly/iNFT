@@ -450,6 +450,12 @@ class CORE {
 		$this->cRedis->hincrby($main,$key,1);
 		return $this->cRedis->hget($main,$key);
 	}
+
+	public function rangeList($main,$start,$end){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->lrange($main,$start,$end);
+	}
 		
 	/*redis服务器的连接*/
 	private function redisLink(){

@@ -23,5 +23,5 @@ define('REDIS_PREFIX_BLOCK', 'block_');
 define('REDIS_PREFIX_HISTORY', 'his_');
 define('REDIS_PREFIX_SELLING', 'sel_');
 
-define('REDIS_QUEUE_TEMPLATE','kkqu_tpl');              //template list entry
+define('REDIS_QUEUE_TEMPLATE','inft_tpl_queue_for_portal');              //template list entry
 define('REDIS_QUEUE_BOUNTY','kkqu_bounty');             //bounty list entry

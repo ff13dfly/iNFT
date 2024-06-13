@@ -13,9 +13,9 @@ function Header(props) {
             <Nav.Link href="/market">
               <h5 className={props.active==="market"?"text-warning":""}>Market</h5>
             </Nav.Link>
-            <Nav.Link href="/bounty">
+            {/* <Nav.Link href="/bounty">
               <h5 className={props.active==="bounty"?"text-warning":""}>Bounty</h5>
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link href="/template">
               <h5 className={props.active==="template"?"text-warning":""}>Template</h5>
             </Nav.Link>
