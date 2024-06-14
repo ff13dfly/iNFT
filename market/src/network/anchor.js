@@ -369,6 +369,27 @@ const self = {
 
         });
     },
+    market:(ck)=>{
+        self.init(() => {
+            wsAPI.query.anchor.sellList.entries().then((arr) => {
+                let list=[];
+                if(!arr) return ck && ck(list);
+                for(let i=0;i<arr.length;i++){
+                    const row=arr[i];
+                    const key=row[0].toHuman();
+                    const info=row[1].toHuman();
+                    list.push({
+                        name:key[0],
+                        owner:info[0],
+                        price:parseInt(info[1]),
+                        target:info[2],
+                        free:info[0]===info[2],
+                    });
+                }
+                return ck && ck(list);
+            });
+        });
+    },
     test: () => {
         test.auto();
     }

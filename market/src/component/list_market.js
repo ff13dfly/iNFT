@@ -1,5 +1,9 @@
-import { Row,Col,Card, Button,Placeholder } from 'react-bootstrap';
+import { Row,Col,Card,Placeholder } from 'react-bootstrap';
 import { useEffect,useState } from "react";
+
+import Network from '../network/router';
+import TPL from '../lib/tpl';
+import Render from '../lib/render';
 
 function ListMarket(props) {
   const size = {
@@ -18,15 +22,41 @@ function ListMarket(props) {
       }
       return arr;
     },
+    getAnchors:(ans,ck,map)=>{
+      if(map===undefined) map={};
+      if(ans.length===0) return ck && ck(map);
+      const row=ans.pop();
+      return Network("anchor").view({name:row.name},"anchor",(data)=>{
+        if(!data || !data.name) return self.getAnchors(ans,ck,map)
+        map[data.name]=data;
+        return self.getAnchors(ans,ck,map);
+      });
+    },
+    getTemplates:(map)=>{
+      const alinks=[];
+      for(var k in map){
+        const row=map[k];
+        const raw=row.raw;
+        if(raw.tpl && !alinks.includes(raw.tpl)) alinks.push(raw.tpl);
+      }
+      return alinks;
+    },
   }
 
   useEffect(() => {
-    const nlist=self.getHolder(20);
-    setList(nlist);
+    Network("anchor").market((arr)=>{
+      const nlist=self.getHolder(arr.length);
+      setList(nlist);
 
-    setTimeout(()=>{
-      setReady(true);
-    },500)
+      self.getAnchors(arr,(full)=>{
+        const alinks=self.getTemplates(full);
+        TPL.cache(alinks,(dels)=>{
+
+
+
+        });
+      });
+    });
   }, [props.update]);
 
   return (
