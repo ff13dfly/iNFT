@@ -26,7 +26,7 @@ class Config extends CORE{
 		foreach($_POST as $k=>$v) $this->_F['request'][$k]=$this->strSafe($v);
 
 		if($_GET['mod']==="system" && in_array($_GET['act'],$this->ignor)){
-			if($this->_F['request']['uuid']){
+			if(!empty($this->_F['request']['uuid'])){
 				$this->_F['uuid']=$this->_F['request']['uuid'];
 				$this->_F['uid']=0;
 			}else{
