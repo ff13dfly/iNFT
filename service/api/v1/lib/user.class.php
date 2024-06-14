@@ -9,17 +9,17 @@
 		//以uuid来记录的数据
 		private $structUser=array(
 			'token'		=>	'',			//用户令牌
-			'uid'			=>	0,			//注册用户的uid
+			'uid'		=>	0,			//注册用户的uid
 			'regIP'		=>	'',			//注册IP	
-			'lastIP'		=>	0,			//
+			'lastIP'	=>	0,			//
 			'ctime'		=>	0,			//创建时间
-			'origin'		=>	0,			//uuid注册来源
-			'last'			=>	0,			//获取token请求时间，防止token过期
+			'origin'	=>	0,			//uuid注册来源
+			'last'		=>	0,			//获取token请求时间，防止token过期
 			'count'		=>	0,			//请求token的次数
-			'IPs'			=>	'',			//历史访问过的IP地址及时间戳json
-			'log'			=>	'',			//登陆日志，暂时不用
-			'x'				=>	0,			//最后一次的IP
-			'y'				=>	0,			//最后一次的IP
+			'IPs'		=>	'',			//历史访问过的IP地址及时间戳json
+			'log'		=>	'',			//登陆日志，暂时不用
+			'x'			=>	0,			//最后一次的IP
+			'y'			=>	0,			//最后一次的IP
 			'world'		=>	0,			//用户的所在的世界编号
 			'death'		=>	0,			//用户死亡时间
 		);
@@ -29,7 +29,7 @@
 			$user=$this->userView($uuid,FALSE);
 			if(empty($user)) return FALSE;
 			$key=GLOBAL_PRE_USER.$user['uid'];
-			return $this->autosetGlobalHash($key,array(
+			return $this->autosetHash($key,array(
 				'name'	=>	$user['name'],
 				'uuid'	=>	$user['uuid'],
 				'birth'	=>	$user['birth'],
@@ -89,7 +89,7 @@
 			$uid=$this->userDBSave($uuid,$info);
 			if(!$uid) return false;
 			$info['uid']=$uid;
-			$this->autosetGlobalHash($uuid, $info);
+			$this->autosetHash($uuid, $info);
 			
 			//$this->userCount();			//放弃统计,都存数据库了
 			
@@ -131,7 +131,7 @@
 		 * */
 		public function userSpam($uuid,$token){
 			//1.检测token是否合法
-			$user=$this->getGlobalHash($uuid,array('token','last'));
+			$user=$this->getHash($uuid,array('token','last'));
 			
 			if($user['token']==FALSE) return USER_ERROR_NO_UUID;					//不存在uuid的错误情况
 			if($user['token']!=$token) return USER_ERROR_WRONG_TOKEN;		//token错误的情况
@@ -141,7 +141,7 @@
 			if($time-(int)$user['last']>GLOBAL_TOKEN_EXPIRE) return FALSE;
 			
 			//3.更新用户最后登录时间
-			$this->setGlobalHash($uuid,'last',$time);	//更新token的寿命
+			$this->setHash($uuid,'last',$time);	//更新token的寿命
 			
 			$spam=$this->spam();					//生成新的spam
 			$salt=$this->salt();							//生成新的salt，用于和IP进行验证
@@ -156,25 +156,25 @@
 				'salt'		=>$salt,
 				'md5'	=>$this->encrySpam($ip,$salt),
 			);
-			$this->autosetGlobalHash($key, $info);
-			$this->setGlobalExp($key,GLOBAL_SPAM_EXPIRE);
+			$this->autosetHash($key, $info);
+			$this->expireKey($key,GLOBAL_SPAM_EXPIRE);
 			
 			return $spam;
 		}
 		
 		public function freshSpam($spam){
 			$key=GLOBAL_PRE_SPAM.$spam;
-			if(!$this->existsGlobalKey($key)) return FALSE;
-			return $this->setGlobalExp($key,GLOBAL_SPAM_EXPIRE);
+			if(!$this->existsKey($key)) return FALSE;
+			return $this->expireKey($key,GLOBAL_SPAM_EXPIRE);
 		}
 		
 		public function getSpam($spam){
 			$key=GLOBAL_PRE_SPAM.$spam;
-			return $this->getGlobalHash($key);
+			return $this->getHash($key);
 		}
 		
 		private function getUid($uuid){
-			$info=$this->getGlobalHash($uuid, array('uid'));
+			$info=$this->getHash($uuid, array('uid'));
 			return (int)$info['uid'];
 		}
 		
@@ -183,10 +183,10 @@
 		}
 		
 		public function tokenFresh($uuid){
-			$user=$this->getGlobalHash($uuid,array('token','last'));
+			$user=$this->getHash($uuid,array('token','last'));
 			$time=time();
 			if($time-(int)$user['last']<GLOBAL_TOKEN_EXPIRE) return FALSE;
-			return $this->setGlobalHash($uuid,'last',$time);
+			return $this->setHash($uuid,'last',$time);
 		}
 		
 		
@@ -248,12 +248,12 @@
 		}
 		
 		public function setUserMobile($uuid,$mobile){
-			$this->setGlobalHash($uuid, 'mobile',$mobile);
+			$this->setHash($uuid, 'mobile',$mobile);
 			return TRUE;
 		}
 		
 		public function lastLogin($uuid,$stamp){
-			$this->setGlobalHash($uuid, 'last',$stamp);
+			$this->setHash($uuid, 'last',$stamp);
 			return $stamp;
 		}
 		
@@ -275,12 +275,9 @@
 			return $hash==$uu['pass']?$uu:FALSE;
 		}
 		
-
-		
-		
 		
 		//密码加密的方法
-		public function hashPass($pass,$time,$salt){
+		public function hashPass($pass,$time){
 			return md5(USER_PASS_SALT.md5($pass).$time);
 		}
 		
@@ -288,51 +285,6 @@
 			return md5(microtime().uniqid());
 		}
 		
-		//***************短信处理部分*****************/
-		
-		public function sent($mobile,$len=6){
-			$this->load('sms');
-			$sms=Sms::getInstance();
-			//$sms->setRequestType('curl');
-			$sms->setRequestType();		//默认的短信获取方式
-			$rst=$sms->sendSmsCode($mobile);
-			
-			
-			$vcode=$rst['obj'];
-			if($this->setMobileVcode($vcode,$mobile)){
-				$this->setVcodeCheck($mobile,$vcode);
-				return $vcode;
-			}
-			return FALSE;
-		}
-	
-		public function checkVcode($mobile){
-			$key=VCODE_CHECK_PRE.$mobile;
-			return $this->ttlKey($key);
-		}
-	
-		private function setVcodeCheck($mobile,$vcode){
-			$key=VCODE_CHECK_PRE.$mobile;
-			$this->setKey($key,$vcode);
-			$this->expireKey($key,SKIP_VCODE_CHECK?5:USER_MOBILE_DELAY);
-			return TRUE;
-		}
-		
-		public function getMobileVcode($mobile){
-			return $this->getKey($mobile.VCODE_SUFFIX);
-		}
-		
-		public function setMobileVcode($vcode,$mobile){
-			$this->setKey($mobile.VCODE_SUFFIX,$vcode);
-			$this->expireKey($mobile,600);		//设置10分钟的过期时间
-			return TRUE;
-		}
-		
-		public function vcode($len=USER_VCODE_LENGTH){
-			$rst='';
-			for($i=0;$i<$len;$i++)$rst.=rand(0, 9);
-			return $rst;
-		}
 		
 		public function getToken($len=10){
 			return substr(md5(USER_PASS_SALT.time().uniqid()),32-$len);

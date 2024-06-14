@@ -1,7 +1,7 @@
 <?php
 class CORE {
 	private static $instanceMap = array();
-	private $pdo,$cRedis,$gRedis;
+	private $pdo,$cRedis;
 
 	public function __clone() {trigger_error('[core]Clone is not allow!', E_USER_ERROR);}
 
@@ -243,133 +243,6 @@ class CORE {
 		$yhf['redis']+=1;
 	}
 	
-	/*提取global缓存的额部分*/
-	//获取全局的缓存
-	public function getGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->get($key);
-	}
-
-	public function ttlGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->ttl($key);
-	}
-	
-	public function setGlobalKey($key,$val){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->set($key,$val);
-	}
-	
-	public function delGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->del($key);
-	}
-	
-	public function incGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		$this->gRedis->incr($key);
-		return $this->gRedis->get($key);
-	}
-	public function incbyGlobalKey($key,$val){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		$this->gRedis->incrby($key,$val);
-		return $this->gRedis->get($key);
-	}
-	
-	public function existsGlobalKey($key){
-		if(!$this->gRedis)$this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->exists($key);
-	}
-	
-	public function setGlobalExp($key,$sec=TOKEN_TIME){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->expire($key,$sec);
-	}
-	
-	//获取全局缓存的hash的值
-	public function getGlobalHash($main,$keys=array()){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		if(empty($keys)) return $this->gRedis->hgetall($main);
-		return $this->gRedis->hmget($main,$keys);
-	}
-	
-	public function existsGlobalHash($main,$key){
-		if(!$this->gRedis)$this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->hexists($main,$key);
-	}
-	
-	//获取全局缓存的hash的值
-	public function setGlobalHash($main,$key,$val){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->hset($main,$key,$val);
-	}
-	
-	public function incGlobalHash($main,$key,$val=1){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		$this->gRedis->hincrby($main,$key,$val);
-		return $this->gRedis->hget($main,$key);
-	}
-	
-	//自动把array存成redis里的hash,1层结构
-	public function autosetGlobalHash($main,$arr){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		foreach($arr as $k=>$v){
-			$this->gRedis->hset($main,$k,is_array($v)?json_encode($v):$v);
-		}
-		return true;
-	}
-	
-	public function removeGlobalList($key,$val){
-		
-	}
-	
-	public function lenGlobalList($key){
-		
-	}
-	
-	public function getGlobalList($key,$start,$end){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->lrange($key,$start,$end);
-	}
-	
-	public function pushGlobalList($key,$val){
-		
-	}
-	
-	public function autoGlobalList($key,$arr){
-		
-	}
-	
-	//全局缓存的redis连接
-	public function globalRedisLink(){
-		if(!class_exists('Redis')){exit('no redis support');}
-		if(!$this->gRedis){
-			$redis=new Redis();
-			if($redis->connect(GLOBAL_REIDS_HOST,GLOBAL_REIDS_PORT)){
-				$redis->auth(GLOBAL_REIDS_AUTH);
-				$this->gRedis=$redis;
-				return true;
-			}else{
-				return false;
-			}
-		}
-		return true;
-	}
-	
 	/*redis功能部分*/
 	public function existsKey($key){
 		if(!$this->cRedis)$this->redisLink();
@@ -377,7 +250,7 @@ class CORE {
 		return $this->cRedis->exists($key);
 	}
 	
-	public function expireKey($key,$time){
+	public function expireKey($key,$time=TOKEN_TIME){
 		if(!$this->cRedis)$this->redisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->expire($key,$time);

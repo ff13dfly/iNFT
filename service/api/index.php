@@ -1,4 +1,6 @@
 <?php
+ini_set("display_errors",1);
+ini_set("display_startup_errors",1);
 
 date_default_timezone_set('Asia/Shanghai');			//设置时区，不然date会按照标准日期进行计算
 

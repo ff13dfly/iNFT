@@ -1,9 +1,8 @@
 <?php
 class Config extends CORE{
 	private $modlist=array('system','template','list','selling');		//support modules
-	private $ignor=array('new','fresh','spam');			//user spam access
-	public $_F=array();	
-	private $callback;
+	private $ignor=array('new','spam','fresh');			//user spam access
+	public $_F=array();
 
  	public function __construct(){CORE::dbStart(); }
 	public function __destruct(){CORE::dbClose();}
@@ -22,26 +21,32 @@ class Config extends CORE{
 		$_GET['act']=isset($_GET['act'])?$_GET['act']:DEFAULT_ACT;
 		if(!in_array($_GET['mod'], $this->modlist)) $this->error('Not in mod list,error module');
 
-		if($_GET['mod']==="system" && in_array($_GET['act'],$this->ignor)){
-
-		}else{
-			$info=$this->checkSpam();
-			if(empty($info)) $this->error('wrong spam',ERROR_LEVEL_3,true);
-			$this->_F['uuid']=$info['uuid'];
-			$this->_F['uid']=$info['uid'];
-		}
-		
 		//2.pramaters process
 		foreach($_GET as $k=>$v) $this->_F['request'][$k]=$this->strSafe($v);
 		foreach($_POST as $k=>$v) $this->_F['request'][$k]=$this->strSafe($v);
+
+		if($_GET['mod']==="system" && in_array($_GET['act'],$this->ignor)){
+			if($this->_F['request']['uuid']){
+				$this->_F['uuid']=$this->_F['request']['uuid'];
+				$this->_F['uid']=0;
+			}else{
+				$this->_F['uuid']="Not yet";
+				$this->_F['uid']=0;
+			}
+		}else{
+			$info=$this->checkSpam();
+			//echo json_encode($info);
+			if(empty($info)) $this->error('wrong spam',ERROR_LEVEL_3,true);
+			$this->_F['uuid']=$info['uuid'];
+			$this->_F['uid']=$info['uid'];
+			
+		}
 		
+		$this->access();
+
 		$target=API_VERSION.DS.PATH_CONTROLLER.DS.$_GET['mod'].DS.$pre.$_GET['mod'].CONNECTOR.$_GET['act'].SUFFIX_CONTROLLER;
 		if(!file_exists($target)) $this->error('Hack Attemp');
 		$this->_F['target']=$target;
-		
-		//3.user access record
-		$this->access($info['uuid']);
-
 		return $this->_F;
 	}
 	
@@ -52,20 +57,20 @@ class Config extends CORE{
 		
 		//spam过期验证
 		$key=GLOBAL_PRE_SPAM.$spam;
-		$ttl=$this->ttlGlobalKey($key);
+		$ttl=$this->ttlKey($key);
 		if($ttl<0) return FALSE;
 			
 		//spam合法性验证
-		$info=$this->getGlobalHash($key);
+		$info=$this->getHash($key);
 		if($this->encrySpam($info['IP'],$info['salt'])!=$info['md5']) return FALSE;
 			
 		//刷新合法的spam
-		$this->setGlobalExp($key,USER_SPAM_EXPIRE);
+		$this->expireKey($key,USER_SPAM_EXPIRE);
 			
 		//输出用户信息
 		$uuid=$info['uuid'];
-		$user=$this->getGlobalHash($uuid,array('uid'));
-		$arr=$this->getGlobalHash($uuid);
+		$user=$this->getHash($uuid,array('uid'));
+		$arr=$this->getHash($uuid);
 		
 		return array('uuid'=>$uuid,'uid'=>(int)$user['uid']);
 	}
@@ -108,9 +113,6 @@ class Config extends CORE{
 			$data['debug']=array(
 				'length'		=>	strlen(json_encode($data))+3,		//输出数据长度，不算debug部分
 				'cost'		=>	round($ms-$yhf['ms'],6),
-				//'start'		=>	$yhf['ms'],
-				//'end'			=>	$ms,
-				//'version'	=>	API_VERSION,
 				'query'		=>	$yhf['query'],
 				'redis'		=>	$yhf['redis'],
 			);
@@ -215,7 +217,7 @@ class Config extends CORE{
 			$post=empty($_POST)?array():$_POST;
 			if(isset($post['thumb'])) $post['thumb']='image thumb data deleted';
 			
-			$act=$this->getGlobalHash($this->_F['uuid'],array('active'));				//获取位置信息
+			$act=$this->getHash($this->_F['uuid'],array('active'));				//获取位置信息
 			if($act['active']) $pos=json_decode($act['active'],TRUE);
 			$data=array(
 				'm'		=>$_GET['mod'],
