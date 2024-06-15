@@ -14,31 +14,23 @@ import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from "./entry/detail";
 
-import { INFTProvider } from './lib/provider';
-
-// import TPL from "./lib/tpl";
-// import Network from "./network/router";
-
-// const funs={
-//   template:TPL,
-//   network:Network,
-// }
+import { INFTProvider } from './context/provider';
 
 function App() {
   return (
     <INFTProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="home" index element={<Home />} />
-          <Route path="market" element={<Market />} />
-          <Route path="market/:page" element={<Market />} />
+          <Route path="home"  index element={<Home />} />
+          <Route path="market"  element={<Market />} />
+          <Route path="market/:page"  element={<Market />} />
           {/* <Route path="bounty" element={<Bounty />} />
           <Route path="bounty/:page" element={<Bounty />} /> */}
           <Route path="template" element={<Template />} />
-          <Route path="explorer" element={<Explorer />} />
-          <Route path="template/:page" element={<Template />} />
+          <Route path="explorer"  element={<Explorer />} />
+          <Route path="template/:page"  element={<Template />} />
           <Route path="playground" element={<Playground />} />
-          <Route path="playground/:cid" element={<Playground />} />
+          <Route path="playground/:cid"   element={<Playground />} />
           <Route path="minter" element={<Minter />} />
           <Route path="editor" element={<Editor />} />
 

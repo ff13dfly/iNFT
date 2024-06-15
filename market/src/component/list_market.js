@@ -2,7 +2,7 @@ import { Row,Col,Card,Placeholder } from 'react-bootstrap';
 import { useEffect,useState,useContext } from "react";
 
 import Render from '../lib/render';
-import source from '../lib/provider';
+import source from '../context/provider';
 
 function ListMarket(props) {
   const size = {
@@ -10,7 +10,7 @@ function ListMarket(props) {
     grid:[3],
   };
 
-  const { Network,TPL } = useContext(source);
+  const { Network,TPL,sharedFunction } = useContext(source);
 
   let [list,setList]=useState([]);
   let [ready,setReady]=useState(false);
@@ -73,7 +73,7 @@ function ListMarket(props) {
   }
 
   useEffect(() => {
-
+    sharedFunction();
     Network("anchor").market((arr)=>{
       const nlist=self.getHolder(arr.length);
       setList(nlist);

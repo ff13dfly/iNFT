@@ -7,12 +7,12 @@ import PriveiwINFT from "../component/inft_preview";
 import DetailINFT from "../component/inft_detail";
 import PartsINFT from "../component/inft_parts";
 
-import source from '../lib/provider';
+import source from '../context/provider';
 
 function View(props) {
 
     let { anchor } = useParams();
-    const { sharedData,Network,TPL } = useContext(source);
+    const { sharedData,Network,TPL,sharedFunction } = useContext(source);
 
     const size = {
         row: [12],
@@ -31,6 +31,7 @@ function View(props) {
     }
 
     useEffect(() => {
+        sharedFunction();
         self.getAnchor(anchor,(res)=>{
             if(!res) return false;
             console.log(res);

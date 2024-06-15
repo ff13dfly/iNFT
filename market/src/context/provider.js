@@ -1,15 +1,20 @@
 import React, { createContext, useState } from 'react';
 
-import TPL from "./tpl";
+import TPL from "../lib/tpl";
 import Network from "../network/router";
 
 const INFTFramework = createContext();
 
+let count_a=0;
+
 export const INFTProvider = ({ children }) => {
   const [sharedData, setSharedData] = useState("Initial Data");
+  const [count,setCount]=useState(0);
 
   const sharedFunction = () => {
-    console.log("This is a shared function");
+    setCount(count+1);
+    count_a++;
+    console.log(`[${count},${count_a}]This is a shared function`);
     setSharedData("Data updated by shared function");
   };
 
