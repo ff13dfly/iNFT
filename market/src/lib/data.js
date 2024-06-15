@@ -1,6 +1,7 @@
 const map={
     template:null,  //current template data, special one, not good
-    cache:{},     
+    cache:{},
+    iNFT:{}, 
 }
 
 const self={

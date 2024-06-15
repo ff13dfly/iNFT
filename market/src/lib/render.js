@@ -190,32 +190,28 @@ const Render= {
     },
 
     //can use this as static iNFT show;
-    //when need to animation for iNFT, try self.preview
     thumb:(hash,bs64,parts,basic,offset,ck,hightlight)=>{
-        //0.check parameters before rendering;
         const container_id=config.container;
         const canvas_id="thumb_canvas"
 
         //create the canvas container;
         let con = document.getElementById(container_id);
-        if(con===null){
-            const div = document.createElement('div');
-            div.id = container_id;
-            div.style.display="none";
-            document.body.appendChild(div);
-            con = document.getElementById(container_id);
-        }
+        if(con!==null) con.remove();
+        
+        const div = document.createElement('div');
+        div.id = container_id;
+        div.style.display="none";
+        document.body.appendChild(div);
+        con = document.getElementById(container_id);
 
-        //create canvas for thumbe;
         let cvs=document.getElementById(canvas_id);
-        if(cvs===null){
-            cvs = document.createElement('canvas');
-            con.appendChild(cvs);
-        }
+        cvs = document.createElement('canvas');
+        con.appendChild(cvs);
+
         cvs.id = canvas_id;
         cvs.width =basic.target[0];
         cvs.height =basic.target[1];
-
+        
         const pen = Render.create(canvas_id, true);
         Render.reset(pen);
         Render.preview(pen,bs64,hash, parts, basic,offset,hightlight);

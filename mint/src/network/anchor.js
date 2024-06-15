@@ -342,7 +342,12 @@ const self = {
                     });
 
                     break;
-
+                case "hash":   //get block hash
+                    wsAPI.rpc.chain.getBlockHash(value, (res) => {
+                        const hash = res.toHex();
+                        return ck && ck(hash);
+                    });
+                    break;
                 default:
                     break;
             }
