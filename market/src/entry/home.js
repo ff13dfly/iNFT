@@ -27,7 +27,6 @@ function Home(props) {
 
     return (
         <div>
-            <Header />
             <BoardOverall />
             <Slide />
             <SectionLatest />

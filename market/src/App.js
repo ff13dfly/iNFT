@@ -1,4 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Container, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+
+import Header from "./component/common_header";
 
 import Home from "./entry/home";
 import Template from "./entry/template";
@@ -14,36 +17,79 @@ import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from "./entry/detail";
 
-import { INFTProvider } from './context/provider';
-
 function App() {
+  //parameters of router
+  let [content, setContent]=useState();
+  let [target, setTarget]=useState("home");
+  let [extend, setExtend ]=useState("");
+
+
+  const pattern={
+    view:["name"],
+    page:["count","step"],
+  }
+  const self={
+    decode:()=>{
+      const path=window.location.pathname;
+      const arr=path.substr(1).split("/");
+      const single=arr.shift();
+      if(!router[single]) return setContent(router["404"]);
+      
+      if(arr.length!==0 && pattern[single]!==undefined){
+        const param={}
+        for(let i=0;i<pattern[single].length;i++){
+          param[pattern[single][i]]=arr[i];
+        }
+        console.log(`Decoding params: ${JSON.stringify(param)}`);
+        if(JSON.stringify(param)!==JSON.stringify(extend))setExtend(param);
+      }
+      if(single!==target) setTarget(single);
+    },
+    linkTo:(name,param)=>{
+      setExtend({});    //clean the param cache
+
+      const folder="";
+      let url=!folder?`${window.location.origin}/${name}`:`${window.location.origin}/${folder}/${name}`;
+      if(param!==undefined){
+        for(let i=0;i<param.length;i++){
+          url+=`/${param[i]}`;
+        }
+      }
+      window.history.replaceState({}, "", url); //update the url
+      setTarget(name);    //set new router
+    }
+  }
+
+  const router={
+    "home":<Home extend={extend}/>,
+    "detail":<Detail extend={extend}/>,
+    "template":<Template extend={extend}/>,
+    "market":<Market extend={extend} link={self.linkTo}/>,
+    "minter":<Minter extend={extend}/>,
+    "editor":<Editor extend={extend}/>,
+    "playground":<Playground extend={extend}/>,
+    "view":<View extend={extend} />,
+    "explorer":<Explorer extend={extend}/>,
+    "preview":<Preview extend={extend}/>,
+    "bounty":<Bounty extend={extend}/>,
+    "404":<InvalidPage />,
+  }
+
+  const alias={
+    view:"market",
+  }
+
+
+  useEffect(() => {
+    self.decode();
+    setContent(router[target]);
+  }, [target,extend]);
+
   return (
-    <INFTProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="home"  index element={<Home />} />
-          <Route path="market"  element={<Market />} />
-          <Route path="market/:page"  element={<Market />} />
-          {/* <Route path="bounty" element={<Bounty />} />
-          <Route path="bounty/:page" element={<Bounty />} /> */}
-          <Route path="template" element={<Template />} />
-          <Route path="explorer"  element={<Explorer />} />
-          <Route path="template/:page"  element={<Template />} />
-          <Route path="playground" element={<Playground />} />
-          <Route path="playground/:cid"   element={<Playground />} />
-          <Route path="minter" element={<Minter />} />
-          <Route path="editor" element={<Editor />} />
-
-          <Route path="/" element={<Home />}></Route>
-
-          <Route path="view/:anchor" element={<View />}></Route>
-          <Route path="detail/:anchor" element={<Detail />}></Route>
-          <Route path="preview/:cid" element={<Preview />}></Route>
-
-          <Route path="*" element={<InvalidPage />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </INFTProvider>
+    <div>
+      <Header link={self.linkTo} active={!alias[target]?target:alias[target]}/>
+      <Container>{content}</Container>
+    </div>
   );
 }
 

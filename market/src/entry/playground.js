@@ -1,8 +1,7 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import Header from "../component/common_header";
 import PriveiwINFT from "../component/inft_preview";
 import PartsINFT from "../component/inft_parts";
 import SeriesINFT from "../component/inft_series";
@@ -107,9 +106,7 @@ function Playground(props) {
     }, [props.data]);
 
     return (
-        <div>
-            <Header active={"playground"} />
-            <Container>
+            <div>
                 <Row className="pt-2">
                     <Col md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]} >
                         <select name="" className='form-control'
@@ -183,7 +180,6 @@ function Playground(props) {
                         </Row>
                     </Col>
                 </Row>
-            </Container>
         </div>
     )
 }
