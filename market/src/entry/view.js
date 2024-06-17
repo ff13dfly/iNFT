@@ -26,26 +26,15 @@ function View(props) {
             INFT.single(anchor,(dt)=>{
                 setData(dt);
             });
-            // self.getAnchor(anchor, (res) => {
-            //     if (!res) return false;
-            //     console.log(res);
-            //     setData(res);
-    
-            //     TPL.view(res.raw.tpl, (dt) => {
-            //         console.log(dt);
-    
-            //     });
-            // });
         }
-        
     }, [props.update,props.extend]);
 
     return (
         <Row className="pt-2">
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <Breadcrumb>
-                    <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item href={`/market/${!props.page ? 1 : props.page}`}>Market</Breadcrumb.Item>
+                    <Breadcrumb.Item onClick={(ev)=>{props.link("home")}}>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item onClick={(ev)=>{props.link("market")}}>Market</Breadcrumb.Item>
                     <Breadcrumb.Item active>iNFT</Breadcrumb.Item>
                 </Breadcrumb>
             </Col>

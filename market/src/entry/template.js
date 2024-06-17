@@ -1,10 +1,5 @@
-import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import Header from "../component/common_header";
-import FilterTemplate from "../component/filter_template";
 import ListTemplate from "../component/list_template";
-
-
 
 function Template(props) {
     const size = {
@@ -21,18 +16,11 @@ function Template(props) {
     }
 
     useEffect(() => {
-
+        self.fresh();
     }, [props.update]);
 
     return (
-        <Row className="pt-2">
-            <Col md={size.side[0]} lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
-                <FilterTemplate update={update} fresh={self.fresh} />
-            </Col>
-            <Col md={size.side[1]} lg={size.side[1]} xl={size.side[1]} xxl={size.side[1]}>
-                <ListTemplate update={update} fresh={self.fresh} />
-            </Col>
-        </Row>
+        <ListTemplate update={update} fresh={self.fresh} link={props.link} />
     )
 }
 

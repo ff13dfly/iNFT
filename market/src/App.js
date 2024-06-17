@@ -27,6 +27,7 @@ function App() {
   const pattern={
     view:["name"],
     page:["count","step"],
+    preview:["name"],
   }
   const self={
     checkding:()=>{
@@ -42,7 +43,7 @@ function App() {
         for(let i=0;i<pattern[single].length;i++){
           param[pattern[single][i]]=arr[i];
         }
-        console.log(`Decoding params: ${JSON.stringify(param)}`);
+        //console.log(`Decoding params: ${JSON.stringify(param)}`);
         if(JSON.stringify(param)!==JSON.stringify(extend))setExtend(param);
       }
       if(single!==target) setTarget(single);
@@ -66,12 +67,12 @@ function App() {
   const router={
     "home":<Home extend={extend}/>,
     "detail":<Detail extend={extend}/>,
-    "template":<Template extend={extend}/>,
+    "template":<Template extend={extend} link={self.linkTo}/>,
     "market":<Market extend={extend} link={self.linkTo}/>,
     "minter":<Minter extend={extend}/>,
     "editor":<Editor extend={extend}/>,
     "playground":<Playground extend={extend}/>,
-    "view":<View extend={extend} />,
+    "view":<View extend={extend} link={self.linkTo}/>,
     "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend}/>,
     "bounty":<Bounty extend={extend}/>,
@@ -81,6 +82,7 @@ function App() {
   //use to active the target nav bar
   const alias={
     view:"market",
+    preview:"template",
   }
 
 

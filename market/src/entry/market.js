@@ -18,11 +18,10 @@ function Market(props) {
         },
     }
     return (
-
         <Row className="pt-2">
-            {/* <Col md={size.side[0]} lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
+            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <FilterMarket update={update} fresh={self.fresh} />
-            </Col> */}
+            </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <ListMarket update={update} fresh={self.fresh} link={props.link}/>
             </Col>

@@ -13,6 +13,7 @@ function ListMarket(props) {
 
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
+  let [info, setInfo] = useState("Loading");
 
   const self = {
     getHolder: (n) => {
@@ -25,7 +26,9 @@ function ListMarket(props) {
   }
 
   useEffect(() => {
+    setInfo("Getting selling iNFTs from network");
     Network("anchor").market((arr) => {
+      setInfo("Getting template from IPFS then rendering iNFTs.");
       const nlist = self.getHolder(arr.length);
       setList(nlist);
 
@@ -38,6 +41,9 @@ function ListMarket(props) {
 
   return (
     <Row>
+      <Col hidden={ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <h6 className='text-info'>{info}</h6>
+      </Col>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
 
