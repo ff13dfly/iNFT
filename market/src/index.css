@@ -26,3 +26,14 @@ code {
   height: 100%;
   min-height: 960px;
 }
+
+.pointer{
+  cursor:pointer;
+}
+
+.template_thumb{
+  height: 360px;
+  background-size: cover; /* Scale the background image to cover the element */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+}

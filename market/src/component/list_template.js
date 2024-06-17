@@ -2,6 +2,7 @@ import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import API from "../lib/api";
+import TPL from "../lib/tpl";
 
 function ListTemplate(props) {
   const size = {
@@ -22,6 +23,16 @@ function ListTemplate(props) {
       }
       return arr;
     },
+    getTemplates:(arr,ck,map)=>{
+      if(map===undefined) map=[];
+      if(arr.length===0) return ck && ck(map);
+      const single=arr.pop();
+      TPL.view(single,(dt)=>{
+        dt.hash=single;
+        map.push(dt);
+        return self.getTemplates(arr,ck,map)
+      });
+    },
   }
 
   useEffect(() => {
@@ -31,7 +42,11 @@ function ListTemplate(props) {
         const nlist = self.getHolder(res.data.length);
         setList(nlist);
 
-        
+        self.getTemplates(res.data,(tpls)=>{
+          console.log(tpls);
+          setReady(true);
+          setList(tpls);
+        });
       }
     },step);
   }, [props.update]);
@@ -43,15 +58,16 @@ function ListTemplate(props) {
 
           <Card hidden={!ready} style={{ width: '100%' }}>
             <a href={`/preview/${row.name}`}>
-              <Card.Img variant="top" src={`${window.location.origin}/imgs/logo.png`} />
+              <div className='template_thumb' style={{ backgroundImage:`url(${!row.image?`${window.location.origin}/imgs/logo.png`:row.image})`}}></div>
             </a>
             <Card.Body>
-              <Card.Title>Template Name</Card.Title>
+              <Card.Title>{!row.name?"":row.name}</Card.Title>
               <Card.Text>
-                Desc about template
+                  Size: {!row.size?0:row.size[0]}px * {!row.size?0:row.size[1]}px <br/>
+                  Cell: {!row.cell?0:row.cell[0]}px * {!row.cell?0:row.cell[1]}px <br/>
+                  {!row.hash?"":row.hash}
               </Card.Text>
             </Card.Body>
-
           </Card>
 
           <Card hidden={ready} style={{ width: '100%' }}>
@@ -64,7 +80,6 @@ function ListTemplate(props) {
                 <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
                 <Placeholder xs={6} /> <Placeholder xs={8} />
               </Placeholder>
-              <Placeholder.Button variant="primary" xs={6} />
             </Card.Body>
           </Card>
         </Col>

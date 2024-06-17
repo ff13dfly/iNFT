@@ -7,7 +7,7 @@ import ListMarket from "../component/list_market";
 function Market(props) {
     const size = {
         row: [12],
-        side: [2, 10]
+        side: [2, 12]
     };
 
     let [update, setUpdate] = useState(0);
@@ -20,10 +20,10 @@ function Market(props) {
     return (
 
         <Row className="pt-2">
-            <Col md={size.side[0]} lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
+            {/* <Col md={size.side[0]} lg={size.side[0]} xl={size.side[0]} xxl={size.side[0]} >
                 <FilterMarket update={update} fresh={self.fresh} />
-            </Col>
-            <Col md={size.side[1]} lg={size.side[1]} xl={size.side[1]} xxl={size.side[1]}>
+            </Col> */}
+            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <ListMarket update={update} fresh={self.fresh} link={props.link}/>
             </Col>
         </Row>

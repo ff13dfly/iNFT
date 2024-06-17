@@ -1,4 +1,4 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Header from "./component/common_header";
@@ -29,12 +29,14 @@ function App() {
     page:["count","step"],
   }
   const self={
-    decode:()=>{
+    checkding:()=>{
       const path=window.location.pathname;
       const arr=path.substr(1).split("/");
       const single=arr.shift();
-      if(!router[single]) return setContent(router["404"]);
-      
+      if(!single) return true;      //no route, return immediately
+
+      if(!router[single]) return  setTarget("404");     //404 check
+
       if(arr.length!==0 && pattern[single]!==undefined){
         const param={}
         for(let i=0;i<pattern[single].length;i++){
@@ -60,6 +62,7 @@ function App() {
     }
   }
 
+  //all routers here
   const router={
     "home":<Home extend={extend}/>,
     "detail":<Detail extend={extend}/>,
@@ -75,13 +78,14 @@ function App() {
     "404":<InvalidPage />,
   }
 
+  //use to active the target nav bar
   const alias={
     view:"market",
   }
 
 
   useEffect(() => {
-    self.decode();
+    self.checkding();
     setContent(router[target]);
   }, [target,extend]);
 
