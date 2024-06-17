@@ -37,3 +37,8 @@ code {
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the background image from repeating */
 }
+
+.view_thumb{
+  width: 100%;
+  border-radius: 5px;
+}

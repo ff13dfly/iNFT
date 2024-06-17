@@ -291,7 +291,6 @@ const self = {
                         unselling();
                         const dt = res.toJSON();
                         if (!dt) return ck && ck(false);
-
                         return ck && ck(dt);
                     }).then((fun) => {
                         unselling = fun;

@@ -1,14 +1,10 @@
-import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Row, Col, Breadcrumb } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
-import Header from "../component/common_header";
-import PriveiwINFT from "../component/inft_preview";
 import DetailINFT from "../component/inft_detail";
-import PartsINFT from "../component/inft_parts";
 
 import Network from "../network/router";
-import TPL from "../lib/tpl";
+import INFT from "../lib/inft";
 
 function View(props) {
     //console.log(props);
@@ -21,27 +17,25 @@ function View(props) {
     let [data, setData] = useState();
 
     const self = {
-        getAnchor: (name, ck) => {
-            Network("anchor").view({ name: name }, 'anchor', (dt) => {
-                if (!dt) return ck && ck(false);
-                return ck && ck(dt);
-            });
-        }
     }
 
     useEffect(() => {
         if(props.extend  && props.extend.name){
             const anchor = props.extend.name;
-            self.getAnchor(anchor, (res) => {
-                if (!res) return false;
-                console.log(res);
-                setData(res);
-    
-                TPL.view(res.raw.tpl, (dt) => {
-                    console.log(dt);
-    
-                });
+            console.log(anchor);
+            INFT.single(anchor,(dt)=>{
+                setData(dt);
             });
+            // self.getAnchor(anchor, (res) => {
+            //     if (!res) return false;
+            //     console.log(res);
+            //     setData(res);
+    
+            //     TPL.view(res.raw.tpl, (dt) => {
+            //         console.log(dt);
+    
+            //     });
+            // });
         }
         
     }, [props.update,props.extend]);
@@ -56,7 +50,7 @@ function View(props) {
                 </Breadcrumb>
             </Col>
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
-                <PriveiwINFT id={"iNFT_view"} hash={"0x"} />
+                <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <DetailINFT data={data} />

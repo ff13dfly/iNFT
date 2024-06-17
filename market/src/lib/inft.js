@@ -7,11 +7,24 @@ const map={};
 const self = {
     single:(name,ck)=>{
         if(map[name]) return ck && ck(map[name]);
-        const list=[name];
-        self.auto(list,(res)=>{
-            if(res) return ck &&  ck(res[0]);
-            return ck && ck(false);
-        });
+        Network("anchor").view(name, "selling", (data) => {
+            console.log(data);
+            if(data===false) return ck && ck(false);
+
+            const row={
+                name:name,
+                owner:data[0],
+                price:parseInt(data[1]),
+                target:data[2],
+                free:data[0]===data[2],
+            }
+            self.auto([row],(res)=>{
+                if(res) return ck &&  ck(res[0]);
+                return ck && ck(false);
+            });
+        })
+
+        
     },
     view:(list)=>{
         const arr=[];
