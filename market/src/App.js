@@ -2,6 +2,7 @@ import { Container} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Header from "./component/common_header";
+import Footer from './component/common_footer';
 
 import Home from "./entry/home";
 import Template from "./entry/template";
@@ -50,7 +51,6 @@ function App() {
     },
     linkTo:(name,param)=>{
       setExtend({});    //clean the param cache
-
       const folder="";
       let url=!folder?`${window.location.origin}/${name}`:`${window.location.origin}/${folder}/${name}`;
       if(param!==undefined){
@@ -74,7 +74,7 @@ function App() {
     "playground":<Playground extend={extend}/>,
     "view":<View extend={extend} link={self.linkTo}/>,
     "explorer":<Explorer extend={extend}/>,
-    "preview":<Preview extend={extend}/>,
+    "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend}/>,
     "404":<InvalidPage />,
   }
@@ -95,6 +95,7 @@ function App() {
     <div>
       <Header link={self.linkTo} active={!alias[target]?target:alias[target]}/>
       <Container>{content}</Container>
+      <Footer link={self.linkTo} />
     </div>
   );
 }

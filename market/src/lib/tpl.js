@@ -100,9 +100,8 @@ const self = {
         }
     },
     view:(cid,ck)=>{
-        //console.log(cid,Data.exsistHash("cache".cid));
+        //console.log(cid,Data.exsistHash("cache",cid));
         if(!Data.exsistHash("cache",cid)){
-            //const list=[cid];
             funs.cacheIPFS([cid],(dels)=>{
                 if(dels.length!==0){
                     return ck && ck(false);

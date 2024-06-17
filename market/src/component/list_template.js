@@ -39,15 +39,15 @@ function ListTemplate(props) {
   }
 
   useEffect(() => {
-    console.log(`Ready to fresh`);
+    //console.log(`Ready to fresh`);
     API.template(page, (res) => {
-      console.log(res);
+      //console.log(res);
       if (res.data && res.data.length !== 0) {
         const nlist = self.getHolder(res.data.length);
         setList(nlist);
 
         self.getTemplates(res.data,(tpls)=>{
-          console.log(tpls);
+          //console.log(tpls);
           setReady(true);
           setList(tpls);
         });
@@ -67,7 +67,7 @@ function ListTemplate(props) {
         <Col className="justify-content-around pt-2" key={index} lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
 
           <Card hidden={!ready} style={{ width: '100%' }} className='pointer' onClick={
-            (ev) => { props.link("preview", [row.hash]) }
+            (ev) => { props.link("preview", [row.hash]);}
           }>
             <div className='template_thumb' style={{ backgroundImage:`url(${!row.image?`${window.location.origin}/imgs/logo.png`:row.image})`}}></div>
 
