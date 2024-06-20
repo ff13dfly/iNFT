@@ -31,6 +31,10 @@ code {
   cursor:pointer;
 }
 
+.parts{
+  width: 60px;
+}
+
 .template_thumb{
   height: 360px;
   background-size: cover; /* Scale the background image to cover the element */

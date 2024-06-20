@@ -128,7 +128,7 @@ const funs={
         return mock;
     },
     getHashesFromMatrix:(matrix,parts)=>{
-        const max=12;
+        const max=4;
         const ms=funs.getPlainMatrix(matrix);
         const hs=[];
         if(ms.length>max){

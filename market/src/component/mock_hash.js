@@ -1,4 +1,4 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import {  Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import { FaCode, FaBuromobelexperte } from "react-icons/fa";

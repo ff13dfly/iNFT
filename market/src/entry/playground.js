@@ -7,6 +7,8 @@ import SeriesINFT from "../component/inft_series";
 import MockOffset from "../component/mock_offset";
 import MockHash from "../component/mock_hash";
 
+import { FaEye,FaEyeSlash } from "react-icons/fa";
+
 import TPL from "../lib/tpl";
 
 const template_orgin = {
@@ -23,6 +25,7 @@ function Playground(props) {
         header: [6, 6],
         parts: [11, 1],
         mock: [6, 6],
+        title:[9,3]
     };
 
     let [list, setList] = useState([]);
@@ -43,7 +46,11 @@ function Playground(props) {
     let [hash, setHash] = useState("0x6353bc102e185084671c2c1391cbb7876911e9f65cdfa46e2d9cc5f1a027a0aa");
     let [full, setFull] = useState("imgs/empty.png");
     let [parts, setParts] = useState([]);
-    let [series, setSeries] = useState([]);
+    let [series, setSeries]=useState([]);
+
+    let [hideParts, setHideParts]=useState(false);
+    let [hideSeries, setHideSeries]=useState(false);
+    let [hideImage, setHideImage]=useState(false);
 
     const self = {
         changeSearch: (ev) => {
@@ -68,6 +75,15 @@ function Playground(props) {
                 arr.push(start+i);
             }
             setActive(arr);
+        },
+        switchSeries:()=>{
+            setHideSeries(!hideSeries);
+        },
+        switchParts:()=>{
+            setHideParts(!hideParts);
+        },
+        switchImage:()=>{
+            setHideImage(!hideImage);
         },
         show: (def) => {
             if (def.image) setFull(def.image);
@@ -158,24 +174,41 @@ function Playground(props) {
                     </Col>
                     <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                         <Row className="pt-2">
-                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <h5>iNFT Parts</h5>
+                            <Col md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                                <h5>iNFT Parts ( {parts.length} )</h5>
                             </Col>
-                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
+                                    self.switchParts(ev);
+                                }}>{!hideParts?<FaEye/>:<FaEyeSlash/>}</button>
+                            </Col>
+                            <Col hidden={hideParts} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <PartsINFT data={parts} callback={(index)=>{
                                     self.changeSelected(index);
                                 }}/>
                             </Col>
-                            <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <h5>iNFT Series</h5>
+
+                            <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                                <h5>iNFT Series ( {series.length} )</h5>
                             </Col>
-                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
+                                    self.switchSeries(ev);
+                                }}>{!hideSeries?<FaEye/>:<FaEyeSlash/>}</button>
+                            </Col>
+                            <Col hidden={hideSeries}  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <SeriesINFT template={search} fresh={self.single}/>
                             </Col>
-                            <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+
+                            <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
                                 <h5>Full Image ( {full.length.toLocaleString()} )</h5>
                             </Col>
-                            <Col className="pb-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
+                                    self.switchImage(ev);
+                                }}>{!hideImage?<FaEye/>:<FaEyeSlash/>}</button>
+                            </Col>
+                            <Col hidden={hideImage}  className="pb-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <img src={full} style={{ width: "100%" }} alt="Full template." />
                             </Col>
                         </Row>
