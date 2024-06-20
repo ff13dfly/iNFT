@@ -1,6 +1,7 @@
 import Local from "./local";
 import Data from "./data";
 import IPFS from "../network/ipfs";
+import Render from "./render";
 
 const config={
     default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
@@ -22,7 +23,9 @@ const funs={
                     return funs.cacheIPFS(alinks, ck, dels);
                 }else{
                     Data.setHash("cache", single, ctx);
-                    return funs.cacheIPFS(alinks, ck, dels);
+                    funs.thumb(ctx,single,()=>{
+                        return funs.cacheIPFS(alinks, ck, dels);
+                    });
                 }
             },agent);
         }
@@ -44,7 +47,20 @@ const funs={
             offset:[],              //customized offset value
             tags: []
         }
-    }
+    },
+    thumb:(tpl,cid,ck)=>{
+        const mock="0x0000000000000000000000000000000000000000000000000000000000000000";
+        const basic = {
+            cell: tpl.cell,
+            grid: tpl.grid,
+            target: tpl.size
+        };
+        Render.thumb(mock,tpl.image,tpl.parts, basic,[],(bs64)=>{
+            const def=Data.getHash("cache", cid);
+            def.thumb=bs64;
+            return ck && ck(true);
+        });
+    },
 }
 
 const self = {

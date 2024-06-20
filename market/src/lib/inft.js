@@ -4,6 +4,7 @@ import Network from '../network/router';
 
 const map={};
 
+let locker=false;
 const self = {
     single:(name,ck)=>{
         if(map[name]) return ck && ck(map[name]);
@@ -22,9 +23,46 @@ const self = {
                 if(res) return ck &&  ck(res[0]);
                 return ck && ck(false);
             });
-        })
+        });
+    },
+    overview:(ck)=>{
+        const tpls=[];
+        let min=0,max=0;
+        let first=true;
+        for(var k in map){
+            const row=map[k];
+            if(row.price>max) max=row.price;
+            if(row.price<min || first) min=row.price;
+            if(!tpls.includes(row.raw.tpl)) tpls.push(row.raw.tpl);
+            first=false;
+        }
+        return ck && ck({
+            template:tpls,
+            range:[min,max],
+        }) 
+    },
+    nav:(step)=>{
+        const sum=Object.keys(map).length;
+        return {
+            page:Math.ceil(sum/step),
+            step:step,
+            sum:sum,
+        }
+    },
+    filter:(value,type)=>{
 
+        switch (type) {
+            case "template":
+                const arr=[];
+                for(var k in map){
+                    const row=map[k];
+                    //console.log(k);
+                }
+                break;
         
+            default:
+                break;
+        }
     },
     view:(list)=>{
         const arr=[];

@@ -14,6 +14,7 @@ function Market(props) {
 
     const self = {
         fresh: () => {
+            console.log(`Force partners fresh.`);
             setUpdate(update + 1);
         },
     }

@@ -38,7 +38,27 @@ code {
   background-repeat: no-repeat; /* Prevent the background image from repeating */
 }
 
+.ml-5{
+  margin-left: 5px;
+}
+
+.ml-10{
+  margin-left: 10px;
+}
+
 .view_thumb{
   width: 100%;
+  border-radius: 5px;
+}
+
+.filter_icon{
+  
+  color:rgb(80, 80, 80);
+}
+
+.template_icon{
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
   border-radius: 5px;
 }

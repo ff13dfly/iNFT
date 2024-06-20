@@ -4,11 +4,13 @@ import { useEffect,useState } from "react";
 import ListSeries from "../component/list_series";
 import PriveiwINFT from "../component/inft_preview";
 import TPL from "../lib/tpl";
+import tools from "../lib/tools";
 
 function Preview(props) {
     const size = {
         row: [12],
-        header: [5, 7]
+        header: [5, 7],
+        operation:[8,4],
     };
 
     let [template, setTemplate]=useState("");
@@ -21,7 +23,6 @@ function Preview(props) {
     useEffect(() => {
         if(props.extend  && props.extend.name){
             const cid = props.extend.name;
-            console.log(cid);
             setTemplate(cid);
 
             TPL.view(cid,(tpl)=>{
@@ -42,6 +43,15 @@ function Preview(props) {
             </Col>
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
                 <PriveiwINFT id={"iNFT_preview"} hash={hash} template={template} offset={[]}  force={true}/>
+                <Row>
+                    <Col md={size.operation[0]} lg={size.operation[0]} xl={size.operation[0]} xxl={size.operation[0]} >
+                        { tools.shorten(hash)}
+                    </Col>
+                    <Col className="text-end" md={size.operation[1]} lg={size.operation[1]} xl={size.operation[1]} xxl={size.operation[1]} >
+                        <button className="btn btn-md btn-primary">Mock</button>
+                    </Col>
+                </Row>
+                
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <ListSeries template={template} />

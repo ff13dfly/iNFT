@@ -35,9 +35,10 @@ function ListMarket(props) {
       INFT.auto(arr,(fs)=>{
         setList(fs);
         setReady(true);
+        props.fresh();
       });
     });
-  }, [props.update]);
+  }, []);
 
   return (
     <Row>
