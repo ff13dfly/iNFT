@@ -4,7 +4,6 @@ import Network from '../network/router';
 
 const map={};
 
-let locker=false;
 const self = {
     single:(name,ck)=>{
         if(map[name]) return ck && ck(map[name]);
@@ -49,20 +48,27 @@ const self = {
             sum:sum,
         }
     },
-    filter:(value,type)=>{
-
+    search:(val,type,ck)=>{
+        const result=[];
         switch (type) {
-            case "template":
-                const arr=[];
+            case 'template':
                 for(var k in map){
                     const row=map[k];
-                    //console.log(k);
+                    const tpl=row.raw.tpl;
+                    if(Array.isArray(val)){
+                        if(val.includes(tpl)) result.push(row);
+                    }else{
+                        if(val===tpl) result.push(row);
+                    }
                 }
                 break;
-        
+            case 'price':
+                
+                break;
             default:
                 break;
         }
+        return ck && ck(result);
     },
     view:(list)=>{
         const arr=[];

@@ -10,21 +10,24 @@ function Market(props) {
         side: [2, 12]
     };
 
-    let [update, setUpdate] = useState(0);
-
+    let [update ,setUpdate]=useState(0);
+    let [filter, setFilter]=useState();
+    
     const self = {
-        fresh: () => {
-            console.log(`Force partners fresh.`);
-            setUpdate(update + 1);
+        fresh: (target) => {
+            setUpdate(update+1);
+        },
+        filter:(map)=>{
+            setFilter(map);
         },
     }
     return (
         <Row className="pt-2">
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                <FilterMarket update={update} fresh={self.fresh} />
+                <FilterMarket update={update} fresh={self.fresh} filter={self.filter}/>
             </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <ListMarket update={update} fresh={self.fresh} link={props.link}/>
+                <ListMarket fresh={self.fresh} link={props.link} filter={filter}/>
             </Col>
         </Row>
     )

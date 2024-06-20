@@ -2,9 +2,9 @@ import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Network from '../network/router';
-import TPL from "../lib/tpl";
 import INFT from "../lib/inft";
 
+let first=true;
 function ListMarket(props) {
   const size = {
     row: [12],
@@ -23,22 +23,40 @@ function ListMarket(props) {
       }
       return arr;
     },
+    show:()=>{
+      setInfo("Getting selling iNFTs from network");
+      Network("anchor").market((arr) => {
+        setInfo("Getting template from IPFS then rendering iNFTs.");
+        const nlist = self.getHolder(arr.length);
+        setList(nlist);
+        INFT.auto(arr,(fs)=>{
+          setList(fs);
+          setReady(true);
+          if(first) props.fresh("filter");
+          first=false;
+        });
+      });
+    },
+    search:(condition)=>{
+      setReady(false);
+      if(condition.template){
+        INFT.search(condition.template,"template",(arr)=>{
+          setReady(true);
+          setList(arr);
+        });
+      }else{
+
+      }
+    },
   }
 
   useEffect(() => {
-    setInfo("Getting selling iNFTs from network");
-    Network("anchor").market((arr) => {
-      setInfo("Getting template from IPFS then rendering iNFTs.");
-      const nlist = self.getHolder(arr.length);
-      setList(nlist);
-
-      INFT.auto(arr,(fs)=>{
-        setList(fs);
-        setReady(true);
-        props.fresh();
-      });
-    });
-  }, []);
+    if(!props.filter){
+      self.show();
+    }else{
+      self.search(props.filter);
+    }
+  }, [props.filter]);
 
   return (
     <Row>

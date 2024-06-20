@@ -36,7 +36,8 @@ function FilterMarket(props) {
       });
     },
     filterByTemplate:(cid)=>{
-      console.log(cid);
+      //console.log(cid);
+      props.filter({template:cid})
     },
   }
 
@@ -45,10 +46,8 @@ function FilterMarket(props) {
     INFT.overview((dt)=>{
       if(dt.template.length!==0){
         self.getTemplates(dt.template,(ts)=>{
-          console.log(ts);
           setTpls(ts);
         });
-
         setMin(dt.range[0]);
         setMax(dt.range[1]);
       }
