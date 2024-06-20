@@ -1,39 +1,68 @@
-import { Container, Row, Col } from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { Row, Col } from 'react-bootstrap';
+import { useEffect } from "react";
 
 function DetailINFT(props) {
 
   const size = {
     row: [12],
+    info:[2,4],
+    more:[1,11],
   };
 
 
   useEffect(() => {
-    
+    console.log(props.data);
   }, []);
 
   return (
     <Row className='pb-4'>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Price {props.data && props.data.price?props.data.price:0}
+      <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+        <small>Price</small>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Network: Tanssi Appchain
+      <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+        <h3 className='text-warning'>{props.data && props.data.price?props.data.price:0}</h3>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Unique Name: {props.data && props.data.name?props.data.name:""}
+
+      <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+        <small>Network</small>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Block Hash:
+      <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+        <h3 className='text-warning'>{props.data && props.data.network?props.data.network:""}</h3>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Transaction Hash:
+
+      <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+        <small>Name</small>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Block: {props.data && props.data.block?props.data.block.toLocaleString():0}
+      <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+        <h3 className='text-warning'>{props.data && props.data.name?props.data.name:""}</h3>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Owner:
+
+      <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+        <small>Block</small>
+      </Col>
+      <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+        <h3 className='text-warning'>{props.data && props.data.block?props.data.block.toLocaleString():0}</h3>
+      </Col>
+
+      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        Hash
+      </Col>
+      <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
+        {props.data && props.data.hash?props.data.hash:""}
+      </Col>
+
+      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        Owner
+      </Col>
+      <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
+        {props.data && props.data.owner?props.data.owner:""}
+      </Col>
+
+      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        Tpl
+      </Col>
+      <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
+        {props.data && props.data.raw && props.data.raw.tpl?props.data.raw.tpl:""}
       </Col>
     </Row>
   );

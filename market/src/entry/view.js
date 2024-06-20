@@ -3,12 +3,9 @@ import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
 
-import Network from "../network/router";
 import INFT from "../lib/inft";
 
 function View(props) {
-    //console.log(props);
-    
     const size = {
         row: [12],
         header: [5, 7]
@@ -24,6 +21,8 @@ function View(props) {
             const anchor = props.extend.name;
             console.log(anchor);
             INFT.single(anchor,(dt)=>{
+                console.log(dt);
+
                 setData(dt);
             });
         }

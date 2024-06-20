@@ -62,3 +62,11 @@ code {
   margin-left: 5px;
   border-radius: 5px;
 }
+
+.template_normal{
+  border: 2px solid #EEEEEE;
+}
+
+.template_selected{
+  border: 2px solid #cc4141;
+}

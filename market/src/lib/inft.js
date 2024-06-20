@@ -88,12 +88,14 @@ const self = {
             return self.auto(list,ck,final);
         }
 
-        Network("anchor").view({ name: key }, "anchor", (data) => {
+        const net="anchor";
+        Network(net).view({ name: key }, "anchor", (data) => {
             if (!data || !data.name) return self.auto(list,ck,final);
-            Network("anchor").view(data.block, "hash", (hash) => {
+            Network(net).view(data.block, "hash", (hash) => {
                 data.price = single.price;
                 data.free = single.free;
                 data.target = single.target;
+                if(!data.Network) data.network=net;         //add default network settling
                 data.hash=hash;
 
                 map[key]=data;
