@@ -1,6 +1,5 @@
 import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 
 import PriveiwINFT from "../component/inft_preview";
 import PartsINFT from "../component/inft_parts";
@@ -18,8 +17,6 @@ const template_orgin = {
 //bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4
 
 function Playground(props) {
-    let { cid } = useParams();
-
     const size = {
         row: [12],
         search: [3, 6, 3],
@@ -93,6 +90,10 @@ function Playground(props) {
 
         fresh: () => {
             setUpdate(update + 1);
+        },
+
+        single:(mock)=>{
+            setHash(mock);
         },
     }
 
@@ -169,7 +170,7 @@ function Playground(props) {
                                 <h5>iNFT Series</h5>
                             </Col>
                             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <SeriesINFT data={series} parts={parts} />
+                                <SeriesINFT template={search} fresh={self.single}/>
                             </Col>
                             <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                                 <h5>Full Image ( {full.length.toLocaleString()} )</h5>

@@ -1,14 +1,15 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect } from "react";
+import { FaSlackHash,FaPizzaSlice,FaUserLock } from "react-icons/fa";
+
+import tools from "../lib/tools";
 
 function DetailINFT(props) {
-
   const size = {
     row: [12],
     info:[2,4],
     more:[1,11],
   };
-
 
   useEffect(() => {
     console.log(props.data);
@@ -27,7 +28,7 @@ function DetailINFT(props) {
         <small>Network</small>
       </Col>
       <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
-        <h3 className='text-warning'>{props.data && props.data.network?props.data.network:""}</h3>
+        <h3 className='text-warning'>{tools.toUp(props.data && props.data.network?props.data.network:"")}</h3>
       </Col>
 
       <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
@@ -44,22 +45,22 @@ function DetailINFT(props) {
         <h3 className='text-warning'>{props.data && props.data.block?props.data.block.toLocaleString():0}</h3>
       </Col>
 
-      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
-        Hash
+      <Col className='pt-1 text-end' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        <FaSlackHash />
       </Col>
       <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
         {props.data && props.data.hash?props.data.hash:""}
       </Col>
 
-      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
-        Owner
+      <Col className='pt-1 text-end' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        <FaUserLock />
       </Col>
       <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
         {props.data && props.data.owner?props.data.owner:""}
       </Col>
 
-      <Col className='pt-1' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
-        Tpl
+      <Col className='pt-1 text-end' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
+        <FaPizzaSlice />
       </Col>
       <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
         {props.data && props.data.raw && props.data.raw.tpl?props.data.raw.tpl:""}

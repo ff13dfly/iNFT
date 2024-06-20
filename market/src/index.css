@@ -70,3 +70,10 @@ code {
 .template_selected{
   border: 2px solid #cc4141;
 }
+
+.series_thumb{
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  margin-right: 10px;
+}

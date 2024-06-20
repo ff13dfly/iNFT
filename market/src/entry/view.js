@@ -42,6 +42,11 @@ function View(props) {
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <DetailINFT data={data} />
+                <Row className="pt-4">
+                    <Col className="pt-4 text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <button className="btn btn-md btn-primary">Buy It Now</button>
+                    </Col>
+                </Row>
             </Col>
         </Row>
     )

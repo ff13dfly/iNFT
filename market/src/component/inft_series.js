@@ -1,6 +1,8 @@
 import {Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import TPL from  "../lib/tpl";
+
 /* iNFT series preview
 *   @param  {array}     data          //series array
 *   @param  {array}     parts         //parts array
@@ -13,6 +15,7 @@ function SeriesINFT(props) {
   };
 
   let [list, setList]=useState([]);
+  let [parts, setParts]=useState([]);
 
   const self={
     calcRarity:(parts,index)=>{
@@ -27,20 +30,36 @@ function SeriesINFT(props) {
       }
       return parseInt(m/n).toLocaleString();
     },
+    clickSingle:(mock)=>{
+      console.log(mock);
+      props.fresh(mock);
+    },
   }
 
+
+
   useEffect(() => {
-    console.log(props.data);
-    console.log(props.parts);
-    setList(props.data);
-  }, [props.data,props.parts]);
+    const cid=props.template;
+    TPL.view(cid,(def)=>{
+      if(def && def.series){
+        console.log(def.series);
+        setList(def.series);
+        setParts(def.parts);
+      }
+    });
+  }, [props.template]);
 
   return (
-      <Row className='pb-'>
+      <Row className='pb-1'>
         {list.map((row, index) => (
           <Col className='pt-1' key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            {row.name},{row.desc}, 1/{self.calcRarity(props.parts,index)}
-          </Col>  
+            {row.name},{row.desc}, 1/{self.calcRarity(parts,index)}
+            {row.thumb &&  row.thumb.map((img, iindex) =>(
+              <img  key={iindex} src={img} className='series_thumb pointer' onClick={(ev)=>{
+                self.clickSingle(row.mock[iindex]);
+              }}/>
+            ))}
+          </Col>
         ))}
     </Row>
   );

@@ -2,7 +2,7 @@ const self = {
   stamp: () => {
     return new Date().getTime();
   },
-  day:()=>{
+  day: () => {
     const dt = new Date();
     const year = dt.getFullYear();
     const month = String(dt.getMonth() + 1).padStart(2, '0');
@@ -26,45 +26,53 @@ const self = {
     if (n === undefined) n = 10;
     return addr.substr(0, n) + "..." + addr.substr(addr.length - n, n);
   },
-  copy:(arr_obj)=>{
+  copy: (arr_obj) => {
     return JSON.parse(JSON.stringify(arr_obj));
   },
-  clone:(arr)=>{
+  clone: (arr) => {
     return JSON.parse(JSON.stringify(arr));
   },
-  clean:(arr)=>{
+  clean: (arr) => {
     return Array.from(new Set(arr));
   },
-  tail:(str,n)=>{
+  tail: (str, n) => {
     return str.substr(0, n) + "...";
   },
   empty: (obj) => {
     if (JSON.stringify(obj) === "{}") return true;
     return false;
   },
-  toUp:(word)=>{
+  toUp: (word) => {
     if (!word) return '';
     return word.charAt(0).toUpperCase() + word.slice(1);
   },
   toDate: (stamp) => {
     return new Date(stamp).toLocaleString();
   },
-  toF: (a,fix)=>{
-    fix=fix||3;return parseFloat(a.toFixed(fix))
+  toF: (a, fix) => {
+    fix = fix || 3; return parseFloat(a.toFixed(fix))
   },
-  download:(filename,text,type)=>{
+  toHex: (val, len) => {
+    let hexString = val.toString(16);
+    while (hexString.length < len) {
+      hexString = '0' + hexString;
+    }
+    if (hexString.length > len) return false
+    return hexString;
+  },
+  download: (filename, text, type) => {
     var element = document.createElement('a');
 
     switch (type) {
       case "image":
         element.setAttribute('href', text);
         break;
-    
+
       default:
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         break;
     }
-    
+
     element.setAttribute('download', filename);
 
     element.style.display = 'none';
@@ -88,7 +96,7 @@ const self = {
     }
     return u8array;
   },
-  device:()=>{
+  device: () => {
     // const con = document.getElementById("minter");
     // var computedStyle = window.getComputedStyle(con);
 
@@ -99,9 +107,9 @@ const self = {
 
     return {
       //margin:[marginTop,marginRight,marginBottom,marginLeft],
-      width:window.screen.width,
-      height:window.screen.height,
-      rate:window.devicePixelRatio,
+      width: window.screen.width,
+      height: window.screen.height,
+      rate: window.devicePixelRatio,
     }
   },
 };

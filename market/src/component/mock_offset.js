@@ -48,7 +48,7 @@ function MockOffset(props) {
 
   useEffect(() => {
     const arr=new Array(props.parts.length).fill(0);
-    console.log(props.hash);
+    //console.log(props.hash);
     setOffset(arr);
     setList(props.parts);
   }, [props.parts, props.active]);

@@ -2,6 +2,7 @@ import Local from "./local";
 import Data from "./data";
 import IPFS from "../network/ipfs";
 import Render from "./render";
+import tools from "./tools";
 
 const config={
     default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
@@ -23,8 +24,37 @@ const funs={
                     return funs.cacheIPFS(alinks, ck, dels);
                 }else{
                     Data.setHash("cache", single, ctx);
-                    funs.thumb(ctx,single,()=>{
-                        return funs.cacheIPFS(alinks, ck, dels);
+
+                    //1.get the thumb of template
+                    //const mock="0x0000000000000000000000000000000000000000000000000000000000000000";
+                    const mock=funs.getHashBySelected();
+                    funs.thumb(mock,ctx,single,(bs64)=>{
+                        ctx.thumb=bs64;
+                        const mks=funs.getSeriesMock(ctx.parts,ctx.series);
+
+                        
+                        //2.get the series thumbs;
+                        //bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4
+                        if(mks!==false){
+                            let count=0;
+                            for(let i=0;i<mks.length;i++){
+                                ctx.series[i].count=mks[i].count
+                                ctx.series[i].mock=mks[i].mock;
+                                ctx.series[i].thumb=[];
+
+                                for(let j=0;j<mks[i].mock.length;j++){
+                                    const smock=mks[i].mock[j];
+                                    count++;
+                                    funs.thumb(smock,ctx,single,(bs64)=>{
+                                        ctx.series[i].thumb.push(bs64);
+                                        count--;
+                                        if(count===0) return funs.cacheIPFS(alinks, ck, dels);
+                                    });
+                                }
+                            }
+                        }else{
+                            return funs.cacheIPFS(alinks, ck, dels); 
+                        }
                     });
                 }
             },agent);
@@ -48,17 +78,96 @@ const funs={
             tags: []
         }
     },
-    thumb:(tpl,cid,ck)=>{
-        const mock="0x0000000000000000000000000000000000000000000000000000000000000000";
+    getPartsArray:(index,parts)=>{
+        const arr=[];
+        for(let i=0;i<parts.length;i++){
+            const row=parts[i];
+            if(!row.rarity || !row.rarity[index]) return false;
+            const rare=row.rarity[index];
+            arr.push(rare);
+        }
+        return arr;
+    },
+    countSeries:(arr)=>{
+        let count=1;
+        for(let i=0;i<arr.length;i++) count=count*arr[i].length;
+        return count;
+        
+    },
+    getPlainMatrix:(matrix,arr)=>{
+        if(arr===undefined) arr=[];
+        if(matrix.length===0) return arr;
+
+        const atom=matrix.shift();
+        if(arr.length===0){
+            arr=JSON.parse(JSON.stringify(atom));
+        }else{
+            const narr=[];
+            for(let j=0;j<arr.length;j++){
+                for(let i=0;i<atom.length;i++){
+                    narr.push(`${arr[j]}_${atom[i]}`);
+                }    
+            }
+            arr=narr;
+        }
+        return funs.getPlainMatrix(matrix,arr);
+    },
+    getHashBySelected:(selected,parts)=>{
+        let mock="0x0000000000000000000000000000000000000000000000000000000000000000";
+        if(!selected || !parts || selected.length!==parts.length) return mock;
+        for(let i=0;i<selected.length;i++){
+            const part=parts[i];
+            const value=selected[i];
+            const [start,step,divide,offset]=part.value;
+            const mk=parseInt(divide) +parseInt(offset)+ parseInt(value);
+            const replace=tools.toHex(mk,step);
+            const head_str=mock.substr(0,start+2)
+            const tail_str=mock.substr(2+start+step);
+            mock=`${head_str}${replace}${tail_str}`;
+        }
+        return mock;
+    },
+    getHashesFromMatrix:(matrix,parts)=>{
+        const max=12;
+        const ms=funs.getPlainMatrix(matrix);
+        const hs=[];
+        if(ms.length>max){
+            for(let i=0;i<max;i++){
+                const st=ms[i].split("_");
+                const hash=funs.getHashBySelected(st,parts);
+                hs.push(hash);
+            }
+        }else{
+            for(let i=0;i<ms.length;i++){
+                const st=ms[i].split("_");
+                const hash=funs.getHashBySelected(st,parts);
+                hs.push(hash);
+            }
+        }
+        return hs;
+    },
+    getSeriesMock:(parts,series)=>{
+        if(!series || series.length===0 || parts.length===0) return false;
+        const arr=[];
+        for(let i=0;i<series.length;i++){
+            const row=series[i];
+            const matrix=funs.getPartsArray(i,parts);
+            const count=funs.countSeries(matrix);
+            const hashes=funs.getHashesFromMatrix(matrix,parts);
+            arr.push({mock:hashes,count:count});                //output the mock hashes and count
+        }
+        return arr;
+    },
+    thumb:(mock,tpl,cid,ck)=>{
         const basic = {
             cell: tpl.cell,
             grid: tpl.grid,
             target: tpl.size
         };
         Render.thumb(mock,tpl.image,tpl.parts, basic,[],(bs64)=>{
-            const def=Data.getHash("cache", cid);
-            def.thumb=bs64;
-            return ck && ck(true);
+            // const def=Data.getHash("cache", cid);
+            // def.thumb=bs64;
+            return ck && ck(bs64);
         });
     },
 }
