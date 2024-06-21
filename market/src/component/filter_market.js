@@ -21,8 +21,6 @@ function FilterMarket(props) {
 
   let [editing, setEditing]=useState(false);
 
-  //let [selected, setSelected]=useState([]);
-
   const self={
     changeMin:(ev)=>{
 
@@ -41,19 +39,21 @@ function FilterMarket(props) {
       });
     },
     filterByTemplate:(cid)=>{
+      //console.log(cid,tpls);
       //1.get the index of template
       let index=null;
       for(let i=0;i<tpls.length;i++){
         const row=tpls[i];
         if(row.cid===cid) index=i;
       }
+      console.log(index,selected);
       if(index===null) return false;
 
       //2.remove or add the selected template
       if(selected.includes(index)){
         const arr=[];
         for(let i=0;i<selected.length;i++){
-          if(i!==index) arr.push(selected[i]);
+          if(selected[i]!==index) arr.push(selected[i]);
         }
         selected=arr;
       }else{
@@ -81,11 +81,10 @@ function FilterMarket(props) {
   }
 
   useEffect(() => {
-    //console.log(`Ready to fresh from filter_market`)
     INFT.overview((dt)=>{
+      console.log(JSON.stringify(dt));
       if(dt.template.length!==0){
         self.getTemplates(dt.template,(ts)=>{
-
           selected=self.getFullSelected(ts.length);
           setTpls(ts);
         });

@@ -47,6 +47,8 @@ const self = {
         let first=true;
         for(var k in map){
             const row=map[k];
+            if(!row.price) continue;
+            
             if(row.price>max) max=row.price;
             if(row.price<min || first) min=row.price;
             if(!tpls.includes(row.raw.tpl)) tpls.push(row.raw.tpl);
@@ -71,6 +73,7 @@ const self = {
             case 'template':
                 for(var k in map){
                     const row=map[k];
+                    if(!row.price) continue;
                     const tpl=row.raw.tpl;
                     if(Array.isArray(val)){
                         if(val.includes(tpl)) result.push(row);
