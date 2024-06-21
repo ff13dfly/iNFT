@@ -74,17 +74,22 @@ function PriveiwINFT(props) {
     
     useEffect(() => {
         //!important, when animation is going on and the hash is not changed, fresh should be forbidden
-        if(props.force){
-            self.autoFresh(()=>{
-                setHidden(false);
-                pre_hash=props.hash;
-            });
+        if(!props.template || !props.hash){
+
         }else{
-            if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
-                setHidden(false);
-                pre_hash=props.hash;
-            });
+            if(props.force){
+                self.autoFresh(()=>{
+                    setHidden(false);
+                    pre_hash=props.hash;
+                });
+            }else{
+                if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
+                    setHidden(false);
+                    pre_hash=props.hash;
+                });
+            }
         }
+        
     }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
 
     

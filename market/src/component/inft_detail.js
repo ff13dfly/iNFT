@@ -9,7 +9,7 @@ import tools from "../lib/tools";
 *   @param  {object}    data            //iNFT data
 *   @param  {boolean}   [noPrice]       //wether show price
 *   @param  {boolean}   [noBuy]        //wether show price
-
+*   @param  {function}  link          //link convert function
 */
 
 function DetailINFT(props) {
@@ -57,7 +57,11 @@ function DetailINFT(props) {
         <FaSlackHash />
       </Col>
       <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
-        {props.data && props.data.hash?props.data.hash:""}
+        {props.data && props.data.hash?
+          (<a href={`https://polkadot.js.org/apps/?rpc=wss://dev2.metanchor.net#/explorer/query/${props.data.hash}`} target='_blank' rel='noreferrer'>
+            {props.data.hash}
+          </a>):""
+        }
       </Col>
 
       <Col className='pt-1 text-end' md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
@@ -71,7 +75,11 @@ function DetailINFT(props) {
         <FaPizzaSlice />
       </Col>
       <Col className='pt-1' md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
-        {props.data && props.data.raw && props.data.raw.tpl?props.data.raw.tpl:""}
+        {props.data && props.data.raw && props.data.raw.tpl?
+          (<span className='pointer' onClick={(ev)=>{props.link("playground",[props.data.raw.tpl])}}>
+            {props.data.raw.tpl}
+          </span>):""
+        }
       </Col>
     </Row>
   );

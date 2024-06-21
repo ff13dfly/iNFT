@@ -16,7 +16,7 @@ function View(props) {
     const self = {
         checkName:(str)=>{
             const arr=str.split("@");
-            if(arr.length===0) return {name:str};
+            if(arr.length===1) return {name:str};
             const network=arr.pop();
             return {name:arr.join("@"),network:network}
         },
@@ -45,7 +45,7 @@ function View(props) {
                 <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                <DetailINFT data={data} />
+                <DetailINFT data={data} link={props.link} />
                 <Row className="pt-4">
                     <Col className="pt-4 text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <button className="btn btn-md btn-primary">Buy It Now</button>

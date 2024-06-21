@@ -22,7 +22,7 @@ const self={
         return `${config.protocol}${cid}${config.gateway}`;
     },
     read:async (cid,ck,proxy)=>{
-        //const url=`${config.protocol}${cid}${config.gateway}`;
+        if(!cid) return ck && ck(true);
         const url=self.getURL(cid,proxy);
         console.log(url);
 

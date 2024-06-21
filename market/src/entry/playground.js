@@ -122,7 +122,7 @@ function Playground(props) {
         setNetwork(`${selected.from}::${selected.orgin}`);
 
         //2.check params
-        console.log(props);
+        console.log(JSON.stringify(props));
         if(props.extend && props.extend.template){
             setSearch(props.extend.template);
             TPL.view(props.extend.template, (def) => {
@@ -130,7 +130,7 @@ function Playground(props) {
             });
         }
 
-    }, [props.data]);
+    }, [props.extend]);
 
     return (
             <div>

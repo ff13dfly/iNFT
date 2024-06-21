@@ -37,14 +37,14 @@ function SeriesINFT(props) {
   }
   
   useEffect(() => {
-    const cid = props.template;
-    TPL.view(cid, (def) => {
-      if (def && def.series) {
-        //console.log(def.series);
-        setList(def.series);
-        setParts(def.parts);
-      }
-    });
+    if(props.template){
+      TPL.view(props.template, (def) => {
+        if (def && def.series) {
+          setList(def.series);
+          setParts(def.parts);
+        }
+      });
+    }
   }, [props.template]);
 
   return (

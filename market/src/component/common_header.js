@@ -15,9 +15,9 @@ function Header(props) {
             {/* <Nav.Link href="/bounty">
               <h5 className={props.active==="bounty"?"text-warning":""}>Bounty</h5>
             </Nav.Link> */}
-            <Nav.Link onClick={(ev) => { props.link("template") }}>
+            {/* <Nav.Link onClick={(ev) => { props.link("template") }}>
               <h5 className={props.active === "template" ? "text-warning" : ""}>Template</h5>
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link onClick={(ev) => { props.link("explorer") }}>
               <h5 className={props.active === "explorer" ? "text-warning" : ""}>Explorer</h5>
             </Nav.Link>

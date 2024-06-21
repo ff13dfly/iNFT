@@ -46,7 +46,6 @@ function FilterMarket(props) {
         const row=tpls[i];
         if(row.cid===cid) index=i;
       }
-      console.log(index,selected);
       if(index===null) return false;
 
       //2.remove or add the selected template

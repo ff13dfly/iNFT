@@ -46,8 +46,8 @@ function App() {
         for(let i=0;i<pattern[single].length;i++){
           param[pattern[single][i]]=arr[i];
         }
-        //console.log(`Decoding params: ${JSON.stringify(param)}`);
-        if(JSON.stringify(param)!==JSON.stringify(extend))setExtend(param);
+        console.log(`Decoding params: ${JSON.stringify(param)}`);
+        if(JSON.stringify(param)!==JSON.stringify(extend)) setExtend(param);
       }
       if(single!==target) setTarget(single);
     },
@@ -72,7 +72,7 @@ function App() {
     "market":<Market extend={extend} link={self.linkTo}/>,
     "minter":<Minter extend={extend}/>,
     "editor":<Editor extend={extend}/>,
-    "playground":<Playground extend={extend}/>,
+    "playground":<Playground extend={extend} link={self.linkTo}/>,
     "view":<View extend={extend} link={self.linkTo}/>,
     "detail":<Detail extend={extend} link={self.linkTo}/>,
     "explorer":<Explorer extend={extend}/>,
