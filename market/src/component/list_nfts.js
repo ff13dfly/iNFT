@@ -4,6 +4,9 @@ import { useEffect,useState } from "react";
 import TPL from "../lib/tpl";
 import Render from '../lib/render';
 import tools from '../lib/tools';
+import INFT from "../lib/inft";
+
+import { FaAnchor } from "react-icons/fa";
 
 /* iNFT list component
 *   @param  {array}     data            //iNFT[], list of iNFT to show
@@ -106,22 +109,19 @@ function ListNFTs(props) {
   }
 
   useEffect(() => {
-    const iNFTs=props.data;
-    //console.log(JSON.stringify(iNFTs[0]));
-    if(iNFTs.length===0){
+    
+    if(props.data.length===0){
       setInfo("No iNFT result list.");
       setList([]);
     }else{
       setInfo("");
-      const nlist=self.getHolder(iNFTs.length);
+      const nlist=self.getHolder(props.data.length);
       setList(nlist);
-  
-      self.getTemplates(iNFTs,(res)=>{
-        self.getThumbs(iNFTs,(imgs)=>{
-          const narr=self.formatResult(iNFTs,imgs);
-          setList(narr)
-          setReady(true);
-        });
+
+      INFT.auto(props.data,(iNFTs)=>{
+        console.log(iNFTs);
+        setList(iNFTs);
+        setReady(true);
       });
     }
   }, [props.data]);
@@ -133,7 +133,6 @@ function ListNFTs(props) {
       </Col>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index}  lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
-          
           <Card hidden={!ready} style={{ width: '100%' }}>
               <a href={`/detail/${row.name}@${row.network}`} target='blank'>
                 <Card.Img variant="top" src={self.showThumb(row.bs64)} />
@@ -141,7 +140,14 @@ function ListNFTs(props) {
               <Card.Body>
                 <Card.Title>{row.name}</Card.Title>
                 <Card.Text>
-                  {!row.owner?"":tools.shorten(row.owner)}
+                  <Row>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                      {!row.signer?"":tools.shorten(row.signer)}
+                    </Col>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                      <FaAnchor /> <span className='pt-1'>{row.blocknumber}</span> 
+                    </Col>
+                  </Row>
                 </Card.Text>
               </Card.Body>
             

@@ -106,32 +106,49 @@ const self = {
         }
 
         const net="anchor";
-        Network(net).view({ name: key }, "anchor", (data) => {
-            if (!data || !data.name) return self.auto(list,ck,final);
-            Network(net).view(data.block, "hash", (hash) => {
-                data.price = single.price;
-                data.free = single.free;
-                data.target = single.target;
-                if(!data.Network) data.network=net;         //add default network settling
-                data.hash=hash;
-
-                map[key]=data;
-
-                TPL.view(data.raw.tpl,(dt)=>{
-                    const basic = {
-                        cell: dt.cell,
-                        grid: dt.grid,
-                        target: dt.size
-                    }
-                    Render.thumb(hash,dt.image,dt.parts, basic,data.raw.offset,(bs64)=>{
-                        map[key].bs64=bs64;
-
-                        final.push(map[key]);
-                        return self.auto(list,ck,final);
+        if(single.raw && single.protocol && single.hash){
+            map[key]=single;
+            TPL.view(single.raw.tpl,(dt)=>{
+                const basic = {
+                    cell: dt.cell,
+                    grid: dt.grid,
+                    target: dt.size
+                }
+                Render.thumb(single.hash,dt.image,dt.parts, basic,single.raw.offset,(bs64)=>{
+                    map[key].bs64=bs64;
+                    final.push(map[key]);
+                    return self.auto(list,ck,final);
+                });
+            });
+        }else{
+            Network(net).view({ name: key }, "anchor", (data) => {
+                if (!data || !data.name) return self.auto(list,ck,final);
+                Network(net).view(data.block, "hash", (hash) => {
+                    data.price = single.price;
+                    data.free = single.free;
+                    data.target = single.target;
+                    if(!data.Network) data.network=net;         //add default network settling
+                    data.hash=hash;
+    
+                    map[key]=data;
+    
+                    TPL.view(data.raw.tpl,(dt)=>{
+                        const basic = {
+                            cell: dt.cell,
+                            grid: dt.grid,
+                            target: dt.size
+                        }
+                        Render.thumb(hash,dt.image,dt.parts, basic,data.raw.offset,(bs64)=>{
+                            map[key].bs64=bs64;
+    
+                            final.push(map[key]);
+                            return self.auto(list,ck,final);
+                        });
                     });
                 });
             });
-        });
+        }
+        
     },
 }   
 

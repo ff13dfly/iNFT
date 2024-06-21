@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-bottom: 100px;
 }
 
 code {
@@ -51,6 +52,10 @@ code {
 
 .ml-5{
   margin-left: 5px;
+}
+
+.mr-5{
+  margin-right: 5px;
 }
 
 .ml-10{

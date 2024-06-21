@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect,useState } from "react";
 
-import { FaTh,FaThLarge,FaThList } from "react-icons/fa";
+import { FaTh,FaThLarge,FaThList,FaGem } from "react-icons/fa";
 
 import INFT from "../lib/inft";
 import TPL from "../lib/tpl";
@@ -18,6 +18,8 @@ function FilterMarket(props) {
   let [tpls,setTpls]=useState([]);
   let [min,setMin]=useState(0);
   let [max,setMax]=useState(0);
+
+  let [editing, setEditing]=useState(false);
 
   //let [selected, setSelected]=useState([]);
 
@@ -79,7 +81,7 @@ function FilterMarket(props) {
   }
 
   useEffect(() => {
-    console.log(`Ready to fresh from filter_market`)
+    //console.log(`Ready to fresh from filter_market`)
     INFT.overview((dt)=>{
       if(dt.template.length!==0){
         self.getTemplates(dt.template,(ts)=>{
@@ -110,7 +112,7 @@ function FilterMarket(props) {
         
       </Col>
       <Col className='pt-2' md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-        <Row>
+        <Row hidden={!editing}>
           <Col md={size.price[0]} lg={size.price[0]} xl={size.price[0]} xxl={size.price[0]}>
             <input type="number" className='form-control' placeholder='Min' value={min} onChange={(ev)=>{
               self.changeMin(ev);
@@ -123,6 +125,14 @@ function FilterMarket(props) {
           </Col>
           <Col className='text-end' md={size.price[2]} lg={size.price[2]} xl={size.price[2]} xxl={size.price[2]}>
             <button className='btn btn-sm btn-primary mt-1'>Search</button>
+          </Col>
+        </Row>
+        <Row hidden={editing}>
+          <Col  md={size.price[0]} lg={size.price[0]} xl={size.price[0]} xxl={size.price[0]}></Col>
+          <Col className='pt-1 text-end' md={size.price[1]} lg={size.price[1]} xl={size.price[1]} xxl={size.price[1]}></Col>
+          <Col className='text-end' md={size.price[2]} lg={size.price[2]} xl={size.price[2]} xxl={size.price[2]}>
+            <FaGem size={18}/>
+            <span className='ml-5'>{min}~{max}</span> 
           </Col>
         </Row>
       </Col>

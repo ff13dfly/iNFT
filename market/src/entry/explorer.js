@@ -52,7 +52,6 @@ function Explorer(props) {
                     for (let i = 0; i < arr.length; i++) {
                         arr[i].blocknumber = num;
                     }
-
                     setData(arr);
                     setAmount(arr.length);
                     setEnable({
@@ -73,9 +72,7 @@ function Explorer(props) {
                     }
 
                     api.view({name:search,block:dt.block},"anchor",(res)=>{
-                        //console.log(res);
                         res.blocknumber=dt.block;
-
                         setData([res]);
                         setAmount(1);
                         setEnable({
