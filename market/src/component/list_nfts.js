@@ -27,6 +27,7 @@ import tools from '../lib/tools';
     "pre":0,
     "signer":"5HMy4ULuRS15DveBH1Nbe6F45jinXQyVup9kpj6jYXnte7KH",
     "block":"0xb3e086e7a6ab4288405eae40e5708ff2c9c95ff5f2125a9f3394aaf66a539c54",
+    "hash":"0xb3e086e7a6ab4288405eae40e5708ff2c9c95ff5f2125a9f3394aaf66a539c54",
     "valid":true,
     "network":"anchor",
     "blocknumber":13598
@@ -79,7 +80,7 @@ function ListNFTs(props) {
             target: def.size
         }
         const offset=!row.raw.offset?[]:row.raw.offset;
-        Render.thumb(row.block,def.image,def.parts,basic,offset,(img)=>{
+        Render.thumb(row.hash,def.image,def.parts,basic,offset,(img)=>{
           imgs[row.name]=img;
           return self.getThumbs(list,ck,imgs)
         });
@@ -134,7 +135,7 @@ function ListNFTs(props) {
         <Col className="justify-content-around pt-2" key={index}  lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           
           <Card hidden={!ready} style={{ width: '100%' }}>
-              <a href={`/detail/${row.name}@${row.network}`}>
+              <a href={`/detail/${row.name}@${row.network}`} target='blank'>
                 <Card.Img variant="top" src={self.showThumb(row.bs64)} />
               </a>
               <Card.Body>

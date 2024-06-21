@@ -13,6 +13,7 @@ function Footer(props) {
   }, []);
 
   return (
+    <div className='footer'>
     <Container>
       <Row className='pb-4'>
         <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
@@ -29,6 +30,7 @@ function Footer(props) {
         </Col>
       </Row>
     </Container>
+    </div>
   );
 }
 export default Footer;

@@ -49,7 +49,6 @@ function SelectNetwork(props) {
                     for (let i = 0; i < arr.length; i++) {
                         arr[i].blocknumber = num;
                     }
-
                     setData(arr);
                     setAmount(arr.length);
                     setEnable({
@@ -59,7 +58,27 @@ function SelectNetwork(props) {
                     })
                 });
             } else {
+                console.log('here')
+                api.view(search,"owner",(dt)=>{
+                    console.log(dt);
+                    if(!dt || dt.error){
+                        return setEnable({
+                            selector: true,
+                            search: true,
+                            button: true,
+                        })
+                    }
 
+                    api.view({name:search,block:dt.block},"anchor",(res)=>{
+                        console.log(res);
+                        setAmount(1);
+                        setEnable({
+                            selector: true,
+                            search: true,
+                            button: true,
+                        });
+                    });
+                });
             }
         },
         getNetworks: () => {

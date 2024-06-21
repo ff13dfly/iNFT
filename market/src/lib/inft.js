@@ -5,24 +5,41 @@ import Network from '../network/router';
 const map={};
 
 const self = {
-    single:(name,ck)=>{
+    single:(name,ck,normal)=>{
         if(map[name]) return ck && ck(map[name]);
-        Network("anchor").view(name, "selling", (data) => {
-            console.log(data);
-            if(data===false) return ck && ck(false);
-
-            const row={
-                name:name,
-                owner:data[0],
-                price:parseInt(data[1]),
-                target:data[2],
-                free:data[0]===data[2],
-            }
-            self.auto([row],(res)=>{
-                if(res) return ck &&  ck(res[0]);
-                return ck && ck(false);
+        if(!normal){
+            Network("anchor").view(name, "selling", (data) => {
+                console.log(data);
+                if(data===false) return ck && ck(false);
+    
+                const row={
+                    name:name,
+                    owner:data[0],
+                    price:parseInt(data[1]),
+                    target:data[2],
+                    free:data[0]===data[2],
+                }
+                self.auto([row],(res)=>{
+                    if(res) return ck &&  ck(res[0]);
+                    return ck && ck(false);
+                });
             });
-        });
+        }else{
+            Network("anchor").view(name, "owner", (data) => {
+                //console.log(data);
+                const row={
+                    name:name,
+                    owner:data.address,
+                    price:0,
+                    target:data.address,
+                    free:false,
+                }
+                self.auto([row],(res)=>{
+                    if(res) return ck &&  ck(res[0]);
+                    return ck && ck(false);
+                });
+            });
+        }
     },
     overview:(ck)=>{
         const tpls=[];

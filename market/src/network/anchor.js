@@ -259,7 +259,9 @@ const self = {
                                         raw: dt.args.raw,
                                         protocol: dt.args.protocol,
                                         pre: parseInt(dt.args.pre),
-                                        block: value.block
+                                        block: value.block,
+                                        hash:hash,
+                                        network:"anchor",
                                     }
                                 }
                             });
@@ -336,7 +338,7 @@ const self = {
                                         protocol:protocol,
                                         pre:parseInt(dt.pre),
                                         signer:row.signer.Id,
-                                        block:value,
+                                        hash:value,
                                         valid:true,
                                         network:"anchor",
                                     }

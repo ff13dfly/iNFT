@@ -16,7 +16,7 @@ import Explorer from "./entry/explorer";
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
-import Detail from "./entry/detail";
+import Detail from './entry/detail';
 
 function App() {
   //parameters of router
@@ -29,6 +29,8 @@ function App() {
     view:["name"],
     page:["count","step"],
     preview:["name"],
+    playground:["template"],
+    detail:["name"],
   }
   const self={
     checkding:()=>{
@@ -66,13 +68,13 @@ function App() {
   //all routers here
   const router={
     "home":<Home extend={extend}/>,
-    "detail":<Detail extend={extend}/>,
     "template":<Template extend={extend} link={self.linkTo}/>,
     "market":<Market extend={extend} link={self.linkTo}/>,
     "minter":<Minter extend={extend}/>,
     "editor":<Editor extend={extend}/>,
     "playground":<Playground extend={extend}/>,
     "view":<View extend={extend} link={self.linkTo}/>,
+    "detail":<Detail extend={extend} link={self.linkTo}/>,
     "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend}/>,
@@ -83,6 +85,7 @@ function App() {
   const alias={
     view:"market",
     preview:"template",
+    detail:"explorer",
   }
 
 

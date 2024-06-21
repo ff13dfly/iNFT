@@ -4,6 +4,14 @@ import { FaSlackHash,FaPizzaSlice,FaUserLock } from "react-icons/fa";
 
 import tools from "../lib/tools";
 
+
+/* iNFT render component parameters
+*   @param  {object}    data            //iNFT data
+*   @param  {boolean}   [noPrice]       //wether show price
+*   @param  {boolean}   [noBuy]        //wether show price
+
+*/
+
 function DetailINFT(props) {
   const size = {
     row: [12],
@@ -17,10 +25,10 @@ function DetailINFT(props) {
 
   return (
     <Row className='pb-4'>
-      <Col className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+      <Col hidden={props.noPrice} className='pt-1' md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
         <small>Price</small>
       </Col>
-      <Col className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+      <Col hidden={props.noPrice} className='pt-1' md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
         <h3 className='text-warning'>{props.data && props.data.price?props.data.price:0}</h3>
       </Col>
 

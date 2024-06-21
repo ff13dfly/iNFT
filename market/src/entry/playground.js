@@ -114,11 +114,21 @@ function Playground(props) {
     }
 
     useEffect(() => {
+        //1.set networks
         const nlist = self.getListFromOrgin(template_orgin);
         setList(nlist);
 
         const selected = nlist[0];
         setNetwork(`${selected.from}::${selected.orgin}`);
+
+        //2.check params
+        console.log(props);
+        if(props.extend && props.extend.template){
+            setSearch(props.extend.template);
+            TPL.view(props.extend.template, (def) => {
+                self.show(def);
+            });
+        }
 
     }, [props.data]);
 

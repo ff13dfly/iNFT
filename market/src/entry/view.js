@@ -14,16 +14,20 @@ function View(props) {
     let [data, setData] = useState();
 
     const self = {
+        checkName:(str)=>{
+            const arr=str.split("@");
+            if(arr.length===0) return {name:str};
+            const network=arr.pop();
+            return {name:arr.join("@"),network:network}
+        },
     }
 
     useEffect(() => {
         if(props.extend  && props.extend.name){
-            const anchor = props.extend.name;
-            console.log(anchor);
-            INFT.single(anchor,(dt)=>{
-                console.log(dt);
-
-                setData(dt);
+            const dt=self.checkName(props.extend.name);
+            console.log(dt);
+            INFT.single(dt.name,(res)=>{
+                setData(res);
             });
         }
     }, [props.update,props.extend]);
