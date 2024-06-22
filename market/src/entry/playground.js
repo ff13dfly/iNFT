@@ -7,7 +7,7 @@ import SeriesINFT from "../component/inft_series";
 import MockOffset from "../component/mock_offset";
 import MockHash from "../component/mock_hash";
 
-import { FaEye,FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import TPL from "../lib/tpl";
 
@@ -22,10 +22,10 @@ function Playground(props) {
     const size = {
         row: [12],
         search: [3, 6, 3],
-        header: [6, 6],
+        header: [5, 7],
         parts: [11, 1],
         mock: [6, 6],
-        title:[9,3]
+        title: [9, 3]
     };
 
     let [list, setList] = useState([]);
@@ -39,18 +39,19 @@ function Playground(props) {
     });
     let [show, setShow] = useState(false);
 
-    let [offset,setOffset]=useState([]);        //for mock offet callback
-    let [active,setActive]=useState([]);        //for mock hash, the selected hash
+    let [offset, setOffset] = useState([]);        //for mock offet callback
+    let [active, setActive] = useState([]);        //for mock hash, the selected hash
 
     //template values
     let [hash, setHash] = useState("0x6353bc102e185084671c2c1391cbb7876911e9f65cdfa46e2d9cc5f1a027a0aa");
     let [full, setFull] = useState("imgs/empty.png");
     let [parts, setParts] = useState([]);
-    let [series, setSeries]=useState([]);
+    let [series, setSeries] = useState([]);
 
-    let [hideParts, setHideParts]=useState(false);
-    let [hideSeries, setHideSeries]=useState(false);
-    let [hideImage, setHideImage]=useState(false);
+    let [hideParts, setHideParts] = useState(false);
+    let [hideSeries, setHideSeries] = useState(false);
+    let [hideImage, setHideImage] = useState(false);
+    let [hideMock, setHideMock] = useState(false);
 
     const self = {
         changeSearch: (ev) => {
@@ -67,23 +68,26 @@ function Playground(props) {
                 });
             }
         },
-        changeSelected:(index)=>{
-            const part=parts[index];
-            const [start,step]=part.value;
-            const arr=[]
-            for(let i=0;i<step;i++){
-                arr.push(start+i);
+        changeSelected: (index) => {
+            const part = parts[index];
+            const [start, step] = part.value;
+            const arr = []
+            for (let i = 0; i < step; i++) {
+                arr.push(start + i);
             }
             setActive(arr);
         },
-        switchSeries:()=>{
+        switchSeries: () => {
             setHideSeries(!hideSeries);
         },
-        switchParts:()=>{
+        switchParts: () => {
             setHideParts(!hideParts);
         },
-        switchImage:()=>{
+        switchImage: () => {
             setHideImage(!hideImage);
+        },
+        switchMock: () => {
+            setHideMock(!hideMock);
         },
         show: (def) => {
             if (def.image) setFull(def.image);
@@ -108,7 +112,9 @@ function Playground(props) {
             setUpdate(update + 1);
         },
 
-        single:(mock)=>{
+        //series click
+        single: (mock) => {
+            setOffset(new Array(offset.length).fill(0));
             setHash(mock);
         },
     }
@@ -123,7 +129,7 @@ function Playground(props) {
 
         //2.check params
         console.log(JSON.stringify(props));
-        if(props.extend && props.extend.template){
+        if (props.extend && props.extend.template) {
             setSearch(props.extend.template);
             TPL.view(props.extend.template, (def) => {
                 self.show(def);
@@ -133,97 +139,118 @@ function Playground(props) {
     }, [props.extend]);
 
     return (
-            <div>
-                <Row className="pt-2">
-                    <Col md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]} >
-                        <select name="" className='form-control'
-                            value={network}
-                            disabled={!enable.selector}
-                            onChange={(ev) => {
-                                self.changeNetwork(ev);
-                            }}>
-                            {list.map((row, index) => (
-                                <option value={`${row.from}::${row.orgin}`} key={index} >{row.from}::{row.orgin}</option>
-                            ))}
-                        </select>
-                    </Col>
-                    <Col md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]} >
-                        <small></small>
-                        <input className='form-control' type="text" placeholder='The template to load'
-                            disabled={!enable.search}
-                            value={search} onChange={(ev) => {
-                                self.changeSearch(ev);
-                            }}
-                        />
-                    </Col>
-                    <Col md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]} >
-                        <button className='btn btn-md btn-primary'
-                            disabled={!enable.button}
-                            onClick={(ev) => {
-                                self.clickLoad(ev);
-                            }}>Load Template</button>
-                    </Col>
+        <div>
+            <Row className="pt-2">
+                <Col md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]} >
+                    <select name="" className='form-control'
+                        value={network}
+                        disabled={!enable.selector}
+                        onChange={(ev) => {
+                            self.changeNetwork(ev);
+                        }}>
+                        {list.map((row, index) => (
+                            <option value={`${row.from}::${row.orgin}`} key={index} >{row.from}::{row.orgin}</option>
+                        ))}
+                    </select>
+                </Col>
+                <Col md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]} >
+                    <small></small>
+                    <input className='form-control' type="text" placeholder='The template to load'
+                        disabled={!enable.search}
+                        value={search} onChange={(ev) => {
+                            self.changeSearch(ev);
+                        }}
+                    />
+                </Col>
+                <Col md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]} >
+                    <button className='btn btn-md btn-primary'
+                        disabled={!enable.button}
+                        onClick={(ev) => {
+                            self.clickLoad(ev);
+                        }}>Load Template</button>
+                </Col>
 
-                </Row>
-                <Row hidden={!show}>
-                    <Col className="pt-2" md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
-                        <PriveiwINFT id={"iNFT_view"} hash={hash} template={search} offset={offset}  force={true}/>
+            </Row>
+            <Row hidden={!show}>
+                <Col className="pt-2" md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
+                    <PriveiwINFT id={"iNFT_view"} hash={hash} template={search} offset={offset} force={true} />
 
-                        <Row className="pt-2">
-                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <MockOffset parts={parts} hash={hash} callback={(res) => {
-                                    setOffset(res);
-                                }} />
-                            </Col>
-                            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <MockHash hash={hash} active={active} callback={(nhash) => {
-                                    setHash(nhash);
-                                }} />
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                        <Row className="pt-2">
-                            <Col md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                                <h5>iNFT Parts ( {parts.length} )</h5>
-                            </Col>
-                            <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
-                                    self.switchParts(ev);
-                                }}>{!hideParts?<FaEye/>:<FaEyeSlash/>}</button>
-                            </Col>
-                            <Col hidden={hideParts} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <PartsINFT data={parts} callback={(index)=>{
-                                    self.changeSelected(index);
-                                }}/>
-                            </Col>
+                    <Row className="pt-2">
+                        <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5>iNFT Series ( {series.length} )</h5>
+                        </Col>
+                        <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                                self.switchSeries(ev);
+                            }}>{!hideSeries ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideSeries} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <SeriesINFT template={search} fresh={self.single} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <hr />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5>Full Image ( {full.length.toLocaleString()} )</h5>
+                        </Col>
+                        <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                                self.switchImage(ev);
+                            }}>{!hideImage ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideImage} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <img src={full} style={{ width: "100%" }} alt="Full template." />
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
+                    <Row className="pt-2">
+                        <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5>Mock Data</h5>
+                        </Col>
+                        <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                                self.switchMock(ev);
+                            }}>{!hideMock ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <MockOffset parts={parts} hash={hash} offset={offset} callback={(res) => {
+                                setOffset(res);
+                            }} />
+                        </Col>
+                        <Col className="pt-2" hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <MockHash hash={hash} active={active} callback={(nhash) => {
+                                setHash(nhash);
+                            }} />
+                        </Col>
 
-                            <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                                <h5>iNFT Series ( {series.length} )</h5>
-                            </Col>
-                            <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
-                                    self.switchSeries(ev);
-                                }}>{!hideSeries?<FaEye/>:<FaEyeSlash/>}</button>
-                            </Col>
-                            <Col hidden={hideSeries}  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <SeriesINFT template={search} fresh={self.single}/>
-                            </Col>
-
-                            <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                                <h5>Full Image ( {full.length.toLocaleString()} )</h5>
-                            </Col>
-                            <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                                <button className='btn btn-sm btn-secondary' onClick={(ev) => {
-                                    self.switchImage(ev);
-                                }}>{!hideImage?<FaEye/>:<FaEyeSlash/>}</button>
-                            </Col>
-                            <Col hidden={hideImage}  className="pb-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                                <img src={full} style={{ width: "100%" }} alt="Full template." />
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
+                    </Row>
+                    <Row>
+                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <hr />
+                        </Col>
+                    </Row>
+                    <Row className="pt-2">
+                        <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5>iNFT Parts ( {parts.length} )</h5>
+                        </Col>
+                        <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                                self.switchParts(ev);
+                            }}>{!hideParts ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideParts} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <PartsINFT data={parts} callback={(index) => {
+                                self.changeSelected(index);
+                            }} />
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
         </div>
     )
 }

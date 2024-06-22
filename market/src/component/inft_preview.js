@@ -39,7 +39,8 @@ function PriveiwINFT(props) {
             if(ani){
                 Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
                 screen_lock=true;
-            } 
+            }
+            console.log(`Rending:${hash}, offst: ${JSON.stringify(offset)}`);
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,()=>{
                 screen_lock=false;
                 return ck && ck();
@@ -65,10 +66,6 @@ function PriveiwINFT(props) {
         },
         calcWidth:()=>{
             return {width:"100%"};
-            // return {
-            //     //width:"100%",
-            //     width:`${width/window.devicePixelRatio}px`,
-            // }
         },
     }
     
@@ -83,6 +80,7 @@ function PriveiwINFT(props) {
                     pre_hash=props.hash;
                 });
             }else{
+                
                 if(!screen_lock && props.hash!==pre_hash) self.autoFresh(()=>{
                     setHidden(false);
                     pre_hash=props.hash;

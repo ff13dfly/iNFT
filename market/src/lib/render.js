@@ -75,13 +75,14 @@ const self={
         },config.animation); 
     },
     decode: (hash, pen, img, parts, tpl, offset,hightlight,ck) => {
+        //console.log(`Redrawing: ${hash}`);
         const { cell, grid } = tpl;
         const multi = 1;    //solve Apple device here.
         let cache=null;
         for (let i = 0; i < parts.length; i++) {
             //0.get the image part from parameters
             const part = parts[i];
-            const [cx,cy,dx,dy,vx,vy]=self.getImageByPart(part,hash,(!offset[i]?0:parseInt(offset[i])),cell,grid);
+            const [cx,cy,dx,dy,vx,vy] = self.getImageByPart(part,hash,(!offset[i]?0:parseInt(offset[i])),cell,grid);
             pen.drawImage(img, cx * multi, cy * multi, dx * multi, dy * multi, vx, vy, dx, dy);
 
             //3.if hightlight, set to cache;
@@ -129,6 +130,7 @@ const Render= {
         }
     },
     drop:(id)=>{
+        //console.log(`Dropping: ${id}`);
         delete RDS[id];
     },
     clear:(id)=>{
@@ -151,7 +153,6 @@ const Render= {
         img.src = bs64;
         img.onload = (e) => {
             if(animate){
-                //self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset));
                 self.animate(hash, pen, img, parts, basic,(offset===undefined?[]:offset),()=>{
                     self.decode(hash, pen, img, parts, basic,(offset===undefined?[]:offset),hightlight,ck);
                 });

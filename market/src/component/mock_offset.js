@@ -14,8 +14,8 @@ function MockOffset(props) {
   const size = {
     row: [12],
     head: [8, 4],
-    offset: [1, 8, 3],
-    formulate:[1,2,1,1,1,2,1,1,1,1],
+    offset: [1, 9, 2],
+    formulate:[1,3,1,1,1,1,1,1,1,1],
   };
 
   let [code, setCode] = useState(false);       //show code mode
@@ -44,19 +44,29 @@ function MockOffset(props) {
       const result=val+offset_templat+offset_user
       return result%divide;
     },
+    checkOffsetDisable:(index)=>{
+      if(!list[index]) return true;
+      if(list[index].value[2]===1) return true;
+      return false;
+    },
   }
 
   useEffect(() => {
-    const arr=new Array(props.parts.length).fill(0);
-    //console.log(props.hash);
-    setOffset(arr);
+    if(props.offset.length===0){
+      const arr=new Array(props.parts.length).fill(0);
+      setOffset(arr);
+    }else{
+      
+      setOffset(JSON.parse(JSON.stringify(props.offset)));
+    }
+    
     setList(props.parts);
-  }, [props.parts, props.active]);
+  }, [props.parts, props.active,props.offset]);
 
   return (
-    <Row className='pt-4'>
+    <Row>
       <Col className='' md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
-        <h5>Mock Offset</h5>
+        <h5>Offset</h5>
       </Col>
       <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
         <button className='btn btn-sm btn-secondary' onClick={(ev) => {
@@ -79,7 +89,9 @@ function MockOffset(props) {
               <Row>
                 <Col md={size.formulate[0]} lg={size.formulate[0]} xl={size.formulate[0]} xxl={size.formulate[0]}>{"("}</Col>
                 <Col md={size.formulate[1]} lg={size.formulate[1]} xl={size.formulate[1]} xxl={size.formulate[1]}>
-                  <button className='btn btn-sm btn-secondary'>
+                  <button className='btn btn-sm btn-secondary' onClick={(ev)=>{
+
+                  }}>
                     {self.getValueFromHash(props.hash,row.value[0],row.value[1])}
                   </button>
                 </Col>
@@ -89,9 +101,12 @@ function MockOffset(props) {
                 </Col>
                 <Col md={size.formulate[4]} lg={size.formulate[4]} xl={size.formulate[4]} xxl={size.formulate[4]}>+</Col>
                 <Col md={size.formulate[5]} lg={size.formulate[5]} xl={size.formulate[5]} xxl={size.formulate[5]}>
-                  <button className='btn btn-sm btn-warning' onClick={(ev)=>{
-                    self.clickSingle(index,offset[index]);
-                  }}>{offset[index]}</button>
+                  <button 
+                    disabled={self.checkOffsetDisable(index)} 
+                    className='btn btn-sm btn-warning' 
+                    onClick={(ev)=>{
+                      self.clickSingle(index,offset[index]);
+                    }}>{offset[index]}</button>
                 </Col>
                 <Col md={size.formulate[6]} lg={size.formulate[6]} xl={size.formulate[6]} xxl={size.formulate[6]}>{")"}</Col>
                 <Col md={size.formulate[7]} lg={size.formulate[7]} xl={size.formulate[7]} xxl={size.formulate[7]}>%</Col>
