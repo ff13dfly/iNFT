@@ -40,7 +40,7 @@ function PriveiwINFT(props) {
                 Render.preview(pen,tpl.image,pre_hash,tpl.parts,basic,offset);
                 screen_lock=true;
             }
-            console.log(`Rending:${hash}, offst: ${JSON.stringify(offset)}`);
+            //console.log(`Rending:${hash}, offst: ${JSON.stringify(offset)}`);
             Render.preview(pen,tpl.image,hash,tpl.parts,basic,offset,props.hightlight,()=>{
                 screen_lock=false;
                 return ck && ck();

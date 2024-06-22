@@ -68,7 +68,7 @@ function MockHash(props) {
       setList(arr);
     },
     checkHashDisable:(index)=>{
-      console.log(index);
+      //console.log(index);
       if(!list[index]) return true;
       if(list[index].value[2]===1) return true;
       return false;
@@ -76,13 +76,13 @@ function MockHash(props) {
   };
 
   useEffect(() => {
-    //console.log(props.active);
+    console.log(props);
     if (props.hash !== hash) {
       //console.log(`Ready to show hash: ${props.hash}`);
       setHash(props.hash);
       self.show(props.hash);
     }
-  }, [props.hash,props.active]);
+  }, [props.hash,props.selected,props.active]);
 
   return (
     <Row>

@@ -41,6 +41,7 @@ function Playground(props) {
 
     let [offset, setOffset] = useState([]);        //for mock offet callback
     let [active, setActive] = useState([]);        //for mock hash, the selected hash
+    let [selected, setSelected] = useState(0);      //which part to select
 
     //template values
     let [hash, setHash] = useState("0x6353bc102e185084671c2c1391cbb7876911e9f65cdfa46e2d9cc5f1a027a0aa");
@@ -69,12 +70,7 @@ function Playground(props) {
             }
         },
         changeSelected: (index) => {
-            const part = parts[index];
-            const [start, step] = part.value;
-            const arr = []
-            for (let i = 0; i < step; i++) {
-                arr.push(start + i);
-            }
+            const arr=self.getActiveHash(index);
             setActive(arr);
         },
         switchSeries: () => {
@@ -88,6 +84,15 @@ function Playground(props) {
         },
         switchMock: () => {
             setHideMock(!hideMock);
+        },
+        getActiveHash:(index)=>{
+            const part = parts[index];
+            const [start, step] = part.value;
+            const arr = []
+            for (let i = 0; i < step; i++) {
+                arr.push(start + i);
+            }
+            return arr;
         },
         show: (def) => {
             if (def.image) setFull(def.image);
@@ -128,7 +133,6 @@ function Playground(props) {
         setNetwork(`${selected.from}::${selected.orgin}`);
 
         //2.check params
-        console.log(JSON.stringify(props));
         if (props.extend && props.extend.template) {
             setSearch(props.extend.template);
             TPL.view(props.extend.template, (def) => {
@@ -173,7 +177,7 @@ function Playground(props) {
             </Row>
             <Row hidden={!show}>
                 <Col className="pt-2" md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
-                    <PriveiwINFT id={"iNFT_view"} hash={hash} template={search} offset={offset} force={true} />
+                    <PriveiwINFT id={"iNFT_view"} hash={hash} template={search} offset={offset} force={true} hightlight={selected} />
 
                     <Row className="pt-2">
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
@@ -218,13 +222,19 @@ function Playground(props) {
                             }}>{!hideMock ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
                         <Col hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                            <MockOffset parts={parts} hash={hash} offset={offset} callback={(res) => {
-                                setOffset(res);
+                            <MockOffset parts={parts} hash={hash} offset={offset} selected={selected} callback={(res, act) => {
+                                if (res) setOffset(res);
+                                if (act !== undefined) {
+                                    setSelected(act);
+                                    const arr=self.getActiveHash(act);
+                                    setActive(arr);
+                                }
                             }} />
                         </Col>
                         <Col className="pt-2" hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                            <MockHash hash={hash} active={active} callback={(nhash) => {
-                                setHash(nhash);
+                            <MockHash hash={hash} active={active} callback={(nhash, act) => {
+                                if (nhash) setHash(nhash);
+                                if (act !== undefined) setSelected(act);
                             }} />
                         </Col>
 
@@ -244,7 +254,8 @@ function Playground(props) {
                             }}>{!hideParts ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
                         <Col hidden={hideParts} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                            <PartsINFT data={parts} callback={(index) => {
+                            <PartsINFT data={parts} selected={selected} callback={(index) => {
+                                setSelected(index);
                                 self.changeSelected(index);
                             }} />
                         </Col>

@@ -21,10 +21,18 @@ function MockOffset(props) {
   let [code, setCode] = useState(false);       //show code mode
   let [offset, setOffset] = useState([]);
   let [list, setList] = useState([]);
+  let [hex, setHex]=useState([]);
+
+  let [cur, setCurrent] = useState(props.selected===undefined?0:parseInt(props.selected));
 
   const self = {
     switchCode: (ev) => {
       setCode(!code);
+    },
+    changeHex:(index)=>{
+      hex[index]=!hex[index];
+      setHex(JSON.parse(JSON.stringify(hex)));
+      if(props.callback)  props.callback(null,index);
     },
     clickSingle:(index,value)=>{
       const divide=props.parts[index].value[2];
@@ -32,11 +40,13 @@ function MockOffset(props) {
       offset[index]=val;
       const noffset=JSON.parse(JSON.stringify(offset));
       setOffset(noffset);
-      if(props.callback) props.callback(noffset);
+      if(props.callback) props.callback(noffset,index);
+
     },
-    getValueFromHash:(hash,start,step)=>{
+    getValueFromHash:(hash,start,step,isHex)=>{
       const pure=hash.substr(2);
-      return  `0x${pure.substr(start,step)}`;
+      const val=`0x${pure.substr(start,step)}`;
+      return  isHex?val:parseInt(val);
     },
     getSelected:(divide,hash,start,step,offset_templat,offset_user)=>{
       const pure=hash.substr(2);
@@ -52,16 +62,19 @@ function MockOffset(props) {
   }
 
   useEffect(() => {
+    if(props.selected!==undefined && props.selected!==cur){
+      setCurrent(parseInt(props.selected));
+    }
     if(props.offset.length===0){
       const arr=new Array(props.parts.length).fill(0);
       setOffset(arr);
     }else{
-      
       setOffset(JSON.parse(JSON.stringify(props.offset)));
     }
     
     setList(props.parts);
-  }, [props.parts, props.active,props.offset]);
+    setHex(new Array(props.parts.length).fill(1));
+  }, [props.parts, props.selected,props.offset]);
 
   return (
     <Row>
@@ -89,10 +102,10 @@ function MockOffset(props) {
               <Row>
                 <Col md={size.formulate[0]} lg={size.formulate[0]} xl={size.formulate[0]} xxl={size.formulate[0]}>{"("}</Col>
                 <Col md={size.formulate[1]} lg={size.formulate[1]} xl={size.formulate[1]} xxl={size.formulate[1]}>
-                  <button className='btn btn-sm btn-secondary' onClick={(ev)=>{
-
+                  <button className={cur===index?'btn btn-sm btn-primary':'btn btn-sm btn-warning'} onClick={(ev)=>{
+                    self.changeHex(index);
                   }}>
-                    {self.getValueFromHash(props.hash,row.value[0],row.value[1])}
+                    {self.getValueFromHash(props.hash,row.value[0],row.value[1],hex[index])}
                   </button>
                 </Col>
                 <Col md={size.formulate[2]} lg={size.formulate[2]} xl={size.formulate[2]} xxl={size.formulate[2]}>+</Col>
@@ -103,7 +116,7 @@ function MockOffset(props) {
                 <Col md={size.formulate[5]} lg={size.formulate[5]} xl={size.formulate[5]} xxl={size.formulate[5]}>
                   <button 
                     disabled={self.checkOffsetDisable(index)} 
-                    className='btn btn-sm btn-warning' 
+                    className={cur===index?'btn btn-sm btn-primary':'btn btn-sm btn-warning'}
                     onClick={(ev)=>{
                       self.clickSingle(index,offset[index]);
                     }}>{offset[index]}</button>

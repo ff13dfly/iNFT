@@ -16,14 +16,13 @@ function PartsINFT(props) {
     parts:[10,2]
   };
 
-  let [cur, setCurrent] = useState(0);
+  let [cur, setCurrent] = useState(props.selected===undefined?0:parseInt(props.selected));
 
   let [parts, setParts] = useState([]);
   let [value, setValue] = useState({});
 
   const self={
     clickPart:(index)=>{
-      //console.log(index);
       const target=parts[index];
       setValue(tools.copy(target));
       setCurrent(index);
@@ -32,12 +31,12 @@ function PartsINFT(props) {
   }
 
   useEffect(() => {
+    setCurrent(props.selected);
     setParts(props.data);
     if(props.data && props.data[cur]){
       setValue(tools.copy(props.data[cur]));
-      if(props.callback) props.callback(cur);
     } 
-  }, [props.data]);
+  }, [props.data,props.selected]);
 
   return (
     <Row className="pt-2">
