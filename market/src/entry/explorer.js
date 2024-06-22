@@ -128,7 +128,6 @@ function Explorer(props) {
                         self.clickSearch(ev);
                     }}>Search</button>
             </Col>
-
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <ListNFTs data={data} network={network} />
             </Col>

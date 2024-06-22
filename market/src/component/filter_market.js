@@ -95,7 +95,7 @@ function FilterMarket(props) {
 
   return (
     <Row>
-      <Col className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+      <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {tpls.map((row, index) => (
           <img className={self.getTemplateClass(index)} key={index} src={row.thumb} alt="" onClick={(ev)=>{
             self.filterByTemplate(row.cid);
@@ -105,12 +105,10 @@ function FilterMarket(props) {
         <FaThList size={28} className='filter_icon ml-10'/>
         <FaThLarge size={28} className='filter_icon ml-10'/>
         <FaTh size={28} className='filter_icon ml-10'/>
-      </Col>
-      <Col className='pt-2' md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        
-      </Col>
-      <Col className='pt-2' md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-        <Row hidden={!editing}>
+        <span className='ml-10'>|</span>
+        <FaGem size={18}  className='ml-10'/>
+        <span className='ml-5'>{min}~{max}</span> 
+        {/* <Row hidden={!editing}>
           <Col md={size.price[0]} lg={size.price[0]} xl={size.price[0]} xxl={size.price[0]}>
             <input type="number" className='form-control' placeholder='Min' value={min} onChange={(ev)=>{
               self.changeMin(ev);
@@ -132,7 +130,7 @@ function FilterMarket(props) {
             <FaGem size={18}/>
             <span className='ml-5'>{min}~{max}</span> 
           </Col>
-        </Row>
+        </Row> */}
       </Col>
     </Row>
   );
