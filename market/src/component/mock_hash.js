@@ -76,9 +76,7 @@ function MockHash(props) {
   };
 
   useEffect(() => {
-    console.log(props);
     if (props.hash !== hash) {
-      //console.log(`Ready to show hash: ${props.hash}`);
       setHash(props.hash);
       self.show(props.hash);
     }

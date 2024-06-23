@@ -81,7 +81,7 @@ function FilterMarket(props) {
 
   useEffect(() => {
     INFT.overview((dt)=>{
-      console.log(JSON.stringify(dt));
+      //console.log(JSON.stringify(dt));
       if(dt.template.length!==0){
         self.getTemplates(dt.template,(ts)=>{
           selected=self.getFullSelected(ts.length);

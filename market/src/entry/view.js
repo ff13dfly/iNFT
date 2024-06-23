@@ -25,7 +25,7 @@ function View(props) {
     useEffect(() => {
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
-            console.log(dt);
+            //console.log(dt);
             INFT.single(dt.name,(res)=>{
                 setData(res);
             });

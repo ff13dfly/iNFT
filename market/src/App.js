@@ -12,6 +12,7 @@ import Minter from "./entry/minter";
 import Market from "./entry/market";
 import Bounty from "./entry/bounty";
 import Explorer from "./entry/explorer";
+import Account from './entry/account';
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
@@ -46,7 +47,7 @@ function App() {
         for(let i=0;i<pattern[single].length;i++){
           param[pattern[single][i]]=arr[i];
         }
-        console.log(`Decoding params: ${JSON.stringify(param)}`);
+        //console.log(`Decoding params: ${JSON.stringify(param)}`);
         if(JSON.stringify(param)!==JSON.stringify(extend)) setExtend(param);
       }
       if(single!==target) setTarget(single);
@@ -78,6 +79,7 @@ function App() {
     "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend}/>,
+    "account":<Account extend={extend}/>,
     "404":<InvalidPage />,
   }
 

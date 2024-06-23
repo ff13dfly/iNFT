@@ -1,5 +1,9 @@
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
 function Header(props) {
+  const size = {
+    head: [2, 7, 3],
+  }
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -12,12 +16,6 @@ function Header(props) {
             <Nav.Link onClick={(ev) => { props.link("market") }} >
               <h5 className={props.active === "market" ? "text-warning" : ""}>Market</h5>
             </Nav.Link>
-            {/* <Nav.Link href="/bounty">
-              <h5 className={props.active==="bounty"?"text-warning":""}>Bounty</h5>
-            </Nav.Link> */}
-            {/* <Nav.Link onClick={(ev) => { props.link("template") }}>
-              <h5 className={props.active === "template" ? "text-warning" : ""}>Template</h5>
-            </Nav.Link> */}
             <Nav.Link onClick={(ev) => { props.link("explorer") }}>
               <h5 className={props.active === "explorer" ? "text-warning" : ""}>Explorer</h5>
             </Nav.Link>
@@ -31,6 +29,12 @@ function Header(props) {
               <h5 className={props.active === "editor" ? "text-warning" : ""}>Editor</h5>
             </Nav.Link>
           </Nav>
+        </Navbar.Collapse>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            Account: <span className='pointer text-warning' onClick={(ev) => { props.link("account") }}>5D5K7b...BhcePg</span>
+          </Navbar.Text>
         </Navbar.Collapse>
       </Container>
     </Navbar>
