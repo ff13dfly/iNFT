@@ -43,6 +43,10 @@ code {
   width: 60px;
 }
 
+.sidebar{
+  width: 100%;
+}
+
 .template_thumb{
   height: 360px;
   background-size: cover; /* Scale the background image to cover the element */

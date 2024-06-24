@@ -53,7 +53,9 @@ function SeriesINFT(props) {
         <Col className='pt-1' key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <Row>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              {row.name},total:{row.count} options,rate: 1/{self.calcRarity(parts, index)}
+              <span className='text-warning'><strong>{row.name}</strong></span>, 
+              total: <strong>{row.count.toLocaleString()}</strong> options, 
+              rate: <strong>1 / {self.calcRarity(parts, index)}</strong>
             </Col>
             <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               {row.desc}

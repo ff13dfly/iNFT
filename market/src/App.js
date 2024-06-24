@@ -12,7 +12,7 @@ import Minter from "./entry/minter";
 import Market from "./entry/market";
 import Bounty from "./entry/bounty";
 import Explorer from "./entry/explorer";
-import Account from './entry/account';
+import Setting from './entry/setting';
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
@@ -32,6 +32,7 @@ function App() {
     preview:["name"],
     playground:["template"],
     detail:["name"],
+    setting:["mod"],
   }
   const self={
     checkding:()=>{
@@ -79,7 +80,7 @@ function App() {
     "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend}/>,
-    "account":<Account extend={extend}/>,
+    "setting":<Setting extend={extend} link={self.linkTo}/>,
     "404":<InvalidPage />,
   }
 

@@ -189,7 +189,7 @@ function Playground(props) {
                         hightlight={!highlight?false:selected}
                     />
                     <Row className="pt-2">
-                        <Col hidden={hideSeries} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <Form>
                             <Form.Check type="checkbox" label={`Enable highlight.`} checked={highlight} onChange={(ev) => {
                                 self.changeHighlight(ev);
@@ -217,7 +217,7 @@ function Playground(props) {
                     </Row>
                     <Row>
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                            <h5>Full Image ( {full.length.toLocaleString()} )</h5>
+                            <h5>Orginal Image ( {full.length.toLocaleString()} )</h5>
                         </Col>
                         <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
                             <button className='btn btn-sm btn-light' onClick={(ev) => {

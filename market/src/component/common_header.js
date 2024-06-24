@@ -1,8 +1,7 @@
-import { Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
+import { Container, Nav, Navbar} from 'react-bootstrap';
+import { FaCog } from "react-icons/fa";
+
 function Header(props) {
-  const size = {
-    head: [2, 7, 3],
-  }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -33,7 +32,8 @@ function Header(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            Account: <span className='pointer text-warning' onClick={(ev) => { props.link("account") }}>5D5K7b...BhcePg</span>
+            <FaCog className='mr-5' size={14}/>
+            <span className='pointer text-warning' onClick={(ev) => { props.link("setting") }}>5D5K7b...BhcePg</span>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>
