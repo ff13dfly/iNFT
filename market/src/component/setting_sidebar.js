@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaHome,FaUserFriends,FaGlobe,FaDatabase } from "react-icons/fa";
+import { FaHome,FaUserFriends,FaGlobe,FaDatabase,FaCat } from "react-icons/fa";
 
 function SettingSidebar(props) {
   const size = {
@@ -27,21 +27,27 @@ function SettingSidebar(props) {
     {
       name: "account",
       icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
-      param: ["basic"],
+      param: ["account"],
       title: "Account",
       desc:"Manage your accounts",
     },
     {
       name: "network",
       icon: <FaGlobe size={20}  className='mr-5' color={self.getColor("network")}/>,
-      param: ["basic"],
+      param: ["network"],
       title: "Network",
     },
     {
       name: "storage",
       icon: <FaDatabase size={20}  className='mr-5' color={self.getColor("storage")}/>,
-      param: ["basic"],
+      param: ["storage"],
       title: "Storage",
+    },
+    {
+      name: "sample",
+      icon: <FaCat size={20}  className='mr-5' color={self.getColor("sample")}/>,
+      param: ["sample"],
+      title: "Sample",
     }
   ];
 
@@ -58,7 +64,7 @@ function SettingSidebar(props) {
         <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <button className={`sidebar text-start btn btn-md ${(props.active!==row.name?'btn-default':'btn-warning')}`} onClick={(ev) => {
             props.link("setting", [row.name]);
-          }}><p>{row.icon}</p>  <h4>{row.title}</h4></button>
+          }}><p>{row.icon}</p>  <h5>{row.title}</h5></button>
         </Col>
       ))}
     </Row>

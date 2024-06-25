@@ -1,7 +1,6 @@
-import { Row, Col, Form } from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { Row, Col,Form } from 'react-bootstrap';
 
-function SettingNetwork(props) {
+function SettingSample(props) {
   const size = {
     row: [12],
     head:[4,8],
@@ -9,22 +8,15 @@ function SettingNetwork(props) {
     left:[8,4],
     right:[4,8],
   };
-
-  useEffect(() => {
-
-  }, []);
-
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <h4>iNFT Networks setting</h4>
-        <small>Support different Networks</small>
+        <h5>iNFT Setting Sample UI</h5>
       </Col>
-
+      
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
-
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
@@ -75,27 +67,6 @@ function SettingNetwork(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
-            <h6>New Network</h6>
-          </Col>
-          <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
-            feedback of action
-          </Col>
-          <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-            <input className='form-control' type="text" placeholder='Adding new Network' />
-          </Col>
-          <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-            <button className='btn btn-md btn-primary'>Add</button>
-          </Col>
-        </Row>
-      </Col>
-
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <hr />
-      </Col>
-
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Row>
-          <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
             <h6>Nodes Network</h6>
           </Col>
           <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
@@ -119,7 +90,24 @@ function SettingNetwork(props) {
         </Row>
       </Col>
 
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <hr />
+      </Col>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <h6>Nodes Setting</h6>
+          </Col>
+          <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+            <input className='form-control' type="text" placeholder='Adding new node of Network' />
+          </Col>
+          <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+            <button className='btn btn-md btn-primary'>Add</button>
+          </Col>
+        </Row>
+      </Col>
     </Row>
   );
 }
-export default SettingNetwork;
+export default SettingSample;

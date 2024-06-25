@@ -7,6 +7,7 @@ import SettingNetwork from "../component/setting_network";
 import SettingAccount from "../component/setting_account";
 import SettingStorage from "../component/setting_storage";
 import Setting404 from "../component/setting_404";
+import SettingSample from "../component/setting_sample";
 
 function Setting(props) {
     const size = {
@@ -18,6 +19,7 @@ function Setting(props) {
         "account":<SettingAccount />,
         "network":<SettingNetwork />,
         "storage":<SettingStorage />,
+        "sample":<SettingSample />,
         "404":<Setting404 />
     }
 
@@ -31,7 +33,7 @@ function Setting(props) {
     }
 
     useEffect(() => {
-        console.log(props.extend);
+        //console.log(props.extend);
         if(props.extend && props.extend.mod){
             const mod=props.extend.mod;
             if(mod!==active){
