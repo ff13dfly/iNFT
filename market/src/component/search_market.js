@@ -25,9 +25,6 @@ function SearchMarket(props) {
     button: true,
   });
 
-  let [data, setData] = useState([]);
-  let [amount, setAmount] = useState(0);
-
   const self = {
     changeSearch: (ev) => {
       setSearch(ev.target.value);
@@ -50,8 +47,9 @@ function SearchMarket(props) {
           for (let i = 0; i < arr.length; i++) {
             arr[i].blocknumber = num;
           }
-          setData(arr);
-          setAmount(arr.length);
+          // setData(arr);
+          // setAmount(arr.length);
+          if(props.callback) props.callback(arr,network);
           setEnable({
             selector: true,
             search: true,
@@ -71,8 +69,10 @@ function SearchMarket(props) {
 
           api.view({ name: search, block: dt.block }, "anchor", (res) => {
             res.blocknumber = dt.block;
-            setData([res]);
-            setAmount(1);
+
+            if(props.callback) props.callback([res],network);
+            //setData([res]);
+            //setAmount(1);
             setEnable({
               selector: true,
               search: true,

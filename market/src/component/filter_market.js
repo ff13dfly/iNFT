@@ -19,8 +19,6 @@ function FilterMarket(props) {
   let [min,setMin]=useState(0);
   let [max,setMax]=useState(0);
 
-  let [editing, setEditing]=useState(false);
-
   const self={
     changeMin:(ev)=>{
 
@@ -39,7 +37,6 @@ function FilterMarket(props) {
       });
     },
     filterByTemplate:(cid)=>{
-      //console.log(cid,tpls);
       //1.get the index of template
       let index=null;
       for(let i=0;i<tpls.length;i++){
