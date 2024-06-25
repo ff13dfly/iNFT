@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect,useState } from "react";
 
-import { FaTh,FaThLarge,FaThList,FaGem } from "react-icons/fa";
+import { FaTh,FaThLarge,FaThList,FaGem,FaCheck } from "react-icons/fa";
 
 import INFT from "../lib/inft";
 import TPL from "../lib/tpl";
@@ -93,6 +93,9 @@ function FilterMarket(props) {
   return (
     <Row>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <button className='btn btn-sm btn-primary'>
+          <FaCheck/>
+        </button>
         {tpls.map((row, index) => (
           <img className={self.getTemplateClass(index)} key={index} src={row.thumb} alt="" onClick={(ev)=>{
             self.filterByTemplate(row.cid);
