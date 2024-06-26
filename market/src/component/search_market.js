@@ -112,7 +112,7 @@ function SearchMarket(props) {
         </select>
       </Col>
       <Col className='pt-1' md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]}>
-        <input className='form-control' type="text" placeholder='Input iNFT name or block number to search...'
+        <input className='form-control' type="text" placeholder='iNFT name / block number / account ...'
           disabled={!enable.search}
           value={search} onChange={(ev) => {
             self.changeSearch(ev);

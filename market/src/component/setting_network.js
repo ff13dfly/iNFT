@@ -86,6 +86,7 @@ function SettingNetwork(props) {
             <tr>
               <th>Network</th>
               <th>Node</th>
+              <th>Type</th>
               <th>Default</th>
               <th>Operation</th>
             </tr>
@@ -93,11 +94,41 @@ function SettingNetwork(props) {
           <tbody>
             <tr>
               <td>
+                W3OS
+              </td>
+              <td>
+                <span><FaLightbulb color={"green"} /></span>
+                <span className='ml-5'>https://api.w3os.net</span>
+              </td>
+              <td>
+                Agent
+              </td>
+              <td>
+                <Form>
+                  <Form.Check // prettier-ignore
+                    type="switch"
+                    label=""
+                    onChange={(ev) => {
+
+                    }}
+                  />
+                </Form>
+              </td>
+              <td>
+                <span className='pointer'><FaSkullCrossbones /></span>
+                <span className='pointer ml-5'><FaSync /></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 Anchor
               </td>
               <td>
                 <span><FaLightbulb color={"green"} /></span>
                 <span className='ml-5'>wss://dev2.metanchor.net</span>
+              </td>
+              <td>
+                Orgin
               </td>
               <td>
                 <Form>
@@ -123,6 +154,9 @@ function SettingNetwork(props) {
               <td>
                 <span><FaLightbulb color={"red"} /></span>
                 <span className='ml-5'>wss://dev2.metanchor.net</span>
+              </td>
+              <td>
+                Orgin
               </td>
               <td>
                 <Form>
