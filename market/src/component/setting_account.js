@@ -63,6 +63,7 @@ function SettingAccount(props) {
               <th>Address</th>
               <th>Default</th>
               <th>Balance</th>
+              <th>Wallet</th>
               <th>Operation</th>
             </tr>
           </thead>
@@ -85,6 +86,7 @@ function SettingAccount(props) {
                 </Form>
               </td>
               <td>0</td>
+              <td>Subwallet | Polkadot</td>
               <td>
                 <span className='pointer'><FaSkullCrossbones /></span>
                 <span className='pointer ml-5'><FaFileDownload /></span>
@@ -108,6 +110,7 @@ function SettingAccount(props) {
                 </Form>
               </td>
               <td>0</td>
+              <td>Subwallet | Polkadot</td>
               <td>
                 <span className='pointer'><FaSkullCrossbones /></span>
                 <span className='pointer ml-5'><FaFileDownload /></span>
@@ -131,6 +134,31 @@ function SettingAccount(props) {
                 </Form>
               </td>
               <td>0</td>
+              <td>Subwallet | Polkadot</td>
+              <td>
+                <span className='pointer'><FaSkullCrossbones /></span>
+                <span className='pointer ml-5'><FaFileDownload /></span>
+              </td>
+            </tr>
+            <tr>
+              <td>Solana</td>
+              <td>
+                <span className='pointer'><FaCopy /></span>
+                <span className='ml-5'>5CSTSUDaBdmET2n6ju9mmpEKwFVqaFtmB8YdB23GMYCJSgmw</span>
+              </td>
+              <td>
+                <Form>
+                  <Form.Check // prettier-ignore
+                    type="switch"
+                    label=""
+                    onChange={(ev) => {
+
+                    }}
+                  />
+                </Form>
+              </td>
+              <td>0</td>
+              <td>Phantom</td>
               <td>
                 <span className='pointer'><FaSkullCrossbones /></span>
                 <span className='pointer ml-5'><FaFileDownload /></span>
@@ -154,6 +182,7 @@ function SettingAccount(props) {
                 </Form>
               </td>
               <td>0</td>
+              <td>Sui Wallet</td>
               <td>
                 <span className='pointer'><FaSkullCrossbones /></span>
                 <span className='pointer ml-5'><FaFileDownload /></span>
@@ -177,6 +206,7 @@ function SettingAccount(props) {
                 </Form>
               </td>
               <td>0</td>
+              <td>Petra</td>
               <td>
                 <span className='pointer'><FaSkullCrossbones /></span>
                 <span className='pointer ml-5'><FaFileDownload /></span>
