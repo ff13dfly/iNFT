@@ -1,10 +1,10 @@
 import Encry from "./encry";
 
 let hash = "";
-
 let dbname = "";
 let timer = null;
 let lock = false;  //write locker
+
 let queue = {
   update: {},
   insert: {},
@@ -188,9 +188,6 @@ const INDEXED = {
     return true;
   },
   insertRow: (db, table, list, ck) => {
-    //console.log(`Function[insertRow], table: ${table}, list:${JSON.stringify(list)}`);
-    //if (lock) return INDEXED.cacheRows(db.name, table, list, "insert");
-    //lock = true;
     const request = db.transaction([table], "readwrite").objectStore(table);
     for (let i = 0; i < list.length; i++) {
       const reqObj = request.add(list[i]);
@@ -203,8 +200,6 @@ const INDEXED = {
     }
   },
   updateRow: (db, table, list, ck) => {
-    //console.log(`Function[updateRow], table: ${table}, list:${JSON.stringify(list)}`);
-
     const store = db.transaction(table, "readwrite").objectStore(table);
     for (let i = 0; i < list.length; i++) {
       const data = list[i];
@@ -226,7 +221,6 @@ const INDEXED = {
     if (!search) {
       request = store.openCursor();
     } else {
-      //TODO, here to add the filter
       const smap = {}
     }
     if (request === null) return ck && ck(false);

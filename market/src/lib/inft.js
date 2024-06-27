@@ -118,6 +118,7 @@ const self = {
                     target: dt.size
                 }
                 Render.thumb(single.hash,dt.image,dt.parts, basic,single.raw.offset,(bs64)=>{
+                    console.log(`Rending done:${key}`);
                     map[key].bs64=bs64;
                     final.push(map[key]);
                     return self.auto(list,ck,final);
@@ -142,16 +143,16 @@ const self = {
                             target: dt.size
                         }
                         Render.thumb(hash,dt.image,dt.parts, basic,data.raw.offset,(bs64)=>{
+                            console.log(`Rending done:${key}`);
                             map[key].bs64=bs64;
-    
                             final.push(map[key]);
                             return self.auto(list,ck,final);
                         });
+                        
                     });
                 });
             });
         }
-        
     },
 }   
 

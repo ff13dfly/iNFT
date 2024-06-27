@@ -3,13 +3,88 @@ import Data from "./data";
 import IPFS from "../network/ipfs";
 import Render from "./render";
 import tools from "./tools";
+import INDEXED from "./indexed";
 
 const config={
     default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+    indexDB:"inftDB",
+    table:"template",
+    keypath:"cid",
+    map:{
+        cid: { unique: true },
+        stamp: { unique: false },
+        thumb: { unique: false },
+        image:{ unique: false },
+        content:{ unique: false },
+    },
 }
 
+
 let agent=true;     //wether use agent
+let local=true;     //get template from local
 const funs={
+    checkTable: (from, list) => {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] === from) return true;
+        }
+        return false;
+      },
+    cacheLocal:(list,ck)=>{
+        INDEXED.checkDB(config.indexDB, (res) => {
+            const tbs = res.objectStoreNames;
+            
+        });
+    },
+    getLocal:(alinks,ck,left)=>{
+        if(left===undefined) left=[];
+        if(alinks.length===0) return ck && ck(left);
+
+        INDEXED.checkDB(config.indexDB, (db) => {
+            const tbs = db.objectStoreNames;
+            if(!funs.checkTable(config.table,tbs)){
+                //no indexDB, init it
+                const tb={table:config.table,keyPath:config.keypath,map:config.map}
+                INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
+                    return ck && ck(tools.copy(alinks));
+                }).catch((error)=>{
+                    return ck && ck({error:"failed to init indexDB"});
+                });
+            }else{
+                //console.log(`Here to search the templates.`);
+                const single=alinks.pop();
+
+                INDEXED.searchRows(db,config.table,"cid",single,(res)=>{
+                    if(res.length!==1){
+                        left.push(single);
+                        return funs.getLocal(alinks,ck,left)
+                    }else{
+                        const itpl=funs.getTemplateFromLocal(res[0]);
+                        Data.setHash("cache", single, itpl);
+                        return funs.getLocal(alinks,ck,left)
+                    }
+                });
+            }
+        });
+    },
+    getTemplateFromLocal:(data)=>{
+        const dt=data.content;
+        dt.thumb=data.thumb;
+        dt.image=data.image;
+        dt.cid=data.cid;
+        return dt;
+    },
+    formatContent:(ctx)=>{
+        console.log(ctx);
+        return {
+            parts:tools.copy(ctx.parts),
+            size:tools.copy(ctx.size),
+            grid:tools.copy(ctx.grid),
+            cell:tools.copy(ctx.cell),
+            series:tools.copy(ctx.series),
+            type:ctx.type,
+            version:ctx.version,
+        }
+    },
     cacheIPFS:(alinks, ck, dels)=>{
         if (dels === undefined) dels = [];
         if (alinks.length === 0) return ck && ck(dels);
@@ -32,7 +107,6 @@ const funs={
                         ctx.thumb=bs64;
                         const mks=funs.getSeriesMock(ctx.parts,ctx.series);
 
-                        
                         //2.get the series thumbs;
                         //bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4
                         if(mks!==false){
@@ -45,10 +119,27 @@ const funs={
                                 for(let j=0;j<mks[i].mock.length;j++){
                                     const smock=mks[i].mock[j];
                                     count++;
-                                    funs.thumb(smock,ctx,single,(bs64)=>{
-                                        ctx.series[i].thumb.push(bs64);
+                                    funs.thumb(smock,ctx,single,(simage)=>{
+                                        ctx.series[i].thumb.push(simage);
                                         count--;
-                                        if(count===0) return funs.cacheIPFS(alinks, ck, dels);
+                                        if(count===0){
+                                            if(local){
+                                                console.log(`Ready to cache to local indexDB.`);
+                                                INDEXED.checkDB(config.indexDB, (db) => {
+                                                    console.log(db);
+                                                    const row={
+                                                        cid: single,
+                                                        stamp: tools.stamp(),
+                                                        thumb: bs64,
+                                                        image:ctx.image,
+                                                        content:funs.formatContent(ctx),            
+                                                    }
+                                                    console.log(row);
+                                                    INDEXED.insertRow(db, config.table, [row]);
+                                                });
+                                            }
+                                            return funs.cacheIPFS(alinks, ck, dels);
+                                        } 
                                     });
                                 }
                             }
@@ -195,9 +286,16 @@ const self = {
         }
     },
     cache:(alinks,ck)=>{
-        funs.cacheIPFS(alinks,(dels)=>{
-            return ck && ck(dels);
-        });
+        if(local){
+            funs.getLocal(alinks,(left)=>{
+                console.log(left);
+            });
+        }else{
+            funs.cacheIPFS(alinks,(dels)=>{
+                return ck && ck(dels);
+            });
+        }
+        
     },
     current:(only_cid)=>{
         const tpl=Data.get("template");
@@ -227,13 +325,31 @@ const self = {
     view:(cid,ck)=>{
         //console.log(cid,Data.exsistHash("cache",cid));
         if(!Data.exsistHash("cache",cid)){
-            funs.cacheIPFS([cid],(dels)=>{
-                if(dels.length!==0){
-                    return ck && ck(false);
-                }else{
-                    return self.view(cid,ck);
-                }
-            });
+            if(local){  
+                //check wether local cache
+                funs.getLocal([cid],(left)=>{
+                    if(left.length!==0){
+                        funs.cacheIPFS(left,(dels)=>{
+                            if(dels.length!==0){
+                                return ck && ck(false);
+                            }else{
+                                return self.view(cid,ck);
+                            }
+                        });
+                    }else{
+                        const tpl=Data.getHash("cache", cid);
+                        return ck && ck(tpl);
+                    }
+                });
+            }else{
+                funs.cacheIPFS([cid],(dels)=>{
+                    if(dels.length!==0){
+                        return ck && ck(false);
+                    }else{
+                        return self.view(cid,ck);
+                    }
+                });
+            }
         }else{
             const tpl=Data.getHash("cache", cid);
             return ck && ck(tpl);
