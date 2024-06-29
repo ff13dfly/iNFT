@@ -1,10 +1,92 @@
 import TPL from "./tpl";
 import Render from "./render";
 import Network from '../network/router';
+import tools from "./tools";
+import INDEXED from "./indexed";
+
+const config={
+    indexDB:"inftDB",
+    table:"iNFT",
+    keypath:"name",
+    map:{
+        name: { unique: true },
+        stamp: { unique: false },
+        thumb: { unique: false },
+    },
+}
 
 const map={};
 
+let local=false;     //get iNFT render result from local
+
+const funs={
+    checkTable: (from, list) => {
+        for (let i = 0; i < list.length; i++) {
+            if (list[i] === from) return true;
+        }
+        return false;
+    },
+    render:(tpl_name,hash,offset,ck)=>{
+        TPL.view(tpl_name,(dt)=>{
+            const basic = {
+                cell: dt.cell,
+                grid: dt.grid,
+                target: dt.size
+            }
+            Render.thumb(hash,dt.image,dt.parts, basic,offset,ck);
+        });
+    },
+    getThumb:(tpl_name,hash,offset,ck,key)=>{
+        if(local){
+            console.log(`Here to go...`);
+            INDEXED.checkDB(config.indexDB, (db) => {
+                console.log(db);
+                const tbs = db.objectStoreNames;
+                if (!funs.checkTable(config.table, tbs)) {
+                    //no indexDB, init it
+                    const tb = { table: config.table, keyPath: config.keypath, map: config.map }
+                    console.log(`Ready to create table: ${JSON.stringify(tb)}`);
+                    INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
+                        console.log(ndb);
+                        return funs.render(tpl_name,hash,offset,ck);
+                    }).catch((error) => {
+                        return ck && ck({ error: "failed to init indexDB" });
+                    });
+                } else {
+                    
+                    INDEXED.searchRows(db, config.table, "name", key, (res) => {
+                        if (res.length !== 1) {
+                            return funs.render(tpl_name,hash,offset,(bs64)=>{
+                                //here to update the iNFT local cache
+                                const row = {
+                                    name: key,
+                                    stamp: tools.stamp(),
+                                    thumb: bs64,
+                                }
+                                //console.log(row);
+                                INDEXED.insertRow(db, config.table, [row]);
+                                return ck && ck(bs64);
+                            });
+                        } else {
+                            //here to return the r
+                            return ck && ck(res.thumb);
+                        }
+                    });
+                }
+            });
+        }else{
+            return funs.render(tpl_name,hash,offset,ck);
+        }
+    },
+}
+
 const self = {
+    enableLocal:()=>{
+        local=true;
+    },
+    disableLocal:()=>{
+        local=false;
+    },
     single:(name,ck,normal)=>{
         if(map[name]) return ck && ck(map[name]);
         if(!normal){
@@ -111,21 +193,17 @@ const self = {
         const net="anchor";
         if(single.raw && single.protocol && single.hash){
             map[key]=single;
-            TPL.view(single.raw.tpl,(dt)=>{
-                const basic = {
-                    cell: dt.cell,
-                    grid: dt.grid,
-                    target: dt.size
-                }
-                Render.thumb(single.hash,dt.image,dt.parts, basic,single.raw.offset,(bs64)=>{
-                    console.log(`Rending done:${key}`);
-                    map[key].bs64=bs64;
-                    final.push(map[key]);
-                    return self.auto(list,ck,final);
-                });
-            });
+            const indexkey=`${key}_${single.block}`;
+            funs.getThumb(single.raw.tpl,single.hash,single.raw.offset,(bs64)=>{
+                console.log(`Rending done:${key}`);
+                map[key].bs64=bs64;
+                final.push(map[key]);
+                return self.auto(list,ck,final);
+            },indexkey);
         }else{
+            //console.log("here to get full data.");
             Network(net).view({ name: key }, "anchor", (data) => {
+                //console.log(data);
                 if (!data || !data.name) return self.auto(list,ck,final);
                 Network(net).view(data.block, "hash", (hash) => {
                     data.price = single.price;
@@ -135,21 +213,14 @@ const self = {
                     data.hash=hash;
     
                     map[key]=data;
-    
-                    TPL.view(data.raw.tpl,(dt)=>{
-                        const basic = {
-                            cell: dt.cell,
-                            grid: dt.grid,
-                            target: dt.size
-                        }
-                        Render.thumb(hash,dt.image,dt.parts, basic,data.raw.offset,(bs64)=>{
-                            console.log(`Rending done:${key}`);
-                            map[key].bs64=bs64;
-                            final.push(map[key]);
-                            return self.auto(list,ck,final);
-                        });
-                        
-                    });
+
+                    const indexkey=`${key}_${data.block}`;
+                    funs.getThumb(data.raw.tpl,data.hash,data.raw.offset,(bs64)=>{
+                        console.log(`Rending done:${key}`);
+                        map[key].bs64=bs64;
+                        final.push(map[key]);
+                        return self.auto(list,ck,final);
+                    },indexkey);
                 });
             });
         }
