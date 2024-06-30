@@ -42,6 +42,7 @@ const funs = {
             const tbs = db.objectStoreNames;
             if (!funs.checkTable(config.table, tbs)) {
                 //no indexDB, init it
+                db.close();
                 const tb = { table: config.table, keyPath: config.keypath, map: config.map }
                 INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
                     return ck && ck(tools.copy(alinks));

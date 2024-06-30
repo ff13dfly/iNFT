@@ -26,11 +26,12 @@ function ListMarket(props) {
     show:()=>{
       setInfo("Getting selling iNFTs from network");
       Network("anchor").market((arr) => {
-        console.log(JSON.stringify(arr));
+        //console.log(JSON.stringify(arr));
         setInfo("Getting template from IPFS then rendering iNFTs.");
         const nlist = self.getHolder(arr.length);
         setList(nlist);
         INFT.auto(arr,(fs)=>{
+          console.log(fs);
           setList(fs);
           setReady(true);
           if(first) props.fresh("filter");

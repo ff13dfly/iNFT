@@ -6,7 +6,7 @@ import INDEXED from "./indexed";
 
 const config={
     indexDB:"inftDB",
-    table:"iNFT",
+    table:"infts",
     keypath:"name",
     map:{
         name: { unique: true },
@@ -17,7 +17,7 @@ const config={
 
 const map={};
 
-let local=false;     //get iNFT render result from local
+let local=true;     //get iNFT render result from local
 
 const funs={
     checkTable: (from, list) => {
@@ -37,17 +37,19 @@ const funs={
         });
     },
     getThumb:(tpl_name,hash,offset,ck,key)=>{
+        //console.log(key);
         if(local){
-            console.log(`Here to go...`);
+            //console.log(`Here to go...`);
             INDEXED.checkDB(config.indexDB, (db) => {
-                console.log(db);
+                //console.log(db);
                 const tbs = db.objectStoreNames;
                 if (!funs.checkTable(config.table, tbs)) {
                     //no indexDB, init it
                     const tb = { table: config.table, keyPath: config.keypath, map: config.map }
-                    console.log(`Ready to create table: ${JSON.stringify(tb)}`);
+                    //console.log(`Ready to create table: ${JSON.stringify(tb)}`);
+                    db.close();         //must close, or the DB is blocked
                     INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
-                        console.log(ndb);
+                        //console.log(ndb);
                         return funs.render(tpl_name,hash,offset,ck);
                     }).catch((error) => {
                         return ck && ck({ error: "failed to init indexDB" });
@@ -55,6 +57,7 @@ const funs={
                 } else {
                     
                     INDEXED.searchRows(db, config.table, "name", key, (res) => {
+                        //console.log(res);
                         if (res.length !== 1) {
                             return funs.render(tpl_name,hash,offset,(bs64)=>{
                                 //here to update the iNFT local cache
@@ -63,13 +66,12 @@ const funs={
                                     stamp: tools.stamp(),
                                     thumb: bs64,
                                 }
-                                //console.log(row);
                                 INDEXED.insertRow(db, config.table, [row]);
                                 return ck && ck(bs64);
                             });
                         } else {
-                            //here to return the r
-                            return ck && ck(res.thumb);
+                            //here to return the result
+                            return ck && ck(res[0].thumb);
                         }
                     });
                 }
@@ -195,8 +197,9 @@ const self = {
             map[key]=single;
             const indexkey=`${key}_${single.block}`;
             funs.getThumb(single.raw.tpl,single.hash,single.raw.offset,(bs64)=>{
-                console.log(`Rending done:${key}`);
+                //console.log(`Rending done:${key}`);
                 map[key].bs64=bs64;
+                if(local) map[key].local=true;
                 final.push(map[key]);
                 return self.auto(list,ck,final);
             },indexkey);
@@ -216,7 +219,7 @@ const self = {
 
                     const indexkey=`${key}_${data.block}`;
                     funs.getThumb(data.raw.tpl,data.hash,data.raw.offset,(bs64)=>{
-                        console.log(`Rending done:${key}`);
+                        //console.log(`Rending done:${key}`);
                         map[key].bs64=bs64;
                         final.push(map[key]);
                         return self.auto(list,ck,final);

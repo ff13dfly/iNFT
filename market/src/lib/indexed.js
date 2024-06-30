@@ -45,18 +45,26 @@ const INDEXED = {
         window.webkitIndexedDB ||
         window.msIndexedDB;
       const request = indexedDB.open(name, version);
+      //console.log(request);
       request.onsuccess = (ev) => {
-        //console.log(`IndexedDB successful, switch lock?`);
+        console.log(`IndexedDB successful.`);
         resolve(ev.target.result);
       };
       request.onerror = (ev) => {
-        //console.log(`IndexedDB failed, switch lock?`);
+        console.log(`IndexedDB failed.`);
+        resolve(false);
+      };
+
+      request.onblocked = (ev) => {
+        console.log(`IndexedDB blocked?`);
         resolve(false);
       };
       request.onupgradeneeded = (ev) => {
+        console.log(`IndexedDB update.`);
         const db = ev.target.result;
         for (let i = 0; i < tables.length; i++) {
           const row = tables[i];
+          console.log(JSON.stringify(row));
           const store = db.createObjectStore(row.table, {
             keyPath: row.keyPath,
             unique: true,
@@ -85,7 +93,7 @@ const INDEXED = {
   },
 
   searchRows: (db, table, key, val, ck) => {
-    console.log(`Table: ${table}, key: ${key}, value: ${val}`);
+    //console.log(`Table: ${table}, key: ${key}, value: ${val}`);
     if(typeof table!=='string') return ck && ck({error:"wrong table."});
     let list = [];
     var store = db.transaction(table, "readwrite").objectStore(table);
