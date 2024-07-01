@@ -47,7 +47,7 @@ function View(props) {
                         <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        {data.local?"Local Cache":"Network"}
+                        {!data || !data.local?"Network":"Local Cache"}
                     </Col>
                 </Row>
             </Col>

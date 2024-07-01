@@ -1,6 +1,26 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { FaCog } from "react-icons/fa";
 
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+
+const self={
+  subwallet:async()=>{
+    const extensions = await web3Enable('iNFT Market');
+    if (extensions.length === 0) {
+      console.log('No extension installed');
+      return false;
+    }
+    const accounts = await web3Accounts();
+    if (accounts.length === 0) {
+      console.log('No accounts found');
+      return false;
+    }
+    const injector = await web3FromAddress(accounts[0].address);
+    console.log(injector);
+
+  },
+}
+
 function Header(props) {
 
   return (
@@ -33,7 +53,9 @@ function Header(props) {
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
 
-            <span className='pointer text-warning' onClick={(ev) => { props.link("setting") }}>
+            <span className='pointer text-warning' onClick={(ev) => {
+              self.subwallet();
+            }}>
               5D5K7b...BhcePg
             </span>
             <span className='ml-5'>|</span>

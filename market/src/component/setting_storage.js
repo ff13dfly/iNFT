@@ -1,7 +1,9 @@
 import { Row, Col, Form, Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones,FaSync,FaPizzaSlice } from "react-icons/fa";
+import StorageTemplat from './storage_template';
+import StorageINFT from './storage_inft';
+import INDEXED from '../lib/indexed';
 
 function SettingStorage(props) {
   const size = {
@@ -13,9 +15,21 @@ function SettingStorage(props) {
   };
 
   let [encry, setEncry] = useState(true);
-
+  let [tpls, setTpls] =useState([]);
 
   useEffect(() => {
+    const nameDB="inftDB";
+    const table="template";
+    INDEXED.checkDB(nameDB, (db) => {
+      console.log(db);
+      if(INDEXED.checkTable(db.objectStoreNames,table)){
+        INDEXED.pageRows(db,table,(res)=>{
+          if(res!==false){
+            setTpls(res);
+          }
+        });
+      }
+    });
 
   }, []);
 
@@ -56,43 +70,17 @@ function SettingStorage(props) {
         More information here / adding functions
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>CID</th>
-              <th>Orgin</th>
-              <th>Operation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <span className='pointer'><FaRegCopy /></span>
-                <span className='ml-5'>bafkreihqa5j6llqfwm6bph343g325njntgvtov6v7iydx3l27i4vxuth2y</span>
-              </td>
-              <td>web3.storage</td>
-              <td>
-                <span className='pointer'><FaSkullCrossbones /></span>
-                <span className='pointer ml-5'><FaFileDownload /></span>
-                <span className='pointer ml-5'><FaPizzaSlice /></span>
-                <span className='pointer ml-5'><FaSync /></span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span className='pointer'><FaCopy /></span>
-                <span className='ml-5'>bafkreiclkjvs77vfggnuwwhhlwblpyssshrtwhvl3ibgzvhcvihcm7cidm</span>
-              </td>
-              <td>web3.storage</td>
-              <td>
-                <span className='pointer'><FaSkullCrossbones /></span>
-                <span className='pointer ml-5'><FaFileDownload /></span>
-                <span className='pointer ml-5'><FaPizzaSlice /></span>
-                <span className='pointer ml-5'><FaSync /></span>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+        <StorageTemplat />
+      </Col>
+
+      <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
+        iNFT Result List
+      </Col>
+      <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
+        More information here / adding functions
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <StorageINFT />
       </Col>
     </Row>
   );
