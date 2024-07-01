@@ -33,7 +33,6 @@ function Setting(props) {
     }
 
     useEffect(() => {
-        //console.log(props.extend);
         if(props.extend && props.extend.mod){
             const mod=props.extend.mod;
             if(mod!==active){
@@ -47,10 +46,8 @@ function Setting(props) {
         }else{
             setContent(map[active]);
         }
-
-        
-
     }, [props.extend]);
+    
     return (
         <Row className="pt-2">
             <Col md={size.sidebar[0]} lg={size.sidebar[0]} xl={size.sidebar[0]} xxl={size.sidebar[0]} >

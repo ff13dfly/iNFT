@@ -31,7 +31,7 @@ function ListMarket(props) {
         const nlist = self.getHolder(arr.length);
         setList(nlist);
         INFT.auto(arr,(fs)=>{
-          console.log(fs);
+          //console.log(fs);
           setList(fs);
           setReady(true);
           if(first) props.fresh("filter");

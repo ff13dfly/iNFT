@@ -197,7 +197,6 @@ const self = {
             map[key]=single;
             const indexkey=`${key}_${single.block}`;
             funs.getThumb(single.raw.tpl,single.hash,single.raw.offset,(bs64)=>{
-                //console.log(`Rending done:${key}`);
                 map[key].bs64=bs64;
                 if(local) map[key].local=true;
                 final.push(map[key]);
@@ -221,6 +220,7 @@ const self = {
                     funs.getThumb(data.raw.tpl,data.hash,data.raw.offset,(bs64)=>{
                         //console.log(`Rending done:${key}`);
                         map[key].bs64=bs64;
+                        if(local) map[key].local=true;
                         final.push(map[key]);
                         return self.auto(list,ck,final);
                     },indexkey);
