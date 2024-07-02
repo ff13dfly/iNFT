@@ -1,27 +1,29 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { FaCog } from "react-icons/fa";
+import { useState } from "react";
+import tools from "../lib/tools";
 
+import { FaCog } from "react-icons/fa";
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
-const self={
-  subwallet:async()=>{
-    const extensions = await web3Enable('iNFT Market');
-    if (extensions.length === 0) {
-      console.log('No extension installed');
-      return false;
-    }
-    const accounts = await web3Accounts();
-    if (accounts.length === 0) {
-      console.log('No accounts found');
-      return false;
-    }
-    const injector = await web3FromAddress(accounts[0].address);
-    console.log(injector);
-
-  },
-}
 
 function Header(props) {
+  let [login, setLogin]=useState("Login");
+
+  const self={
+    subwallet:async()=>{
+      const extensions = await web3Enable('iNFT Market');
+      if (extensions.length === 0) {
+        console.log('No extension installed');
+        return false;
+      }
+      const accounts = await web3Accounts();
+      if (accounts.length === 0) {
+        console.log('No accounts found');
+        return false;
+      }
+      setLogin(tools.shorten(accounts[0].address,5));
+    },
+  }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -52,12 +54,9 @@ function Header(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-
-            <span className='pointer text-warning' onClick={(ev) => {
+              <button className='btn btn-md btn-default' onClick={(ev) => {
               self.subwallet();
-            }}>
-              5D5K7b...BhcePg
-            </span>
+            }}>{login}</button>
             <span className='ml-5'>|</span>
             <span className='pointer' onClick={(ev) => { props.link("setting") }}>
               <FaCog className='ml-5' size={16} />

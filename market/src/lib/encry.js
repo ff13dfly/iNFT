@@ -1,4 +1,5 @@
-const CryptoJS = require("crypto-js");
+import CryptoJS from "crypto-js";
+
 let key = null;
 let iv = null;
 
@@ -45,4 +46,4 @@ const self = {
   },
 };
 
-module.exports = self;
+export default self;
