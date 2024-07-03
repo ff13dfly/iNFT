@@ -98,7 +98,7 @@ function App() {
     self.checkding();
     setContent(router[target]);
     Config.account("5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
-    Config.init(true);        //Config setting auto init function
+    Config.fresh(true);        //Config setting auto init function
   }, [target,extend]);
 
   return (

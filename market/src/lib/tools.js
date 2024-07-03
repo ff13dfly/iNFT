@@ -2,12 +2,13 @@ const self = {
   stamp: () => {
     return new Date().getTime();
   },
-  day: () => {
-    const dt = new Date();
+  day: (stamp,seperator) => {
+    const dt = !stamp?new Date():new Date(stamp);
     const year = dt.getFullYear();
     const month = String(dt.getMonth() + 1).padStart(2, '0');
     const day = String(dt.getDate()).padStart(2, '0');
-    return `${year}${month}${day}`;
+    const sp=!seperator?"":seperator;
+    return `${year}${sp}${month}${sp}${day}`;
   },
   rand: (m, n) => {
     return Math.round(Math.random() * (m - n) + n);

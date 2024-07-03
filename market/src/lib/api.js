@@ -2,7 +2,7 @@ import Local from "./local";
 import Data from "./data";
 
 const config={
-    site:"http://localhost/inFT/service/api/",
+    site:"http://localhost/iNFT/service/api/",
 }
 
 const funs={

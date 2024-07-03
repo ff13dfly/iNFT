@@ -1,6 +1,8 @@
 import { Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaPizzaSlice } from "react-icons/fa";
+import { FaSkullCrossbones, FaSync } from "react-icons/fa";
+
+import tools from "../lib/tools";
 import INDEXED from '../lib/indexed';
 
 function StorageINFT(props) {
@@ -10,6 +12,12 @@ function StorageINFT(props) {
   };
 
   let [list, setList] = useState([]);
+
+  const self={
+    getDate:(stamp)=>{
+      return tools.day(stamp,"-");
+    },
+  };
 
   useEffect(() => {
     const nameDB = "inftDB";
@@ -29,8 +37,8 @@ function StorageINFT(props) {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>CID</th>
-          <th>Orgin</th>
+          <th>iNFT</th>
+          <th>Last</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -39,13 +47,11 @@ function StorageINFT(props) {
           <tr key={index}>
             <td>
               <span className='ml-5'> <img className='template_icon' src={row.thumb} alt="template thumb" /></span>
-              <span className='ml-5'>{row.cid}</span>
+              <span className='ml-5'>{row.name}</span>
             </td>
-            <td>web3.storage</td>
+            <td>{self.getDate(row.stamp)}</td>
             <td>
               <span className='pointer'><FaSkullCrossbones /></span>
-              <span className='pointer ml-5'><FaFileDownload /></span>
-              <span className='pointer ml-5'><FaPizzaSlice /></span>
               <span className='pointer ml-5'><FaSync /></span>
             </td>
           </tr>

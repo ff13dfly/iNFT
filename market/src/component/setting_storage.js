@@ -43,8 +43,8 @@ function SettingStorage(props) {
         <hr />
       </Col>
 
-      <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-        Enable password to encry localstoraget.
+      {/* <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+        Enable password to encry cache which is stored in indexedDB.
       </Col>
       <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
@@ -61,7 +61,7 @@ function SettingStorage(props) {
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
-      </Col>
+      </Col> */}
 
       <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
         Template List
