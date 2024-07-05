@@ -1,18 +1,27 @@
 import { FaEthereum } from "react-icons/fa";
+import tools from "./tools";
 import Encry from "./encry";
 
 //using account address (password optional) to encry the setting to localstorage
 
-let address="";
+let metadata={
+    address:"",
+    pass:"",
+}
+let cache=null;         //setting cache, if no setting, keep null
+
 const config={
     system:{        //this part will be written to localstorage
         name:"iNFT Market",         //dApp name needed for wallet
         password:false,             //enable local setting password,
-        key:"imarket_config",       //localstorage key name to confirm the setting
-        prefix:"iMarket",
+        prefix:"imxt",              //prefix of localstorage
+    },
+    account:{
+        password:"",                //password to encry the private key
     },
     storage:{           
         DBname:"inftDB",
+        password:"",                //password for image cache
         tables:{
             template:{
                 keypath: "cid",
@@ -41,7 +50,7 @@ const config={
                     metadata: { unique: false },
                 }, 
             },
-        }
+        },
     },
     froxy:{
         market:[
@@ -74,99 +83,188 @@ const config={
             coin:"",
             mining:true,
             template:false,
-            nodes:[],
+            nodes:[
+                "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
+            ],
         },
         polkadot:{
             coin:"DOT",
             mining:false,
             template:false,
-            nodes:[],
+            nodes:[
+                "",
+            ],
         },
         solana:{
             coin:"SOL",
             mining:true,
             template:true,
-            nodes:[],
+            nodes:[
+                "",
+            ],
         },
         aptos:{
             coin:"APTOS",
             mining:true,
             template:true,
             nodes:[     //check network type by node URL 
-
+                "",
             ],
         },
         sui:{
             coin:"SUI",
             mining:true,
             template:true,
-            nodes:[],
+            nodes:[
+                "",
+            ],
         },
         bitcoin:{
             coin:"BTC",
             mining:false,
             template:false,
-            nodes:[],
+            nodes:[
+                "",
+            ],
         },
         ethereum:{
             coin:"ETH",
             mining:false,
             template:false,
-            nodes:[],
+            nodes:[
+                "",
+            ],
         },
     },
 }
 
 const funs={
-    exsist:()=>{
-        const data=localStorage.getItem(config.system.key);
-        return data!==null;
+    /*  Set the account to check setting 
+    * @param  {string}  addr     //account to get setting
+    */
+     set:(addr,pass)=>{
+        if(addr) metadata.address=addr;
+        if(pass) metadata.pass=pass;
+        return true;
     },
-    login:()=>{
 
+    //get the setting key by 
+    getSettingKey:(addr,pass)=>{
+        if(!addr && !pass) return `${config.system.prefix}_${config.system.key}`;
+        if(addr && !pass) return `${config.system.prefix}_${Encry.sha256(addr)}`;
+        if(addr && pass) return `${config.system.prefix}_`+Encry.sha256(`${addr}${pass}`);
+        return `${config.system.prefix}_${config.system.key}`;
+    },
+    decodeData:(raw,addr,pass)=>{
+        const offset=Encry.md5(!pass?addr:(addr+pass));
+        Encry.auto(offset);
+        return Encry.decrypt(raw);
+    },
+    encodeData:(raw,addr,pass)=>{
+        const offset=Encry.md5(!pass?addr:(addr+pass));
+        Encry.auto(offset);
+        return Encry.encrypt(raw);
     },
 }
 
 const self={
-    account:(addr)=>{
-        address=addr;
-        return true;
-    },
+    /*get the setting
+    * @param    {function}  ck      //callback
+    * @param    {string}    [addr]  //address to get setting
+    * @param    {string}    [pass]  //password to get setting
+    * return
+    *   {object}  setting object
+    */
+    init:(ck,addr,pass)=>{
+        funs.set(addr,pass);
+        const status={
+            first:true,
+            msg:"null",
+        }
+        //1.check wether setting data
+        const key=funs.getSettingKey(addr,pass);
+        const data=localStorage.getItem(key);
+        if(data===null){
+            cache=tools.clone(config);      //set default setting
+            return ck && ck(status);
+        }
+
+        //2.decode encry setting;
+        const str=funs.decodeData(data,addr,pass);
+        if(!str){
+            status.first=false;
+            status.message="Invalid password or manage account.";
+            cache=tools.clone(config);      //set default setting
+            return ck && ck(status);
+        }
+        try {
+            const cfg=JSON.parse(str);
+            cfg.stamp=tools.stamp();        //leave a stamp to 
+            cache=tools.clone(cfg);         //set customer setting
+            return ck && ck(status);
+
+        } catch (error) {
+            status.first=false;
+            status.message="Invalid config setting file";
+            return ck && ck(status);
+        } 
+    },    
 
     /* fresh the setting
-    * @param [force]    boolean     //force to fresh setting
-    * @param [pass]     string      //password to fresh setting
+    * @param {boolean}    [force]    //force to fresh setting
+    * @param {string}     [pass]     //password to fresh setting
     */
-    fresh:(force,pass)=>{
-        if((!funs.exsist() || force) && address!==""){
-            if(pass!==undefined){
-            
-            }else{
-                //1.system config
-                const key=Encry.md5(address);
-                Encry.auto(key);
-                const val=Encry.encrypt(JSON.stringify(config.system));
-                localStorage.setItem(`${config.system.prefix}_${key}`,val);
-
-                //2.network config
-            }
-        }
-    },
-    get:(ck,key)=>{
-        if(key===undefined){
-
+    save:()=>{
+        const key=funs.getSettingKey(metadata.address,metadata.pass);
+        //console.log(key);
+        const dt=JSON.stringify(cache);
+        if(key.length===(64+config.system.prefix.length+1)){    //check wether encried;
+            const edata=funs.encodeData(dt,metadata.address,metadata.pass);
+            //console.log(edata);
+            localStorage.setItem(key,edata);
         }else{
-
+            localStorage.setItem(key,dt);
         }
     },
-    set:(path,val,ck)=>{
-
+    get:(path,obj)=>{
+        //1.check wether init the setting
+        if(cache===null) return self.init(()=>{
+            self.get(path);
+        });
+        if(obj===undefined) obj=cache;
+        if(!path) return tools.clone(obj);
+        
+        //2.saving result if the end of path
+        if(Array.isArray(path)){
+            if(path.length===1){
+                return !obj[path[0]]?false:tools.clone(obj[path[0]]);
+            }
+            const kk=path.shift();
+            obj=obj[kk];
+            return self.get(path,obj);
+        }
+        return !obj[path]?false:tools.clone(obj[path]);
     },
+    set:(path,val,force,obj)=>{
+        //1.check wether init the setting
+        if(cache===null) return self.init(()=>{
+            self.set(path,val,force);
+        });
 
-    //use password to fresh localstorage
-    password:(pass,ck)=>{
-        const real_pass=Encry.md5(pass);
-        self.init(true,real_pass);
+        //2.saving result if the end of path
+        if(obj===undefined) obj=cache;
+        if(path.length===1){
+            if(!obj[path[0]]) return false;
+            obj[path[0]]=val;
+            if(force) self.save();
+            return true;
+        }
+
+        //3.reset the point to the setting path
+        const kk=path.shift();
+        if(!obj[kk]) return false;
+        obj=obj[kk];
+        return self.set(path,val,force,obj);
     },
 }
 

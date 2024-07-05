@@ -44,6 +44,9 @@ const self = {
   md5: (str) => {
     return CryptoJS.MD5(str).toString();
   },
+  sha256:(str)=>{
+    return CryptoJS.SHA256(str).toString();
+  },
 };
 
 export default self;

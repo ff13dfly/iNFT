@@ -21,6 +21,8 @@ import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from './entry/detail';
 
+import Encry from "./lib/encry";
+
 function App() {
   //parameters of router
   let [content, setContent]=useState();
@@ -97,8 +99,18 @@ function App() {
   useEffect(() => {
     self.checkding();
     setContent(router[target]);
-    Config.account("5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
-    Config.fresh(true);        //Config setting auto init function
+    // Config.account("5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
+    // Config.fresh(true);        //Config setting auto init function
+
+    
+    const addr="5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg";
+    const pass=Encry.md5("555666"+addr);
+    Config.init((data)=>{
+      //Config.set(["system","name"],"test system",true);
+      console.log(Config.get());
+    },addr,pass);
+
+    //console.log(Config.get("system"));
   }, [target,extend]);
 
   return (
