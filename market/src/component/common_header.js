@@ -1,6 +1,9 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { useState } from "react";
+import { useState,useEffect } from "react";
+
 import tools from "../lib/tools";
+import Config from "../system/setting";
+import RUNTIME from '../system/runtime';
 
 import { FaCog } from "react-icons/fa";
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
@@ -10,8 +13,16 @@ function Header(props) {
   let [login, setLogin]=useState("Login");
 
   const self={
-    subwallet:async()=>{
-      const extensions = await web3Enable('iNFT Market');
+    clickLogin:()=>{
+      if(login==="Login"){
+        const dapp=Config.get(["system","name"]);
+        if(dapp) self.subwallet(dapp);
+      }else{
+        props.link("user");
+      }
+    },
+    subwallet:async(name)=>{
+      const extensions = await web3Enable(name);
       if (extensions.length === 0) {
         console.log('No extension installed');
         return false;
@@ -21,15 +32,25 @@ function Header(props) {
         console.log('No accounts found');
         return false;
       }
-      setLogin(tools.shorten(accounts[0].address,5));
+      const addr=accounts[0].address;
+      RUNTIME.account.set(addr);
+      setLogin(tools.shorten(addr,5));
     },
   }
+
+  useEffect(() => {
+    setLogin("Checking...");
+    setTimeout(()=>{
+      setLogin("Login");
+      self.clickLogin();
+    },1500);
+  }, [props.update]);
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/home">
-          <h3>iNFT</h3>
+        <Navbar.Brand >
+          <h3 className='pointer' onClick={(ev) => { props.link("home") }} >iNFT</h3>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -54,9 +75,9 @@ function Header(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-              <button className='btn btn-md btn-default' onClick={(ev) => {
-              self.subwallet();
-            }}>{login}</button>
+              <button className='btn btn-md btn-default' onClick={(ev) => { 
+                self.clickLogin();
+              }}>{login}</button>
             <span className='ml-5'>|</span>
             <span className='pointer' onClick={(ev) => { props.link("setting") }}>
               <FaCog className='ml-5' size={16} />

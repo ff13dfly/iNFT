@@ -13,6 +13,11 @@ const config={
         name:"iNFT Market",         //dApp name needed for wallet
         password:false,             //enable local setting password,
         prefix:"imxt",              //prefix of localstorage
+        key:"local_setting",        //default local setting key
+        avatar:{
+            base:"https://robohash.org",
+            set:"?set=set2",
+        },
     },
     account:{
         password:"",                //password to encry the private key
@@ -165,6 +170,18 @@ const funs={
     },
 }
 
+//test demo
+const test={
+    test_init:()=>{
+        const addr="5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg";
+        const pass=Encry.md5("555666"+addr);
+        self.init((data)=>{
+            self.set(["system","name"],"my test system",true);
+            console.log(self.get());
+        },addr,pass);
+    },
+}
+
 const self={
     /* check wether setting encried localstorage
     * 
@@ -234,26 +251,30 @@ const self={
     get:(path,obj)=>{
         //1.check wether init the setting
         if(cache===null) return self.init(()=>{
-            self.get(path);
+            return self.get(path);
         });
         if(obj===undefined) obj=cache;
         if(!path) return tools.clone(obj);
+        //console.log(`here:${JSON.stringify(path)}`);
         
         //2.saving result if the end of path
         if(Array.isArray(path)){
             if(path.length===1){
+                //console.log(`here: ${!obj[path[0]]?false:tools.clone(obj[path[0]])}`)
                 return !obj[path[0]]?false:tools.clone(obj[path[0]]);
+            }else{
+                const kk=path.shift();
+                obj=obj[kk];
+                return self.get(path,obj);
             }
-            const kk=path.shift();
-            obj=obj[kk];
-            return self.get(path,obj);
+        }else{
+            return !obj[path]?false:tools.clone(obj[path]);
         }
-        return !obj[path]?false:tools.clone(obj[path]);
     },
     set:(path,val,force,obj)=>{
         //1.check wether init the setting
         if(cache===null) return self.init(()=>{
-            self.set(path,val,force);
+            return self.set(path,val,force);
         });
 
         //2.saving result if the end of path

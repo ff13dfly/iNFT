@@ -1,8 +1,6 @@
 import { Container} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import Config from "./system/setting";
-
 import Header from "./component/common_header";
 import Footer from './component/common_footer';
 
@@ -15,13 +13,12 @@ import Market from "./entry/market";
 import Bounty from "./entry/bounty";
 import Explorer from "./entry/explorer";
 import Setting from './entry/setting';
+import User from './entry/user';
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from './entry/detail';
-
-import Encry from "./lib/encry";
 
 function App() {
   //parameters of router
@@ -37,6 +34,7 @@ function App() {
     playground:["template"],
     detail:["name"],
     setting:["mod"],
+    user:["mod"],
   }
   const self={
     checkding:()=>{
@@ -85,6 +83,7 @@ function App() {
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend}/>,
     "setting":<Setting extend={extend} link={self.linkTo}/>,
+    "user":<User extend={extend} link={self.linkTo}/>,
     "404":<InvalidPage />,
   }
 
@@ -99,17 +98,6 @@ function App() {
   useEffect(() => {
     self.checkding();
     setContent(router[target]);
-    // Config.account("5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
-    // Config.fresh(true);        //Config setting auto init function
-
-    const addr="5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg";
-    const pass=Encry.md5("555666"+addr);
-    Config.init((data)=>{
-      Config.set(["system","name"],"my test system",true);
-      console.log(Config.get());
-    },addr);
-
-    //console.log(Config.get("system"));
   }, [target,extend]);
 
   return (
