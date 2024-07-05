@@ -1,5 +1,5 @@
-import Local from "./local";
-import Data from "./data";
+import Local from "../lib/local";
+import Data from "../lib/data";
 
 const config={
     site:"http://localhost/iNFT/service/api/",

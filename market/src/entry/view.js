@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
 
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 
 function View(props) {
     const size = {

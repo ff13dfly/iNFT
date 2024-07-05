@@ -1,9 +1,9 @@
-import Local from "./local";
-import Data from "./data";
+import Local from "../lib/local";
+import Data from "../lib/data";
 import IPFS from "../network/ipfs";
-import Render from "./render";
-import tools from "./tools";
-import INDEXED from "./indexed";
+import Render from "../lib/render";
+import tools from "../lib/tools";
+import INDEXED from "../lib/indexed";
 
 const config = {
     default: "bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",

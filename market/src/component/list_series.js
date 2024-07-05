@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 
 /* template series thumb list
 *   @param  {string}    template         //template cid

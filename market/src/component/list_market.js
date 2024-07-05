@@ -2,7 +2,7 @@ import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Network from '../network/router';
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 
 let first=true;
 function ListMarket(props) {

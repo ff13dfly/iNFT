@@ -1,8 +1,8 @@
 import TPL from "./tpl";
-import Render from "./render";
+import Render from "../lib/render";
 import Network from '../network/router';
-import tools from "./tools";
-import INDEXED from "./indexed";
+import tools from "../lib/tools";
+import INDEXED from "../lib/indexed";
 
 const config={
     indexDB:"inftDB",

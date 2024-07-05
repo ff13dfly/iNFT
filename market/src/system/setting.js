@@ -1,9 +1,7 @@
-import { FaEthereum } from "react-icons/fa";
-import tools from "./tools";
-import Encry from "./encry";
+import tools from "../lib/tools";
+import Encry from "../lib/encry";
 
 //using account address (password optional) to encry the setting to localstorage
-
 let metadata={
     address:"",
     pass:"",
@@ -152,7 +150,7 @@ const funs={
     getSettingKey:(addr,pass)=>{
         if(!addr && !pass) return `${config.system.prefix}_${config.system.key}`;
         if(addr && !pass) return `${config.system.prefix}_${Encry.sha256(addr)}`;
-        if(addr && pass) return `${config.system.prefix}_`+Encry.sha256(`${addr}${pass}`);
+        if(addr && pass) return config.system.prefix+'_'+Encry.sha256(`${addr}${pass}`);
         return `${config.system.prefix}_${config.system.key}`;
     },
     decodeData:(raw,addr,pass)=>{
@@ -168,6 +166,13 @@ const funs={
 }
 
 const self={
+    /* check wether setting encried localstorage
+    * 
+    */
+    exsist:(addr,pass)=>{
+
+    },
+
     /*get the setting
     * @param    {function}  ck      //callback
     * @param    {string}    [addr]  //address to get setting

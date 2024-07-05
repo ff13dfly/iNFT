@@ -9,7 +9,7 @@ import MockHash from "../component/mock_hash";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 
 const template_orgin = {
     "IPFS": ["web3.storage"],

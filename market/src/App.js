@@ -1,7 +1,7 @@
 import { Container} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import Config from "./lib/setting";
+import Config from "./system/setting";
 
 import Header from "./component/common_header";
 import Footer from './component/common_footer';
@@ -102,13 +102,12 @@ function App() {
     // Config.account("5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
     // Config.fresh(true);        //Config setting auto init function
 
-    
     const addr="5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg";
     const pass=Encry.md5("555666"+addr);
     Config.init((data)=>{
-      //Config.set(["system","name"],"test system",true);
+      Config.set(["system","name"],"my test system",true);
       console.log(Config.get());
-    },addr,pass);
+    },addr);
 
     //console.log(Config.get("system"));
   }, [target,extend]);

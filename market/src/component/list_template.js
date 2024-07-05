@@ -1,8 +1,8 @@
 import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import API from "../lib/api";
-import TPL from "../lib/tpl";
+import API from "../system/api";
+import TPL from "../system/tpl";
 
 function ListTemplate(props) {
   const size = {

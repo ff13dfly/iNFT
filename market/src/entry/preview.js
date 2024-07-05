@@ -3,7 +3,7 @@ import { useEffect,useState } from "react";
 
 import ListSeries from "../component/list_series";
 import PriveiwINFT from "../component/inft_preview";
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 import tools from "../lib/tools";
 
 function Preview(props) {
