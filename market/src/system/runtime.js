@@ -12,7 +12,6 @@ const RUNTIME={
             return cache.address;
         },
     },
-
 }
 
 export default RUNTIME

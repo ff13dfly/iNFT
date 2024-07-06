@@ -1,6 +1,7 @@
 import { Row, Col, Image } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import tools from "../lib/tools";
 import Config from "../system/setting";
 import RUNTIME from '../system/runtime';
 
@@ -14,6 +15,7 @@ function UserBasic(props) {
   };
 
   let [thumb, setThumb] = useState(""); 
+  let [address,setAddress]= useState("");
 
   const self = {
     getAvatar: () => {
@@ -26,6 +28,7 @@ function UserBasic(props) {
   useEffect(() => {
     const url=self.getAvatar();
     setThumb(url);
+    setAddress(tools.shorten(RUNTIME.account.get()),16);
   }, []);
 
   return (
@@ -45,6 +48,7 @@ function UserBasic(props) {
           width="100%"
           style={{ minHeight: "80px" }}
         />
+        <h6>{address}</h6>
       </Col>
     </Row>
   );

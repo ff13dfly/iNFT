@@ -2,7 +2,7 @@ import tools from "../lib/tools";
 import Encry from "../lib/encry";
 
 //using account address (password optional) to encry the setting to localstorage
-let metadata={
+const metadata={
     address:"",
     pass:"",
 }
@@ -11,20 +11,32 @@ let cache=null;         //setting cache, if no setting, keep null
 const config={
     system:{        //this part will be written to localstorage
         name:"iNFT Market",         //dApp name needed for wallet
-        password:false,             //enable local setting password,
         prefix:"imxt",              //prefix of localstorage
         key:"local_setting",        //default local setting key
         avatar:{
             base:"https://robohash.org",
             set:"?set=set2",
         },
+        enable:{
+            password:false,         //enable local setting password,
+            startup:false,          //wether check the system when startup
+        }
     },
     account:{
         password:"",                //password to encry the private key
     },
-    storage:{           
+    runtime:{
+        template:{
+            default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+        }
+    },
+    storage:{     
         DBname:"inftDB",
         password:"",                //password for image cache
+        enable:{
+            template:true,          //enable cache template
+            iNFT:true,              //enable cache iNFT thumb
+        },
         tables:{
             template:{
                 keypath: "cid",
@@ -63,13 +75,13 @@ const config={
             "https://ipfs.w3os.net",
         ],
         bitcoin:[
-
+            ""
         ],
         ethereum:[
-
+            ""
         ],
         price:[
-
+            ""
         ],
     },
     network:{
@@ -80,6 +92,9 @@ const config={
             nodes:[
                 "wss://dev2.metanchor.net",
             ],
+            wallet:[
+                "subwallet"
+            ],
             test:{},
         },
         tanssi:{
@@ -89,6 +104,9 @@ const config={
             nodes:[
                 "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
             ],
+            wallet:[
+                "subwallet"
+            ],
         },
         polkadot:{
             coin:"DOT",
@@ -96,6 +114,9 @@ const config={
             template:false,
             nodes:[
                 "",
+            ],
+            wallet:[
+                "subwallet"
             ],
         },
         solana:{
@@ -105,13 +126,16 @@ const config={
             nodes:[
                 "",
             ],
+            wallet:[
+                "phantom"
+            ],
         },
         aptos:{
             coin:"APTOS",
             mining:true,
             template:true,
             nodes:[     //check network type by node URL 
-                "",
+                "petra",
             ],
         },
         sui:{
@@ -119,7 +143,7 @@ const config={
             mining:true,
             template:true,
             nodes:[
-                "",
+                "sui",
             ],
         },
         bitcoin:{
@@ -135,10 +159,11 @@ const config={
             mining:false,
             template:false,
             nodes:[
-                "",
+                "metamask",
             ],
         },
     },
+    version:202401,             //setting version
 }
 
 const funs={
