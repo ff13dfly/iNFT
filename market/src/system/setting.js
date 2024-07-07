@@ -24,10 +24,14 @@ const config={
     },
     account:{
         password:"",                //password to encry the private key
+        enable:{
+            oneforall:true,         //one password to encry all private key by AES
+        },
     },
     runtime:{
         template:{
             default:"bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+            orgin:"web3.storage",
         }
     },
     storage:{     
@@ -36,6 +40,7 @@ const config={
         enable:{
             template:true,          //enable cache template
             iNFT:true,              //enable cache iNFT thumb
+            encry:false,            //wether encry the image bs64 data
         },
         tables:{
             template:{
@@ -67,28 +72,34 @@ const config={
             },
         },
     },
-    froxy:{
-        market:[
-            "http://localhost/iNFT/service/api/",
-        ],
-        ipfs:[
-            "https://ipfs.w3os.net",
-        ],
-        bitcoin:[
-            ""
-        ],
-        ethereum:[
-            ""
-        ],
-        price:[
-            ""
-        ],
+    proxy:{             //all agent url here
+        enable:{
+            cache:false,        //get iNFT data from proxy server   
+        },
+        nodes:{
+            market:[
+                "http://localhost/iNFT/service/api/",
+            ],
+            ipfs:[
+                "https://ipfs.w3os.net",
+            ],
+            bitcoin:[
+                ""
+            ],
+            ethereum:[
+                ""
+            ],
+            price:[
+                ""
+            ],
+        },
     },
     network:{
         anchor:{
             coin:"",
             mining:true,
             template:true,
+            enable:true,
             nodes:[
                 "wss://dev2.metanchor.net",
             ],
@@ -101,6 +112,7 @@ const config={
             coin:"",
             mining:true,
             template:false,
+            enable:true,
             nodes:[
                 "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
             ],
@@ -112,6 +124,7 @@ const config={
             coin:"DOT",
             mining:false,
             template:false,
+            enable:false,
             nodes:[
                 "",
             ],
@@ -123,6 +136,7 @@ const config={
             coin:"SOL",
             mining:true,
             template:true,
+            enable:false,
             nodes:[
                 "",
             ],
@@ -134,6 +148,7 @@ const config={
             coin:"APTOS",
             mining:true,
             template:true,
+            enable:false,
             nodes:[     //check network type by node URL 
                 "petra",
             ],
@@ -142,6 +157,7 @@ const config={
             coin:"SUI",
             mining:true,
             template:true,
+            enable:false,
             nodes:[
                 "sui",
             ],
@@ -150,6 +166,7 @@ const config={
             coin:"BTC",
             mining:false,
             template:false,
+            enable:false,
             nodes:[
                 "",
             ],
@@ -158,6 +175,7 @@ const config={
             coin:"ETH",
             mining:false,
             template:false,
+            enable:false,
             nodes:[
                 "metamask",
             ],

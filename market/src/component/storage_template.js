@@ -6,23 +6,41 @@ import INDEXED from '../lib/indexed';
 function StorageTemplat(props) {
   const size = {
     row: [12],
-    grid: [3]
   };
 
   let [list, setList] = useState([]);
-
-  useEffect(() => {
-    const nameDB = "inftDB";
+  const nameDB = "inftDB";
     const table = "template";
-    INDEXED.checkDB(nameDB, (db) => {
-      if (INDEXED.checkTable(db.objectStoreNames, table)) {
-        INDEXED.pageRows(db, table, (res) => {
-          if (res !== false) {
-            setList(res);
-          }
-        });
-      }
-    });
+
+  const self={
+    clickRemove:(cid)=>{
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.removeRow(db,table,"cid",cid,(done)=>{
+            if(done) self.fresh();
+          });
+        }
+      });
+    },
+
+    clickPlayground:(cid)=>{
+
+    },
+
+    fresh:()=>{
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.pageRows(db, table, (res) => {
+            if (res !== false) {
+              setList(res);
+            }
+          });
+        }
+      });
+    },
+  }  
+  useEffect(() => {
+    self.fresh();
   }, []);
 
   return (
@@ -31,6 +49,7 @@ function StorageTemplat(props) {
         <tr>
           <th>CID</th>
           <th>Orgin</th>
+          <th>Share</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -43,8 +62,12 @@ function StorageTemplat(props) {
             </td>
             <td>web3.storage</td>
             <td>
-              <span className='pointer'><FaSkullCrossbones /></span>
               <span className='pointer ml-5'><FaFileDownload /></span>
+            </td>
+            <td>
+              <span className='pointer' onClick={(ev)=>{
+                self.clickRemove(row.cid);
+              }}><FaSkullCrossbones /></span>
               <span className='pointer ml-5'><FaPizzaSlice /></span>
               <span className='pointer ml-5'><FaSync /></span>
             </td>

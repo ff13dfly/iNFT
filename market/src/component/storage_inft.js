@@ -1,36 +1,52 @@
 import { Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
-import { FaSkullCrossbones, FaSync } from "react-icons/fa";
+import { FaSkullCrossbones, FaSync,FaFileDownload } from "react-icons/fa";
 
 import tools from "../lib/tools";
 import INDEXED from '../lib/indexed';
 
 function StorageINFT(props) {
   const size = {
-    row: [12],
-    grid: [3]
+    row: [12]
   };
 
   let [list, setList] = useState([]);
 
+  const nameDB = "inftDB";
+  const table = "infts";
+
   const self={
+    clickRemove:(name)=>{
+      console.log(name);
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.removeRow(db,table,"name",name,(done)=>{
+            if(done) self.fresh();
+          });
+        }
+      });
+    },
+    clickFresh:(name)=>{
+      console.log(name);
+    },
     getDate:(stamp)=>{
       return tools.day(stamp,"-");
+    },
+    fresh:()=>{
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.pageRows(db, table, (res) => {
+            if (res !== false) {
+              setList(res);
+            }
+          });
+        }
+      });
     },
   };
 
   useEffect(() => {
-    const nameDB = "inftDB";
-    const table = "infts";
-    INDEXED.checkDB(nameDB, (db) => {
-      if (INDEXED.checkTable(db.objectStoreNames, table)) {
-        INDEXED.pageRows(db, table, (res) => {
-          if (res !== false) {
-            setList(res);
-          }
-        });
-      }
-    });
+    self.fresh();
   }, []);
 
   return (
@@ -39,6 +55,7 @@ function StorageINFT(props) {
         <tr>
           <th>iNFT</th>
           <th>Last</th>
+          <th>Share</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -51,8 +68,18 @@ function StorageINFT(props) {
             </td>
             <td>{self.getDate(row.stamp)}</td>
             <td>
-              <span className='pointer'><FaSkullCrossbones /></span>
-              <span className='pointer ml-5'><FaSync /></span>
+            <span className='pointer' onClick={(ev)=>{
+                  self.clickDownload(row.name);
+              }}><FaFileDownload /></span>
+            </td>
+            <td>
+              <span className='pointer' onClick={(ev)=>{
+                  self.clickRemove(row.name);
+              }}><FaSkullCrossbones /></span>
+              
+              <span className='pointer ml-5' onClick={(ev)=>{
+                  self.clickFresh(row.name);
+              }}><FaSync /></span>
             </td>
           </tr>
         ))}

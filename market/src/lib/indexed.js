@@ -95,11 +95,11 @@ const INDEXED = {
   searchRows: (db, table, key, val, ck) => {
     //console.log(`Table: ${table}, key: ${key}, value: ${val}`);
     if(typeof table!=='string') return ck && ck({error:"wrong table."});
-    let list = [];
-    var store = db.transaction(table, "readwrite").objectStore(table);
-    var request = store.index(key).openCursor(IDBKeyRange.only(val));
+    const list = [];
+    const store = db.transaction(table, "readwrite").objectStore(table);
+    const request = store.index(key).openCursor(IDBKeyRange.only(val));
 
-    request.onsuccess = function (e) {
+    request.onsuccess = (e)=>{
       var cursor = e.target.result;
       if (cursor) {
         // 必须要检查
@@ -109,8 +109,36 @@ const INDEXED = {
         return ck && ck(list);
       }
     };
-    request.onerror = function (e) { };
+    request.onerror =  (e)=>{
+
+    };
   },
+
+  removeRow:(db,table,key,val,ck)=>{
+    if(typeof table!=='string') return ck && ck({error:"wrong table."});
+
+    const store = db.transaction(table, "readwrite").objectStore(table);
+    const request = store.index(key).openCursor(IDBKeyRange.only(val));
+
+    request.onsuccess =  (e)=>{
+      const cursor = e.target.result;
+      let deleteRequest;
+      if (cursor) {
+        deleteRequest = cursor.delete(); // 请求删除当前项
+        deleteRequest.onerror =  ()=>{
+          return ck && ck({error:"failed to remove target row"});
+        };
+        deleteRequest.onsuccess =  ()=>{
+          return ck && ck(true);
+        };
+        cursor.continue();
+      }
+    };
+    request.onerror =  (e)=>{
+      return ck && ck({error:"wrong key path."});
+    };
+  },
+
   checkTable: (tables, name) => {
     let valid = false;
     if (tables.length === 0) return valid;

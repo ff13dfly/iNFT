@@ -21,7 +21,7 @@ function SettingStorage(props) {
     const nameDB="inftDB";
     const table="template";
     INDEXED.checkDB(nameDB, (db) => {
-      console.log(db);
+      //console.log(db);
       if(INDEXED.checkTable(db.objectStoreNames,table)){
         INDEXED.pageRows(db,table,(res)=>{
           if(res!==false){
