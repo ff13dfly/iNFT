@@ -78,19 +78,33 @@ const config={
         },
         nodes:{
             market:[
-                "http://localhost/iNFT/service/api/",
+                {
+                    endpoint:"http://localhost/iNFT/service/api/",
+                    orgin:"W3OS",
+                }
             ],
             ipfs:[
-                "https://ipfs.w3os.net",
+                {
+                    domain:"ipfs.w3os.net",
+                    protocol:"https://",
+                    partten:"path",             // {protocol}{domain}/{cid}
+                    orgin:"w3os.net",
+                },
+                {
+                    domain:"ipfs.w3s.link",
+                    protocol:"https://",
+                    partten:"subdomain",        // {protocol}{cid}.{domain}
+                    orgin:"web3.storage",
+                },
             ],
             bitcoin:[
-                ""
+                {}
             ],
             ethereum:[
-                ""
+                {}
             ],
             price:[
-                ""
+                {}
             ],
         },
     },
@@ -117,7 +131,10 @@ const config={
                 "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
             ],
             wallet:[
-                "subwallet"
+                {
+                    name:"subwallet",
+                    icon:"",
+                }
             ],
         },
         polkadot:{

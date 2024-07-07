@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import UserBasic from "../component/user_basic";
 import UserSidebar from "../component/user_sidebar";
 import UserINFT from "../component/user_inft";
+import UserAccount from "../component/user_account";
 import User404 from "../component/user_404";
 
 function User(props) {
@@ -14,6 +15,7 @@ function User(props) {
     const map={
         "basic":<UserBasic />,
         "inft":<UserINFT />,
+        "account":<UserAccount />,
         "404":<User404 />,
     }
 

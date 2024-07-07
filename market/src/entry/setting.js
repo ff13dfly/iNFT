@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import SettingSidebar from "../component/setting_sidebar";
 import SettingBasic from "../component/setting_basic";
 import SettingNetwork from "../component/setting_network";
-import SettingAccount from "../component/setting_account";
 import SettingStorage from "../component/setting_storage";
 import Setting404 from "../component/setting_404";
 import SettingSample from "../component/setting_sample";
@@ -16,7 +15,6 @@ function Setting(props) {
 
     const map={
         "basic":<SettingBasic />,
-        "account":<SettingAccount />,
         "network":<SettingNetwork />,
         "storage":<SettingStorage />,
         "sample":<SettingSample />,

@@ -10,6 +10,7 @@ import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-d
 
 
 function Header(props) {
+
   let [login, setLogin]=useState("Login");
 
   const self={
@@ -39,12 +40,13 @@ function Header(props) {
   }
 
   useEffect(() => {
-    setLogin("Checking...");
-    setTimeout(()=>{
-      setLogin("Login");
-      self.clickLogin();
-    },1500);
-  }, [props.update]);
+    console.log(props);
+    // setLogin("Checking...");
+    // setTimeout(()=>{
+    //   setLogin("Login");
+    //   self.clickLogin();
+    // },1500);
+  }, [props.active]);
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -75,11 +77,13 @@ function Header(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-              <button className='btn btn-md btn-default' onClick={(ev) => { 
+              <button className={props.active==="user"?'btn btn-md btn-default text-warning':'btn btn-md btn-default'} onClick={(ev) => { 
                 self.clickLogin();
               }}>{login}</button>
-            <span className='ml-5'>|</span>
-            <span className='pointer' onClick={(ev) => { props.link("setting") }}>
+            <span className='ml-5 text-secondary'>|</span>
+            <span className={props.active==="setting"?'pointer text-warning':'pointer'} onClick={(ev) => { 
+              props.link("setting");
+            }}>
               <FaCog className='ml-5' size={16} />
             </span>
           </Navbar.Text>

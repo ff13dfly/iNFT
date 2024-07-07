@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
-function SettingAccount(props) {
+function UserAccount(props) {
   const size = {
     row: [12],
     head: [4, 8],
@@ -221,4 +221,4 @@ function SettingAccount(props) {
     </Row>
   );
 }
-export default SettingAccount;
+export default UserAccount;

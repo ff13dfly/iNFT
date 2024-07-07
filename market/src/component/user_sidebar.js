@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaHome,FaUserFriends,FaGlobe,FaDatabase,FaCat } from "react-icons/fa";
+import { FaHome,FaUserFriends,FaCat } from "react-icons/fa";
 
 function UserSidebar(props) {
   const size = {
@@ -23,6 +23,13 @@ function UserSidebar(props) {
       param: ["basic"],
       title: "Basic",
       desc:"",
+    },
+    {
+      name: "account",
+      icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
+      param: ["account"],
+      title: "Account",
+      desc:"Manage your accounts",
     },
     {
       name: "inft",
