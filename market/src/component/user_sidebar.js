@@ -28,7 +28,7 @@ function UserSidebar(props) {
       name: "account",
       icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
       param: ["account"],
-      title: "Account",
+      title: "Accounts",
       desc:"Manage your accounts",
     },
     {

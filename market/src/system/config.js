@@ -111,7 +111,7 @@ const config={
     network:{
         anchor:{
             coin:"",
-            mining:true,
+            minting:true,
             template:true,
             enable:true,
             nodes:[
@@ -124,7 +124,7 @@ const config={
         },
         tanssi:{
             coin:"",
-            mining:true,
+            minting:true,
             template:false,
             enable:true,
             nodes:[
@@ -139,7 +139,7 @@ const config={
         },
         polkadot:{
             coin:"DOT",
-            mining:false,
+            minting:false,
             template:false,
             enable:false,
             nodes:[
@@ -151,9 +151,9 @@ const config={
         },
         solana:{
             coin:"SOL",
-            mining:true,
+            minting:true,
             template:true,
-            enable:false,
+            enable:true,
             nodes:[
                 "",
             ],
@@ -163,16 +163,16 @@ const config={
         },
         aptos:{
             coin:"APTOS",
-            mining:true,
+            minting:true,
             template:true,
-            enable:false,
+            enable:true,
             nodes:[     //check network type by node URL 
                 "petra",
             ],
         },
         sui:{
             coin:"SUI",
-            mining:true,
+            minting:true,
             template:true,
             enable:false,
             nodes:[
@@ -181,7 +181,7 @@ const config={
         },
         bitcoin:{
             coin:"BTC",
-            mining:false,
+            minting:false,
             template:false,
             enable:false,
             nodes:[
@@ -190,7 +190,7 @@ const config={
         },
         ethereum:{
             coin:"ETH",
-            mining:false,
+            minting:false,
             template:false,
             enable:false,
             nodes:[
@@ -247,7 +247,9 @@ const self={
     * 
     */
     exsist:(addr,pass)=>{
-
+        const key=funs.getSettingKey(addr,pass);
+        const data=localStorage.getItem(key);
+        return  data===null;
     },
 
     /*get the setting
@@ -265,6 +267,7 @@ const self={
         }
         //1.check wether setting data
         const key=funs.getSettingKey(addr,pass);
+        //console.log(key);
         const data=localStorage.getItem(key);
         if(data===null){
             cache=tools.clone(config);      //set default setting
@@ -315,7 +318,6 @@ const self={
         });
         if(obj===undefined) obj=cache;
         if(!path) return tools.clone(obj);
-        //console.log(`here:${JSON.stringify(path)}`);
         
         //2.saving result if the end of path
         if(Array.isArray(path)){

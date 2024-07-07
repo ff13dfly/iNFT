@@ -24,13 +24,13 @@ function SettingSidebar(props) {
       title: "Basic",
       desc:"",
     },
-    {
-      name: "account",
-      icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
-      param: ["account"],
-      title: "Account",
-      desc:"Manage your accounts",
-    },
+    // {
+    //   name: "account",
+    //   icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
+    //   param: ["account"],
+    //   title: "Account",
+    //   desc:"Manage your accounts",
+    // },
     {
       name: "network",
       icon: <FaGlobe size={20}  className='mr-5' color={self.getColor("network")}/>,

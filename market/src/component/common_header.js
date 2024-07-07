@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useState,useEffect } from "react";
 
 import tools from "../lib/tools";
-import Config from "../system/setting";
+import Config from "../system/config";
 import RUNTIME from '../system/runtime';
 
 import { FaCog } from "react-icons/fa";
@@ -41,11 +41,13 @@ function Header(props) {
 
   useEffect(() => {
     console.log(props);
-    // setLogin("Checking...");
-    // setTimeout(()=>{
-    //   setLogin("Login");
-    //   self.clickLogin();
-    // },1500);
+    if(props.active==="user" && login==="Login"){
+      setLogin("Checking...");
+      setTimeout(()=>{
+        setLogin("Login");
+        self.clickLogin();
+      },1500);
+    }
   }, [props.active]);
 
   return (
@@ -77,7 +79,7 @@ function Header(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-              <button className={props.active==="user"?'btn btn-md btn-default text-warning':'btn btn-md btn-default'} onClick={(ev) => { 
+              <button className={props.active==="user"?'btn btn-md btn-default text-info':'btn btn-md btn-default'} onClick={(ev) => { 
                 self.clickLogin();
               }}>{login}</button>
             <span className='ml-5 text-secondary'>|</span>

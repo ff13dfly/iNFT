@@ -112,6 +112,29 @@ function SettingBasic(props) {
           />
         </Form>
       </Col>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <hr />
+      </Col>
+      
+      <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+        Enable single password to access all accounts.
+      </Col>
+      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+        <Form>
+          <Form.Check // prettier-ignore
+            type="switch"
+            id="custom-switch"
+            label="Single Password"
+            checked={true}
+            onChange={(ev) => {
+              
+            }}
+          />
+        </Form>
+      </Col>
+
+      
     </Row>
   );
 }
