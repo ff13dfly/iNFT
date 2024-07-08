@@ -47,24 +47,23 @@ const INDEXED = {
       const request = indexedDB.open(name, version);
       //console.log(request);
       request.onsuccess = (ev) => {
-        console.log(`IndexedDB successful.`);
+        //console.log(`IndexedDB successful.`);
         resolve(ev.target.result);
       };
       request.onerror = (ev) => {
-        console.log(`IndexedDB failed.`);
+        //console.log(`IndexedDB failed.`);
         resolve(false);
       };
 
       request.onblocked = (ev) => {
-        console.log(`IndexedDB blocked?`);
+        //console.log(`IndexedDB blocked?`);
         resolve(false);
       };
       request.onupgradeneeded = (ev) => {
-        console.log(`IndexedDB update.`);
+        //console.log(`IndexedDB update.`);
         const db = ev.target.result;
         for (let i = 0; i < tables.length; i++) {
           const row = tables[i];
-          console.log(JSON.stringify(row));
           const store = db.createObjectStore(row.table, {
             keyPath: row.keyPath,
             unique: true,
@@ -156,7 +155,7 @@ const INDEXED = {
     var store = db.transaction(table, "readwrite").objectStore(table);
     var request = store.index(key).openCursor(IDBKeyRange.only(val));
 
-    request.onsuccess = function (e) {
+    request.onsuccess =  (e)=>{
       var cursor = e.target.result;
       if (cursor) {
         if (cursor.value.status === status) {
@@ -169,7 +168,7 @@ const INDEXED = {
         return ck && ck({ count: count, latest: latest });
       }
     };
-    request.onerror = function (e) { };
+    request.onerror =  (e)=>{ };
   },
   getDB: (ck) => {
     const indexedDB =
@@ -224,13 +223,15 @@ const INDEXED = {
     return true;
   },
   insertRow: (db, table, list, ck) => {
+    console.log(table);
     const request = db.transaction([table], "readwrite").objectStore(table);
+    
     for (let i = 0; i < list.length; i++) {
       const reqObj = request.add(list[i]);
-      reqObj.onsuccess = function (ev) {
+      reqObj.onsuccess =  (ev)=>{
         return ck && ck(true);
       };
-      reqObj.onerror = function (ev) {
+      reqObj.onerror =  (ev)=>{
         return ck && ck({ error: "Failed to insert" });
       }
     }
@@ -240,11 +241,11 @@ const INDEXED = {
     for (let i = 0; i < list.length; i++) {
       const data = list[i];
       const request = store.put(data);
-      request.onsuccess = function () {
+      request.onsuccess =  ()=>{
         return ck && ck(true);
       };
 
-      request.onerror = function () {
+      request.onerror =  ()=>{
         return ck && ck({ error: "Failed to update rows" });
       };
     }
@@ -262,7 +263,7 @@ const INDEXED = {
     if (request === null) return ck && ck(false);
 
     let advanced = true;
-    request.onsuccess = function (e) {
+    request.onsuccess =  (e)=>{
       const cursor = e.target.result;
       if (advanced && nav !== undefined && nav.page !== undefined && nav.step !== undefined) {
         const skip = (nav.page - 1) * nav.step;
@@ -277,7 +278,7 @@ const INDEXED = {
         return ck && ck(list);
       }
     };
-    request.onerror = function (e) { };
+    request.onerror =  (e) =>{ };
   },
   test: () => {
     //https://juejin.cn/post/7026900352968425486

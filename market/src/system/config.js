@@ -23,7 +23,10 @@ const config={
         }
     },
     account:{
-        password:"",                //password to encry the private key
+        password:{                  //password to encry the private key, address --> password
+
+        },
+        single:"",                  //if one password, saving here.                
         enable:{
             oneforall:true,         //one password to encry all private key by AES
         },
@@ -44,7 +47,7 @@ const config={
         },
         tables:{
             template:{
-                keypath: "cid",
+                keyPath: "cid",
                 map: {
                     cid: { unique: true },
                     stamp: { unique: false },
@@ -54,18 +57,20 @@ const config={
                 },
                 step:10,
             },
-            inft:{
-                keypath:"name",
+            infts:{
+                keyPath:"name",
                 map:{
                     name: { unique: true },
                     stamp: { unique: false },
                     thumb: { unique: false },
                 },
             },
-            account:{
-                keypath:"address",
+            accounts:{               //storage encried private key, the password are storage on setting
+                keyPath:"address",
                 map:{
                     address: { unique: true },
+                    network: { unique: false },
+                    encoded: {unique: false },      //encried private key
                     stamp: { unique: false },
                     metadata: { unique: false },
                 }, 
@@ -243,8 +248,10 @@ const test={
 }
 
 const self={
+
     /* check wether setting encried localstorage
-    * 
+    *   @param  {string}     [addr]     //manage account
+    *   @param  {string}     [pass]     //encry password
     */
     exsist:(addr,pass)=>{
         const key=funs.getSettingKey(addr,pass);
@@ -311,6 +318,11 @@ const self={
             localStorage.setItem(key,dt);
         }
     },
+
+    /*  get target value of config
+    *   @param  {string | array}    path    //the path to get the value of config
+    *   @param  {object}    [obj]           //for loop target, no need to input
+    */
     get:(path,obj)=>{
         //1.check wether init the setting
         if(cache===null) return self.init(()=>{
@@ -333,6 +345,14 @@ const self={
             return !obj[path]?false:tools.clone(obj[path]);
         }
     },
+
+    /*  set target value of config
+    *   @param  {string | array}    path    //the path to get the value of config
+    *   @param  {any}               val     //value to set
+    *   @param  {boolean}   [force]         //wether force to save to localstorage
+    *   @param  {object}    [obj]           //for loop target, no need to input
+    */  
+
     set:(path,val,force,obj)=>{
         //1.check wether init the setting
         if(cache===null) return self.init(()=>{

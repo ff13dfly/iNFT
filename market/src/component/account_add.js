@@ -1,6 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import Account from "../system/account";
 import Config from "../system/config";
 import tools from "../lib/tools";
 
@@ -20,6 +21,10 @@ function AccountAdd(props) {
     },
     clickAdd:(ev)=>{
       console.log("Click adding button,"+current);
+
+      Account.generate(current,()=>{
+
+      });
       if(props.fresh) props.fresh();
     },
     getNetworks:(ck)=>{

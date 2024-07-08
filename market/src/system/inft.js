@@ -20,6 +20,9 @@ const map={};
 let local=true;     //get iNFT render result from local
 
 const funs={
+    getConfig:()=>{     //get config from Config file
+
+    },
     checkTable: (from, list) => {
         for (let i = 0; i < list.length; i++) {
             if (list[i] === from) return true;
@@ -55,7 +58,6 @@ const funs={
                         return ck && ck({ error: "failed to init indexDB" });
                     });
                 } else {
-                    
                     INDEXED.searchRows(db, config.table, "name", key, (res) => {
                         //console.log(res);
                         if (res.length !== 1) {

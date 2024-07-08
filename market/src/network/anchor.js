@@ -145,12 +145,24 @@ const self = {
         }
     },
     generate: (password, ck) => {
-        const mnemonic = mnemonicGenerate();
-        const keyring = new Keyring({ type: "sr25519" });
-        const pair = keyring.addFromUri(mnemonic);
-        const sign = pair.toJson(password);
-        sign.meta.from = "minter";
-        return ck && ck(sign,mnemonic);
+        self.init(() => {
+            const mnemonic = mnemonicGenerate();
+            const keyring = new Keyring({ type: "sr25519" });
+            const pair = keyring.addFromUri(mnemonic);
+            const sign = pair.toJson(password);
+            sign.meta.network = "anchor";
+
+            const row={
+                address:sign.address,
+                encoded:sign.encoded,
+                network:"anchor",
+                metadata:{
+                    encoding:sign.encoding,
+                }
+            }
+
+            return ck && ck(row,mnemonic);
+        });
     },
     transfer: (pair, to, amount, ck) => {
         self.init(() => {
