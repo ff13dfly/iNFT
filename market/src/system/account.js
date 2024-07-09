@@ -1,11 +1,30 @@
-import tools from "../lib/tools";
-import Local from "../lib/local";
 import INDEXED from "../lib/indexed";
+import tools from "../lib/tools";
 
 import Config from "./config";
 import Network from "../network/router";
 
+const cache={}      //cache the account
+
 const funs = {
+    checkDB:(table,ck)=>{
+        const cfg = Config.get(["storage"]);
+        INDEXED.checkDB(cfg.DBname, (db) => {
+            const tbs = db.objectStoreNames;
+            if (!funs.checkTable(table, tbs)) {
+                const tb = tools.clone(cfg.tables[table]);
+                tb.table=table;
+                db.close();         //must close, or the DB is blocked
+                INDEXED.initDB(cfg.DBname, [tb], db.version + 1).then((ndb) => {
+                    return ck && ck(ndb);
+                }).catch((error) => {
+                    return ck && ck({ error: "failed to init indexDB" });
+                });
+            } else {
+               return ck && ck(db);
+            }
+        });
+    },
     checkTable: (from, list) => {
         for (let i = 0; i < list.length; i++) {
             if (list[i] === from) return true;
@@ -17,23 +36,9 @@ const funs = {
         return tools.char(n);
     },
     insertToDB: (row, ck) => {
-        const cfg = Config.get(["storage"]);
         const table="accounts";
-        INDEXED.checkDB(cfg.DBname, (db) => {
-            const tbs = db.objectStoreNames;
-            if (!funs.checkTable(table, tbs)) {
-                const tb = tools.clone(cfg.tables[table]);
-                console.log(tb);
-                tb.table=table;
-                db.close();         //must close, or the DB is blocked
-                INDEXED.initDB(cfg.DBname, [tb], db.version + 1).then((ndb) => {
-                    INDEXED.insertRow(ndb, table, [row],ck);
-                }).catch((error) => {
-                    return ck && ck({ error: "failed to init indexDB" });
-                });
-            } else {
-                INDEXED.insertRow(db, table, [row],ck);
-            }
+        funs.checkDB(table,(db)=>{
+            INDEXED.insertRow(db, table, [row],ck);
         });
     },
 }
@@ -57,7 +62,10 @@ const self = {
     },
 
     list: (filter, ck, page, step) => {
-
+        const table="accounts";
+        funs.checkDB(table,(db)=>{
+            INDEXED.pageRows(db,table,ck,{page:page,step:step})
+        });
     },
 }
 
