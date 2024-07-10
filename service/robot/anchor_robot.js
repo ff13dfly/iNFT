@@ -14,7 +14,6 @@ const overview={
     round:0,
 };
 
-
 const self = {
     getBasic: () => {
         return {

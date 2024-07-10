@@ -3,6 +3,7 @@ const tools = require('./lib/tools.js');
 const { output } = require('./lib/output.js');
 const AnchorJS = require('./network/anchor.full.js');
 const { REDIS } = require('./lib/redis.js');
+const saving=require('./system/cache_anchor');
 
 //13598
 //Redis data sample: Entry data
@@ -46,8 +47,7 @@ const self = {
         }
     },
     load: (ck) => {
-        const key = config.keys.entry;
-        //const key="hello";
+        const key = config.keys.status;
         return REDIS.exsistKey(key, (is, err) => {
             if(!is) {
                 REDIS.setKey(key, JSON.stringify(entry), (res,err) => {
@@ -69,10 +69,9 @@ const self = {
     },
     reset:(ck,arr)=>{
         //1. remove all prefix;
-        
         if(arr===undefined){
             const prefix=config.keys.prefix;
-            console.log(prefix);
+            //console.log(prefix);
             const ps=[];
             for(var k in prefix){
                 ps.push(prefix[k]);
@@ -81,11 +80,8 @@ const self = {
         }
 
         if(arr.length===0) return ck && ck();
-
-        const cur=arr.pop();
-        console.log(cur);
+        arr.pop();
         return self.reset(ck,arr);
-
     },
     getINFT:(obj,block)=>{
         //console.log(obj);
@@ -103,119 +99,6 @@ const self = {
         };
         if(obj.target) NFT.target=obj.target;   //optional, target block
         return NFT;
-    },
-    saving:(map,left,ck)=>{
-        output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
-        const keys=config.keys;
-        const prefix=keys.prefix;
-
-        let working=0;     //working tag, when it is 0, callback
-        for(let block in map){
-            console.log(`Got block [${block}] list`);
-            const data=map[block];
-            if(parseInt(block)===13580) console.log(data);
-
-            if(data.set!==null){
-                const list_iNFT=[];
-                for(let i=0;i<data.set.length;i++){
-                    const row=data.set[i];
-
-                    const name=row.args.key;
-                    const key=`${name}_${block}`;
-                    
-                    //1.1. save raw iNFT data;
-                    working++;
-                    const NFT=self.getINFT(row,parseInt(block));
-                    REDIS.setKey(key,JSON.stringify(NFT),(res,err)=>{
-                        working--;
-                        if(err) output(`Error:${err}`,'error');
-                        if(working<1) return ck && ck();
-                    });
-
-                    //1.2. push to template queue;
-                    // working++;
-                    // const qu_template=NFT.tpl;
-                    // console.log(`Template queue: ${qu_template}`);
-                    // REDIS.pushQueue(qu_template,key,(res,err)=>{
-                    //     working--;
-                    //     if(err) output(`Error:${err}`,'error');
-                    //     if(working<1) return ck && ck();
-                    // },left);
-
-                    //1.3. push to history queue;
-                    // working++;
-                    // const qu_history=`his_${name}`;
-                    // const history=[block,row.index,"set",row.signer];
-                    // console.log(`History queue: ${qu_history}`);
-                    // REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
-                    //     working--;
-                    //     if(err) output(`Error:${err}`,'error');
-                    //     if(working<1) return ck && ck();
-                    // },left);
-
-                    //1.4. push to account queue;
-                    // working++;
-                    // const qu_account=`acc_${row.signer}`;
-                    // console.log(`Account queue: ${qu_account}`);
-                    // REDIS.pushQueue(qu_account,key,(res,err)=>{
-                    //     working--;
-                    //     if(err) output(`Error:${err}`,'error');
-                    //     if(working<1) return ck && ck();
-                    // },left);
-
-                    //1.5. push to block queue;
-                    working++;
-                    const qu_block=`block_${block}`;
-                    const block_data=[row.index,name,"set",row.signer];
-                    console.log(`History queue: ${qu_block}`);
-                    REDIS.pushQueue(qu_block,JSON.stringify(block_data),(res,err)=>{
-                        working--;
-                        if(err) output(`Error:${err}`,'error');
-                        if(working<1) return ck && ck();
-                    },left);
-                }
-
-                //1.6. push to iNFT list
-            }
-
-            if(data.sell!==null){
-                for(let i=0;i<data.sell.length;i++){
-                    working++;
-                    const row=data.sell[i];
-                    //1.1. push to selling queue;
-                    
-                    //1.2. push to history queue;
-
-                    //1.3. push to block queue;
-                }
-            }
-
-            if(data.buy!==null){
-                for(let i=0;i<data.buy.length;i++){
-                    working++;
-                    const row=data.buy[i];
-                    //1.1. remove from selling queue;
-
-                    //1.2. push to done queue;
-                    
-                    //1.2. push to history queue;
-
-                    //1.3. push to block queue;
-                }
-            }
-
-            if(data.revoke!==null){
-                for(let i=0;i<data.buy.length;i++){
-                    working++;
-                    const row=data.buy[i];
-                    //1.1. remove from selling queue;
-                    
-                    //1.2. push to history queue;
-
-                    //1.3. push to block queue;
-                }
-            }
-        }
     },
     read:(bks,ck,map)=>{
         if(map===undefined) map={};
@@ -249,7 +132,7 @@ const self = {
         output(`Last block to cache:${arr[len-1]}`);
         self.read(arr,(map)=>{
             const left=false;
-            self.saving(map,left,()=>{
+            saving(map,left,()=>{
                 return output(`Cached data saved to Redis`,'success',true);
 
                 status.done_right=status.done_right+len;
@@ -290,9 +173,8 @@ process.on('uncaughtException', (error) => {
     output(`uncaughtException`, 'error');
 });
 
-return self.reset();
-
-//return REDIS.test();
+//when restart the system, need to run this function
+//return self.reset();
 
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag
@@ -324,13 +206,13 @@ self.load((status) => {
                         status.done_left=block;
                     }
                     status.block_subcribe=block;
-                    REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                    REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
                     })
                 }else{
                     output(`History robot recover, status: ${JSON.stringify(status)}`,"primary",true);
                     status.block_subcribe=block;
-                    REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                    REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
                     });
                 }

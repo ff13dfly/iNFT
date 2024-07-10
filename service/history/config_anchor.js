@@ -7,7 +7,7 @@ exports.config = {
         'auth':'',
     },
     'keys':{
-        'index':'current_index',
+        'status':'current_index',    //kv value, the block
         'all':'all_NFT_list',
         'prefix':{              //queue prefix, can use this to remove all
             'history':'his_',           //history queue

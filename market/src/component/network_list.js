@@ -32,7 +32,6 @@ function NetworkList(props) {
     fresh: () => {
       const map = Config.get("network");
       const arr = self.getNetworks(map);
-      console.log(arr);
       setList(arr);
     },
   }
