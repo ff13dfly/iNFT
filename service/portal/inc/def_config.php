@@ -18,8 +18,8 @@ define('CON_AJAX',		'ajax_');
 
 define('DEFAULT_ADMIN_EXPIRE', 300);
 
-define('DEFAULT_MOD',	'hack');
-define('DEFAULT_ACT',	'list');
+define('DEFAULT_MOD',	'inft');
+define('DEFAULT_ACT',	'overview');
 
 define('DEFALT_WORLD',0);
 define('MIN_X',1);		//世界的X边长

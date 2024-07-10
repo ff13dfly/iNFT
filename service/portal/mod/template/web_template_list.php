@@ -6,6 +6,7 @@ $page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
 
 $a->load("template");
 $a=Template::getInstance();
+
 $_F['list']=$a->templateList($page);
 
 $param=$a->templatePages();

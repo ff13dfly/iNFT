@@ -47,7 +47,7 @@
 							<a href="?mod=inft&act=history" title=""><span>History</span></a>
                         </li>
 						<li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'template'%}active{%/if%}">
-							<a href="?mod=inft&act=template" title=""><span>History</span></a>
+							<a href="?mod=inft&act=template" title=""><span>Template</span></a>
                         </li>
                      </ul>
 				</li>

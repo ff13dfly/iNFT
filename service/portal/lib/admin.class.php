@@ -96,8 +96,8 @@
 		 * 注销掉令牌
 		 * */
 		public function adminLogout($spam){
-			if($this->getGlobalKey($spam)){
-				$this->delGlobalKey($spam);
+			if($this->getKey($spam)){
+				$this->delKey($spam);
 				return TRUE;
 			}
 			return FALSE;

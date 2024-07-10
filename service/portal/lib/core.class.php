@@ -246,53 +246,13 @@ class CORE {
 	}
 	
 	/*提取global缓存的额部分*/
+
 	//获取全局的缓存
-	public function getGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->get($key);
-	}
-	public function delGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->del($key);
-	}
-	
-	public function cleanGlobalkey($keys){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		$this->gRedis->delete($this->gRedis->keys($keys));
-	}
-	//获取全局的缓存
-	public function setGlobalKey($key,$val){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->set($key,$val);
-	}
-	
-	public function incGlobalKey($key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		$this->gRedis->incr($key);
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->get($key);
-	}
 		
 	public function existsGlobalKey($key){
 		if(!$this->gRedis)$this->globalRedisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->gRedis->exists($key);
-	}
-	
-	public function existsGlobalHash($main,$key){
-		if(!$this->gRedis)$this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->hexists($main,$key);
-	}
-	
-	public function setGlobalExp($key,$sec=TOKEN_TIME){
-		if(!$this->gRedis) $this->globalRedisLink();
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->expire($key,$sec);
 	}
 	
 	//获取全局缓存的hash的值
@@ -310,12 +270,6 @@ class CORE {
 		return $this->gRedis->hset($main,$key,$val);
 	}
 	
-	public function incGlobalHash($main,$key){
-		if(!$this->gRedis) $this->globalRedisLink();
-		$this->gRedis->hincrby($main,$key,1);
-		if(DEBUG)$this->redisCount();
-		return $this->gRedis->hget($main,$key);
-	}
 	
 	//自动把array存成redis里的hash,1层结构
 	public function autosetGlobalHash($main,$arr){
@@ -365,7 +319,6 @@ class CORE {
 		return $this->cRedis->ttl($key);
 	}
 
-	
 	/*string的redis部分*/
 	public function getKey($key){
 		if(!$this->cRedis)$this->redisLink();
@@ -417,6 +370,12 @@ class CORE {
 		if(!$this->cRedis) $this->redisLink();
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->lrange($main,$start,$end);
+	}
+
+	public function countKey($prefix){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->keys($prefix."*");
 	}
 		
 	/*redis服务器的连接*/
