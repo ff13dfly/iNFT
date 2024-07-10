@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const { config } = require('./Anchor_config.js');
+const { config } = require('./anchor_config.js');
 const { output } = require('./lib/output.js');
 const tools = require('./lib/tools.js');
 const IO = require('./lib/file.js');
@@ -192,9 +192,9 @@ self.start((cfg) => {
                     output(`____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
 
                     //4.run minting task    
-                    // return setTimeout(()=>{
-                    //     self.run(pairs,tpl,cfg);
-                    // },2000);
+                    return setTimeout(()=>{
+                        self.run(pairs,tpl,cfg);
+                    },2000);
                 });
 
             });

@@ -1,6 +1,7 @@
 exports.config = {
     'name':'history',
-    'node':'wss://dev2.metanchor.net',
+    //'node':'wss://dev2.metanchor.net',
+    'node':'ws://localhost:9944',
     'redis':{
         'host':'localhost',
         'port':6379,

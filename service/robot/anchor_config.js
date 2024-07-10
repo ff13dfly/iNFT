@@ -1,6 +1,7 @@
 exports.config = {
     'name':'robot_minter',
-    'node':'wss://dev2.metanchor.net',
+    //'node':'wss://dev2.metanchor.net',
+    'node':'ws://localhost:9944',
     'template':'bafkreigkauu4hjwhzi3q6ar5jqfgh55b3exfxpoymasl4gt7wsbsw3nr4y',       
     'account':[     //select the account by day%account.length
         ['5D5LpGNEzW9nh3sQvz4d5FUQYuCXUhQMWTqHFZ8DMHRWzio8','123456'],

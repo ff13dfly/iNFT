@@ -1,8 +1,25 @@
+const { REDIS } = require('../lib/redis.js');
+
 const { config } = require('../config_anchor.js');
 const { output } = require('../lib/output.js');
 
 const self={
-
+    getINFT:(obj,block)=>{
+        const raw=obj.args.raw;
+        const NFT={
+            tpl:raw.tpl,
+            from:raw.from,              //template source type
+            orgin:raw.orgin,            //storage website
+            offset:raw.offset,          //mint offset
+            signer:obj.signer,          //the signer of this iNFT
+            block:block,                //on which block
+            result:obj.hash,            //result hash
+            index:obj.index,            //index of the iNFT data on block
+            stamp:obj.stamp,            //block create timestamp
+        };
+        if(obj.target) NFT.target=obj.target;   //optional, target block
+        return NFT;
+    },
 }
 
 module.exports =(map,left,ck)=>{
