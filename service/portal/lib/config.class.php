@@ -1,7 +1,7 @@
 <?php
 class Config extends CORE{
 	
-	private $modlist=array('admin','hack','log','system','user','template','bounty');		//模块列表
+	private $modlist=array('admin','hack','log','system','user','template','bounty','inft');		//模块列表
 	private $_F=array();					//返回的系统变量,计算后的所有结果
 	private $callback=0;					//js回调的放置位置
 	private $smarty=array(

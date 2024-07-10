@@ -30,6 +30,29 @@
 				</li>
 
 				<li class=" ">
+					<a href="#inft" title="" data-toggle="collapse">
+						<em class="icon-magic-wand"></em><span>iNFT</span>
+					</a>
+					<ul class="nav sidebar-subnav collapse" id="inft">
+					<li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'overview'%}active{%/if%}">
+							<a href="?mod=inft&act=overview" title=""><span>Overview</span></a>
+                        </li>
+                        <li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'block'%}active{%/if%}">
+							<a href="?mod=inft&act=block" title=""><span>Block</span></a>
+                        </li>
+                        <li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'account'%}active{%/if%}">
+							<a href="?mod=inft&act=account" title=""><span>Account</span></a>
+                        </li>
+						<li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'history'%}active{%/if%}">
+							<a href="?mod=inft&act=history" title=""><span>History</span></a>
+                        </li>
+						<li class="{%if $F.request.mod eq 'inft' && $F.request.act eq 'template'%}active{%/if%}">
+							<a href="?mod=inft&act=template" title=""><span>History</span></a>
+                        </li>
+                     </ul>
+				</li>
+
+				<li class=" ">
 					<a href="#template" title="" data-toggle="collapse">
 						<em class="icon-magic-wand"></em><span>Template</span>
 					</a>

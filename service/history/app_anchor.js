@@ -8,6 +8,11 @@ const saving=require('./system/cache_anchor');
 //13598
 //Redis data sample: Entry data
 const DEBUG=true;
+const debug_config={
+    start:200,
+    clean:false,            //force to clean all redis cache
+}
+
 const entry = {
     block_stamp: 0,         //which block start to read iNFT
     block_subcribe:0,       //current subcribe start block
@@ -71,7 +76,6 @@ const self = {
         //1. remove all prefix;
         if(arr===undefined){
             const prefix=config.keys.prefix;
-            //console.log(prefix);
             const ps=[];
             for(var k in prefix){
                 ps.push(prefix[k]);
@@ -81,6 +85,8 @@ const self = {
 
         if(arr.length===0) return ck && ck();
         arr.pop();
+
+
         return self.reset(ck,arr);
     },
     getINFT:(obj,block)=>{
@@ -133,10 +139,9 @@ const self = {
         self.read(arr,(map)=>{
             const left=false;
             saving(map,left,()=>{
-                return output(`Cached data saved to Redis`,'success',true);
-
+                output(`Cached data saved to Redis`,'success',true);
                 status.done_right=status.done_right+len;
-                REDIS.setKey(config.keys.entry, JSON.stringify(status), (res,err) => {
+                REDIS.setKey(config.keys.index, JSON.stringify(status), (res,err) => {
                     if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
                     return self.toRight(status,ck);
                 });
@@ -174,7 +179,11 @@ process.on('uncaughtException', (error) => {
 });
 
 //when restart the system, need to run this function
-//return self.reset();
+if(DEBUG && debug_config.clean){
+    output(`Clearn the redis cache successful.`,'error',true);
+    output(`Please close DEBUG mod or set debug_config.clean to false, then restart this robot.`,'error',true);
+    return self.reset();
+} 
 
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag
@@ -199,8 +208,8 @@ self.load((status) => {
 
                     //13598
                     if(DEBUG){
-                        status.done_right=13560;
-                        status.done_left=13560;
+                        status.done_right=debug_config.start;
+                        status.done_left=debug_config.start;
                     }else{
                         status.done_right=block;
                         status.done_left=block;
