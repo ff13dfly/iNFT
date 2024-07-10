@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 
 import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaLightbulb } from "react-icons/fa";
 
+import NetworkList from './network_list';
+
+import Config from "../system/config";
+
 function SettingNetwork(props) {
   const size = {
     row: [12],
@@ -12,8 +16,29 @@ function SettingNetwork(props) {
     right: [4, 8],
   };
 
-  useEffect(() => {
+  let [list, setList] = useState([]);
 
+
+  const self = {
+
+    getNetworks: (map) => {
+      const arr = [];
+      for (var k in map) {
+        const row = map[k];
+        row.network = k;
+        arr.push(row);
+      }
+      return arr;
+    },
+    fresh: () => {
+      const map = Config.get("network");
+      const arr = self.getNetworks(map);
+      setList(arr);
+    },
+  }
+
+  useEffect(() => {
+    self.fresh();
   }, []);
 
   return (
@@ -81,101 +106,8 @@ function SettingNetwork(props) {
         More information here / adding functions
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Network</th>
-              <th>Node</th>
-              <th>Type</th>
-              <th>Default</th>
-              <th>Operation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                W3OS
-              </td>
-              <td>
-                <span><FaLightbulb color={"green"} /></span>
-                <span className='ml-5'>https://api.w3os.net</span>
-              </td>
-              <td>
-                Agent
-              </td>
-              <td>
-                <Form>
-                  <Form.Check // prettier-ignore
-                    type="switch"
-                    label=""
-                    onChange={(ev) => {
-
-                    }}
-                  />
-                </Form>
-              </td>
-              <td>
-                <span className='pointer'><FaSkullCrossbones /></span>
-                <span className='pointer ml-5'><FaSync /></span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Anchor
-              </td>
-              <td>
-                <span><FaLightbulb color={"green"} /></span>
-                <span className='ml-5'>wss://dev2.metanchor.net</span>
-              </td>
-              <td>
-                Orgin
-              </td>
-              <td>
-                <Form>
-                  <Form.Check // prettier-ignore
-                    type="switch"
-                    label=""
-                    onChange={(ev) => {
-
-                    }}
-                  />
-                </Form>
-              </td>
-              <td>
-                <span className='pointer'><FaSkullCrossbones /></span>
-                <span className='pointer ml-5'><FaSync /></span>
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                Bitcoin
-              </td>
-              <td>
-                <span><FaLightbulb color={"red"} /></span>
-                <span className='ml-5'>wss://dev2.metanchor.net</span>
-              </td>
-              <td>
-                Orgin
-              </td>
-              <td>
-                <Form>
-                  <Form.Check // prettier-ignore
-                    type="switch"
-                    label=""
-                    onChange={(ev) => {
-
-                    }}
-                  />
-                </Form>
-              </td>
-              <td>
-                <span className='pointer'><FaSkullCrossbones /></span>
-                <span className='pointer ml-5'><FaSync /></span>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+        <NetworkList  />
+        
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
