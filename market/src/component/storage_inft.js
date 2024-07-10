@@ -5,6 +5,8 @@ import { FaSkullCrossbones, FaSync,FaFileDownload } from "react-icons/fa";
 import tools from "../lib/tools";
 import INDEXED from '../lib/indexed';
 
+import Config from '../system/config';
+
 function StorageINFT(props) {
   const size = {
     row: [12]
@@ -12,7 +14,7 @@ function StorageINFT(props) {
 
   let [list, setList] = useState([]);
 
-  const nameDB = "inftDB";
+  const nameDB =Config.get(["storage","DBname"]);
   const table = "infts";
 
   const self={

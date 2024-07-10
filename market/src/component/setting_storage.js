@@ -1,35 +1,16 @@
-import { Row, Col, Form, Table } from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { Row, Col } from 'react-bootstrap';
+import { useEffect } from "react";
 
 import StorageTemplat from './storage_template';
 import StorageINFT from './storage_inft';
-import INDEXED from '../lib/indexed';
 
 function SettingStorage(props) {
   const size = {
     row: [12],
     head: [4, 8],
-    normal: [9, 3],
-    left: [8, 4],
-    right: [4, 8],
   };
 
-  let [encry, setEncry] = useState(true);
-  let [tpls, setTpls] =useState([]);
-
   useEffect(() => {
-    const nameDB="inftDB";
-    const table="template";
-    INDEXED.checkDB(nameDB, (db) => {
-      //console.log(db);
-      if(INDEXED.checkTable(db.objectStoreNames,table)){
-        INDEXED.pageRows(db,table,(res)=>{
-          if(res!==false){
-            setTpls(res);
-          }
-        });
-      }
-    });
 
   }, []);
 

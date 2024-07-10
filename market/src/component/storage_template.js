@@ -1,7 +1,9 @@
 import { Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaPizzaSlice } from "react-icons/fa";
+
 import INDEXED from '../lib/indexed';
+import Config from '../system/config';
 
 function StorageTemplat(props) {
   const size = {
@@ -9,8 +11,9 @@ function StorageTemplat(props) {
   };
 
   let [list, setList] = useState([]);
-  const nameDB = "inftDB";
-    const table = "template";
+
+  const nameDB =Config.get(["storage","DBname"]);
+  const table = "template";
 
   const self={
     clickRemove:(cid)=>{

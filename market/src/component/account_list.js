@@ -5,6 +5,9 @@ import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icon
 
 import Account from "../system/account";
 
+import INDEXED from '../lib/indexed';
+import Config from '../system/config';
+
 function AccountList(props) {
   const size = {
     row: [12],
@@ -16,7 +19,19 @@ function AccountList(props) {
 
   let [list, setList] = useState([]);
 
+  const nameDB =Config.get(["storage","DBname"]);
+  const table="accounts";
+
   const self = {
+    clickRemove:(addr)=>{
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.removeRow(db,table,"address",addr,(done)=>{
+            if(done) self.fresh();
+          });
+        }
+      });
+    },
     fresh: () => {
       //console.log("force to fresh.");
       Account.list({}, (data) => {
@@ -65,7 +80,9 @@ function AccountList(props) {
                 <td>0</td>
                 <td>Subwallet | Polkadot</td>
                 <td>
-                  <span className='pointer'><FaSkullCrossbones /></span>
+                  <span className='pointer' onClick={(ev)=>{
+                    self.clickRemove(row.address);
+                  }}><FaSkullCrossbones /></span>
                   <span className='pointer ml-5'><FaFileDownload /></span>
                 </td>
               </tr>
