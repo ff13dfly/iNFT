@@ -51,35 +51,35 @@ module.exports =(map,left,ck)=>{
                 });
 
                 //1.2. push to template queue;
-                // working++;
-                // const qu_template=NFT.tpl;
-                // console.log(`Template queue: ${qu_template}`);
-                // REDIS.pushQueue(qu_template,key,(res,err)=>{
-                //     working--;
-                //     if(err) output(`Error:${err}`,'error');
-                //     if(working<1) return ck && ck();
-                // },left);
+                working++;
+                const qu_template=NFT.tpl;
+                console.log(`Template queue: ${qu_template}`);
+                REDIS.pushQueue(qu_template,key,(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,'error');
+                    if(working<1) return ck && ck();
+                },left);
 
                 //1.3. push to history queue;
-                // working++;
-                // const qu_history=`his_${name}`;
-                // const history=[block,row.index,"set",row.signer];
-                // console.log(`History queue: ${qu_history}`);
-                // REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
-                //     working--;
-                //     if(err) output(`Error:${err}`,'error');
-                //     if(working<1) return ck && ck();
-                // },left);
+                working++;
+                const qu_history=`his_${name}`;
+                const history=[block,row.index,"set",row.signer];
+                console.log(`History queue: ${qu_history}`);
+                REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,'error');
+                    if(working<1) return ck && ck();
+                },left);
 
                 //1.4. push to account queue;
-                // working++;
-                // const qu_account=`acc_${row.signer}`;
-                // console.log(`Account queue: ${qu_account}`);
-                // REDIS.pushQueue(qu_account,key,(res,err)=>{
-                //     working--;
-                //     if(err) output(`Error:${err}`,'error');
-                //     if(working<1) return ck && ck();
-                // },left);
+                working++;
+                const qu_account=`acc_${row.signer}`;
+                console.log(`Account queue: ${qu_account}`);
+                REDIS.pushQueue(qu_account,key,(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,'error');
+                    if(working<1) return ck && ck();
+                },left);
 
                 //1.5. push to block queue;
                 working++;

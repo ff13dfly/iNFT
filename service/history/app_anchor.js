@@ -89,23 +89,6 @@ const self = {
 
         return self.reset(ck,arr);
     },
-    getINFT:(obj,block)=>{
-        //console.log(obj);
-        const raw=obj.args.raw;
-        const NFT={
-            tpl:raw.tpl,
-            from:raw.from,              //template source type
-            orgin:raw.orgin,            //storage website
-            offset:raw.offset,          //mint offset
-            signer:obj.signer,          //the signer of this iNFT
-            block:block,                //on which block
-            result:obj.hash,            //result hash
-            index:obj.index,            //index of the iNFT data on block
-            stamp:obj.stamp,            //block create timestamp
-        };
-        if(obj.target) NFT.target=obj.target;   //optional, target block
-        return NFT;
-    },
     read:(bks,ck,map)=>{
         if(map===undefined) map={};
         if(bks.length===0) return ck && ck(map);
@@ -122,6 +105,7 @@ const self = {
     },
     toLeft:(status,ck)=>{
         output(`Caching the history iNFTs.`,'primary',true);
+
 
     },
     toRight:(status,ck)=>{
@@ -141,7 +125,8 @@ const self = {
             saving(map,left,()=>{
                 output(`Cached data saved to Redis`,'success',true);
                 status.done_right=status.done_right+len;
-                REDIS.setKey(config.keys.index, JSON.stringify(status), (res,err) => {
+                //console.log(status);
+                REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                     if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
                     return self.toRight(status,ck);
                 });
@@ -235,7 +220,6 @@ self.load((status) => {
             //2.2. record the recent data.
             if(catchup){
                 //output(`Storage the iNFTs per block.`);
-
 
             }else{
                 //output(`Cache the iNFTs records, when catchup, start to storage.`);

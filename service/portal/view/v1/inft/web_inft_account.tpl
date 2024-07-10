@@ -18,10 +18,10 @@
 			<div class="col-lg-8">
 				<div class="row">
 					<div class="col-lg-4">
-						<input class="form-control" value="" placeholder="Address to search iNFT." />
+						<input id="account_val" class="form-control" value="" placeholder="Address to search iNFT." />
 					</div>
 					<div class="col-lg-3 text-right">
-						<button class="btn btn-md btn-primary">Search</button>
+						<button class="btn btn-md btn-primary" id="account_search">Search</button>
 					</div>
 					<div class="col-lg-5"></div>
 					<div class="col-lg-12" id="block_result">
@@ -71,7 +71,15 @@
 </section>
 
 <script type="text/javascript">
+	$("#account_search").on('click',function(){
+		var acc=$("#account_val").val();
+		if(!acc) return false;
 
+		var cfg = {mod:'inft',act:'account',param:{address:acc}}
+		FF.fn.ajax(cfg, false, function(data) {
+			console.log(data);
+		})
+	});
 </script>
 
 {%include file="{%DEF_VERSION%}/common/web_footer.tpl" title=foo%}
