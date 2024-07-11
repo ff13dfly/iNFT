@@ -9,7 +9,7 @@ const saving=require('./system/cache_anchor');
 //Redis data sample: Entry data
 const DEBUG=true;
 const debug_config={
-    start:4000,
+    start:10000,
     clean:false,            //force to clean all redis cache
 }
 

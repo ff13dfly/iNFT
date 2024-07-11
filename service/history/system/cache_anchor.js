@@ -20,6 +20,15 @@ const self={
         if(obj.target) NFT.target=obj.target;   //optional, target block
         return NFT;
     },
+    getArrayFromMap:(map,left)=>{
+        const arr=[];
+        for(let block in map){
+            const row=map[block];
+            row.block=block;
+            !left?arr.push(row):arr.unshift(row);
+        }
+        return arr;
+    },
 }
 
 module.exports =(map,left,ck)=>{
@@ -28,12 +37,15 @@ module.exports =(map,left,ck)=>{
     const prefix=keys.prefix;
     let done=false;                 //wether callback
 
+    const arr=self.getArrayFromMap(map,left);
+
     let working=0;     //working tag, when it is 0, callback
-    const test=[];
-    for(let block in map){
+
+    for(let k=0;k<arr.length;k++){
+        const data=arr[k];
+        const block=data.block;
         output(`Got block [${block}] list`,"success",true);
-        test.push(block);
-        const data=map[block];
+
         if(data.set===null && data.sell===null && data.buy===null && data.revoke===null ){
             continue;
         }
@@ -151,7 +163,7 @@ module.exports =(map,left,ck)=>{
         }
     }
 
-    output(`Order: ${JSON.stringify(test)}`,"error",true);
+    //output(`Order: ${JSON.stringify(test)}`,"error",true);
     //add interval to callback
     const ttt=setInterval(() => {
         if(working<1 && !done){
