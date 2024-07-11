@@ -16,9 +16,9 @@ $key=INFT_PREFIX_TEMPLATE.$tpl;
 
 $arr=$a->rangeList($tpl,$start,$end);
 
-foreach($arr as $key=>$val){
-    $arr[$key]=json_decode($val,true);
-}
+// foreach($arr as $key=>$val){
+//     $arr[$key]=json_decode($val,true);
+// }
 
 $result['data']=$arr;
 $result['success']=true;

@@ -5,7 +5,7 @@ if(!defined('INFTADM')) exit('error');
 if(!isset($_F['request']['address'])) exit('wrong id');
 $acc=$_F['request']['address'];
 $start=0;
-$end=100;
+$end=20000;
 
 $result=array('success'=>FALSE);
 

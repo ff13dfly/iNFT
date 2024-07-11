@@ -18,7 +18,7 @@ const entry = {
     block_subcribe:0,       //current subcribe start block
     done_left:0,            //left blocknumber cached
     done_right:0,           //right blocknumber cached
-    step: 20,               //block step to read iNFT
+    step: 100,              //block step to read iNFT
 };
 
 //global tags
@@ -108,6 +108,7 @@ const self = {
         if(map===undefined) map={};
         if(bks.length===0) return ck && ck(map);
         const block=bks.pop();
+        //output(`Reading block ${block}`,'success',true);
         AnchorJS.hash(block,(hash)=>{
             AnchorJS.full(hash,block,(list)=>{
                 if(!list || list.error) return self.read(bks,ck,map);
@@ -134,7 +135,6 @@ const self = {
             const left=true;
             if(!tools.empty(map)){
                 saving(map,left,()=>{
-                    output(`Cached data saved to Redis`,'success',true);
                     status.done_left=status.done_left-len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
@@ -168,7 +168,6 @@ const self = {
             const left=false;
             if(!tools.empty(map)){
                 saving(map,left,()=>{
-                    //output(`Cached data saved to Redis`,'success',true);
                     status.done_right=status.done_right+len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
@@ -266,10 +265,9 @@ self.load((status) => {
 
             //2.2. record the recent data.
             if(catchup){
-                //output(`Storage the iNFTs per block.`);
-
+                output(`Storage the iNFTs per block.`);
             }else{
-                //output(`Cache the iNFTs records, when catchup, start to storage.`);
+                output(`Cache the iNFTs records, when catchup, start to storage.`);
             }
         });
     });

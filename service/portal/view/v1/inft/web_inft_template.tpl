@@ -57,14 +57,13 @@
 			var dom=`<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Description</th>
 							<th>Value</th>
 						</tr>
 					</thead>`
 			for(var i=0;i<arr.length;i++){
 				var row=arr[i];
 				dom+=`<tr>
-					<td></td>
+					<td>${row}</td>
 				</tr>`;
 			}
 			$("#"+id).html(dom);
@@ -76,6 +75,7 @@
 
 		var cfg = {mod:'inft',act:'template',param:{template:name}}
 		FF.fn.ajax(cfg, false, function(res) {
+			console.log(res);
 			self.fill(res.data,"template_result")
 		})
 	});

@@ -15,6 +15,7 @@ exports.config = {
             'template':'tpl_',          //template queue prefix
             'account':'acc_',
             'block':'block_',
+            'raw':'ank_',               //raw anchor data
         }
     }
 };
