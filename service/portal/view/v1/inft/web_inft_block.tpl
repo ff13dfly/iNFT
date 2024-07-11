@@ -82,6 +82,7 @@
 
 		var cfg = {mod:'inft',act:'block',param:{block:block}}
 		FF.fn.ajax(cfg, false, function(res) {
+			console.log(res);
 			self.fill(res.data,"block_result")
 		})
 	});

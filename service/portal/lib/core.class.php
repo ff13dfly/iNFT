@@ -360,6 +360,12 @@ class CORE {
 		return $this->cRedis->hget($main,$key);
 	}
 
+	public function lenList($main){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->llen($main);
+	}
+
 	public function pushList($main,$value,$toRight=true){
 		if(!$this->cRedis) $this->redisLink();
 		if(DEBUG)$this->redisCount();

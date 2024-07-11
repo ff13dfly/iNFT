@@ -9,15 +9,15 @@ const saving=require('./system/cache_anchor');
 //Redis data sample: Entry data
 const DEBUG=true;
 const debug_config={
-    start:200,
+    start:4000,
     clean:false,            //force to clean all redis cache
 }
 
 const entry = {
     block_stamp: 0,         //which block start to read iNFT
     block_subcribe:0,       //current subcribe start block
-    done_left:0,        //left blocknumber cached
-    done_right:0,       //right blocknumber cached
+    done_left:0,            //left blocknumber cached
+    done_right:0,           //right blocknumber cached
     step: 20,               //block step to read iNFT
 };
 
@@ -72,6 +72,15 @@ const self = {
             }
         });
     },
+    remove:(key,ck)=>{
+        console.log(key);
+        REDIS.keys(key,(arr)=>{
+            console.log(arr);
+            REDIS.multiRemove(arr,()=>{
+                return  ck && ck();
+            });
+        });
+    },
     reset:(ck,arr)=>{
         //1. remove all prefix;
         if(arr===undefined){
@@ -83,11 +92,17 @@ const self = {
             return self.reset(ck,ps);
         }
 
-        if(arr.length===0) return ck && ck();
-        arr.pop();
-
-
-        return self.reset(ck,arr);
+        if(arr.length===0){
+            return REDIS.remove(config.keys.status,()=>{
+                output(`Clearn the redis cache successful.`,'error',true);
+                output(`Please close DEBUG mod or set debug_config.clean to false, then restart this robot.`,'error',true);
+                return ck && ck();
+            });
+        } 
+        const key=arr.pop();
+        self.remove(key,()=>{
+            return self.reset(ck,arr);
+        });
     },
     read:(bks,ck,map)=>{
         if(map===undefined) map={};
@@ -104,47 +119,83 @@ const self = {
         });
     },
     toLeft:(status,ck)=>{
-        output(`Caching the history iNFTs.`,'primary',true);
-
-
+        output(`Start to cache up history iNFTs, left limit ${status.done_left}`,'primary',true);
+        //return ck && ck();
+        if(status.done_left<1) return ck && ck();    
+        const arr=[];
+        for(let i=0;i<status.step;i++){
+            const p=status.done_left-i;
+            if(p===0) break;
+            arr.push(p);
+        }
+        const len=arr.length;
+        output(`Last left block to cache:${arr[0]}`);
+        self.read(arr,(map)=>{
+            const left=true;
+            if(!tools.empty(map)){
+                saving(map,left,()=>{
+                    output(`Cached data saved to Redis`,'success',true);
+                    status.done_left=status.done_left-len;
+                    REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        return self.toLeft(status,ck);
+                    });
+                });
+            }else{
+                status.done_left=status.done_left-len;
+                REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
+                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    return self.toLeft(status,ck);
+                });
+            }
+        });
     },
     toRight:(status,ck)=>{
-        if(status.done_right===status.block_subcribe) return ck && ck();
+        if(status.done_right >= status.block_subcribe){
+            output(`Catch up to the latest subcribe block, status: ${JSON.stringify(status)}`,'success',true);
+            return ck && ck();
+        } 
         output(`Start to catch up the subcribe block. From ${status.done_right} to ${status.block_subcribe}`,'primary',true);
         const arr=[];
         for(let i=0;i<status.step;i++){
             const p=status.done_right+i;
-            
             if(p>=status.block_subcribe) break;
-            arr.push(status.done_right+i);
+            arr.push(p);
         }
         const len=arr.length;
         output(`Last block to cache:${arr[len-1]}`);
         self.read(arr,(map)=>{
             const left=false;
-            saving(map,left,()=>{
-                output(`Cached data saved to Redis`,'success',true);
+            if(!tools.empty(map)){
+                saving(map,left,()=>{
+                    //output(`Cached data saved to Redis`,'success',true);
+                    status.done_right=status.done_right+len;
+                    REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        return self.toRight(status,ck);
+                    });
+                });
+            }else{
                 status.done_right=status.done_right+len;
-                //console.log(status);
                 REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                     if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
                     return self.toRight(status,ck);
                 });
-            });
+            }
         });
     },
     autoCache:(status)=>{
         output(`Caching the history started, status:${JSON.stringify(status)}`,'primary',true);
         //0.check the done_right data
-        if(status.done_right<status.block_subcribe){
-            self.toRight(status,(final)=>{
-                catchup=true;
-                output(`Catch up the subcribe.`,'primary',true);
-                self.toLeft(final);
+        if(status.done_right>=status.block_subcribe) return self.toLeft(status);
+
+        return self.toRight(status,()=>{
+            catchup=true;
+            output(`Catch up the subcribe.`,'primary',true);
+            self.toLeft(status,()=>{
+                output(`Great! All iNFTs are cached.`,'success',true);
             });
-        }else{
-            self.toLeft(status);
-        }
+        });
     },
 };
 
@@ -164,11 +215,7 @@ process.on('uncaughtException', (error) => {
 });
 
 //when restart the system, need to run this function
-if(DEBUG && debug_config.clean){
-    output(`Clearn the redis cache successful.`,'error',true);
-    output(`Please close DEBUG mod or set debug_config.clean to false, then restart this robot.`,'error',true);
-    return self.reset();
-} 
+if(DEBUG && debug_config.clean) return self.reset();
 
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag
@@ -191,7 +238,6 @@ self.load((status) => {
                     output(`History robot start the first time, stamp it at ${block}`,"primary",true);
                     status.block_stamp=block;
 
-                    //13598
                     if(DEBUG){
                         status.done_right=debug_config.start;
                         status.done_left=debug_config.start;
@@ -199,20 +245,21 @@ self.load((status) => {
                         status.done_right=block;
                         status.done_left=block;
                     }
+
                     status.block_subcribe=block;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        self.autoCache(status); //b. start to run the autocache
                     })
                 }else{
                     output(`History robot recover, status: ${JSON.stringify(status)}`,"primary",true);
                     status.block_subcribe=block;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        
+                        self.autoCache(status); //b. start to run the autocache
                     });
                 }
-
-                //b. start to run the autocache
-                self.autoCache(status);
             }
 
             output(`[${block.toLocaleString()}] ${hash} , ${list.length} iNFTs.`);

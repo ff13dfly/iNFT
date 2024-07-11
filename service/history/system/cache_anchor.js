@@ -24,14 +24,19 @@ const self={
 
 module.exports =(map,left,ck)=>{
     output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
+    //console.log(JSON.stringify(map));
     const keys=config.keys;
     const prefix=keys.prefix;
+    let done=false;                 //wether callback
 
     let working=0;     //working tag, when it is 0, callback
     for(let block in map){
-        console.log(`Got block [${block}] list`);
+        output(`Got block [${block}] list`,"success",true);
         const data=map[block];
-        //if(parseInt(block)===13580) console.log(data);
+
+        if(data.set===null && data.sell===null && data.buy===null && data.revoke===null ){
+            continue;
+        }
 
         if(data.set!==null){
             const list_iNFT=[];
@@ -47,49 +52,64 @@ module.exports =(map,left,ck)=>{
                 REDIS.setKey(key,JSON.stringify(NFT),(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,'error');
-                    if(working<1) return ck && ck();
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
                 });
 
                 //1.2. push to template queue;
                 working++;
                 const qu_template=`tpl_${NFT.tpl}`;
-                console.log(`Template queue: ${qu_template}`);
+                //console.log(`Template queue: ${qu_template}`);
                 REDIS.pushQueue(qu_template,key,(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,'error');
-                    if(working<1) return ck && ck();
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
                 },left);
 
                 //1.3. push to history queue;
                 working++;
                 const qu_history=`his_${name}`;
                 const history=[block,row.index,"set",row.signer];
-                console.log(`History queue: ${qu_history}`);
+                //console.log(`History queue: ${qu_history}`);
                 REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,'error');
-                    if(working<1) return ck && ck();
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
                 },left);
 
                 //1.4. push to account queue;
                 working++;
                 const qu_account=`acc_${row.signer}`;
-                console.log(`Account queue: ${qu_account}`);
+                //console.log(`Account queue: ${qu_account}`);
                 REDIS.pushQueue(qu_account,key,(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,'error');
-                    if(working<1) return ck && ck();
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
                 },left);
 
                 //1.5. push to block queue;
                 working++;
                 const qu_block=`block_${block}`;
                 const block_data=[row.index,name,"set",row.signer];
-                console.log(`History queue: ${qu_block}`);
+                //console.log(`History queue: ${qu_block}`);
                 REDIS.pushQueue(qu_block,JSON.stringify(block_data),(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,'error');
-                    if(working<1) return ck && ck();
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
                 },left);
             }
 
@@ -134,4 +154,12 @@ module.exports =(map,left,ck)=>{
             }
         }
     }
+
+    //add interval to callback
+    const ttt=setInterval(() => {
+        if(working<1 && !done){
+            clearInterval(ttt);
+            return ck && ck();
+        } 
+    }, 100);
 };

@@ -39,6 +39,13 @@ const self={
             return ck && ck(res);
         });
     },
+    multiRemove:(arr,ck)=>{
+        if(arr.length===0) return ck && ck();
+        const k=arr.pop();
+        return self.remove(k,()=>{
+            return self.multiRemove(arr,ck);
+        });
+    },
     pushQueue:(queue,value,ck,left)=>{
         if(left){
             client.lPush(queue,value).then((res,err) => {
