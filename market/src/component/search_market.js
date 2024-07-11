@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 import Network from "../network/router";
 import tools from "../lib/tools";
 
-//Anchor Network 13598
-//Tanssi Network 411191
-
 function SearchMarket(props) {
 
   const size = {
@@ -43,12 +40,9 @@ function SearchMarket(props) {
       const num = parseInt(search);
       if (!isNaN(num)) {
         api.view(num, "blocknumber", (arr) => {
-          console.log(arr);
           for (let i = 0; i < arr.length; i++) {
             arr[i].blocknumber = num;
           }
-          // setData(arr);
-          // setAmount(arr.length);
           if(props.callback) props.callback(arr,network);
           setEnable({
             selector: true,
@@ -71,8 +65,6 @@ function SearchMarket(props) {
             res.blocknumber = dt.block;
 
             if(props.callback) props.callback([res],network);
-            //setData([res]);
-            //setAmount(1);
             setEnable({
               selector: true,
               search: true,

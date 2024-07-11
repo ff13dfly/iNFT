@@ -4,6 +4,8 @@ if(!defined('INFTADM')) exit('error');
 
 if(!isset($_F['request']['address'])) exit('wrong id');
 $acc=$_F['request']['address'];
+$page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
+
 $start=0;
 $end=20000;
 
@@ -12,12 +14,8 @@ $result=array('success'=>FALSE);
 $a->load('inft');
 $a=Inft::getInstance();
 
-$key=INFT_PREFIX_ACCOUNT.$acc;
-
-$arr=$a->rangeList($key,$start,$end);
-
-$result['address']=$acc;
-$result['data']=$arr;
+$result['data']=$a->listINFTbyAddress($acc,$page);
+$result['nav']=$a->nav($acc);
 $result['success']=true;
 
 $a=Config::getInstance();

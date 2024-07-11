@@ -37,6 +37,7 @@ module.exports =(map,left,ck)=>{
     const prefix=keys.prefix;
     let done=false;                 //wether callback
 
+    //!important, the map is order by block number, when push to the queue from the left side, need to change the order
     const arr=self.getArrayFromMap(map,left);
 
     let working=0;     //working tag, when it is 0, callback

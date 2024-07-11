@@ -329,6 +329,12 @@ class CORE {
 		if(DEBUG)$this->redisCount();
 		return $this->cRedis->lrange($main,$start,$end);
 	}
+
+	public function lenList($main){
+		if(!$this->cRedis) $this->redisLink();
+		if(DEBUG)$this->redisCount();
+		return $this->cRedis->llen($main);
+	}
 		
 	/*redis服务器的连接*/
 	private function redisLink(){

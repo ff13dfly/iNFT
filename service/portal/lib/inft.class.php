@@ -8,4 +8,39 @@
 		public function getStep(){
 			return INFT_PAGE_STEP;
 		}
+
+		public function nav($address){
+			$key=INFT_PREFIX_ACCOUNT.$address;
+			$sum=$this->lenList($key);
+			$step=$this->getStep();
+			return array(
+				"total"=> $sum,
+				"page" => ceil($sum/$step),
+				"step" => $step,
+			);
+		}
+
+		public function listINFTbyAddress($address,$page=0){
+			$queue=INFT_PREFIX_ACCOUNT.$address;
+
+			$step=$this->getStep();
+			$start=$step*$page;
+			$end=$start+$step;
+			$arr=$this->rangeList($queue,$start,$end);
+
+			$result=array();
+			foreach($arr as $k=>$v){
+				$tmp=explode("_",$v);
+				$block=array_pop($tmp);		//get the last element as block number
+
+				array_shift($tmp);			//remove the prefix
+				$name=implode("_",$tmp);
+				$result[]=array(
+					"name"	=>	$name,
+					"block" => (int)$block,
+				);
+			}
+
+			return $result;
+		}
 	}

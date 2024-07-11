@@ -1,6 +1,6 @@
 <?php
 define('INFT_PAGE_COUNT',	20);
-define('INFT_PAGE_STEP',	10);
+define('INFT_PAGE_STEP',	30);
 
 define('INFT_STATUS',"current_index");
 //define('INFT_STATUS',"block_13598");

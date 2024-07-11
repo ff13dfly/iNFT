@@ -53,19 +53,25 @@
 
 <script type="text/javascript">
 	var self={
-		fill:function(arr,id){
+		nav:function(nav){
+			return JSON.stringify(nav);
+		},
+		fill:function(arr,id,more){
 			var dom=`<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Name</th>
+							<th>Block</th>
 						</tr>
 					</thead>`
 			for(var i=0;i<arr.length;i++){
 				var row=arr[i];
 				dom+=`<tr>
-					<td>${row}</td>
+					<td>${row.name}</td>
+					<td>${row.block}</td>
 				</tr>`;
 			}
+			if(more!==undefined) dom+=more;
 			$("#"+id).html(dom);
 		},
 	}
@@ -76,7 +82,9 @@
 
 		var cfg = {mod:'inft',act:'account',param:{address:acc}}
 		FF.fn.ajax(cfg, false, function(res) {
-			self.fill(res.data,"account_result");
+			console.log(res);
+			var more=self.nav(res.nav);
+			self.fill(res.data,"account_result",more);
 		})
 	});
 </script>

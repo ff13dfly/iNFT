@@ -120,8 +120,10 @@ const config={
             template:true,
             enable:true,
             nodes:[
+                "ws://localhost:9944",
                 "wss://dev2.metanchor.net",
             ],
+            interval:3000,
             wallet:[
                 "subwallet"
             ],
@@ -135,6 +137,7 @@ const config={
             nodes:[
                 "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
             ],
+            interval:12000,
             wallet:[
                 {
                     name:"subwallet",
@@ -150,6 +153,7 @@ const config={
             nodes:[
                 "",
             ],
+            interval:3000,
             wallet:[
                 "subwallet"
             ],
@@ -162,6 +166,7 @@ const config={
             nodes:[
                 "",
             ],
+            interval:3000,
             wallet:[
                 "phantom"
             ],
@@ -174,6 +179,7 @@ const config={
             nodes:[     //check network type by node URL 
                 "petra",
             ],
+            interval:3000,
         },
         sui:{
             coin:"SUI",
@@ -183,6 +189,7 @@ const config={
             nodes:[
                 "sui",
             ],
+            interval:3000,
         },
         bitcoin:{
             coin:"BTC",
@@ -192,6 +199,7 @@ const config={
             nodes:[
                 "",
             ],
+            interval:240000,
         },
         ethereum:{
             coin:"ETH",
@@ -201,6 +209,7 @@ const config={
             nodes:[
                 "metamask",
             ],
+            interval:60000,
         },
     },
     version:202401,             //setting version
