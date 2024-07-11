@@ -18,33 +18,14 @@
 			<div class="col-lg-8">
 				<div class="row">
 					<div class="col-lg-4">
-						<input class="form-control" value="" placeholder="input block to search" />
+						<input class="form-control" id="inft_block" value="" placeholder="input block to search" />
 					</div>
 					<div class="col-lg-3 text-right">
-						<button class="btn btn-md btn-primary">Search</button>
+						<button class="btn btn-md btn-primary" id="search_block">Search</button>
 					</div>
 					<div class="col-lg-5"></div>
 					<div class="col-lg-12" id="block_result">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Hash</th>
-									<th>Template</th>
-									<th>Stamp</th>
-									<th>Network</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ii_33</td>
-									<td>0xadafd</td>
-									<td>cid</td>
-									<td>2024-07-08 20:23:12</td>
-									<td>anchor</td>
-								</tr>
-							</tbody>
-						</table>
+						<h4>iNFT list on single block.</h4>
 					</div>
 				</div>
 			</div>
@@ -71,7 +52,39 @@
 </section>
 
 <script type="text/javascript">
+	var self={
+		fill:function(arr,id){
+			var dom=`<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Order</th>
+							<th>Name</th>
+							<th>Action</th>
+							<th>Owner</th>
+						</tr>
+					</thead>`
+			for(var i=0;i<arr.length;i++){
+				var row=arr[i];
+				dom+=`<tr>
+					<td>${row[0]}</td>
+					<td>${row[1]}</td>
+					<td>${row[2]}</td>
+					<td>${row[3]}</td>
+				</tr>`;
+			}
+			$("#"+id).html(dom);
+		},
+	}
 
+	$("#search_block").on('click',function(){
+		var block=$("#inft_block").val();
+		if(!block) return false;
+
+		var cfg = {mod:'inft',act:'block',param:{block:block}}
+		FF.fn.ajax(cfg, false, function(res) {
+			self.fill(res.data,"block_result")
+		})
+	});
 </script>
 
 {%include file="{%DEF_VERSION%}/common/web_footer.tpl" title=foo%}

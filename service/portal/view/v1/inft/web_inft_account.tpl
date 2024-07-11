@@ -24,27 +24,8 @@
 						<button class="btn btn-md btn-primary" id="account_search">Search</button>
 					</div>
 					<div class="col-lg-5"></div>
-					<div class="col-lg-12" id="block_result">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Hash</th>
-									<th>Template</th>
-									<th>Stamp</th>
-									<th>Network</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ii_33</td>
-									<td>0xadafd</td>
-									<td>cid</td>
-									<td>2024-07-08 20:23:12</td>
-									<td>anchor</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="col-lg-12" id="account_result">
+						<h4>iNFT list of account</h4>
 					</div>
 				</div>
 			</div>
@@ -71,13 +52,31 @@
 </section>
 
 <script type="text/javascript">
+	var self={
+		fill:function(arr,id){
+			var dom=`<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Name</th>
+						</tr>
+					</thead>`
+			for(var i=0;i<arr.length;i++){
+				var row=arr[i];
+				dom+=`<tr>
+					<td>${row}</td>
+				</tr>`;
+			}
+			$("#"+id).html(dom);
+		},
+	}
+
 	$("#account_search").on('click',function(){
 		var acc=$("#account_val").val();
 		if(!acc) return false;
 
 		var cfg = {mod:'inft',act:'account',param:{address:acc}}
-		FF.fn.ajax(cfg, false, function(data) {
-			console.log(data);
+		FF.fn.ajax(cfg, false, function(res) {
+			self.fill(res.data,"account_result");
 		})
 	});
 </script>

@@ -18,33 +18,14 @@
 			<div class="col-lg-8">
 				<div class="row">
 					<div class="col-lg-4">
-						<input class="form-control" value="" placeholder="Search iNFT by template ..." />
+						<input class="form-control" id="inft_template" value="" placeholder="Search iNFT by template ..." />
 					</div>
 					<div class="col-lg-3 text-right">
-						<button class="btn btn-md btn-primary">Search</button>
+						<button class="btn btn-md btn-primary" id="search_template">Search</button>
 					</div>
 					<div class="col-lg-5"></div>
-					<div class="col-lg-12" id="block_result">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Hash</th>
-									<th>Template</th>
-									<th>Stamp</th>
-									<th>Network</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ii_33</td>
-									<td>0xadafd</td>
-									<td>cid</td>
-									<td>2024-07-08 20:23:12</td>
-									<td>anchor</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="col-lg-12" id="template_result">
+						<h4>Template search result.</h4>
 					</div>
 				</div>
 			</div>
@@ -71,7 +52,33 @@
 </section>
 
 <script type="text/javascript">
+	var self={
+		fill:function(arr,id){
+			var dom=`<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Description</th>
+							<th>Value</th>
+						</tr>
+					</thead>`
+			for(var i=0;i<arr.length;i++){
+				var row=arr[i];
+				dom+=`<tr>
+					<td></td>
+				</tr>`;
+			}
+			$("#"+id).html(dom);
+		},
+	}
+	$("#search_template").on('click',function(){
+		var name=$("#inft_template").val();
+		if(!name) return false;
 
+		var cfg = {mod:'inft',act:'template',param:{template:name}}
+		FF.fn.ajax(cfg, false, function(res) {
+			self.fill(res.data,"template_result")
+		})
+	});
 </script>
 
 {%include file="{%DEF_VERSION%}/common/web_footer.tpl" title=foo%}

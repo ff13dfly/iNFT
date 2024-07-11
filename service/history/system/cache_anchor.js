@@ -52,7 +52,7 @@ module.exports =(map,left,ck)=>{
 
                 //1.2. push to template queue;
                 working++;
-                const qu_template=NFT.tpl;
+                const qu_template=`tpl_${NFT.tpl}`;
                 console.log(`Template queue: ${qu_template}`);
                 REDIS.pushQueue(qu_template,key,(res,err)=>{
                     working--;
