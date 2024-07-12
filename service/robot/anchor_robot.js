@@ -6,8 +6,6 @@ const tools = require('./lib/tools.js');
 const IO = require('./lib/file.js');
 const Anchor = require('./network/anchor.js');
 
-let round=0;
-
 const overview={
     try:0,
     success:0,
