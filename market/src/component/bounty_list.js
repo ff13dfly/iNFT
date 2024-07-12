@@ -21,14 +21,14 @@ function BountyList(props) {
     },
     prize:[      //prize of bounty
       {
-        level:0,
-        reward:1,
-        coin:"BTC",
+        place:0,        // the level of bounty
+        bonus:1,          //bonus amount of bounty
+        amount:10,        //how many winner
+        coin:"ETH",
         type:1,             //[1.digtal coins; 2.phisical object;]
         desc:"The first place of winner",
         target:[
-          {hash:""},
-          {series:""},
+          {series:0,bonus:100,amount:10},
         ],          
       },
     ],                                           
