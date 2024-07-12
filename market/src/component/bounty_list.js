@@ -26,7 +26,10 @@ function BountyList(props) {
         coin:"BTC",
         type:1,             //[1.digtal coins; 2.phisical object;]
         desc:"The first place of winner",
-        target:[],          //
+        target:[
+          {hash:""},
+          {series:""},
+        ],          
       },
     ],                                           
   }
