@@ -1,7 +1,7 @@
 import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-function ListBounty(props) {
+function BountyList(props) {
   const size = {
     row: [12],
     grid: [4, 5, 3],
@@ -9,6 +9,27 @@ function ListBounty(props) {
 
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
+
+  //bounty will be written on chain
+  const format={
+    title:"Bounty of Happy PEPE",
+    desc:"Description of bounty.",
+    publisher:"5DhSQwEKYr5rwcEHagj4APs8VZWbz96ppkWoacGQKDfpsfQh",
+    period:{        //bounty valid period
+      start:0,
+      end:0,
+    },
+    prize:[      //prize of bounty
+      {
+        level:0,
+        reward:1,
+        coin:"BTC",
+        type:1,             //[1.digtal coins; 2.phisical object;]
+        desc:"The first place of winner",
+        target:[],          //
+      },
+    ],                                           
+  }
 
   const self = {
     getHolder: (n) => {
@@ -88,4 +109,4 @@ function ListBounty(props) {
     </Row>
   );
 }
-export default ListBounty;
+export default BountyList;

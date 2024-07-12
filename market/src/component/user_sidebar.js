@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaHome,FaUserFriends,FaCat } from "react-icons/fa";
+import { FaHome,FaUserFriends,FaCat,FaBitcoin } from "react-icons/fa";
 
 function UserSidebar(props) {
   const size = {
@@ -20,23 +20,26 @@ function UserSidebar(props) {
     {
       name: "basic",
       icon: <FaHome size={20}  className='mr-5' color={self.getColor("basic")}/>,
-      param: ["basic"],
       title: "Basic",
       desc:"",
     },
     {
+      name: "inft",
+      icon: <FaCat size={20}  className='mr-5' color={self.getColor("inft")}/>,
+      title: "My iNFTs",
+    },
+    {
+      name: "bounty",
+      icon: <FaBitcoin size={20}  className='mr-5' color={self.getColor("bounty")}/>,
+      title: "Bounty",
+      desc:"Manage your bounty",
+    },
+    {
       name: "account",
       icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
-      param: ["account"],
       title: "Accounts",
       desc:"Manage your accounts",
     },
-    {
-      name: "inft",
-      icon: <FaCat size={20}  className='mr-5' color={self.getColor("inft")}/>,
-      param: ["inft"],
-      title: "List",
-    }
   ];
 
   useEffect(() => {

@@ -20,33 +20,28 @@ function SettingSidebar(props) {
     {
       name: "basic",
       icon: <FaHome size={20}  className='mr-5' color={self.getColor("basic")}/>,
-      param: ["basic"],
       title: "Basic",
       desc:"",
     },
     // {
     //   name: "account",
     //   icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
-    //   param: ["account"],
     //   title: "Account",
     //   desc:"Manage your accounts",
     // },
     {
       name: "network",
       icon: <FaGlobe size={20}  className='mr-5' color={self.getColor("network")}/>,
-      param: ["network"],
       title: "Network",
     },
     {
       name: "storage",
       icon: <FaDatabase size={20}  className='mr-5' color={self.getColor("storage")}/>,
-      param: ["storage"],
       title: "Storage",
     },
     {
       name: "sample",
       icon: <FaCat size={20}  className='mr-5' color={self.getColor("sample")}/>,
-      param: ["sample"],
       title: "Sample",
     }
   ];

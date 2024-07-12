@@ -62,6 +62,9 @@ function Header(props) {
             <Nav.Link onClick={(ev) => { props.link("market") }} >
               <h5 className={props.active === "market" ? "text-warning" : ""}>Market</h5>
             </Nav.Link>
+            <Nav.Link onClick={(ev) => { props.link("bounty") }} >
+              <h5 className={props.active === "bounty" ? "text-warning" : ""}>Bounty</h5>
+            </Nav.Link>
             {/* <Nav.Link onClick={(ev) => { props.link("explorer") }}>
               <h5 className={props.active === "explorer" ? "text-warning" : ""}>Explorer</h5>
             </Nav.Link> */}

@@ -1,4 +1,4 @@
-import { Container} from 'react-bootstrap';
+import { Container,Modal} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Header from "./component/common_header";
@@ -21,11 +21,16 @@ import Preview from "./entry/preview";
 import Detail from './entry/detail';
 
 function App() {
+
   //parameters of router
   let [content, setContent]=useState();
   let [target, setTarget]=useState("home");
   let [extend, setExtend ]=useState("");
 
+  let [show,setShow]=useState(false);
+  let [title, setTitle]=useState("");
+  let [dialogContent,setDialog]=useState("");
+  
 
   const pattern={
     view:["name"],
@@ -66,7 +71,12 @@ function App() {
       }
       window.history.replaceState({}, "", url); //update the url
       setTarget(name);    //set new router
-    }
+    },
+    dialog: (ctx, title) => {
+      setTitle(title);
+      setDialog(ctx);
+      setShow(true);
+    },
   }
 
   //all routers here
@@ -81,7 +91,7 @@ function App() {
     "detail":<Detail extend={extend} link={self.linkTo}/>,
     "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend} link={self.linkTo}/>,
-    "bounty":<Bounty extend={extend}/>,
+    "bounty":<Bounty extend={extend} link={self.linkTo} dialog={self.dialog}/>,
     "setting":<Setting extend={extend} link={self.linkTo}/>,
     "user":<User extend={extend} link={self.linkTo}/>,
     "404":<InvalidPage />,
@@ -105,6 +115,23 @@ function App() {
       <Header link={self.linkTo} active={!alias[target]?target:alias[target]}/>
       <Container>{content}</Container>
       <Footer link={self.linkTo} />
+
+      <Modal dialogClassName="modal-minter"
+        show={show}
+        size="lg"
+        backdrop="static"
+        onHide={(ev) => {
+          setShow(false);
+        }}
+        centered={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {dialogContent}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

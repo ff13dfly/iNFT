@@ -5,6 +5,7 @@ import UserBasic from "../component/user_basic";
 import UserSidebar from "../component/user_sidebar";
 import UserINFT from "../component/user_inft";
 import UserAccount from "../component/user_account";
+import UserBounty from "../component/user_bounty";
 import User404 from "../component/user_404";
 
 function User(props) {
@@ -16,6 +17,7 @@ function User(props) {
         "basic":<UserBasic />,
         "inft":<UserINFT />,
         "account":<UserAccount />,
+        "bounty":<UserBounty />,
         "404":<User404 />,
     }
 

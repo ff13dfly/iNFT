@@ -22,6 +22,12 @@ const config={
             startup:false,          //wether check the system when startup
         }
     },
+    bounty:{
+        approver:{                  //accounts to accept bounty coins
+            anchor:"",
+            tanssi:"",
+        },
+    },
     account:{
         password:{                  //password to encry the private key, address --> password
 
