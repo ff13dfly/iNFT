@@ -29,6 +29,13 @@ function BountySubmit(props) {
   //step enable
   let [ready, setReady] = useState(false);
   let [pay, setPay] = useState(false);
+  
+  //UI improvement
+  let [tabs, setTabs]=useState({
+    "step_1":<span><strong className='text-secondary'>Step 1 : </strong><strong>Template</strong></span>,
+    "step_2":<span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
+    "step_3":<span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
+  })
 
   //sub component params
   //let [series, setSeries] = useState([]);
@@ -48,6 +55,24 @@ function BountySubmit(props) {
     },
     changeTemplate: (ev) => {
       setTemplate(ev.target.value);
+    },
+    changeTabTitle:(active)=>{
+      const ts={
+        step_1:{index:1,title:"Template"},
+        step_2:{index:2,title:"Bonus"},
+        step_3:{index:2,title:"Payment"},
+      }
+
+      const ntabs={}
+      for(var k in ts){
+        const row=ts[k];
+        if(k===active){
+          ntabs[k]=<span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-warning'>{row.title}</strong></span>
+        }else{
+          ntabs[k]=<span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-secondary'>{row.title}</strong></span>
+        }
+      }
+      setTabs(ntabs);
     },
     clickLoad: (ev) => {
       TPL.view(template, (dt) => {
@@ -90,7 +115,7 @@ function BountySubmit(props) {
   }
 
   useEffect(() => {
-    
+    self.changeTabTitle("step_1");
   }, []);
 
   return (
@@ -98,8 +123,12 @@ function BountySubmit(props) {
       defaultActiveKey="step_1"
       id="uncontrolled-tab-example"
       className="mb-3"
+      fill
+      onSelect={(active)=>{
+        self.changeTabTitle(active);
+      }}
     >
-      <Tab eventKey="step_1" title="Step 1">
+      <Tab eventKey="step_1" title={tabs.step_1}>
         <Row>
           <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Select a template for bounty which is storage on IPFS.
@@ -121,7 +150,7 @@ function BountySubmit(props) {
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="step_2" title="Step 2">
+      <Tab eventKey="step_2" title={tabs.step_2}>
         <Row>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
@@ -190,7 +219,7 @@ function BountySubmit(props) {
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="step_3" title="Step 3">
+      <Tab eventKey="step_3" title={tabs.step_3}>
         <Row>
           <Col hidden={pay} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
@@ -208,7 +237,6 @@ function BountySubmit(props) {
         </Row>
       </Tab>
     </Tabs>
-
   );
 }
 export default BountySubmit;
