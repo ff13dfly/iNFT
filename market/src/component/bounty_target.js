@@ -3,14 +3,11 @@ import { useEffect, useState } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
 
 import tools from "../lib/tools";
+import Config from "../system/config";
 
-let series= null;
 function BountyTarget(props) {
   const size = {
     row: [12],
-    half: [6],
-    step: [2, 10],
-    head: [4, 8],
     normal: [9, 3],
     bonus: [3, 4, 4, 1],
   };
@@ -19,8 +16,8 @@ function BountyTarget(props) {
   
   const single = {
     series: 0,
-    bonus: 100,
-    amount: 10
+    bonus: 10,
+    amount: 1
   };
 
   const self = {
@@ -29,26 +26,60 @@ function BountyTarget(props) {
       nlist.push(tools.clone(single));
       setList(nlist);
     },
+    clickReset:()=>{
+      self.fresh();
+    },
     clickRemove: (index) => {
       const nlist = [];
       for (let i = 0; i < list.length; i++) {
         if (i !== index) nlist.push(list[i]);
       }
       setList(nlist);
+      self.update(nlist);
+    },
+    changeBonus:(ev,index)=>{
+      list[index].bonus=parseInt(ev.target.value);
+      self.update(list);
+    },
+    changeAmount:(ev,index)=>{
+      list[index].amount=parseInt(ev.target.value);
+      self.update(list);
+    },
+    update:(data)=>{
+      const dt=tools.clone(data)
+      setList(dt);
+      if(props.callback) props.callback(data);
+    },
+    fresh:()=>{
+      if(!props.data || !props.data.series) return false;
+      const nlist=[];
+      for(let i=0;i<props.data.series.length;i++){
+        const se=props.data.series[i];
+        const row=tools.clone(single);
+        row.series=i;
+        row.thumb=se.thumb[0];
+        row.name=se.name;
+        nlist.push(row);
+      }
+      setList(nlist);
+      self.update(nlist);
     },
   }
 
   useEffect(() => {
-    if(props.data && props.data.series){
-      console.log(props.data.series);
-      series = props.data.series;
-    }
+    self.fresh();
   }, [props.data]);
 
   return (
     <Row>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <hr />
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr/></Col>
+      <Col className='pt-1' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+        Select the series to bonus.
+      </Col>
+      <Col className='text-end pt-1' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+        <button className='btn btn-sm btn-danger' onClick={(ev) => {
+          self.clickReset();
+        }}>Reset</button>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
 
@@ -62,38 +93,27 @@ function BountyTarget(props) {
         {list.map((row, index) => (
           <Row key={index} className='pt-1'>
             <Col md={size.bonus[0]} lg={size.bonus[0]} xl={size.bonus[0]} xxl={size.bonus[0]} >
-              <select className='form-control' onChange={(ev) => {
-
-              }}>
-                {series!==null && series.map((ss, order) => (
-                  <option key={order} value={order}>#{order} {ss.name}</option>
-                ))}
-              </select>
+              <img className='template_icon' src={row.thumb} alt={row.name} /> #{row.series} {row.name}
             </Col>
             <Col md={size.bonus[1]} lg={size.bonus[1]} xl={size.bonus[1]} xxl={size.bonus[1]} >
               <input className='form-control' type="number" value={row.bonus} onChange={(ev) => {
-
+                self.changeBonus(ev,index);
               }} />
             </Col>
             <Col md={size.bonus[2]} lg={size.bonus[2]} xl={size.bonus[2]} xxl={size.bonus[2]} >
               <input className='form-control' type="number" value={row.amount} onChange={(ev) => {
-
+                self.changeAmount(ev,index);
               }} />
             </Col>
-            <Col md={size.bonus[3]} lg={size.bonus[3]} xl={size.bonus[3]} xxl={size.bonus[3]} >
+            <Col className='text-end' md={size.bonus[3]} lg={size.bonus[3]} xl={size.bonus[3]} xxl={size.bonus[3]} >
               <button className='btn btn-sm btn-danger' onClick={(ev) => {
                 self.clickRemove(index);
               }}><FaSkullCrossbones /></button>
             </Col>
           </Row>
         ))}
-
       </Col>
-      <Col className='text-center pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <button className='btn btn-md btn-primary' onClick={(ev) => {
-          self.clickAdd();
-        }}>+ bounty target</button>
-      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr/></Col>
     </Row>
   );
 }

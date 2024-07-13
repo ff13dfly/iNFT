@@ -1,5 +1,6 @@
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 import { useEffect, useState } from "react";
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
@@ -9,37 +10,41 @@ import TPL from "../system/tpl";
 function BountySubmit(props) {
   const size = {
     row: [12],
-    half: [6],
+    half: [5],
     step: [2, 10],
     head: [4, 8],
     normal: [9, 3],
   };
 
   //submission details
+  let [template, setTemplate] = useState("");
   let [title, setTitle] = useState("");
+  let [desc, setDesc] = useState("");
   let [start, setStart] = useState(0);
   let [end, setEnd] = useState(0);
-  let [template, setTemplate] = useState("");
+  let [bonus, setBonus]=useState([]);
+  let [publisher,setPublisher]=useState("");
+  let [coin, setCoin]=useState("ank");            //the coin type for bounty
 
   //step enable
   let [ready, setReady] = useState(false);
   let [pay, setPay] = useState(false);
 
   //sub component params
-  let [series, setSeries] = useState([]);
+  //let [series, setSeries] = useState([]);
   let [data, setData] = useState({});
 
-  //let [active, setActive]=useState("step_1");
+  
 
   const self = {
     changeTitle: (ev) => {
       setTitle(ev.target.value);
     },
     changeStart: (ev) => {
-      setStart(ev.target.value);
+      setStart(parseInt(ev.target.value));
     },
     changeEnd: (ev) => {
-      setEnd(ev.target.value);
+      setEnd(parseInt(ev.target.value));
     },
     changeTemplate: (ev) => {
       setTemplate(ev.target.value);
@@ -48,9 +53,40 @@ function BountySubmit(props) {
       TPL.view(template, (dt) => {
         setData(dt);
         setReady(true);
-        setSeries(dt.series);
       });
     },
+    clickSubmit:()=>{
+      const raw=self.getBountyData();
+      const protocol={fmt:"json",type:"data",tpl:"bounty"};
+      console.log(raw,protocol);
+    },
+    callbackBonus:(list)=>{
+      const arr=[];
+      for(let i=0;i<list.length;i++){
+        const row=list[i];
+        delete row.thumb;
+        delete row.name;
+        arr.push(row);
+      }
+      setBonus(arr);
+    },
+    getBountyData:()=>{
+      return {
+        title:title,
+        desc:desc,
+        publisher:publisher,
+        coin:coin,
+        template:{
+          cid:template,
+          orgin:"web3.storage",
+        },
+        period:{
+          start:start,
+          end:end,
+        },
+        bonus:bonus
+      }
+    }
   }
 
   useEffect(() => {
@@ -58,7 +94,6 @@ function BountySubmit(props) {
   }, []);
 
   return (
-
     <Tabs
       defaultActiveKey="step_1"
       id="uncontrolled-tab-example"
@@ -66,10 +101,7 @@ function BountySubmit(props) {
     >
       <Tab eventKey="step_1" title="Step 1">
         <Row>
-          <Col md={size.step[0]} lg={size.step[0]} xl={size.step[0]} xxl={size.step[0]}>
-            <h4>Step 1</h4>
-          </Col>
-          <Col md={size.step[1]} lg={size.step[1]} xl={size.step[1]} xxl={size.step[1]}>
+          <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Select a template for bounty which is storage on IPFS.
           </Col>
 
@@ -93,25 +125,27 @@ function BountySubmit(props) {
         <Row>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
-              <Col md={size.step[0]} lg={size.step[0]} xl={size.step[0]} xxl={size.step[0]}>
-                <h4>Step 2</h4>
-              </Col>
-              <Col md={size.step[1]} lg={size.step[1]} xl={size.step[1]} xxl={size.step[1]}>
+              <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Setup the details about the bounty and write on chain.
               </Col>
 
-              <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 <small>The title of bounty</small>
                 <input type="text" className='form-control' placeholder='Input the title of bounty'
                   value={title} onChange={(ev) => {
                     self.changeTitle(ev);
                   }} />
               </Col>
+              <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+              </Col>
 
-              <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <small>The title of bounty</small>
+              <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+                <small>Details about the bounty.</small>
                 <textarea className='form-control' cols={4}></textarea>
               </Col>
+              <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+              </Col>
+
 
               <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
                 <small>Bounty start at block</small>
@@ -134,7 +168,9 @@ function BountySubmit(props) {
               </Col>
 
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget series={series} callback={() => { }} />
+                <BountyTarget data={data} callback={(dt) => {
+                  self.callbackBonus(dt);
+                }} />
               </Col>
 
 
@@ -142,7 +178,9 @@ function BountySubmit(props) {
 
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button className='btn btn-md btn-primary'>Submit</button>
+                <button className='btn btn-md btn-primary' onClick={(ev)=>{
+                  self.clickSubmit();
+                }}>Submit</button>
               </Col>
 
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -156,10 +194,7 @@ function BountySubmit(props) {
         <Row>
           <Col hidden={pay} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
-              <Col md={size.step[0]} lg={size.step[0]} xl={size.step[0]} xxl={size.step[0]}>
-                <h4>Step 3</h4>
-              </Col>
-              <Col md={size.step[1]} lg={size.step[1]} xl={size.step[1]} xxl={size.step[1]}>
+              <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Pay the coins to target account.
               </Col>
 

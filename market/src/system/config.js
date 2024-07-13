@@ -121,25 +121,34 @@ const config={
     },
     network:{
         anchor:{
-            coin:"",
-            minting:true,
-            template:true,
+            coin:"MEKK",
             enable:true,
+            support:{
+                minting:true,
+                template:true,
+                bonus:true,
+            },
             nodes:[
                 "ws://localhost:9944",
                 "wss://dev2.metanchor.net",
             ],
             interval:3000,
             wallet:[
-                "subwallet"
+                {
+                    name:"subwallet",
+                    icon:"",
+                }
             ],
             test:{},
         },
         tanssi:{
-            coin:"",
-            minting:true,
-            template:false,
+            coin:"INFT",
             enable:true,
+            support:{
+                minting:true,
+                template:true,
+                bonus:false,
+            },
             nodes:[
                 "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network"
             ],
@@ -153,67 +162,103 @@ const config={
         },
         polkadot:{
             coin:"DOT",
-            minting:false,
-            template:false,
             enable:false,
+            support:{
+                minting:false,
+                template:false,
+                bonus:true,
+            },
             nodes:[
                 "",
             ],
             interval:3000,
             wallet:[
-                "subwallet"
+                {
+                    name:"subwallet",
+                    icon:"",
+                }
             ],
         },
         solana:{
             coin:"SOL",
-            minting:true,
-            template:true,
             enable:true,
+            support:{
+                minting:true,
+                template:true,
+                bonus:true,
+            },
             nodes:[
                 "",
             ],
             interval:3000,
             wallet:[
-                "phantom"
+                {
+                    name:"phantom",
+                    icon:"",
+                }
             ],
         },
         aptos:{
             coin:"APTOS",
-            minting:true,
-            template:true,
-            enable:true,
+            enable:false,
+            support:{
+                minting:true,
+                template:true,
+                bonus:true,
+            },
             nodes:[     //check network type by node URL 
-                "petra",
+                {
+                    name:"petra",
+                    icon:"",
+                }
             ],
             interval:3000,
         },
         sui:{
             coin:"SUI",
-            minting:true,
-            template:true,
             enable:false,
+            support:{
+                minting:true,
+                template:true,
+                bonus:true,
+            },
             nodes:[
-                "sui",
+                {
+                    name:"sui",
+                    icon:"",
+                }
             ],
             interval:3000,
         },
         bitcoin:{
             coin:"BTC",
-            minting:false,
-            template:false,
             enable:false,
+            support:{
+                minting:false,
+                template:false,
+                bonus:true,
+            },
             nodes:[
-                "",
+                {
+                    name:"",
+                    icon:"",
+                }
             ],
             interval:240000,
         },
         ethereum:{
             coin:"ETH",
-            minting:false,
-            template:false,
             enable:false,
+            support:{
+                minting:false,
+                template:false,
+                bonus:true,
+            },
             nodes:[
-                "metamask",
+                {
+                    name:"metamask",
+                    icon:"",
+                }
             ],
             interval:60000,
         },
