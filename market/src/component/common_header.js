@@ -8,7 +8,6 @@ import RUNTIME from '../system/runtime';
 import { FaCog } from "react-icons/fa";
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
-
 function Header(props) {
 
   let [login, setLogin]=useState("Login");

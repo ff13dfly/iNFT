@@ -6,6 +6,10 @@ import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
 
 import TPL from "../system/tpl";
+import RUNTIME from '../system/runtime';
+import Config from '../system/config';
+
+import tools from "../lib/tools";
 
 function BountySubmit(props) {
   const size = {
@@ -13,7 +17,7 @@ function BountySubmit(props) {
     half: [5],
     step: [2, 10],
     head: [4, 8],
-    normal: [9, 3],
+    normal: [8, 4],
   };
 
   //submission details
@@ -23,9 +27,8 @@ function BountySubmit(props) {
   let [start, setStart] = useState(0);
   let [end, setEnd] = useState(0);
   let [bonus, setBonus]=useState([]);
-  let [publisher,setPublisher]=useState("");
   let [coin, setCoin]=useState("ank");            //the coin type for bounty
-
+  
   //step enable
   let [ready, setReady] = useState(false);
   let [pay, setPay] = useState(false);
@@ -36,12 +39,11 @@ function BountySubmit(props) {
     "step_2":<span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
     "step_3":<span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
   })
+  let [coins,setCoins]=useState([]);
 
   //sub component params
   //let [series, setSeries] = useState([]);
   let [data, setData] = useState({});
-
-  
 
   const self = {
     changeTitle: (ev) => {
@@ -55,6 +57,10 @@ function BountySubmit(props) {
     },
     changeTemplate: (ev) => {
       setTemplate(ev.target.value);
+    },
+    changeCoin:(ev)=>{
+      const val=ev.target.value;
+      setCoin(val.toLocaleLowerCase());
     },
     changeTabTitle:(active)=>{
       const ts={
@@ -81,7 +87,8 @@ function BountySubmit(props) {
       });
     },
     clickSubmit:()=>{
-      const raw=self.getBountyData();
+      const addr=RUNTIME.account.get();
+      const raw=self.getBountyData(addr);
       const protocol={fmt:"json",type:"data",tpl:"bounty"};
       console.log(raw,protocol);
     },
@@ -95,11 +102,11 @@ function BountySubmit(props) {
       }
       setBonus(arr);
     },
-    getBountyData:()=>{
+    getBountyData:(addr)=>{
       return {
         title:title,
         desc:desc,
-        publisher:publisher,
+        publisher:addr,
         coin:coin,
         template:{
           cid:template,
@@ -111,11 +118,30 @@ function BountySubmit(props) {
         },
         bonus:bonus
       }
-    }
+    },
+    getCoins:()=>{
+      const cs=Config.get("network");
+      //console.log(cs);
+      const arr=[];
+      for(let k in cs){
+        const row=cs[k];
+        if(row.support && row.support.bonus) arr.push({
+          coin:row.coin,
+          network:k,
+        });
+      }
+      return arr;
+   },
+    fresh:()=>{
+      self.changeTabTitle("step_1");
+      const cs=self.getCoins();
+      setCoins(cs);
+    },
   }
 
   useEffect(() => {
-    self.changeTabTitle("step_1");
+
+    self.fresh();
   }, []);
 
   return (
@@ -166,6 +192,14 @@ function BountySubmit(props) {
                   }} />
               </Col>
               <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+                <small>Bonus coin</small>
+                <select className='form-control' onChange={(ev)=>{
+                  self.changeCoin(ev);
+                }}>
+                {coins.map((row, index) => (
+                  <option value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
+                ))}
+                </select>
               </Col>
 
               <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>

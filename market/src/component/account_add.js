@@ -32,8 +32,8 @@ function AccountAdd(props) {
         const ns=Config.get("network");
         for(var k in ns){
           const row=ns[k];
-          //console.log(row);
-          if(row.enable && row.minting){
+          console.log(row);
+          if(row.enable && row.support && row.support.minting){
             row.name=k;
             networks.push(row);
           } 
