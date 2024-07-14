@@ -1,6 +1,5 @@
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 import { useEffect, useState } from "react";
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
@@ -61,6 +60,9 @@ function BountySubmit(props) {
     changeCoin:(ev)=>{
       const val=ev.target.value;
       setCoin(val.toLocaleLowerCase());
+    },
+    changeDesc:(ev)=>{
+      setDesc(ev.target.value);
     },
     changeTabTitle:(active)=>{
       const ts={
@@ -197,14 +199,16 @@ function BountySubmit(props) {
                   self.changeCoin(ev);
                 }}>
                 {coins.map((row, index) => (
-                  <option value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
+                  <option key={index} value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
                 ))}
                 </select>
               </Col>
 
               <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 <small>Details about the bounty.</small>
-                <textarea className='form-control' cols={4}></textarea>
+                <textarea className='form-control' cols={4} placeholder='The details of the bounty.' value={desc} onChange={(ev)=>{
+                  self.changeDesc(ev);
+                }}></textarea>
               </Col>
               <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
               </Col>

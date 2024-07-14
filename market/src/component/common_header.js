@@ -2,11 +2,9 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useState,useEffect } from "react";
 
 import tools from "../lib/tools";
-import Config from "../system/config";
 import RUNTIME from '../system/runtime';
 
 import { FaCog } from "react-icons/fa";
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 function Header(props) {
 
@@ -15,26 +13,13 @@ function Header(props) {
   const self={
     clickLogin:()=>{
       if(login==="Login"){
-        const dapp=Config.get(["system","name"]);
-        if(dapp) self.subwallet(dapp);
+        RUNTIME.auto((addr)=>{
+          setLogin(tools.shorten(addr,5));
+        });
+        
       }else{
         props.link("user");
       }
-    },
-    subwallet:async(name)=>{
-      const extensions = await web3Enable(name);
-      if (extensions.length === 0) {
-        console.log('No extension installed');
-        return false;
-      }
-      const accounts = await web3Accounts();
-      if (accounts.length === 0) {
-        console.log('No accounts found');
-        return false;
-      }
-      const addr=accounts[0].address;
-      RUNTIME.account.set(addr);
-      setLogin(tools.shorten(addr,5));
     },
   }
 
