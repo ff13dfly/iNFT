@@ -1,5 +1,6 @@
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 const config = {
     node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
@@ -107,12 +108,12 @@ const self = {
             return ck && ck(error);
         });
     },
-    metadata:(ck)=>{
+    metadata: (ck) => {
         self.init(() => {
             wsAPI.rpc.state.getMetadata().then((res) => {
                 return ck && ck(res);
-            }).catch((error)=>{
-                return ck && ck({error:'Invalid request'});
+            }).catch((error) => {
+                return ck && ck({ error: 'Invalid request' });
             });
         });
     },
@@ -152,16 +153,16 @@ const self = {
             const sign = pair.toJson(password);
             sign.meta.network = "anchor";
 
-            const row={
-                address:sign.address,
-                encoded:sign.encoded,
-                network:"anchor",
-                metadata:{
-                    encoding:sign.encoding,
+            const row = {
+                address: sign.address,
+                encoded: sign.encoded,
+                network: "anchor",
+                metadata: {
+                    encoding: sign.encoding,
                 }
             }
 
-            return ck && ck(row,mnemonic);
+            return ck && ck(row, mnemonic);
         });
     },
     transfer: (pair, to, amount, ck) => {
@@ -215,6 +216,35 @@ const self = {
                 return ck && ck(error);
             }
         });
+    },
+    sign: async ( obj, ck, wallet, param) => {
+        self.init(async () => {
+            let { anchor, raw, protocol } = obj;
+            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
+            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
+
+            const pre = 0;
+
+            const extensions = await web3Enable(obj.dapp);
+            if (extensions.length === 0) {
+                return ck && ck({error:"No subwallet extention"});
+            }
+
+            const allAccounts = await web3Accounts();
+            const account = allAccounts[0];
+            const injector= await web3FromAddress(account.address);
+            //console.log(injector);
+            const tx = wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre);
+            tx.signAndSend(account.address, { signer: injector.signer }, (res) => {
+                const dt = res.toHuman();
+                funs.decodeProcess(dt, (status) => {
+                    return ck && ck(status);
+                });
+            }).catch((error)=>{
+                return ck && ck({error:"Sign error, maybe low balance."});
+            });
+        })
     },
     sell: (pair, name, price, ck, target) => {
         self.init(() => {
@@ -272,8 +302,8 @@ const self = {
                                         protocol: dt.args.protocol,
                                         pre: parseInt(dt.args.pre),
                                         block: value.block,
-                                        hash:hash,
-                                        network:"anchor",
+                                        hash: hash,
+                                        network: "anchor",
                                     }
                                 }
                             });
@@ -334,29 +364,29 @@ const self = {
                 case "detail":
                     wsAPI.rpc.chain.getBlock(value).then((dt) => {
                         const exs = dt.block.extrinsics;
-                        const infts=[];
+                        const infts = [];
                         if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
                             if (index < 2) return false;
                             const row = ex.toHuman();
-                            if(row.method && row.method.section==="anchor" && row.method.method==="setAnchor"){
-                                const dt=row.method.args;
+                            if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
+                                const dt = row.method.args;
                                 try {
-                                    const protocol=JSON.parse(dt.protocol);
-                                    const raw=JSON.parse(dt.raw);
-                                    const inft={
-                                        name:dt.key,
-                                        raw:raw,
-                                        protocol:protocol,
-                                        pre:parseInt(dt.pre),
-                                        signer:row.signer.Id,
-                                        hash:value,
-                                        valid:true,
-                                        network:"anchor",
+                                    const protocol = JSON.parse(dt.protocol);
+                                    const raw = JSON.parse(dt.raw);
+                                    const inft = {
+                                        name: dt.key,
+                                        raw: raw,
+                                        protocol: protocol,
+                                        pre: parseInt(dt.pre),
+                                        signer: row.signer.Id,
+                                        hash: value,
+                                        valid: true,
+                                        network: "anchor",
                                     }
                                     infts.push(inft);
                                 } catch (error) {
-                                    
+
                                 }
                             }
                         });
@@ -382,21 +412,21 @@ const self = {
 
         });
     },
-    market:(ck)=>{
+    market: (ck) => {
         self.init(() => {
             wsAPI.query.anchor.sellList.entries().then((arr) => {
-                let list=[];
-                if(!arr) return ck && ck(list);
-                for(let i=0;i<arr.length;i++){
-                    const row=arr[i];
-                    const key=row[0].toHuman();
-                    const info=row[1].toHuman();
+                let list = [];
+                if (!arr) return ck && ck(list);
+                for (let i = 0; i < arr.length; i++) {
+                    const row = arr[i];
+                    const key = row[0].toHuman();
+                    const info = row[1].toHuman();
                     list.push({
-                        name:key[0],
-                        owner:info[0],
-                        price:parseInt(info[1]),
-                        target:info[2],
-                        free:info[0]===info[2],
+                        name: key[0],
+                        owner: info[0],
+                        price: parseInt(info[1]),
+                        target: info[2],
+                        free: info[0] === info[2],
                     });
                 }
                 return ck && ck(list);
@@ -413,8 +443,8 @@ const test = {
         test.test_view();
         test.test_metadata();
     },
-    test_metadata:()=>{
-        self.metadata((dt)=>{
+    test_metadata: () => {
+        self.metadata((dt) => {
             console.log(dt.toHuman());
         });
     },

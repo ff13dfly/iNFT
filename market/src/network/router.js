@@ -65,6 +65,9 @@ const format={
         const hash="0x00000000000000000000000000000000";
         return hash;
     },
+    sign:(addr,obj,ck,wallet)=>{
+
+    },
 }
 
 const map={     //support networks

@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
+import BountyDetail from './bounty_detail';
 
 import TPL from "../system/tpl";
 import RUNTIME from '../system/runtime';
 import Config from '../system/config';
+import Network from '../network/router';
 
 import tools from "../lib/tools";
 
@@ -25,24 +27,26 @@ function BountySubmit(props) {
   let [desc, setDesc] = useState("");
   let [start, setStart] = useState(0);
   let [end, setEnd] = useState(0);
-  let [bonus, setBonus]=useState([]);
-  let [coin, setCoin]=useState("ank");            //the coin type for bounty
-  
+  let [bonus, setBonus] = useState([]);
+  let [coin, setCoin] = useState("ank");            //the coin type for bounty
+
   //step enable
   let [ready, setReady] = useState(false);
   let [pay, setPay] = useState(false);
-  
+
   //UI improvement
-  let [tabs, setTabs]=useState({
-    "step_1":<span><strong className='text-secondary'>Step 1 : </strong><strong>Template</strong></span>,
-    "step_2":<span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
-    "step_3":<span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
+  let [tabs, setTabs] = useState({
+    "step_1": <span><strong className='text-secondary'>Step 1 : </strong><strong>Template</strong></span>,
+    "step_2": <span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
+    "step_3": <span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
   })
-  let [coins,setCoins]=useState([]);
+  let [coins, setCoins] = useState([]);
+  let [block, setBlock] = useState(0);
 
   //sub component params
   //let [series, setSeries] = useState([]);
   let [data, setData] = useState({});
+  let [anchor, setAnchor]= useState(""); 
 
   const self = {
     changeTitle: (ev) => {
@@ -57,27 +61,27 @@ function BountySubmit(props) {
     changeTemplate: (ev) => {
       setTemplate(ev.target.value);
     },
-    changeCoin:(ev)=>{
-      const val=ev.target.value;
+    changeCoin: (ev) => {
+      const val = ev.target.value;
       setCoin(val.toLocaleLowerCase());
     },
-    changeDesc:(ev)=>{
+    changeDesc: (ev) => {
       setDesc(ev.target.value);
     },
-    changeTabTitle:(active)=>{
-      const ts={
-        step_1:{index:1,title:"Template"},
-        step_2:{index:2,title:"Bonus"},
-        step_3:{index:2,title:"Payment"},
+    changeTabTitle: (active) => {
+      const ts = {
+        step_1: { index: 1, title: "Template" },
+        step_2: { index: 2, title: "Bonus" },
+        step_3: { index: 2, title: "Payment" },
       }
 
-      const ntabs={}
-      for(var k in ts){
-        const row=ts[k];
-        if(k===active){
-          ntabs[k]=<span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-warning'>{row.title}</strong></span>
-        }else{
-          ntabs[k]=<span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-secondary'>{row.title}</strong></span>
+      const ntabs = {}
+      for (var k in ts) {
+        const row = ts[k];
+        if (k === active) {
+          ntabs[k] = <span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-warning'>{row.title}</strong></span>
+        } else {
+          ntabs[k] = <span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-secondary'>{row.title}</strong></span>
         }
       }
       setTabs(ntabs);
@@ -88,61 +92,78 @@ function BountySubmit(props) {
         setReady(true);
       });
     },
-    clickSubmit:()=>{
-      const addr=RUNTIME.account.get();
-      const raw=self.getBountyData(addr);
-      const protocol={fmt:"json",type:"data",tpl:"bounty"};
-      console.log(raw,protocol);
+    clickSubmit: () => {
+      const addr = RUNTIME.account.get();
+      const raw = self.getBountyData(addr);
+      const protocol = { fmt: "json", type: "data", tpl: "bounty" };
+      const name="anchor_bounty";
+      const dapp=Config.get(["system","name"]);
+      const obj={
+        anchor:name,
+        raw:raw,
+        protocol:protocol,
+        dapp:dapp,
+      }
+      Network("anchor").sign(obj,(res)=>{
+        console.log(res);
+      },"subwallet");
     },
-    callbackBonus:(list)=>{
-      const arr=[];
-      for(let i=0;i<list.length;i++){
-        const row=list[i];
+    callbackBonus: (list) => {
+      const arr = [];
+      for (let i = 0; i < list.length; i++) {
+        const row = list[i];
         delete row.thumb;
         delete row.name;
         arr.push(row);
       }
       setBonus(arr);
     },
-    getBountyData:(addr)=>{
+
+    getBountyData: (addr) => {
       return {
-        title:title,
-        desc:desc,
-        publisher:addr,
-        coin:coin,
-        template:{
-          cid:template,
-          orgin:"web3.storage",
+        title: title,
+        desc: desc,
+        publisher: addr,
+        coin: coin,
+        template: {
+          cid: template,
+          orgin: "web3.storage",
         },
-        period:{
-          start:start,
-          end:end,
+        period: {
+          start: start,
+          end: end,
         },
-        bonus:bonus
+        bonus: bonus
       }
     },
-    getCoins:()=>{
-      const cs=Config.get("network");
+    getCoins: () => {
+      const cs = Config.get("network");
       //console.log(cs);
-      const arr=[];
-      for(let k in cs){
-        const row=cs[k];
-        if(row.support && row.support.bonus) arr.push({
-          coin:row.coin,
-          network:k,
+      const arr = [];
+      for (let k in cs) {
+        const row = cs[k];
+        if (row.support && row.support.bonus) arr.push({
+          coin: row.coin,
+          network: k,
         });
       }
       return arr;
-   },
-    fresh:()=>{
+    },
+    fresh: () => {
       self.changeTabTitle("step_1");
-      const cs=self.getCoins();
+      const cs = self.getCoins();
       setCoins(cs);
+
+      Network("anchor").subscribe("bounty_submit", (bk, hash) => {
+        //console.log(block,hash);
+        setBlock(bk);
+        setStart(bk + 10000);
+        setEnd(bk + 30000);
+      });
     },
   }
 
   useEffect(() => {
-
     self.fresh();
   }, []);
 
@@ -152,7 +173,7 @@ function BountySubmit(props) {
       id="uncontrolled-tab-example"
       className="mb-3"
       fill
-      onSelect={(active)=>{
+      onSelect={(active) => {
         self.changeTabTitle(active);
       }}
     >
@@ -195,18 +216,18 @@ function BountySubmit(props) {
               </Col>
               <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <small>Bonus coin</small>
-                <select className='form-control' onChange={(ev)=>{
+                <select className='form-control' onChange={(ev) => {
                   self.changeCoin(ev);
                 }}>
-                {coins.map((row, index) => (
-                  <option key={index} value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
-                ))}
+                  {coins.map((row, index) => (
+                    <option key={index} value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
+                  ))}
                 </select>
               </Col>
 
               <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 <small>Details about the bounty.</small>
-                <textarea className='form-control' cols={4} placeholder='The details of the bounty.' value={desc} onChange={(ev)=>{
+                <textarea className='form-control' cols={4} placeholder='The details of the bounty.' value={desc} onChange={(ev) => {
                   self.changeDesc(ev);
                 }}></textarea>
               </Col>
@@ -231,7 +252,7 @@ function BountySubmit(props) {
               </Col>
 
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                Current block number: {0}, {6}s per block.
+                Current block number: {block.toLocaleString()}, {6}s per block.
               </Col>
 
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -245,7 +266,7 @@ function BountySubmit(props) {
 
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button className='btn btn-md btn-primary' onClick={(ev)=>{
+                <button className='btn btn-md btn-primary' onClick={(ev) => {
                   self.clickSubmit();
                 }}>Submit</button>
               </Col>
@@ -262,10 +283,15 @@ function BountySubmit(props) {
           <Col hidden={pay} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
               <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                Pay the coins to target account.
+                Payment details.
               </Col>
+              <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                <BountyDetail data={anchor} callback={()=>{
 
+                }}/>
+              </Col>
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+                
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button className='btn btn-md btn-primary'>Pay</button>

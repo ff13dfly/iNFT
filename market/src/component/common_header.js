@@ -14,6 +14,7 @@ function Header(props) {
     clickLogin:()=>{
       if(login==="Login"){
         RUNTIME.auto((addr)=>{
+          console.log(addr);
           setLogin(tools.shorten(addr,5));
         });
         
