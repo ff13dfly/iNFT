@@ -81,6 +81,18 @@ const config={
                     metadata: { unique: false },
                 }, 
             },
+            bounty:{                //bounty storaged on local
+                keyPath:"name",
+                map:{
+                    name:{ unique: true },
+                    publisher: { unique: false },
+                    payer:{unique: false},
+                    start:{unique: false},
+                    end:{unique: false},
+                    coin:{unique: false},
+                    status:{unique: false},
+                },
+            },
         },
     },
     proxy:{             //all agent url here
@@ -90,8 +102,15 @@ const config={
         nodes:{
             market:[
                 {
-                    endpoint:"http://localhost/iNFT/service/api/",
+                    domain:"localhost/iNFT/service/api/",
+                    protocol:"http://",
+                    partten:"php",
                     orgin:"W3OS",
+
+                    lang:"php",
+                    desc:"",
+                    funs:"",
+                    def:"",                 //get the definition of API (JSON format)
                 }
             ],
             ipfs:[
@@ -207,12 +226,15 @@ const config={
                 bonus:true,
             },
             nodes:[     //check network type by node URL 
+                ""
+            ],
+            interval:3000,
+            wallet:[
                 {
                     name:"petra",
                     icon:"",
                 }
             ],
-            interval:3000,
         },
         sui:{
             coin:"SUI",
@@ -223,12 +245,15 @@ const config={
                 bonus:true,
             },
             nodes:[
+                ""
+            ],
+            interval:3000,
+            wallet:[
                 {
                     name:"sui",
                     icon:"",
                 }
             ],
-            interval:3000,
         },
         bitcoin:{
             coin:"BTC",
@@ -239,12 +264,15 @@ const config={
                 bonus:true,
             },
             nodes:[
+                ""
+            ],
+            interval:240000,
+            wallet:[
                 {
                     name:"",
                     icon:"",
                 }
             ],
-            interval:240000,
         },
         ethereum:{
             coin:"ETH",
@@ -255,12 +283,15 @@ const config={
                 bonus:true,
             },
             nodes:[
+                ""
+            ],
+            interval:60000,
+            wallet:[
                 {
                     name:"metamask",
                     icon:"",
                 }
             ],
-            interval:60000,
         },
     },
     version:202401,             //setting version

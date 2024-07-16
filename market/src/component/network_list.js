@@ -1,11 +1,8 @@
 import { Row,Col, Table,Form } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaRegCopy, FaCopy, FaLightbulb, FaSkullCrossbones,FaSync } from "react-icons/fa";
+import {FaLightbulb, FaSkullCrossbones,FaSync } from "react-icons/fa";
 
-import Account from "../system/account";
-
-import INDEXED from '../lib/indexed';
 import Config from '../system/config';
 
 function NetworkList(props) {
@@ -32,6 +29,7 @@ function NetworkList(props) {
     fresh: () => {
       const map = Config.get("network");
       const arr = self.getNetworks(map);
+      console.log(arr);
       setList(arr);
     },
   }
@@ -63,14 +61,13 @@ function NetworkList(props) {
                 </td>
                 <td>
                   <Row>
-                  {row.nodes.map((uri, k) => (
+                  {row.nodes && row.nodes.map((uri, k) => (
                     <Col key={k} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                       <span><FaLightbulb color={"green"} /></span>
                       <span className='ml-5'>{uri}</span>
                     </Col>
                     ))}
                   </Row>
-                  
                 </td>
                 <td>
                   Agent

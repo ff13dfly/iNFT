@@ -7,6 +7,7 @@ import SettingNetwork from "../component/setting_network";
 import SettingStorage from "../component/setting_storage";
 import Setting404 from "../component/setting_404";
 import SettingSample from "../component/setting_sample";
+import SettingProxy from "../component/setting_proxy";
 
 function Setting(props) {
     const size = {
@@ -18,6 +19,7 @@ function Setting(props) {
         "network":<SettingNetwork />,
         "storage":<SettingStorage />,
         "sample":<SettingSample />,
+        "proxy":<SettingProxy />,
         "404":<Setting404 />
     }
 

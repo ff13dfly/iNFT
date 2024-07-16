@@ -1,11 +1,7 @@
-import { Row, Col, Form, Table } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaLightbulb } from "react-icons/fa";
-
 import NetworkList from './network_list';
-
-import Config from "../system/config";
 
 function SettingNetwork(props) {
   const size = {
@@ -16,29 +12,11 @@ function SettingNetwork(props) {
     right: [4, 8],
   };
 
-  let [list, setList] = useState([]);
-
-
   const self = {
 
-    getNetworks: (map) => {
-      const arr = [];
-      for (var k in map) {
-        const row = map[k];
-        row.network = k;
-        arr.push(row);
-      }
-      return arr;
-    },
-    fresh: () => {
-      const map = Config.get("network");
-      const arr = self.getNetworks(map);
-      setList(arr);
-    },
   }
 
   useEffect(() => {
-    self.fresh();
   }, []);
 
   return (
@@ -91,7 +69,6 @@ function SettingNetwork(props) {
               />
             </Form>
           </Col>
-
         </Row>
       </Col>
 
@@ -107,7 +84,6 @@ function SettingNetwork(props) {
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <NetworkList  />
-        
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

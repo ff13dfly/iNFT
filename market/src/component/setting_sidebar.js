@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaHome,FaUserFriends,FaGlobe,FaDatabase,FaCat } from "react-icons/fa";
+import { FaHome,FaLink,FaGlobe,FaDatabase,FaCat } from "react-icons/fa";
 
 function SettingSidebar(props) {
   const size = {
@@ -33,6 +33,11 @@ function SettingSidebar(props) {
       name: "network",
       icon: <FaGlobe size={20}  className='mr-5' color={self.getColor("network")}/>,
       title: "Network",
+    },
+    {
+      name: "proxy",
+      icon: <FaLink size={20}  className='mr-5' color={self.getColor("proxy")}/>,
+      title: "Proxy",
     },
     {
       name: "storage",
