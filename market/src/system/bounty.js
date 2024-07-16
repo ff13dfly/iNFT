@@ -2,7 +2,6 @@ import INDEXED from "../lib/indexed";
 import tools from "../lib/tools";
 
 import Config from "./config";
-import Network from "../network/router";
 
 const funs = {
     checkDB:(table,ck)=>{
@@ -50,6 +49,20 @@ const self = {
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });
+    },
+    status:{
+        toChain:(name,ck)=>{
+
+        },
+        toSystem:(name,ck)=>{
+
+        },
+        toProgress:(name,ck)=>{
+
+        },
+        toDone:(name,ck)=>{
+
+        },
     },
 }
 

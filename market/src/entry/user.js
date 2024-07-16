@@ -17,7 +17,7 @@ function User(props) {
         "basic":<UserBasic />,
         "inft":<UserINFT />,
         "account":<UserAccount />,
-        "bounty":<UserBounty />,
+        "bounty":<UserBounty dialog={props.dialog}/>,
         "404":<User404 />,
     }
 
@@ -25,6 +25,7 @@ function User(props) {
     let [ content, setContent] =useState("");
 
     useEffect(() => {
+        console.log(props);
         if(props.extend && props.extend.mod){
             const mod=props.extend.mod;
             if(mod!==active){

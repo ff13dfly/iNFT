@@ -93,7 +93,7 @@ function App() {
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend} link={self.linkTo} dialog={self.dialog}/>,
     "setting":<Setting extend={extend} link={self.linkTo}/>,
-    "user":<User extend={extend} link={self.linkTo}/>,
+    "user":<User extend={extend} link={self.linkTo}  dialog={self.dialog}/>,
     "404":<InvalidPage />,
   }
 

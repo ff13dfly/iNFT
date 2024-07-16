@@ -160,6 +160,7 @@ function BountySubmit(props) {
         payer: {
           address:"",
           transaction:"",     //transation hash
+          receiver:"",
         },
         template:{
           cid:template,
@@ -168,7 +169,8 @@ function BountySubmit(props) {
         start: start,
         end: end,
         coin: coin,
-        status: 1,      
+        status: 1, 
+        stamp:tools.stamp(),    
       }
     },
     getBountyData: (addr) => {
@@ -180,6 +182,10 @@ function BountySubmit(props) {
         template: {
           cid: template,
           orgin: "web3.storage",
+        },
+        contract:{      //contract to call for the bounty. if no, free to mint
+          network:"",
+          address:"",
         },
         period: {
           start: start,
@@ -207,7 +213,6 @@ function BountySubmit(props) {
       setCoins(cs);
 
       Network("anchor").subscribe("bounty_submit", (bk, hash) => {
-
         setBlock(bk);
         setStart(bk + 10000);
         setEnd(bk + 30000);
@@ -217,7 +222,10 @@ function BountySubmit(props) {
 
   useEffect(() => {
     self.fresh();
-  }, []);
+    if(props.name){
+      console.log(`Ready to check bounty on progress.`);
+    }
+  }, [props.name]);
 
   return (
     <Tabs

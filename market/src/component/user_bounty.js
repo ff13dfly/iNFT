@@ -2,8 +2,9 @@ import { Row, Col, Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Bounty from "../system/bounty";
+import BountySubmit from './bounty_submit';
 
-import { FaSkullCrossbones, FaSync,FaFileDownload } from "react-icons/fa";
+import { FaBitcoin } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -13,6 +14,9 @@ function UserBounty(props) {
   let [list, setList]=useState([]);
 
   const self = {
+    clickPay:(name)=>{
+      props.dialog(<BountySubmit name={name} />,"Bounty Submission");
+    },
     fresh:()=>{
       Bounty.list((arr)=>{
         console.log(arr);
@@ -39,6 +43,7 @@ function UserBounty(props) {
           <th>Start</th>
           <th>End</th>
           <th>Template</th>
+          <th>Operation</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +63,11 @@ function UserBounty(props) {
             </td>
             <td>
               {row.template.cid}
+            </td>
+            <td>
+              <span className='pointer' onClick={(ev)=>{
+                  self.clickPay(row.name);
+              }}><FaBitcoin /></span>
             </td>
           </tr>
         ))}
