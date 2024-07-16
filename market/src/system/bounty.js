@@ -45,7 +45,7 @@ const self = {
     get:(name,ck)=>{
 
     },
-    list: (filter, ck, page, step) => {
+    list: (ck,filter,page,step) => {
         const table="bounty";
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
