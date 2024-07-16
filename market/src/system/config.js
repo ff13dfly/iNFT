@@ -96,6 +96,8 @@ const config={
                 keyPath:"name",
                 map:{
                     name:{ unique: true },
+                    title:{ unique: false },
+                    desc:{ unique: false },
                     publisher: { unique: false },
                     payer:{unique: false},
                     start:{unique: false},

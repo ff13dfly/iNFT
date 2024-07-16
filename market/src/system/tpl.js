@@ -52,7 +52,6 @@ const funs = {
             } else {
                 //console.log(`Here to search the templates.`);
                 const single = alinks.pop();
-
                 INDEXED.searchRows(db, config.table, "cid", single, (res) => {
                     if (res.length !== 1) {
                         left.push(single);

@@ -2,9 +2,13 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
+import Config from "../system/config";
+
+const dt=Config.get(["network","anchor"]);
+
 const config = {
-    node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
-    target: 12000,           //How long to create a new block
+    node: dt.nodes[0],  //Tanssi appchain URI
+    target: dt.interval,           //How long to create a new block
 }
 
 const subs = {};      //subscribe funs

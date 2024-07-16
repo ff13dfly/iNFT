@@ -19,7 +19,7 @@ function UserBounty(props) {
     },
     fresh:()=>{
       Bounty.list((arr)=>{
-        console.log(arr);
+        //console.log(arr);
         setList(arr);
       });
     }

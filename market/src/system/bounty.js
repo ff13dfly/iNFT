@@ -34,18 +34,19 @@ const funs = {
     },
 }
 
+const table="bounty";
 const self = {
     insert:(row,ck)=>{
-        const table="bounty";
         funs.checkDB(table,(db)=>{
             INDEXED.insertRow(db, table, [row],ck);
         });
     },
     get:(name,ck)=>{
-
+        funs.checkDB(table,(db)=>{
+            INDEXED.searchRows(db,table,"name",name,ck);
+        });
     },
     list: (ck,filter,page,step) => {
-        const table="bounty";
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });

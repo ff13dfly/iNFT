@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
 
 import tools from "../lib/tools";
-import Config from "../system/config";
 
 function BountyTarget(props) {
   const size = {
@@ -64,11 +63,32 @@ function BountyTarget(props) {
       setList(nlist);
       self.update(nlist);
     },
+    selected:(bonus)=>{
+      if(!props.data || !props.data.series) return false;
+
+      const nlist=[];
+      for(let i=0;i<bonus.length;i++){
+        const row=tools.clone(bonus[i]);
+        //console.log(row,props.data.series);
+        const se=props.data.series[row.series];
+        row.thumb=se.thumb[0];
+        row.name=se.name;
+        nlist.push(row);
+      }
+      setList(nlist);
+      self.update(nlist);
+    },
   }
 
   useEffect(() => {
-    self.fresh();
-  }, [props.data]);
+    if(!props.bonus || props.bonus.length===0){
+      self.fresh();
+    }else{
+      setTimeout(()=>{
+        self.selected(props.bonus);
+      },500);
+    }
+  }, [props.data,props.bonus]);
 
   return (
     <Row>

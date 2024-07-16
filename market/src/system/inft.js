@@ -84,6 +84,7 @@ const funs={
     },
 }
 
+const table="infts";
 const self = {
     enableLocal:()=>{
         local=true;

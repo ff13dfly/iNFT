@@ -1,5 +1,5 @@
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
@@ -23,6 +23,8 @@ function BountySubmit(props) {
     head: [4, 8],
     normal: [8, 4],
   };
+
+  const loadRef = useRef(null);
 
   //submission details
   let [template, setTemplate] = useState("");
@@ -151,6 +153,8 @@ function BountySubmit(props) {
     getLocalData:(name,addr)=>{
       return {
         name: name,
+        title: title,
+        desc: desc,
         publish:{
           network:"anchor",
           address:addr, 
@@ -166,6 +170,7 @@ function BountySubmit(props) {
           cid:template,
           orgin:"web3.storage",
         },
+        bonus: bonus,
         start: start,
         end: end,
         coin: coin,
@@ -207,23 +212,57 @@ function BountySubmit(props) {
       }
       return arr;
     },
-    fresh: () => {
+    fresh: (ignore) => {
       self.changeTabTitle("step_1");
       const cs = self.getCoins();
       setCoins(cs);
 
       Network("anchor").subscribe("bounty_submit", (bk, hash) => {
         setBlock(bk);
-        setStart(bk + 10000);
-        setEnd(bk + 30000);
+        if(!ignore){
+          setStart(bk + 10000);
+          setEnd(bk + 30000);
+        }
       });
+    },
+
+    load:(bounty)=>{
+      //1.set template value
+      setTemplate(bounty.template.cid);
+      setTimeout(()=>{
+        loadRef.current.click();
+      },200);
+
+      //2.set details value
+      console.log(bounty);
+      //setTitle(bounty.title);
+      if(bounty.title) setTitle(bounty.title);
+      if(bounty.desc) setDesc(bounty.desc);
+      if(bounty.start) setStart(bounty.start);
+      if(bounty.end) setEnd(bounty.end);
+      if(bounty.coin){
+        setCoin(bounty.coin);
+        const cs = self.getCoins();
+        //console.log(cs);
+        setCoins(cs);
+      } 
+      if(bounty.bonus) setBonus(bounty.bonus);
     },
   }
 
   useEffect(() => {
-    self.fresh();
+    //console.log(`Ready to check bounty on progress.`);
+    
     if(props.name){
-      console.log(`Ready to check bounty on progress.`);
+      self.fresh(true);
+      Bounty.get(props.name,(res)=>{
+        if(!res || res.length===0) return false;
+        const bty=res[0];
+        self.load(bty);
+        
+      });
+    }else{
+      self.fresh();
     }
   }, [props.name]);
 
@@ -250,7 +289,7 @@ function BountySubmit(props) {
               }} />
           </Col>
           <Col className='pt-2 text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-            <button className='btn btn-md btn-primary' onClick={(ev) => {
+            <button className='btn btn-md btn-primary' ref={loadRef} onClick={(ev) => {
               self.clickLoad(ev);
             }}>Load</button>
           </Col>
@@ -276,7 +315,7 @@ function BountySubmit(props) {
               </Col>
               <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <small>Bonus coin</small>
-                <select className='form-control' onChange={(ev) => {
+                <select className='form-control' value={coin.toUpperCase()} onChange={(ev) => {
                   self.changeCoin(ev);
                 }}>
                   {coins.map((row, index) => (
@@ -316,7 +355,7 @@ function BountySubmit(props) {
               </Col>
 
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget data={data} callback={(dt) => {
+                <BountyTarget data={data} bonus={bonus} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
