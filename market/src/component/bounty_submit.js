@@ -5,10 +5,13 @@ import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
 import BountyDetail from './bounty_detail';
 
+import Network from '../network/router';
+
 import TPL from "../system/tpl";
 import RUNTIME from '../system/runtime';
 import Config from '../system/config';
-import Network from '../network/router';
+import Bounty from '../system/bounty';
+import API from '../system/api';
 
 import tools from "../lib/tools";
 
@@ -46,7 +49,7 @@ function BountySubmit(props) {
   //sub component params
   //let [series, setSeries] = useState([]);
   let [data, setData] = useState({});
-  let [anchor, setAnchor]= useState(""); 
+  let [anchor, setAnchor] = useState("");
 
   const self = {
     changeTitle: (ev) => {
@@ -94,19 +97,42 @@ function BountySubmit(props) {
     },
     clickSubmit: () => {
       const addr = RUNTIME.account.get();
-      const raw = self.getBountyData(addr);
-      const protocol = { fmt: "json", type: "data", tpl: "bounty" };
-      const name="anchor_bounty";
-      const dapp=Config.get(["system","name"]);
-      const obj={
-        anchor:name,
-        raw:raw,
-        protocol:protocol,
-        dapp:dapp,
-      }
-      Network("anchor").sign(obj,(res)=>{
-        console.log(res);
-      },"subwallet");
+      const name = self.getBountyName(8);
+
+      //1.storage the bounty details to indexDB
+      const bt = self.getLocalData(name,addr);
+      Bounty.insert(bt, (res) => {
+
+          //2.write the bounty data to Anchor Network
+          const raw = self.getBountyData(addr);
+          const protocol = { fmt: "json", type: "data", tpl: "bounty" };
+          const dapp = Config.get(["system", "name"]);
+          const obj = {
+            anchor: name,
+            raw: raw,
+            protocol: protocol,
+            dapp: dapp,
+          }
+          Network("anchor").sign(obj,(res)=>{
+            console.log(res);
+            
+            if(res.status==="Finalized"){
+              //3.update local indexedDB status;
+
+              //4.report to iNFT proxy system
+              const report={
+                name:name,
+                transaction:res.hash,
+              }
+              API.bounty.submit(report,(dt)=>{
+                console.log(dt);
+                //5.update local indexedDB status;
+              });
+            }
+          },"subwallet");
+          
+
+      });
     },
     callbackBonus: (list) => {
       const arr = [];
@@ -119,6 +145,32 @@ function BountySubmit(props) {
       setBonus(arr);
     },
 
+    getBountyName: (n) => {
+      return `bounty_${tools.char(n)}`;
+    },
+    getLocalData:(name,addr)=>{
+      return {
+        name: name,
+        publish:{
+          network:"anchor",
+          address:addr, 
+          block:0,              //anchor block
+          hash:"",              //setAnchor transaction hash
+        },
+        payer: {
+          address:"",
+          transaction:"",     //transation hash
+        },
+        template:{
+          cid:template,
+          orgin:"web3.storage",
+        },
+        start: start,
+        end: end,
+        coin: coin,
+        status: 1,      
+      }
+    },
     getBountyData: (addr) => {
       return {
         title: title,
@@ -155,7 +207,7 @@ function BountySubmit(props) {
       setCoins(cs);
 
       Network("anchor").subscribe("bounty_submit", (bk, hash) => {
-        //console.log(block,hash);
+
         setBlock(bk);
         setStart(bk + 10000);
         setEnd(bk + 30000);
@@ -286,12 +338,12 @@ function BountySubmit(props) {
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyDetail data={anchor} callback={()=>{
+                <BountyDetail data={anchor} callback={() => {
 
-                }}/>
+                }} />
               </Col>
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-                
+
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button className='btn btn-md btn-primary'>Pay</button>

@@ -1,20 +1,18 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import Bounty from "../system/bounty";
 
 function UserBounty(props) {
   const size = {
     row: [12],
-    head: [4, 8],
-    normal: [9, 3],
-    left: [8, 4],
-    right: [4, 8],
   };
 
   const self = {
   }
 
   useEffect(() => {
+
   }, []);
 
   return (

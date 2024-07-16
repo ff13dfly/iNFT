@@ -75,19 +75,30 @@ const self={
         });
     },
 
-    bounty:(page,ck,step)=>{
-        self.init((ready)=>{
-            if(ready.error) return ck && ck({error:"Internal error."});
-            const param={page:page};
-            if(step) param.step=parseInt(step);
-
-            funs.request("bounty","list",(res)=>{
-                if(res.success) return ck && ck(res);
-                return ck && ck({error:"Failed to get data."});
-            },param);
-        });
+    bounty:{
+        submit:(obj,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={nama:obj.name,hash:obj.hash};
+                funs.request("bounty","submit",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to submit bounty."});
+                },param);
+            });
+        },
+        page:(page,ck,step)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={page:page};
+                if(step) param.step=parseInt(step);
+    
+                funs.request("bounty","list",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to get data."});
+                },param);
+            });
+        },
     },
-
     selling:(page,ck,step)=>{
         self.init((ready)=>{
             if(ready.error) return ck && ck({error:"Internal error."});

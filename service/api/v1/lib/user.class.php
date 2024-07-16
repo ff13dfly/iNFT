@@ -133,12 +133,12 @@
 			//1.检测token是否合法
 			$user=$this->getHash($uuid,array('token','last'));
 			
-			if($user['token']==FALSE) return USER_ERROR_NO_UUID;					//不存在uuid的错误情况
+			if($user['token']==FALSE) return USER_ERROR_NO_UUID;			//不存在uuid的错误情况
 			if($user['token']!=$token) return USER_ERROR_WRONG_TOKEN;		//token错误的情况
 			
 			//2.token长时间未用过期
 			$time=time();
-			if($time-(int)$user['last']>GLOBAL_TOKEN_EXPIRE) return FALSE;
+			//if($time-(int)$user['last']>GLOBAL_TOKEN_EXPIRE) return FALSE;
 			
 			//3.更新用户最后登录时间
 			$this->setHash($uuid,'last',$time);	//更新token的寿命

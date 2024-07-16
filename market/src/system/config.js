@@ -27,6 +27,17 @@ const config={
             anchor:"",
             tanssi:"",
         },
+        status:{    //[0.removed; 2.init; 3.written to chain;4.report to system; 5.payed; 6. on progress; 8.done;]
+            0:"removed",
+            1:"normal",
+            2:"local saved",
+            3:"written to chain",
+            4:"report to proxy system",
+            5:"payed",
+            6:"on progress",
+            7:"finished without all done",
+            8:"all done",
+        }
     },
     account:{
         password:{                  //password to encry the private key, address --> password
