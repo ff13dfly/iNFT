@@ -53,6 +53,9 @@ function BountySubmit(props) {
   let [data, setData] = useState({});
   let [anchor, setAnchor] = useState("");
 
+  let [info, setInfo]=useState("");         //writing status
+  let [payInfo,setPayInfo]=useState("");     //paying status
+
   const self = {
     changeTitle: (ev) => {
       setTitle(ev.target.value);
@@ -77,7 +80,7 @@ function BountySubmit(props) {
       const ts = {
         step_1: { index: 1, title: "Template" },
         step_2: { index: 2, title: "Bonus" },
-        step_3: { index: 2, title: "Payment" },
+        step_3: { index: 3, title: "Payment" },
       }
 
       const ntabs = {}
@@ -99,7 +102,7 @@ function BountySubmit(props) {
     },
     clickSubmit: () => {
       const addr = RUNTIME.account.get();
-      const name = self.getBountyName(8);
+      const name = self.getBountyName(8).toLocaleLowerCase();
 
       //1.storage the bounty details to indexDB
       const bt = self.getLocalData(name,addr);
@@ -116,10 +119,14 @@ function BountySubmit(props) {
             dapp: dapp,
           }
           Network("anchor").sign(obj,(res)=>{
-            console.log(res);
-            
+            setInfo(res.msg);
             if(res.status==="Finalized"){
+              setTimeout(() => {
+                setInfo("");
+              }, 1500);
               //3.update local indexedDB status;
+
+              //3.1.update the block information
 
               //4.report to iNFT proxy system
               const report={
@@ -135,6 +142,9 @@ function BountySubmit(props) {
           
 
       });
+    },
+    clickPay:()=>{
+      console.log(`Ready to pay`);
     },
     callbackBonus: (list) => {
       const arr = [];
@@ -234,7 +244,6 @@ function BountySubmit(props) {
       },200);
 
       //2.set details value
-      console.log(bounty);
       //setTitle(bounty.title);
       if(bounty.title) setTitle(bounty.title);
       if(bounty.desc) setDesc(bounty.desc);
@@ -259,7 +268,7 @@ function BountySubmit(props) {
         if(!res || res.length===0) return false;
         const bty=res[0];
         self.load(bty);
-        
+        setAnchor(props.name);
       });
     }else{
       self.fresh();
@@ -355,14 +364,14 @@ function BountySubmit(props) {
               </Col>
 
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget data={data} bonus={bonus} callback={(dt) => {
+                <BountyTarget data={data} link={anchor} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
 
 
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-
+                {info}
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button className='btn btn-md btn-primary' onClick={(ev) => {
@@ -385,15 +394,15 @@ function BountySubmit(props) {
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyDetail data={anchor} callback={() => {
-
-                }} />
+                <BountyDetail link={anchor} data={data}/>
               </Col>
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-
+                {payInfo}
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button className='btn btn-md btn-primary'>Pay</button>
+                <button className='btn btn-md btn-primary' onClick={(ev)=>{
+                  self.clickPay(ev);
+                }}>Pay Now</button>
               </Col>
             </Row>
           </Col>

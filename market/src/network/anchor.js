@@ -285,12 +285,14 @@ const self = {
         });
     },
     view: (value, type, ck) => {
+        console.log(value);
         self.init(() => {
             switch (type) {
                 case "anchor":
                     //1.if set block,search directly
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
+                        console.log(hash);
 
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;
@@ -328,7 +330,7 @@ const self = {
 
                     //2.check the latest block of the name
                     self.view(value.name, "owner", (owner) => {
-                        //console.log(owner);
+                        if(!owner) return ck && ck(false);
                         return self.view({ name: value.name, block: owner.block }, "anchor", ck);
                     });
 

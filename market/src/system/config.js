@@ -37,7 +37,10 @@ const config={
             6:"on progress",
             7:"finished without all done",
             8:"all done",
-        }
+        },
+        receiver:{
+            anchor:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
+        },
     },
     account:{
         password:{                  //password to encry the private key, address --> password

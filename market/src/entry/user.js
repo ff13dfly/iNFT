@@ -25,7 +25,7 @@ function User(props) {
     let [ content, setContent] =useState("");
 
     useEffect(() => {
-        console.log(props);
+        //console.log(props);
         if(props.extend && props.extend.mod){
             const mod=props.extend.mod;
             if(mod!==active){

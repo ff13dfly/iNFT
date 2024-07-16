@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
 
 import tools from "../lib/tools";
+import Bounty from "../system/bounty";
 
 function BountyTarget(props) {
   const size = {
@@ -12,6 +13,7 @@ function BountyTarget(props) {
   };
 
   let [list, setList] = useState([]);
+  let [modify,setModify] = useState(true);    //wether modifyable
   
   const single = {
     series: 0,
@@ -81,12 +83,17 @@ function BountyTarget(props) {
   }
 
   useEffect(() => {
-    if(!props.bonus || props.bonus.length===0){
-      self.fresh();
+    if(props.link){
+      Bounty.get(props.link,(dt)=>{
+        if(dt.length!==0){
+          self.selected(dt[0].bonus);
+          setModify(false);
+        }else{
+          self.fresh();
+        }
+      });
     }else{
-      setTimeout(()=>{
-        self.selected(props.bonus);
-      },500);
+      self.fresh();
     }
   }, [props.data,props.bonus]);
 
@@ -97,7 +104,7 @@ function BountyTarget(props) {
         Select the series to bonus.
       </Col>
       <Col className='text-end pt-1' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-        <button className='btn btn-sm btn-danger' onClick={(ev) => {
+        <button hidden={!modify} className='btn btn-sm btn-danger' onClick={(ev) => {
           self.clickReset();
         }}>Reset</button>
       </Col>
@@ -116,17 +123,17 @@ function BountyTarget(props) {
               <img className='template_icon' src={row.thumb} alt={row.name} /> #{row.series} {row.name}
             </Col>
             <Col md={size.bonus[1]} lg={size.bonus[1]} xl={size.bonus[1]} xxl={size.bonus[1]} >
-              <input className='form-control' type="number" value={row.bonus} onChange={(ev) => {
+              <input disabled={!modify} className='form-control' type="number" value={row.bonus} onChange={(ev) => {
                 self.changeBonus(ev,index);
               }} />
             </Col>
             <Col md={size.bonus[2]} lg={size.bonus[2]} xl={size.bonus[2]} xxl={size.bonus[2]} >
-              <input className='form-control' type="number" value={row.amount} onChange={(ev) => {
+              <input disabled={!modify}  className='form-control' type="number" value={row.amount} onChange={(ev) => {
                 self.changeAmount(ev,index);
               }} />
             </Col>
             <Col className='text-end' md={size.bonus[3]} lg={size.bonus[3]} xl={size.bonus[3]} xxl={size.bonus[3]} >
-              <button className='btn btn-sm btn-danger' onClick={(ev) => {
+              <button hidden={!modify} className='btn btn-sm btn-danger' onClick={(ev) => {
                 self.clickRemove(index);
               }}><FaSkullCrossbones /></button>
             </Col>
