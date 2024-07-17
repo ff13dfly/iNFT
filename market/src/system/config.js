@@ -30,12 +30,12 @@ const config={
         status:{    //[0.removed; 2.init; 3.written to chain;4.report to system; 5.payed; 6. on progress; 8.done;]
             0:"removed",
             1:"normal",
-            2:"local saved",
-            3:"written to chain",
-            4:"report to proxy system",
+            2:"on chain",
+            3:"local saved",
+            4:"reported",
             5:"payed",
             6:"on progress",
-            7:"finished without all done",
+            7:"done",
             8:"all done",
         },
         receiver:{

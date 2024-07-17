@@ -1,10 +1,15 @@
 import { Row, Col, Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import Bounty from "../system/bounty";
 import BountySubmit from './bounty_submit';
 
-import { FaBitcoin } from "react-icons/fa";
+import Config from "../system/config";
+import Bounty from "../system/bounty";
+import API from '../system/api';
+
+import tools from "../lib/tools";
+
+import { FaBitcoin,FaSyncAlt } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -13,9 +18,21 @@ function UserBounty(props) {
   
   let [list, setList]=useState([]);
 
+  const def=Config.get(["bounty","status"]);
   const self = {
     clickPay:(name)=>{
       props.dialog(<BountySubmit name={name} />,"Bounty Submission");
+    },
+    clickSync:(name)=>{
+      Bounty.get(name,(dt)=>{
+        if(!dt || dt.length===0) return false;
+        const bt=dt[0];
+        console.log(bt);
+        const name=bt.name;
+        API.bounty.exsist(name,(res)=>{
+          console.log(res);
+        });
+      });
     },
     fresh:()=>{
       Bounty.list((arr)=>{
@@ -43,6 +60,7 @@ function UserBounty(props) {
           <th>Start</th>
           <th>End</th>
           <th>Template</th>
+          <th>Date</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -50,10 +68,12 @@ function UserBounty(props) {
         {list.map((row, index) => (
           <tr key={index}>
             <td>
+              <a href="https://polkadot.js.org/apps/?rpc=ws://localhost:9944#/chainstate" target="_blank" rel="noreferrer">
               {row.name}
+              </a>
             </td>
             <td>
-              {row.status}
+              {!def[row.status]?"unknow":def[row.status]}
             </td>
             <td>
               {row.start.toLocaleString()}
@@ -62,12 +82,21 @@ function UserBounty(props) {
               {row.end.toLocaleString()}
             </td>
             <td>
-              {row.template.cid}
+              <a href={`http://localhost:3000/playground/${row.template.cid}`} target="_blank" rel="noreferrer">
+                {tools.shorten(row.template.cid)}
+              </a>
+            </td>
+            <td>
+              {(new Date(row.stamp).toLocaleDateString())}
             </td>
             <td>
               <span className='pointer' onClick={(ev)=>{
                   self.clickPay(row.name);
-              }}><FaBitcoin /></span>
+              }}><FaBitcoin size={24}/></span>
+              <span className='pointer ml-5' onClick={(ev)=>{
+                  self.clickSync(row.name);
+              }}><FaSyncAlt size={20}/></span>
+              
             </td>
           </tr>
         ))}

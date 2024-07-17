@@ -64,7 +64,7 @@ function BountyDetail(props) {
   return (
     <Row className='pt-2'>
       {list.map((row, index) => (
-        <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+        <Col key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
           <Row>
             <Col md={size.thumb[0]} lg={size.thumb[0]} xl={size.thumb[0]} xxl={size.thumb[0]}>
               <img className='series_thumb' src={row.thumb} alt={row.name} />
@@ -79,7 +79,7 @@ function BountyDetail(props) {
       ))}
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr /></Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Total: {total.toLocaleString()} ${coin}. Target account: {target}
+        Total: {total.toLocaleString()} ${coin}. Target account: <strong>{target}</strong>
       </Col>
     </Row>
   );

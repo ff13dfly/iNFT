@@ -21,7 +21,7 @@ function BountySubmit(props) {
     half: [5],
     step: [2, 10],
     head: [4, 8],
-    normal: [8, 4],
+    normal: [9, 3],
   };
 
   const loadRef = useRef(null);
@@ -38,6 +38,7 @@ function BountySubmit(props) {
   //step enable
   let [ready, setReady] = useState(false);
   let [pay, setPay] = useState(false);
+  let [modify, setModify]=useState(true);       //wether modifable
 
   //UI improvement
   let [tabs, setTabs] = useState({
@@ -100,7 +101,56 @@ function BountySubmit(props) {
         setReady(true);
       });
     },
-    clickSubmit: () => {
+    clickSubmit:()=>{
+      const addr = RUNTIME.account.get();
+      const name = self.getBountyName(8).toLocaleLowerCase();
+
+      //1.write data on chain
+      const raw = self.getBountyData(addr);
+      const protocol = { fmt: "json", type: "data", tpl: "bounty" };
+      const dapp = Config.get(["system", "name"]);
+      const obj = {
+        anchor: name,
+        raw: raw,
+        protocol: protocol,
+        dapp: dapp,
+      }
+
+      const chain=Network("anchor");
+      chain.sign(obj,(res)=>{
+        setInfo(res.msg);
+        
+        if(res.status==="Finalized"){
+          setTimeout(() => {
+            setInfo("");
+          }, 1500);
+          const hash=res.hash;    //get the transaction hash
+
+          chain.view({name:name},"anchor",(detail)=>{
+            if(!detail) return setInfo("Failed to get the bounty anchor data.");
+            const alink=`anchor://${name}/${detail.block}`;
+            const bt = self.getLocalData(alink,addr);
+            bt.status=3;
+            bt.publisher.block=detail.block;
+            bt.publisher.hash=hash;
+            
+            Bounty.insert(bt, (dt) => {
+              //4.report to iNFT proxy system
+              const report={
+                name:alink,
+                transaction:hash,
+              }
+              API.bounty.submit(report,(dt)=>{
+                console.log(dt);
+                //5.update local indexedDB status;
+              });
+            });
+          });
+        }
+      },"subwallet");
+    },
+
+    clickSubmit_bak: () => {
       const addr = RUNTIME.account.get();
       const name = self.getBountyName(8).toLocaleLowerCase();
 
@@ -139,8 +189,6 @@ function BountySubmit(props) {
               });
             }
           },"subwallet");
-          
-
       });
     },
     clickPay:()=>{
@@ -269,6 +317,7 @@ function BountySubmit(props) {
         const bty=res[0];
         self.load(bty);
         setAnchor(props.name);
+        setModify(false);
       });
     }else{
       self.fresh();
@@ -374,13 +423,9 @@ function BountySubmit(props) {
                 {info}
               </Col>
               <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button className='btn btn-md btn-primary' onClick={(ev) => {
+                <button disabled={!modify} className='btn btn-md btn-primary' onClick={(ev) => {
                   self.clickSubmit();
                 }}>Submit</button>
-              </Col>
-
-              <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <hr />
               </Col>
             </Row>
           </Col>
@@ -399,7 +444,7 @@ function BountySubmit(props) {
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 {payInfo}
               </Col>
-              <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+              <Col className='pt-4 text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button className='btn btn-md btn-primary' onClick={(ev)=>{
                   self.clickPay(ev);
                 }}>Pay Now</button>

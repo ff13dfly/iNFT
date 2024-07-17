@@ -76,6 +76,16 @@ const self={
     },
 
     bounty:{
+        exsist:(name,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={name:name};
+                funs.request("bounty","exsist",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to submit bounty."});
+                },param);
+            });
+        },
         submit:(obj,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});

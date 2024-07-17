@@ -119,7 +119,7 @@ function ListNFTs(props) {
       setList(nlist);
 
       INFT.auto(props.data,(iNFTs)=>{
-        console.log(iNFTs);
+        //console.log(iNFTs);
         setList(iNFTs);
         setReady(true);
       });

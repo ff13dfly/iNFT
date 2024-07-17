@@ -285,7 +285,7 @@ const self = {
         });
     },
     view: (value, type, ck) => {
-        console.log(value);
+        //console.log(value);
         self.init(() => {
             switch (type) {
                 case "anchor":
@@ -410,6 +410,9 @@ const self = {
                         const hash = res.toHex();
                         return ck && ck(hash);
                     });
+                    break;
+                case "transaction":
+                        
                     break;
                 default:
                     break;
