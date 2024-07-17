@@ -2,10 +2,13 @@ import { Row, Col, Image } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
+import Network from '../network/router';
+
 import Config from "../system/config";
 import RUNTIME from '../system/runtime';
 
 function UserBasic(props) {
+
   const size = {
     row: [12],
     head: [4, 8],
@@ -16,6 +19,7 @@ function UserBasic(props) {
 
   let [thumb, setThumb] = useState(""); 
   let [address,setAddress]= useState("");
+  let [balance,setBalance] =useState(0);
 
   const self = {
     getAvatar: () => {
@@ -23,10 +27,25 @@ function UserBasic(props) {
       const addr=RUNTIME.account.get();
       return `${cfg.base}/${addr}.png${cfg.set}`;
     },
+
     fresh:()=>{
       const url=self.getAvatar();
+      const addr=RUNTIME.account.get();
+
+      console.log(addr);
+      if(!addr || addr===null) return setTimeout(()=>{
+        self.fresh();
+      },500);
+
       setThumb(url);
-      setAddress(tools.shorten(RUNTIME.account.get()),16);
+      setAddress(tools.shorten(addr),16);
+
+      const chain=Network("anchor")
+      chain.balance(addr,(res)=>{
+        const free=parseInt(res.free);
+        const val=free/chain.divide();
+        setBalance(val.toLocaleString());
+      });
     },
     isAddressSetting:()=>{
       return Config.exsist(address);
@@ -45,7 +64,7 @@ function UserBasic(props) {
       </Col>
 
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-        Summary Of Manager Account
+        Balance: <strong>{balance}</strong>
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <h5>Manager</h5>

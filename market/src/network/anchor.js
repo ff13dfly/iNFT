@@ -187,15 +187,16 @@ const self = {
     divide: () => {
         return 1000000000000;
     },
-
     balance: (address, ck) => {
-        let unsub = null;
-        wsAPI.query.system.account(address, (res) => {
-            if (unsub != null) unsub();
-            const data = res.toJSON().data;
-            return ck && ck(data);
-        }).then((fun) => {
-            unsub = fun;
+        self.init(() => {
+            let unsub = null;
+            wsAPI.query.system.account(address, (res) => {
+                if (unsub != null) unsub();
+                const data = res.toJSON().data;
+                return ck && ck(data);
+            }).then((fun) => {
+                unsub = fun;
+            });
         });
     },
 
