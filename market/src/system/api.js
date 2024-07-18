@@ -74,7 +74,18 @@ const self={
             },param);
         });
     },
+    selling:(page,ck,step)=>{
+        self.init((ready)=>{
+            if(ready.error) return ck && ck({error:"Internal error."});
+            const param={page:page};
+            if(step) param.step=parseInt(step);
 
+            funs.request("selling","list",(res)=>{
+                if(res.success) return ck && ck(res);
+                return ck && ck({error:"Failed to get data."});
+            },param);
+        });
+    },
     bounty:{
         exsist:(name,ck)=>{
             self.init((ready)=>{
@@ -109,17 +120,20 @@ const self={
             });
         },
     },
-    selling:(page,ck,step)=>{
-        self.init((ready)=>{
-            if(ready.error) return ck && ck({error:"Internal error."});
-            const param={page:page};
-            if(step) param.step=parseInt(step);
+    list:{
+        byAddress:(address,ck,page,step)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
 
-            funs.request("selling","list",(res)=>{
-                if(res.success) return ck && ck(res);
-                return ck && ck({error:"Failed to get data."});
-            },param);
-        });
+                const param={acc:address,page:!page?1:page};
+                if(step) param.step=parseInt(step);
+    
+                funs.request("list","account",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to get data."});
+                },param);
+            });
+        },
     },
 };
 

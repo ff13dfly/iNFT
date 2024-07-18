@@ -109,7 +109,7 @@ function ListNFTs(props) {
   }
 
   useEffect(() => {
-    
+    console.log(JSON.stringify(props.data));
     if(props.data.length===0){
       setInfo("No iNFT result list.");
       setList([]);
@@ -132,7 +132,7 @@ function ListNFTs(props) {
         <h4>{info}</h4>
       </Col>
       {list.map((row, index) => (
-        <Col className="justify-content-around pt-2" key={index}  lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
+        <Col key={index} className="justify-content-around pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           <Card hidden={!ready} style={{ width: '100%' }}>
               <a href={`/detail/${row.name}@${row.network}`} target='blank'>
                 <Card.Img variant="top" src={self.showThumb(row.bs64)} />

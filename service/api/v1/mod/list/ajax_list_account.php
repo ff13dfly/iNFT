@@ -13,13 +13,21 @@ $key=REDIS_PREFIX_ACCOUNT.$account;
 
 $start=0;
 $end=20;
-$queue=$a->getGlobalList($key,$start,$end);
+$queue=$a->rangeList($key,$start,$end);
 
 $map=array();
 foreach($queue as $v){
     $raw=$a->getKey($v);
     $data=json_decode($raw,true);
-    $data['name']=$v;
+    $tmp=explode("_",$v);
+    $block=array_pop($tmp);
+
+    array_shift($tmp);
+    $name=implode("_",$tmp);
+
+    $data['name']=$name;
+    $data['block']=(int)$block;
+
     array_push($map,$data);
 }
 
