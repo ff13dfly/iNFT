@@ -5,6 +5,7 @@ import AccountSelector from './account_selector';
 import ListNFTs from './list_nfts';
 
 import API from '../system/api';
+import INFT from '../system/inft';
 
 function UserINFT(props) {
   const size = {
@@ -21,10 +22,26 @@ function UserINFT(props) {
       setAddress(addr);
       self.fresh(addr);
     },
+    getAnchorArray:(arr)=>{
+      const narr=[];
+      for(let i=0;i<arr.length;i++){
+        const row=arr[i];
+        narr.push({name:row.name,block:row.block});
+      }
+      return narr;
+    },
     fresh:(addr)=>{
       //console.log(addr);
       API.list.byAddress(addr,(res)=>{
         console.log(res);
+        if(!res || !res.data || res.data.length!==0){
+          const narr=self.getAnchorArray(res.data);
+          console.log(narr);
+          INFT.multi(narr,(ans)=>{
+            console.log(ans);
+            setList(ans);
+          });
+        } 
       });
     },
   }
@@ -41,7 +58,7 @@ function UserINFT(props) {
           self.changeAccount(addr);
         }} />
       </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ListNFTs data={list} />
       </Col>
     </Row>

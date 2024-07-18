@@ -36,10 +36,10 @@ function SearchMarket(props) {
         button: false,
       })
 
-      const api = Network(network);
+      const chain = Network(network);
       const num = parseInt(search);
       if (!isNaN(num)) {
-        api.view(num, "blocknumber", (arr) => {
+        chain.view(num, "blocknumber", (arr) => {
           for (let i = 0; i < arr.length; i++) {
             arr[i].blocknumber = num;
           }
@@ -51,7 +51,7 @@ function SearchMarket(props) {
           })
         });
       } else {
-        api.view(search, "owner", (dt) => {
+        chain.view(search, "owner", (dt) => {
           console.log(dt);
           if (!dt || dt.error) {
             return setEnable({
@@ -61,7 +61,7 @@ function SearchMarket(props) {
             })
           }
 
-          api.view({ name: search, block: dt.block }, "anchor", (res) => {
+          chain.view({ name: search, block: dt.block }, "anchor", (res) => {
             res.blocknumber = dt.block;
 
             if(props.callback) props.callback([res],network);

@@ -92,6 +92,23 @@ const self = {
     disableLocal:()=>{
         local=false;
     },
+    /*  get the anchor list by name and block
+    *   @param  {list}  array       //{name:ANCHOR_NAME,block:BLOCK}
+    *   @param  {ck}    [function]  //
+    *   @param  {done}  array       //result for loop
+    */
+    multi:(list,ck,done)=>{
+        if(!done) done=[];
+        if(list.length===0) return ck && ck(done);
+        const single=list.pop();
+        const chain=Network("anchor");
+        chain.view(single,"anchor",(dt)=>{
+            dt.block=single.block;
+            done.push(dt);
+            return self.multi(list,ck,done);
+        });
+    },
+
     single:(name,ck,normal)=>{
         if(map[name]) return ck && ck(map[name]);
         if(!normal){
@@ -177,14 +194,11 @@ const self = {
         }
         return ck && ck(result);
     },
-    view:(list)=>{
-        const arr=[];
-        for(let i=0;i<list.length;i++){
-            const key=list[i];
-            if(map[key]) arr.push(map[key]);
-        }
-        return arr;
-    },
+    /* get the thumb and cache
+    *   @param  {list}  anchor[]       //anchor data array
+    *   @param  {ck}    [function]      //
+    *   @param  {final} [array]         //temp list, for loop
+    */
     auto:(list,ck,final)=>{
         if(!final) final=[];
         if(list.length===0) return ck && ck(final);
