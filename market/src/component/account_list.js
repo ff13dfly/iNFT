@@ -1,11 +1,12 @@
 import { Row, Col, Table, Form } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
+import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaFileImport } from "react-icons/fa";
 
 import Account from "../system/account";
 
 import INDEXED from '../lib/indexed';
+import tools from '../lib/tools';
 import Config from '../system/config';
 
 function AccountList(props) {
@@ -32,6 +33,10 @@ function AccountList(props) {
         }
       });
     },
+    getDate:(stamp)=>{
+      const dt=new Date(stamp);
+      return`${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
+    },
     fresh: () => {
       //console.log("force to fresh.");
       Account.list({}, (data) => {
@@ -54,7 +59,7 @@ function AccountList(props) {
               <th>Address</th>
               <th>Default</th>
               <th>Balance</th>
-              <th>Wallet</th>
+              <th>Stamp</th>
               <th>Operation</th>
             </tr>
           </thead>
@@ -64,7 +69,7 @@ function AccountList(props) {
                 <td>{row.network}</td>
                 <td>
                   <span className='pointer'><FaRegCopy /></span>
-                  <span className='ml-5'>{row.address}</span>
+                  <span className='ml-5'>{tools.shorten(row.address)}</span>
                 </td>
                 <td>
                   <Form>
@@ -78,7 +83,7 @@ function AccountList(props) {
                   </Form>
                 </td>
                 <td>0</td>
-                <td>Subwallet | Polkadot</td>
+                <td>{self.getDate(row.stamp)}</td>
                 <td>
                   <span className='pointer' onClick={(ev)=>{
                     self.clickRemove(row.address);

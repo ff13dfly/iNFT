@@ -1,9 +1,13 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import AccountLoad from './account_load';
+
 import Account from "../system/account";
 import Config from "../system/config";
 import tools from "../lib/tools";
+
+import { FaRegPlusSquare,FaUpload } from "react-icons/fa";
 
 function AccountAdd(props) {
   const size = {
@@ -16,23 +20,27 @@ function AccountAdd(props) {
   
   const self={
     changeNetwork:(ev)=>{
-      //console.log(ev.target.value);
       setCurrent(ev.target.value);
     },
     clickAdd:(ev)=>{
       console.log("Click adding button,"+current);
-
       Account.generate(current,()=>{
 
       });
       if(props.fresh) props.fresh();
+    },
+    clickImport:(ev)=>{
+      if(props.dialog){
+        props.dialog(<AccountLoad network={current} callback={()=>{
+
+        }}/>,`Import Account ( ${tools.toUp(current)} Network )`)
+      }
     },
     getNetworks:(ck)=>{
         if(networks.length!==0) return ck && ck(networks);
         const ns=Config.get("network");
         for(var k in ns){
           const row=ns[k];
-          console.log(row);
           if(row.enable && row.support && row.support.minting){
             row.name=k;
             networks.push(row);
@@ -66,7 +74,10 @@ function AccountAdd(props) {
       <Col md={size.account[1]} lg={size.account[1]} xl={size.account[1]} xxl={size.account[1]}>
         <button className='btn btn-md btn-primary' onClick={(ev)=>{
           self.clickAdd(ev);
-        }}> New Account </button>
+        }}><FaRegPlusSquare size={18}/></button>
+        <button className='btn btn-md btn-primary ml-5' onClick={(ev)=>{
+          self.clickImport(ev);
+        }}><FaUpload size={18}/></button>
       </Col>
     </Row>
   );

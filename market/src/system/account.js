@@ -50,6 +50,7 @@ const self = {
         const pass = funs.randomPassword();
 
         gen.generate(pass, (row) => {
+
             //1.saving the password to config
             Config.set(["account", "password", row.address], pass);
 
@@ -58,6 +59,21 @@ const self = {
             funs.insertToDB(row, (res) => {
                 console.log(res);
             });
+        });
+    },
+
+    import:(pass,row,ck)=>{
+        console.log(pass,row);
+        //0.check wether loaded;
+
+        //1.saving the password to config
+        Config.set(["account", "password", row.address], pass);
+
+        //2.insert the address data to indexedDB
+        row.stamp = tools.stamp();
+        funs.insertToDB(row, (res) => {
+            console.log(res);
+            return ck && ck();
         });
     },
 
