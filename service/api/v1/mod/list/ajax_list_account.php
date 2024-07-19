@@ -1,7 +1,7 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$page=isset($_F['request']['p'])?(int)$_F['request']['p']-1:0;
+$page=isset($_F['request']['page'])?(int)$_F['request']['page']-1:0;
 $account=$_F['request']['acc'];
 
 $result=array('success'=>FALSE);
@@ -11,8 +11,9 @@ $a=Cache::getInstance();
 
 $key=REDIS_PREFIX_ACCOUNT.$account;
 
-$start=0;
-$end=20;
+$step=12;
+$start=$page*$step;
+$end=$start+$step-1;
 $queue=$a->rangeList($key,$start,$end);
 
 $map=array();

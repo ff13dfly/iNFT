@@ -293,7 +293,7 @@ const self = {
                     //1.if set block,search directly
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
-                        console.log(hash);
+                        //console.log(hash);
 
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;

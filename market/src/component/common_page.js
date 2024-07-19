@@ -76,7 +76,7 @@ function Page(props) {
           <ButtonGroup className="me-2" aria-label="First group">
             <button className='btn btn-md btn-default' onClick={(ev) => {
               self.clickStart(ev);
-            }}>{"<<"}</button>
+            }}>{"|<<"}</button>
             <button className='btn btn-md btn-default' onClick={(ev) => {
               self.clickPrevious(ev);
             }}>{"<"}</button>
@@ -95,7 +95,7 @@ function Page(props) {
             }}>{">"}</button>
             <button className='btn btn-md btn-default' onClick={(ev) => {
               self.clickEnd(ev);
-            }}>{">>"}</button>
+            }}>{">>|"}</button>
           </ButtonGroup></ButtonToolbar>
       </Col>
     </Row>

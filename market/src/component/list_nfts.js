@@ -1,5 +1,5 @@
-import { Row,Col,Card,Placeholder } from 'react-bootstrap';
-import { useEffect,useState } from "react";
+import { Row, Col, Card, Placeholder } from 'react-bootstrap';
+import { useEffect, useState } from "react";
 
 import Render from '../lib/render';
 import tools from '../lib/tools';
@@ -40,85 +40,85 @@ import { FaAnchor } from "react-icons/fa";
 function ListNFTs(props) {
   const size = {
     row: [12],
-    grid:[3],
+    grid: [3],
   };
 
-  let [list,setList]=useState([]);
-  let [ready,setReady]=useState(false);
-  let [info, setInfo]=useState("");
+  let [list, setList] = useState([]);
+  let [ready, setReady] = useState(false);
+  let [info, setInfo] = useState("");
 
-  const self={
-    getHolder:(n)=>{
-      const arr=[]
-      for(let i=0;i<n;i++){
-        arr.push({name:"#"+i});
+  const self = {
+    getHolder: (n) => {
+      const arr = []
+      for (let i = 0; i < n; i++) {
+        arr.push({ name: "#" + i });
       }
       return arr;
     },
-    getTemplates:(list,ck)=>{
+    getTemplates: (list, ck) => {
       //1.filter out all template cid
-      const map={};
-      for(let i=0;i<list.length;i++){
-        const row=list[i];
-        if(row && row.raw && row.raw.tpl) map[row.raw.tpl]=true;
+      const map = {};
+      for (let i = 0; i < list.length; i++) {
+        const row = list[i];
+        if (row && row.raw && row.raw.tpl) map[row.raw.tpl] = true;
       }
 
       //get cid array
-      const tpls=[];
-      for(var cid in map) tpls.push(cid);
-      TPL.cache(tpls,ck);
+      const tpls = [];
+      for (var cid in map) tpls.push(cid);
+      TPL.cache(tpls, ck);
     },
-    getThumbs:(list,ck,imgs)=>{
-      if(imgs===undefined){
-        list=tools.copy(list);
-        imgs={}
+    getThumbs: (list, ck, imgs) => {
+      if (imgs === undefined) {
+        list = tools.copy(list);
+        imgs = {}
       }
-      if(list.length===0) return ck && ck(imgs);
-      const row=list.pop();
+      if (list.length === 0) return ck && ck(imgs);
+      const row = list.pop();
       //console.log(row);
-      TPL.view(row.raw.tpl,(def)=>{
+      TPL.view(row.raw.tpl, (def) => {
         const basic = {
-            cell: def.cell,
-            grid: def.grid,
-            target: def.size
+          cell: def.cell,
+          grid: def.grid,
+          target: def.size
         }
-        const offset=!row.raw.offset?[]:row.raw.offset;
-        Render.thumb(row.hash,def.image,def.parts,basic,offset,(img)=>{
-          imgs[row.name]=img;
-          return self.getThumbs(list,ck,imgs)
+        const offset = !row.raw.offset ? [] : row.raw.offset;
+        Render.thumb(row.hash, def.image, def.parts, basic, offset, (img) => {
+          imgs[row.name] = img;
+          return self.getThumbs(list, ck, imgs)
         });
       })
     },
-    formatResult:(list,imgs)=>{
-      const arr=[];
-      for(let i=0;i<list.length;i++){
-        const row=list[i];
+    formatResult: (list, imgs) => {
+      const arr = [];
+      for (let i = 0; i < list.length; i++) {
+        const row = list[i];
         arr.push({
-          name:row.name,
-          signer:row.signer,
-          network:row.network,
-          bs64:imgs[row.name],
+          name: row.name,
+          signer: row.signer,
+          network: row.network,
+          bs64: imgs[row.name],
         });
       }
       return arr;
     },
-    showThumb:(bs64)=>{
-      if(!bs64) return `${window.location.origin}/imgs/logo.png`;
+    showThumb: (bs64) => {
+      if (!bs64) return `${window.location.origin}/imgs/logo.png`;
       return bs64;
     },
   }
 
   useEffect(() => {
-    console.log(JSON.stringify(props.data));
-    if(props.data.length===0){
+    //console.log(JSON.stringify(props.data));
+    if (props.data.length === 0) {
       setInfo("No iNFT result list.");
       setList([]);
-    }else{
+    } else {
       setInfo("");
-      const nlist=self.getHolder(props.data.length);
+      const nlist = self.getHolder(props.data.length);
       setList(nlist);
 
-      INFT.auto(props.data,(iNFTs)=>{
+      INFT.auto(props.data, (iNFTs) => {
         //console.log(iNFTs);
         setList(iNFTs);
         setReady(true);
@@ -128,29 +128,28 @@ function ListNFTs(props) {
 
   return (
     <Row>
-      <Col className='pt-1' hidden={!info?true:false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className='pt-1' hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h4>{info}</h4>
       </Col>
       {list.map((row, index) => (
         <Col key={index} className="justify-content-around pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           <Card hidden={!ready} style={{ width: '100%' }}>
-              <a href={`/detail/${row.name}@${row.network}`} target='blank'>
-                <Card.Img variant="top" src={self.showThumb(row.bs64)} />
-              </a>
-              <Card.Body>
-                <Card.Title>{row.name}</Card.Title>
-                <Card.Text>
-                  <Row>
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                      {!row.signer?"":tools.shorten(row.signer)}
-                    </Col>
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                      <FaAnchor /> <span className='pt-1'>{row.blocknumber}</span> 
-                    </Col>
-                  </Row>
-                </Card.Text>
-              </Card.Body>
-            
+            <a href={`/detail/${row.name}@${row.network}`} target='blank'>
+              <Card.Img variant="top" src={self.showThumb(row.bs64)} />
+            </a>
+            <Card.Body>
+              <Card.Title>{row.name}</Card.Title>
+              <Card.Text>
+                <Row>
+                  <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                    {!row.signer ? "" : tools.shorten(row.signer)}
+                  </Col>
+                  <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                    <FaAnchor /> <span className='pt-1'>{row.blocknumber}</span>
+                  </Col>
+                </Row>
+              </Card.Text>
+            </Card.Body>
           </Card>
 
           <Card hidden={ready} style={{ width: '100%' }}>
