@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import AccountSelector from './account_selector';
 import ListNFTs from './list_nfts';
+import Page from './common_page';
 
 import API from '../system/api';
 import INFT from '../system/inft';
@@ -13,13 +14,13 @@ function UserINFT(props) {
     left: [8, 4],
   };
 
-  let [address,setAddress]=useState("");
+  //let [address,setAddress]=useState("");
   let [list, setList]=useState([]);
 
   const self = {
     changeAccount:(addr)=>{
       //console.log(addr);
-      setAddress(addr);
+      //setAddress(addr);
       self.fresh(addr);
     },
     getAnchorArray:(arr)=>{
@@ -31,9 +32,7 @@ function UserINFT(props) {
       return narr;
     },
     fresh:(addr)=>{
-      //console.log(addr);
       API.list.byAddress(addr,(res)=>{
-        console.log(res);
         if(!res || !res.data || res.data.length!==0){
           const narr=self.getAnchorArray(res.data);
           console.log(narr);
@@ -59,6 +58,9 @@ function UserINFT(props) {
         }} />
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Page  show={true} align={"right"} now={3} step={5} total={12} callback={(n)=>{
+          console.log(n);
+        }}/>
         <ListNFTs data={list} />
       </Col>
     </Row>
