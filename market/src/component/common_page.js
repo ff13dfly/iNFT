@@ -71,8 +71,8 @@ function Page(props) {
   return (
 
     <Row hidden={!props.show}>
-      <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <ButtonToolbar aria-label="Toolbar with button groups text-end">
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <ButtonToolbar aria-label="Toolbar with button groups">
           <ButtonGroup className="me-2" aria-label="First group">
             <button className='btn btn-md btn-default' onClick={(ev) => {
               self.clickStart(ev);

@@ -9,30 +9,17 @@ $result=array('success'=>FALSE);
 $a->load('cache');
 $a=Cache::getInstance();
 
-$key=REDIS_PREFIX_ACCOUNT.$account;
+$a->load('inft');
+$a=Inft::getInstance();
 
-$step=12;
-$start=$page*$step;
-$end=$start+$step-1;
-$queue=$a->rangeList($key,$start,$end);
+//1.get the iNFT list by address
+$list=$a->listINFTbyAddress($account,$page);
 
-$map=array();
-foreach($queue as $v){
-    $raw=$a->getKey($v);
-    $data=json_decode($raw,true);
-    $tmp=explode("_",$v);
-    $block=array_pop($tmp);
+//2.calc navigator
+$key=INFT_PREFIX_ACCOUNT.$account;
 
-    array_shift($tmp);
-    $name=implode("_",$tmp);
-
-    $data['name']=$name;
-    $data['block']=(int)$block;
-
-    array_push($map,$data);
-}
-
-$result['data']=$map;
+$result['nav']=$a->nav($key);
+$result['data']=$list;
 $result['success']=true;
 
 $a=Config::getInstance();

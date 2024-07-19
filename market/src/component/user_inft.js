@@ -15,15 +15,18 @@ function UserINFT(props) {
   };
 
   let [address, setAddress]=useState("");
-  let [page, setPage]=useState(1);
   let [list, setList]=useState([]);
+
+  let [show,setShow]=useState(false);
+  let [now, setNow]=useState(1);
+  let [total, setTotal]=useState(1);
 
   const self = {
     changeAccount:(addr)=>{
       if(!addr) return false;
       console.log(`Here to fresh`);
       setAddress(addr);
-      self.fresh(addr,page);
+      self.fresh(addr,now);
     },
     getAnchorArray:(arr)=>{
       const narr=[];
@@ -34,16 +37,21 @@ function UserINFT(props) {
       return narr;
     },
     fresh:(addr,p)=>{
+      if(!addr) return false;
       API.list.byAddress(addr,(res)=>{
-        if(!res || !res.data || res.data.length!==0){
-          console.log(res.data);
+        //console.log(res.nav);
+        if(res && res.nav && res.nav.total!==0){
+          setShow(true);
+          setTotal(res.nav.page);
+        }else{
+          setShow(false);
+        } 
+
+        if(!res || !res.data || res.data.length===0) return false;
           const narr=self.getAnchorArray(res.data);
-          //console.log(narr);
           INFT.multi(narr,(ans)=>{
-            //console.log(ans);
             setList(ans);
           });
-        } 
       },p);
     },
   }
@@ -61,8 +69,8 @@ function UserINFT(props) {
         }} />
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Page  show={true} align={"right"} now={3} step={5} total={12} callback={(n)=>{
-          setPage(n);
+        <Page show={show} align={"right"} now={now} step={5} total={total} callback={(n)=>{
+          setNow(n);
           self.fresh(address,n)
         }}/>
         <ListNFTs data={list} />
