@@ -70,7 +70,7 @@ function Page(props) {
 
   return (
 
-    <Row hidden={!props.show}>
+    <Row hidden={!props.show} className='pt-2'>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ButtonToolbar aria-label="Toolbar with button groups">
           <ButtonGroup className="me-2" aria-label="First group">

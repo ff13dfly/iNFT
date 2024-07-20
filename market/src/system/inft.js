@@ -104,6 +104,7 @@ const self = {
         const chain=Network("anchor");
         chain.view(single,"anchor",(dt)=>{
             dt.block=single.block;
+            dt.blocknumber=single.block;
             done.push(dt);
             return self.multi(list,ck,done);
         });
