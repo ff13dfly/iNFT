@@ -19,6 +19,7 @@ function AccountList(props) {
   };
 
   let [list, setList] = useState([]);
+  let [balances,setBalances]= useState({});
 
   const nameDB =Config.get(["storage","DBname"]);
   const table="accounts";
@@ -37,10 +38,23 @@ function AccountList(props) {
       const dt=new Date(stamp);
       return`${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
     },
+    getBalances:(accs)=>{
+      const narr=[];
+      for(let i=0;i<accs.length;i++){
+        narr.push(accs[i].address);
+      }
+
+      Account.balance(narr,(bs)=>{
+        console.log(bs);
+        setBalances(bs);
+      });
+    },
     fresh: () => {
-      //console.log("force to fresh.");
       Account.list({}, (data) => {
         setList(data);
+        setTimeout(()=>{
+          self.getBalances(data);
+        },100);
       });
     },
   }
@@ -82,7 +96,7 @@ function AccountList(props) {
                     />
                   </Form>
                 </td>
-                <td>0</td>
+                <td>{!balances[row.address]?0:balances[row.address].toLocaleString()}</td>
                 <td>{self.getDate(row.stamp)}</td>
                 <td>
                   <span className='pointer' onClick={(ev)=>{

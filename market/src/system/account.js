@@ -41,6 +41,9 @@ const funs = {
             INDEXED.insertRow(db, table, [row],ck);
         });
     },
+    getDivide:()=>{
+        return 0.000000000001;
+    },
 }
 
 const self = {
@@ -63,7 +66,7 @@ const self = {
     },
 
     import:(pass,row,ck)=>{
-        console.log(pass,row);
+        //console.log(pass,row);
         //0.check wether loaded;
 
         //1.saving the password to config
@@ -82,6 +85,24 @@ const self = {
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });
+    },
+    balance:(list,ck,net)=>{
+        const chain = Network(!net?"anchor":net);
+        if(Array.isArray(list)){
+            let working=0;
+            const map={};
+            for(let i=0;i<list.length;i++){
+                const address=list[i];
+                working++;
+                chain.balance(address,(res)=>{
+                    working--;
+                    map[address]=parseInt(res.free)*funs.getDivide();
+                    if(working<1) return ck && ck(map);
+                });
+            }
+        }else{
+            chain.balance(list,ck);
+        }
     },
 }
 
