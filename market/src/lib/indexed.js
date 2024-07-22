@@ -250,6 +250,14 @@ const INDEXED = {
       };
     }
   },
+  /*  get page from indexedDB
+  *   @param  {object}    db        //indexedDB object
+  *   @param  {string}    table     //indexedDB table name
+  *   @param  {callbakc}  [ck]
+  *   @param  {object}    [nav]     //{page:PAGE,step:STEP}
+  *   @param  {search}    [search]  //search function, not support yet.  
+  *
+  */
   pageRows: (db, table, ck, nav, search) => {
     let list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
@@ -273,14 +281,18 @@ const INDEXED = {
 
       if (cursor) {
         list.push(cursor.value);
-        cursor.continue(); // 遍历了存储对象中的所有内容
+        cursor.continue();        // get all result from table
       } else {
         return ck && ck(list);
       }
     };
     request.onerror =  (e) =>{ };
   },
-  test: () => {
+  
+};
+
+const test={
+  sample: () => {
     //https://juejin.cn/post/7026900352968425486
     const name = "w3os_chat";
     //const name =`w3os_chat_${address}`;
@@ -299,6 +311,6 @@ const INDEXED = {
       // ],db.version+1)
     });
   },
-};
+}
 
 export default INDEXED;

@@ -49,4 +49,9 @@ const self = {
   },
 };
 
+//put test on every lib, can be run in self.
+const test={
+
+};
+
 export default self;

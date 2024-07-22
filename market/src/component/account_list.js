@@ -6,7 +6,9 @@ import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaFileImport } fr
 import Account from "../system/account";
 
 import INDEXED from '../lib/indexed';
+import Copy from '../lib/clipboard';
 import tools from '../lib/tools';
+
 import Config from '../system/config';
 
 function AccountList(props) {
@@ -20,6 +22,7 @@ function AccountList(props) {
 
   let [list, setList] = useState([]);
   let [balances,setBalances]= useState({});
+  let [recover, setRecover] = useState({});
 
   const nameDB =Config.get(["storage","DBname"]);
   const table="accounts";
@@ -34,6 +37,19 @@ function AccountList(props) {
         }
       });
     },
+    clickCopy:(address)=>{
+      Copy(address);
+    },
+    callRecover:(key, at) => {
+      if (!recover[key]) {
+          recover[key] = "text-warning";
+          setRecover(tools.copy(recover));
+          setTimeout(() => {
+              delete recover[key];
+              setRecover(tools.copy(recover));
+          }, !at ? 1000 : at);
+      }
+    },
     getDate:(stamp)=>{
       const dt=new Date(stamp);
       return`${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
@@ -45,7 +61,7 @@ function AccountList(props) {
       }
 
       Account.balance(narr,(bs)=>{
-        console.log(bs);
+        //console.log(bs);
         setBalances(bs);
       });
     },
@@ -82,7 +98,10 @@ function AccountList(props) {
               <tr key={index}>
                 <td>{row.network}</td>
                 <td>
-                  <span className='pointer'><FaRegCopy /></span>
+                  <span className='pointer'><FaRegCopy className={!recover[row.address] ? "" : recover[row.address]} onClick={(ev)=>{
+                    self.clickCopy(row.address);
+                    self.callRecover(row.address);
+                  }}/></span>
                   <span className='ml-5'>{tools.shorten(row.address)}</span>
                 </td>
                 <td>

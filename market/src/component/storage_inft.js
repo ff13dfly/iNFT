@@ -13,6 +13,8 @@ function StorageINFT(props) {
   };
 
   let [list, setList] = useState([]);
+  let [page, setPage] = useState(1);
+  let [step, setStep] = useState(12);
 
   const nameDB =Config.get(["storage","DBname"]);
   const table = "infts";
@@ -41,7 +43,7 @@ function StorageINFT(props) {
             if (res !== false) {
               setList(res);
             }
-          });
+          },{page:page,step:step});
         }
       });
     },
