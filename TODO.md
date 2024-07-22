@@ -1,10 +1,10 @@
 # Todo List Of iNFT
 
-- Github: []()
+- Github: [https://github.com/ff13dfly/iNFT](https://github.com/ff13dfly/iNFT)
 
 ## White Paper
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/whitepaper](https://github.com/ff13dfly/iNFT/tree/master/whitepaper)
 
 - [ ] Goal of iNFT.
 - [ ] Definition of iNFT.
@@ -71,7 +71,7 @@
 
 #### API
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/api](https://github.com/ff13dfly/iNFT/tree/master/service/api)
 
 - Language: PHP
 
@@ -88,7 +88,7 @@
 
 #### Manage Portal
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/portal](https://github.com/ff13dfly/iNFT/tree/master/service/portal)
 
 - Language: PHP
 
@@ -96,9 +96,13 @@
 
 - Functions
 
+- [ ] Bounty management.
+- [ ] Template management.
+- [ ] iNFT list management.
+
 #### Faucet Server
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/airdrop](https://github.com/ff13dfly/iNFT/tree/master/service/airdrop)
 
 - Language: Javascript ( Node.js ) 
 
@@ -106,35 +110,46 @@
 
 - Functions
 
-#### IFPS Agent Server
-
-- Github folder: []()
-
-- Language: Javascript ( Node.js ) 
-
-- Demo: [https://api.w3os.net](https://api.w3os.net)
-
-- Functions
+- [ ] Multi accounts auto swtich.
+- [ ] Multi chain support.
 
 #### Mint Robot
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/robot](https://github.com/ff13dfly/iNFT/tree/master/service/robot)
 
 - Language: Javascript ( Node.js ) 
 
 - Demo: [https://api.w3os.net](https://api.w3os.net)
 
 - Functions
+
+- [ ] Multi template support.
+- [ ] Mint limitaion benchmark.
 
 #### Cache Robot
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/history](https://github.com/ff13dfly/iNFT/tree/master/service/history)
 
 - Language: Javascript ( Node.js ) 
 
 - Demo: [https://api.w3os.net](https://api.w3os.net)
 
 - Functions
+
+- [ ] iNFT operation history data.
+- [ ] iNFT list by account address.
+- [ ] iNFT list by template.
+- [ ] iNFT list by block.
+
+#### IFPS Agent Server
+
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/service/template](https://github.com/ff13dfly/iNFT/tree/master/service/template)
+
+- Language: Javascript ( Node.js ) 
+
+- Demo: [https://api.w3os.net](https://api.w3os.net)
+
+- Functions ( No update this time )
 
 ## Minter
 
@@ -142,7 +157,7 @@
 
 - Language: Javascript ( React )
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/mint](https://github.com/ff13dfly/iNFT/tree/master/mint)
 
 - Demo: [https://inft.w3os.net/minter](https://inft.w3os.net/minter)
 
@@ -158,7 +173,7 @@
 
 - Language: Javascript ( React )
 
-- Github folder: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/editor](https://github.com/ff13dfly/iNFT/tree/master/editor)
 
 - Demo: [https://inft.w3os.net/editor](https://inft.w3os.net/editor)
 

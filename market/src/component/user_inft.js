@@ -70,7 +70,7 @@ function UserINFT(props) {
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ListNFTs data={list} />
-        <Page show={show} align={"right"} now={now} step={5} total={total} callback={(n)=>{
+        <Page show={show} align={"right"} now={now} step={10} total={total} callback={(n)=>{
           setNow(n);
           self.fresh(address,n)
         }}/>

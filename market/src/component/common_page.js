@@ -41,8 +41,18 @@ function Page(props) {
     clickEnd: (ev) => {
       props.callback && props.callback(props.total);
     },
-    getButtons: (current, step, total) => {
-      console.log(total);
+    getButtons:(current, step, total)=>{
+      console.log(current,step,total);
+      const narr=[];
+      const count=Math.floor(current/step);
+      const start=(current%step===0?count-1:count)*step;
+      for (let i = 0; i < step; i++) {
+        narr.push({ page: start + i + 1 });
+      }
+      return narr;
+    },
+    getCenterButtons: (current, step, total) => {
+      
       const narr = [{ page: current }];
       for (let i = 0; i < step; i++) {
         if (current - i - 1 < 1) continue;
@@ -54,7 +64,7 @@ function Page(props) {
         narr.push({ page: current + i + 1 });
       }
 
-      console.log(narr);
+      //console.log(narr);
       return narr;
     },
     fresh: () => {

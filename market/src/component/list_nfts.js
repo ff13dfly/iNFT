@@ -131,11 +131,9 @@ function ListNFTs(props) {
       <Col className='pt-1' hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h4>{info}</h4>
       </Col>
-      {list.map((row, index) => (
-        
+      {list.map((row, index) => (     
         <Col key={index} className="justify-content-around pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           <Card hidden={!ready} style={{ width: '100%' }}>
-          {console.log(row)}
             <a href={`/detail/${row.name}@${row.network}`} target='blank'>
               <Card.Img variant="top" src={self.showThumb(row.bs64)} />
             </a>
