@@ -7,6 +7,8 @@ import Network from '../network/router';
 import Config from "../system/config";
 import RUNTIME from '../system/runtime';
 
+import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
+
 function UserBasic(props) {
 
   const size = {
@@ -21,16 +23,30 @@ function UserBasic(props) {
   let [address, setAddress] = useState("");
   let [balance, setBalance] = useState(0);
 
+  let [recover, setRecover] = useState({});   //button recover status
+
   const self = {
     clickCharge: (ev) => {
       console.log(`Call metamask to transfer $INFT ERC20 Token.`);
+    },
+    clickAddress:(addr)=>{
+      console.log(addr);
     },
     getAvatar: () => {
       const cfg = Config.get(["system", "avatar"]);
       const addr = RUNTIME.account.get();
       return `${cfg.base}/${addr}.png${cfg.set}`;
     },
-
+    callRecover:(key, at) => {
+      if (!recover[key]) {
+          recover[key] = "text-warning";
+          setRecover(tools.copy(recover));
+          setTimeout(() => {
+              delete recover[key];
+              setRecover(tools.copy(recover));
+          }, !at ? 1000 : at);
+      }
+    },
     fresh: () => {
       const url = self.getAvatar();
       const addr = RUNTIME.account.get();
@@ -41,7 +57,7 @@ function UserBasic(props) {
       }, 500);
 
       setThumb(url);
-      setAddress(tools.shorten(addr), 16);
+      setAddress(addr, 16);
 
       const chain = Network("anchor")
       chain.balance(addr, (res) => {
@@ -91,7 +107,10 @@ function UserBasic(props) {
           width="100%"
           style={{ minHeight: "80px" }}
         />
-        <h6>{address}</h6>
+        <h6 className='pointer pt-4' onClick={(ev)=>{
+          self.clickAddress(address);
+          self.callRecover("address");
+        }}>{tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" :`ml-5 ${recover.address}`} /></h6>
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

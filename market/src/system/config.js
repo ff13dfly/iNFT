@@ -20,6 +20,12 @@ const config={
         enable:{
             password:false,         //enable local setting password,
             startup:false,          //wether check the system when startup
+        },
+        status:{            //network status
+            1:"normal",
+            2:"trying",
+            4:"failed",
+            9:"unknown",
         }
     },
     bounty:{

@@ -1,7 +1,7 @@
 import { Row, Col, Table, Form } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaFileImport } from "react-icons/fa";
+import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
 import Account from "../system/account";
 
@@ -98,7 +98,7 @@ function AccountList(props) {
               <tr key={index}>
                 <td>{row.network}</td>
                 <td>
-                  <span className='pointer'><FaRegCopy className={!recover[row.address] ? "" : recover[row.address]} onClick={(ev)=>{
+                  <span className='pointer'><FaCopy className={!recover[row.address] ? "" : recover[row.address]} onClick={(ev)=>{
                     self.clickCopy(row.address);
                     self.callRecover(row.address);
                   }}/></span>

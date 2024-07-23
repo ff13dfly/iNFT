@@ -19,6 +19,14 @@ const funs={
             response.text().then((res)=>{
                 try {
                     const dt=JSON.parse(res);
+
+                    //check the spam expired status, reinit system.
+                    if(dt.code && dt.code===444){
+                        Data.removeHash('cache','spam');
+                        return self.init(()=>{
+                            funs.request(mod,act,ck,param);
+                        });
+                    }
                     return ck && ck(dt);
                 } catch (error) {
                     return ck && ck({error:"Invalide content"})

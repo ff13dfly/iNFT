@@ -52,6 +52,7 @@ class Config extends CORE{
 	
 	/*检测动态令牌是否合法的操作*/
 	public function checkSpam(){
+
 		if(!isset($_GET['spam']) || strlen($_GET['spam'])!=7) return FALSE;
 		$spam=$_GET['spam'];
 		
@@ -127,6 +128,7 @@ class Config extends CORE{
 			'success'		=>false,
 			'message'		=>$msg,
 		);
+		if($msg==='wrong spam') $rst['code']=444;		
 		if($expired) $rst['expired']=true;
 		$this->export($rst);
 	}
