@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Network from '../network/router';
 import INFT from "../system/inft";
 
+import tools from "../lib/tools";
+
 let first=true;
 function ListMarket(props) {
   const size = {
@@ -75,10 +77,11 @@ function ListMarket(props) {
             <Card.Body>
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
-                Price: {row.price}
+                <strong>Price: </strong>{row.price}
+                <br/>
+                <strong>Owner: </strong>{!row.owner?"":tools.shorten(row.owner)}
               </Card.Text>
             </Card.Body>
-
           </Card>
 
           <Card hidden={ready} style={{ width: '100%' }}>

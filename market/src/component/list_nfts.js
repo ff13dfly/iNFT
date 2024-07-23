@@ -140,6 +140,7 @@ function ListNFTs(props) {
               <Card.Text>
                 {!row.signer ? "" : tools.shorten(row.signer)}
                 <FaAnchor /><span className='pt-1'>{row.blocknumber}</span>
+
               </Card.Text>
             </Card.Body>
           </Card>

@@ -114,7 +114,7 @@ const self = {
         if(map[name]) return ck && ck(map[name]);
         if(!normal){
             Network("anchor").view(name, "selling", (data) => {
-                console.log(data);
+                //console.log(data);
                 if(data===false) return ck && ck(false);
     
                 const row={
