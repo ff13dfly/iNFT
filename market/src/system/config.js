@@ -25,7 +25,8 @@ const config={
             1:"normal",
             2:"trying",
             4:"failed",
-            9:"unknown",
+            9:"unknown",        //unknow network status
+            13:"error",         //no such url           
         }
     },
     bounty:{

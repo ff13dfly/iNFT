@@ -1,13 +1,14 @@
 import Local from "../lib/local";
 import Data from "../lib/data";
+import Config from "../system/config"
+import Status from "../system/status";
 
-const config={
-    site:"http://localhost/iNFT/service/api/",
-}
+const cfg=Config.get(["proxy","nodes","market"])[0];
+const site=`${cfg.protocol}${cfg.domain}`;
 
 const funs={
     request:(mod,act,ck,param)=>{
-        let url=`${config.site}?mod=${mod}&act=${act}`;
+        let url=`${site}?mod=${mod}&act=${act}`;
         if(param!==undefined){
             for(var k in param) url+=`&${k}=${param[k]}`;
         }
@@ -46,24 +47,36 @@ const self={
         const spam=Data.getHash('cache','spam');
         if(spam) return ck && ck(true);
 
+        Status.set(site,2);
         const uuid=Local.get('uuid');
         const token=Local.get('token');
         if(!uuid || !token){
             Local.remove('uuid');
             Local.remove('token');
             funs.request('system','new',(res)=>{
-                if(!res.uuid || !res.token) return ck && ck({error:"Invalide data"});
+                if(!res.uuid || !res.token){
+                    Status.set(site,13);
+                    return ck && ck({error:"Invalide data"});
+                } 
                 Local.set("uuid",res.uuid);
                 Local.set("token",res.token);
                 funs.request('system','spam',(dt)=>{
-                    if(!dt.spam) return ck && ck({error:"Invalide data"});
+                    if(!dt.spam){
+                        Status.set(site,4);
+                        return ck && ck({error:"Invalide data"});
+                    } 
+                    Status.set(site,1);
                     Data.setHash("cache","spam",dt.spam);
                     return ck && ck(true);
                 },{uuid:res.uuid,token:res.token});
             });
         }else{
             funs.request('system','spam',(res)=>{
-                if(!res.spam) return ck && ck({error:"Invalide data"});
+                if(!res.spam){
+                    Status.set(site,4);
+                    return ck && ck({error:"Invalide data"});
+                } 
+                Status.set(site,1);
                 Data.setHash("cache","spam",res.spam);
                 return ck && ck(true);
             },{uuid:uuid,token:token});

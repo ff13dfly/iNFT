@@ -3,8 +3,10 @@ import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 import Config from "../system/config";
+import Status from "../system/status";
 
 const dt=Config.get(["network","anchor"]);
+//const status=Config.get(["system","status"]);
 
 const config = {
     node: dt.nodes[0],  //Tanssi appchain URI
@@ -90,12 +92,13 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
+        Status.set(uri,2);      //trying, update uri status
         const provider = new WsProvider(uri);
         ApiPromise.create({ provider: provider }).then((api) => {
             console.log(`Linked to node ${uri}`);
             wsAPI = api;
             linking = false;
-
+            Status.set(uri,1);      //normal, update uri status
             //add the listener;
             wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                 const data = JSON.parse(JSON.stringify(lastHeader));
@@ -108,6 +111,7 @@ const self = {
             return ck && ck(wsAPI);
         }).catch((error) => {
             console.log(error);
+            Status.set(uri,4);  //failed, update uri status
             linking = false;
             return ck && ck(error);
         });

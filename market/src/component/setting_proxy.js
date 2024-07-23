@@ -12,9 +12,7 @@ function SettingProxy(props) {
     right: [4, 8],
   };
 
-  const self = {
-    
-  }
+  const self = {}
 
   useEffect(() => {
   }, []);
