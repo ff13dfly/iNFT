@@ -115,7 +115,6 @@ function App() {
       <Header link={self.linkTo} active={!alias[target]?target:alias[target]}/>
       <Container>{content}</Container>
       <Footer link={self.linkTo} />
-
       <Modal dialogClassName="modal-minter"
         show={show}
         size="lg"

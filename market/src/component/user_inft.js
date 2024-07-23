@@ -39,7 +39,6 @@ function UserINFT(props) {
     fresh:(addr,p)=>{
       if(!addr) return false;
       API.list.byAddress(addr,(res)=>{
-        //console.log(res.nav);
         if(res && res.nav && res.nav.total!==0){
           setShow(true);
           setTotal(res.nav.page);
@@ -47,7 +46,7 @@ function UserINFT(props) {
           setShow(false);
         } 
 
-        if(!res || !res.data || res.data.length===0) return false;
+        if(!res || !res.data || res.data.length===0) return setList([]);
           const narr=self.getAnchorArray(res.data);
           INFT.multi(narr,(ans)=>{
             setList(ans);

@@ -109,7 +109,6 @@ function ListNFTs(props) {
   }
 
   useEffect(() => {
-    //console.log(JSON.stringify(props.data));
     if (props.data.length === 0) {
       setInfo("No iNFT result list.");
       setList([]);
@@ -119,7 +118,6 @@ function ListNFTs(props) {
       setList(nlist);
 
       INFT.auto(props.data, (iNFTs) => {
-        //console.log(iNFTs);
         setList(iNFTs);
         setReady(true);
       });
@@ -131,8 +129,8 @@ function ListNFTs(props) {
       <Col className='pt-1' hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h4>{info}</h4>
       </Col>
-      {list.map((row, index) => (     
-        <Col key={index} className="justify-content-around pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
+      {list.length!==0 && list.map((row, index) => (     
+        <Col key={index} className="pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           <Card hidden={!ready} style={{ width: '100%' }}>
             <a href={`/detail/${row.name}@${row.network}`} target='blank'>
               <Card.Img variant="top" src={self.showThumb(row.bs64)} />
@@ -140,14 +138,8 @@ function ListNFTs(props) {
             <Card.Body>
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
-                <Row>
-                  <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                    {!row.signer ? "" : tools.shorten(row.signer)}
-                  </Col>
-                  <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                    <FaAnchor /> <span className='pt-1'>{row.blocknumber}</span>
-                  </Col>
-                </Row>
+                {!row.signer ? "" : tools.shorten(row.signer)}
+                <FaAnchor /><span className='pt-1'>{row.blocknumber}</span>
               </Card.Text>
             </Card.Body>
           </Card>
