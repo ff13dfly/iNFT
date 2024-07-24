@@ -69,7 +69,6 @@ function ListMarket(props) {
       </Col>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
-
           <Card hidden={!ready} className='pointer' onClick={
             (ev) => { props.link("view", [row.name]) }
           }>

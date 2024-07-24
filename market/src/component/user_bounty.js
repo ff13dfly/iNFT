@@ -30,7 +30,17 @@ function UserBounty(props) {
         console.log(bt);
         const name=bt.name;
         API.bounty.exsist(name,(res)=>{
-          console.log(res);
+          if(!res.exsist){
+            const detail={
+              bonus:bt.bonus,
+              desc:bt.desc,
+              publish:bt.publish,
+              payer:bt.payer,
+            }
+            API.bounty.submit(name,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
+              console.log(res);
+            });
+          }
         });
       });
     },

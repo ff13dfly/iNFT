@@ -1,13 +1,17 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$name=$_F['request']['name'];
+$alink=$_F['request']['name'];
 $result=array('success'=>FALSE);
 
-$result["anchor"]=$name;
+$a->load("bounty");
+$a=Bounty::getInstance();
 
+$result['exsist']=$a->bountyExsist($alink);
 
+$result["anchor"]=$alink;
 $result["success"]=true;
+
 $a=Config::getInstance();
 $a->export($result);
 

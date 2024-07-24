@@ -40,9 +40,18 @@ function BountyDetail(props) {
       setList(nlist);
       setTotal(sum);
     },
-    fresh: (name) => {
-      console.log(name);
-      if (name) Network("anchor").view({ name: name.toLowerCase() }, "anchor", (res) => {
+    decode:(alink)=>{
+      console.log(alink);
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
+    },
+    fresh: (alink) => {
+      //console.log(name);
+      const dt=self.decode(alink);
+      if (dt) Network("anchor").view(dt, "anchor", (res) => {
         //1.list bonus and calc total
         self.selected(res.raw.bonus,res.raw.coin);
 
