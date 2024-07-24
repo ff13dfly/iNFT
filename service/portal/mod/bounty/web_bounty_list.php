@@ -22,7 +22,7 @@ foreach($arr as $k=>$v){
     //$arr[$k]["detail"]=json_decode($v['detail']);
 }
 
-echo json_encode($arr);
+//echo json_encode($arr);
 
 $_F['list']=$arr;
 

@@ -14,7 +14,6 @@ function Bounty(props) {
 
     const self = {
         clickAdd:(ev)=>{
-            //console.log(props);
             props.dialog(<BountySubmit />,"Bounty Submission");
         },
         fresh: () => {

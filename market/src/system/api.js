@@ -121,17 +121,17 @@ const self={
         submit:(name,coin,start,end,template,detail,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={name:name,coin:coin,template:template,start:start,end:end,detail:JSON.stringify(detail)};
+                const param={name:name,coin:coin,template:template,start:start,end:end,detail:detail};
                 funs.request("bounty","submit",(res)=>{
                     if(res.success) return ck && ck(res);
                     return ck && ck({error:"Failed to submit bounty."});
                 },param);
             });
         },
-        page:(page,ck,step)=>{
+        list:(ck,page,step)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={page:page};
+                const param={page:page-1};
                 if(step) param.step=parseInt(step);
     
                 funs.request("bounty","list",(res)=>{

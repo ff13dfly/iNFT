@@ -189,11 +189,10 @@ class Config extends CORE{
 		         chr(163),
 		         chr(169),
 		         "chr(\\1)");
-		//fuu,这里需要递归处理，防止多次嵌套
+
 		return preg_replace($search, $replace, $txt);	
 	}
 	
-	/*日志类，用于每天的日志记录*/
 	public function hackLog($txt,$code=ERROR_LEVEL_3){
 		$date=date('Y_m');
 		$table = PRE . HLOG;

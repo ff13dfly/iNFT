@@ -1,12 +1,15 @@
 import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import API from "../system/api";
+
 function BountyList(props) {
   const size = {
     row: [12],
     grid: [4, 5, 3],
   };
 
+  let [page, setPage] = useState(1);
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
 
@@ -44,11 +47,15 @@ function BountyList(props) {
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      const nlist = self.getHolder(6);
-      setList(nlist);
-      setReady(true);
-    }, 15000)
+    const hlist = self.getHolder(1);
+    setList(hlist);
+
+    API.bounty.list((res)=>{
+      if(res && res.success && res.data){
+        setList(res.data);
+        setReady(true);
+      }
+    },page);
   }, [props.update]);
 
   return (
@@ -56,6 +63,7 @@ function BountyList(props) {
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
           <Row>
+            {console.log(row)}
             <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
               <Card hidden={!ready} style={{ width: '100%' }}>
                 <a href={`/playground/${row.name}`}>
