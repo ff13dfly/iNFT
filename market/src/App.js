@@ -40,6 +40,7 @@ function App() {
     detail:["name"],
     setting:["mod"],
     user:["mod"],
+    bounty:["anchor","block"],        //definition of input parameters
   }
   const self={
     checkding:()=>{

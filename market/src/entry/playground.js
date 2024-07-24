@@ -16,8 +16,6 @@ const template_orgin = {
     "Chain": ["anchor"],
 }
 
-//bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4
-
 function Playground(props) {
     const size = {
         row: [12],
