@@ -1,6 +1,8 @@
 import { Row, Col, Card } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import BountyApply from './bounty_apply';
+
 import tools from "../lib/tools";
 import { FaClock,FaPizzaSlice } from "react-icons/fa";
 
@@ -21,6 +23,9 @@ function BountyShow(props) {
   let [block, setBlock] = useState(0);    //current block number
 
   const self = {
+    clickSubmit:(index,alink)=>{
+      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog}/>,"Bounty apply");
+    },
     calcBonus: (list) => {
       let amount = 0;
       for (let i = 0; i < list.length; i++) {
@@ -91,7 +96,9 @@ function BountyShow(props) {
                   Progress: {!progress[row.series] ? 0 : progress[row.series]}/{row.amount}
                 </Col>
                 <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <button className='btn btn-sm btn-primary'>submit</button>
+                  <button className='btn btn-sm btn-primary' onClick={(ev)=>{
+                    self.clickSubmit(index,data.alink);
+                  }}>submit</button>
                 </Col>
               </Row>
             </Col>

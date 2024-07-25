@@ -21,7 +21,7 @@ function UserBounty(props) {
   const def=Config.get(["bounty","status"]);
   const self = {
     clickPay:(name)=>{
-      props.dialog(<BountySubmit name={name} />,"Bounty Submission");
+      props.dialog.show(<BountySubmit name={name} />,"Bounty Submission");
     },
     clickSync:(name)=>{
       Bounty.get(name,(dt)=>{

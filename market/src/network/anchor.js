@@ -103,7 +103,7 @@ const self = {
             wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                 const data = JSON.parse(JSON.stringify(lastHeader));
                 const block = data.number - 1;      //get the right block number
-                const hash = data.parentHash;     //get the finalized hash
+                const hash = data.parentHash;       //get the finalized hash
                 for (let k in subs) {
                     subs[k](block, hash);
                 }

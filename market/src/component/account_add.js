@@ -31,7 +31,7 @@ function AccountAdd(props) {
     },
     clickImport:(ev)=>{
       if(props.dialog){
-        props.dialog(<AccountLoad network={current} callback={()=>{
+        props.dialog.show(<AccountLoad network={current} callback={()=>{
 
         }}/>,`Import Account ( ${tools.toUp(current)} Network )`)
       }

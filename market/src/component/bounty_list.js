@@ -73,6 +73,7 @@ function BountyList(props) {
           });
         }
       },page);
+      
     },500);
   }, [props.update]);
 
@@ -80,7 +81,7 @@ function BountyList(props) {
     <Row>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-          <BountyShow data={row} link={props.link}/>
+          <BountyShow data={row} link={props.link} dialog={props.dialog}/>
         </Col>
       ))}
       <Col hidden={ready} className="justify-content-around pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >

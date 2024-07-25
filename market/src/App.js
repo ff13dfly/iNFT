@@ -73,11 +73,18 @@ function App() {
       window.history.replaceState({}, "", url); //update the url
       setTarget(name);    //set new router
     },
-    dialog: (ctx, title) => {
-      setTitle(title);
-      setDialog(ctx);
-      setShow(true);
-    },
+    dialog:{
+      show:(ctx,title)=> {
+        setTitle(title);
+        setDialog(ctx);
+        setShow(true);
+      },
+      close:()=>{
+        setTitle("");
+        setDialog("");
+        setShow(false);
+      },
+    } 
   }
 
   //all routers here
