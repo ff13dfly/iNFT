@@ -100,7 +100,10 @@ function BountyShow(props) {
         ))}
       </Col>
       <Col md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-        Chat here.
+        The minting result showing.
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <hr />
       </Col>
     </Row>
   );

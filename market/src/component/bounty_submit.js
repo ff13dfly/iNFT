@@ -126,70 +126,31 @@ function BountySubmit(props) {
           }, 1500);
           const hash=res.hash;    //get the transaction hash
 
-          chain.view({name:name},"anchor",(detail)=>{
-            if(!detail) return setInfo("Failed to get the bounty anchor data.");
-            const alink=`anchor://${name}/${detail.block}`;
+          chain.view({name:name},"anchor",(adata)=>{
+            console.log(JSON.stringify(adata));
+
+            if(!adata) return setInfo("Failed to get the bounty anchor data.");
+            const alink=`anchor://${name}/${adata.block}`;
             const bt = self.getLocalData(alink,addr);
             bt.status=3;
-            bt.publisher.block=detail.block;
-            bt.publisher.hash=hash;
+            bt.publish.block=adata.block;
+            bt.publish.hash=hash;
             
             Bounty.insert(bt, (dt) => {
               //4.report to iNFT proxy system
-              const report={
-                name:alink,
-                transaction:hash,
+              const detail={
+                bonus:bt.bonus,
+                desc:bt.desc,
+                publish:bt.publish,
+                payer:bt.payer,
               }
-              API.bounty.submit(report,(dt)=>{
-                console.log(dt);
-                //5.update local indexedDB status;
+              API.bounty.submit(name,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
+                console.log(res);
               });
             });
           });
         }
       },"subwallet");
-    },
-
-    clickSubmit_bak: () => {
-      const addr = RUNTIME.account.get();
-      const name = self.getBountyName(8).toLocaleLowerCase();
-
-      //1.storage the bounty details to indexDB
-      const bt = self.getLocalData(name,addr);
-      Bounty.insert(bt, (res) => {
-
-          //2.write the bounty data to Anchor Network
-          const raw = self.getBountyData(addr);
-          const protocol = { fmt: "json", type: "data", tpl: "bounty" };
-          const dapp = Config.get(["system", "name"]);
-          const obj = {
-            anchor: name,
-            raw: raw,
-            protocol: protocol,
-            dapp: dapp,
-          }
-          Network("anchor").sign(obj,(res)=>{
-            setInfo(res.msg);
-            if(res.status==="Finalized"){
-              setTimeout(() => {
-                setInfo("");
-              }, 1500);
-              //3.update local indexedDB status;
-
-              //3.1.update the block information
-
-              //4.report to iNFT proxy system
-              const report={
-                name:name,
-                transaction:res.hash,
-              }
-              API.bounty.submit(report,(dt)=>{
-                console.log(dt);
-                //5.update local indexedDB status;
-              });
-            }
-          },"subwallet");
-      });
     },
     clickPay:()=>{
       console.log(`Ready to pay`);
