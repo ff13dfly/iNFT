@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 
 import BountyList from "../component/bounty_list";
 import BountySubmit from "../component/bounty_submit";
+import BountyPreview from "../component/bounty_preview";
 
 function Bounty(props) {
     const size = {
@@ -10,12 +11,13 @@ function Bounty(props) {
         head: [10, 2]
     };
 
-
+    let [data,setData]= useState({});
     let [ active, setActive ]= useState("basic");
     let [ content, setContent] =useState("");
 
     const map={
         "basic":<BountyList />,
+        "view": <BountyPreview data={data}/>,
         "404":"404 page",
     }
 
@@ -26,23 +28,17 @@ function Bounty(props) {
     }
 
     useEffect(() => {
-        console.log(props);
-        // if(props.extend && props.extend.mod){
-        //     const mod=props.extend.mod;
-        //     if(mod!==active){
-        //         setActive(mod);
-        //         if(map[mod]){
-        //             setContent(map[mod]);
-        //         }else{
-        //             setContent(map["404"]);
-        //         }
-        //     }
-        // }else{
-        //     setContent(map[active]);
-        // }
+        //console.log(props);
+        if(!props.extend){
+            setContent(map.basic);
+        }else if(props.extend.anchor && props.extend.block){
+            console.log(`Here to show bounty details.`);
+            setContent(map.view);
+            setData(props.extend);
+        }else{
+            setContent(map.basic);
+        }
     }, [props.extend]);
-    
-
 
     return (
         <Row className="pt-2">

@@ -93,12 +93,12 @@ const INDEXED = {
 
   searchRows: (db, table, key, val, ck) => {
     //console.log(`Table: ${table}, key: ${key}, value: ${val}`);
-    if(typeof table!=='string') return ck && ck({error:"wrong table."});
+    if (typeof table !== 'string') return ck && ck({ error: "wrong table." });
     const list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
     const request = store.index(key).openCursor(IDBKeyRange.only(val));
 
-    request.onsuccess = (e)=>{
+    request.onsuccess = (e) => {
       var cursor = e.target.result;
       if (cursor) {
         // 必须要检查
@@ -108,33 +108,33 @@ const INDEXED = {
         return ck && ck(list);
       }
     };
-    request.onerror =  (e)=>{
+    request.onerror = (e) => {
 
     };
   },
 
-  removeRow:(db,table,key,val,ck)=>{
-    if(typeof table!=='string') return ck && ck({error:"wrong table."});
+  removeRow: (db, table, key, val, ck) => {
+    if (typeof table !== 'string') return ck && ck({ error: "wrong table." });
 
     const store = db.transaction(table, "readwrite").objectStore(table);
     const request = store.index(key).openCursor(IDBKeyRange.only(val));
 
-    request.onsuccess =  (e)=>{
+    request.onsuccess = (e) => {
       const cursor = e.target.result;
       let deleteRequest;
       if (cursor) {
         deleteRequest = cursor.delete(); // 请求删除当前项
-        deleteRequest.onerror =  ()=>{
-          return ck && ck({error:"failed to remove target row"});
+        deleteRequest.onerror = () => {
+          return ck && ck({ error: "failed to remove target row" });
         };
-        deleteRequest.onsuccess =  ()=>{
+        deleteRequest.onsuccess = () => {
           return ck && ck(true);
         };
         cursor.continue();
       }
     };
-    request.onerror =  (e)=>{
-      return ck && ck({error:"wrong key path."});
+    request.onerror = (e) => {
+      return ck && ck({ error: "wrong key path." });
     };
   },
 
@@ -147,6 +147,7 @@ const INDEXED = {
     }
     return valid;
   },
+
   countRows: (db, table, key, val, status, ck) => {
     if (!INDEXED.checkTable(db.objectStoreNames, table))
       return ck && ck({ count: 0, latest: 0 });
@@ -155,7 +156,7 @@ const INDEXED = {
     var store = db.transaction(table, "readwrite").objectStore(table);
     var request = store.index(key).openCursor(IDBKeyRange.only(val));
 
-    request.onsuccess =  (e)=>{
+    request.onsuccess = (e) => {
       var cursor = e.target.result;
       if (cursor) {
         if (cursor.value.status === status) {
@@ -168,7 +169,7 @@ const INDEXED = {
         return ck && ck({ count: count, latest: latest });
       }
     };
-    request.onerror =  (e)=>{ };
+    request.onerror = (e) => { };
   },
   getDB: (ck) => {
     const indexedDB =
@@ -225,13 +226,13 @@ const INDEXED = {
   insertRow: (db, table, list, ck) => {
     console.log(table);
     const request = db.transaction([table], "readwrite").objectStore(table);
-    
+
     for (let i = 0; i < list.length; i++) {
       const reqObj = request.add(list[i]);
-      reqObj.onsuccess =  (ev)=>{
+      reqObj.onsuccess = (ev) => {
         return ck && ck(true);
       };
-      reqObj.onerror =  (ev)=>{
+      reqObj.onerror = (ev) => {
         return ck && ck({ error: "Failed to insert" });
       }
     }
@@ -241,15 +242,16 @@ const INDEXED = {
     for (let i = 0; i < list.length; i++) {
       const data = list[i];
       const request = store.put(data);
-      request.onsuccess =  ()=>{
+      request.onsuccess = () => {
         return ck && ck(true);
       };
 
-      request.onerror =  ()=>{
+      request.onerror = () => {
         return ck && ck({ error: "Failed to update rows" });
       };
     }
   },
+
   /*  get page from indexedDB
   *   @param  {object}    db        //indexedDB object
   *   @param  {string}    table     //indexedDB table name
@@ -268,30 +270,59 @@ const INDEXED = {
     } else {
       const smap = {}
     }
+
     if (request === null) return ck && ck(false);
-
-    let advanced = true;
-    request.onsuccess =  (e)=>{
+    let count=0;
+    let advanced = true; 
+    request.onsuccess = (e) => {
       const cursor = e.target.result;
-      if (advanced && nav !== undefined && nav.page !== undefined && nav.step !== undefined) {
-        const skip = (nav.page - 1) * nav.step;
-        if (skip > 0) cursor.advance((nav.page - 1) * nav.step);
-        advanced = false;
-      }
+      console.log(JSON.stringify(nav));
+      if (nav !== undefined && nav.page !== undefined && nav.step !== undefined) {
+        if(advanced){
+          const skip = (nav.page - 1) * nav.step;
+          if (skip > 0){
+            advanced = false;
+            cursor.advance((nav.page - 1) * nav.step);
+            return true;
+          } 
+        }
 
-      if (cursor) {
-        list.push(cursor.value);
-        cursor.continue();        // get all result from table
+        if(cursor){
+          count++;
+          if(count <= nav.step) {
+            list.push(cursor.value);
+            cursor.continue(); 
+          }else{
+            return ck && ck(list);
+          }
+        }
+
       } else {
-        return ck && ck(list);
+        if (cursor) {
+          list.push(cursor.value);
+          cursor.continue();        // get all result from table
+        } else {
+          return ck && ck(list);
+        }
       }
+    }
+
+
+    request.onerror = (e) => {
+      return ck && ck(false);
     };
-    request.onerror =  (e) =>{ };
   },
-  
+
+  countTable:(db, table,ck)=>{
+    const store = db.transaction(table, "readwrite").objectStore(table);
+    const request = store.count();
+    request.onsuccess = (e) => {
+      return ck && ck(request.result);
+    }
+  },
 };
 
-const test={
+const test = {
   sample: () => {
     //https://juejin.cn/post/7026900352968425486
     const name = "w3os_chat";
