@@ -28,12 +28,6 @@ const funs = {
         }
         return false;
     },
-    // cacheLocal:(list,ck)=>{
-    //     INDEXED.checkDB(config.indexDB, (res) => {
-    //         const tbs = res.objectStoreNames;
-
-    //     });
-    // },
     getLocal: (alinks, ck, left) => {
         if (left === undefined) left = [];
         if (alinks.length === 0) return ck && ck(left);
@@ -295,6 +289,7 @@ const self = {
         if (local) {
             funs.getLocal(alinks, (left) => {
                 console.log(left);
+                return ck && ck(left);
             });
         } else {
             funs.cacheIPFS(alinks, (dels) => {

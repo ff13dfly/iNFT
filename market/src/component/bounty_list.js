@@ -1,7 +1,10 @@
 import { Row, Col, Card, Placeholder } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import BountyShow from './bounty_show';
+
 import API from "../system/api";
+import TPL from "../system/tpl";
 
 function BountyList(props) {
   const size = {
@@ -44,46 +47,40 @@ function BountyList(props) {
       }
       return arr;
     },
+    prepareData:(list,ck,bts)=>{
+      if(!bts) bts=[];
+      if(list.length===0) return ck && ck(bts);
+      const row=list.pop();
+      const tp=row.template;
+      TPL.view(tp.cid,(dt)=>{
+        row.template.raw=dt;
+        bts.push(row);
+        return self.prepareData(list,ck,bts);
+      })
+    },
   }
 
   useEffect(() => {
     const hlist = self.getHolder(1);
     setList(hlist);
 
-    API.bounty.list((res)=>{
-      if(res && res.success && res.data){
-        setList(res.data);
-        setReady(true);
-      }
-    },page);
+    setTimeout(()=>{
+      API.bounty.list((res)=>{
+        if(res && res.success && res.data){
+          self.prepareData(res.data,(bts)=>{
+            setList(bts);
+            setReady(true);
+          });
+        }
+      },page);
+    },500);
   }, [props.update]);
 
   return (
     <Row>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-          <Row>
-            {console.log(row)}
-            <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-              <Card hidden={!ready} style={{ width: '100%' }}>
-                <a href={`/playground/${row.name}`}>
-                  <Card.Img variant="top" src={`${window.location.origin}/imgs/logo.png`} />
-                </a>
-                <Card.Body>
-                  <Card.Title>Bounty Title</Card.Title>
-                  <Card.Text>
-                    1 BTC to buy the treasure tree.
-                  </Card.Text>
-                </Card.Body>
-
-              </Card>
-            </Col>
-            <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-              <h6>1 BTC ( 3,000 $INFT )</h6>
-            </Col>
-            <Col md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-            </Col>
-          </Row>
+          <BountyShow data={row} link={props.link}/>
         </Col>
       ))}
       <Col hidden={ready} className="justify-content-around pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >

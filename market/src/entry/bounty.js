@@ -16,7 +16,7 @@ function Bounty(props) {
     let [ content, setContent] =useState("");
 
     const map={
-        "basic":<BountyList />,
+        "basic":<BountyList link={props.link}/>,
         "view": <BountyPreview data={data}/>,
         "404":"404 page",
     }
