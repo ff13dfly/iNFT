@@ -1,8 +1,9 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$alink=$_F['request']['alink'];
-$bounty=$_F['request']['bounty'];
+$alink=$_F['request']['alink'];             //iNFT anchor link
+$bounty=$_F['request']['bounty'];           //bounty anchor link
+$record=$_F['request']['record'];           //on chain apply record
 
 $result=array('success'=>FALSE);
 
@@ -23,6 +24,7 @@ if(empty($bt)){
 $aps=json_decode($bt["apply"],true);
 array_push($aps,array(
     "link"      =>   $alink,
+    "record"    =>  $record,
     "stamp"     =>   time(),
     "status"    =>   BOUNTY_APPLY_ON_PROGRESS,
 ));

@@ -65,6 +65,17 @@ const self = {
 
         },
     },
+    apply:{
+        insert:(row,ck)=>{
+
+        },
+        list:(ck,page,step)=>{
+
+        },
+        remove:()=>{
+
+        },
+    },
 }
 
 export default self;

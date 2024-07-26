@@ -23,7 +23,7 @@ function BountyShow(props) {
   let [block, setBlock] = useState(0);    //current block number
 
   const self = {
-    clickSubmit:(index,alink)=>{
+    clickApply:(index,alink)=>{
       props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog}/>,"Bounty apply");
     },
     calcBonus: (list) => {
@@ -92,13 +92,13 @@ function BountyShow(props) {
             <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
               <Row>
                 <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()}/piece<br />
-                  Progress: {!progress[row.series] ? 0 : progress[row.series]}/{row.amount}
+                  <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
+                  Applying:
                 </Col>
                 <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                   <button className='btn btn-sm btn-primary' onClick={(ev)=>{
-                    self.clickSubmit(index,data.alink);
-                  }}>submit</button>
+                    self.clickApply(index,data.alink);
+                  }}>Apply</button>
                 </Col>
               </Row>
             </Col>

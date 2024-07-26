@@ -47,11 +47,22 @@ function BountyList(props) {
       }
       return arr;
     },
+    decode:(alink)=>{
+      console.log(alink);
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
+    },
     prepareData:(list,ck,bts)=>{
       if(!bts) bts=[];
       if(list.length===0) return ck && ck(bts);
       const row=list.pop();
       const tp=row.template;
+      const anchor=self.decode(row.alink);
+      row.name=anchor.name;
+      row.block=anchor.block;
       TPL.view(tp.cid,(dt)=>{
         row.template.raw=dt;
         bts.push(row);

@@ -145,7 +145,9 @@ function BountySubmit(props) {
                 payer:bt.payer,
               }
               API.bounty.submit(alink,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
-                console.log(res);
+                //console.log(res);
+                if(res && res.success) return props.dailog.close();
+                setInfo("Failed to submit to system");
               });
             });
           });

@@ -116,6 +116,14 @@ const config={
                     status:{unique: false},
                 },
             },
+            apply:{             //bounty apply data
+                keyPath:"alink",
+                map:{
+                    alink:{ unique: true },
+                    status:{unique: false},
+                    receiver:{unique: false},
+                },
+            },
         },
     },
     proxy:{             //all agent url here

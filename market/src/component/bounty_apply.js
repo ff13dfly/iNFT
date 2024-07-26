@@ -2,12 +2,14 @@ import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Network from "../network/router";
-import PriveiwINFT from './inft_preview';
-
-import API from "../system/api";
-import TPL from "../system/tpl";
 import tools from "../lib/tools";
 
+import RUNTIME from '../system/runtime';
+import API from "../system/api";
+import TPL from "../system/tpl";
+import Config from "../system/config";
+
+import PriveiwINFT from './inft_preview';
 
 function BountyApply(props) {
   const size = {
@@ -24,13 +26,22 @@ function BountyApply(props) {
   let [hiddenPreview, setHiddenPreview] = useState(true);
   let [disable, setDisable] = useState(true);
 
-
   let [hash, setHash] = useState("");
   let [template, setTemplate] = useState("");
   let [offset, setOffset] = useState([]);
   let [owner, setOwner] = useState("");
 
+  //apply details
+  let [network, setNetwork] = useState("anchor");   //network to get bonus
+  let [receiver,setReceiver] = useState("");        //receive address
+  let [chainInfo, setChainInfo]= useState("");      //apply button clicked status
   const self = {
+    changeNetwork:(ev)=>{
+      setNetwork(ev.target.value);
+    },
+    changeReceiver:(ev)=>{
+      setReceiver(ev.target.value);
+    },
     changeSearch: (ev) => {
       const name = ev.target.value;
       setSearch(name);
@@ -38,7 +49,7 @@ function BountyApply(props) {
       setInfo("");
       setHiddenPreview(true);
 
-      self.getINFT(name, (inft) => {
+      self.getAnchor(name, (inft) => {
         if (inft === false) return setInfo(`No such iNFT ${name}`);
         if (!inft.protocol || !inft.protocol.fmt || !inft.protocol.tpl || inft.protocol.tpl !== "inft") return setInfo(`Not iNFT anchor ${name}`);
         if (!inft.raw || !inft.raw.tpl || inft.raw.tpl !== props.data.template.cid) {
@@ -52,21 +63,61 @@ function BountyApply(props) {
       });
     },
     clickApply:(ev)=>{
-      //1.write on chain
-      //return console.log(props.data);
-
-      //2.report to portal
-      // console.log(search);
       const alink=props.data.alink;
-      //console.log(alink);
-      self.getINFT(search,(dt)=>{
+      self.getAnchor(search,(dt)=>{
         const inft=`anchor://${dt.name}/${dt.block}`;
-        //console.log(alink,inft);
-        API.bounty.apply(alink,inft,(res)=>{
-          console.log(res);
+        //1.write on chain
+        const name = self.getApplyName(8).toLocaleLowerCase();
+        const raw = self.getApplyData(inft);
+        const protocol = { fmt: "json", type: "data", ref:alink };    //"ref" is the keyword of Easy Protocol
+
+        const dapp = Config.get(["system", "name"]);
+        const obj = {
+          anchor: name,
+          raw: raw,
+          protocol: protocol,
+          dapp: dapp,
+        }
+
+        const chain=Network("anchor");
+        chain.sign(obj,(res)=>{
+          setChainInfo(res.msg);
+
+          if(res.status==="Finalized"){
+            setTimeout(() => {
+              setChainInfo("");
+            }, 1500);
+
+            self.getAnchor(name,(record)=>{
+              console.log(record);
+              const rlink=`anchor://${record.name}/${record.block}`;
+
+              //2.report to portal
+              API.bounty.apply(alink,inft,rlink,(res)=>{
+                console.log(res);
+
+                //3.save to local indexedDB
+
+              });
+            });
+          }
         });
       });
-      
+    },
+    getApplyData:(inft_link)=>{
+      //console.log(props.data,props.index);
+      return {
+        inft:inft_link,      //apply inft anchor link
+        target:props.data.alink,    //bounty anchor link
+        bonus:props.index,      //bonus index
+        receiver:{
+          network:network,
+          address:receiver,
+        }
+      }
+    },
+    getApplyName: (n) => {
+      return `apply_${tools.char(n)}`;
     },
     showINFT: (inft) => {
       setHash(inft.hash);
@@ -79,7 +130,7 @@ function BountyApply(props) {
     checkValid: () => {
 
     },
-    getINFT: (name, ck) => {
+    getAnchor: (name, ck) => {
       const chain = Network("anchor");
       chain.view({ name: name }, "anchor", ck);
     },
@@ -96,8 +147,7 @@ function BountyApply(props) {
   }
 
   useEffect(() => {
-    self.showBonus(props.data,props.index);
-    
+    self.showBonus(props.data,props.index); 
   }, [props.data]);
 
   return (
@@ -128,7 +178,9 @@ function BountyApply(props) {
         <img src={thumb} className='inft_thumb' alt=""/>
       </Col>
 
-      <Col className='pt-2' md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}></Col>
+      <Col className='pt-2' md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+        {chainInfo}
+      </Col>
       <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
         <button disabled={disable} className='btn btn-md btn-primary' onClick={(ev)=>{
           self.clickApply(ev);

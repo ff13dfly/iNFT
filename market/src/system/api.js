@@ -128,10 +128,10 @@ const self={
                 },param);
             });
         },
-        apply:(name,target,ck)=>{
+        apply:(name,target,record,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={alink:target,bounty:name};
+                const param={alink:target,bounty:name,record:record};
                 funs.request("bounty","apply",(res)=>{
                     if(res.success) return ck && ck(res);
                     return ck && ck({error:"Failed to appy bounty."});
