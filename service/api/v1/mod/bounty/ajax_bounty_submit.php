@@ -20,6 +20,7 @@ $data=array(
     "end"       =>  $end,
     "template"  =>  $tpl,
     "winner"    =>  "{}",
+    "apply"     =>  "{}",
     "detail"    =>  $detail,
     "status"    =>  BOUNTY_STATUS_OK,
 );

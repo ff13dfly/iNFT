@@ -52,6 +52,15 @@
 			return empty($arr)?FALSE:$arr[0];
 		}
 
+		public function bountySearch($alink){
+			$warr=array(
+				'alink'=>$alink,
+			);
+			$arr=$this->bountyList(0,$warr);
+			//echo json_encode($arr);
+			return empty($arr)?FALSE:$arr[0];
+		}
+
 		public function bountyIds($ids,$order='id',$fields=array()){
 			$table=PRE.'bounty';
 			$where='id';

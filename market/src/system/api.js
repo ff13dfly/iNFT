@@ -128,6 +128,16 @@ const self={
                 },param);
             });
         },
+        apply:(name,target,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={alink:target,bounty:name};
+                funs.request("bounty","apply",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to appy bounty."});
+                },param);
+            });
+        },
         list:(ck,page,step)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});

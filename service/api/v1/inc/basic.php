@@ -4,7 +4,7 @@
 define('INFTAPI', TRUE);		//基础防止异常访问的方法
 define('DEBUG', TRUE);		//调试模式是否开启
 define('SHUTDOWN',FALSE);	//全站关闭模式是否开启
-define('QUERY',	FALSE);		//是否调试SQL语句
+define('QUERY',	false);		//是否调试SQL语句
 define('DS', DIRECTORY_SEPARATOR);		//兼容liunx和windows的文件路径分隔符
 
 define('CONNECTOR',	'_');		//连接符

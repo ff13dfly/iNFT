@@ -108,11 +108,12 @@ class Config extends CORE{
 	
 	/*通用输出方法*/
 	public function export($data){
+		//echo json_encode($data);
 		if(DEBUG){
 			global $yhf;
 			$ms=microtime(true);
 			$data['debug']=array(
-				'length'		=>	strlen(json_encode($data))+3,		//输出数据长度，不算debug部分
+				'length'	=>	strlen(json_encode($data))+3,		//输出数据长度，不算debug部分
 				'cost'		=>	round($ms-$yhf['ms'],6),
 				'query'		=>	$yhf['query'],
 				'redis'		=>	$yhf['redis'],

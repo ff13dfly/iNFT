@@ -144,7 +144,7 @@ function BountySubmit(props) {
                 publish:bt.publish,
                 payer:bt.payer,
               }
-              API.bounty.submit(name,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
+              API.bounty.submit(alink,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
                 console.log(res);
               });
             });

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Network from "../network/router";
 import PriveiwINFT from './inft_preview';
 
+import API from "../system/api";
 import TPL from "../system/tpl";
 import tools from "../lib/tools";
 
@@ -46,9 +47,26 @@ function BountyApply(props) {
         }
 
         self.showINFT(inft);
-
+        setDisable(false);
 
       });
+    },
+    clickApply:(ev)=>{
+      //1.write on chain
+      //return console.log(props.data);
+
+      //2.report to portal
+      // console.log(search);
+      const alink=props.data.alink;
+      //console.log(alink);
+      self.getINFT(search,(dt)=>{
+        const inft=`anchor://${dt.name}/${dt.block}`;
+        //console.log(alink,inft);
+        API.bounty.apply(alink,inft,(res)=>{
+          console.log(res);
+        });
+      });
+      
     },
     showINFT: (inft) => {
       setHash(inft.hash);
@@ -112,7 +130,9 @@ function BountyApply(props) {
 
       <Col className='pt-2' md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}></Col>
       <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button disabled={disable} className='btn btn-md btn-primary'>Apply</button>
+        <button disabled={disable} className='btn btn-md btn-primary' onClick={(ev)=>{
+          self.clickApply(ev);
+        }}>Apply</button>
       </Col>
 
     </Row>
