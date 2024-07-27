@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import BountyApply from './bounty_apply';
 
 import tools from "../lib/tools";
-import { FaClock,FaPizzaSlice } from "react-icons/fa";
+import { FaClock, FaPizzaSlice } from "react-icons/fa";
 
 function BountyShow(props) {
   const size = {
     row: [12],
     grid: [3, 4, 5],
-    left: [3,9],
+    left: [3, 9],
   };
 
   let [ready, setReady] = useState(false);
@@ -23,8 +23,8 @@ function BountyShow(props) {
   let [block, setBlock] = useState(0);    //current block number
 
   const self = {
-    clickApply:(index,alink)=>{
-      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog}/>,"Bounty apply");
+    clickApply: (index, alink) => {
+      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
     },
     calcBonus: (list) => {
       let amount = 0;
@@ -62,9 +62,11 @@ function BountyShow(props) {
     <Row hidden={!ready}>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Card style={{ width: '100%' }}>
-          <a href={"#"}>
+          <span className='pointer' onClick={(ev) => {
+            props.link("bounty", [props.data.name, props.data.block]);
+          }}>
             <Card.Img variant="top" src={data.template && data.template.raw ? data.template.raw.image : `${window.location.origin}/imgs/logo.png`} />
-          </a>
+          </span>
           <Card.Body>
             <Card.Title>{data.detail && data.detail.title ? data.detail.title : ""}</Card.Title>
             <Card.Text>
@@ -73,12 +75,12 @@ function BountyShow(props) {
           </Card.Body>
         </Card>
         <p>
-          <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()} ( current: {block.toLocaleString()} )<br/>
-          <FaPizzaSlice />{data && data.template && data.template.cid?
-          (<span className='pointer ml-5' onClick={(ev)=>{props.link("playground",[data.template.cid])}}>
-            {tools.shorten(data.template.cid,15)}
-          </span>):""
-        }
+          <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()} ( current: {block.toLocaleString()} )<br />
+          <FaPizzaSlice />{data && data.template && data.template.cid ?
+            (<span className='pointer ml-5' onClick={(ev) => { props.link("playground", [data.template.cid]) }}>
+              {tools.shorten(data.template.cid, 15)}
+            </span>) : ""
+          }
         </p>
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
@@ -96,8 +98,8 @@ function BountyShow(props) {
                   Applying:
                 </Col>
                 <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <button className='btn btn-sm btn-primary' onClick={(ev)=>{
-                    self.clickApply(index,data.alink);
+                  <button className='btn btn-sm btn-primary' onClick={(ev) => {
+                    self.clickApply(index, data.alink);
                   }}>Apply</button>
                 </Col>
               </Row>

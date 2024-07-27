@@ -19,10 +19,11 @@ function Bounty(props) {
     let [ content, setContent] =useState("");
     let [ network, setNetwork ]= useState("anchor");
     let [ block, setBlock]=useState(0);
+    let [ hidden, setHidden ] =useState(false);
 
     const map={
         "basic":<BountyList link={props.link} dialog={props.dialog} />,
-        "view": <BountyPreview data={data}/>,
+        "view": <BountyPreview data={data} link={props.link} dialog={props.dialog} />,
         "404":"404 page",
     }
 
@@ -33,14 +34,16 @@ function Bounty(props) {
     }
 
     useEffect(() => {
-        //console.log(props);
+        //console.log(props)
         if(!props.extend){
+            setHidden(false);
             setContent(map.basic);
         }else if(props.extend.anchor && props.extend.block){
-            console.log(`Here to show bounty details.`);
+            setHidden(true);
             setContent(map.view);
             setData(props.extend);
         }else{
+            setHidden(false);
             setContent(map.basic);
         }
 
@@ -53,16 +56,15 @@ function Bounty(props) {
 
     return (
         <Row className="pt-2">
-            <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
+            <Col hidden={hidden} md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
                 {tools.toUp(network)} network current block number {block.toLocaleString()}
             </Col>
-            <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
+            <Col hidden={hidden} className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
                 <button className="btn btn-md btn-primary" onClick={(ev)=>{
                     self.clickAdd(ev);
                 }}> + Bounty </button>
             </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                
                 {content}
             </Col>
         </Row>
