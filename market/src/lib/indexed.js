@@ -276,7 +276,7 @@ const INDEXED = {
     let advanced = true; 
     request.onsuccess = (e) => {
       const cursor = e.target.result;
-      console.log(JSON.stringify(nav));
+      //console.log(JSON.stringify(nav));
       if (nav !== undefined && nav.page !== undefined && nav.step !== undefined) {
         if(advanced){
           const skip = (nav.page - 1) * nav.step;

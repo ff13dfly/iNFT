@@ -2,7 +2,8 @@ import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import AccountSelector from './account_selector';
-import ListNFTs from './list_nfts';
+import ListAddress from './list_address';
+
 import Page from './common_page';
 
 import API from '../system/api';
@@ -68,7 +69,7 @@ function UserINFT(props) {
         }} />
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <ListNFTs data={list} />
+        <ListAddress data={list} dialog={props.dialog} link={props.link}/>
         <Page show={show} align={"right"} now={now} step={10} total={total} callback={(n)=>{
           setNow(n);
           self.fresh(address,n)

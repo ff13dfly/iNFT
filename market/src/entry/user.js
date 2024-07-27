@@ -15,7 +15,7 @@ function User(props) {
 
     const map={
         "basic":<UserBasic dialog={props.dialog}/>,
-        "inft":<UserINFT />,
+        "inft":<UserINFT  dialog={props.dialog} link={props.link}/>,
         "account":<UserAccount dialog={props.dialog}/>,
         "bounty":<UserBounty dialog={props.dialog}/>,
         "404":<User404 />,

@@ -25,7 +25,7 @@ function Header(props) {
   }
 
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
     if(props.active==="user" && login==="Login"){
       setLogin("Checking...");
       setTimeout(()=>{
