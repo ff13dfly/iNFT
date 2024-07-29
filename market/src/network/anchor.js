@@ -160,15 +160,14 @@ const self = {
             const keyring = new Keyring({ type: "sr25519" });
             const pair = keyring.addFromUri(mnemonic);
             const sign = pair.toJson(password);
-            sign.meta.network = "anchor";
+            //sign.meta.network = "anchor";
 
             const row = {
                 address: sign.address,
                 encoded: sign.encoded,
                 network: "anchor",
-                metadata: {
-                    encoding: sign.encoding,
-                }
+                encoding: sign.encoding,
+                metadata: sign.meta,
             }
 
             return ck && ck(row, mnemonic);
@@ -319,45 +318,6 @@ const self = {
                         }
                     });
                 });
-
-                //if(!wallet && owner.addresss===pair.address) return ck && ck({error:"Your own anchor"});
-                //if(wallet && owner.addresss===address) return ck && ck({error:"Your own anchor"});
-
-                // self.view(anchor,"selling",(dt)=>{
-                //     if(dt[0]!==dt[2] && dt)
-                //     console.log(dt);
-                // });
-
-                // let unlist=null;
-                // wsAPI.query.anchor.sellList(anchor, (dt) => {
-                //     unlist();
-                //     console.log(dt);
-                //     if (dt.value.isEmpty) return ck && ck({error:`'${anchor}' is not on sell`});
-                //     const res=dt.toJSON();
-                //     const cost=res[1]*1000000000000;
-                //     if(res[0]!==res[2] && res[2]!==pair.address) return ck && ck({error:"Not target account"});
-
-                //     self.balance(pair.address,(amount)=>{
-                //         if(amount.free<cost) return ck && ck({error:'Low balance'});
-                //         try {
-                //             if(!wallet){
-                //                 wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(pair, (res) => {
-                //                     return ck && ck(self.process(res));
-                //                 });
-                //             }else{
-                //                 console.log(address,pair);
-                //                 wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(address,{signer:pair}, (res) => {
-                //                     return ck && ck(self.process(res));
-                //                 });
-                //             }
-                //         } catch (error) {
-                //             return ck && ck({error:error});
-                //         }
-                //     });
-                // }).then((fun) => {
-                //     unlist = fun;
-                // });
-
             });
         });
     },

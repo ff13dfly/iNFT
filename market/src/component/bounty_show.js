@@ -49,7 +49,6 @@ function BountyShow(props) {
     setReady(false);
     if (props.data && props.data.template) {
       const data = props.data;
-      console.log(data);
       setData(data);
       setReady(true);
 
@@ -68,8 +67,7 @@ function BountyShow(props) {
           <span className='pointer' onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);
           }}>
-            {/* <Card.Img variant="top" src={self.getCover()} /> */}
-            <div className='template_thumb' style={{ backgroundImage:`url(${self.getCover()})`}}></div>
+            <div className='template_thumb' style={{backgroundImage:`url(${self.getCover()})`}}></div>
           </span>
           <Card.Body>
             <Card.Title>{data.detail && data.detail.title ? data.detail.title : ""}</Card.Title>

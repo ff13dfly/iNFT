@@ -8,8 +8,9 @@ import Bounty from "../system/bounty";
 import API from '../system/api';
 
 import tools from "../lib/tools";
+import INDEXED from '../lib/indexed';
 
-import { FaBitcoin,FaSyncAlt } from "react-icons/fa";
+import { FaBitcoin,FaSyncAlt,FaSkullCrossbones } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -19,7 +20,20 @@ function UserBounty(props) {
   let [list, setList]=useState([]);
 
   const def=Config.get(["bounty","status"]);
+  const nameDB =Config.get(["storage","DBname"]);
+  const table="bounty";
+
   const self = {
+    clickRemove:(name)=>{
+      console.log(name);
+      INDEXED.checkDB(nameDB, (db) => {
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.removeRow(db,table,"name",name,(done)=>{
+            if(done) self.fresh();
+          });
+        }
+      });
+    },
     clickPay:(name)=>{
       props.dialog.show(<BountySubmit name={name} />,"Bounty Submission");
     },
@@ -46,7 +60,6 @@ function UserBounty(props) {
     },
     fresh:()=>{
       Bounty.list((arr)=>{
-        //console.log(arr);
         setList(arr);
       });
     }
@@ -101,6 +114,9 @@ function UserBounty(props) {
             </td>
             <td>
               <span className='pointer' onClick={(ev)=>{
+                  self.clickRemove(row.name);
+              }}><FaSkullCrossbones size={20}/></span>
+              <span className='pointer ml-5' onClick={(ev)=>{
                   self.clickPay(row.name);
               }}><FaBitcoin size={24}/></span>
               <span className='pointer ml-5' onClick={(ev)=>{

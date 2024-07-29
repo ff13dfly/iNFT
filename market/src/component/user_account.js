@@ -1,10 +1,5 @@
-import { Row, Col, Form, Table } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
-
-import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
-
-import Config from "../system/config";
-import tools from "../lib/tools";
 
 import AccountAdd from './account_add';
 import AccountList from './account_list';
