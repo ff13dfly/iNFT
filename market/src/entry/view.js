@@ -2,7 +2,7 @@ import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
-import OperationView from "../component/view_operation";
+import AccountSign from "../component/account_sign";
 
 import INFT from "../system/inft";
 
@@ -14,7 +14,6 @@ function View(props) {
     };
 
     let [data, setData] = useState();
-
     let [way, setWay] = useState("wallet");
 
     const payment={
@@ -29,7 +28,9 @@ function View(props) {
             const network=arr.pop();
             return {name:arr.join("@"),network:network}
         },
-        
+        clickBuy:(pair)=>{
+            console.log(`Buying...`,pair);
+        },
     }
 
     useEffect(() => {
@@ -62,10 +63,12 @@ function View(props) {
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <DetailINFT data={data} link={props.link} />
-                
+                <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
+                    self.clickBuy(pair);
+                }}/>
             </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                <OperationView data={data} link={props.link} />
+                
             </Col>
         </Row>
     )

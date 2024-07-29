@@ -150,6 +150,7 @@ const self = {
                 return ck && ck({ error: "Invalid passoword" });
             }
         } catch (error) {
+            console.log(error);
             return ck && ck({ error: "Invalid file" });
         }
     },
@@ -254,6 +255,16 @@ const self = {
                 return ck && ck({error:"Sign error, maybe low balance."});
             });
         })
+    },
+    wallet: async (dapp,ck)=>{
+        const extensions = await web3Enable(dapp);
+        if (extensions.length === 0) {
+            return ck && ck({error:"No subwallet extention"});
+        }
+        const allAccounts = await web3Accounts();
+        const account = allAccounts[0];
+        const injector= await web3FromAddress(account.address);
+        return ck && ck(injector);
     },
     sell: (pair, name, price, ck, target) => {
         self.init(() => {
