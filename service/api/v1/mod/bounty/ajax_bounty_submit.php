@@ -19,8 +19,8 @@ $data=array(
     "start"     =>  $start,
     "end"       =>  $end,
     "template"  =>  $tpl,
-    "winner"    =>  "{}",
-    "apply"     =>  "{}",
+    "winner"    =>  "[]",
+    "apply"     =>  "[]",
     "detail"    =>  $detail,
     "status"    =>  BOUNTY_STATUS_OK,
 );

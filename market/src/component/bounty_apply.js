@@ -21,10 +21,11 @@ function BountyApply(props) {
 
   let [search, setSearch] = useState("");
   let [info, setInfo] = useState("");
-  let [thumb, setThumb]= useState(`${window.location.origin}/imgs/logo.png`);
+  let [thumb, setThumb] = useState(`${window.location.origin}/imgs/logo.png`);
 
   let [hiddenPreview, setHiddenPreview] = useState(true);
   let [disable, setDisable] = useState(true);
+  let [hidden, setHidden] = useState(false);
 
   let [hash, setHash] = useState("");
   let [template, setTemplate] = useState("");
@@ -33,24 +34,29 @@ function BountyApply(props) {
 
   //apply details
   let [network, setNetwork] = useState("anchor");   //network to get bonus
-  let [receiver,setReceiver] = useState("");        //receive address
-  let [chainInfo, setChainInfo]= useState("");      //apply button clicked status
+  let [receiver, setReceiver] = useState("");        //receive address
+  let [chainInfo, setChainInfo] = useState("");      //apply button clicked status
   const self = {
-    changeNetwork:(ev)=>{
+    changeNetwork: (ev) => {
       setNetwork(ev.target.value);
     },
-    changeReceiver:(ev)=>{
+    changeReceiver: (ev) => {
       setReceiver(ev.target.value);
     },
     changeSearch: (ev) => {
+
       const name = ev.target.value;
       setSearch(name);
 
       setInfo("");
-      setHiddenPreview(true);
+      setHidden(false);
+      //setHiddenPreview(true);
 
       self.getAnchor(name, (inft) => {
-        if (inft === false) return setInfo(`No such iNFT ${name}`);
+        if (inft === false) {
+          setHidden(true);
+          return setInfo(`No such iNFT ${name}`);
+        }
         if (!inft.protocol || !inft.protocol.fmt || !inft.protocol.tpl || inft.protocol.tpl !== "inft") return setInfo(`Not iNFT anchor ${name}`);
         if (!inft.raw || !inft.raw.tpl || inft.raw.tpl !== props.data.template.cid) {
           self.showINFT(inft);
@@ -62,14 +68,14 @@ function BountyApply(props) {
 
       });
     },
-    clickApply:(ev)=>{
-      const alink=props.data.alink;
-      self.getAnchor(search,(dt)=>{
-        const inft=`anchor://${dt.name}/${dt.block}`;
+    clickApply: (ev) => {
+      const alink = props.data.alink;
+      self.getAnchor(search, (dt) => {
+        const inft = `anchor://${dt.name}/${dt.block}`;
         //1.write on chain
         const name = self.getApplyName(8).toLocaleLowerCase();
         const raw = self.getApplyData(inft);
-        const protocol = { fmt: "json", type: "data", ref:alink };    //"ref" is the keyword of Easy Protocol
+        const protocol = { fmt: "json", type: "data", ref: alink };    //"ref" is the keyword of Easy Protocol
 
         const dapp = Config.get(["system", "name"]);
         const obj = {
@@ -79,21 +85,21 @@ function BountyApply(props) {
           dapp: dapp,
         }
 
-        const chain=Network("anchor");
-        chain.sign(obj,(res)=>{
+        const chain = Network("anchor");
+        chain.sign(obj, (res) => {
           setChainInfo(res.msg);
 
-          if(res.status==="Finalized"){
+          if (res.status === "Finalized") {
             setTimeout(() => {
               setChainInfo("");
             }, 1500);
 
-            self.getAnchor(name,(record)=>{
+            self.getAnchor(name, (record) => {
               console.log(record);
-              const rlink=`anchor://${record.name}/${record.block}`;
+              const rlink = `anchor://${record.name}/${record.block}`;
 
               //2.report to portal
-              API.bounty.apply(alink,inft,rlink,(res)=>{
+              API.bounty.apply(alink, inft, rlink, (res) => {
                 console.log(res);
 
                 //3.save to local indexedDB
@@ -104,15 +110,15 @@ function BountyApply(props) {
         });
       });
     },
-    getApplyData:(inft_link)=>{
+    getApplyData: (inft_link) => {
       //console.log(props.data,props.index);
       return {
-        inft:inft_link,      //apply inft anchor link
-        target:props.data.alink,    //bounty anchor link
-        bonus:props.index,      //bonus index
-        receiver:{
-          network:network,
-          address:receiver,
+        inft: inft_link,      //apply inft anchor link
+        target: props.data.alink,    //bounty anchor link
+        bonus: props.index,      //bonus index
+        receiver: {
+          network: network,
+          address: receiver,
         }
       }
     },
@@ -134,12 +140,12 @@ function BountyApply(props) {
       const chain = Network("anchor");
       chain.view({ name: name }, "anchor", ck);
     },
-    showBonus:(data,index)=>{
-      const target=data.detail.bonus[index];
+    showBonus: (data, index) => {
+      const target = data.detail.bonus[index];
       console.log(target);
-      TPL.view(data.template.cid,(res)=>{
+      TPL.view(data.template.cid, (res) => {
         //console.log(res);
-        const dt=res.series[target.series];
+        const dt = res.series[target.series];
         //console.log(dt)
         setThumb(dt.thumb[0]);
       });
@@ -147,7 +153,7 @@ function BountyApply(props) {
   }
 
   useEffect(() => {
-    self.showBonus(props.data,props.index); 
+    self.showBonus(props.data, props.index);
   }, [props.data]);
 
   return (
@@ -161,28 +167,46 @@ function BountyApply(props) {
         {info}
       </Col>
 
-      <Col hidden={hiddenPreview} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-        <h5>Your iNFT</h5>
-        <PriveiwINFT
-          id={"apply_view"}
-          hash={hash}
-          template={template}
-          offset={offset}
-          force={true}
-          hightlight={false}
-        />
-        {tools.shorten(owner, 12)}
+
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Row>
+          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            <h5>Your iNFT</h5>
+            <PriveiwINFT
+              id={"apply_view"}
+              hash={hash}
+              hidden={hidden}
+              template={template}
+              offset={offset}
+              force={true}
+              hightlight={false}
+            />
+          </Col>
+          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            <h5>Bounty wanted</h5>
+            <img src={thumb} className='inft_thumb' alt="" />
+          </Col>
+        </Row>
       </Col>
-      <Col hidden={hiddenPreview} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-        <h5>Bounty wanted</h5>
-        <img src={thumb} className='inft_thumb' alt=""/>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Row>
+          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            {tools.shorten(owner, 12)}
+          </Col>
+          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+
+          </Col>
+        </Row>
       </Col>
+
 
       <Col className='pt-2' md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         {chainInfo}
       </Col>
       <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button disabled={disable} className='btn btn-md btn-primary' onClick={(ev)=>{
+        <button disabled={disable} className='btn btn-md btn-primary' onClick={(ev) => {
           self.clickApply(ev);
         }}>Apply</button>
       </Col>

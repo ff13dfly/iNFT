@@ -150,6 +150,16 @@ const self={
                 },param);
             });
         },
+        view:(alink,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={name:alink};
+                funs.request("bounty","view",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to get data."});
+                },param);
+            });
+        },
     },
     list:{
         byAddress:(address,ck,page,step)=>{

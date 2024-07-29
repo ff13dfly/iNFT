@@ -22,8 +22,8 @@ function Bounty(props) {
     let [ hidden, setHidden ] =useState(false);
 
     const map={
-        "basic":<BountyList link={props.link} dialog={props.dialog} />,
-        "view": <BountyPreview data={data} link={props.link} dialog={props.dialog} />,
+        "basic":<BountyList link={props.link} dialog={props.dialog} extend={props.extend}/>,
+        "view": <BountyPreview data={data} link={props.link} dialog={props.dialog} extend={props.extend} />,
         "404":"404 page",
     }
 

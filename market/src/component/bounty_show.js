@@ -40,6 +40,9 @@ function BountyShow(props) {
       const dt = data.template.raw.series[index];
       return dt.thumb[0];
     },
+    getCover:()=>{
+      return data.template && data.template.raw ? data.template.raw.image : `${window.location.origin}/imgs/logo.png`
+    },
   }
 
   useEffect(() => {
@@ -65,7 +68,8 @@ function BountyShow(props) {
           <span className='pointer' onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);
           }}>
-            <Card.Img variant="top" src={data.template && data.template.raw ? data.template.raw.image : `${window.location.origin}/imgs/logo.png`} />
+            {/* <Card.Img variant="top" src={self.getCover()} /> */}
+            <div className='template_thumb' style={{ backgroundImage:`url(${self.getCover()})`}}></div>
           </span>
           <Card.Body>
             <Card.Title>{data.detail && data.detail.title ? data.detail.title : ""}</Card.Title>
