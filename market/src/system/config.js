@@ -47,6 +47,12 @@ const config={
         },
         receiver:{
             anchor:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
+            tanssi:"TANSSI_RECEIVER_ACCOUNT",
+            solana:"SOLANA_RECEIVER_ACCOUNT",
+            ethereum:"ETHEREUM_RECEIVER_ACCOUNT",
+            bitcoin:"BITCOIN_RECEIVER_ACCOUNT",
+            aptos:"APTOS_RECEIVER_ACCOUNT",
+            sui:"SUI_RECEIVER_ACCOUNT",
         },
     },
     account:{

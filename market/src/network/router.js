@@ -18,6 +18,9 @@ const format={
     },
     reset:()=>{
 
+    },
+    accuracy:()=>{      //replacement of "divide"
+        return 1000000000000
     },             
     divide:()=>{                            //The max divide of single unit
         return 1000000000;      

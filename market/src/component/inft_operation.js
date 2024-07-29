@@ -11,10 +11,11 @@ function OperationINFT(props) {
     left:[8,4],
     right:[4,8],
     sell:[4,6,2],
+    revoke:[4,6,2],
   };
 
   let [ enable, setEnable ]=useState({
-    sell:true,
+    sell:false,
     revoke:false,
   }); 
   let [price, setPrice] = useState(0);
@@ -29,32 +30,78 @@ function OperationINFT(props) {
       setPassword(ev.target.value);
     },
     clickSell:(ev)=>{
-      //console.log(price);
-      console.log(props.data);
       const name=props.data.name;
       const target=props.data.owner;
       const chain=Network("anchor");
+      self.getPair(target,(pair)=>{
+        if(pair){
+          chain.sell(pair,name,price,(progress)=>{
+            setInfo(progress.msg);
+            if(progress.status==="Finalized"){
+              setTimeout(() => {
+                props.dialog.close();
+              }, 500);
+            }
+          });
+        }
+      });
+    },
+    clickRevoke:(ev)=>{
+      const name=props.data.name;
+      const target=props.data.owner;
+      const chain=Network("anchor");
+      self.getPair(target,(pair)=>{
+        if(pair){
+          chain.revoke(pair,name,(progress)=>{
+            setInfo(progress.msg);
+            if(progress.status==="Finalized"){
+              setTimeout(() => {
+                props.dialog.close();
+              }, 500);
+            }
+          });
+        }
+      });
+    },
+    getPair:(target,ck)=>{
+      const chain=Network("anchor");
       Account.get(target,(res)=>{
         if(!res || res.length===0){
-          return setInfo("Invalid iNFT to set sell status");
+          setInfo("Invalid iNFT to set sell status");
+          return ck && ck(false);
         }
         const fa=JSON.stringify(res[0]);
         chain.load(fa, password, (pair)=>{
           if(pair.error){
-            return setInfo(pair.error);
+            setInfo(pair.error);
+            return ck && ck(false);
           }
-          chain.sell(pair,name,price,(status)=>{
-            setInfo(status.msg);
-
-
-          }); 
+          return ck && ck(pair);
         });
+      });
+    },
+    fresh:()=>{
+      //console.log(props.data);
+      const chain=Network("anchor");
+      chain.view(props.data.name,"selling",(res)=>{
+        if(res===false){
+          setEnable({
+            sell:true,
+            revoke:false,
+          })
+        }else{
+          setEnable({
+            sell:false,
+            revoke:true,
+          })
+        }
       });
     },
   }
 
   useEffect(() => {
-    console.log(props.data);
+    self.fresh();
+    //console.log(props.dialog);
   }, [props.data]);
 
   return (
@@ -88,21 +135,29 @@ function OperationINFT(props) {
               self.clickSell(ev);
             }}>Sell</button>
           </Col>
-          <Col className='text-end'  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            {info}
-          </Col>
         </Row>
       </Col> 
 
       <Col hidden={!enable.revoke}  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
-          <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+          <Col md={size.revoke[0]} lg={size.revoke[0]} xl={size.revoke[0]} xxl={size.revoke[0]}>
           
           </Col>
-          <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-            <button className='btn btn-md btn-primary'>Revoke</button>
+          <Col className='text-end' md={size.revoke[1]} lg={size.revoke[1]} xl={size.revoke[1]} xxl={size.revoke[1]}>
+            <input className='form-control' type="password" value={password} placeholder='Password of account' onChange={(ev)=>{
+              self.changePassword(ev);
+            }}/>
+          </Col>
+          <Col className='text-end' md={size.revoke[2]} lg={size.revoke[2]} xl={size.revoke[2]} xxl={size.revoke[2]}>
+            <button className='btn btn-md btn-primary'onClick={(ev)=>{
+              self.clickRevoke(ev);
+            }}>Revoke</button>
           </Col>
         </Row>
+      </Col>
+
+      <Col className='text-end'  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        {info}
       </Col>
     </Row>
   );

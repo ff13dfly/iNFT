@@ -27,9 +27,7 @@ function ListAddress(props) {
 
   const self = {
     clickSingle:(row)=>{
-      //console.log(props.dialog);
-      console.log(row);
-      if(props.dialog) props.dialog.show(<OperationINFT data={row}/>, `iNFT operation of ( ${row.name} )`)
+      if(props.dialog) props.dialog.show(<OperationINFT data={row} dialog={props.dialog}/>, `iNFT operation of ( ${row.name} )`)
     },
     getHolder: (n) => {
       const arr = []

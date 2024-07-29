@@ -447,6 +447,9 @@ const self = {
             });
         });
     },
+    accuracy:()=>{
+        return 1000000000000;
+    },
     test: () => {
         test.auto();
     }
