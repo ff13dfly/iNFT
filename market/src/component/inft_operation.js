@@ -1,12 +1,16 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import Network from '../network/router';
+
+import Account from '../system/account';
+
 function OperationINFT(props) {
   const size = {
     row: [12],
     left:[8,4],
     right:[4,8],
-    sell:[4,2,6],
+    sell:[4,6,2],
   };
 
   let [ enable, setEnable ]=useState({
@@ -14,13 +18,38 @@ function OperationINFT(props) {
     revoke:false,
   }); 
   let [price, setPrice] = useState(0);
+  let [password, setPassword]= useState("");
+  let [info, setInfo] = useState("");
 
   const self={
     changePrice:(ev)=>{
       setPrice(ev.target.value);
     },
+    changePassword:(ev)=>{
+      setPassword(ev.target.value);
+    },
     clickSell:(ev)=>{
-      console.log(price);
+      //console.log(price);
+      console.log(props.data);
+      const name=props.data.name;
+      const target=props.data.owner;
+      const chain=Network("anchor");
+      Account.get(target,(res)=>{
+        if(!res || res.length===0){
+          return setInfo("Invalid iNFT to set sell status");
+        }
+        const fa=JSON.stringify(res[0]);
+        chain.load(fa, password, (pair)=>{
+          if(pair.error){
+            return setInfo(pair.error);
+          }
+          chain.sell(pair,name,price,(status)=>{
+            setInfo(status.msg);
+
+
+          }); 
+        });
+      });
     },
   }
 
@@ -48,16 +77,22 @@ function OperationINFT(props) {
               self.changePrice(ev);
             }}/>
           </Col>
-          <Col className='text-end' md={size.sell[1]} lg={size.sell[1]} xl={size.sell[1]} xxl={size.sell[1]}>
+          <Col md={size.sell[1]} lg={size.sell[1]} xl={size.sell[1]} xxl={size.sell[1]}>
+            <input className='form-control' type="password" value={password} placeholder='Password of account' onChange={(ev)=>{
+              self.changePassword(ev);
+            }}/>
+          </Col>
+          <Col className='text-end' md={size.sell[2]} lg={size.sell[2]} xl={size.sell[2]} xxl={size.sell[2]}>
+            
             <button className='btn btn-md btn-primary' onClick={(ev)=>{
               self.clickSell(ev);
             }}>Sell</button>
           </Col>
-          <Col className='text-end' md={size.sell[2]} lg={size.sell[2]} xl={size.sell[2]} xxl={size.sell[2]}>
-
+          <Col className='text-end'  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {info}
           </Col>
         </Row>
-      </Col>
+      </Col> 
 
       <Col hidden={!enable.revoke}  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>

@@ -47,6 +47,12 @@ const funs = {
 }
 
 const self = {
+    get:(addr,ck)=>{
+        const table="accounts";
+        funs.checkDB(table,(db)=>{
+            INDEXED.searchRows(db,table,"address",addr,ck);
+        });
+    },
     generate: (network, ck) => {
         const gen = Network(network);
         if (gen === false) return ck && ck(false);
@@ -86,6 +92,8 @@ const self = {
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });
     },
+
+    
     balance:(list,ck,net)=>{
         const chain = Network(!net?"anchor":net);
         if(Array.isArray(list)){
