@@ -54,11 +54,10 @@ function AccountSign(props) {
           if(pair!==false && props.callback) props.callback({wallet:wallet,signer:pair});
         });
       }else{
-        console.log(`Wallet to approve`);
         const dapp = Config.get(["system", "name"]);
-        chain.wallet(dapp,(injector)=>{
+        chain.wallet(dapp,(injector,addr)=>{
           if(injector.error) return setInfo(injector.error);
-          if(props.callback) props.callback({wallet:wallet,signer:injector.signer});
+          if(props.callback) props.callback({wallet:wallet,signer:injector.signer,address:addr});
         });
       }
     },

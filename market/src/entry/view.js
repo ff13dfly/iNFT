@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
 import AccountSign from "../component/account_sign";
-
 import INFT from "../system/inft";
+import Network from "../network/router";
 
 function View(props) {
     const size = {
@@ -15,6 +15,7 @@ function View(props) {
 
     let [data, setData] = useState();
     let [way, setWay] = useState("wallet");
+    let [network,setNetwork] = useState("anchor");
 
     const payment={
         wallet:{},
@@ -29,13 +30,18 @@ function View(props) {
             return {name:arr.join("@"),network:network}
         },
         clickBuy:(pair)=>{
-            console.log(`Buying...`,pair);
+            //console.log(`Buying...`,pair,data);
+            const chain=Network("anchor");
+            chain.buy(pair.signer,data.name,(process)=>{
+                console.log(process);
+            },pair.wallet,pair.address);
         },
     }
 
     useEffect(() => {
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
+            if(dt.network) setNetwork(dt.network);
             INFT.single(dt.name,(res)=>{
                 setData(res);
             });

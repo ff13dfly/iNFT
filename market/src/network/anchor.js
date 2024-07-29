@@ -5,7 +5,7 @@ import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-d
 import Config from "../system/config";
 import Status from "../system/status";
 
-const dt=Config.get(["network","anchor"]);
+const dt = Config.get(["network", "anchor"]);
 //const status=Config.get(["system","status"]);
 
 const config = {
@@ -92,13 +92,13 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        Status.set(uri,2);      //trying, update uri status
+        Status.set(uri, 2);      //trying, update uri status
         const provider = new WsProvider(uri);
         ApiPromise.create({ provider: provider }).then((api) => {
             console.log(`Linked to node ${uri}`);
             wsAPI = api;
             linking = false;
-            Status.set(uri,1);      //normal, update uri status
+            Status.set(uri, 1);      //normal, update uri status
             //add the listener;
             wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                 const data = JSON.parse(JSON.stringify(lastHeader));
@@ -111,7 +111,7 @@ const self = {
             return ck && ck(wsAPI);
         }).catch((error) => {
             console.log(error);
-            Status.set(uri,4);  //failed, update uri status
+            Status.set(uri, 4);  //failed, update uri status
             linking = false;
             return ck && ck(error);
         });
@@ -227,44 +227,16 @@ const self = {
             }
         });
     },
-    sign: async ( obj, ck, wallet, param) => {
-        self.init(async () => {
-            let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-            if (typeof raw !== 'string') raw = JSON.stringify(raw);
-            if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
-            const pre = 0;
-
-            const extensions = await web3Enable(obj.dapp);
-            if (extensions.length === 0) {
-                return ck && ck({error:"No subwallet extention"});
-            }
-
-            const allAccounts = await web3Accounts();
-            const account = allAccounts[0];
-            const injector= await web3FromAddress(account.address);
-            //console.log(injector);
-            const tx = wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre);
-            tx.signAndSend(account.address, { signer: injector.signer }, (res) => {
-                const dt = res.toHuman();
-                funs.decodeProcess(dt, (status) => {
-                    return ck && ck(status);
-                });
-            }).catch((error)=>{
-                return ck && ck({error:"Sign error, maybe low balance."});
-            });
-        })
-    },
-    wallet: async (dapp,ck)=>{
+    wallet: async (dapp, ck) => {
         const extensions = await web3Enable(dapp);
         if (extensions.length === 0) {
-            return ck && ck({error:"No subwallet extention"});
+            return ck && ck({ error: "No subwallet extention" });
         }
         const allAccounts = await web3Accounts();
         const account = allAccounts[0];
-        const injector= await web3FromAddress(account.address);
-        return ck && ck(injector);
+        const injector = await web3FromAddress(account.address);
+        return ck && ck(injector, account.address);
     },
     sell: (pair, name, price, ck, target) => {
         self.init(() => {
@@ -280,6 +252,112 @@ const self = {
                 } catch (error) {
                     return ck && ck({ error: error });
                 }
+            });
+        });
+    },
+    sign: async (obj, ck, wallet, param) => {
+        self.init(async () => {
+            let { anchor, raw, protocol } = obj;
+            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
+            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
+
+            const pre = 0;
+
+            const extensions = await web3Enable(obj.dapp);
+            if (extensions.length === 0) {
+                return ck && ck({ error: "No subwallet extention" });
+            }
+
+            const allAccounts = await web3Accounts();
+            const account = allAccounts[0];
+            const injector = await web3FromAddress(account.address);
+            //console.log(injector);
+            const tx = wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre);
+            tx.signAndSend(account.address, { signer: injector.signer }, (res) => {
+                const dt = res.toHuman();
+                funs.decodeProcess(dt, (status) => {
+                    return ck && ck(status);
+                });
+            }).catch((error) => {
+                return ck && ck({ error: "Sign error, maybe low balance." });
+            });
+        })
+    },
+    buy: (pair, anchor, ck, wallet, address) => {
+        self.init(() => {
+            anchor = anchor.toLocaleLowerCase();
+            if (funs.limited(anchor)) return ck && ck({ error: "Name error" });
+
+            self.view(anchor, "owner", (owner) => {
+                self.view(anchor, "selling", (dt) => {
+                    const cost = dt[1] * self.accuracy();
+                    if (owner.addresss === (wallet ? address : pair.address)) return ck && ck({ error: "Your own anchor" });
+                    if (dt[0] !== dt[2] && dt[2] !== (wallet ? address : pair.address)) return ck && ck({ error: "Your can not buy this one" });
+                    self.balance((wallet ? address : pair.address), (bc) => {
+                        if (bc.free < cost) return ck && ck({ error: 'Low balance' });
+                        try {
+                            if (wallet) {
+                                console.log(address,pair);
+                                wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(address, { signer: pair }, (res) => {
+                                    const dt = res.toHuman();
+                                    funs.decodeProcess(dt, (status) => {
+                                        return ck && ck(status);
+                                    });
+                                });
+                            } else {
+                                wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(pair, (res) => {
+                                    const dt = res.toHuman();
+                                    funs.decodeProcess(dt, (status) => {
+                                        return ck && ck(status);
+                                    });
+                                });
+                            }
+
+                        } catch (error) {
+                            return ck && ck({ error: error });
+                        }
+                    });
+                });
+
+                //if(!wallet && owner.addresss===pair.address) return ck && ck({error:"Your own anchor"});
+                //if(wallet && owner.addresss===address) return ck && ck({error:"Your own anchor"});
+
+                // self.view(anchor,"selling",(dt)=>{
+                //     if(dt[0]!==dt[2] && dt)
+                //     console.log(dt);
+                // });
+
+                // let unlist=null;
+                // wsAPI.query.anchor.sellList(anchor, (dt) => {
+                //     unlist();
+                //     console.log(dt);
+                //     if (dt.value.isEmpty) return ck && ck({error:`'${anchor}' is not on sell`});
+                //     const res=dt.toJSON();
+                //     const cost=res[1]*1000000000000;
+                //     if(res[0]!==res[2] && res[2]!==pair.address) return ck && ck({error:"Not target account"});
+
+                //     self.balance(pair.address,(amount)=>{
+                //         if(amount.free<cost) return ck && ck({error:'Low balance'});
+                //         try {
+                //             if(!wallet){
+                //                 wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(pair, (res) => {
+                //                     return ck && ck(self.process(res));
+                //                 });
+                //             }else{
+                //                 console.log(address,pair);
+                //                 wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(address,{signer:pair}, (res) => {
+                //                     return ck && ck(self.process(res));
+                //                 });
+                //             }
+                //         } catch (error) {
+                //             return ck && ck({error:error});
+                //         }
+                //     });
+                // }).then((fun) => {
+                //     unlist = fun;
+                // });
+
             });
         });
     },
@@ -346,7 +424,7 @@ const self = {
 
                     //2.check the latest block of the name
                     self.view(value.name, "owner", (owner) => {
-                        if(!owner) return ck && ck(false);
+                        if (!owner) return ck && ck(false);
                         return self.view({ name: value.name, block: owner.block }, "anchor", ck);
                     });
 
@@ -428,7 +506,7 @@ const self = {
                     });
                     break;
                 case "transaction":
-                        
+
                     break;
                 default:
                     break;
@@ -458,7 +536,7 @@ const self = {
             });
         });
     },
-    accuracy:()=>{
+    accuracy: () => {
         return 1000000000000;
     },
     test: () => {
