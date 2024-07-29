@@ -2,6 +2,7 @@ import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
+import OperationView from "../component/view_operation";
 
 import INFT from "../system/inft";
 
@@ -61,22 +62,10 @@ function View(props) {
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <DetailINFT data={data} link={props.link} />
-                <Row className="pt-4">
-                    <Col className="pt-4 text-end" md={size.buy[0]} lg={size.buy[0]} xl={size.buy[0]} xxl={size.buy[0]} >
-                    </Col>
-                    <Col className="pt-4 text-end" md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]} >
-                        <select className="form-control">
-                            <option value="wallet">Wallet</option>
-                            <option value="local">Local</option>
-                        </select>
-                    </Col>
-                    <Col className="pt-4 text-end" md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]} >
-                        <button className="btn btn-md btn-primary">Buy It Now</button>
-                    </Col>
-                    <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        <small>You can buy iNFT at the same network.</small>
-                    </Col>
-                </Row>
+                
+            </Col>
+            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                <OperationView data={data} link={props.link} />
             </Col>
         </Row>
     )

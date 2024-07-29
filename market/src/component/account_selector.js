@@ -12,6 +12,7 @@ function AccountSelector(props) {
   const self = {
     fresh: () => {
       Account.list({}, (data) => {
+        console.log(data);
         setList(data);
         if(props.callback && data && data[0]) props.callback(data[0].address);
       });
