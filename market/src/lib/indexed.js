@@ -320,6 +320,20 @@ const INDEXED = {
       return ck && ck(request.result);
     }
   },
+  deleteTable:(db,table,ck)=>{
+    console.log(table);
+    const indexedDB =
+        window.indexedDB ||
+        window.mozIndexedDB ||
+        window.webkitIndexedDB ||
+        window.msIndexedDB;
+    const request = indexedDB.open(db.name, db.version+1);
+    request.onupgradeneeded = (event) => {
+      const ndb = request.result;
+      ndb.deleteObjectStore(table);
+      return ck && ck(true);
+    };
+  },
 };
 
 const test = {

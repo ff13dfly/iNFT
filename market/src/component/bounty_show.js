@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import BountyApply from './bounty_apply';
 
 import tools from "../lib/tools";
-import { FaClock, FaPizzaSlice } from "react-icons/fa";
+import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
 
 function BountyShow(props) {
   const size = {
@@ -22,7 +22,12 @@ function BountyShow(props) {
 
   let [block, setBlock] = useState(0);    //current block number
 
+  let [qr, setQR] = useState(false);
+
   const self = {
+    clickQR:()=>{
+      setQR(!qr);
+    },
     clickApply: (index, alink) => {
       props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
     },
@@ -40,7 +45,7 @@ function BountyShow(props) {
       const dt = data.template.raw.series[index];
       return dt.thumb[0];
     },
-    getCover:()=>{
+    getCover: () => {
       return data.template && data.template.raw ? data.template.raw.image : `${window.location.origin}/imgs/logo.png`
     },
   }
@@ -64,12 +69,20 @@ function BountyShow(props) {
     <Row hidden={!ready}>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Card style={{ width: '100%' }}>
-          <span className='pointer' onClick={(ev) => {
+          <FaQrcode hidden={qr} className='qr_button pointer bg-default' size={30} onClick={(ev) => {
+            self.clickQR();
+          }}/>
+          <div className='qr pointer' hidden={!qr} onClick={(ev) => {
+            self.clickQR();
+          }}>
+            <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} />
+          </div>
+          <div className='template_thumb pointer' style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
+            props.link("bounty", [props.data.name, props.data.block]);
+          }}></div>
+          <Card.Body className='pointer' onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);
           }}>
-            <div className='template_thumb' style={{backgroundImage:`url(${self.getCover()})`}}></div>
-          </span>
-          <Card.Body>
             <Card.Title>{data.detail && data.detail.title ? data.detail.title : ""}</Card.Title>
             <Card.Text>
               {data.detail && data.detail.desc ? data.detail.desc : ""}

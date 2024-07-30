@@ -159,15 +159,13 @@ function BountyApply(props) {
   return (
     <Row>
       <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
-        <input className='form-control' type="text" value={search} onChange={(ev) => {
+        <input className='form-control' type="text" value={search} placeholder='Input the iNFT name' onChange={(ev) => {
           self.changeSearch(ev);
         }} />
       </Col>
       <Col className='pt-2' md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
         {info}
       </Col>
-
-
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>

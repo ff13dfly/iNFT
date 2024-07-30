@@ -97,3 +97,21 @@ code {
   border-radius: 10px;
   margin-right: 10px;
 }
+
+.qr{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  background: #AAAAAA;
+  float: right;
+  right:5px;
+  top:5px;
+  z-index: 999;
+}
+
+.qr_button{
+  position: absolute;
+  right:5px;
+  top:5px;
+  z-index: 998;
+}
