@@ -44,6 +44,18 @@
 
 - Different networks supported.
 
+### Service
+
+#### Faucet
+
+#### API
+
+#### Portal
+
+#### Cache Robot
+
+#### Minting Robot
+
 ## Definition of iNFT
 
 - The template of iNFT definition as follow. 
