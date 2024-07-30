@@ -2,6 +2,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import BountySubmit from './bounty_submit';
+import BountyProcess from './bounty_process';
 
 import Config from "../system/config";
 import Bounty from "../system/bounty";
@@ -10,7 +11,7 @@ import API from '../system/api';
 import tools from "../lib/tools";
 import INDEXED from '../lib/indexed';
 
-import { FaBitcoin,FaSyncAlt,FaSkullCrossbones } from "react-icons/fa";
+import { FaBitcoin,FaSyncAlt,FaSkullCrossbones,FaRoad } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -25,7 +26,7 @@ function UserBounty(props) {
 
   const self = {
     clickRemove:(name)=>{
-      console.log(name);
+      //console.log(name);
       INDEXED.checkDB(nameDB, (db) => {
         if (INDEXED.checkTable(db.objectStoreNames, table)) {
           INDEXED.removeRow(db,table,"name",name,(done)=>{
@@ -58,6 +59,9 @@ function UserBounty(props) {
         });
       });
     },
+    clickProcess:(name)=>{
+      props.dialog.show(<BountyProcess name={name} />,"Bounty Process");
+    },
     fresh:()=>{
       Bounty.list((arr)=>{
         setList(arr);
@@ -79,7 +83,7 @@ function UserBounty(props) {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Status</th>
+          <th>Process</th>
           <th>Start</th>
           <th>End</th>
           <th>Template</th>
@@ -96,7 +100,9 @@ function UserBounty(props) {
               </a>
             </td>
             <td>
-              {!def[row.status]?"unknow":def[row.status]}
+              <span className='pointer ml-5 text-primary' onClick={(ev)=>{
+                  self.clickProcess(row.name);
+              }}><FaRoad size={24}/></span>
             </td>
             <td>
               {row.start.toLocaleString()}
@@ -122,7 +128,6 @@ function UserBounty(props) {
               <span className='pointer ml-5' onClick={(ev)=>{
                   self.clickSync(row.name);
               }}><FaSyncAlt size={20}/></span>
-              
             </td>
           </tr>
         ))}

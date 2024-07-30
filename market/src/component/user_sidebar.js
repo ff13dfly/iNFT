@@ -31,7 +31,7 @@ function UserSidebar(props) {
     {
       name: "bounty",
       icon: <FaBitcoin size={20}  className='mr-5' color={self.getColor("bounty")}/>,
-      title: "Bounty",
+      title: "My Bounty",
       desc:"Manage your bounty",
     },
     {

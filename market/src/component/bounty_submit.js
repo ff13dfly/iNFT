@@ -4,6 +4,7 @@ import { useEffect, useState,useRef } from "react";
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
 import BountyDetail from './bounty_detail';
+import BountyPay from './bounty_pay';
 
 import Network from '../network/router';
 
@@ -404,14 +405,19 @@ function BountySubmit(props) {
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyDetail link={anchor} data={data}/>
               </Col>
-              <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+              <BountyPay title={"Pay Now"} network={"anchor"} callback={()=>{
+
+              }}/>
+
+              {/* <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 {payInfo}
               </Col>
+
               <Col className='pt-4 text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button className='btn btn-md btn-primary' onClick={(ev)=>{
                   self.clickPay(ev);
                 }}>Pay Now</button>
-              </Col>
+              </Col> */}
             </Row>
           </Col>
         </Row>
