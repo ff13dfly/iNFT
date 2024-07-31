@@ -408,16 +408,6 @@ function BountySubmit(props) {
               <BountyPay title={"Pay Now"} network={"anchor"} callback={()=>{
 
               }}/>
-
-              {/* <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-                {payInfo}
-              </Col>
-
-              <Col className='pt-4 text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button className='btn btn-md btn-primary' onClick={(ev)=>{
-                  self.clickPay(ev);
-                }}>Pay Now</button>
-              </Col> */}
             </Row>
           </Col>
         </Row>

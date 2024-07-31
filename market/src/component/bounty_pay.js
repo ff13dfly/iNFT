@@ -19,34 +19,25 @@ import { FaCheck } from "react-icons/fa";
 function BountyPay(props) {
   const size = {
     row: [12],
-    buy: [1,5,4,2],
+    transaction: [1,9,2],
   };
 
-  let [done, setDone] = useState(true);    //wether transfer and got hash
+  let [payed, setPayed] = useState(true);    //wether transfer and got hash
   let [info, setInfo] = useState("");
-  let [address, setAddress]= useState("");
-  let [balance,setBalance] = useState(0);
-  let [password, setPassword] = useState("");
+
   let [title, setTitle]=useState(props.title);
+
+  let [hash,setHash]= useState("");
 
   const chain=Network(props.network);
 
   const self = {
-    changeAccount:(addr)=>{
-      setInfo("");
-      chain.balance(addr,(res)=>{
-        console.log(res);
-        const val=res.free/chain.accuracy();
-        setBalance(val);
-      });
-      setAddress(addr);
+    changeHash:(ev)=>{
+      setHash(ev.target.value);
     },
-    changePassword:(ev)=>{
-      setPassword(ev.target.value);
-    },
-    clickDone:()=>{
-      setDone(!done);
-      if(!done){
+    clickPayed:()=>{
+      setPayed(!payed);
+      if(!payed){
         setTitle(props.title);
       }else{
         setTitle("Update");
@@ -54,35 +45,11 @@ function BountyPay(props) {
     },
     clickSign:(ev)=>{
       setInfo("");
-      if(!done){
-        self.getPair((pair)=>{
-          setPassword("");
-          if(pair!==false && props.callback) props.callback({signer:pair});
-        });
+      if(!payed){
+        
       }else{
-        const dapp = Config.get(["system", "name"]);
-        chain.wallet(dapp,(injector,addr)=>{
-          if(injector.error) return setInfo(injector.error);
-          if(props.callback) props.callback({signer:injector.signer,address:addr});
-        });
+        
       }
-    },
-    getPair:(ck)=>{
-      Account.get(address,(res)=>{
-        if(!res || res.length===0){
-          setInfo("No such account");
-          return ck && ck(false);
-        }
-
-        const fa=JSON.stringify(res[0]);
-        chain.load(fa, password, (pair)=>{
-          if(pair.error){
-            setInfo(pair.error);
-            return ck && ck(false);
-          }
-          return ck && ck(pair);
-        });
-      });
     },
   }
 
@@ -95,28 +62,20 @@ function BountyPay(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
-      <Col className='pt-1' md={size.buy[0]} lg={size.buy[0]} xl={size.buy[0]} xxl={size.buy[0]}>
-        <button className={done ? 'btn btn-sm btn-default' : 'btn btn-sm btn-primary'} onClick={(ev) => {
-          self.clickDone(ev)
+      <Col className='pt-1' md={size.transaction[0]} lg={size.transaction[0]} xl={size.transaction[0]} xxl={size.transaction[0]}>
+        <button className={payed ? 'btn btn-sm btn-default' : 'btn btn-sm btn-primary'} onClick={(ev) => {
+          self.clickPayed(ev)
         }}><FaCheck /></button>
       </Col>
-      <Col hidden={done} className='' md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
-        <AccountSelector network={"anchor"} callback={(addr) => {
-          self.changeAccount(addr);
-        }} />
-        <small>Balance: {balance}</small>
-      </Col>
-      <Col hidden={!done} className='pt-2' md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
-        Check to set transaction hash.
-      </Col>
-      <Col hidden={done} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
-        <input type="password" className='form-control' placeholder='password for account' value={password} onChange={(ev)=>{
-          self.changePassword(ev);
+      <Col hidden={payed} className='' md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
+        <input className='form-control' type="text" placeholder='Transaction hash' onChange={(ev)=>{
+          self.changeHash(ev);
         }}/>
       </Col>
-      <Col hidden={!done} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
+      <Col hidden={!payed} className='' md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
+        
       </Col>
-      <Col className='text-end' md={size.buy[3]} lg={size.buy[3]} xl={size.buy[3]} xxl={size.buy[3]}>
+      <Col className='text-end' md={size.transaction[2]} lg={size.transaction[2]} xl={size.transaction[2]} xxl={size.transaction[2]}>
         <button className='btn btn-md btn-primary' onClick={(ev)=>{
           self.clickSign();
         }}>{title}</button>

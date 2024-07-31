@@ -16,10 +16,16 @@ function BountyProcess(props) {
 
   let [data, setData] = useState({});
 
+  let [ anchorBounty, setAnchorBounty ] = useState("");
+  let [ anchorPayment, setAnchorPayment ] = useState("");
+  let [ anchorAppy, setAnchorApply ] = useState("");
+  let [ anchorDistribution, setAnchorDistribution] = useState("");
+
   const self={
     fresh:()=>{
       API.bounty.view(props.name,(res)=>{
-        console.log(res);
+        if(!res.success) return false;
+        setAnchorBounty(res.data.alink);
       });
     },
   }
@@ -30,9 +36,18 @@ function BountyProcess(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-        
+        Bounty details ( {anchorBounty} ) 
       </Col>
-      
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+        <hr />Payment details ( {anchorPayment} ) 
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+        <hr />Apply details
+      </Col>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+        <hr />Distribution details
+      </Col>
     </Row>
   );
 }

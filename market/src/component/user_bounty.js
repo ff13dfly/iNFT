@@ -82,7 +82,8 @@ function UserBounty(props) {
       <Table striped bordered hover>
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Title</th>
+          <th>Alink</th>
           <th>Process</th>
           <th>Start</th>
           <th>End</th>
@@ -94,6 +95,9 @@ function UserBounty(props) {
       <tbody>
         {list.map((row, index) => (
           <tr key={index}>
+            <td>
+              {row.title}
+            </td>
             <td>
               <a href="https://polkadot.js.org/apps/?rpc=ws://localhost:9944#/chainstate" target="_blank" rel="noreferrer">
               {row.name}

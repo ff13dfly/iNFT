@@ -371,6 +371,11 @@ const self = {
 
         });
     },
+    events:{
+        payed:()=>{
+
+        },
+    },
 }
 
 export default self;

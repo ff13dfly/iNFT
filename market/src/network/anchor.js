@@ -499,6 +499,11 @@ const self = {
     accuracy: () => {
         return 1000000000000;
     },
+    events:{
+        payed:()=>{
+
+        },
+    },
     test: () => {
         test.auto();
     }
