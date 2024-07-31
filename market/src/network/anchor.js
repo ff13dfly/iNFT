@@ -160,8 +160,6 @@ const self = {
             const keyring = new Keyring({ type: "sr25519" });
             const pair = keyring.addFromUri(mnemonic);
             const sign = pair.toJson(password);
-            //sign.meta.network = "anchor";
-
             const row = {
                 address: sign.address,
                 encoded: sign.encoded,

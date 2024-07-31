@@ -213,7 +213,7 @@ const self = {
         const net="anchor";
         if(single.raw && single.protocol && single.hash){
             map[key]=single;
-            const indexkey=`${key}_${single.block}`;
+            const indexkey=`${key}_${!single.blocknumber?single.block:single.blocknumber}`;
             funs.getThumb(single.raw.tpl,single.hash,single.raw.offset,(bs64)=>{
                 map[key].bs64=bs64;
                 if(local) map[key].local=true;
@@ -221,7 +221,6 @@ const self = {
                 return self.auto(list,ck,final);
             },indexkey);
         }else{
-            //console.log("here to get full data.");
             Network(net).view({ name: key }, "anchor", (data) => {
                 //console.log(data);
                 if (!data || !data.name) return self.auto(list,ck,final);
@@ -234,7 +233,7 @@ const self = {
     
                     map[key]=data;
 
-                    const indexkey=`${key}_${data.block}`;
+                    const indexkey=`${key}_${!data.blocknumber?data.block:data.blocknumber}`;
                     funs.getThumb(data.raw.tpl,data.hash,data.raw.offset,(bs64)=>{
                         //console.log(`Rending done:${key}`);
                         map[key].bs64=bs64;

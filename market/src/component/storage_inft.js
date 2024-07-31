@@ -26,7 +26,7 @@ function StorageINFT(props) {
 
   const self = {
     clickRemove: (name) => {
-      console.log(name);
+      //console.log(name);
       INDEXED.checkDB(nameDB, (db) => {
         if (INDEXED.checkTable(db.objectStoreNames, table)) {
           INDEXED.removeRow(db, table, "name", name, (done) => {
@@ -67,7 +67,7 @@ function StorageINFT(props) {
     self.count(()=>{
       self.fresh(page);
     });
-  }, []);
+  }, [props.update]);
 
   return (
     <Row>

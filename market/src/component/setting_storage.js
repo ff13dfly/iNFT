@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
 
 import StorageTemplat from "./storage_template";
 import StorageINFT from "./storage_inft";
@@ -13,6 +13,7 @@ function SettingStorage(props) {
     head: [4, 8],
   };
 
+  let [update, setUpdate] =useState(0);
 
   const nameDB=Config.get(["storage","DBname"]);  
   const self={
@@ -20,7 +21,7 @@ function SettingStorage(props) {
       const table="template";
       INDEXED.checkDB(nameDB, (db) => {
         INDEXED.deleteTable(db, table, () => {
-          
+          self.update();
         });
       });
     },
@@ -28,9 +29,12 @@ function SettingStorage(props) {
       const table="infts";
       INDEXED.checkDB(nameDB, (db) => {
         INDEXED.deleteTable(db, table, () => {
-          
+          self.update();
         });
       });
+    },
+    update:()=>{
+      setUpdate(update+1);
     },
   }
 
@@ -57,7 +61,7 @@ function SettingStorage(props) {
         }}>Clean Template Cache</button>
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <StorageTemplat />
+        <StorageTemplat update={update}/>
       </Col>
 
       <Col className='pt-4' md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
@@ -69,7 +73,7 @@ function SettingStorage(props) {
         }}>Clean All iNFT Cache</button>
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <StorageINFT/>
+        <StorageINFT update={update}/>
       </Col>
     </Row>
   );

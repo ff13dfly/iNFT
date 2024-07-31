@@ -36,7 +36,6 @@ function AccountAdd(props) {
   return (
     <Row>
       <Col md={size.account[0]} lg={size.account[0]} xl={size.account[0]} xxl={size.account[0]}>
-
       </Col>
       <Col md={size.account[1]} lg={size.account[1]} xl={size.account[1]} xxl={size.account[1]}>
         <button className='btn btn-md btn-primary' onClick={(ev)=>{

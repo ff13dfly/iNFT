@@ -31,7 +31,6 @@ function Market(props) {
         <Row className="pt-2">
             <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
                 <SearchMarket callback={(arr,net)=>{
-                    //console.log(arr,net)
                     setData(arr);
                     setNetwork(net);
                     setMarket(false);
