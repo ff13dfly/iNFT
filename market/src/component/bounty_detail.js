@@ -87,10 +87,6 @@ function BountyDetail(props) {
 
         </Col>
       ))}
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr /></Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Total: <strong>{total.toLocaleString()}</strong> ${coin.toUpperCase()}. Target account: <strong>{target}</strong>
-      </Col>
     </Row>
   );
 }

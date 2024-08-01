@@ -8,6 +8,11 @@
 		public function getStep(){
 			return BOUNTY_PAGE_STEP;
 		}
+
+		public function bountyTarget($network){
+			if(isset(BOUNTY_TARGET[$network])) return BOUNTY_TARGET[$network];
+			return false;
+		}
 		
 		public function bountyExsist($alink){
 			$warr=array(

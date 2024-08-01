@@ -45,7 +45,7 @@ const config={
             7:"done",
             8:"all done",
         },
-        receiver:{
+        receiver:{          //abandon these, get target from portal
             anchor:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
             tanssi:"TANSSI_RECEIVER_ACCOUNT",
             solana:"SOLANA_RECEIVER_ACCOUNT",

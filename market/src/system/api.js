@@ -138,6 +138,16 @@ const self={
                 },param);
             });
         },
+        target:(network,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={network:network};
+                funs.request("bounty","target",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to get bounty payment target details."});
+                },param);
+            });
+        },
         list:(ck,page,step)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
