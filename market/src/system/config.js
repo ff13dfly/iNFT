@@ -177,7 +177,7 @@ const config={
     },
     network:{
         anchor:{
-            coin:"MEKK",
+            coin:"ANK",
             enable:true,
             support:{
                 minting:true,

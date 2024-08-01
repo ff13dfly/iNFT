@@ -25,11 +25,14 @@ function BountyPay(props) {
   let [payed, setPayed] = useState(true);    //wether transfer and got hash
   let [info, setInfo] = useState("");
 
+  //payment details from anchor raw data
+  let [network, setNetwork] = useState("");   //network of payment 
+  let [amount, setAmount]= useState(0);       //amount of payment
+  let [target, setTarget]= useState("");      //receiver address of payment
+
   let [title, setTitle]=useState(props.title);
-
-  let [hash,setHash]= useState("");
-
-  const chain=Network(props.network);
+  let [hash,setHash]= useState("");         //transaction hash to confirm payment;
+  let [ready, setReady] = useState(false);
 
   const self = {
     changeHash:(ev)=>{
@@ -46,16 +49,52 @@ function BountyPay(props) {
     clickSign:(ev)=>{
       setInfo("");
       if(!payed){
-        
+        const chain=Network(network);
+        if(!chain) return props.callback && props.callback({error:`Network ${network} is not support yet.`})
       }else{
         
+      }
+    },
+    decode:(alink)=>{
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
+    },
+    getBounty:(val,ck)=>{
+      const chain=Network("anchor");      //bounty data is base on Anchor Network
+      chain.view(val,"anchor",(res)=>{
+        //console.log(res);
+        return ck && ck(res);
+      });
+    },
+    getNetworkByCoin:(coin)=>{
+      const ns=Config.get("network");
+      for(var k in ns){
+        if(ns[k].coin===coin && ns[k].enable) return k;
+      }
+      return false;
+    },
+    autoSet:(alink)=>{
+      const bounty=self.decode(alink);
+      if(bounty){
+        self.getBounty(bounty,(data)=>{
+          if(!data.raw || !data.raw.coin) return props.callback && props.callback({error:"Invalid bounty anchor"});
+          const coin=data.raw.coin;
+          const net=self.getNetworkByCoin(coin.toUpperCase());
+          if(net!==false){
+            setReady(true);
+            setNetwork(net);
+          }
+        });
       }
     },
   }
 
   useEffect(() => {
-
-  }, [props.network]);
+    if(props.bounty) self.autoSet(props.bounty);
+  }, [props.bounty]);
 
   return (
     <Row>
@@ -76,7 +115,7 @@ function BountyPay(props) {
         
       </Col>
       <Col className='text-end' md={size.transaction[2]} lg={size.transaction[2]} xl={size.transaction[2]} xxl={size.transaction[2]}>
-        <button className='btn btn-md btn-primary' onClick={(ev)=>{
+        <button className='btn btn-md btn-primary' disabled={!ready} onClick={(ev)=>{
           self.clickSign();
         }}>{title}</button>
       </Col>

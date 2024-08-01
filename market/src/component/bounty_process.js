@@ -1,11 +1,15 @@
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import ProcessDetail from './process_detail';
+
 import tools from "../lib/tools";
 import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
 
 import API from "../system/api";
+
+import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
 function BountyProcess(props) {
   const size = {
@@ -25,7 +29,9 @@ function BountyProcess(props) {
     fresh:()=>{
       API.bounty.view(props.name,(res)=>{
         if(!res.success) return false;
+
         setAnchorBounty(res.data.alink);
+        setData(res.data);
       });
     },
   }
@@ -36,17 +42,39 @@ function BountyProcess(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-        Bounty details ( {anchorBounty} ) 
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <h5>Bounty details ( {anchorBounty} <FaCopy className='pointer' /> ) </h5>
+          </Col>
+        </Row>
+        <ProcessDetail data={data}/>
       </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-        <hr />Payment details ( {anchorPayment} ) 
-      </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-        <hr />Apply details
-      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-        <hr />Distribution details
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <h5>Payment details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+          </Col>
+        </Row>
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <h5>Apply details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+          </Col>
+        </Row>
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
+
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <h5>Distribution details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+          </Col>
+        </Row>
       </Col>
     </Row>
   );

@@ -41,7 +41,6 @@ function BountyDetail(props) {
       setTotal(sum);
     },
     decode:(alink)=>{
-      console.log(alink);
       const str=alink.replace("anchor://","");
       const arr=str.split("/");
       const block=parseInt(arr.pop());
@@ -49,7 +48,6 @@ function BountyDetail(props) {
       return {name:arr.join("/"),block:block};
     },
     fresh: (alink) => {
-      //console.log(name);
       const dt=self.decode(alink);
       if (dt) Network("anchor").view(dt, "anchor", (res) => {
         //1.list bonus and calc total
@@ -67,8 +65,7 @@ function BountyDetail(props) {
 
   useEffect(() => {
     self.fresh(props.link);
-
-  }, [props.data]);
+  }, [props.data,props.link]);
 
   return (
     <Row className='pt-2'>
@@ -80,7 +77,11 @@ function BountyDetail(props) {
             </Col>
             <Col md={size.thumb[1]} lg={size.thumb[1]} xl={size.thumb[1]} xxl={size.thumb[1]}>
               <h5>#{row.series} {row.name}</h5>
-              <p>Bonus <strong>{row.bonus}</strong> ${row.coin} <br/>Wanted <strong>{row.amount}</strong></p>
+              <p>
+                Bonus <strong>{row.bonus}</strong> ${row.coin.toUpperCase()} <br/>
+                Wanted <strong>{row.amount}</strong> <br/>
+                Total <strong>{row.amount*row.bonus}</strong> ${row.coin.toUpperCase()}
+              </p>
             </Col>
           </Row>
 
@@ -88,7 +89,7 @@ function BountyDetail(props) {
       ))}
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr /></Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Total: {total.toLocaleString()} ${coin}. Target account: <strong>{target}</strong>
+        Total: <strong>{total.toLocaleString()}</strong> ${coin.toUpperCase()}. Target account: <strong>{target}</strong>
       </Col>
     </Row>
   );

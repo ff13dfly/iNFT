@@ -38,7 +38,6 @@ function BountySubmit(props) {
 
   //step enable
   let [ready, setReady] = useState(false);
-  let [pay, setPay] = useState(false);
   let [modify, setModify]=useState(true);       //wether modifable
 
   //UI improvement
@@ -53,9 +52,10 @@ function BountySubmit(props) {
   //sub component params
   //let [series, setSeries] = useState([]);
   let [data, setData] = useState({});
-  let [anchor, setAnchor] = useState("");
+  let [anchor, setAnchor] = useState("");     //alink of bounty
 
   let [info, setInfo]=useState("");         //writing status
+  let [pay, setPay] = useState(false);
   let [payInfo,setPayInfo]=useState("");     //paying status
 
   const self = {
@@ -147,7 +147,10 @@ function BountySubmit(props) {
               }
               API.bounty.submit(alink,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
                 //console.log(res);
-                if(res && res.success) return props.dailog.close();
+                if(res && res.success){
+                  setAnchor(alink);
+                  return props.dailog.close();
+                } 
                 setInfo("Failed to submit to system");
               });
             });
@@ -275,6 +278,7 @@ function BountySubmit(props) {
     //console.log(`Ready to check bounty on progress.`);
     
     if(props.name){
+      //console.log(props.name);
       self.fresh(true);
       Bounty.get(props.name,(res)=>{
         if(!res || res.length===0) return false;
@@ -405,9 +409,12 @@ function BountySubmit(props) {
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyDetail link={anchor} data={data}/>
               </Col>
-              <BountyPay title={"Pay Now"} network={"anchor"} callback={()=>{
-
+              <BountyPay title={"Pay Now"} bounty={anchor} callback={(status)=>{
+                console.log(status);
               }}/>
+              <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                {payInfo}
+              </Col>
             </Row>
           </Col>
         </Row>
