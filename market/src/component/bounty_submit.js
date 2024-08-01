@@ -108,7 +108,7 @@ function BountySubmit(props) {
 
       //1.write data on chain
       const raw = self.getBountyData(addr);
-      const protocol = { fmt: "json", type: "data", tpl: "bounty" };
+      const protocol = { fmt: "json", type: "data", tpl: "bounty",app:"inft"};
       const dapp = Config.get(["system", "name"]);
       const obj = {
         anchor: name,

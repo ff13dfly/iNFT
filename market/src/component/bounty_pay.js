@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Network from "../network/router";
 import Config from "../system/config";
 import API from "../system/api";
+import tools from "../lib/tools";
 
 import { FaCheck } from "react-icons/fa";
 
@@ -48,11 +49,19 @@ function BountyPay(props) {
     clickSign: (ev) => {
       setInfo("");
       if (!payed) {
+        //1.here to update transaction hash directly.
+
 
       } else {
+        //2.make the payment via Wallet
         const chain = Network(network);
         if (!chain) return props.callback && props.callback({ error: `Network ${network} payment is not support yet.` });
-        console.log(target, amount);
+        //console.log(target, amount);
+
+        const dapp = Config.get(["system", "name"]);
+        chain.wallet(dapp,(injector,addr)=>{
+          console.log(injector,addr)
+        });
       }
     },
     decode: (alink) => {
@@ -127,7 +136,7 @@ function BountyPay(props) {
             }}><FaCheck /></button>
           </Col>
           <Col hidden={payed} className='' md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
-            <input className='form-control' type="text" placeholder='Transaction hash' onChange={(ev) => {
+            <input className='form-control' type="text" placeholder={`Transaction hash of ${tools.toUp(network)} network`} onChange={(ev) => {
               self.changeHash(ev);
             }} />
           </Col>

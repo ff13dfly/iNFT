@@ -12,5 +12,8 @@ define('BOUNTY_APPLY_ON_PROGRESS',  2);
 define('BOUNTY_APPLY_FAILED',       4);
 
 define('BOUNTY_TARGET',array(
-    "anchor" =>  "5DcpcBu1J4qpQRkeFy6Qcn9FxUm6knhvufnYpX62oHH1zWCx",
+    "anchor"    =>  "5DcpcBu1J4qpQRkeFy6Qcn9FxUm6knhvufnYpX62oHH1zWCx",
+    "tanssi"    =>  "5ECZb1Jmm8ACGXdXtBx9AbqspK2ECQ1QNnXqH9FiGLEEjJjV",
+    "polkadot"  =>  "",
+    "solana"    =>  "",
 ));

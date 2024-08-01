@@ -65,15 +65,106 @@ const self = {
 
         },
     },
-    apply:{
-        insert:(row,ck)=>{
-
+    format:{
+        local:(alink,addr,more)=>{
+            return {
+                name: alink,
+                title: more.title,
+                desc: more.desc,
+                publish:{
+                  network:"anchor",
+                  address:addr, 
+                  block:0,              //anchor block
+                  hash:"",              //setAnchor transaction hash
+                },
+                payer: {
+                  address:"",
+                  transaction:"",     //transation hash
+                  receiver:"",
+                },
+                template:{
+                  cid:more.template,
+                  orgin:"web3.storage",
+                },
+                bonus: more.bonus,
+                start: more.start,
+                end: more.end,
+                coin: more.coin,
+                status: 1, 
+                stamp:tools.stamp(),    
+              }
         },
-        list:(ck,page,step)=>{
+        raw:{
+            submit:(addr,more)=>{
+                return {
+                    title: more.title,
+                    desc: more.desc,
+                    publisher: addr,
+                    coin: more.coin,
+                    template: {
+                      cid: more.template,
+                      orgin: "web3.storage",
+                    },
+                    contract:{      //contract to call for the bounty. if no, free to mint
+                      network:"",
+                      address:"",
+                    },
+                    period: {
+                      start: more.start,
+                      end: more.end,
+                    },
+                    bonus: more.bonus
+                  }
+            },
+            payment:()=>{
+                return {
 
+                }
+            },
+            apply:()=>{
+                return {
+                    
+                }
+            },
+            distribe:()=>{
+                return {
+                    
+                }
+            },
         },
-        remove:()=>{
-
+        protocol:{
+            submit:()=>{
+                return { 
+                    fmt: "json", 
+                    type: "data",
+                    tpl: "bounty",
+                    app:"inft"
+                };
+            },
+            payment:(bounty)=>{
+                return { 
+                    fmt: "json", 
+                    type: "data",
+                    app:"inft",
+                    ref:bounty,
+                };
+            },
+            apply:(bounty)=>{
+                return { 
+                    fmt: "json", 
+                    type: "data",
+                    app:"inft",
+                    ref:bounty,
+                };
+            },
+            distribe:(bounty)=>{
+                return { 
+                    fmt: "json", 
+                    type: "data",
+                    app:"inft",
+                    ref:bounty,
+                };
+            },
         },
     },
 }

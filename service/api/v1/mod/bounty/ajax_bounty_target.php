@@ -15,6 +15,8 @@ if(empty($target)){
     $a->error("No target address to pay.");
 }
 
+//2. option 2: saving the target on anchor
+
 $result["target"]=$target;
 $result["network"]=$network;
 $result["success"]=true;
