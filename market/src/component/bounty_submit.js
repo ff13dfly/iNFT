@@ -104,11 +104,22 @@ function BountySubmit(props) {
     },
     clickSubmit:()=>{
       const addr = RUNTIME.account.get();
-      const name = self.getBountyName(8).toLocaleLowerCase();
+      const name = Bounty.format.name("submit");
 
       //1.write data on chain
-      const raw = self.getBountyData(addr);
-      const protocol = { fmt: "json", type: "data", tpl: "bounty",app:"inft"};
+      const more={    //parameters for submission
+        title:title,
+        desc:desc,
+        coin:coin,
+        template:template,
+        bonus:bonus,
+        start:start,
+        end:end
+      };
+      const raw=Bounty.format.raw.submit(addr,more);
+      const protocol=Bounty.format.protocol.submit();
+      //const raw = self.getBountyData(addr);
+      //const protocol = { fmt: "json", type: "data", tpl: "bounty",app:"inft"};
       const dapp = Config.get(["system", "name"]);
       const obj = {
         anchor: name,
@@ -132,7 +143,8 @@ function BountySubmit(props) {
 
             if(!adata) return setInfo("Failed to get the bounty anchor data.");
             const alink=`anchor://${name}/${adata.block}`;
-            const bt = self.getLocalData(alink,addr);
+            //const bt = self.getLocalData(alink,addr);
+            const bt=Bounty.format.local(alink,addr,more);
             bt.status=3;
             bt.publish.block=adata.block;
             bt.publish.hash=hash;
@@ -170,59 +182,6 @@ function BountySubmit(props) {
         arr.push(row);
       }
       setBonus(arr);
-    },
-
-    getBountyName: (n) => {
-      return `bounty_${tools.char(n)}`;
-    },
-    getLocalData:(name,addr)=>{
-      return {
-        name: name,
-        title: title,
-        desc: desc,
-        publish:{
-          network:"anchor",
-          address:addr, 
-          block:0,              //anchor block
-          hash:"",              //setAnchor transaction hash
-        },
-        payer: {
-          address:"",
-          transaction:"",     //transation hash
-          receiver:"",
-        },
-        template:{
-          cid:template,
-          orgin:"web3.storage",
-        },
-        bonus: bonus,
-        start: start,
-        end: end,
-        coin: coin,
-        status: 1, 
-        stamp:tools.stamp(),    
-      }
-    },
-    getBountyData: (addr) => {
-      return {
-        title: title,
-        desc: desc,
-        publisher: addr,
-        coin: coin,
-        template: {
-          cid: template,
-          orgin: "web3.storage",
-        },
-        contract:{      //contract to call for the bounty. if no, free to mint
-          network:"",
-          address:"",
-        },
-        period: {
-          start: start,
-          end: end,
-        },
-        bonus: bonus
-      }
     },
     getCoins: () => {
       const cs = Config.get("network");

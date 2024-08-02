@@ -80,7 +80,7 @@ function BountyDetail(props) {
               <p>
                 Bonus <strong>{row.bonus}</strong> ${row.coin.toUpperCase()} <br/>
                 Wanted <strong>{row.amount}</strong> <br/>
-                Total <strong>{row.amount*row.bonus}</strong> ${row.coin.toUpperCase()}
+                Total <strong>{(row.amount*row.bonus).toLocaleString()}</strong> ${row.coin.toUpperCase()}
               </p>
             </Col>
           </Row>

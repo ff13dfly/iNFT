@@ -3,6 +3,34 @@ import tools from "../lib/tools";
 
 import Config from "./config";
 
+const prefix={          //anchor name prefix
+    submit:"bounty_",           
+    payment:"pay_",
+    apply:"apply_",
+    distribe:"distribe_",
+}
+
+const process={
+    bounty:{
+        "REMOVED":      0,          //bounty is removed         
+        "ON_CHAIN":     2,          //bounty details is written on chain
+        "LOCAL_SAVED":  3,          //bounty is saved locally
+        "REPORTED":     4,          //bounty reported to system
+        "NORMAL":       1,          //{after approved} bounty details approved, accepted
+        "PAY_SUBMITTED":5,          //bonus payment done, need to approve
+        "PAYED":        6,          //{after approved} bonus is payed
+        "ON_PROGRESS":  7,          //bounty is on progress
+        "DONE":         8,          //bounty ended at the setting time
+        "ALL_APPROVED": 9,          //bounty finished and all bonus done
+    },
+    apply:{
+        "SUBMITTED":    2,        //bonus anchor submitted
+        "FAILED":       4,        //invalid iNFT submission
+        "APPROVED":     1,        //target iNFT approved
+        "PAYED":        6,        //bonus payed after approved
+    },
+};
+
 const funs = {
     checkDB:(table,ck)=>{
         const cfg = Config.get(["storage"]);
@@ -66,6 +94,9 @@ const self = {
         },
     },
     format:{
+        status:()=>{
+
+        },
         local:(alink,addr,more)=>{
             return {
                 name: alink,
@@ -93,6 +124,10 @@ const self = {
                 status: 1, 
                 stamp:tools.stamp(),    
               }
+        },
+        name:(type)=>{
+            if(!prefix[type]) return false;
+            return `${prefix[type]}${tools.char(8).toLocaleLowerCase()}`;
         },
         raw:{
             submit:(addr,more)=>{
