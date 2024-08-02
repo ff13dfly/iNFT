@@ -48,6 +48,9 @@ function BountyPay(props) {
     },
     clickSign: (ev) => {
       setInfo("");
+
+      return props.callback({finalized:"0x5d7df76ab0a6f9548eb9eed45f8a9dac567250e0f415a38fa9de8041ac374ff2"},target,amount);
+
       if (!payed) {
         //1.here to update transaction hash directly.
 
@@ -59,8 +62,13 @@ function BountyPay(props) {
         //console.log(target, amount);
 
         const dapp = Config.get(["system", "name"]);
-        chain.wallet(dapp,(injector,addr)=>{
-          console.log(injector,addr)
+        chain.wallet(dapp,(injector,walletAddress)=>{
+          //console.log(injector,walletAddress);
+          //console.log(amount,target);
+          chain.transfer(injector.signer,target,amount,(status)=>{
+            //console.log(status);
+            if(props.callback) props.callback(status,target,amount);
+          },true,walletAddress);
         });
       }
     },

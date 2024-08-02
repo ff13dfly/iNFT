@@ -1,5 +1,5 @@
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
@@ -34,9 +34,9 @@ function BountySubmit(props) {
 
   //step enable
   let [ready, setReady] = useState(false);
-  let [modify, setModify]=useState(true);       //wether modifable
-  let [bounty, setBounty]=useState({});
-  let [more,setMore] =useState({});
+  let [modify, setModify] = useState(true);       //wether modifable
+  let [bounty, setBounty] = useState({});
+  let [more, setMore] = useState({});
 
   //UI improvement
   let [tabs, setTabs] = useState({
@@ -50,14 +50,14 @@ function BountySubmit(props) {
   let [data, setData] = useState({});
   let [anchor, setAnchor] = useState("");     //alink of bounty
 
-  let [info, setInfo]=useState("");         //writing status
+  let [info, setInfo] = useState("");         //writing status
 
 
   let [pay, setPay] = useState(false);
-  let [payInfo,setPayInfo]=useState("");     //paying status
+  let [payInfo, setPayInfo] = useState("");     //paying status
 
   const self = {
-    changeTemplate:(ev)=>{
+    changeTemplate: (ev) => {
       setTemplate(ev.target.value);
     },
     changeTabTitle: (active) => {
@@ -84,13 +84,13 @@ function BountySubmit(props) {
         setReady(true);
       });
     },
-    clickSubmit:()=>{
+    clickSubmit: () => {
       const addr = RUNTIME.account.get();
       const name = Bounty.format.name("submit");
 
       //1.write data on chain
-      const raw=Bounty.format.raw.submit(addr,more);
-      const protocol=Bounty.format.protocol.submit();
+      const raw = Bounty.format.raw.submit(addr, more);
+      const protocol = Bounty.format.protocol.submit();
       //const raw = self.getBountyData(addr);
       //const protocol = { fmt: "json", type: "data", tpl: "bounty",app:"inft"};
       const dapp = Config.get(["system", "name"]);
@@ -101,50 +101,83 @@ function BountySubmit(props) {
         dapp: dapp,
       }
 
-      const chain=Network("anchor");
-      chain.sign(obj,(res)=>{
+      const chain = Network("anchor");
+      chain.sign(obj, (res) => {
         setInfo(res.msg);
-        
-        if(res.status==="Finalized"){
+
+        if (res.status === "Finalized") {
           setTimeout(() => {
             setInfo("");
           }, 1500);
-          const hash=res.hash;    //get the transaction hash
+          const hash = res.hash;    //get the transaction hash
 
-          chain.view({name:name},"anchor",(adata)=>{
+          chain.view({ name: name }, "anchor", (adata) => {
             console.log(JSON.stringify(adata));
 
-            if(!adata) return setInfo("Failed to get the bounty anchor data.");
-            const alink=`anchor://${name}/${adata.block}`;
+            if (!adata) return setInfo("Failed to get the bounty anchor data.");
+            const alink = `anchor://${name}/${adata.block}`;
             //const bt = self.getLocalData(alink,addr);
-            const bt=Bounty.format.local(alink,addr,more);
-            bt.status=3;
-            bt.publish.block=adata.block;
-            bt.publish.hash=hash;
-            
+            const bt = Bounty.format.local(alink, addr, more);
+            bt.status = 3;
+            bt.publish.block = adata.block;
+            bt.publish.hash = hash;
+
             Bounty.insert(bt, (dt) => {
               //4.report to iNFT proxy system
-              const detail={
-                bonus:bt.bonus,
-                desc:bt.desc,
-                publish:bt.publish,
-                payer:bt.payer,
+              const detail = {
+                bonus: bt.bonus,
+                desc: bt.desc,
+                publish: bt.publish,
+                payer: bt.payer,
               }
-              API.bounty.submit(alink,bt.coin,bt.start,bt.end,JSON.stringify(bt.template),JSON.stringify(detail),(res)=>{
+              API.bounty.submit(alink, bt.coin, bt.start, bt.end, JSON.stringify(bt.template), JSON.stringify(detail), (res) => {
                 //console.log(res);
-                if(res && res.success){
+                if (res && res.success) {
                   setAnchor(alink);
                   return props.dailog.close();
-                } 
+                }
                 setInfo("Failed to submit to system");
               });
             });
           });
         }
-      },"subwallet");
+      }, "subwallet");
     },
-    clickPay:()=>{
-      console.log(`Ready to pay`);
+    callbackPay: (status, target, amount) => {
+      if (status.error) return setPayInfo(status.error);
+      if (!status.finalized) return setPayInfo(JSON.stringify(status));
+
+      const dapp = Config.get(["system", "name"]);
+      const name = Bounty.format.name("payment");
+      const raw = Bounty.format.raw.payment(status.finalized, target, amount);
+      const protocol = Bounty.format.protocol.payment(props.name);
+      //console.log(name, raw, protocol);
+
+      const obj = {
+        anchor: name,
+        raw: raw,
+        protocol: protocol,
+        dapp: dapp,
+      }
+
+      //1.write payment information on chain
+      const chain = Network("anchor");
+      chain.sign(obj, (res) => {
+        if(res.status!=="Finalized") return setPayInfo(res.msg);
+
+        chain.view({name:name},"anchor",(dt)=>{
+          const alink=`anchor://${name}/${dt.block}`;
+          //2.update local record status
+          Bounty.update.toPayed(props.name,alink,()=>{
+            //3.submit the payment details to portal system 
+            API.bounty.payment(props.name,alink,(rows)=>{
+              
+            });
+          });
+        })
+
+        
+      });
     },
     callbackBonus: (list) => {
       const arr = [];
@@ -156,29 +189,29 @@ function BountySubmit(props) {
       }
       setBonus(arr);
     },
-    callbackMore:(more)=>{
-      more.template=template;
-      more.bonus=bonus;
+    callbackMore: (more) => {
+      more.template = template;
+      more.bonus = bonus;
       setMore(tools.clone(more));
     },
-    load:(bt)=>{
+    load: (bt) => {
       setTemplate(bt.template.cid);
-      setTimeout(()=>{
+      setTimeout(() => {
         loadRef.current.click();
-      },200);
+      }, 200);
 
-      if(bt.bonus) setBonus(bt.bonus);
+      if (bt.bonus) setBonus(bt.bonus);
     },
   }
 
   useEffect(() => {
     self.changeTabTitle("step_2");
-    if(props.name){
+    if (props.name) {
       setAnchor(props.name);
-      Bounty.get(props.name,(res)=>{
-        if(!res || res.length===0) return false;
-        const bty=res[0];
-        console.log(bty);
+      Bounty.get(props.name, (res) => {
+        if (!res || res.length === 0) return false;
+        const bty = res[0];
+        //console.log(bty);
         self.load(bty);
         setBounty(bty);
         setModify(false);
@@ -255,11 +288,11 @@ function BountySubmit(props) {
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyDetail link={anchor} data={data}/>
+                <BountyDetail link={anchor} data={data} />
               </Col>
-              <BountyPay title={"Pay Now"} bounty={anchor} callback={(status)=>{
-                console.log(status);
-              }}/>
+              <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
+                self.callbackPay(status, target, total);
+              }} />
               <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {payInfo}
               </Col>

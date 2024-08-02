@@ -79,17 +79,23 @@ const self = {
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });
     },
-    status:{
+    update:{
         toChain:(name,ck)=>{
+            funs.checkDB(table,(db)=>{
 
+            });
         },
-        toSystem:(name,ck)=>{
-
+        toPayed:(name,alink,ck)=>{
+            console.log(name,alink);
+            funs.checkDB(table,(db)=>{
+                INDEXED.searchRows(db,table,"name",name,(rows)=>{
+                    if(rows.length!==1) return ck && ck({error:"Invalid bounty alink."});
+                    rows[0].payment=alink;
+                    INDEXED.updateRow(db,table,rows,ck);
+                }); 
+            });
         },
-        toProgress:(name,ck)=>{
-
-        },
-        toDone:(name,ck)=>{
+        toSubmitter:(name,ck)=>{
 
         },
     },
@@ -108,15 +114,11 @@ const self = {
                   block:0,              //anchor block
                   hash:"",              //setAnchor transaction hash
                 },
-                payer: {
-                  address:"",
-                  transaction:"",     //transation hash
-                  receiver:"",
-                },
                 template:{
                   cid:more.template,
                   orgin:"web3.storage",
                 },
+                payment: "ALINK_OF_PAYMENT",
                 bonus: more.bonus,
                 start: more.start,
                 end: more.end,
@@ -144,6 +146,7 @@ const self = {
                       network:"",
                       address:"",
                     },
+                    receiver:more.receiver,         //address to accept the iNFT result.
                     period: {
                       start: more.start,
                       end: more.end,
@@ -151,9 +154,11 @@ const self = {
                     bonus: more.bonus
                   }
             },
-            payment:()=>{
+            payment:(hash,target,amount)=>{
                 return {
-
+                    block:hash,
+                    target:target,
+                    amount:amount,
                 }
             },
             apply:()=>{

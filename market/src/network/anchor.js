@@ -171,24 +171,29 @@ const self = {
             return ck && ck(row, mnemonic);
         });
     },
-    transfer: (pair, to, amount, ck) => {
+    transfer: (pair, to, amount, ck, wallet, address) => {
         self.init(() => {
             const dest = { Id: to };
-            const m = self.divide();
+            const m = self.accuracy();
             try {
-                wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(pair, (res) => {
-                    const status = res.status.toJSON();
-                    console.log(status);
-                });
+                if(!wallet){
+                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(pair, (res) => {
+                        const status = res.status.toJSON();
+                        return ck && ck(status);
+                    });
+                }else{
+                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(address, { signer: pair }, (res) => {
+                        const status = res.status.toJSON();
+                        return ck && ck(status);
+                    });
+                }
             } catch (error) {
                 return ck && ck({ error: "Internal error." });
             }
 
         });
     },
-    divide: () => {
-        return 1000000000000;
-    },
+
     balance: (address, ck) => {
         self.init(() => {
             let unsub = null;
@@ -494,10 +499,13 @@ const self = {
             });
         });
     },
+    divide: () => {
+        return 1000000000000;
+    },
     accuracy: () => {
         return 1000000000000;
     },
-    events:{
+    events:{        //TODO, here to add events listeners.
         payed:()=>{
 
         },

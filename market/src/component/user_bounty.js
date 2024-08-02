@@ -114,7 +114,7 @@ function UserBounty(props) {
               <th>Process</th>
               <th>Start</th>
               <th>End</th>
-              <th>Date</th>
+              <th>Created</th>
               <th>Operation</th>
             </tr>
           </thead>

@@ -1,7 +1,7 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$alink=$_F['request']['alink'];             //iNFT anchor link
+$alink=$_F['request']['alink'];             //payment anchor link
 $bounty=$_F['request']['bounty'];           //bounty anchor link
 
 $result=array('success'=>FALSE);

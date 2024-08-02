@@ -128,6 +128,16 @@ const self={
                 },param);
             });
         },
+        payment:(name,alink,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={bounty:name,alink:alink};
+                funs.request("bounty","payment",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to update payment details."});
+                },param);
+            });
+        },
         apply:(name,target,record,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});

@@ -96,6 +96,9 @@ function UserBasic(props) {
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Network: <strong>Anchor Network</strong>
           </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            This account is for writting data to Anchor Network.
+          </Col>
         </Row>
 
       </Col>
