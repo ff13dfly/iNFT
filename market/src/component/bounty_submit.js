@@ -5,6 +5,7 @@ import BountyTarget from './bounty_target';
 import BountyTemplate from './bounty_template';
 import BountyDetail from './bounty_detail';
 import BountyPay from './bounty_pay';
+import BountyMore from './bounty_more';
 
 import Network from '../network/router';
 
@@ -29,25 +30,20 @@ function BountySubmit(props) {
 
   //submission details
   let [template, setTemplate] = useState("");
-  let [title, setTitle] = useState("");
-  let [desc, setDesc] = useState("");
-  let [start, setStart] = useState(0);
-  let [end, setEnd] = useState(0);
   let [bonus, setBonus] = useState([]);
-  let [coin, setCoin] = useState("ank");            //the coin type for bounty
 
   //step enable
   let [ready, setReady] = useState(false);
   let [modify, setModify]=useState(true);       //wether modifable
+  let [bounty, setBounty]=useState({});
+  let [more,setMore] =useState({});
 
   //UI improvement
   let [tabs, setTabs] = useState({
     "step_1": <span><strong className='text-secondary'>Step 1 : </strong><strong>Template</strong></span>,
     "step_2": <span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
     "step_3": <span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
-  })
-  let [coins, setCoins] = useState([]);
-  let [block, setBlock] = useState(0);
+  });
 
   //sub component params
   //let [series, setSeries] = useState([]);
@@ -55,28 +51,14 @@ function BountySubmit(props) {
   let [anchor, setAnchor] = useState("");     //alink of bounty
 
   let [info, setInfo]=useState("");         //writing status
+
+
   let [pay, setPay] = useState(false);
   let [payInfo,setPayInfo]=useState("");     //paying status
 
   const self = {
-    changeTitle: (ev) => {
-      setTitle(ev.target.value);
-    },
-    changeStart: (ev) => {
-      setStart(parseInt(ev.target.value));
-    },
-    changeEnd: (ev) => {
-      setEnd(parseInt(ev.target.value));
-    },
-    changeTemplate: (ev) => {
+    changeTemplate:(ev)=>{
       setTemplate(ev.target.value);
-    },
-    changeCoin: (ev) => {
-      const val = ev.target.value;
-      setCoin(val.toLocaleLowerCase());
-    },
-    changeDesc: (ev) => {
-      setDesc(ev.target.value);
     },
     changeTabTitle: (active) => {
       const ts = {
@@ -107,15 +89,6 @@ function BountySubmit(props) {
       const name = Bounty.format.name("submit");
 
       //1.write data on chain
-      const more={    //parameters for submission
-        title:title,
-        desc:desc,
-        coin:coin,
-        template:template,
-        bonus:bonus,
-        start:start,
-        end:end
-      };
       const raw=Bounty.format.raw.submit(addr,more);
       const protocol=Bounty.format.protocol.submit();
       //const raw = self.getBountyData(addr);
@@ -183,71 +156,33 @@ function BountySubmit(props) {
       }
       setBonus(arr);
     },
-    getCoins: () => {
-      const cs = Config.get("network");
-      //console.log(cs);
-      const arr = [];
-      for (let k in cs) {
-        const row = cs[k];
-        if (row.support && row.support.bonus) arr.push({
-          coin: row.coin,
-          network: k,
-        });
-      }
-      return arr;
+    callbackMore:(more)=>{
+      more.template=template;
+      more.bonus=bonus;
+      setMore(tools.clone(more));
     },
-    fresh: (ignore) => {
-      self.changeTabTitle("step_1");
-      const cs = self.getCoins();
-      setCoins(cs);
-
-      Network("anchor").subscribe("bounty_submit", (bk, hash) => {
-        setBlock(bk);
-        if(!ignore){
-          setStart(bk + 10000);
-          setEnd(bk + 30000);
-        }
-      });
-    },
-
-    load:(bounty)=>{
-      //1.set template value
-      setTemplate(bounty.template.cid);
+    load:(bt)=>{
+      setTemplate(bt.template.cid);
       setTimeout(()=>{
         loadRef.current.click();
       },200);
 
-      //2.set details value
-      //setTitle(bounty.title);
-      if(bounty.title) setTitle(bounty.title);
-      if(bounty.desc) setDesc(bounty.desc);
-      if(bounty.start) setStart(bounty.start);
-      if(bounty.end) setEnd(bounty.end);
-      if(bounty.coin){
-        setCoin(bounty.coin);
-        const cs = self.getCoins();
-        //console.log(cs);
-        setCoins(cs);
-      } 
-      if(bounty.bonus) setBonus(bounty.bonus);
+      if(bt.bonus) setBonus(bt.bonus);
     },
   }
 
   useEffect(() => {
-    //console.log(`Ready to check bounty on progress.`);
-    
+    self.changeTabTitle("step_2");
     if(props.name){
-      //console.log(props.name);
-      self.fresh(true);
+      setAnchor(props.name);
       Bounty.get(props.name,(res)=>{
         if(!res || res.length===0) return false;
         const bty=res[0];
+        console.log(bty);
         self.load(bty);
-        setAnchor(props.name);
+        setBounty(bty);
         setModify(false);
       });
-    }else{
-      self.fresh();
     }
   }, [props.name]);
 
@@ -290,62 +225,16 @@ function BountySubmit(props) {
               <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Setup the details about the bounty and write on chain.
               </Col>
-
-              <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-                <small>The title of bounty</small>
-                <input type="text" className='form-control' placeholder='Input the title of bounty'
-                  value={title} onChange={(ev) => {
-                    self.changeTitle(ev);
-                  }} />
-              </Col>
-              <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <small>Bonus coin</small>
-                <select className='form-control' value={coin.toUpperCase()} onChange={(ev) => {
-                  self.changeCoin(ev);
-                }}>
-                  {coins.map((row, index) => (
-                    <option key={index} value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
-                  ))}
-                </select>
-              </Col>
-
-              <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-                <small>Details about the bounty.</small>
-                <textarea className='form-control' cols={4} placeholder='The details of the bounty.' value={desc} onChange={(ev) => {
-                  self.changeDesc(ev);
-                }}></textarea>
-              </Col>
-              <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-              </Col>
-
-
-              <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-                <small>Bounty start at block</small>
-                <input type="number" className='form-control' placeholder='Start of bounty'
-                  value={start} onChange={(ev) => {
-                    self.changeStart(ev);
-                  }} />
-              </Col>
-
-              <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-                <small>Bounty end at block</small>
-                <input type="number" className='form-control' placeholder='End of bounty'
-                  value={end} onChange={(ev) => {
-                    self.changeEnd(ev);
-                  }} />
-              </Col>
-
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                Current block number: {block.toLocaleString()}, {6}s per block.
+                <BountyMore bounty={bounty} modify={modify} callback={(more) => {
+                  self.callbackMore(more);
+                }} />
               </Col>
-
               <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyTarget data={data} link={anchor} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
-
-
               <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 {info}
               </Col>
