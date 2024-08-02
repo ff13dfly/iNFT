@@ -29,7 +29,7 @@ function BountyProcess(props) {
     fresh:()=>{
       API.bounty.view(props.name,(res)=>{
         if(!res.success) return false;
-
+        //console.log(res.data);
         setAnchorBounty(res.data.alink);
         setData(res.data);
       });
@@ -55,6 +55,9 @@ function BountyProcess(props) {
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <h5>Payment details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+          </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            {data && data.payment}
           </Col>
         </Row>
       </Col>

@@ -174,9 +174,7 @@ function BountySubmit(props) {
               
             });
           });
-        })
-
-        
+        });
       });
     },
     callbackBonus: (list) => {

@@ -20,6 +20,15 @@ if(empty($bt)){
 
 
 //3.update the apply and status
+$data=array(
+    "payment" => $alink,
+    "status"  => BOUNTY_STATUS_PAY_SUBMITTED,
+);
+
+if(!$a->bountyUpdate($data,(int)$bt["id"])){
+    $a=Config::getInstance();
+    $a->error("Failed to update payment");
+}
 
 $result["alink"]=$alink;
 $result["bounty"]=$bounty;

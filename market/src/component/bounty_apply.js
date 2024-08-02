@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Network from "../network/router";
 import tools from "../lib/tools";
 
-import RUNTIME from '../system/runtime';
 import API from "../system/api";
 import TPL from "../system/tpl";
 import Config from "../system/config";

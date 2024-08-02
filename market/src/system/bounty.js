@@ -95,7 +95,7 @@ const self = {
                 }); 
             });
         },
-        toSubmitter:(name,ck)=>{
+        toSubmitted:(name,ck)=>{
 
         },
     },
@@ -161,14 +161,21 @@ const self = {
                     amount:amount,
                 }
             },
-            apply:()=>{
+            apply:(bounty,index,inft_link,network,address)=>{
                 return {
-                    
+                    inft: inft_link,        //apply inft anchor link
+                    target: bounty,         //bounty anchor link
+                    bonus: index,           //bonus index
+                    receiver: {
+                        network: network,
+                        address: address,
+                    }
                 }
             },
-            distribe:()=>{
+            distribe:(apply_link,hash)=>{
                 return {
-                    
+                    apply:apply_link,
+                    transaction:hash,
                 }
             },
         },
