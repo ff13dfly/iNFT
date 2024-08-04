@@ -40,7 +40,7 @@
 						<tr class="text-left">
 							<td><input type="checkbox" class="check_list" value="{%$v.id%}" /></td>
 							<td class="id">{%$v.id%}</td>
-							<td class="id">{%$v.alink%}</td>
+							<td class="id"><a href="?mod=bounty&act=edit&id={%$v.id%}">{%$v.alink%}</a></td>
 							<td class="nobreak">
 								
 								<button class="btn btn-sm btn-default user_cache" data="{%$v.uid%}">缓存</button>

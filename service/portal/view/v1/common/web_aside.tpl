@@ -78,7 +78,7 @@
                         </li>
                         {%if $F.request.mod eq 'bounty' && $F.request.act eq edit%}
                         <li class="active">
-                           <a href="?mod=bounty&act=edit&id={%$F.bounty.id%}" title=""><span>Bounty Editing</span></a>
+                           <a href="?mod=bounty&act=edit&id={%$F.bounty.id%}" title=""><span>Bounty Edit</span></a>
                         </li>
                         {%/if%}
                      </ul>

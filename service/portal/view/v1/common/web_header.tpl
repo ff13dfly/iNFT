@@ -45,6 +45,10 @@
 	<script src="{%$F.cdn%}/js/app.js"></script>
 	
 	<script src="{%$F.cdn%}/js/admin.js"></script>
+
+	<script src="{%$F.cdn%}/web3/polkadot.min.js"></script>
+	<script src="{%$F.cdn%}/web3/easy.min.js"></script>
+	<script src="{%$F.cdn%}/web3/anchor.min.js"></script>
 </head>
 <body>
 	<div class="wrapper">
