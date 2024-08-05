@@ -151,7 +151,8 @@ const self = {
                       start: more.start,
                       end: more.end,
                     },
-                    bonus: more.bonus
+                    bonus: more.bonus,
+                    status:"submit",
                   }
             },
             payment:(hash,target,amount)=>{
@@ -159,6 +160,7 @@ const self = {
                     block:hash,
                     target:target,
                     amount:amount,
+                    status:"pay",
                 }
             },
             apply:(bounty,index,inft_link,network,address)=>{
@@ -169,13 +171,21 @@ const self = {
                     receiver: {
                         network: network,
                         address: address,
-                    }
+                    },
+                    status:"apply",
+                }
+            },
+
+            divert:(divert_link)=>{
+                return {
+                    status:"divert",
                 }
             },
             distribe:(apply_link,hash)=>{
                 return {
                     apply:apply_link,
                     transaction:hash,
+                    status:"distribe",
                 }
             },
         },
@@ -197,6 +207,14 @@ const self = {
                 };
             },
             apply:(bounty)=>{
+                return { 
+                    fmt: "json", 
+                    type: "data",
+                    app:"inft",
+                    ref:bounty,
+                };
+            },
+            divert:(bounty)=>{
                 return { 
                     fmt: "json", 
                     type: "data",
