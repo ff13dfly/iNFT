@@ -22,6 +22,31 @@
 			<li class="active">Edit {%$F.data.alink%} </li>
 		</ol>
 		<div class="row">
+			<div class="col-lg-12" style="margin-bottom: 15px;">
+				<div class="row" id="con_load">
+					<div class="col-lg-3">
+						<input class="form-control" id="account_json" type="file" />
+					</div>
+					<div class="col-lg-4">
+						<input class="form-control" id="account_password" type="password"
+							placeholder="Password for approve account {%BOUNTY_APPROVER%}" />
+					</div>
+					<div class="col-lg-1 text-right">
+						<button class="btn btn-md btn-primary" id="account_load">Load</button>
+					</div>
+					<div class="col-lg-4" id="account_info">
+
+					</div>
+				</div>
+				<div class="row" id="con_drop" style="display: none;">
+					<div class="col-lg-7">
+						Account {%BOUNTY_APPROVER%} is active now, you can do approve.
+					</div>
+					<div class="col-lg-2 text-right">
+						<button class="btn btn-md btn-primary" id="account_drop">Drop Account</button>
+					</div>
+				</div>
+			</div>
 			<div class="col-lg-9">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -60,15 +85,14 @@
 									<td>{%date("Ymd",$v.stamp)%}</td>
 									<td>
 										{%if $v.status eq BOUNTY_APPLY_SUBMITTED%}
-										<button class="btn btn-sm btn-primary apply_accept"
-											data="{%$k%}">Accept</button>
-										<button class="btn btn-sm btn-danger apply_refuse" data="{%$k%}">Refuse</button>
+											<button class="btn btn-sm btn-primary apply_accept"data="{%$k%}">Accept</button>
+											<button class="btn btn-sm btn-danger apply_refuse" data="{%$k%}">Refuse</button>
 										{%else%}
-										{%if $v.status eq BOUNTY_APPLY_FAILED%}
-										<span class="text-dark">{%$F.status[$v.status]%}</span>
-										{%else%}
-										<span class="text-danger">{%$F.status[$v.status]%}</span>
-										{%/if%}
+											{%if $v.status eq BOUNTY_APPLY_FAILED%}
+												<span class="text-dark">{%$F.status[$v.status]%}</span>
+											{%else%}
+												<span class="text-danger">{%$F.status[$v.status]%}</span>
+											{%/if%}
 										{%/if%}
 									</td>
 								</tr>
@@ -78,21 +102,7 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="row">
-							<div class="col-lg-3">
-								<input class="form-control" id="account_json" type="file" />
-							</div>
-							<div class="col-lg-4">
-								<input class="form-control" id="account_password" type="password"
-									placeholder="Password for approve account." />
-							</div>
-							<div class="col-lg-1 text-right">
-								<button class="btn btn-md btn-primary" id="account_load">Load</button>
-							</div>
-							<div class="col-lg-4" id="account_info">
-
-							</div>
-						</div>
+						Please select the account JSON file before any operation.
 					</div>
 				</div>
 			</div>
@@ -102,7 +112,7 @@
 						<div class="row">
 							<div class="col-lg-6">
 								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-								<h5>Bounty Information</h5>
+									<h5>Bounty Information</h5>
 								</a>
 							</div>
 							<div class="col-lg-6 text-right">
@@ -124,7 +134,7 @@
 			<div class="col-lg-9">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						
+
 						<div class="row">
 							<div class="col-lg-3">
 								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
@@ -139,47 +149,33 @@
 					</div>
 					<div class="panel-wrapper collapse in">
 						<div class="panel-body">
-							<table class="table table-hover">
-								<tr>
-									<th></th>
-									<th>iNFT</th>
-									<th>Record</th>
-									<th>Stamp</th>
-									<th>Operation</th>
-								</tr>
 
-								{%if count($F.data.apply) neq 0%} {%foreach from=$F.data.apply key=k item=v %}
-								{%if $v.status eq BOUNTY_APPLY_APPROVED%}
-								<tr>
-									<td></td>
-									<td>{%$v.link%}</td>
-									<td>{%$v.record%}</td>
-									<td>{%date("Ymd",$v.stamp)%}</td>
-									<td>
-										<button class="btn btn-sm btn-primary apply_accept" data="{%$k%}">Payed</button>
-									</td>
-								</tr>
-								{%/if%}
-								{%/foreach%} {%/if%}
-							</table>
+						<div class="row">
+							{%if count($F.paying) eq 0%}	
+								<div class="col-lg-12">
+									No apply to distribute.
+								</div>
+							{%else%}
+								<div class="col-lg-4">
+									<select class="form-control" id="payment_record">
+									{%foreach from=$F.paying key=k item=v %}
+										<option value="{%$v.index%}">[{%$k%}]-{%$v.record%}<option>
+									{%/foreach%}
+									</select>
+								</div>
+								<div class="col-lg-6">
+									<input class="form-control" id="payment_hash" type="text" placeholder="Transaction hash here.">
+								</div>
+								<div class="col-lg-2">
+									<button class="btn btn-md btn-primary" id="distribute_submit">Submit Payment</button>
+								</div>
+								<div class="col-lg-12" id="distribute_info"></div>
+							{%/if%}
+							</div>
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="row">
-							<div class="col-lg-3">
-								<input class="form-control" id="account_json" type="file" />
-							</div>
-							<div class="col-lg-4">
-								<input class="form-control" id="account_password" type="password"
-									placeholder="Password for distribute account." />
-							</div>
-							<div class="col-lg-1 text-right">
-								<button class="btn btn-md btn-primary" id="account_load">Load</button>
-							</div>
-							<div class="col-lg-4" id="account_info">
-
-							</div>
-						</div>
+						Please select the account JSON file before any operation.
 					</div>
 				</div>
 			</div>
@@ -190,7 +186,7 @@
 						<div class="row">
 							<div class="col-lg-6">
 								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-								<h5>Bounty Payment</h5>
+									<h5>Bounty Payment</h5>
 								</a>
 							</div>
 							<div class="col-lg-6 text-right">
@@ -236,43 +232,60 @@
 				return ck && ck(wsAPI);
 			});
 		},
+		decode:function(json,password,ck){
+			try {
+				const {Keyring}=window.Polkadot;
+				const keyring = new Keyring({ type: "sr25519" });
+				const signer = keyring.createFromJson(json);
+				signer.decodePkcs8(password);
+				return ck && ck(signer);
+			} catch (error) {
+				console.log(error);
+				return ck && ck({error:"Invalid password."});
+			}
+		},
 		load: function(fa, password, ck) {
-			console.log(fa, password);
 			const reader = new FileReader();
 			reader.onload = (e) => {
 				try {
 					const sign = JSON.parse(e.target.result);
-					console.log(sign);
+					Chain.decode(sign,password,ck);
 				} catch (error) {
+					console.log(error);
 					return ck && ck({error:"Invalid account JSON file."});
 				}
 			};
 			reader.readAsText(fa);
-			return ck && ck();
 		},
 	};
 </script>
 
 <script type="text/javascript">
 	//bounty information
-	Chain.init(function(API) {
-	$("#info").html(`Node linked: ${node}`);
-
-	Decoder("{%$F.data.alink%}",startAPI,(data)=>{
-	if (data.error.length !== 0) {
-
-		return false;
-	}
-	console.log(data);
-	});
+	Chain.init((API)=>{
+		$("#info").html(`Node linked: ${node}`);
+		Decoder("{%$F.data.alink%}",startAPI,(data)=>{
+			if (data.error.length !== 0) return false;
+			console.log("Here to show bounty details.",data);
+		});
 	});
 </script>
 
 <script type="text/javascript">
 	const bounty={%json_encode($F.data)%}
 	const self = {
-		toChain: (bounty, apply, inft, bonus, result, ck) => {
-			const name = `judge_`;
+		char: (n, pre) => {
+			n = n || 7;
+			pre = pre || "";
+			for (let i = 0; i < n; i++)
+			pre +=String.fromCharCode(self.rand(97, 122));
+			return pre;
+		},
+		rand: (m, n) => {
+			return Math.round(Math.random() * (m - n) + n);
+		},
+		approveToChain: (bounty, apply, inft, bonus, result, ck) => {
+			const name = self.char(12,"judge_");
 			const raw = {
 				bounty: bounty,
 				apply: apply,
@@ -287,29 +300,83 @@
 				app: "inft",
 				ref: bounty,
 			}
-			const dt = {
-				alink: "anchor://hello/123",
+			//console.log(name,raw,protocol);
+			AnchorJS.write(pair,name,raw,protocol,(res)=>{
+				console.log(res);
+				if(res.step==="Finalized"){
+					AnchorJS.search(name,(adata)=>{
+						const dt = {
+							alink: `anchor://${name}/${adata.block}`,
+						}
+						return ck && ck(dt);
+					});
+				}
+			});
+		},
+		distributeToChain:(bounty,apply,inft,hash,ck)=>{
+			const name = self.char(12,"distribute_");
+			const raw = {
+				bounty: bounty,
+				apply: apply,
+				inft: inft,
+				payment: hash,
+				status: "distribute"
 			}
-
-			return ck && ck(dt);
+			const protocol = {
+				fmt: "json",
+				type: "data",
+				app: "inft",
+				ref: bounty,
+			}
+			AnchorJS.write(pair,name,raw,protocol,(res)=>{
+				console.log(res);
+				if(res.step==="Finalized"){
+					AnchorJS.search(name,(adata)=>{
+						const dt = {
+							alink: `anchor://${name}/${adata.block}`,
+						}
+						return ck && ck(dt);
+					});
+				}
+			});
+		},
+		enalbeOperation:()=>{
+			$(".apply_accept").prop("disabled",false);
+			$(".apply_refuse").prop("disabled",false);
+			$("#distribute_submit").prop("disabled",false);
+			$("#payment_record").prop("disabled",false);
+			$("#payment_hash").prop("disabled",false);
+		},
+		disableOperation:()=>{
+			$(".apply_accept").prop("disabled",true);
+			$(".apply_refuse").prop("disabled",true);
+			$("#distribute_submit").prop("disabled",true);
+			$("#payment_record").prop("disabled",true);
+			$("#payment_hash").prop("disabled",true);
 		},
 		fresh: () => {
-			loacation.reload();
+			location.reload();
+		},
+		autoRun:()=>{
+			self.disableOperation();
 		},
 	}
+
+	$(function(){
+		self.autoRun();		//run when the page is ready
+	});
 
 	$(".apply_accept").off("click").on("click", function() {
 		const index = parseInt($(this).attr("data"));
 		const ps = bounty.apply,
 			bonus = bounty.detail;
 		const current = ps[index];
-		const bonus_index = 2;
+		const bonus_index = 2;			//FIXME, here to get right index
 
 		//1.set anchor to storage the status
-		self.toChain(bounty.alink, current.record, current.link, bonus_index, true, (res) => {
+		self.approveToChain(bounty.alink, current.record, current.link, bonus_index, true, (res) => {
 
 			//2.update the status on portal
-			console.log(res);
 			const id = parseInt(bounty.id);
 			const param={id:id,index:index,record:res.alink};
 			const cfg = {mod:'bounty',act:'accept',param:param}
@@ -324,13 +391,12 @@
 		const ps = bounty.apply,
 			bonus = bounty.detail;
 		const current = ps[index];
-		const bonus_index = 2;
+		const bonus_index = 2;		//FIXME, here to get right index
 
 		//1.set anchor to storage the status
-		self.toChain(bounty.alink, current.record, current.link, bonus_index, false, (res) => {
+		self.approveToChain(bounty.alink, current.record, current.link, bonus_index, false, (res) => {
 
 			//2.update the status on portal
-			console.log(res);
 			const id = parseInt(bounty.id);
 			const param={id:id,index:index,record:res.alink};
 			const cfg = {mod:'bounty',act:'refuse',param:param}
@@ -342,22 +408,73 @@
 
 	let file = null;
 	$("#account_json").off("change").on("change", function(ev) {
-		//const val=$(this).val();
 		file = ev.target.files[0];
-		// const pass=$("#account_password").val();
-		// if(!pass){
-
-		// 	return $("#account_info").html("Input password.");
-		// } 
-
 	});
 
+	const approver="{%BOUNTY_APPROVER%}";
 	$("#account_load").off("click").on("click", function() {
+		$("#account_info").html("");
+		const me=$(this);
+		me.prop("disabled",true);
 		const pass = $("#account_password").val();
-		if (!pass) return $("#account_info").html("Invalid password.");
-		Chain.load(file, pass, function() {
+		$("#account_password").val("");			//clean the password
 
+		if (file===null){
+			me.prop("disabled",false);
+			return $("#account_info").html("Select account JSON file first.");
+		}
+		if (!pass){
+			me.prop("disabled",false);
+			return $("#account_info").html("Invalid password.");
+		}
+
+		Chain.load(file, pass, (signer)=>{
+			me.prop("disabled",false);
+			if(signer.error) return $("#account_info").html(signer.error);
+			if(signer.address!==approver) return $("#account_info").html("Unexcept approver");
+
+			pair=signer;
+			self.enalbeOperation();
+			$("#con_load").hide();
+			$("#con_drop").show();
+
+			file=null; 		//clean the json cache
+			$("#account_json").val("");
 		});
+	});
+
+	$("#account_drop").off("click").on("click", function() {
+		pair=null;
+		$("#con_load").show();
+		$("#con_drop").hide();
+		self.disableOperation();
+	});
+
+	$("#distribute_submit").off("click").on("click", function() {
+		const index=parseInt($("#payment_record").val());
+		const hash=$("#payment_hash").val();
+		const me=$(this);
+		me.prop("disabled",true);
+
+		if(isNaN(index)){
+			me.prop("disabled",false);
+			return $("#distribute_info").html("Please select a approved apply to pay");
+		}
+
+
+		console.log(bounty);
+		const aply=bounty.apply[index];
+		self.distributeToChain(bounty.alink,aply.record,aply.link,hash,(res) => {
+
+			//2.update the status on portal
+			const id = parseInt(bounty.id);
+			const param={id:id,index:index,pay:res.alink};
+			const cfg = {mod:'bounty',act:'distribute',param:param}
+			FF.fn.ajax(cfg, false, function(dt) {
+				if (dt.success) return self.fresh();
+			})
+		});
+		
 	});
 </script>
 

@@ -18,6 +18,7 @@ define('BOUNTY_APPLY_APPROVED',     1);
 define('BOUNTY_APPLY_SUBMITTED',    2);
 define('BOUNTY_APPLY_FAILED',       4);
 define('BOUNTY_APPLY_PAYED',        6);
+define('BOUNTY_APPLY_DIVERTED',     7);         //iNFT divert to target account
 
 define('BOUNTY_TARGET',array(
     "anchor"    =>  "5DcpcBu1J4qpQRkeFy6Qcn9FxUm6knhvufnYpX62oHH1zWCx",
@@ -25,6 +26,8 @@ define('BOUNTY_TARGET',array(
     "polkadot"  =>  "",
     "solana"    =>  "",
 ));
+
+define('BOUNTY_APPROVER',"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
 
 //Polkadot frontend parameters
 

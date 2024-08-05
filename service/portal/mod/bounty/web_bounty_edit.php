@@ -19,12 +19,25 @@ $bounty["apply"]=json_decode(htmlspecialchars_decode($bounty["apply"]),true);
 
 $_F['status']=array(
     BOUNTY_APPLY_SUBMITTED  => "Submitted",
-    BOUNTY_APPLY_APPROVED  => "Waiting for distributing",
+    BOUNTY_APPLY_APPROVED  => "Waiting for diverting",
     BOUNTY_APPLY_FAILED  => "Invalid apply",
     BOUNTY_APPLY_PAYED  => "Distributed",
+    BOUNTY_APPLY_DIVERTED   =>  "Waiting for distributing",
 );
 
 $_F['data']=$bounty;
+
+//3.get pay apply array
+$arr=array();
+foreach($bounty["apply"] as $k=>$v){
+    if( (int)$v["status"] === BOUNTY_APPLY_APPROVED){
+        $v["index"]=$k;
+        $arr[]=$v;
+    }
+}
+$_F['paying']=$arr;
+
+echo json_encode($_F['paying']);
 
 $a=Config::getInstance();
 $a->tpl($_F['request']['mod'],$_F['request']['act'],$_F['pre'],$_F);
