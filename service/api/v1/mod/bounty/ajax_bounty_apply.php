@@ -26,7 +26,7 @@ array_push($aps,array(
     "link"      =>   $alink,
     "record"    =>  $record,
     "stamp"     =>   time(),
-    "status"    =>   BOUNTY_APPLY_ON_PROGRESS,
+    "status"    =>   BOUNTY_STATUS_ON_CHAIN,
 ));
 
 $data=array(

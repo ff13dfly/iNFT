@@ -14,7 +14,7 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						管理员列表
+						Administrators
 						<a class="pull-right" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="点击收起操作面板">
 							<em class="fa fa-minus"></em>
 						</a>
