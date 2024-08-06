@@ -48,9 +48,9 @@
 
 - Functions.
 
-- [ ] New bounty submission.
-- [ ] Bounty list via API.
-- [ ] Bounty result submission.
+- [*] New bounty submission.
+- [*] Bounty list via API.
+- [*] Bounty result apply.
 - [ ] Bounty details review.
 
 ### Playground
@@ -61,7 +61,7 @@
 
 - Functions
 
-- [ ] Load template from web3.storage
+- [*] Load template from web3.storage
 - [ ] Template hash mocker
 - [ ] Template parts detail
 - [ ] Template series detail
@@ -99,6 +99,7 @@
 - [ ] Bounty management.
 - [ ] Template management.
 - [ ] iNFT list management.
+- [*] iNFT fav management.
 
 #### Faucet Server
 
