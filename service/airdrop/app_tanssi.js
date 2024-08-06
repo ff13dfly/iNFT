@@ -1,12 +1,12 @@
-const { config } = require('./config.js');
-const tools=require('./lib/tools.js');
-const IO=require('./lib/file.js');
+const { config } = require("./config.js");
+const tools=require("./lib/tools.js");
+const IO=require("./lib/file.js");
 
 const theme = {
-    error: '\x1b[31m%s\x1b[0m',
-    success: '\x1b[36m%s\x1b[0m',
-    primary: '\x1b[33m%s\x1b[0m',
-    dark: '\x1b[90m%s\x1b[0m',
+    error: "\x1b[31m%s\x1b[0m",
+    success: "\x1b[36m%s\x1b[0m",
+    primary: "\x1b[33m%s\x1b[0m",
+    dark: "\x1b[90m%s\x1b[0m",
 };
 
 let server=null;        //express instance
@@ -25,7 +25,7 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        const { ApiPromise, WsProvider } = require('@polkadot/api');
+        const { ApiPromise, WsProvider } = require("@polkadot/api");
         try {
             const provider = new WsProvider(uri);
             ApiPromise.create({ provider: provider }).then((api) => {
@@ -153,19 +153,19 @@ const self = {
     },
 };
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 //catch error in order to avoid crashing.
-process.on('unhandledRejection', (reason, promise) => {
-    self.output(`UnhandledRejection`,'error');
+process.on("unhandledRejection", (reason, promise) => {
+    self.output(`UnhandledRejection`,"error");
 });
   
-process.on('uncaughtException', (error) => {
-    self.output(`uncaughtException`,'error');
+process.on("uncaughtException", (error) => {
+    self.output(`uncaughtException`,"error");
 });
 
 
@@ -175,17 +175,17 @@ self.init(()=>{
         self.run(config.server,()=>{
             self.output(`Cors should be supported by Nginx.`);
 
-            app.get('/',(req, res)=>{
+            app.get("/",(req, res)=>{
                 res.send("");
             });
 
             //console.log(`Here to link to Tanssi appchain`);
-            app.get('/:address',(req, res)=>{
-                if(exhoused) return res.send({error:'Faucet pool is exhoused today.'});
+            app.get("/:address",(req, res)=>{
+                if(exhoused) return res.send({error:"Faucet pool is exhoused today."});
 
                 const addr=req.params.address;
                 self.output(`Request Address:${addr}`,"primary");
-                if(addr.length!==48) return res.send({error:'Invalid request.'});
+                if(addr.length!==48) return res.send({error:"Invalid request."});
 
                 const range=!map[addr]?config.amount.first:config.amount.normal;
                 const day=tools.day();
@@ -198,19 +198,19 @@ self.init(()=>{
                         self.output(`Transaction done. Hash: ${txHash}`,"primary");
                         self.output(`---------------------------`,"primary");
                     });
-                    return res.send({message:'Welcome, your faucet is sending.'});
+                    return res.send({message:"Welcome, your faucet is sending."});
                 }else{
                     if(!map[addr][day]){
                         const amount=tools.rand(range[0],range[1]);
                         map[addr][day]={amount:amount,confirmed:false};
                         self.output(`Normal faucet: ${amount}`)
                         self.transfer(amount,addr,day);
-                        return res.send({message:'Faucet daily is sending.'});
+                        return res.send({message:"Faucet daily is sending."});
                     }else{
                         if(map[addr][day].confirmed){
-                            return res.send({message:'Try tomorrow.'});
+                            return res.send({message:"Try tomorrow."});
                         }else{
-                            return res.send({message:'Faucet is on progress.'});
+                            return res.send({message:"Faucet is on progress."});
                         }
                     }
                 }

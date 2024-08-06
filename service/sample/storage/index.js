@@ -1,6 +1,6 @@
-const {DataProgram}=require('solana-data-program');
+const {DataProgram}=require("solana-data-program");
 const SOL = require("@solana/web3.js");
-const bs58 = require('bs58');
+const bs58 = require("bs58");
 
 let link = null;
 const self={
@@ -9,7 +9,7 @@ const self={
         const { Connection, clusterApiUrl } = SOL;
         switch (network) {
             case "devnet":
-                link = new Connection(clusterApiUrl('devnet'));
+                link = new Connection(clusterApiUrl("devnet"));
                 break;
 
             default:
@@ -130,12 +130,12 @@ const self={
     },
     view:async(dataKey,connection)=>{
         
-        // extract Data Account's metadata
+        // extract Data Account"s metadata
         const meta = await DataProgram.parseMetadata(connection, dataKey, "confirmed");
         console.log(meta);
-        // extract Data Account's data
+        // extract Data Account"s data
         const data = await DataProgram.parseData(connection, dataKey, "confirmed");
-        console.log(data.toString('utf-8'));
+        console.log(data.toString("utf-8"));
         //console.log(bs58.decode(data.toString()));
     },
 }
@@ -154,7 +154,7 @@ self.init("devnet",(connection)=>{
     });
 
     connection.getSlot().then((block) => {
-        console.log('New block received:', block);
+        console.log("New block received:", block);
         // const dataKey="ECQd7f4sYhcWX5G9DQ7Hgcf3URZTfgwVwjKzH2sMQeFW";
         // const pubData=new SOL.PublicKey(dataKey);
         // self.view(pubData,connection);

@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 const file = {
     read: (target, ck, toJSON, toBase64) => {
         fs.stat(target, (err, stats) => {
@@ -13,7 +13,7 @@ const file = {
                     const json = JSON.parse(str);
                     return ck && ck(json);
                 } catch (error) {
-                    return ck && ck({ error: 'Invalid JSON file.' });
+                    return ck && ck({ error: "Invalid JSON file." });
                 }
             });
         });
@@ -22,7 +22,7 @@ const file = {
         const path=!folder?`./`:`./${folder}`;
         if(!fs.existsSync(path)) fs.mkdirSync(path,{recursive:true});
         const target = `${path}/${name}`;
-        fs.writeFile(target, data, 'utf8', function (err) {
+        fs.writeFile(target, data, "utf8", function (err) {
             if (err) return ck && ck({ error: err });
             return ck && ck(true);
         });

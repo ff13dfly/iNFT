@@ -1,7 +1,7 @@
-const { REDIS } = require('../lib/redis.js');
+const { REDIS } = require("../lib/redis.js");
 
-const { config } = require('../config_anchor.js');
-const { output } = require('../lib/output.js');
+const { config } = require("../config_anchor.js");
+const { output } = require("../lib/output.js");
 
 const self={
     getINFT:(obj,block)=>{
@@ -37,7 +37,7 @@ const self={
 *   @param  {function}      ck          //callback function
 */
 module.exports =(map,left,ck)=>{
-    output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
+    output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,"primary",true);
     const keys=config.keys;
     const prefix=keys.prefix;
     let done=false;                 //wether callback
@@ -67,7 +67,7 @@ module.exports =(map,left,ck)=>{
                 const key=`${prefix.raw}${name}_${block}`;
                 REDIS.setKey(key,JSON.stringify(NFT),(res,err)=>{
                     working--;
-                    if(err) output(`Error:${err}`,'error');
+                    if(err) output(`Error:${err}`,"error");
                     if(working<1){
                         done=true;
                         return ck && ck();
@@ -80,7 +80,7 @@ module.exports =(map,left,ck)=>{
                 //console.log(`Template queue: ${qu_template}`);
                 REDIS.pushQueue(qu_template,key,(res,err)=>{
                     working--;
-                    if(err) output(`Error:${err}`,'error');
+                    if(err) output(`Error:${err}`,"error");
                     if(working<1){
                         done=true;
                         return ck && ck();
@@ -94,7 +94,7 @@ module.exports =(map,left,ck)=>{
                 //console.log(`History queue: ${qu_history}`);
                 REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
                     working--;
-                    if(err) output(`Error:${err}`,'error');
+                    if(err) output(`Error:${err}`,"error");
                     if(working<1){
                         done=true;
                         return ck && ck();
@@ -106,7 +106,7 @@ module.exports =(map,left,ck)=>{
                 const qu_account=`${prefix.account}${row.signer}`;
                 REDIS.pushQueue(qu_account,key,(res,err)=>{
                     working--;
-                    if(err) output(`Error:${err}`,'error');
+                    if(err) output(`Error:${err}`,"error");
                     if(working<1){
                         done=true;
                         return ck && ck();
@@ -119,7 +119,7 @@ module.exports =(map,left,ck)=>{
                 const block_data=[row.index,name,"set",row.signer];
                 REDIS.pushQueue(qu_block,JSON.stringify(block_data),(res,err)=>{
                     working--;
-                    if(err) output(`Error:${err}`,'error');
+                    if(err) output(`Error:${err}`,"error");
                     if(working<1){
                         done=true;
                         return ck && ck();

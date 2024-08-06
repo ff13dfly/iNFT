@@ -1,1 +1,0 @@
-nohup /usr/bin/node ~/ipfs/ipfs_cache.min.js &

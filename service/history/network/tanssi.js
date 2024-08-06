@@ -1,4 +1,4 @@
-const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
+const { ApiPromise, WsProvider, Keyring } = require("@polkadot/api");
 
 const config = {
     node: "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",  //Tanssi appchain URI
@@ -15,7 +15,7 @@ const funs = {
         exs.forEach((ex, index) => {
             console.log(ex)
             // if(index===0){
-            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, '');
+            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, "");
             // }
             // if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
             // const dt = ex.toHuman();

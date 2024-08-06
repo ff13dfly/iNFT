@@ -4,13 +4,13 @@
 * 2.使用Redis进行Anchor的队列缓存；
 */
 
-const { config } = require('../config');
+const { config } = require("../config");
 
 /***********************************/
 /*********文件缓存功能实现*************/
 /***********************************/
 
-const fs=require('fs');
+const fs=require("fs");
 const md5 =require("md5");
 const cfgCache=config.cache;
 
@@ -29,7 +29,7 @@ const file={
         var path=file.getPath(str,cfgCache.folder,cfgCache.level);
         if(!fs.existsSync(path)) fs.mkdirSync(path,{recursive:true});
 
-        fs.writeFile(path+str+cfgCache.suffix, data,'utf8',function (err) {
+        fs.writeFile(path+str+cfgCache.suffix, data,"utf8",function (err) {
             if (err) return ck && ck({error:err});
             return ck && ck(str);
         });
@@ -44,9 +44,9 @@ const file={
         var folder=`${cfg.folder}/${path}`;
         if(!fs.existsSync(folder)) fs.mkdirSync(folder,{recursive:true});
 
-        var target=`${path}${hash}.${!suffix?'jpg':suffix}`;
+        var target=`${path}${hash}.${!suffix?"jpg":suffix}`;
         //console.log(`Ready to write to file : ${folder}`);
-        fs.writeFile(`${cfg.folder}/${target}`, atob(data),'ascii',function (err) {
+        fs.writeFile(`${cfg.folder}/${target}`, atob(data),"ascii",function (err) {
             if (err){
                 //console.log(err);
                 return ck && ck(index,{error:err});
@@ -86,8 +86,8 @@ const file={
         }
     },
     getPath:(str,folder,level,skip)=>{
-        let path=skip?'':(folder+'/');
-        for(var i=0;i<level;i++) path+=str.substr(i+i,2) +'/';
+        let path=skip?"":(folder+"/");
+        for(var i=0;i<level;i++) path+=str.substr(i+i,2) +"/";
         return path;
     },
 };
@@ -96,7 +96,7 @@ const file={
 /*********Redis缓存功能实现***********/
 /***********************************/
 
-const redis = require('redis');
+const redis = require("redis");
 const client = redis.createClient();
 client.connect();
 
@@ -155,7 +155,7 @@ const self={
     },
     pushQueue:function(anchor,block,ck){
         const qu=prefix.queue+anchor;
-        client.lPush(qu,''+block).then((data,err) => {
+        client.lPush(qu,""+block).then((data,err) => {
             if(err) return ck && ck(err);
             return ck && ck(true);
         });
@@ -187,8 +187,8 @@ const self={
 
         for(let i=0;i<len;i++){
             const img=row.raw.imgs[i];
-            const arr=img.split(';base64,');
-            const type=arr[0].split(':image/');
+            const arr=img.split(";base64,");
+            const type=arr[0].split(":image/");
             //console.log(`Orginal [${i}] : ${img.substr(0,200)}`);
             //console.log(`Prefix : ${arr[0]} , raw: ${arr[1].substr(0,200)}` );
 
@@ -243,7 +243,7 @@ const self={
             if(data!==null) delete row.raw;
             self.cacheAnchor(anchor,block,data,function(){
                 
-                client.hSet(main,''+block,JSON.stringify(row)).then((res,err) => {
+                client.hSet(main,""+block,JSON.stringify(row)).then((res,err) => {
                     if (err) result.error= "Failed to set redis map.";
                     return ck && ck(result);
                 });
@@ -252,7 +252,7 @@ const self={
     },
     getMap:function(anchor,block,ck){
         const main=prefix.data+anchor;
-        client.hGet(main,''+block).then((dt,err) => {
+        client.hGet(main,""+block).then((dt,err) => {
             if (err || dt==null) return ck && ck(false);
             const result=JSON.parse(dt);
             if(!result.block) result.block=block;

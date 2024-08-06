@@ -1,12 +1,12 @@
-const { config } = require('./config.js');
-const tools = require('./lib/tools.js');
-const IO = require('./lib/file.js');
+const { config } = require("./config.js");
+const tools = require("./lib/tools.js");
+const IO = require("./lib/file.js");
 
 const theme = {
-    error: '\x1b[31m%s\x1b[0m',
-    success: '\x1b[36m%s\x1b[0m',
-    primary: '\x1b[33m%s\x1b[0m',
-    dark: '\x1b[90m%s\x1b[0m',
+    error: "\x1b[31m%s\x1b[0m",
+    success: "\x1b[36m%s\x1b[0m",
+    primary: "\x1b[33m%s\x1b[0m",
+    dark: "\x1b[90m%s\x1b[0m",
 };
 
 const map={};           //the template cache
@@ -47,8 +47,8 @@ const self = {
     },
 };
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -57,16 +57,16 @@ self.run(config.server, () => {
     self.output(`Cors should be supported by Nginx.`);
     self.output(`Copy the following URL to explorer to test: `,"", true);
     self.output(`http://localhost:${config.server.port}/bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i`,"primary", true);
-    app.get('/', (req, res) => {
+    app.get("/", (req, res) => {
         res.send("");
     });
 
     //console.log(`Here to link to Tanssi appchain`);
-    app.get('/:cid', (req, res) => {
+    app.get("/:cid", (req, res) => {
 
         const cid = req.params.cid;
         self.output(`Request cid:${cid}`, "primary");
-        if (cid.length !== 59) return res.send({ error: 'Invalid web3.storage CID.' });
+        if (cid.length !== 59) return res.send({ error: "Invalid web3.storage CID." });
 
         self.getCache(cid,(data)=>{
             if(data.error){

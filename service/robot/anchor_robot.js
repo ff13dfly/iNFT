@@ -1,10 +1,10 @@
-const axios = require('axios');
+const axios = require("axios");
 
-const { config } = require('./anchor_config.js');
-const { output } = require('./lib/output.js');
-const tools = require('./lib/tools.js');
-const IO = require('./lib/file.js');
-const Anchor = require('./network/anchor.js');
+const { config } = require("./anchor_config.js");
+const { output } = require("./lib/output.js");
+const tools = require("./lib/tools.js");
+const IO = require("./lib/file.js");
+const Anchor = require("./network/anchor.js");
 
 const overview={
     try:0,
@@ -67,10 +67,10 @@ const self = {
             if (fa.error) return self.load(accounts, ck, pairs);
             Anchor.load(fa, password, (pair) => {
                 if (pair.error) {
-                    output(`Failed to decode account ${acc}`, 'error', true);
+                    output(`Failed to decode account ${acc}`, "error", true);
                     return self.load(accounts, ck, pairs);
                 }
-                output(`Load account '${acc}' successful.`, "success", true);
+                output(`Load account "${acc}" successful.`, "success", true);
                 pairs[acc] = pair;
                 return self.load(accounts, ck, pairs);
             });
@@ -83,15 +83,15 @@ const self = {
         try {
             const response = await axios.get(url, {
                 headers: {
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-                  'Accept-Language': 'en-US,en;q=0.9',
-                  'Accept-Encoding': 'gzip, deflate, br',
-                  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+                  "Accept-Language": "en-US,en;q=0.9",
+                  "Accept-Encoding": "gzip, deflate, br",
+                  "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
                 }
             });
             const json = response.data;
             json.cid=hash;
-            output(`Got template successful.`, 'success', true);
+            output(`Got template successful.`, "success", true);
             return ck && ck(json);
         } catch (error) {
             return ck && ck({ error: error });
@@ -103,9 +103,9 @@ const self = {
             count++;
             Anchor.balance(acc, (res) => {
                 count--;
-                output(`Account ${acc} balance: ${res.free.toLocaleString()}`, 'success', true);
+                output(`Account ${acc} balance: ${res.free.toLocaleString()}`, "success", true);
                 if (res.free < config.low) {
-                    output(`Low balance account ${acc}, removed.`, 'error', true);
+                    output(`Low balance account ${acc}, removed.`, "error", true);
                     delete pairs[acc];
                 }
                 if (count === 0) return ck && ck(pairs);
@@ -155,21 +155,21 @@ output(`\n____________iNFT____________Robot____________Anchor____________Network
 //output(`\n____________i___N___F___T______i___N___F___T______i___N___F___T______i___N___F___T____________`, "success", true);
 output(`Start iNFT robot ( version ${config.version} ), author: Fuu, 2024.05`, "success", true);
 
-process.on('unhandledRejection', (reason, promise) => {
-    output(`UnhandledRejection`,'error');
-    //console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+    output(`UnhandledRejection`,"error");
+    //console.error("Unhandled Rejection at:", promise, "reason:", reason);
     // Application specific logging, throwing an error, or other logic here
 });
   
-process.on('uncaughtException', (error) => {
-    output(`uncaughtException`,'error');
+process.on("uncaughtException", (error) => {
+    output(`uncaughtException`,"error");
 });
 
 self.start((cfg) => {
     //0.update the index invoid to write the same anchor name;
     if(cfg.index!==0) cfg.index+=2*cfg.accounts.length;
 
-    output(`Load robot setting from '${config.basic}' successful.`, "success", true);
+    output(`Load robot setting from "${config.basic}" successful.`, "success", true);
     output(`Start to load accounts(${cfg.accounts.length}) for minting.`, "primary", true);
     //1.load all accounts from setting
     self.load(tools.clone(cfg.accounts), (accounts) => {
@@ -179,12 +179,12 @@ self.start((cfg) => {
             output(`Linked to Anchor appchain node successful.`, "success", true);
             //3.check the balance, remove low balance accounts
             self.check(accounts, (pairs) => {
-                // return  output(`No account to mint automatically.`,'error');
+                // return  output(`No account to mint automatically.`,"error");
 
-                output(`Checking template ${config.template} from '${config.gateway}'.`, "primary", true);
+                output(`Checking template ${config.template} from "${config.gateway}".`, "primary", true);
                 self.template(config.template, (tpl) => {
                     //console.log(tpl);
-                    if(tpl.error) return  output(`Failed to load template IPFS file.`,'error');
+                    if(tpl.error) return  output(`Failed to load template IPFS file.`,"error");
                     //console.log(tpl);
                     output(`Minting robot is ready to go in 2s...`, "success", true);
                     output(`____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);

@@ -47,7 +47,7 @@ const self = {
 	 * @param {class} ks		//websocket keyring class
 	*/
 	setKeyring:(ks)=>{
-		keyRing=new ks({ type: 'sr25519' });
+		keyRing=new ks({ type: "sr25519" });
 		return true;
 	},
 
@@ -117,7 +117,7 @@ const self = {
 			self.specific(hash,(exs)=>{
 				for(let i=0;i<exs.length;i++){
 					const ex=exs[i],row=ex.args;
-					if(row.key.substr(0, 2).toLowerCase() === '0x') row.key=self.decodeUTF8(row.key);
+					if(row.key.substr(0, 2).toLowerCase() === "0x") row.key=self.decodeUTF8(row.key);
 					row.signer=ex.owner;
 					row.block=block;
 					const dt=format(row.key,self.decor(row));
@@ -202,7 +202,7 @@ const self = {
 	latest: (anchor, ck) => {
 		if (!self.ready()) return ck && ck({error:"No websocke link."});
 		anchor = anchor.toLocaleLowerCase();
-		if (anchor.substr(0, 2) === '0x') anchor = self.decodeUTF8(anchor);
+		if (anchor.substr(0, 2) === "0x") anchor = self.decodeUTF8(anchor);
 
 		if(self.limited(anchor)) return ck && ck(false);
 
@@ -221,7 +221,7 @@ const self = {
 	target:(anchor,block,ck)=>{
 		if (!self.ready()) return ck && ck({error:"No websocke link."});
 		anchor = anchor.toLocaleLowerCase();
-		if (anchor.substr(0, 2) === '0x') anchor = self.decodeUTF8(anchor);
+		if (anchor.substr(0, 2) === "0x") anchor = self.decodeUTF8(anchor);
 
 		if(self.limited(anchor)) return ck && ck(false);
 		self.owner(anchor,(owner)=>{
@@ -327,7 +327,7 @@ const self = {
 
 		const row=list.shift();
 		done.push(row);
-		if (typeof (row) == 'string') {
+		if (typeof (row) == "string") {
 			self.latest(row,(data)=>{
 				map[row]=data;
 				if(list.length===0) return ck && ck(self.groupMulti(done,map));
@@ -335,7 +335,7 @@ const self = {
 			});
 		} else {
 			self.target(row[0],row[1],(data)=>{
-				map[row[0]+'_'+row[1]]=data;
+				map[row[0]+"_"+row[1]]=data;
 				if(list.length===0) return ck && ck(self.groupMulti(done,map));
 				return self.multi(list,ck,done,map);
 			});
@@ -352,7 +352,7 @@ const self = {
 		const format=self.format;
 		for (let i = 0; i < list.length; i++) {
 			const row = list[i];
-			const data=map[(typeof (row) == 'string')?row:(row[0]+'_'+row[1])];
+			const data=map[(typeof (row) == "string")?row:(row[0]+"_"+row[1])];
 			arr.push(!data?format(list[i]):data);
 		}
 		return arr;
@@ -370,14 +370,14 @@ const self = {
 			if (dt.block.extrinsics.length === 1) return ck && ck(false);
 
 			wsAPI.query.system.events.at(hash,(evs)=>{
-				const exs = self.filter(dt, 'setAnchor',self.status(evs));
+				const exs = self.filter(dt, "setAnchor",self.status(evs));
 				if(exs.length===0) return ck && ck(false);
 				if(cfg===undefined || cfg.anchor===undefined) return ck && ck(exs);
 
 				let data=null;
 				for(let i=0;i<exs.length;i++){
 					let ex=exs[i],row=ex.args;
-					if(row.key.substr(0, 2).toLowerCase() === '0x') row.key=self.decodeUTF8(row.key);
+					if(row.key.substr(0, 2).toLowerCase() === "0x") row.key=self.decodeUTF8(row.key);
 					if(row.key.toLowerCase()===cfg.anchor.toLowerCase()){
 						data=row;
 						data.signer=ex.owner;
@@ -398,11 +398,11 @@ const self = {
 			try {
 				const protocol=JSON.parse(row.protocol);
 				if(!protocol.type || 
-					protocol.type!=='data' || 
+					protocol.type!=="data" || 
 					!protocol.fmt || 
-					protocol.fmt!=='json' ||
+					protocol.fmt!=="json" ||
 					!protocol.tpl ||
-					protocol.tpl!=='inft'
+					protocol.tpl!=="inft"
 				) continue;
 
 				row.raw=JSON.parse(row.raw);
@@ -413,7 +413,7 @@ const self = {
 				list[i].args=row;
 				arr.push(list[i]);
 			} catch (error) {
-				output(`Failed to decode iNFT: ${JSON.stringify(row)}`,'error',true);
+				output(`Failed to decode iNFT: ${JSON.stringify(row)}`,"error",true);
 			}
 		}
 		return arr;
@@ -432,14 +432,14 @@ const self = {
 			if (dt.block.extrinsics.length === 1) return ck && ck(result);
 			wsAPI.query.system.events.at(hash,(evs)=>{
 				//1.get setAnchor
-				result.set =self.getINFTs(self.filter(dt, 'setAnchor',self.status(evs)),block,hash);
-				result.sell = self.filter(dt, 'sellAnchor',self.status(evs));
-				result.buy = self.filter(dt, 'buyAnchor',self.status(evs));
-				result.revoke = self.filter(dt, 'revokeAnchor',self.status(evs));
+				result.set =self.getINFTs(self.filter(dt, "setAnchor",self.status(evs)),block,hash);
+				result.sell = self.filter(dt, "sellAnchor",self.status(evs));
+				result.buy = self.filter(dt, "buyAnchor",self.status(evs));
+				result.revoke = self.filter(dt, "revokeAnchor",self.status(evs));
 				
 				//2.new method
-				result.divert=self.filter(dt, 'divertAnchor',self.status(evs));
-				result.drop=self.filter(dt, 'dropAnchor',self.status(evs));
+				result.divert=self.filter(dt, "divertAnchor",self.status(evs));
+				result.drop=self.filter(dt, "dropAnchor",self.status(evs));
 
 				return ck && ck(result);
 			}).catch((error)=>{
@@ -464,14 +464,14 @@ const self = {
 	*/
 	write: (pair, anchor, raw, protocol, ck) => {
 		if (!self.ready()) return ck && ck({error:"No websocke link."});
-		if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-		if (typeof raw !== 'string') raw = JSON.stringify(raw);
+		if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
+		if (typeof raw !== "string") raw = JSON.stringify(raw);
 		if(self.limited(anchor,raw,protocol)) return ck && ck({error:"Params error"});
 
 		self.owner(anchor,(owner,block)=>{
 			if(owner!==false &&  owner!==pair.address) return ck && ck({error:`Not the owner of ${anchor}`});
 			self.balance(pair.address,(amount)=>{
-				if(amount.free<100*1000000000000) return ck && ck({error:'Low balance'});
+				if(amount.free<100*1000000000000) return ck && ck({error:"Low balance"});
 				const pre = owner===false?0:block;
 				try {
 					wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
@@ -580,13 +580,13 @@ const self = {
 			let unlist=null;
 			wsAPI.query.anchor.sellList(anchor, (dt) => {
 				unlist();
-				if (dt.value.isEmpty) return ck && ck({error:`'${anchor}' is not on sell`});
+				if (dt.value.isEmpty) return ck && ck({error:`"${anchor}" is not on sell`});
 				const res=dt.toJSON();
 				const cost=res[1]*1000000000000;
 				if(res[0]!==res[2] && res[2]!==pair.address) return ck && ck({error:"Not target account"});
 				
 				self.balance(pair.address,(amount)=>{
-					if(amount.free<cost) return ck && ck({error:'Low balance'});
+					if(amount.free<cost) return ck && ck({error:"Low balance"});
 					try {
 						wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(pair, (res) => {
 							return ck && ck(self.process(res));
@@ -616,26 +616,26 @@ const self = {
 	*/
 	process:(obj)=>{
 		const status={
-			step:'',
-			message:'',
+			step:"",
+			message:"",
 		};
 		const res=obj.status.toHuman();
 
-		if (typeof (res) == 'string'){
+		if (typeof (res) == "string"){
 			status.step=res;
-			status.message='Ready to interact with node.';
+			status.message="Ready to interact with node.";
 			return status;
 		}
 
 		if(res.InBlock){
-			status.step='InBlock';
-			status.message='Packaged to block, nearly done. Waiting for finalizing.';
+			status.step="InBlock";
+			status.message="Packaged to block, nearly done. Waiting for finalizing.";
 			return status;
 		}
 
 		if(res.Finalized){
-			status.step='Finalized';
-			status.message='Finalized, done.';
+			status.step="Finalized";
+			status.message="Finalized, done.";
 			return status;
 		}
 		return status;
@@ -650,8 +650,8 @@ const self = {
 	 * @param {object}	data	//anchor data from specific function
 	*/
 	decor:(data)=>{
-		if(data.key.substr(0, 2).toLowerCase() === '0x') data.key=self.decodeUTF8(data.key);
-		if(data.raw.substr(0, 2).toLowerCase() === '0x') data.raw = self.decodeUTF8(data.raw);
+		if(data.key.substr(0, 2).toLowerCase() === "0x") data.key=self.decodeUTF8(data.key);
+		if(data.raw.substr(0, 2).toLowerCase() === "0x") data.raw = self.decodeUTF8(data.raw);
 		if(data.protocol){
 			try {
 				let proto=JSON.parse(data.protocol);
@@ -661,11 +661,11 @@ const self = {
 				console.log(`Failed to parse JSON.`);
 			}
 		}
-		data.pre=parseInt(data.pre.replace(/,/gi, ''));
+		data.pre=parseInt(data.pre.replace(/,/gi, ""));
 		data.index=parseInt(data.index);
 		
 		//remove the thound seperetor
-		if(data.block && typeof(data.block)==='string') data.block=parseInt(data.block.replace(/,/gi, ''));
+		if(data.block && typeof(data.block)==="string") data.block=parseInt(data.block.replace(/,/gi, ""));
 		return data;
 	},
 
@@ -680,7 +680,7 @@ const self = {
 		let stamp=0;
 		exs.block.extrinsics.forEach((ex, index) => {
 			if(index===0){
-				stamp=ex.toHuman().method.args.now.replace(/,/gi, '');
+				stamp=ex.toHuman().method.args.now.replace(/,/gi, "");
 			}
 			if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
 			const dt = ex.toHuman();
@@ -716,13 +716,13 @@ const self = {
 	 * @param {string}	str		//Hex string need to convert
 	*/
 	decodeUTF8:(str) => {
-		const arr=str.slice(2).replace(/\s+/g, '').split("");
-		let final='';
+		const arr=str.slice(2).replace(/\s+/g, "").split("");
+		let final="";
 		for(let i=0;i<arr.length;i+=2){
 			final+="%"+arr[i]+arr[i+1];
 		}
 		return decodeURIComponent(final);
-		//return decodeURIComponent(str.slice(2).replace(/\s+/g, '').replace(/[0-9a-f]{2}/g, '%$&'));
+		//return decodeURIComponent(str.slice(2).replace(/\s+/g, "").replace(/[0-9a-f]{2}/g, "%$&"));
 	},
 
 	/** 

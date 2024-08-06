@@ -1,4 +1,4 @@
-const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
+const { ApiPromise, WsProvider, Keyring } = require("@polkadot/api");
 
 const limits = {
     key: 40,					//Max length of anchor name ( ASCII character )
@@ -91,8 +91,8 @@ const self = {
     write: (pair, obj, ck) => {
         self.init(() => {
             let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
+            if (typeof raw !== "string") raw = JSON.stringify(raw);
             if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
             const pre = 0;

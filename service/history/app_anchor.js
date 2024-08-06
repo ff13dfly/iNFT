@@ -1,9 +1,9 @@
-const { config } = require('./config_anchor.js');
-const tools = require('./lib/tools.js');
-const { output } = require('./lib/output.js');
-const AnchorJS = require('./network/anchor.full.js');
-const { REDIS } = require('./lib/redis.js');
-const Saving=require('./system/cache_anchor');
+const { config } = require("./config_anchor.js");
+const tools = require("./lib/tools.js");
+const { output } = require("./lib/output.js");
+const AnchorJS = require("./network/anchor.full.js");
+const { REDIS } = require("./lib/redis.js");
+const Saving=require("./system/cache_anchor");
 
 //13598
 //Redis data sample: Entry data
@@ -37,7 +37,7 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        const { ApiPromise, WsProvider } = require('@polkadot/api');
+        const { ApiPromise, WsProvider } = require("@polkadot/api");
         try {
             const provider = new WsProvider(uri);
             ApiPromise.create({ provider: provider }).then((api) => {
@@ -94,8 +94,8 @@ const self = {
 
         if(arr.length===0){
             return REDIS.remove(config.keys.status,()=>{
-                output(`Clearn the redis cache successful.`,'error',true);
-                output(`Please close DEBUG mod or set debug_config.clean to false, then restart this robot.`,'error',true);
+                output(`Clearn the redis cache successful.`,"error",true);
+                output(`Please close DEBUG mod or set debug_config.clean to false, then restart this robot.`,"error",true);
                 return ck && ck();
             });
         } 
@@ -108,7 +108,7 @@ const self = {
         if(map===undefined) map={};
         if(bks.length===0) return ck && ck(map);
         const block=bks.pop();
-        //output(`Reading block ${block}`,'success',true);
+        //output(`Reading block ${block}`,"success",true);
         AnchorJS.hash(block,(hash)=>{
             AnchorJS.full(hash,block,(list)=>{
                 if(!list || list.error) return self.read(bks,ck,map);
@@ -120,7 +120,7 @@ const self = {
         });
     },
     toLeft:(status,ck)=>{
-        output(`Start to cache up history iNFTs, left limit ${status.done_left}`,'primary',true);
+        output(`Start to cache up history iNFTs, left limit ${status.done_left}`,"primary",true);
         //return ck && ck();
         if(status.done_left<1) return ck && ck();    
         const arr=[];
@@ -137,14 +137,14 @@ const self = {
                 Saving(map,left,()=>{
                     status.done_left=status.done_left-len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                         return self.toLeft(status,ck);
                     });
                 });
             }else{
                 status.done_left=status.done_left-len;
                 REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                     return self.toLeft(status,ck);
                 });
             }
@@ -152,10 +152,10 @@ const self = {
     },
     toRight:(status,ck)=>{
         if(status.done_right >= status.block_subcribe){
-            output(`Catch up to the latest subcribe block, status: ${JSON.stringify(status)}`,'success',true);
+            output(`Catch up to the latest subcribe block, status: ${JSON.stringify(status)}`,"success",true);
             return ck && ck();
         } 
-        output(`Start to catch up the subcribe block. From ${status.done_right} to ${status.block_subcribe}`,'primary',true);
+        output(`Start to catch up the subcribe block. From ${status.done_right} to ${status.block_subcribe}`,"primary",true);
         const arr=[];
         for(let i=0;i<status.step;i++){
             const p=status.done_right+i;
@@ -170,29 +170,29 @@ const self = {
                 Saving(map,left,()=>{
                     status.done_right=status.done_right+len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                         return self.toRight(status,ck);
                     });
                 });
             }else{
                 status.done_right=status.done_right+len;
                 REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                    if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                     return self.toRight(status,ck);
                 });
             }
         });
     },
     autoCache:(status)=>{
-        output(`Caching the history started, status:${JSON.stringify(status)}`,'primary',true);
+        output(`Caching the history started, status:${JSON.stringify(status)}`,"primary",true);
         //0.check the done_right data
         if(status.done_right>=status.block_subcribe) return self.toLeft(status);
 
         return self.toRight(status,()=>{
             catchup=true;
-            output(`Catch up the subcribe.`,'primary',true);
+            output(`Catch up the subcribe.`,"primary",true);
             self.toLeft(status,()=>{
-                output(`Great! All iNFTs are cached.`,'success',true);
+                output(`Great! All iNFTs are cached.`,"success",true);
             });
         });
     },
@@ -203,14 +203,14 @@ output(`Start iNFT history cache robot ( version ${config.version} ), author: Fu
 output(`Will storage iNFT data to local Redis, then the Market API can use these data.`, "", true);
 
 //0. handle unknown error
-process.on('unhandledRejection', (reason, promise) => {
+process.on("unhandledRejection", (reason, promise) => {
     console.log(reason);
-    output(`UnhandledRejection`, 'error');
+    output(`UnhandledRejection`, "error");
 });
 
-process.on('uncaughtException', (error) => {
+process.on("uncaughtException", (error) => {
     console.log(error);
-    output(`uncaughtException`, 'error');
+    output(`uncaughtException`, "error");
 });
 
 //when restart the system, need to run this function
@@ -221,8 +221,8 @@ let first = true;         //first subcribe tag
 let map=null;             //subcribe cache, before catchup, cache iNFTs here.
 let gap=null;             //when saving cached iNFTs, new subcribe iNFTs here.
 self.load((status) => {
-    if(status===false) return output(`Failed to load status from Redis. Please check the system`,'error',true);
-    output(`Load status successful, ready to link to Anchor Network for the next step.`,'primary',true);
+    if(status===false) return output(`Failed to load status from Redis. Please check the system`,"error",true);
+    output(`Load status successful, ready to link to Anchor Network for the next step.`,"primary",true);
     self.init((wsAPI) => {
         output(`\nLinked to node: ${config.node}`, "success", true);
         output(`____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
@@ -247,14 +247,14 @@ self.load((status) => {
 
                     status.block_subcribe=block;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                         self.autoCache(status); //b. start to run the autocache
                     })
                 }else{
                     output(`History robot recover, status: ${JSON.stringify(status)}`,"primary",true);
                     status.block_subcribe=block;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
-                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
+                        if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,"error",true);
                         
                         self.autoCache(status); //b. start to run the autocache
                     });

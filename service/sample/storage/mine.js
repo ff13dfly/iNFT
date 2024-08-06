@@ -1,6 +1,6 @@
-const {DataProgram}=require('solana-data-program');
+const {DataProgram}=require("solana-data-program");
 const SOL = require("@solana/web3.js");
-const bs58 = require('bs58');
+const bs58 = require("bs58");
 
 let link = null;
 const self={
@@ -9,7 +9,7 @@ const self={
         const { Connection, clusterApiUrl } = SOL;
         switch (network) {
             case "devnet":
-                link = new Connection(clusterApiUrl('devnet'));
+                link = new Connection(clusterApiUrl("devnet"));
                 break;
 
             default:

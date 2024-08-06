@@ -5,8 +5,8 @@ const self = {
   day:()=>{
     const dt = new Date();
     const year = dt.getFullYear();
-    const month = String(dt.getMonth() + 1).padStart(2, '0');
-    const day = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, "0");
+    const day = String(dt.getDate()).padStart(2, "0");
     return `${year}${month}${day}`;
   },
   rand: (m, n) => {
@@ -47,12 +47,12 @@ const self = {
   },
   u8ToHex: (u8array) => {
     return Array.prototype.map.call(u8array, function (byte) {
-      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-    }).join('');
+      return ("0" + (byte & 0xFF).toString(16)).slice(-2);
+    }).join("");
   },
   hexToU8: (hexString) => {
     if (hexString.length % 2 !== 0) {
-      throw new Error('Hex string must have an even number of characters');
+      throw new Error("Hex string must have an even number of characters");
     }
     const u8array = new Uint8Array(hexString.length / 2);
     for (let i = 0; i < hexString.length; i += 2) {

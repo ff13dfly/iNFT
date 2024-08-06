@@ -1,8 +1,8 @@
 const theme = {
-    error: '\x1b[31m%s\x1b[0m',
-    success: '\x1b[36m%s\x1b[0m',
-    primary: '\x1b[33m%s\x1b[0m',
-    dark: '\x1b[90m%s\x1b[0m',
+    error: "\x1b[31m%s\x1b[0m",
+    success: "\x1b[36m%s\x1b[0m",
+    primary: "\x1b[33m%s\x1b[0m",
+    dark: "\x1b[90m%s\x1b[0m",
 };
 
 const self={
