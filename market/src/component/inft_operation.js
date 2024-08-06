@@ -2,14 +2,15 @@ import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
 import Network from '../network/router';
-
 import Account from '../system/account';
+
+import {  FaHeart, FaRegHeart } from "react-icons/fa";
 
 function OperationINFT(props) {
   const size = {
     row: [12],
     left:[8,4],
-    right:[4,8],
+    detail:[4,6,2],
     sell:[4,6,2],
     revoke:[4,6,2],
   };
@@ -81,7 +82,6 @@ function OperationINFT(props) {
       });
     },
     fresh:()=>{
-      //console.log(props.data);
       const chain=Network("anchor");
       chain.view(props.data.name,"selling",(res)=>{
         if(res===false){
@@ -101,18 +101,22 @@ function OperationINFT(props) {
 
   useEffect(() => {
     self.fresh();
-    //console.log(props.dialog);
   }, [props.data]);
 
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
-          <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
+          <Col md={size.detail[0]} lg={size.detail[0]} xl={size.detail[0]} xxl={size.detail[0]}>
             <img className='inft_thumb' src={props.data.bs64} alt="thumb of iNFT" />
           </Col>
-          <Col md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
+          <Col md={size.detail[1]} lg={size.detail[1]} xl={size.detail[1]} xxl={size.detail[1]}>
             More details.
+          </Col>
+          <Col className='text-end' md={size.detail[2]} lg={size.detail[2]} xl={size.detail[2]} xxl={size.detail[2]}>
+            <button className="btn btn-md btn-default">
+              <FaRegHeart className="text-warning" size={30}/>
+            </button>
           </Col>
         </Row>
       </Col>

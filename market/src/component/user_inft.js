@@ -9,6 +9,8 @@ import Page from './common_page';
 import API from '../system/api';
 import INFT from '../system/inft';
 
+import { FaCheck } from "react-icons/fa";
+
 function UserINFT(props) {
   const size = {
     row: [12],
@@ -22,7 +24,12 @@ function UserINFT(props) {
   let [now, setNow]=useState(1);
   let [total, setTotal]=useState(1);
 
+  let [fav, setFav]=useState(false);
+
   const self = {
+    clickFav:(ev)=>{
+      setFav(!fav);
+    },
     changeAccount:(addr)=>{
       if(!addr) return false;
       console.log(`Here to fresh`);
@@ -67,6 +74,17 @@ function UserINFT(props) {
         <AccountSelector callback={(addr)=>{
           self.changeAccount(addr);
         }} />
+      </Col>
+      <Col className='pt-4 text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+          
+          <span>
+            <button className={fav ? 'btn btn-sm btn-primary mt-1' : 'btn btn-sm btn-default mt-1'} onClick={(ev) => {
+              self.clickFav();
+            }}>
+              <FaCheck />
+            </button>
+            <strong className='ml-10 pt-4'>Fav iNFT only</strong>
+          </span>
       </Col>
       <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ListAddress data={list} dialog={props.dialog} link={props.link}/>

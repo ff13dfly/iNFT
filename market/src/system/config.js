@@ -129,6 +129,15 @@ const config={
                     status:{unique: false},
                     receiver:{unique: false},
                 },
+            },      
+            fav:{               //fav list on local 
+                keyPath:"name",
+                map:{
+                    alink:{ unique: true },
+                    address:{unique: false},
+                    block:{unique: false},
+                    stamp:{unique: false},
+                },
             },
         },
     },
