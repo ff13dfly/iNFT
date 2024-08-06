@@ -32,7 +32,7 @@ function UserINFT(props) {
     },
     changeAccount:(addr)=>{
       if(!addr) return false;
-      console.log(`Here to fresh`);
+      //console.log(`Here to fresh`);
       setAddress(addr);
       self.fresh(addr,now);
     },
@@ -46,20 +46,25 @@ function UserINFT(props) {
     },
     fresh:(addr,p)=>{
       if(!addr) return false;
-      API.list.byAddress(addr,(res)=>{
-        if(res && res.nav && res.nav.total!==0){
-          setShow(true);
-          setTotal(res.nav.page);
-        }else{
-          setShow(false);
-        } 
+      if(!fav){
+        API.list.byAddress(addr,(res)=>{
+          if(res && res.nav && res.nav.total!==0){
+            setShow(true);
+            setTotal(res.nav.page);
+          }else{
+            setShow(false);
+          } 
+  
+          if(!res || !res.data || res.data.length===0) return setList([]);
+            const narr=self.getAnchorArray(res.data);
+            console.log(JSON.stringify(narr));
+            INFT.multi(narr,(ans)=>{
+              setList(ans);
+            });
+        },p);
+      }else{
 
-        if(!res || !res.data || res.data.length===0) return setList([]);
-          const narr=self.getAnchorArray(res.data);
-          INFT.multi(narr,(ans)=>{
-            setList(ans);
-          });
-      },p);
+      }
     },
   }
 

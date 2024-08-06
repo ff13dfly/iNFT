@@ -224,7 +224,7 @@ const INDEXED = {
     return true;
   },
   insertRow: (db, table, list, ck) => {
-    console.log(table);
+    //console.log(table);
     const request = db.transaction([table], "readwrite").objectStore(table);
 
     for (let i = 0; i < list.length; i++) {

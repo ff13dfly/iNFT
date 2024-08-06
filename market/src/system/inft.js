@@ -3,24 +3,25 @@ import Render from "../lib/render";
 import Network from '../network/router';
 import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
+import Config from "./config";
 
-const config={
-    indexDB:"inftDB",
-    table:"infts",
-    keypath:"name",
-    map:{
+const config = {
+    indexDB: "inftDB",
+    table: "infts",
+    keypath: "name",
+    map: {
         name: { unique: true },
         stamp: { unique: false },
         thumb: { unique: false },
     },
 }
 
-const map={};
+const map = {};
 
-let local=true;     //get iNFT render result from local
+let local = true;     //get iNFT render result from local
 
-const funs={
-    getConfig:()=>{     //get config from Config file
+const funs = {
+    getConfig: () => {     //get config from Config file
 
     },
     checkTable: (from, list) => {
@@ -29,19 +30,19 @@ const funs={
         }
         return false;
     },
-    render:(tpl_name,hash,offset,ck)=>{
-        TPL.view(tpl_name,(dt)=>{
+    render: (tpl_name, hash, offset, ck) => {
+        TPL.view(tpl_name, (dt) => {
             const basic = {
                 cell: dt.cell,
                 grid: dt.grid,
                 target: dt.size
             }
-            Render.thumb(hash,dt.image,dt.parts, basic,offset,ck);
+            Render.thumb(hash, dt.image, dt.parts, basic, offset, ck);
         });
     },
-    getThumb:(tpl_name,hash,offset,ck,key)=>{
+    getThumb: (tpl_name, hash, offset, ck, key) => {
         //console.log(key);
-        if(local){
+        if (local) {
             //console.log(`Here to go...`);
             INDEXED.checkDB(config.indexDB, (db) => {
                 //console.log(db);
@@ -53,7 +54,7 @@ const funs={
                     db.close();         //must close, or the DB is blocked
                     INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
                         //console.log(ndb);
-                        return funs.render(tpl_name,hash,offset,ck);
+                        return funs.render(tpl_name, hash, offset, ck);
                     }).catch((error) => {
                         return ck && ck({ error: "failed to init indexDB" });
                     });
@@ -61,7 +62,7 @@ const funs={
                     INDEXED.searchRows(db, config.table, "name", key, (res) => {
                         //console.log(res);
                         if (res.length !== 1) {
-                            return funs.render(tpl_name,hash,offset,(bs64)=>{
+                            return funs.render(tpl_name, hash, offset, (bs64) => {
                                 //here to update the iNFT local cache
                                 const row = {
                                     name: key,
@@ -78,117 +79,170 @@ const funs={
                     });
                 }
             });
-        }else{
-            return funs.render(tpl_name,hash,offset,ck);
+        } else {
+            return funs.render(tpl_name, hash, offset, ck);
         }
+    },
+    exsistFav:(name,ck)=>{
+        const table = "ifav";
+        const cfg = Config.get(["storage", "tables", table]);
+        const DBname = Config.get(["storage", "DBname"]);
+        //console.log(JSON.stringify(cfg));
+        INDEXED.checkDB(DBname, (db) => {
+            const tbs = db.objectStoreNames;
+            //console.log(tbs);
+            if (!funs.checkTable(table, tbs)) {
+                const tb = { table: table, keyPath: cfg.keyPath, map: cfg.map }
+                db.close();         //must close, or the DB is blocked
+                INDEXED.initDB(DBname, [tb], db.version + 1).then((ndb) => {
+                    return ck && ck(ndb);
+                }).catch((error) => {       
+                    return ck && ck({error:"failed to fav"});
+                });
+            }else{
+                INDEXED.searchRows(db,table, "name", name, (res) => {
+                    if(res.length!==0) return ck && ck({error:"fav exsist"});
+                    return ck && ck(db);
+                });
+            }
+        })
     },
 }
 
-const table="infts";
 const self = {
-    enableLocal:()=>{
-        local=true;
+    enableLocal: () => {
+        local = true;
     },
-    disableLocal:()=>{
-        local=false;
+    disableLocal: () => {
+        local = false;
     },
+    faved:(name,ck)=>{
+        funs.exsistFav(name,(db)=>{
+            if(db.error==="fav exsist") return ck && ck(true);
+            return ck && ck(false);
+        });
+    },
+    fav: (name, block, address, ck) => {
+        console.log(`Add ${name} to fav list.`);
+        funs.exsistFav(name,(db)=>{
+            if(db.error) return ck && ck({error:db.error});
+            console.log(`Here to go.`);
+            const table = "ifav";
+            const row={
+                name:name,
+                block:block,
+                address:address,
+                stamp:tools.stamp(),
+            }
+            return INDEXED.insertRow(db,table,[row],ck);
+        });
+    },
+    unfav: (name, ck) => {
+        console.log(`Remove ${name} from fav list.`);
+        funs.exsistFav(name,(db)=>{
+            if(db.error) return ck && ck({error:db.error});
+            const table = "ifav";
+            return INDEXED.removeRow(db,table,"name",name,ck);
+        });
+    },
+
     /*  get the anchor list by name and block
     *   @param  {list}  array       //{name:ANCHOR_NAME,block:BLOCK}
     *   @param  {ck}    [function]  //
     *   @param  {done}  array       //result for loop
     */
-    multi:(list,ck,done)=>{
-        if(!done) done=[];
-        if(list.length===0) return ck && ck(done);
-        const single=list.pop();
-        const chain=Network("anchor");
-        chain.view(single,"anchor",(dt)=>{
-            dt.block=single.block;
-            dt.blocknumber=single.block;
+    multi: (list, ck, done) => {
+        if (!done) done = [];
+        if (list.length === 0) return ck && ck(done);
+        const single = list.pop();
+        const chain = Network("anchor");
+        chain.view(single, "anchor", (dt) => {
+            dt.block = single.block;
+            dt.blocknumber = single.block;
             done.push(dt);
-            return self.multi(list,ck,done);
+            return self.multi(list, ck, done);
         });
     },
 
-    single:(name,ck,normal)=>{
-        if(map[name]) return ck && ck(map[name]);
-        if(!normal){
+    single: (name, ck, normal) => {
+        if (map[name]) return ck && ck(map[name]);
+        if (!normal) {
             Network("anchor").view(name, "selling", (data) => {
                 //console.log(data);
-                if(data===false) return ck && ck(false);
-    
-                const row={
-                    name:name,
-                    owner:data[0],
-                    price:parseInt(data[1]),
-                    target:data[2],
-                    free:data[0]===data[2],
+                if (data === false) return ck && ck(false);
+
+                const row = {
+                    name: name,
+                    owner: data[0],
+                    price: parseInt(data[1]),
+                    target: data[2],
+                    free: data[0] === data[2],
                 }
-                self.auto([row],(res)=>{
-                    if(res) return ck &&  ck(res[0]);
+                self.auto([row], (res) => {
+                    if (res) return ck && ck(res[0]);
                     return ck && ck(false);
                 });
             });
-        }else{
+        } else {
             Network("anchor").view(name, "owner", (data) => {
                 //console.log(data);
-                const row={
-                    name:name,
-                    owner:data.address,
-                    price:0,
-                    target:data.address,
-                    free:false,
+                const row = {
+                    name: name,
+                    owner: data.address,
+                    price: 0,
+                    target: data.address,
+                    free: false,
                 }
-                self.auto([row],(res)=>{
-                    if(res) return ck &&  ck(res[0]);
+                self.auto([row], (res) => {
+                    if (res) return ck && ck(res[0]);
                     return ck && ck(false);
                 });
             });
         }
     },
-    overview:(ck)=>{
-        const tpls=[];
-        let min=0,max=0;
-        let first=true;
-        for(var k in map){
-            const row=map[k];
-            if(!row.price) continue;
-            
-            if(row.price>max) max=row.price;
-            if(row.price<min || first) min=row.price;
-            if(!tpls.includes(row.raw.tpl)) tpls.push(row.raw.tpl);
-            first=false;
+    overview: (ck) => {
+        const tpls = [];
+        let min = 0, max = 0;
+        let first = true;
+        for (var k in map) {
+            const row = map[k];
+            if (!row.price) continue;
+
+            if (row.price > max) max = row.price;
+            if (row.price < min || first) min = row.price;
+            if (!tpls.includes(row.raw.tpl)) tpls.push(row.raw.tpl);
+            first = false;
         }
         return ck && ck({
-            template:tpls,
-            range:[min,max],
-        }) 
+            template: tpls,
+            range: [min, max],
+        })
     },
-    nav:(step)=>{
-        const sum=Object.keys(map).length;
+    nav: (step) => {
+        const sum = Object.keys(map).length;
         return {
-            page:Math.ceil(sum/step),
-            step:step,
-            sum:sum,
+            page: Math.ceil(sum / step),
+            step: step,
+            sum: sum,
         }
     },
-    search:(val,type,ck)=>{
-        const result=[];
+    search: (val, type, ck) => {
+        const result = [];
         switch (type) {
             case 'template':
-                for(var k in map){
-                    const row=map[k];
-                    if(!row.price) continue;
-                    const tpl=row.raw.tpl;
-                    if(Array.isArray(val)){
-                        if(val.includes(tpl)) result.push(row);
-                    }else{
-                        if(val===tpl) result.push(row);
+                for (var k in map) {
+                    const row = map[k];
+                    if (!row.price) continue;
+                    const tpl = row.raw.tpl;
+                    if (Array.isArray(val)) {
+                        if (val.includes(tpl)) result.push(row);
+                    } else {
+                        if (val === tpl) result.push(row);
                     }
                 }
                 break;
             case 'price':
-                
+
                 break;
             default:
                 break;
@@ -200,51 +254,51 @@ const self = {
     *   @param  {ck}    [function]      //
     *   @param  {final} [array]         //temp list, for loop
     */
-    auto:(list,ck,final)=>{
-        if(!final) final=[];
-        if(list.length===0) return ck && ck(final);
-        const single=list.pop();
-        const key=single.name;
-        if(map[key]!==undefined){
+    auto: (list, ck, final) => {
+        if (!final) final = [];
+        if (list.length === 0) return ck && ck(final);
+        const single = list.pop();
+        const key = single.name;
+        if (map[key] !== undefined) {
             final.push(map[key]);
-            return self.auto(list,ck,final);
+            return self.auto(list, ck, final);
         }
 
-        const net="anchor";
-        if(single.raw && single.protocol && single.hash){
-            map[key]=single;
-            const indexkey=`${key}_${!single.blocknumber?single.block:single.blocknumber}`;
-            funs.getThumb(single.raw.tpl,single.hash,single.raw.offset,(bs64)=>{
-                map[key].bs64=bs64;
-                if(local) map[key].local=true;
+        const net = "anchor";
+        if (single.raw && single.protocol && single.hash) {
+            map[key] = single;
+            const indexkey = `${key}_${!single.blocknumber ? single.block : single.blocknumber}`;
+            funs.getThumb(single.raw.tpl, single.hash, single.raw.offset, (bs64) => {
+                map[key].bs64 = bs64;
+                if (local) map[key].local = true;
                 final.push(map[key]);
-                return self.auto(list,ck,final);
-            },indexkey);
-        }else{
+                return self.auto(list, ck, final);
+            }, indexkey);
+        } else {
             Network(net).view({ name: key }, "anchor", (data) => {
                 //console.log(data);
-                if (!data || !data.name) return self.auto(list,ck,final);
+                if (!data || !data.name) return self.auto(list, ck, final);
                 Network(net).view(data.block, "hash", (hash) => {
                     data.price = single.price;
                     data.free = single.free;
                     data.target = single.target;
-                    if(!data.Network) data.network=net;         //add default network settling
-                    data.hash=hash;
-    
-                    map[key]=data;
+                    if (!data.Network) data.network = net;         //add default network settling
+                    data.hash = hash;
 
-                    const indexkey=`${key}_${!data.blocknumber?data.block:data.blocknumber}`;
-                    funs.getThumb(data.raw.tpl,data.hash,data.raw.offset,(bs64)=>{
+                    map[key] = data;
+
+                    const indexkey = `${key}_${!data.blocknumber ? data.block : data.blocknumber}`;
+                    funs.getThumb(data.raw.tpl, data.hash, data.raw.offset, (bs64) => {
                         //console.log(`Rending done:${key}`);
-                        map[key].bs64=bs64;
-                        if(local) map[key].local=true;
+                        map[key].bs64 = bs64;
+                        if (local) map[key].local = true;
                         final.push(map[key]);
-                        return self.auto(list,ck,final);
-                    },indexkey);
+                        return self.auto(list, ck, final);
+                    }, indexkey);
                 });
             });
         }
     },
-}   
+}
 
 export default self;

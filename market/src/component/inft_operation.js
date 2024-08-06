@@ -1,8 +1,9 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from '../network/router';
-import Account from '../system/account';
+import Network from "../network/router";
+import Account from "../system/account";
+import INFT from "../system/inft";
 
 import {  FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -22,6 +23,8 @@ function OperationINFT(props) {
   let [price, setPrice] = useState(0);
   let [password, setPassword]= useState("");
   let [info, setInfo] = useState("");
+
+  let [fav, setFav] = useState(false);
 
   const self={
     changePrice:(ev)=>{
@@ -64,6 +67,19 @@ function OperationINFT(props) {
         }
       });
     },
+    clickFav:()=>{
+      setFav(!fav);
+      const {name,block,owner}=props.data;
+      if(fav){
+        INFT.unfav(name,()=>{
+
+        });
+      }else{
+        INFT.fav(name,block,owner,()=>{
+
+        });
+      }
+    },
     getPair:(target,ck)=>{
       const chain=Network("anchor");
       Account.get(target,(res)=>{
@@ -83,7 +99,8 @@ function OperationINFT(props) {
     },
     fresh:()=>{
       const chain=Network("anchor");
-      chain.view(props.data.name,"selling",(res)=>{
+      const name=props.data.name;
+      chain.view(name,"selling",(res)=>{
         if(res===false){
           setEnable({
             sell:true,
@@ -95,6 +112,11 @@ function OperationINFT(props) {
             revoke:true,
           })
         }
+      });
+
+      INFT.faved(name,(res)=>{
+        console.log(res);
+        setFav(res);
       });
     },
   }
@@ -114,8 +136,11 @@ function OperationINFT(props) {
             More details.
           </Col>
           <Col className='text-end' md={size.detail[2]} lg={size.detail[2]} xl={size.detail[2]} xxl={size.detail[2]}>
-            <button className="btn btn-md btn-default">
-              <FaRegHeart className="text-warning" size={30}/>
+            <button className="btn btn-md btn-default" onClick={(ev)=>{
+              self.clickFav(ev);
+            }}>
+              <FaRegHeart hidden={fav} className="text-warning" size={30}/>
+              <FaHeart hidden={!fav} className="text-warning" size={30}/>
             </button>
           </Col>
         </Row>

@@ -34,26 +34,6 @@ const config={
             anchor:"",
             tanssi:"",
         },
-        status:{    //[0.removed; 2.init; 3.written to chain;4.report to system; 5.payed; 6. on progress; 8.done;]
-            0:"removed",
-            1:"normal",
-            2:"on chain",
-            3:"local saved",
-            4:"reported",
-            5:"payed",
-            6:"on progress",
-            7:"done",
-            8:"all done",
-        },
-        receiver:{          //abandon these, get target from portal
-            anchor:"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
-            tanssi:"TANSSI_RECEIVER_ACCOUNT",
-            solana:"SOLANA_RECEIVER_ACCOUNT",
-            ethereum:"ETHEREUM_RECEIVER_ACCOUNT",
-            bitcoin:"BITCOIN_RECEIVER_ACCOUNT",
-            aptos:"APTOS_RECEIVER_ACCOUNT",
-            sui:"SUI_RECEIVER_ACCOUNT",
-        },
     },
     account:{
         password:{                  //password to encry the private key, address --> password
@@ -130,10 +110,10 @@ const config={
                     receiver:{unique: false},
                 },
             },      
-            fav:{               //fav list on local 
+            ifav:{               //fav list on local 
                 keyPath:"name",
                 map:{
-                    alink:{ unique: true },
+                    name:{ unique: true },
                     address:{unique: false},
                     block:{unique: false},
                     stamp:{unique: false},
