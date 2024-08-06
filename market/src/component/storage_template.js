@@ -1,9 +1,9 @@
-import { Table } from 'react-bootstrap';
+import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaPizzaSlice } from "react-icons/fa";
 
-import INDEXED from '../lib/indexed';
-import Config from '../system/config';
+import INDEXED from "../lib/indexed";
+import Config from "../system/config";
 
 function StorageTemplat(props) {
   const size = {
@@ -60,19 +60,19 @@ function StorageTemplat(props) {
         {list.map((row, index) => (
           <tr key={index}>
             <td>
-              <span className='ml-5'> <img className='template_icon' src={row.thumb} alt="template thumb" /></span>
-              <span className='ml-5'>{row.cid}</span>
+              <span className="ml-5"> <img className="template_icon" src={row.thumb} alt="template thumb" /></span>
+              <span className="ml-5">{row.cid}</span>
             </td>
             <td>web3.storage</td>
             <td>
-              <span className='pointer ml-5'><FaFileDownload /></span>
+              <span className="pointer ml-5"><FaFileDownload /></span>
             </td>
             <td>
-              <span className='pointer' onClick={(ev)=>{
+              <span className="pointer" onClick={(ev)=>{
                 self.clickRemove(row.cid);
               }}><FaSkullCrossbones /></span>
-              <span className='pointer ml-5'><FaPizzaSlice /></span>
-              <span className='pointer ml-5'><FaSync /></span>
+              <span className="pointer ml-5"><FaPizzaSlice /></span>
+              <span className="pointer ml-5"><FaSync /></span>
             </td>
           </tr>
         ))}

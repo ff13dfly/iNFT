@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 
 import { useEffect, useState } from "react";
 
@@ -133,30 +133,30 @@ function BountyPay(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Total: <strong className='text-danger'>{amount.toLocaleString()}</strong>
-        <strong className='text-warning ml-5'>${coin.toUpperCase()}</strong>. Target: <strong className='text-danger'>{target}</strong>
+        Total: <strong className="text-danger">{amount.toLocaleString()}</strong>
+        <strong className="text-warning ml-5">${coin.toUpperCase()}</strong>. Target: <strong className="text-danger">{target}</strong>
       </Col>
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
-          <Col className='pt-1' md={size.transaction[0]} lg={size.transaction[0]} xl={size.transaction[0]} xxl={size.transaction[0]}>
-            <button className={payed ? 'btn btn-sm btn-default' : 'btn btn-sm btn-primary'} onClick={(ev) => {
+          <Col className="pt-1" md={size.transaction[0]} lg={size.transaction[0]} xl={size.transaction[0]} xxl={size.transaction[0]}>
+            <button className={payed ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
               self.clickPayed(ev)
             }}><FaCheck /></button>
           </Col>
-          <Col hidden={payed} className='' md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
-            <input className='form-control' type="text" placeholder={`Transaction hash of ${tools.toUp(network)} network`} onChange={(ev) => {
+          <Col hidden={payed} className="" md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
+            <input className="form-control" type="text" placeholder={`Transaction hash of ${tools.toUp(network)} network`} onChange={(ev) => {
               self.changeHash(ev);
             }} />
           </Col>
-          <Col hidden={!payed} className='' md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
+          <Col hidden={!payed} className="" md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
 
           </Col>
-          <Col className='text-end' md={size.transaction[2]} lg={size.transaction[2]} xl={size.transaction[2]} xxl={size.transaction[2]}>
-            <button className='btn btn-md btn-primary' disabled={!ready} onClick={(ev) => {
+          <Col className="text-end" md={size.transaction[2]} lg={size.transaction[2]} xl={size.transaction[2]} xxl={size.transaction[2]}>
+            <button className="btn btn-md btn-primary" disabled={!ready} onClick={(ev) => {
               self.clickSign();
             }}>{title}</button>
           </Col>
-          <Col className='text-end text-danger' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col className="text-end text-danger" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             {info}
           </Col>
         </Row>

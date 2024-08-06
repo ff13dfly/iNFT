@@ -5,8 +5,8 @@ const self = {
   day: (stamp,seperator) => {
     const dt = !stamp?new Date():new Date(stamp);
     const year = dt.getFullYear();
-    const month = String(dt.getMonth() + 1).padStart(2, '0');
-    const day = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, "0");
+    const day = String(dt.getDate()).padStart(2, "0");
     const sp=!seperator?"":seperator;
     return `${year}${sp}${month}${sp}${day}`;
   },
@@ -44,7 +44,7 @@ const self = {
     return false;
   },
   toUp: (word) => {
-    if (!word) return '';
+    if (!word) return "";
     return word.charAt(0).toUpperCase() + word.slice(1);
   },
   toDate: (stamp) => {
@@ -56,27 +56,27 @@ const self = {
   toHex: (val, len) => {
     let hexString = val.toString(16);
     while (hexString.length < len) {
-      hexString = '0' + hexString;
+      hexString = "0" + hexString;
     }
     if (hexString.length > len) return false
     return hexString;
   },
   download: (filename, text, type) => {
-    var element = document.createElement('a');
+    var element = document.createElement("a");
 
     switch (type) {
       case "image":
-        element.setAttribute('href', text);
+        element.setAttribute("href", text);
         break;
 
       default:
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
         break;
     }
 
-    element.setAttribute('download', filename);
+    element.setAttribute("download", filename);
 
-    element.style.display = 'none';
+    element.style.display = "none";
     document.body.appendChild(element);
 
     element.click();
@@ -84,12 +84,12 @@ const self = {
   },
   u8ToHex: (u8array) => {
     return Array.prototype.map.call(u8array, function (byte) {
-      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-    }).join('');
+      return ("0" + (byte & 0xFF).toString(16)).slice(-2);
+    }).join("");
   },
   hexToU8: (hexString) => {
     if (hexString.length % 2 !== 0) {
-      throw new Error('Hex string must have an even number of characters');
+      throw new Error("Hex string must have an even number of characters");
     }
     const u8array = new Uint8Array(hexString.length / 2);
     for (let i = 0; i < hexString.length; i += 2) {

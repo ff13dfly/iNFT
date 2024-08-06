@@ -1,4 +1,4 @@
-import { Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
@@ -86,9 +86,9 @@ function BountyPreview(props) {
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
         {bonus.map((row, index) => (
-          <Row key={index} className='pt-2'>
+          <Row key={index} className="pt-2">
             <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-              <img alt="" src={self.getThumb(row.series)} className='series_thumb pointer' />
+              <img alt="" src={self.getThumb(row.series)} className="series_thumb pointer" />
             </Col>
           </Row>
         ))}
@@ -96,7 +96,7 @@ function BountyPreview(props) {
       </Col>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         {apply.map((row, index) => (
-          <Row key={index} className='pt-2'>
+          <Row key={index} className="pt-2">
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               Target: <strong>{row.link}</strong><br />
               on-chain record: <strong>{row.record}</strong><br/>

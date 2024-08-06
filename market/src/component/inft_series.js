@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import TPL from "../system/tpl";
@@ -48,21 +48,21 @@ function SeriesINFT(props) {
   }, [props.template]);
 
   return (
-    <Row className='pb-1'>
+    <Row className="pb-1">
       {list.map((row, index) => (
-        <Col className='pt-1' key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Col className="pt-1" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <Row>
-            <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <span className='text-warning'><strong>{row.name}</strong></span>, 
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <span className="text-warning"><strong>{row.name}</strong></span>, 
               total: <strong>{row.count.toLocaleString()}</strong> options, 
               rate: <strong>1 / {self.calcRarity(parts, index)}</strong>
             </Col>
-            <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               {row.desc}
             </Col>
             {row.thumb && row.thumb.map((img, iindex) => (
-              <Col className='pt-1' key={iindex} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                <img alt="" src={img} className='series_thumb pointer' onClick={(ev) => {
+              <Col className="pt-1" key={iindex} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                <img alt="" src={img} className="series_thumb pointer" onClick={(ev) => {
                   self.clickSingle(row.mock[iindex]);
                 }} />
               </Col>

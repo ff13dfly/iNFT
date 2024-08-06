@@ -1,13 +1,13 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import AccountSelector from './account_selector';
-import ListAddress from './list_address';
+import AccountSelector from "./account_selector";
+import ListAddress from "./list_address";
 
-import Page from './common_page';
+import Page from "./common_page";
 
-import API from '../system/api';
-import INFT from '../system/inft';
+import API from "../system/api";
+import INFT from "../system/inft";
 
 import { FaCheck } from "react-icons/fa";
 
@@ -88,18 +88,18 @@ function UserINFT(props) {
           self.changeAccount(addr);
         }} />
       </Col>
-      <Col className='pt-4 text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+      <Col className="pt-4 text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
           
           <span>
-            <button className={fav ? 'btn btn-sm btn-primary mt-1' : 'btn btn-sm btn-default mt-1'} onClick={(ev) => {
+            <button className={fav ? "btn btn-sm btn-primary mt-1" : "btn btn-sm btn-default mt-1"} onClick={(ev) => {
               self.clickFav();
             }}>
               <FaCheck />
             </button>
-            <strong className='ml-10 pt-4'>Fav iNFT only</strong>
+            <strong className="ml-10 pt-4">Fav iNFT only</strong>
           </span>
       </Col>
-      <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ListAddress data={list} dialog={props.dialog} link={props.link}/>
         <Page show={show} align={"right"} now={now} step={10} total={total} callback={(n)=>{
           setNow(n);

@@ -1,9 +1,9 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
-import Network from '../network/router';
-import Config from '../system/config';
+import Network from "../network/router";
+import Config from "../system/config";
 
 function BountyDetail(props) {
   const size = {
@@ -68,12 +68,12 @@ function BountyDetail(props) {
   }, [props.data,props.link]);
 
   return (
-    <Row className='pt-2'>
+    <Row className="pt-2">
       {list.map((row, index) => (
         <Col key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
           <Row>
             <Col md={size.thumb[0]} lg={size.thumb[0]} xl={size.thumb[0]} xxl={size.thumb[0]}>
-              <img className='series_thumb' src={row.thumb} alt={row.name} />
+              <img className="series_thumb" src={row.thumb} alt={row.name} />
             </Col>
             <Col md={size.thumb[1]} lg={size.thumb[1]} xl={size.thumb[1]} xxl={size.thumb[1]}>
               <h5>#{row.series} {row.name}</h5>

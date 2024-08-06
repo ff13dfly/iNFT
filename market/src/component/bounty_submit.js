@@ -1,19 +1,19 @@
-import { Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import { useEffect, useState, useRef } from "react";
 
-import BountyTarget from './bounty_target';
-import BountyTemplate from './bounty_template';
-import BountyDetail from './bounty_detail';
-import BountyPay from './bounty_pay';
-import BountyMore from './bounty_more';
+import BountyTarget from "./bounty_target";
+import BountyTemplate from "./bounty_template";
+import BountyDetail from "./bounty_detail";
+import BountyPay from "./bounty_pay";
+import BountyMore from "./bounty_more";
 
-import Network from '../network/router';
+import Network from "../network/router";
 
 import TPL from "../system/tpl";
-import RUNTIME from '../system/runtime';
-import Config from '../system/config';
-import Bounty from '../system/bounty';
-import API from '../system/api';
+import RUNTIME from "../system/runtime";
+import Config from "../system/config";
+import Bounty from "../system/bounty";
+import API from "../system/api";
 
 import tools from "../lib/tools";
 
@@ -40,9 +40,9 @@ function BountySubmit(props) {
 
   //UI improvement
   let [tabs, setTabs] = useState({
-    "step_1": <span><strong className='text-secondary'>Step 1 : </strong><strong>Template</strong></span>,
-    "step_2": <span><strong className='text-secondary'>Step 2 : </strong><strong className='text-secondary'>Bonus</strong></span>,
-    "step_3": <span><strong className='text-secondary'>Step 3 : </strong><strong className='text-secondary'>Payment</strong></span>,
+    "step_1": <span><strong className="text-secondary">Step 1 : </strong><strong>Template</strong></span>,
+    "step_2": <span><strong className="text-secondary">Step 2 : </strong><strong className="text-secondary">Bonus</strong></span>,
+    "step_3": <span><strong className="text-secondary">Step 3 : </strong><strong className="text-secondary">Payment</strong></span>,
   });
 
   //sub component params
@@ -71,9 +71,9 @@ function BountySubmit(props) {
       for (var k in ts) {
         const row = ts[k];
         if (k === active) {
-          ntabs[k] = <span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-warning'>{row.title}</strong></span>
+          ntabs[k] = <span><strong className="text-secondary">Step {row.index} : </strong><strong className="text-warning">{row.title}</strong></span>
         } else {
-          ntabs[k] = <span><strong className='text-secondary'>Step {row.index} : </strong><strong className='text-secondary'>{row.title}</strong></span>
+          ntabs[k] = <span><strong className="text-secondary">Step {row.index} : </strong><strong className="text-secondary">{row.title}</strong></span>
         }
       }
       setTabs(ntabs);
@@ -229,18 +229,18 @@ function BountySubmit(props) {
     >
       <Tab eventKey="step_1" title={tabs.step_1}>
         <Row>
-          <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col className="text-info" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Select a template for bounty which is storage on IPFS.
           </Col>
 
-          <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-            <input type="text" className='form-control' placeholder='Input template CID'
+          <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+            <input type="text" className="form-control" placeholder="Input template CID"
               value={template} onChange={(ev) => {
                 self.changeTemplate(ev);
               }} />
           </Col>
-          <Col className='pt-2 text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-            <button className='btn btn-md btn-primary' ref={loadRef} onClick={(ev) => {
+          <Col className="pt-2 text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+            <button className="btn btn-md btn-primary" ref={loadRef} onClick={(ev) => {
               self.clickLoad(ev);
             }}>Load</button>
           </Col>
@@ -253,24 +253,24 @@ function BountySubmit(props) {
         <Row>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
-              <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col className="text-info" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Setup the details about the bounty and write on chain.
               </Col>
-              <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyMore bounty={bounty} modify={modify} callback={(more) => {
                   self.callbackMore(more);
                 }} />
               </Col>
-              <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyTarget data={data} link={anchor} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
-              <Col className='' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+              <Col className="" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
                 {info}
               </Col>
-              <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button disabled={!modify} className='btn btn-md btn-primary' onClick={(ev) => {
+              <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+                <button disabled={!modify} className="btn btn-md btn-primary" onClick={(ev) => {
                   self.clickSubmit();
                 }}>Submit</button>
               </Col>
@@ -282,7 +282,7 @@ function BountySubmit(props) {
         <Row>
           <Col hidden={pay} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
-              <Col className='text-info' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col className="text-info" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -291,7 +291,7 @@ function BountySubmit(props) {
               <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
                 self.callbackPay(status, target, total);
               }} />
-              <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {payInfo}
               </Col>
             </Row>

@@ -1,4 +1,4 @@
-import { Row, Col, Form } from 'react-bootstrap';
+import { Row, Col, Form } from "react-bootstrap";
 import { useEffect,useState } from "react";
 
 function SettingBasic(props) {
@@ -33,7 +33,7 @@ function SettingBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Enable setting password.
       </Col>
-      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
           <Form.Check // prettier-ignore
             type="switch"
@@ -57,7 +57,7 @@ function SettingBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Enable cache iNFT template data to local IndexDB.
       </Col>
-      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
           <Form.Check // prettier-ignore
             type="switch"
@@ -78,7 +78,7 @@ function SettingBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Enable cache iNFT thumb data to local IndexDB.
       </Col>
-      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
           <Form.Check // prettier-ignore
             type="switch"
@@ -99,7 +99,7 @@ function SettingBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Checking system when iNFT system startup.
       </Col>
-      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
           <Form.Check // prettier-ignore
             type="switch"
@@ -120,7 +120,7 @@ function SettingBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Enable single password to access all accounts.
       </Col>
-      <Col className='text-end' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <Form>
           <Form.Check // prettier-ignore
             type="switch"

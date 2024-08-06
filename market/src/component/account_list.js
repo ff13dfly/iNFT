@@ -1,15 +1,15 @@
-import { Row, Col, Table, Form } from 'react-bootstrap';
+import { Row, Col, Table, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
 import Account from "../system/account";
 
-import INDEXED from '../lib/indexed';
-import Copy from '../lib/clipboard';
-import tools from '../lib/tools';
+import INDEXED from "../lib/indexed";
+import Copy from "../lib/clipboard";
+import tools from "../lib/tools";
 
-import Config from '../system/config';
+import Config from "../system/config";
 
 function AccountList(props) {
   const size = {
@@ -98,11 +98,11 @@ function AccountList(props) {
               <tr key={index}>
                 <td>{row.network}</td>
                 <td>
-                  <span className='pointer'><FaCopy className={!recover[row.address] ? "" : recover[row.address]} onClick={(ev)=>{
+                  <span className="pointer"><FaCopy className={!recover[row.address] ? "" : recover[row.address]} onClick={(ev)=>{
                     self.clickCopy(row.address);
                     self.callRecover(row.address);
                   }}/></span>
-                  <span className='ml-5'>{tools.shorten(row.address)}</span>
+                  <span className="ml-5">{tools.shorten(row.address)}</span>
                 </td>
                 <td>
                   <Form>
@@ -118,10 +118,10 @@ function AccountList(props) {
                 <td>{!balances[row.address]?0:balances[row.address].toLocaleString()}</td>
                 <td>{self.getDate(row.stamp)}</td>
                 <td>
-                  <span className='pointer' onClick={(ev)=>{
+                  <span className="pointer" onClick={(ev)=>{
                     self.clickRemove(row.address);
                   }}><FaSkullCrossbones /></span>
-                  <span className='pointer ml-5'><FaFileDownload /></span>
+                  <span className="pointer ml-5"><FaFileDownload /></span>
                 </td>
               </tr>
             ))}

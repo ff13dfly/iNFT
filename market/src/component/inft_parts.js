@@ -1,7 +1,7 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ParameterINFT from './inft_parameter';
+import ParameterINFT from "./inft_parameter";
 import tools from "../lib/tools";
 
 /* iNFT parts preview
@@ -44,10 +44,10 @@ function PartsINFT(props) {
         <ParameterINFT data={value} />
       </Col>
       <Col md={size.parts[1]} lg={size.parts[1]} xl={size.parts[1]} xxl={size.parts[1]} >
-        <Row className='pb-2 text-center'>
+        <Row className="pb-2 text-center">
           {parts.map((row, index) => (
-            <Col className='text-end pt-1' key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <button className={index===cur?'parts btn btn-md btn-warning':'parts btn btn-md btn-secondary'} onClick={(ev)=>{
+            <Col className="text-end pt-1" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <button className={index===cur?"parts btn btn-md btn-warning":"parts btn btn-md btn-secondary"} onClick={(ev)=>{
                 self.clickPart(index)
               }}>#{index+1}</button>
             </Col>

@@ -425,6 +425,8 @@ const self = {
 			sell:null,
 			buy:null,
 			revoke:null,
+			divert:null,
+			drop:null,
 		}
 		wsAPI.rpc.chain.getBlock(hash).then((dt) => {
 			if (dt.block.extrinsics.length === 1) return ck && ck(result);
@@ -434,6 +436,11 @@ const self = {
 				result.sell = self.filter(dt, 'sellAnchor',self.status(evs));
 				result.buy = self.filter(dt, 'buyAnchor',self.status(evs));
 				result.revoke = self.filter(dt, 'revokeAnchor',self.status(evs));
+				
+				//2.new method
+				result.divert=self.filter(dt, 'divertAnchor',self.status(evs));
+				result.drop=self.filter(dt, 'dropAnchor',self.status(evs));
+
 				return ck && ck(result);
 			}).catch((error)=>{
 				return ck && ck({error:"Failed to events by block hash."})

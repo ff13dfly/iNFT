@@ -1,4 +1,4 @@
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+import { web3Accounts, web3Enable, web3FromAddress } from "@polkadot/extension-dapp";
 import Config from "./config";
 
 const cache={
@@ -20,12 +20,12 @@ const RUNTIME={
 
         const extensions = await web3Enable(dapp);
         if (extensions.length === 0) {
-            console.log('No extension installed');
+            console.log("No extension installed");
             return false;
         }
         const accounts = await web3Accounts();
         if (accounts.length === 0) {
-            console.log('No accounts found');
+            console.log("No accounts found");
             return false;
         }
         const addr=accounts[0].address;

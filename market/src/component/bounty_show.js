@@ -1,7 +1,7 @@
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import BountyApply from './bounty_apply';
+import BountyApply from "./bounty_apply";
 
 import tools from "../lib/tools";
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
@@ -68,19 +68,19 @@ function BountyShow(props) {
   return (
     <Row hidden={!ready}>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-        <Card style={{ width: '100%' }}>
-          <FaQrcode hidden={qr} className='qr_button pointer bg-default' size={30} onClick={(ev) => {
+        <Card style={{ width: "100%" }}>
+          <FaQrcode hidden={qr} className="qr_button pointer bg-default" size={30} onClick={(ev) => {
             self.clickQR();
           }}/>
-          <div className='qr pointer' hidden={!qr} onClick={(ev) => {
+          <div className="qr pointer" hidden={!qr} onClick={(ev) => {
             self.clickQR();
           }}>
             <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} />
           </div>
-          <div className='template_thumb pointer' style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
+          <div className="template_thumb pointer" style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);
           }}></div>
-          <Card.Body className='pointer' onClick={(ev) => {
+          <Card.Body className="pointer" onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);
           }}>
             <Card.Title>{data.detail && data.detail.title ? data.detail.title : ""}</Card.Title>
@@ -92,7 +92,7 @@ function BountyShow(props) {
         <p>
           <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()} ( current: {block.toLocaleString()} )<br />
           <FaPizzaSlice />{data && data.template && data.template.cid ?
-            (<span className='pointer ml-5' onClick={(ev) => { props.link("playground", [data.template.cid]) }}>
+            (<span className="pointer ml-5" onClick={(ev) => { props.link("playground", [data.template.cid]) }}>
               {tools.shorten(data.template.cid, 15)}
             </span>) : ""
           }
@@ -101,9 +101,9 @@ function BountyShow(props) {
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
         {bonus.map((row, index) => (
-          <Row key={index} className='pt-2'>
+          <Row key={index} className="pt-2">
             <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-              <img alt="" src={self.getThumb(row.series)} className='series_thumb pointer' />
+              <img alt="" src={self.getThumb(row.series)} className="series_thumb pointer" />
 
             </Col>
             <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
@@ -112,8 +112,8 @@ function BountyShow(props) {
                   <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
                   Applying:
                 </Col>
-                <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <button className='btn btn-sm btn-primary' onClick={(ev) => {
+                <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                  <button className="btn btn-sm btn-primary" onClick={(ev) => {
                     self.clickApply(index, data.alink);
                   }}>Apply</button>
                 </Col>

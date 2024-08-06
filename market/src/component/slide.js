@@ -1,4 +1,4 @@
-import { Row, Col, Carousel } from 'react-bootstrap';
+import { Row, Col, Carousel } from "react-bootstrap";
 
 import { useEffect, useState } from "react";
 function Slide(props) {

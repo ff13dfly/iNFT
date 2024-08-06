@@ -1,6 +1,6 @@
 import TPL from "./tpl";
 import Render from "../lib/render";
-import Network from '../network/router';
+import Network from "../network/router";
 import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
 import Config from "./config";
@@ -240,7 +240,7 @@ const self = {
     search: (val, type, ck) => {
         const result = [];
         switch (type) {
-            case 'template':
+            case "template":
                 for (var k in map) {
                     const row = map[k];
                     if (!row.price) continue;
@@ -252,7 +252,7 @@ const self = {
                     }
                 }
                 break;
-            case 'price':
+            case "price":
 
                 break;
             default:

@@ -1,7 +1,7 @@
-import { Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ProcessDetail from './process_detail';
+import ProcessDetail from "./process_detail";
 
 import tools from "../lib/tools";
 import Bounty from "../system/bounty";
@@ -44,7 +44,7 @@ function BountyProcess(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <h5>Bounty details ( {anchorBounty} <FaCopy className='pointer' /> ) </h5>
+            <h5>Bounty details ( {anchorBounty} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
         <ProcessDetail data={data}/>
@@ -54,7 +54,7 @@ function BountyProcess(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <h5>Payment details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+            <h5>Payment details ( {anchorPayment} <FaCopy className="pointer" /> ) </h5>
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             {data && data.payment}
@@ -66,7 +66,7 @@ function BountyProcess(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <h5>Apply details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+            <h5>Apply details ( {anchorPayment} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
       </Col>
@@ -75,7 +75,7 @@ function BountyProcess(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <h5>Distribution details ( {anchorPayment} <FaCopy className='pointer' /> ) </h5>
+            <h5>Distribution details ( {anchorPayment} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
       </Col>

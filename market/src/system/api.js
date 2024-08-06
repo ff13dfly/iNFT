@@ -12,18 +12,18 @@ const funs={
         if(param!==undefined){
             for(var k in param) url+=`&${k}=${param[k]}`;
         }
-        const spam=Data.getHash('cache','spam');
+        const spam=Data.getHash("cache","spam");
         if(spam) url+=`&spam=${spam}`;
         console.log(url);
         fetch(url).then((response)=>{
-            if(!response.ok) return ck && ck({error:'Failed to get respons from '+url});
+            if(!response.ok) return ck && ck({error:"Failed to get respons from "+url});
             response.text().then((res)=>{
                 try {
                     const dt=JSON.parse(res);
 
                     //check the spam expired status, reinit system.
                     if(dt.code && dt.code===444){
-                        Data.removeHash('cache','spam');
+                        Data.removeHash("cache","spam");
                         return self.init(()=>{
                             funs.request(mod,act,ck,param);
                         });
@@ -44,23 +44,23 @@ const funs={
 const self={
     init:(ck)=>{
         //1.check spam first;
-        const spam=Data.getHash('cache','spam');
+        const spam=Data.getHash("cache","spam");
         if(spam) return ck && ck(true);
 
         Status.set(site,2);
-        const uuid=Local.get('uuid');
-        const token=Local.get('token');
+        const uuid=Local.get("uuid");
+        const token=Local.get("token");
         if(!uuid || !token){
-            Local.remove('uuid');
-            Local.remove('token');
-            funs.request('system','new',(res)=>{
+            Local.remove("uuid");
+            Local.remove("token");
+            funs.request("system","new",(res)=>{
                 if(!res.uuid || !res.token){
                     Status.set(site,13);
                     return ck && ck({error:"Invalide data"});
                 } 
                 Local.set("uuid",res.uuid);
                 Local.set("token",res.token);
-                funs.request('system','spam',(dt)=>{
+                funs.request("system","spam",(dt)=>{
                     if(!dt.spam){
                         Status.set(site,4);
                         return ck && ck({error:"Invalide data"});
@@ -71,7 +71,7 @@ const self={
                 },{uuid:res.uuid,token:res.token});
             });
         }else{
-            funs.request('system','spam',(res)=>{
+            funs.request("system","spam",(res)=>{
                 if(!res.spam){
                     Status.set(site,4);
                     return ck && ck({error:"Invalide data"});

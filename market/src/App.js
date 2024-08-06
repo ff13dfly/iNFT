@@ -1,8 +1,8 @@
-import { Container,Modal} from 'react-bootstrap';
+import { Container,Modal} from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Header from "./component/common_header";
-import Footer from './component/common_footer';
+import Footer from "./component/common_footer";
 
 import Home from "./entry/home";
 import Template from "./entry/template";
@@ -12,15 +12,15 @@ import Minter from "./entry/minter";
 import Market from "./entry/market";
 import Bounty from "./entry/bounty";
 import Explorer from "./entry/explorer";
-import Setting from './entry/setting';
-import User from './entry/user';
+import Setting from "./entry/setting";
+import User from "./entry/user";
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
-import Detail from './entry/detail';
+import Detail from "./entry/detail";
 
-import INDEXED from './lib/indexed';
+import INDEXED from "./lib/indexed";
 
 function App() {
 

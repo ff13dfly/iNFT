@@ -1,7 +1,7 @@
-import { Row, Col, Image, Badge } from 'react-bootstrap';
+import { Row, Col, Image, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from '../network/router';
+import Network from "../network/router";
 
 import Account from "../system/account";
 import Config from "../system/config";
@@ -84,7 +84,7 @@ function AccountGenerate(props) {
   return (
     <Row>
       <Col md={size.generate[0]} lg={size.generate[0]} xl={size.generate[0]} xxl={size.generate[0]}>
-        <select className='form-control' onChange={(ev) => {
+        <select className="form-control" onChange={(ev) => {
           self.changeNetwork(ev);
         }} value={current}>
           {networks.map((row, index) => (
@@ -93,18 +93,18 @@ function AccountGenerate(props) {
         </select>
       </Col>
       <Col md={size.generate[1]} lg={size.generate[1]} xl={size.generate[1]} xxl={size.generate[1]}>
-        <input className='form-control' type="password" value={password} 
-          placeholder='Password for account'
+        <input className="form-control" type="password" value={password} 
+          placeholder="Password for account"
           onChange={(ev)=>{
             self.changePassword(ev);
           }}/>
       </Col>
-      <Col className='text-end' md={size.generate[2]} lg={size.generate[2]} xl={size.generate[2]} xxl={size.generate[2]}>
-          <button className='btn btn-md btn-primary' onClick={(ev)=>{
+      <Col className="text-end" md={size.generate[2]} lg={size.generate[2]} xl={size.generate[2]} xxl={size.generate[2]}>
+          <button className="btn btn-md btn-primary" onClick={(ev)=>{
             self.clickGenerate(ev);
           }}>Generate</button>
       </Col>
-      <Col className='text-end' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -124,12 +124,12 @@ function AccountGenerate(props) {
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
             <Row>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <Badge className='bg-danger'>Warning</Badge>
-              <span className='ml-5'>These words is used to generate the account.</span> 
+              <Badge className="bg-danger">Warning</Badge>
+              <span className="ml-5">These words is used to generate the account.</span> 
             </Col>
             {words.map((row, index) => (
-               <Col className='text-center pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                  <button className='btn btn-md btn-info' style={{width:"100px"}} key={index}>{row}</button>
+               <Col className="text-center pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                  <button className="btn btn-md btn-info" style={{width:"100px"}} key={index}>{row}</button>
                </Col>
             ))}
             </Row>
@@ -145,8 +145,8 @@ function AccountGenerate(props) {
       <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
           {saveInfo}
       </Col>
-      <Col className='text-end' md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
-        <button disabled={!password || !accountFile.address} className='btn btn-md btn-primary'>Save Account</button>
+      <Col className="text-end" md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
+        <button disabled={!password || !accountFile.address} className="btn btn-md btn-primary">Save Account</button>
       </Col>
     </Row>
   );

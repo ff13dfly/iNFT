@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
 
@@ -100,17 +100,17 @@ function BountyTarget(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}><hr/></Col>
-      <Col className='pt-1' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+      <Col className="pt-1" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         Select the series to bonus.
       </Col>
-      <Col className='text-end pt-1' md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-        <button hidden={!modify} className='btn btn-sm btn-danger' onClick={(ev) => {
+      <Col className="text-end pt-1" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+        <button hidden={!modify} className="btn btn-sm btn-danger" onClick={(ev) => {
           self.clickReset();
         }}>Reset</button>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
 
-        <Row hidden={list.length === 0} className='pt-1'>
+        <Row hidden={list.length === 0} className="pt-1">
           <Col md={size.bonus[0]} lg={size.bonus[0]} xl={size.bonus[0]} xxl={size.bonus[0]} >Series</Col>
           <Col md={size.bonus[1]} lg={size.bonus[1]} xl={size.bonus[1]} xxl={size.bonus[1]} >Bonus</Col>
           <Col md={size.bonus[2]} lg={size.bonus[2]} xl={size.bonus[2]} xxl={size.bonus[2]} >Amount</Col>
@@ -118,22 +118,22 @@ function BountyTarget(props) {
         </Row>
 
         {list.map((row, index) => (
-          <Row key={index} className='pt-1'>
+          <Row key={index} className="pt-1">
             <Col md={size.bonus[0]} lg={size.bonus[0]} xl={size.bonus[0]} xxl={size.bonus[0]} >
-              <img className='template_icon' src={row.thumb} alt={row.name} /> #{row.series} {row.name}
+              <img className="template_icon" src={row.thumb} alt={row.name} /> #{row.series} {row.name}
             </Col>
             <Col md={size.bonus[1]} lg={size.bonus[1]} xl={size.bonus[1]} xxl={size.bonus[1]} >
-              <input disabled={!modify} className='form-control' type="number" value={row.bonus} onChange={(ev) => {
+              <input disabled={!modify} className="form-control" type="number" value={row.bonus} onChange={(ev) => {
                 self.changeBonus(ev,index);
               }} />
             </Col>
             <Col md={size.bonus[2]} lg={size.bonus[2]} xl={size.bonus[2]} xxl={size.bonus[2]} >
-              <input disabled={!modify}  className='form-control' type="number" value={row.amount} onChange={(ev) => {
+              <input disabled={!modify}  className="form-control" type="number" value={row.amount} onChange={(ev) => {
                 self.changeAmount(ev,index);
               }} />
             </Col>
-            <Col className='text-end' md={size.bonus[3]} lg={size.bonus[3]} xl={size.bonus[3]} xxl={size.bonus[3]} >
-              <button hidden={!modify} className='btn btn-sm btn-danger' onClick={(ev) => {
+            <Col className="text-end" md={size.bonus[3]} lg={size.bonus[3]} xl={size.bonus[3]} xxl={size.bonus[3]} >
+              <button hidden={!modify} className="btn btn-sm btn-danger" onClick={(ev) => {
                 self.clickRemove(index);
               }}><FaSkullCrossbones /></button>
             </Col>

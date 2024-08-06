@@ -1,4 +1,4 @@
-import { Container,Row, Col } from 'react-bootstrap';
+import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 function BoardOverall(props) {
@@ -34,17 +34,17 @@ function BoardOverall(props) {
 
   return (
     <Container>
-      <Row className='pb-4'>
-        <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
+      <Row className="pb-4">
+        <Col className="pt-4" md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
           Total: 2.2M
         </Col>
-        <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
+        <Col className="pt-4" md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
           Today: 28K
         </Col>
-        <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
+        <Col className="pt-4" md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
           Today: 28K
         </Col>
-        <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
+        <Col className="pt-4" md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
           Gas: 9.3M
         </Col>
     </Row>

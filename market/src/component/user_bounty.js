@@ -1,16 +1,16 @@
-import { Row, Col, Table } from 'react-bootstrap';
+import { Row, Col, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import BountySubmit from './bounty_submit';
-import BountyProcess from './bounty_process';
+import BountySubmit from "./bounty_submit";
+import BountyProcess from "./bounty_process";
 
 import Config from "../system/config";
 import Bounty from "../system/bounty";
-import API from '../system/api';
-import TPL from '../system/tpl';
+import API from "../system/api";
+import TPL from "../system/tpl";
 
 import tools from "../lib/tools";
-import INDEXED from '../lib/indexed';
+import INDEXED from "../lib/indexed";
 
 import { FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
 
@@ -123,7 +123,7 @@ function UserBounty(props) {
               <tr key={index}>
                 <td>
                   <a href={`http://localhost:3000/playground/${row.template.cid}`} target="_blank" rel="noreferrer">
-                  <img className='template_icon' src={row.thumb} alt="template thumb" />
+                  <img className="template_icon" src={row.thumb} alt="template thumb" />
                   </a>
                 </td>
                 <td>
@@ -138,10 +138,10 @@ function UserBounty(props) {
                   </a>
                 </td>
                 <td>
-                  <span className='pointer text-info' onClick={(ev) => {
+                  <span className="pointer text-info" onClick={(ev) => {
                     self.clickProcess(row.name);
                   }}><FaRoad size={24} /></span>
-                  <span className='pointer ml-5 text-info' onClick={(ev) => {
+                  <span className="pointer ml-5 text-info" onClick={(ev) => {
                     self.clickPay(row.name);
                   }}><FaBitcoin size={24} /></span>
                 </td>
@@ -155,11 +155,11 @@ function UserBounty(props) {
                   {(new Date(row.stamp).toLocaleDateString())}
                 </td>
                 <td>
-                  <span className='pointer' onClick={(ev) => {
+                  <span className="pointer" onClick={(ev) => {
                     self.clickRemove(row.name);
                   }}><FaSkullCrossbones size={20} /></span>
                   
-                  <span className='pointer ml-5' onClick={(ev) => {
+                  <span className="pointer ml-5" onClick={(ev) => {
                     self.clickSync(row.name);
                   }}><FaSyncAlt size={20} /></span>
                 </td>

@@ -1,8 +1,8 @@
-import { Row, Col, Card, Placeholder } from 'react-bootstrap';
+import { Row, Col, Card, Placeholder } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Render from '../lib/render';
-import tools from '../lib/tools';
+import Render from "../lib/render";
+import tools from "../lib/tools";
 import TPL from "../system/tpl";
 import INFT from "../system/inft";
 
@@ -126,33 +126,33 @@ function ListNFTs(props) {
 
   return (
     <Row>
-      <Col className='pt-1' hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-1" hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h4>{info}</h4>
       </Col>
       {list.length!==0 && list.map((row, index) => (     
         <Col key={index} className="pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
-          <Card hidden={!ready} style={{ width: '100%' }}>
-            <a href={`/detail/${row.name}@${row.network}`} target='blank'>
+          <Card hidden={!ready} style={{ width: "100%" }}>
+            <a href={`/detail/${row.name}@${row.network}`} target="blank">
               <Card.Img variant="top" src={self.showThumb(row.bs64)} />
             </a>
             <Card.Body>
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
                 {!row.signer ? "" : tools.shorten(row.signer)}
-                <FaAnchor /><span className='pt-1'>{row.blocknumber}</span>
+                <FaAnchor /><span className="pt-1">{row.blocknumber}</span>
 
               </Card.Text>
             </Card.Body>
           </Card>
 
-          <Card hidden={ready} style={{ width: '100%' }}>
+          <Card hidden={ready} style={{ width: "100%" }}>
             <Card.Img variant="top" src={`${window.location.origin}/imgs/logo.png`} />
             <Card.Body>
               <Placeholder as={Card.Title} animation="glow">
                 <Placeholder xs={6} />
               </Placeholder>
               <Placeholder as={Card.Text} animation="glow">
-                <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
+                <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{" "}
                 <Placeholder xs={6} /> <Placeholder xs={8} />
               </Placeholder>
             </Card.Body>

@@ -1,4 +1,4 @@
-import { Table } from 'react-bootstrap';
+import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaLightbulb, FaSkullCrossbones, FaSync } from "react-icons/fa";

@@ -1,10 +1,10 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from '../network/router';
+import Network from "../network/router";
 
 import tools from "../lib/tools";
-import Config from '../system/config';
+import Config from "../system/config";
 
 function BountyMore(props) {
   const size = {
@@ -102,14 +102,14 @@ function BountyMore(props) {
     <Row>
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>The title of bounty</small>
-        <input type="text" disabled={disable} className='form-control' placeholder='Input the title of bounty'
+        <input type="text" disabled={disable} className="form-control" placeholder="Input the title of bounty"
           value={title} onChange={(ev) => {
             self.changeTitle(ev);
           }} />
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <small>Bonus coin</small>
-        <select className='form-control' disabled={disable} value={coin.toUpperCase()} onChange={(ev) => {
+        <select className="form-control" disabled={disable} value={coin.toUpperCase()} onChange={(ev) => {
           self.changeCoin(ev);
         }}>
           {coins.map((row, index) => (
@@ -118,25 +118,25 @@ function BountyMore(props) {
         </select>
       </Col>
 
-      <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+      <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>Details about the bounty.</small>
-        <textarea className='form-control'disabled={disable}  cols={4} placeholder='The details of the bounty.' value={desc} onChange={(ev) => {
+        <textarea className="form-control"disabled={disable}  cols={4} placeholder="The details of the bounty." value={desc} onChange={(ev) => {
           self.changeDesc(ev);
         }}></textarea>
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>
 
-      <Col className='pt-2' md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+      <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>The account address to accept the bonus iNFT result.</small>
-        <input className='form-control' type="text" disabled={disable} placeholder='The account to accept iNFTs.' />
+        <input className="form-control" type="text" disabled={disable} placeholder="The account to accept iNFTs." />
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>
 
       <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Bounty start at block</small>
-        <input type="number" disabled={disable} className='form-control' placeholder='Start of bounty'
+        <input type="number" disabled={disable} className="form-control" placeholder="Start of bounty"
           value={start} onChange={(ev) => {
             self.changeStart(ev);
           }} />
@@ -144,13 +144,13 @@ function BountyMore(props) {
 
       <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Bounty end at block</small>
-        <input type="number" disabled={disable} className='form-control' placeholder='End of bounty'
+        <input type="number" disabled={disable} className="form-control" placeholder="End of bounty"
           value={end} onChange={(ev) => {
             self.changeEnd(ev);
           }} />
       </Col>
 
-      <Col className='' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         Current block number: {block.toLocaleString()}, {6}s per block.
       </Col>
 

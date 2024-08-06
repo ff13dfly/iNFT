@@ -1,4 +1,4 @@
-import { Row, Col, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Row, Col, ButtonToolbar, ButtonGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* common page component parameters
@@ -80,30 +80,30 @@ function Page(props) {
 
   return (
 
-    <Row hidden={!props.show} className='pt-2'>
+    <Row hidden={!props.show} className="pt-2">
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <ButtonToolbar aria-label="Toolbar with button groups">
           <ButtonGroup className="me-2" aria-label="First group">
-            <button className='btn btn-md btn-default' onClick={(ev) => {
+            <button className="btn btn-md btn-default" onClick={(ev) => {
               self.clickStart(ev);
             }}>{"|<<"}</button>
-            <button className='btn btn-md btn-default' onClick={(ev) => {
+            <button className="btn btn-md btn-default" onClick={(ev) => {
               self.clickPrevious(ev);
             }}>{"<"}</button>
             {list.map((row, index) => (
               <button
                 key={index}
-                className={row.page === current ? 'btn btn-md btn-primary' : 'btn btn-md btn-default'}
+                className={row.page === current ? "btn btn-md btn-primary" : "btn btn-md btn-default"}
                 onClick={(ev) => {
                   props.callback && props.callback(row.page);
                 }}>
                 {row.page}
               </button>
             ))}
-            <button className='btn btn-md btn-default' onClick={(ev) => {
+            <button className="btn btn-md btn-default" onClick={(ev) => {
               self.clickNext(ev);
             }}>{">"}</button>
-            <button className='btn btn-md btn-default' onClick={(ev) => {
+            <button className="btn btn-md btn-default" onClick={(ev) => {
               self.clickEnd(ev);
             }}>{">>|"}</button>
           </ButtonGroup></ButtonToolbar>

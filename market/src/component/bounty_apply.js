@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Network from "../network/router";
@@ -8,7 +8,7 @@ import API from "../system/api";
 import TPL from "../system/tpl";
 import Config from "../system/config";
 
-import PriveiwINFT from './inft_preview';
+import PriveiwINFT from "./inft_preview";
 
 function BountyApply(props) {
   const size = {
@@ -158,17 +158,17 @@ function BountyApply(props) {
   return (
     <Row>
       <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
-        <input className='form-control' type="text" value={search} placeholder='Input the iNFT name' onChange={(ev) => {
+        <input className="form-control" type="text" value={search} placeholder="Input the iNFT name" onChange={(ev) => {
           self.changeSearch(ev);
         }} />
       </Col>
-      <Col className='pt-2' md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
+      <Col className="pt-2" md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
         {info}
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
-          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
             <h5>Your iNFT</h5>
             <PriveiwINFT
               id={"apply_view"}
@@ -180,30 +180,30 @@ function BountyApply(props) {
               hightlight={false}
             />
           </Col>
-          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
             <h5>Bounty wanted</h5>
-            <img src={thumb} className='inft_thumb' alt="" />
+            <img src={thumb} className="inft_thumb" alt="" />
           </Col>
         </Row>
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
-          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
             {tools.shorten(owner, 12)}
           </Col>
-          <Col hidden={false} className='pt-2' md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
 
           </Col>
         </Row>
       </Col>
 
 
-      <Col className='pt-2' md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+      <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         {chainInfo}
       </Col>
-      <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button disabled={disable} className='btn btn-md btn-primary' onClick={(ev) => {
+      <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+        <button disabled={disable} className="btn btn-md btn-primary" onClick={(ev) => {
           self.clickApply(ev);
         }}>Apply</button>
       </Col>

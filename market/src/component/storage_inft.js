@@ -1,14 +1,14 @@
-import { Row, Col, Table } from 'react-bootstrap';
+import { Row, Col, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FaSkullCrossbones, FaSync, FaFileDownload } from "react-icons/fa";
 
 
-import Page from './common_page';
+import Page from "./common_page";
 
 import tools from "../lib/tools";
-import INDEXED from '../lib/indexed';
+import INDEXED from "../lib/indexed";
 
-import Config from '../system/config';
+import Config from "../system/config";
 
 function StorageINFT(props) {
   const size = {
@@ -86,21 +86,21 @@ function StorageINFT(props) {
             {list.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <span className='ml-5'> <img className='template_icon' src={row.thumb} alt="template thumb" /></span>
-                  <span className='ml-5'>{row.name}</span>
+                  <span className="ml-5"> <img className="template_icon" src={row.thumb} alt="template thumb" /></span>
+                  <span className="ml-5">{row.name}</span>
                 </td>
                 <td>{self.getDate(row.stamp)}</td>
                 <td>
-                  <span className='pointer' onClick={(ev) => {
+                  <span className="pointer" onClick={(ev) => {
                     self.clickDownload(row.name);
                   }}><FaFileDownload /></span>
                 </td>
                 <td>
-                  <span className='pointer' onClick={(ev) => {
+                  <span className="pointer" onClick={(ev) => {
                     self.clickRemove(row.name);
                   }}><FaSkullCrossbones /></span>
 
-                  <span className='pointer ml-5' onClick={(ev) => {
+                  <span className="pointer ml-5" onClick={(ev) => {
                     self.clickFresh(row.name);
                   }}><FaSync /></span>
                 </td>

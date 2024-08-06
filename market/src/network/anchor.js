@@ -1,6 +1,6 @@
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+import { web3Accounts, web3Enable, web3FromAddress } from "@polkadot/extension-dapp";
 
 import Config from "../system/config";
 import Status from "../system/status";
@@ -55,7 +55,7 @@ const funs = {
         exs.forEach((ex, index) => {
             console.log(ex)
             // if(index===0){
-            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, '');
+            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, "");
             // }
             // if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
             // const dt = ex.toHuman();
@@ -121,7 +121,7 @@ const self = {
             wsAPI.rpc.state.getMetadata().then((res) => {
                 return ck && ck(res);
             }).catch((error) => {
-                return ck && ck({ error: 'Invalid request' });
+                return ck && ck({ error: "Invalid request" });
             });
         });
     },
@@ -210,8 +210,8 @@ const self = {
     write: (pair, obj, ck) => {
         self.init(() => {
             let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
+            if (typeof raw !== "string") raw = JSON.stringify(raw);
             if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
             const pre = 0;
@@ -260,8 +260,8 @@ const self = {
     sign: async (obj, ck, wallet, param) => {
         self.init(async () => {
             let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
+            if (typeof raw !== "string") raw = JSON.stringify(raw);
             if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
             const pre = 0;
@@ -297,7 +297,7 @@ const self = {
                     if (owner.addresss === (wallet ? address : pair.address)) return ck && ck({ error: "Your own anchor" });
                     if (dt[0] !== dt[2] && dt[2] !== (wallet ? address : pair.address)) return ck && ck({ error: "Your can not buy this one" });
                     self.balance((wallet ? address : pair.address), (bc) => {
-                        if (bc.free < cost) return ck && ck({ error: 'Low balance' });
+                        if (bc.free < cost) return ck && ck({ error: "Low balance" });
                         try {
                             if (wallet) {
                                 console.log(address,pair);

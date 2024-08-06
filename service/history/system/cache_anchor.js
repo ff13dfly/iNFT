@@ -31,6 +31,11 @@ const self={
     },
 }
 
+/*  Saving the anchor data to Redis
+*   @param  {object}		map	        //{set:[],sell:[],buy:[],revoke:[],divert:[],drop:[]}
+*   @param  {boolean}       [left]      //direction to push data
+*   @param  {function}      ck          //callback function
+*/
 module.exports =(map,left,ck)=>{
     output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,'primary',true);
     const keys=config.keys;
@@ -161,6 +166,14 @@ module.exports =(map,left,ck)=>{
 
                 //1.3. push to block queue;
             }
+        }
+
+        if(data.divert!==null){
+
+        }
+
+        if(data.drop!==null){
+
         }
     }
 

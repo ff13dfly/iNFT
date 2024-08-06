@@ -93,7 +93,7 @@ const INDEXED = {
 
   searchRows: (db, table, key, val, ck) => {
     //console.log(`Table: ${table}, key: ${key}, value: ${val}`);
-    if (typeof table !== 'string') return ck && ck({ error: "wrong table." });
+    if (typeof table !== "string") return ck && ck({ error: "wrong table." });
     const list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
     const request = store.index(key).openCursor(IDBKeyRange.only(val));
@@ -114,7 +114,7 @@ const INDEXED = {
   },
 
   removeRow: (db, table, key, val, ck) => {
-    if (typeof table !== 'string') return ck && ck({ error: "wrong table." });
+    if (typeof table !== "string") return ck && ck({ error: "wrong table." });
 
     const store = db.transaction(table, "readwrite").objectStore(table);
     const request = store.index(key).openCursor(IDBKeyRange.only(val));

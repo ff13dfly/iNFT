@@ -1,7 +1,7 @@
-import { Row, Col, Form } from 'react-bootstrap';
+import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react"
 
-import ProxyMarket from './proxy_market';
+import ProxyMarket from "./proxy_market";
 
 function SettingProxy(props) {
   const size = {

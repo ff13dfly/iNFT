@@ -129,12 +129,12 @@ function OperationINFT(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col md={size.detail[0]} lg={size.detail[0]} xl={size.detail[0]} xxl={size.detail[0]}>
-            <img className='inft_thumb' src={props.data.bs64} alt="thumb of iNFT" />
+            <img className="inft_thumb" src={props.data.bs64} alt="thumb of iNFT" />
           </Col>
           <Col md={size.detail[1]} lg={size.detail[1]} xl={size.detail[1]} xxl={size.detail[1]}>
             More details.
           </Col>
-          <Col className='text-end' md={size.detail[2]} lg={size.detail[2]} xl={size.detail[2]} xxl={size.detail[2]}>
+          <Col className="text-end" md={size.detail[2]} lg={size.detail[2]} xl={size.detail[2]} xxl={size.detail[2]}>
             <button className="btn btn-md btn-default" onClick={(ev)=>{
               self.clickFav(ev);
             }}>
@@ -145,21 +145,21 @@ function OperationINFT(props) {
         </Row>
       </Col>
 
-      <Col className='pt-2' hidden={!enable.sell} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" hidden={!enable.sell} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col md={size.sell[0]} lg={size.sell[0]} xl={size.sell[0]} xxl={size.sell[0]}>
-            <input className='form-control' type="number" value={price} placeholder='Set the price to sell' onChange={(ev)=>{
+            <input className="form-control" type="number" value={price} placeholder="Set the price to sell" onChange={(ev)=>{
               self.changePrice(ev);
             }}/>
           </Col>
           <Col md={size.sell[1]} lg={size.sell[1]} xl={size.sell[1]} xxl={size.sell[1]}>
-            <input className='form-control' type="password" value={password} placeholder='Password of account' onChange={(ev)=>{
+            <input className="form-control" type="password" value={password} placeholder="Password of account" onChange={(ev)=>{
               self.changePassword(ev);
             }}/>
           </Col>
-          <Col className='text-end' md={size.sell[2]} lg={size.sell[2]} xl={size.sell[2]} xxl={size.sell[2]}>
+          <Col className="text-end" md={size.sell[2]} lg={size.sell[2]} xl={size.sell[2]} xxl={size.sell[2]}>
             
-            <button className='btn btn-md btn-primary' onClick={(ev)=>{
+            <button className="btn btn-md btn-primary" onClick={(ev)=>{
               self.clickSell(ev);
             }}>Sell</button>
           </Col>
@@ -171,20 +171,20 @@ function OperationINFT(props) {
           <Col md={size.revoke[0]} lg={size.revoke[0]} xl={size.revoke[0]} xxl={size.revoke[0]}>
           
           </Col>
-          <Col className='text-end' md={size.revoke[1]} lg={size.revoke[1]} xl={size.revoke[1]} xxl={size.revoke[1]}>
-            <input className='form-control' type="password" value={password} placeholder='Password of account' onChange={(ev)=>{
+          <Col className="text-end" md={size.revoke[1]} lg={size.revoke[1]} xl={size.revoke[1]} xxl={size.revoke[1]}>
+            <input className="form-control" type="password" value={password} placeholder="Password of account" onChange={(ev)=>{
               self.changePassword(ev);
             }}/>
           </Col>
-          <Col className='text-end' md={size.revoke[2]} lg={size.revoke[2]} xl={size.revoke[2]} xxl={size.revoke[2]}>
-            <button className='btn btn-md btn-primary'onClick={(ev)=>{
+          <Col className="text-end" md={size.revoke[2]} lg={size.revoke[2]} xl={size.revoke[2]} xxl={size.revoke[2]}>
+            <button className="btn btn-md btn-primary"onClick={(ev)=>{
               self.clickRevoke(ev);
             }}>Revoke</button>
           </Col>
         </Row>
       </Col>
 
-      <Col className='text-end'  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="text-end"  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
       </Col>
     </Row>

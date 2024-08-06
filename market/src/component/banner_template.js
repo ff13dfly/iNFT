@@ -1,4 +1,4 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from "react-bootstrap";
 
 function BannerTemplate(props) {
   const size = {
@@ -6,15 +6,15 @@ function BannerTemplate(props) {
   };
   const cmap = {
     //background: `url("${subject.background}") no-repeat center center`,
-    'backgroundSize': 'cover',
-    'minHeight': '300px',
+    "backgroundSize": "cover",
+    "minHeight": "300px",
   };
 
   return (
     <div expand="lg" className="bg-body-tertiary pt-4 pb-4" id="banner_selling" style={cmap}>
       <Container>
-        <Row className='pt-4'>
-          <Col className='pt-4' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Row className="pt-4">
+          <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Introduction about iNFT template, how to combine the iNFT result.
           </Col>
         </Row>

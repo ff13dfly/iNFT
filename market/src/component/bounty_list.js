@@ -1,7 +1,7 @@
-import { Row, Col, Card, Placeholder } from 'react-bootstrap';
+import { Row, Col, Card, Placeholder } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import BountyShow from './bounty_show';
+import BountyShow from "./bounty_show";
 
 import API from "../system/api";
 import TPL from "../system/tpl";
@@ -98,14 +98,14 @@ function BountyList(props) {
       <Col hidden={ready} className="justify-content-around pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row>
           <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-            <Card style={{ width: '100%' }}>
+            <Card style={{ width: "100%" }}>
               <Card.Img variant="top" src="" />
               <Card.Body>
                 <Placeholder as={Card.Title} animation="glow">
                   <Placeholder xs={6} />
                 </Placeholder>
                 <Placeholder as={Card.Text} animation="glow">
-                  <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
+                  <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{" "}
                   <Placeholder xs={6} /> <Placeholder xs={8} />
                 </Placeholder>
               </Card.Body>

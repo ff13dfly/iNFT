@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaHome,FaUserFriends,FaCat,FaBitcoin } from "react-icons/fa";
@@ -12,31 +12,31 @@ function UserSidebar(props) {
 
   const self={
     getColor:(mod)=>{
-      return props.active===mod?'#FFFFFF':'#666666'
+      return props.active===mod?"#FFFFFF":"#666666"
     },
   }
 
   const menu = [
     {
       name: "basic",
-      icon: <FaHome size={20}  className='mr-5' color={self.getColor("basic")}/>,
+      icon: <FaHome size={20}  className="mr-5" color={self.getColor("basic")}/>,
       title: "Basic",
       desc:"",
     },
     {
       name: "inft",
-      icon: <FaCat size={20}  className='mr-5' color={self.getColor("inft")}/>,
+      icon: <FaCat size={20}  className="mr-5" color={self.getColor("inft")}/>,
       title: "My iNFTs",
     },
     {
       name: "bounty",
-      icon: <FaBitcoin size={20}  className='mr-5' color={self.getColor("bounty")}/>,
+      icon: <FaBitcoin size={20}  className="mr-5" color={self.getColor("bounty")}/>,
       title: "My Bounty",
       desc:"Manage your bounty",
     },
     {
       name: "account",
-      icon: <FaUserFriends size={20}  className='mr-5' color={self.getColor("account")}/>,
+      icon: <FaUserFriends size={20}  className="mr-5" color={self.getColor("account")}/>,
       title: "Accounts",
       desc:"Manage your accounts",
     },
@@ -47,13 +47,13 @@ function UserSidebar(props) {
   }, [props.active]);
 
   return (
-    <Row className='pt-4'>
-      <Col className='pb-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+    <Row className="pt-4">
+      <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         User Setting
       </Col>
       {list.map((row, index) => (
         <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          <button className={`sidebar text-start btn btn-md ${(props.active!==row.name?'btn-default':'btn-info')}`} onClick={(ev) => {
+          <button className={`sidebar text-start btn btn-md ${(props.active!==row.name?"btn-default":"btn-info")}`} onClick={(ev) => {
             props.link("user", [row.name]);
           }}><p>{row.icon}</p>  <h5>{row.title}</h5></button>
         </Col>

@@ -1,4 +1,4 @@
-import { Container,Row, Col } from 'react-bootstrap';
+import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 function SectionSelling(props) {
@@ -90,19 +90,19 @@ function SectionSelling(props) {
 }, [  ]);
 
   return (
-    <Container className='pb-4'>
+    <Container className="pb-4">
       <Row>
-        <Col className='pt-4' md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
+        <Col className="pt-4" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
           <h4>On selling list</h4>
         </Col>
-        <Col className='pt-4' md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}></Col>
-        <Col className='pt-4 text-end' md={size.title[2]} lg={size.title[2]} xl={size.title[2]} xxl={size.title[2]}>
+        <Col className="pt-4" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}></Col>
+        <Col className="pt-4 text-end" md={size.title[2]} lg={size.title[2]} xl={size.title[2]} xxl={size.title[2]}>
           <a href="market">More...</a>
         </Col>
         {list.map((row, index) => (
-          <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+          <Col key={index} className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
               <a href={`detail/${row.anchor}`}>
-                <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+                <img className="inft_thumb" src={row.thumb} alt={row.alt} />
               </a>
               {row.block}, price: {row.price} $INFT       
           </Col>

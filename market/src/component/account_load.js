@@ -1,7 +1,7 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from '../network/router';
+import Network from "../network/router";
 import Account from "../system/account";
 import tools from "../lib/tools";
 
@@ -76,24 +76,24 @@ function AccountLoad(props) {
     <Row>
       <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Select the encried account json file.</small>
-        <input className='form-control' type="file" onChange={(ev)=>{
+        <input className="form-control" type="file" onChange={(ev)=>{
           self.changeFile(ev);
         }} />
       </Col>
       <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Password of the account file.</small>
-        <input className='form-control' type="password" onChange={(ev)=>{
+        <input className="form-control" type="password" onChange={(ev)=>{
           self.changePassword(ev);
         }} />
       </Col>
-      <Col hidden={!file} className='pt-4' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <textarea className='form-control' disabled  cols={30} value={file}></textarea>
+      <Col hidden={!file} className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <textarea className="form-control" disabled  cols={30} value={file}></textarea>
       </Col>
-      <Col className='pt-4' md={size.footer[0]} lg={size.footer[0]} xl={size.footer[0]} xxl={size.footer[0]}>
+      <Col className="pt-4" md={size.footer[0]} lg={size.footer[0]} xl={size.footer[0]} xxl={size.footer[0]}>
         {info}
       </Col>
-      <Col className='pt-4 text-end' md={size.footer[1]} lg={size.footer[1]} xl={size.footer[1]} xxl={size.footer[1]}>
-        <button className='btn btn-md btn-primary' onClick={(ev)=>{
+      <Col className="pt-4 text-end" md={size.footer[1]} lg={size.footer[1]} xl={size.footer[1]} xxl={size.footer[1]}>
+        <button className="btn btn-md btn-primary" onClick={(ev)=>{
           self.clickLoad();
         }}>Load</button>
       </Col>

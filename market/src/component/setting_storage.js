@@ -55,24 +55,24 @@ function SettingStorage(props) {
       <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
         Template List
       </Col>
-      <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
-        <button className='btn btn-sm btn-danger' onClick={(ev)=>{
+      <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
+        <button className="btn btn-sm btn-danger" onClick={(ev)=>{
           self.clickCleanTemplate();
         }}>Clean Template Cache</button>
       </Col>
-      <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <StorageTemplat update={update}/>
       </Col>
 
-      <Col className='pt-4' md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
+      <Col className="pt-4" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
         iNFT Cache List
       </Col>
-      <Col className='pt-4 text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
-        <button className='btn btn-sm btn-danger' onClick={(ev)=>{
+      <Col className="pt-4 text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
+        <button className="btn btn-sm btn-danger" onClick={(ev)=>{
           self.clickCleanINFT();
         }}>Clean All iNFT Cache</button>
       </Col>
-      <Col className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <StorageINFT update={update}/>
       </Col>
     </Row>

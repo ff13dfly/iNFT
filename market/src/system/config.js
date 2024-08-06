@@ -337,7 +337,7 @@ const funs={
     getSettingKey:(addr,pass)=>{
         if(!addr && !pass) return `${config.system.prefix}_${config.system.key}`;
         if(addr && !pass) return `${config.system.prefix}_${Encry.sha256(addr)}`;
-        if(addr && pass) return config.system.prefix+'_'+Encry.sha256(`${addr}${pass}`);
+        if(addr && pass) return config.system.prefix+"_"+Encry.sha256(`${addr}${pass}`);
         return `${config.system.prefix}_${config.system.key}`;
     },
     decodeData:(raw,addr,pass)=>{

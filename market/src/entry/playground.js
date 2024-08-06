@@ -148,7 +148,7 @@ function Playground(props) {
         <div>
             <Row className="pt-2">
                 <Col md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]} >
-                    <select name="" className='form-control'
+                    <select name="" className="form-control"
                         value={network}
                         disabled={!enable.selector}
                         onChange={(ev) => {
@@ -161,7 +161,7 @@ function Playground(props) {
                 </Col>
                 <Col md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]} >
                     <small></small>
-                    <input className='form-control' type="text" placeholder='The template to load'
+                    <input className="form-control" type="text" placeholder="The template to load"
                         disabled={!enable.search}
                         value={search} onChange={(ev) => {
                             self.changeSearch(ev);
@@ -169,7 +169,7 @@ function Playground(props) {
                     />
                 </Col>
                 <Col md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]} >
-                    <button className='btn btn-md btn-primary'
+                    <button className="btn btn-md btn-primary"
                         disabled={!enable.button}
                         onClick={(ev) => {
                             self.clickLoad(ev);
@@ -200,7 +200,7 @@ function Playground(props) {
                             <h5>iNFT Series ( {series.length} )</h5>
                         </Col>
                         <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
                                 self.switchSeries(ev);
                             }}>{!hideSeries ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
@@ -218,7 +218,7 @@ function Playground(props) {
                             <h5>Orginal Image ( {full.length.toLocaleString()} Bytes )</h5>
                         </Col>
                         <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
                                 self.switchImage(ev);
                             }}>{!hideImage ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
@@ -233,7 +233,7 @@ function Playground(props) {
                             <h5>Mock Data</h5>
                         </Col>
                         <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
                                 self.switchMock(ev);
                             }}>{!hideMock ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
@@ -271,7 +271,7 @@ function Playground(props) {
                             <h5>iNFT Parts ( {parts.length} )</h5>
                         </Col>
                         <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
-                            <button className='btn btn-sm btn-light' onClick={(ev) => {
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
                                 self.switchParts(ev);
                             }}>{!hideParts ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>

@@ -1,11 +1,11 @@
-import { Row, Col, Table, Form } from 'react-bootstrap';
+import { Row, Col, Table, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaLightbulb, FaSkullCrossbones, FaSync } from "react-icons/fa";
 
-import tools from '../lib/tools';
-import Config from '../system/config';
-import Status from '../system/status';
+import tools from "../lib/tools";
+import Config from "../system/config";
+import Status from "../system/status";
 
 function NetworkList(props) {
   const size = {
@@ -104,7 +104,7 @@ function NetworkList(props) {
                 {row.nodes && row.nodes.map((uri, k) => (
                   <Col key={k} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                     <span><FaLightbulb color={self.getColor(status[uri])} /></span>
-                    <span className='ml-5'>{uri}</span>
+                    <span className="ml-5">{uri}</span>
                   </Col>
                 ))}
               </Row>
@@ -125,8 +125,8 @@ function NetworkList(props) {
               </Form>
             </td>
             <td>
-              <span className='pointer'><FaSkullCrossbones /></span>
-              <span className='pointer ml-5'><FaSync /></span>
+              <span className="pointer"><FaSkullCrossbones /></span>
+              <span className="pointer ml-5"><FaSync /></span>
             </td>
           </tr>
         ))}

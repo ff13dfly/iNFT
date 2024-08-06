@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 function BountyTemplate(props) {
@@ -27,7 +27,7 @@ function BountyTemplate(props) {
   }, [props.data]);
 
   return (
-    <Row className='pt-2'>
+    <Row className="pt-2">
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
@@ -35,10 +35,10 @@ function BountyTemplate(props) {
         Template Details: {self.getParts()} parts.
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        <Row className=''>
+        <Row className="">
           {series.map((row, index) => (
             <Col key={index} md={size.single[0]} lg={size.single[0]} xl={size.single[0]} xxl={size.single[0]}>
-              <img className='series_thumb' src={row.thumb[0]} alt={row.name} />
+              <img className="series_thumb" src={row.thumb[0]} alt={row.name} />
               {row.name}
             </Col>
           ))}

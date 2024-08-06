@@ -199,14 +199,14 @@ const Render= {
         let con = document.getElementById(container_id);
         if(con!==null) con.remove();
         
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.id = container_id;
         div.style.display="none";
         document.body.appendChild(div);
         con = document.getElementById(container_id);
 
         let cvs=document.getElementById(canvas_id);
-        cvs = document.createElement('canvas');
+        cvs = document.createElement("canvas");
         con.appendChild(cvs);
 
         cvs.id = canvas_id;

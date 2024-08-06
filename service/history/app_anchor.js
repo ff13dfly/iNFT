@@ -3,7 +3,7 @@ const tools = require('./lib/tools.js');
 const { output } = require('./lib/output.js');
 const AnchorJS = require('./network/anchor.full.js');
 const { REDIS } = require('./lib/redis.js');
-const saving=require('./system/cache_anchor');
+const Saving=require('./system/cache_anchor');
 
 //13598
 //Redis data sample: Entry data
@@ -134,7 +134,7 @@ const self = {
         self.read(arr,(map)=>{
             const left=true;
             if(!tools.empty(map)){
-                saving(map,left,()=>{
+                Saving(map,left,()=>{
                     status.done_left=status.done_left-len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);
@@ -167,7 +167,7 @@ const self = {
         self.read(arr,(map)=>{
             const left=false;
             if(!tools.empty(map)){
-                saving(map,left,()=>{
+                Saving(map,left,()=>{
                     status.done_right=status.done_right+len;
                     REDIS.setKey(config.keys.status, JSON.stringify(status), (res,err) => {
                         if(err!==undefined) return output(`Failed to save data on Redis. Please check the system`,'error',true);

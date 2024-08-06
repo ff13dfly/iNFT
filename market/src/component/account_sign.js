@@ -1,8 +1,8 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 
 import { useEffect, useState } from "react";
 
-import AccountSelector from './account_selector';
+import AccountSelector from "./account_selector";
 
 import Network from "../network/router";
 import Account from "../system/account";
@@ -89,33 +89,33 @@ function AccountSign(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
-      <Col className='pt-1' md={size.buy[0]} lg={size.buy[0]} xl={size.buy[0]} xxl={size.buy[0]}>
-        <button className={wallet ? 'btn btn-sm btn-default' : 'btn btn-sm btn-primary'} onClick={(ev) => {
+      <Col className="pt-1" md={size.buy[0]} lg={size.buy[0]} xl={size.buy[0]} xxl={size.buy[0]}>
+        <button className={wallet ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
           self.clickWallet(ev)
         }}><FaCheck /></button>
       </Col>
-      <Col hidden={wallet} className='' md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
+      <Col hidden={wallet} className="" md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
         <AccountSelector network={"anchor"} callback={(addr) => {
           self.changeAccount(addr);
         }} />
         <small>Balance: {balance}</small>
       </Col>
-      <Col hidden={!wallet} className='pt-2' md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
+      <Col hidden={!wallet} className="pt-2" md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
         Check to select accounts to buy.
       </Col>
       <Col hidden={wallet} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
-        <input type="password" className='form-control' placeholder='password for account' value={password} onChange={(ev)=>{
+        <input type="password" className="form-control" placeholder="password for account" value={password} onChange={(ev)=>{
           self.changePassword(ev);
         }}/>
       </Col>
       <Col hidden={!wallet} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
       </Col>
-      <Col className='text-end' md={size.buy[3]} lg={size.buy[3]} xl={size.buy[3]} xxl={size.buy[3]}>
-        <button className='btn btn-md btn-primary' onClick={(ev)=>{
+      <Col className="text-end" md={size.buy[3]} lg={size.buy[3]} xl={size.buy[3]} xxl={size.buy[3]}>
+        <button className="btn btn-md btn-primary" onClick={(ev)=>{
           self.clickSign();
         }}>{props.title}</button>
       </Col>
-      <Col className='text-end text-danger' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="text-end text-danger" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
       </Col>
     </Row>

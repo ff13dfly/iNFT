@@ -91,8 +91,8 @@ function SearchMarket(props) {
 
   return (
     <Row>
-      <Col className='pt-1' md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]}>
-        <select name="" className='form-control'
+      <Col className="pt-1" md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]}>
+        <select name="" className="form-control"
           value={network}
           disabled={!enable.selector}
           onChange={(ev) => {
@@ -103,16 +103,16 @@ function SearchMarket(props) {
           ))}
         </select>
       </Col>
-      <Col className='pt-1' md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]}>
-        <input className='form-control' type="text" placeholder='iNFT name / block number / account ...'
+      <Col className="pt-1" md={size.search[1]} lg={size.search[1]} xl={size.search[1]} xxl={size.search[1]}>
+        <input className="form-control" type="text" placeholder="iNFT name / block number / account ..."
           disabled={!enable.search}
           value={search} onChange={(ev) => {
             self.changeSearch(ev);
           }}
         />
       </Col>
-      <Col className='pt-1 text-end' md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]}>
-        <button className='btn btn-md btn-primary'
+      <Col className="pt-1 text-end" md={size.search[2]} lg={size.search[2]} xl={size.search[2]} xxl={size.search[2]}>
+        <button className="btn btn-md btn-primary"
           disabled={!enable.button}
           onClick={(ev) => {
             self.clickSearch(ev);

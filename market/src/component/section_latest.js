@@ -1,4 +1,4 @@
-import { Container,Row, Col } from 'react-bootstrap';
+import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 function SectionLatest(props) {
@@ -73,13 +73,13 @@ function SectionLatest(props) {
   return (
     <Container>
       <Row>
-        <Col className='pt-4' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <h4>Latest iNFT Mint Result</h4>
         </Col>
         {list.map((row, index) => (
-          <Col key={index} className='pt-2' md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]} >
+          <Col key={index} className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]} >
             <a href={`view/${row.anchor}`}>
-              <img className='inft_thumb' src={row.thumb} alt={row.alt} />
+              <img className="inft_thumb" src={row.thumb} alt={row.alt} />
             </a>
             {row.block}, price: {row.price} $INFT
           </Col>

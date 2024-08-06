@@ -1,11 +1,11 @@
-import { Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
-import Network from '../network/router';
+import Network from "../network/router";
 
 import Config from "../system/config";
-import RUNTIME from '../system/runtime';
+import RUNTIME from "../system/runtime";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
@@ -89,7 +89,7 @@ function UserBasic(props) {
 
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-            <button className='btn btn-sm btn-primary' onClick={(ev) => {
+            <button className="btn btn-sm btn-primary" onClick={(ev) => {
               self.clickCharge(ev);
             }}>Charge</button>
           </Col>
@@ -110,7 +110,7 @@ function UserBasic(props) {
           width="100%"
           style={{ minHeight: "80px" }}
         />
-        <h6 className='pointer pt-4' onClick={(ev)=>{
+        <h6 className="pointer pt-4" onClick={(ev)=>{
           self.clickAddress(address);
           self.callRecover("address");
         }}>{tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" :`ml-5 ${recover.address}`} /></h6>
@@ -123,10 +123,10 @@ function UserBasic(props) {
 
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         Checking local setting files.
-        <input className='form-control' type="password" placeholder='Password to access local data.' />
+        <input className="form-control" type="password" placeholder="Password to access local data." />
       </Col>
-      <Col className='text-end' md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button className='btn btn-md btn-danger' disabled={self.isAddressSetting()}>
+      <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+        <button className="btn btn-md btn-danger" disabled={self.isAddressSetting()}>
           Clean Account Setting
         </button>
       </Col>

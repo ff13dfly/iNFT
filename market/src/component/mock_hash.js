@@ -1,4 +1,4 @@
-import {  Row, Col } from 'react-bootstrap';
+import {  Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaCode, FaBuromobelexperte } from "react-icons/fa";
@@ -84,28 +84,28 @@ function MockHash(props) {
 
   return (
     <Row>
-      <Col className='' md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
+      <Col className="" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
         <h5>Hash</h5>
       </Col>
-      <Col className='text-end' md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
-        <button className='btn btn-sm btn-secondary' onClick={(ev) => {
+      <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
+        <button className="btn btn-sm btn-secondary" onClick={(ev) => {
           self.switchCode(ev);
         }}>
         {!code ? <FaBuromobelexperte /> : <FaCode />}
         </button>
       </Col>
-      <Col hidden={!code} className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <textarea className='form-control' rows="2" disabled value={hash}></textarea>
+      <Col hidden={!code} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <textarea className="form-control" rows="2" disabled value={hash}></textarea>
       </Col>
-      <Col hidden={code} className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col hidden={code} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row style={{paddingLeft:"0px"}}>
           {list.length !== 0 && list.map((row, index) => (
             <Col key={index} md={size.block[0]} lg={size.block[0]} xl={size.block[0]} xxl={size.block[0]}>
               <Row>
               {row.length !== 0 && row.map((single, key) => (
-                <Col className='pt-1 text-center' key={key} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                <Col className="pt-1 text-center" key={key} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                   <button 
-                    className={(props.active && props.active.includes(index*row.length+key))?'btn btn-sm btn-warning':'btn btn-sm btn-secondary'} 
+                    className={(props.active && props.active.includes(index*row.length+key))?"btn btn-sm btn-warning":"btn btn-sm btn-secondary"} 
                     onClick={()=>{
                       self.clickSingle(index*row.length+key,row[key])
                     }}>{row[key]}</button>
