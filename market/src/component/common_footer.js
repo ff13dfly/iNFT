@@ -17,7 +17,7 @@ function Footer(props) {
     <Container>
       <Row className='pb-4'>
         <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
-          <h5>iNFT Portal ( 2024 )</h5>
+          <h5>iNFT Market ( 2024 )</h5>
         </Col>
         <Col className='pt-4' md={size.board[0]} lg={size.board[0]} xl={size.board[0]} xxl={size.board[0]}>
 

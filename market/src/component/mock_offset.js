@@ -16,6 +16,7 @@ function MockOffset(props) {
     head: [8, 4],
     offset: [1, 9, 2],
     formulate:[1,3,1,1,1,1,1,1,1,1],
+    help:[2,10],
   };
 
   let [code, setCode] = useState(false);       //show code mode
@@ -92,7 +93,14 @@ function MockOffset(props) {
         <textarea className='form-control' rows="1" disabled value={JSON.stringify(offset)}></textarea>
       </Col>
       <Col hidden={code} className='pt-2' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-
+        <Row>
+            <Col className='pt-2' md={size.help[0]} lg={size.help[0]} xl={size.help[0]} xxl={size.help[0]}>
+              Formulate
+            </Col>
+            <Col className='pt-2' md={size.help[1]} lg={size.help[1]} xl={size.help[1]} xxl={size.help[1]}>
+              Value = ( BLOCK_VALUE + TEMPLATE_OFFSSET + INFT_OFFSET ) % PART_DIVIDE
+            </Col>
+        </Row>
         {list.length !== 0 && list.map((row, index) => (
           <Row key={index}>
             <Col className='pt-2' md={size.offset[0]} lg={size.offset[0]} xl={size.offset[0]} xxl={size.offset[0]}>

@@ -215,7 +215,7 @@ function Playground(props) {
                     </Row>
                     <Row>
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                            <h5>Orginal Image ( {full.length.toLocaleString()} )</h5>
+                            <h5>Orginal Image ( {full.length.toLocaleString()} Bytes )</h5>
                         </Col>
                         <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
                             <button className='btn btn-sm btn-light' onClick={(ev) => {
@@ -247,13 +247,19 @@ function Playground(props) {
                                 }
                             }} />
                         </Col>
+                        <Col hidden={hideMock} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <small>This is the mock iNFT user offset.</small>
+                        </Col>
                         <Col className="pt-2" hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                             <MockHash hash={hash} active={active} callback={(nhash, act) => {
                                 if (nhash) setHash(nhash);
                                 if (act !== undefined) setSelected(act);
                             }} />
                         </Col>
-
+                        <Col hidden={hideMock} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <small>This hash mock block hash to render iNFT.
+                                The hightlight chars is the value of iNFT part.</small>
+                        </Col>
                     </Row>
                     <Row>
                         <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >

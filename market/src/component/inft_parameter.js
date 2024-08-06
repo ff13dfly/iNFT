@@ -1,6 +1,12 @@
 import { Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from "react";
 
+import TemplateValue from './template_value';
+import TemplateImage from './template_image';
+import TemplateCenter from './template_center';
+import TemplatePosition from './template_position';
+import TemplateRotation from './template_rotation';
+
 import { FaCode, FaAlignJustify } from "react-icons/fa";
 
 function ParameterINFT(props) {
@@ -38,24 +44,12 @@ function ParameterINFT(props) {
         <textarea className='form-control' value={JSON.stringify(props.data)} disabled></textarea>
       </Col>
 
-      <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Row hidden={code}>
-          <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            Value:{!props.data.value ? "" : JSON.stringify(props.data.value)}
-          </Col>
-          <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            Image:{!props.data.img ? "" : JSON.stringify(props.data.img)}
-          </Col>
-          <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            Center:{!props.data.center ? "" : JSON.stringify(props.data.center)}
-          </Col>
-          <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            Position:{!props.data.position ? "" : JSON.stringify(props.data.position)}
-          </Col>
-          <Col className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            Rotation:{!props.data.rotation ? "" : JSON.stringify(props.data.rotation)}
-          </Col>
-        </Row>
+      <Col hidden={code} className='pt-1' md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <TemplateValue data={props.data.value}/>
+        <TemplateImage data={props.data.img}/>
+        <TemplateCenter data={props.data.center}/>
+        <TemplatePosition data={props.data.position}/>
+        <TemplateRotation data={props.data.rotation}/>
       </Col>
     </Row>
   );
