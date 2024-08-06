@@ -261,7 +261,7 @@ const INDEXED = {
   *
   */
   pageRows: (db, table, ck, nav, search) => {
-    console.log(table,nav);
+    //console.log(table,nav);
     let list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
 
@@ -295,6 +295,8 @@ const INDEXED = {
           }else{
             return ck && ck(list);
           }
+        }else{
+          return ck && ck(list);
         }
 
       } else {
@@ -333,6 +335,9 @@ const INDEXED = {
       return ck && ck(true);
     };
   },
+  autoTest:()=>{
+    test.page();
+  },
 };
 
 const test = {
@@ -354,6 +359,18 @@ const test = {
       // 	{ table: "address_"+tools.rand(1,100), keyPath: "address", map: { stamp: { unique: false },status: { unique: false } } },
       // ],db.version+1)
     });
+  },
+
+  //page of table test
+  page:()=>{
+    const dbName = "inftDB";
+    const table=  "ifav";
+    const nav={page:2,step:3}
+    INDEXED.checkDB(dbName, (db) => {
+      INDEXED.pageRows(db,table,(list)=>{
+        console.log(list);
+      },nav);
+    })
   },
 }
 

@@ -48,9 +48,9 @@
 
 - Functions.
 
-- [*] New bounty submission.
-- [*] Bounty list via API.
-- [*] Bounty result apply.
+- [x] New bounty submission.
+- [x] Bounty list via API.
+- [x] Bounty result apply.
 - [ ] Bounty details review.
 
 ### Playground
@@ -61,7 +61,7 @@
 
 - Functions
 
-- [*] Load template from web3.storage
+- [x] Load template from web3.storage
 - [ ] Template hash mocker
 - [ ] Template parts detail
 - [ ] Template series detail
@@ -99,7 +99,7 @@
 - [ ] Bounty management.
 - [ ] Template management.
 - [ ] iNFT list management.
-- [*] iNFT fav management.
+- [x] iNFT fav management.
 
 #### Faucet Server
 
@@ -162,8 +162,8 @@
 
 - Demo: [https://inft.w3os.net/minter](https://inft.w3os.net/minter)
 
-- [ ] New UI of mint
-- [ ] Minting board
+- [x] New UI of mint
+- [x] Minting board
 - [ ] Template preview
 - [ ] iNFT management
 - [ ] Multi chain support
@@ -195,6 +195,9 @@
 - [ ] Register of template.
 - [ ] Template remove.
 - [ ] Mint from template.
+- [ ] Anchor divert.
+- [ ] Anchro drop.
+- [ ] Update to latest version of Polkadot SDK ( Substrate ).
 
 ## Resource
 
