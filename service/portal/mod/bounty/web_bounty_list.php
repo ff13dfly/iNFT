@@ -19,7 +19,8 @@ if($page>=$param['total'] && $param['total']!=0){
 $arr=$a->bountyList($page,$warr);
 
 foreach($arr as $k=>$v){
-    //$arr[$k]["detail"]=json_decode($v['detail']);
+    $arr[$k]["apply"]=json_decode(htmlspecialchars_decode($v["apply"]),true);
+	$arr[$k]["detail"]=json_decode(htmlspecialchars_decode($v["detail"]),true);
 }
 
 //echo json_encode($arr);

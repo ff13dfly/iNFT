@@ -37,7 +37,5 @@ foreach($bounty["apply"] as $k=>$v){
 }
 $_F['paying']=$arr;
 
-echo json_encode($_F['paying']);
-
 $a=Config::getInstance();
 $a->tpl($_F['request']['mod'],$_F['request']['act'],$_F['pre'],$_F);

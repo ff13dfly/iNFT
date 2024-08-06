@@ -24,12 +24,12 @@
 		<div class="row">
 			<div class="col-lg-12" style="margin-bottom: 15px;">
 				<div class="row" id="con_load">
-					<div class="col-lg-3">
+					<div class="col-lg-2">
 						<input class="form-control" id="account_json" type="file" />
 					</div>
-					<div class="col-lg-4">
+					<div class="col-lg-6">
 						<input class="form-control" id="account_password" type="password"
-							placeholder="Password for approve account {%BOUNTY_APPROVER%}" />
+							placeholder="Password of approver {%BOUNTY_APPROVER%}" />
 					</div>
 					<div class="col-lg-1 text-right">
 						<button class="btn btn-md btn-primary" id="account_load">Load</button>
@@ -40,7 +40,7 @@
 				</div>
 				<div class="row" id="con_drop" style="display: none;">
 					<div class="col-lg-7">
-						Account {%BOUNTY_APPROVER%} is active now, you can do approve.
+						Account <strong><span class="text-danger">{%BOUNTY_APPROVER%}</span></strong> is active now, you can do approve.
 					</div>
 					<div class="col-lg-2 text-right">
 						<button class="btn btn-md btn-primary" id="account_drop">Drop Account</button>
@@ -67,8 +67,8 @@
 								<tr>
 									<th></th>
 									<th>iNFT</th>
-									<th>Record</th>
-									<th>Stamp</th>
+									<th>Progress</th>
+									<th>Created</th>
 									<th>Status</th>
 								</tr>
 
@@ -80,7 +80,9 @@
 										<a href="#" target="_blank">{%$v.link%}</a>
 									</td>
 									<td>
-										<a href="#" target="_blank">{%$v.record%}</a>
+										Apply: <a href="#" target="_blank">{%$v.record%}</a> <br/>
+										Judge: {%if !empty($v.judge)%}<a href="#" target="_blank">{%$v.judge%}</a>{%/if%} <br/>
+										Distribute: {%if !empty($v.distribute)%}<a href="#" target="_blank">{%$v.distribute%}</a>{%/if%} <br/>
 									</td>
 									<td>{%date("Ymd",$v.stamp)%}</td>
 									<td>
@@ -102,7 +104,14 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						Please select the account JSON file before any operation.
+						<div class="row">
+							<div class="col-lg-6">
+								Please select the account JSON file before any operation.
+							</div>
+							<div class="col-lg-6 text-right" id="approve_info">
+
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -169,13 +178,19 @@
 								<div class="col-lg-2">
 									<button class="btn btn-md btn-primary" id="distribute_submit">Submit Payment</button>
 								</div>
-								<div class="col-lg-12" id="distribute_info"></div>
 							{%/if%}
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer">
-						Please select the account JSON file before any operation.
+						<div class="row">
+							<div class="col-lg-6">
+								Please select the account JSON file before any operation.
+							</div>
+							<div class="col-lg-6 text-right" id="distribute_info">
+
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -268,6 +283,11 @@
 			if (data.error.length !== 0) return false;
 			console.log("Here to show bounty details.",data);
 		});
+
+		const test_alink="anchor://distribute_vhvieuhepwsx/238976";
+		Decoder(test_alink,startAPI,(data)=>{
+			console.log(test_alink,data);
+		});
 	});
 </script>
 
@@ -329,7 +349,7 @@
 				ref: bounty,
 			}
 			AnchorJS.write(pair,name,raw,protocol,(res)=>{
-				console.log(res);
+				//console.log(res);
 				if(res.step==="Finalized"){
 					AnchorJS.search(name,(adata)=>{
 						const dt = {
