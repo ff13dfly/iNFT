@@ -71,12 +71,12 @@ function OperationINFT(props) {
       setFav(!fav);
       const {name,block,owner}=props.data;
       if(fav){
-        INFT.unfav(name,()=>{
-
+        INFT.fav.remove(name,(res)=>{
+          console.log(res);
         });
       }else{
-        INFT.fav(name,block,owner,()=>{
-
+        INFT.fav.add(name,block,owner,(res)=>{
+          console.log(res);
         });
       }
     },
@@ -114,8 +114,7 @@ function OperationINFT(props) {
         }
       });
 
-      INFT.faved(name,(res)=>{
-        console.log(res);
+      INFT.fav.exsist(name,(res)=>{
         setFav(res);
       });
     },

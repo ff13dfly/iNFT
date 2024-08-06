@@ -20,6 +20,8 @@ const map = {};
 
 let local = true;     //get iNFT render result from local
 
+const DBname = Config.get(["storage", "DBname"]);
+const fav_table="ifav";
 const funs = {
     getConfig: () => {     //get config from Config file
 
@@ -84,25 +86,21 @@ const funs = {
         }
     },
     exsistFav:(name,ck)=>{
-        const table = "ifav";
-        const cfg = Config.get(["storage", "tables", table]);
-        const DBname = Config.get(["storage", "DBname"]);
-        //console.log(JSON.stringify(cfg));
+        const cfg = Config.get(["storage", "tables", fav_table]);
         INDEXED.checkDB(DBname, (db) => {
             const tbs = db.objectStoreNames;
-            //console.log(tbs);
-            if (!funs.checkTable(table, tbs)) {
-                const tb = { table: table, keyPath: cfg.keyPath, map: cfg.map }
+            if (!funs.checkTable(fav_table, tbs)) {
+                const tb = { table: fav_table, keyPath: cfg.keyPath, map: cfg.map }
                 db.close();         //must close, or the DB is blocked
                 INDEXED.initDB(DBname, [tb], db.version + 1).then((ndb) => {
-                    return ck && ck(ndb);
+                    return ck && ck(false,ndb);
                 }).catch((error) => {       
-                    return ck && ck({error:"failed to fav"});
+                    return ck && ck(false,{error:"failed to fav"});
                 });
             }else{
-                INDEXED.searchRows(db,table, "name", name, (res) => {
-                    if(res.length!==0) return ck && ck({error:"fav exsist"});
-                    return ck && ck(db);
+                INDEXED.searchRows(db,fav_table, "name", name, (res) => {
+                    if(res.length!==0) return ck && ck(true,db);
+                    return ck && ck(false,db);
                 });
             }
         })
@@ -116,35 +114,48 @@ const self = {
     disableLocal: () => {
         local = false;
     },
-    faved:(name,ck)=>{
-        funs.exsistFav(name,(db)=>{
-            if(db.error==="fav exsist") return ck && ck(true);
-            return ck && ck(false);
-        });
+    fav:{
+        exsist:(name,ck)=>{
+            funs.exsistFav(name,(exsist,db)=>{
+                return ck && ck(exsist);
+            });
+        },
+        add: (name, block, address, ck) => {
+            console.log(`Add ${name} to fav list.`);
+            funs.exsistFav(name,(exsist,db)=>{
+                if(exsist) return ck && ck({error:"Faved already."});
+                const row={
+                    name:name,
+                    block:block,
+                    address:address,
+                    stamp:tools.stamp(),
+                }
+                return INDEXED.insertRow(db,fav_table,[row],ck);
+            });
+        },
+        remove: (name, ck) => {
+            console.log(`Remove ${name} from fav list.`);
+            funs.exsistFav(name,(exsist,db)=>{
+                if(!exsist) return ck && ck({error:"No such iNFT."});
+                return INDEXED.removeRow(db,fav_table,"name",name,ck);
+            });
+        },
+        list:(address,ck,step,page)=>{
+            INDEXED.checkDB(DBname, (db) => {
+                const tbs = db.objectStoreNames;
+                if (!funs.checkTable(fav_table, tbs))return ck && ck({error:"no target "});
+                INDEXED.pageRows(db, fav_table, ck,{ page: !page?1:page, step: !step?12:step});
+            });
+
+            // INDEXED.pageRows(db, table, (res) => {
+            //     if (res !== false) {
+            //       setList(res);
+            //     }
+            //   }, { page: n, step: step });
+        },
     },
-    fav: (name, block, address, ck) => {
-        console.log(`Add ${name} to fav list.`);
-        funs.exsistFav(name,(db)=>{
-            if(db.error) return ck && ck({error:db.error});
-            console.log(`Here to go.`);
-            const table = "ifav";
-            const row={
-                name:name,
-                block:block,
-                address:address,
-                stamp:tools.stamp(),
-            }
-            return INDEXED.insertRow(db,table,[row],ck);
-        });
-    },
-    unfav: (name, ck) => {
-        console.log(`Remove ${name} from fav list.`);
-        funs.exsistFav(name,(db)=>{
-            if(db.error) return ck && ck({error:db.error});
-            const table = "ifav";
-            return INDEXED.removeRow(db,table,"name",name,ck);
-        });
-    },
+    
+    
 
     /*  get the anchor list by name and block
     *   @param  {list}  array       //{name:ANCHOR_NAME,block:BLOCK}

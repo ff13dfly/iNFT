@@ -261,6 +261,7 @@ const INDEXED = {
   *
   */
   pageRows: (db, table, ck, nav, search) => {
+    console.log(table,nav);
     let list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
 
@@ -276,13 +277,12 @@ const INDEXED = {
     let advanced = true; 
     request.onsuccess = (e) => {
       const cursor = e.target.result;
-      //console.log(JSON.stringify(nav));
       if (nav !== undefined && nav.page !== undefined && nav.step !== undefined) {
         if(advanced){
           const skip = (nav.page - 1) * nav.step;
           if (skip > 0){
             advanced = false;
-            cursor.advance((nav.page - 1) * nav.step);
+            cursor.advance(skip);
             return true;
           } 
         }
@@ -306,7 +306,6 @@ const INDEXED = {
         }
       }
     }
-
 
     request.onerror = (e) => {
       return ck && ck(false);

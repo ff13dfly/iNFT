@@ -21,7 +21,7 @@ function UserINFT(props) {
   let [list, setList]=useState([]);
 
   let [show,setShow]=useState(false);
-  let [now, setNow]=useState(1);
+  let [now, setNow]=useState(1);            //current page
   let [total, setTotal]=useState(1);
 
   let [fav, setFav]=useState(false);
@@ -29,6 +29,16 @@ function UserINFT(props) {
   const self = {
     clickFav:(ev)=>{
       setFav(!fav);
+      if(!fav){
+        console.log("List favs");
+        const page=1;
+        const step=4;
+        INFT.fav.list(address,(res)=>{
+          INFT.multi(res,(ans)=>{
+            setList(ans);
+          });
+        },page,step);
+    }
     },
     changeAccount:(addr)=>{
       if(!addr) return false;
@@ -57,13 +67,11 @@ function UserINFT(props) {
   
           if(!res || !res.data || res.data.length===0) return setList([]);
             const narr=self.getAnchorArray(res.data);
-            console.log(JSON.stringify(narr));
+            //console.log(JSON.stringify(narr));
             INFT.multi(narr,(ans)=>{
               setList(ans);
             });
         },p);
-      }else{
-
       }
     },
   }
