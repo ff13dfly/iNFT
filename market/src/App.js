@@ -20,7 +20,7 @@ import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from "./entry/detail";
 
-import INDEXED from "./lib/indexed";
+//import INDEXED from "./lib/indexed";
 
 function App() {
 
@@ -119,7 +119,7 @@ function App() {
     self.checkding();
     setContent(router[target]);
 
-    INDEXED.autoTest();
+    //INDEXED.autoTest();
   }, [target,extend]);
 
   return (

@@ -37,7 +37,7 @@ class CORE {
 		
 	}
 	
-	public function loadController($mod,$act,$type=CON_WEIXIN){
+	public function loadController($mod,$act,$type=CON_AJAX){
 		return PATH_CONTROLLER.DS.$mod.DS.$type.$mod.CONNECTOR.$act.SUFFIX_CONTROLLER;		
 	}
 	
