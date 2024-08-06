@@ -71,7 +71,7 @@ function Result(props) {
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
             setPassword("");
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).load(fa, password, (pair) => {
                 Network(cur).revoke(pair, name, (res) => {
                     if (res.error) return setInfo(res.error);
@@ -91,7 +91,7 @@ function Result(props) {
             const fa = Local.get("login");
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).load(fa, password, (pair) => {
                 setPassword("");
                 Network(cur).sell(pair, name, price, (res) => {
@@ -129,7 +129,7 @@ function Result(props) {
             setInfo("");
 
             //3.get selling status; Confirm from network. Fix the data automatically.
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).view(props.name, "selling", (dt) => {
                 if (dt && dt.length === 3) {
                     setMarket(`On selling, price ${dt[1]} unit.`);

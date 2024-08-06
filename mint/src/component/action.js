@@ -90,7 +90,7 @@ function Action(props) {
             }
              
             //2.check the password for account
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).load(fa, password, (pair) => {
                 setPassword("");
                 if (pair.error !== undefined) {
@@ -149,7 +149,7 @@ function Action(props) {
             if (task === false) return setInfo("Failed to get task data.");
 
             let duration=2;
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).subscribe("autorun", (bk, bhash) => {
                 //console.log(`Try to run task automatically.`);
 
@@ -186,7 +186,7 @@ function Action(props) {
 
                 //when more than one task, need closure to keep the index right.
                 ((task_index,target,raw,protocol,cid) => {
-                    const cur=Data.getHash('cache','network');
+                    const cur=Data.getHash("cache","network");
                     Network(cur).write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
                         if (process.error) {
                             setDisable(false);
@@ -217,10 +217,10 @@ function Action(props) {
             return true;
         },
         saveResult: (cid,name, hash,offset, creator, ck) => {
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).view(hash, "block", (data) => {
                 //const tpl = TPL.current(true);
-                const cur=Data.getHash('cache','network');
+                const cur=Data.getHash("cache","network");
                 INFT.single.add(name, cid, hash, data.block, creator,offset,cur);
                 return ck && ck(data.block);
             });

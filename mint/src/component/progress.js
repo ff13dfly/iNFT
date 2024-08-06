@@ -72,7 +72,7 @@ function Progress(props) {
     useEffect(() => {
         self.showTask();
         setBlock(props.block);
-        const cur=Data.getHash('cache','network');
+        const cur=Data.getHash("cache","network");
         Network(cur).subscribe("progress",(bk, bhash)=>{
             setBlock(bk);
             setTimeout(self.showTask,500);  //update task after finalized new block

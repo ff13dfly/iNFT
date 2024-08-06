@@ -86,8 +86,8 @@ function App() {
         if(ns[key]!==null) arr.push(key);
       }
 
-      Data.setHash('cache','network',config.network);
-      Data.setHash('cache','support',arr);
+      Data.setHash("cache","network",config.network);
+      Data.setHash("cache","support",arr);
 
       return ck && ck();
     },
@@ -120,7 +120,7 @@ function App() {
 
     //4.linke to server to subscribe block finalization
     self.autosetNetwork(()=>{
-      const cur=Data.getHash('cache','network');
+      const cur=Data.getHash("cache","network");
       Network(cur).init((API) => {
 
       });

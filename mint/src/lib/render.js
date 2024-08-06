@@ -200,7 +200,7 @@ const Render= {
         //create the canvas container;
         let con = document.getElementById(container_id);
         if(con===null){
-            const div = document.createElement('div');
+            const div = document.createElement("div");
             div.id = container_id;
             div.style.display="none";
             document.body.appendChild(div);
@@ -210,7 +210,7 @@ const Render= {
         //create canvas for thumbe;
         let cvs=document.getElementById(canvas_id);
         if(cvs===null){
-            cvs = document.createElement('canvas');
+            cvs = document.createElement("canvas");
             con.appendChild(cvs);
         }
         cvs.id = canvas_id;

@@ -1,8 +1,8 @@
-//import * as Sui from '@mysten/sui.js';
-import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
-import { getFaucetHost, requestSuiFromFaucetV0 } from '@mysten/sui.js/faucet';
+//import * as Sui from "@mysten/sui.js";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
+import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 //import * as Sui_utils from "@mysten/sui.js/utils";
 
 
@@ -92,7 +92,7 @@ const self = {
             const result = await client.signAndExecuteTransactionBlock({
                 transactionBlock: txb,
                 signer: keypair,
-                requestType: 'WaitForLocalExecution',
+                requestType: "WaitForLocalExecution",
                 options: {
                     showEffects: true,
                 },

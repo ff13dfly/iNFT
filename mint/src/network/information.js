@@ -1,18 +1,18 @@
 const Information={
     anchor:{
-        intro:'',
-        short:'substarte test network',
+        intro:"",
+        short:"substarte test network",
         account:{
-            format:'Base58',
-            support:['anchor','tanssi','polkadot'],
+            format:"Base58",
+            support:["anchor","tanssi","polkadot"],
         }
     },
     tanssi:{
-        intro:'',
-        short:'appchain',
+        intro:"",
+        short:"appchain",
         account:{
-            format:'Base58',
-            support:['anchor','tanssi'],
+            format:"Base58",
+            support:["anchor","tanssi"],
         }
     },
     pokadot:{
@@ -22,11 +22,11 @@ const Information={
 
     },
     sui:{
-        intro:'',
-        short:'',
+        intro:"",
+        short:"",
         account:{
-            format:'Base58',
-            support:['sui'],
+            format:"Base58",
+            support:["sui"],
         }
     },
     aptos:{

@@ -6,7 +6,7 @@ import tools from "../lib/tools";
 
 function SettingNetwork(props) {
 
-    const cur=Data.getHash('cache','network');
+    const cur=Data.getHash("cache","network");
     let [value, setValue]=useState(cur);
     let [list, setList]=useState([]);
     
@@ -16,7 +16,7 @@ function SettingNetwork(props) {
             const dt=Network();
             setValue(net);
             if(dt[net] && dt[net]!==null){
-                Data.setHash('cache','network',net);
+                Data.setHash("cache","network",net);
                 props.fresh();
             }
         },

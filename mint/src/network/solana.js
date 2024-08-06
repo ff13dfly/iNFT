@@ -15,7 +15,7 @@ const funs = {
     //TODO, heret to check the input type
     check: (value, type) => {
         switch (type) {
-            case 'account':
+            case "account":
 
                 break;
 
@@ -27,8 +27,8 @@ const funs = {
         return true;
     },
     uint8ArrayToBase58: (uint8Array) => {
-        const BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        let base58String = '';
+        const BASE58_CHARS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+        let base58String = "";
         let value = 0n;
         let base = 1n;
 
@@ -45,9 +45,9 @@ const funs = {
             base58String = BASE58_CHARS[Number(remainder)] + base58String;
         }
 
-        // Prefix leading zero bytes in Uint8Array with '1' in Base58 string
+        // Prefix leading zero bytes in Uint8Array with "1" in Base58 string
         for (let i = 0; i < uint8Array.length && uint8Array[i] === 0; i++) {
-            base58String = '1' + base58String;
+            base58String = "1" + base58String;
         }
 
         return base58String;
@@ -78,9 +78,9 @@ const self = {
         } = SOL;
         const pub = new PublicKey(ss58);
         const u8arr = pub.toBytes();
-        return '0x' + Array.from(u8arr)
-            .map(byte => byte.toString(16).padStart(2, '0'))
-            .join('');
+        return "0x" + Array.from(u8arr)
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("");
     },
     init: (network, ck) => {
         if (link !== null) return ck && ck(link);
@@ -88,7 +88,7 @@ const self = {
         //console.log(SOL);
         switch (network) {
             case "devnet":
-                link = new Connection(clusterApiUrl('devnet'));
+                link = new Connection(clusterApiUrl("devnet"));
                 break;
 
             default:
@@ -102,7 +102,7 @@ const self = {
 
     //connect to Phantom wallet
     wallet: (ck) => {
-        if (typeof window.solana !== 'undefined') {
+        if (typeof window.solana !== "undefined") {
             try {
                 window.solana.connect().then((res) => {
                     return ck && ck(res);
@@ -165,7 +165,7 @@ const self = {
         } = SOL;
         self.init(network, (connection) => {
             connection.getRecentBlockhash().then(({ blockhash }) => {
-                if (typeof window.solana !== 'undefined') {
+                if (typeof window.solana !== "undefined") {
                     const wallet = window.solana;
                     wallet.connect().then(async (from) => {
                         const toAccount = new PublicKey(to);
@@ -247,7 +247,7 @@ const self = {
                 PublicKey,
             } = SOL;
             switch (type) {
-                case 'block':
+                case "block":
                     const cfg = { "maxSupportedTransactionVersion": 0 };
                     connection.getBlock(value, cfg).then((res) => {
                         return ck && ck(res);
@@ -256,7 +256,7 @@ const self = {
                     });
                     break;
 
-                case 'account':
+                case "account":
                     const publicKey = new PublicKey(value);
                     connection.getAccountInfo(publicKey).then((info) => {
                         return ck && ck(info);
@@ -265,7 +265,7 @@ const self = {
                     });
                     break;
 
-                case 'transaction':
+                case "transaction":
                     connection.getTransaction(value).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
@@ -273,7 +273,7 @@ const self = {
                     });
                     break;
 
-                case 'program':
+                case "program":
                     const program_id = new PublicKey(value);
                     //console.log(program_id.toString(),value);
                     connection.getProgramAccounts(program_id).then((info) => {
@@ -283,7 +283,7 @@ const self = {
                     });
                     break;
 
-                case 'balance':
+                case "balance":
                     connection.getBalance(value).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
@@ -291,7 +291,7 @@ const self = {
                     });
                     break;
 
-                case 'token':
+                case "token":
 
                     break;
 

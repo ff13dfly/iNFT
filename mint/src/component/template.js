@@ -88,7 +88,7 @@ function Template(props) {
             //2.准备绘图用的canvas
             const con = document.getElementById("tpl_handle");
             if(con!==null){
-                const cvs = document.createElement('canvas');
+                const cvs = document.createElement("canvas");
                 cvs.id = dom_id;
                 cvs.width = 400;
                 cvs.height = 400;

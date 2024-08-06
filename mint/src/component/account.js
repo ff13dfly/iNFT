@@ -37,12 +37,12 @@ function Account(props) {
 
     const self = {
         getUnit:()=>{
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             if(config.unit && config.unit[cur]) return config.unit[cur];
-            return 'unit';
+            return "unit";
         },
         getFaucetURL:(addr)=>{
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             if(config.faucet && config.faucet[cur]) return `${config.faucet[cur]}/${addr}`;
             return false;
         },
@@ -52,7 +52,7 @@ function Account(props) {
         },
         clickNewAccount: (ev) => {
             setNewDisable(true);
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).generate(password,(fa,mnemonic)=>{
                 Local.set("login", JSON.stringify(fa));
                 setLogin(true);
@@ -155,7 +155,7 @@ function Account(props) {
             }
         },
         showBalance:(address)=>{
-            const cur=Data.getHash('cache','network');
+            const cur=Data.getHash("cache","network");
             Network(cur).balance(address, (res) => {
                 const divide = Network(cur).divide();
                 setBalance(tools.toF(res.free * (1 / divide), 8));

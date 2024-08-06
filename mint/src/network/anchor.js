@@ -48,7 +48,7 @@ const funs = {
         exs.forEach((ex, index) => {
             console.log(ex)
             // if(index===0){
-            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, '');
+            // 	stamp=ex.toHuman().method.args.now.replace(/,/gi, "");
             // }
             // if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
             // const dt = ex.toHuman();
@@ -112,7 +112,7 @@ const self = {
             wsAPI.rpc.state.getMetadata().then((res) => {
                 return ck && ck(res);
             }).catch((error)=>{
-                return ck && ck({error:'Invalid request'});
+                return ck && ck({error:"Invalid request"});
             });
         });
     },
@@ -188,8 +188,8 @@ const self = {
     write: (pair, obj, ck) => {
         self.init(() => {
             let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== 'string') protocol = JSON.stringify(protocol);
-            if (typeof raw !== 'string') raw = JSON.stringify(raw);
+            if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
+            if (typeof raw !== "string") raw = JSON.stringify(raw);
             if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
             const pre = 0;
