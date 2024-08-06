@@ -15,7 +15,7 @@ const funs = {
     //TODO, heret to check the input type
     check: (value, type) => {
         switch (type) {
-            case 'account':
+            case "account":
 
                 break;
 
@@ -27,8 +27,8 @@ const funs = {
         return true;
     },
     uint8ArrayToBase58: (uint8Array) => {
-        const BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        let base58String = '';
+        const BASE58_CHARS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+        let base58String = "";
         let value = 0n;
         let base = 1n;
 
@@ -45,9 +45,9 @@ const funs = {
             base58String = BASE58_CHARS[Number(remainder)] + base58String;
         }
 
-        // Prefix leading zero bytes in Uint8Array with '1' in Base58 string
+        // Prefix leading zero bytes in Uint8Array with "1" in Base58 string
         for (let i = 0; i < uint8Array.length && uint8Array[i] === 0; i++) {
-            base58String = '1' + base58String;
+            base58String = "1" + base58String;
         }
 
         return base58String;
@@ -56,13 +56,13 @@ const funs = {
 
 const self = {
     ss58ToHex: (base58String) => {
-        const bs58 = require('bs58');
+        const bs58 = require("bs58");
         const uint8Array = bs58.decode(base58String);
 
         // Convert the Uint8Array to a hexadecimal string
         const hexString = Array.from(uint8Array)
-            .map(byte => byte.toString(16).padStart(2, '0'))
-            .join('');
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("");
 
         return "0x"+hexString;
     },
@@ -73,9 +73,9 @@ const self = {
         } = SOL;
         const pub = new PublicKey(ss58);
         const u8arr=pub.toBytes();
-        return '0x' + Array.from(u8arr)
-            .map(byte => byte.toString(16).padStart(2, '0'))
-            .join('');
+        return "0x" + Array.from(u8arr)
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("");
     },
     //create connection to Solana node
     init: (network, ck) => {
@@ -83,7 +83,7 @@ const self = {
         const { Connection, clusterApiUrl } = SOL;
         switch (network) {
             case "devnet":
-                link = new Connection(clusterApiUrl('devnet'));
+                link = new Connection(clusterApiUrl("devnet"));
                 break;
 
             default:
@@ -95,7 +95,7 @@ const self = {
 
     //connect to Phantom wallet
     wallet: (ck) => {
-        if (typeof window.solana !== 'undefined') {
+        if (typeof window.solana !== "undefined") {
             try {
                 window.solana.connect().then((res) => {
                     return ck && ck(res);
@@ -140,7 +140,7 @@ const self = {
             const dt = funs.toBuffer(JSON.stringify(data));
 
             //系统的ID，必须要的部分
-            const program_id = new PublicKey('11111111111111111111111111111111');
+            const program_id = new PublicKey("11111111111111111111111111111111");
 
             //1.创建账号的交易指令，再转2个SOL进去
             const createAccountInstruction = SystemProgram.createAccount({
@@ -169,7 +169,7 @@ const self = {
                 }
                 const trans = new Transaction(param).add(createAccountInstruction, writeDataInstruction);
                 //console.log(trans);
-                if (typeof window.solana !== 'undefined') {
+                if (typeof window.solana !== "undefined") {
                     const wallet = window.solana;
                     wallet.connect().then(async (pair) => {
                         const signedTransaction = await wallet.signTransaction(trans);
@@ -181,25 +181,25 @@ const self = {
                         // wallet.signAndSendTransaction(trans).then(({signature}) => {
 
                         // }).catch(error => {
-                        //     console.error('Failed signAndSendTransaction: ', error);
+                        //     console.error("Failed signAndSendTransaction: ", error);
                         // });
                         //2.之前的版本
                         //wallet.signTransaction(trans)
                         // wallet.signTransaction(trans).then((signedTransaction) => {
                         //     //console.log(signedTransaction.serialize());
                         //     connection.sendRawTransaction(signedTransaction.serialize()).then((signature) => {
-                        //         console.log('Transaction signature:', signature);
+                        //         console.log("Transaction signature:", signature);
                         //         connection.confirmTransaction(signature).then(()=>{
-                        //             console.log('Account Public Key:', accountPublicKey.toBase58());
+                        //             console.log("Account Public Key:", accountPublicKey.toBase58());
                         //         });
                         //     }).catch(error => {
-                        //         console.error('Failed to send raw transaction: ', error);
+                        //         console.error("Failed to send raw transaction: ", error);
                         //     });
                         // }).catch(error => {
-                        //     console.error('Failed to sign transaction: ', error);
+                        //     console.error("Failed to sign transaction: ", error);
                         // });
                     }).catch((error) => {
-                        console.error('Failed to connect to Phantom:', error);
+                        console.error("Failed to connect to Phantom:", error);
                     });
                 }
             });
@@ -214,7 +214,7 @@ const self = {
             } = SOL;
 
             connection.getRecentBlockhash().then(({ blockhash }) => {
-                if (typeof window.solana !== 'undefined') {
+                if (typeof window.solana !== "undefined") {
                     const wallet = window.solana;
                     wallet.connect().then(async (signer) => {
                         const accountPublicKey = signer.publicKey;
@@ -237,21 +237,21 @@ const self = {
                         wallet.signTransaction(trans).then((signedTransaction) => {
                             console.log(signedTransaction);
                             connection.sendRawTransaction(signedTransaction.serialize()).then((signature) => {
-                                console.log('Transaction signature:', signature);
+                                console.log("Transaction signature:", signature);
                                 connection.confirmTransaction(signature).then(() => {
-                                    console.log('Account Public Key:', accountPublicKey.toBase58());
+                                    console.log("Account Public Key:", accountPublicKey.toBase58());
                                 });
 
                             }).catch(error => {
-                                console.error('Failed to send raw transaction: ', error);
+                                console.error("Failed to send raw transaction: ", error);
                             });
 
                         }).catch((error) => {
-                            console.error('Failed to signed transaction:', error);
+                            console.error("Failed to signed transaction:", error);
                         });
 
                     }).catch((error) => {
-                        console.error('Failed to connect to Phantom:', error);
+                        console.error("Failed to connect to Phantom:", error);
                     });
                 }
 
@@ -284,7 +284,7 @@ const self = {
                 PublicKey,
             } = SOL;
             switch (type) {
-                case 'block':
+                case "block":
                     const cfg = { "maxSupportedTransactionVersion": 0 };
                     connection.getBlock(value, cfg).then((res) => {
                         return ck && ck(res);
@@ -293,7 +293,7 @@ const self = {
                     });
                     break;
 
-                case 'account':
+                case "account":
                     connection.getAccountInfo(value).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
@@ -301,7 +301,7 @@ const self = {
                     });
                     break;
 
-                case 'transaction':
+                case "transaction":
                     connection.getTransaction(value).then((info) => {
                         return ck && ck(info);
                     }).catch((error) => {
@@ -309,7 +309,7 @@ const self = {
                     });
                     break;
 
-                case 'program':
+                case "program":
                     const program_id = new PublicKey(value);
                     connection.getProgramAccounts(program_id).then((info) => {
                         return ck && ck(info);
@@ -318,7 +318,7 @@ const self = {
                     });
                     break;
 
-                case 'token':
+                case "token":
 
                     break;
 
@@ -332,7 +332,7 @@ const self = {
             if(checker===null){
                 checker=setInterval(()=>{
                     connection.getSlot().then((block)=>{
-                        //console.log('New block received:', block);
+                        //console.log("New block received:", block);
                         self.view(block,"block",(block)=>{
                             //console.log(block.blockhash);
                             return ck && ck(self.ss58ToHex(block.blockhash));

@@ -165,13 +165,13 @@ function Tanssi(props) {
             try {
               const response = await fetch(url);
               if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error("Network response was not ok");
               }
               const content = await response.text();
-              //console.log('Content from URL:', content);
+              //console.log("Content from URL:", content);
               return content;
             } catch (error) {
-              console.error('Error fetching content from URL:', error);
+              console.error("Error fetching content from URL:", error);
               throw error;
             }
         },
@@ -194,14 +194,14 @@ function Tanssi(props) {
 
                 //IPFS
                 // const host="ipfs.w3s.link";
-                // const ipfs = new IPFS({ host: host, protocol: 'https' });
+                // const ipfs = new IPFS({ host: host, protocol: "https" });
                 // const cid="bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a";
                 // console.log(host);
                 // ipfs.cat(cid, (err, result) => {
                 //     console.log(err, result);
                 // });
 
-                const url = 'https://bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a.ipfs.w3s.link/';
+                const url = "https://bafkreihze725zh5uqcffao5w27qdmaihjffjzj3wvtdfjocc33ajqtzc7a.ipfs.w3s.link/";
                 self.getContentFromURL(url)
                 .then((content) => {
                     //console.log(content);

@@ -49,21 +49,21 @@ const self = {
     fix = fix || 3; return parseFloat(a.toFixed(fix))
   },
   download: (filename, text, type) => {
-    var element = document.createElement('a');
+    var element = document.createElement("a");
 
     switch (type) {
       case "image":
-        element.setAttribute('href', text);
+        element.setAttribute("href", text);
         break;
 
       default:
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
         break;
     }
 
-    element.setAttribute('download', filename);
+    element.setAttribute("download", filename);
 
-    element.style.display = 'none';
+    element.style.display = "none";
     document.body.appendChild(element);
 
     element.click();

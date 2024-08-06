@@ -65,7 +65,7 @@ const self={
         self.init(network,(aptos)=>{
             const param={ accountAddress:hash };
             switch (type) {
-                case 'account':
+                case "account":
                     aptos.getAccountInfo(param).then((obj)=>{
                         return ck && ck(obj);
                     }).catch((error) => {
@@ -73,14 +73,14 @@ const self={
                     });
                     break;
                 
-                case 'transaction':
+                case "transaction":
                     aptos.getAccountTransactions(param).then((obj)=>{
                         return ck && ck(obj);
                     }).catch((error) => {
                         return ck && ck(error);
                     });
                     break;
-                case 'token':
+                case "token":
                     aptos.getAccountOwnedTokens(param).then((obj)=>{
                         return ck && ck(obj);
                     }).catch((error) => {

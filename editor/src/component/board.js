@@ -5,7 +5,7 @@ import Value from "./value";
 
 import Data from "../lib/data";
 import Render from "../lib/render";
-import ETH from '../lib/eth';
+import ETH from "../lib/eth";
 
 import tools from "../lib/tools";
 //context.drawImage(img, sx, sy, swidth, sheight, x, y, width, height)

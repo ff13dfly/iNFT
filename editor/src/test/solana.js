@@ -1,5 +1,5 @@
-import { useWallet } from '@solana/wallet-adapter-react';
-import { verifySignIn } from '@solana/wallet-standard-util';
+import { useWallet } from "@solana/wallet-adapter-react";
+import { verifySignIn } from "@solana/wallet-standard-util";
 
 //import tools from "../lib/tools";
 import SOL from "../network/solana";
@@ -60,14 +60,14 @@ const self = {
     },
     test_4: () => {    //call一个部署的合约
         const { Connection, PublicKey, Transaction, TransactionInstruction, Account } = solana;
-        const connection = new Connection('http://api.devnet.solana.com');
-        const programId = new PublicKey('9AzXSN81r45BAqs6EpRfa3qHSsz5ZjfJHXzeVA4tMNuL');
+        const connection = new Connection("http://api.devnet.solana.com");
+        const programId = new PublicKey("9AzXSN81r45BAqs6EpRfa3qHSsz5ZjfJHXzeVA4tMNuL");
         const instruction = new TransactionInstruction({
             keys: [
                 // Add keys here as needed by the smart contract method
             ],
             programId,
-            //data: Buffer.from('<instruction_data>') // Replace with instruction data
+            //data: Buffer.from("<instruction_data>") // Replace with instruction data
             //data:new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]),
         });
 

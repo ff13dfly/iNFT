@@ -83,7 +83,7 @@ function Rarity(props) {
     return (
         <Row className="pt-4">
             <Col lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
-                <h5>iNFT Part's Rarity</h5>
+                <h5>iNFT Part"s Rarity</h5>
             </Col>
             <Col  lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {series.map((row, index) => (

@@ -1,4 +1,4 @@
-import ipfsHttpClient from 'ipfs-http-client';
+import ipfsHttpClient from "ipfs-http-client";
 
 //cache to the target files.
 const map={}
