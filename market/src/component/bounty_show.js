@@ -1,9 +1,9 @@
 import { Row, Col, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import BountyApply from "./bounty_apply";
 import BountyComment from "./bounty_comment";
 import BountyMinting from "./bounty_minting";
+import BountyBonus from "./bounty_bonus";
 
 import tools from "../lib/tools";
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
@@ -30,9 +30,9 @@ function BountyShow(props) {
     clickQR:()=>{
       setQR(!qr);
     },
-    clickApply: (index, alink) => {
-      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
-    },
+    // clickApply: (index, alink) => {
+    //   props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
+    // },
     calcBonus: (list) => {
       let amount = 0;
       for (let i = 0; i < list.length; i++) {
@@ -42,7 +42,6 @@ function BountyShow(props) {
       return amount;
     },
     getThumb: (index) => {
-      //console.log(data.template.raw);
       if (!data.template || !data.template.raw || !data.template.raw.series) return false;
       const dt = data.template.raw.series[index];
       return dt.thumb[0];
@@ -103,28 +102,7 @@ function BountyShow(props) {
       </Col>
       <Col className="bounty_title" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
-        {bonus.map((row, index) => (
-          <Row key={index} className="pt-2">
-            <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-              <img alt="" src={self.getThumb(row.series)} className="series_thumb pointer" />
-
-            </Col>
-            <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-              <Row>
-                <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
-                  Applying:
-                </Col>
-                <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <button className="btn btn-sm btn-primary" onClick={(ev) => {
-                    self.clickApply(index, data.alink);
-                  }}>Apply</button>
-                </Col>
-              </Row>
-            </Col>
-
-          </Row>
-        ))}
+        <BountyBonus data={bonus} coin={coin} bounty={data.alink} template={!data.template || !data.template.raw?{}:data.template.raw}/>
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
         <BountyMinting template={props.data && props.data.template?props.data.template:""}/>

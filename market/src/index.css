@@ -97,6 +97,12 @@ code {
   border-radius: 10px;
   margin-right: 10px;
 }
+.bonus_thumb{
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
 
 .avatar{
   width: 60px;

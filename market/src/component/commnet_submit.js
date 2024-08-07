@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 function CommentSubmit(props) {
   const size = {
     row: [12],
+    left: [9,3],
   };
 
   let [avatar, setAvatar] = useState("imgs/logo.png");
@@ -22,8 +23,11 @@ function CommentSubmit(props) {
 
   return (
     <Row>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Comment add
+      <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+        <input type="text"  className="form-control" placeholder="Commnet of bounty" />
+      </Col>
+      <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+        <button className="btn btn-md btn-primary">Comment</button>
       </Col>
     </Row>
   );

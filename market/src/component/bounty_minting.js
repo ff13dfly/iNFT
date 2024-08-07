@@ -31,7 +31,7 @@ function BountyMinting(props) {
         <Row>
           <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
             <Image
-              src={"imgs/logo.png"}
+              src={`${window.location.origin}/imgs/logo.png`}
               rounded
               width="100%"
               style={{ border: "1px solid #EEEEEE" }}
@@ -39,7 +39,7 @@ function BountyMinting(props) {
           </Col>
           <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
             <Image
-              src={"imgs/logo.png"}
+              src={`${window.location.origin}/imgs/logo.png`}
               rounded
               width="100%"
               style={{ border: "1px solid #EEEEEE" }}
@@ -47,7 +47,7 @@ function BountyMinting(props) {
           </Col>
           <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
             <Image
-              src={"imgs/logo.png"}
+              src={`${window.location.origin}/imgs/logo.png`}
               rounded
               width="100%"
               style={{ border: "1px solid #EEEEEE" }}
@@ -55,7 +55,7 @@ function BountyMinting(props) {
           </Col>
           <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
             <Image
-              src={"imgs/logo.png"}
+              src={`${window.location.origin}/imgs/logo.png`}
               rounded
               width="100%"
               style={{ border: "1px solid #EEEEEE" }}
