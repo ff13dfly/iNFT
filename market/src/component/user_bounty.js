@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 
 import BountySubmit from "./bounty_submit";
 import BountyProcess from "./bounty_process";
+import BountyLoad from "./bounty_load";
 
 import Config from "../system/config";
 import Bounty from "../system/bounty";
 import API from "../system/api";
 import TPL from "../system/tpl";
 
-import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
 
 import { FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
@@ -101,8 +101,13 @@ function UserBounty(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <BountyLoad fresh={""} />
+      </Col>
+
+      <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Bounty List</h5>
       </Col>
+
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Table striped bordered hover>
           <thead>

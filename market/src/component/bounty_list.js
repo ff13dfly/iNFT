@@ -48,7 +48,6 @@ function BountyList(props) {
       return arr;
     },
     decode:(alink)=>{
-      console.log(alink);
       const str=alink.replace("anchor://","");
       const arr=str.split("/");
       const block=parseInt(arr.pop());

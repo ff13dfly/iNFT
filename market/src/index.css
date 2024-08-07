@@ -98,6 +98,12 @@ code {
   margin-right: 10px;
 }
 
+.avatar{
+  width: 60px;
+  height: 60px;
+  border: 1px solid #EEEEEE;
+}
+
 .qr{
   width: 200px;
   height: 200px;
@@ -114,4 +120,14 @@ code {
   right:5px;
   top:5px;
   z-index: 998;
+}
+
+.bounty_title{
+  border-bottom: 1px solid #8c8c8c;
+}
+
+.bounty_live{
+  background: #8c8c8c;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
 }

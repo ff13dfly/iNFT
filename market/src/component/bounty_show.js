@@ -2,6 +2,8 @@ import { Row, Col, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import BountyApply from "./bounty_apply";
+import BountyComment from "./bounty_comment";
+import BountyMinting from "./bounty_minting";
 
 import tools from "../lib/tools";
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
@@ -63,11 +65,12 @@ function BountyShow(props) {
       }
       if (data.coin) setCoin(data.coin);
     }
+    //console.log(props.data);
   }, [props.data]);
 
   return (
-    <Row hidden={!ready}>
-      <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+    <Row hidden={!ready} className="pb-4">
+      <Col className="bounty_title" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Card style={{ width: "100%" }}>
           <FaQrcode hidden={qr} className="qr_button pointer bg-default" size={30} onClick={(ev) => {
             self.clickQR();
@@ -98,7 +101,7 @@ function BountyShow(props) {
           }
         </p>
       </Col>
-      <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
+      <Col className="bounty_title" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
         {bonus.map((row, index) => (
           <Row key={index} className="pt-2">
@@ -123,11 +126,9 @@ function BountyShow(props) {
           </Row>
         ))}
       </Col>
-      <Col md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-        The minting result showing.
-      </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <hr />
+      <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
+        <BountyMinting template={props.data && props.data.template?props.data.template:""}/>
+        <BountyComment bounty={props.data && props.data.alink?props.data.alink:""}/>
       </Col>
     </Row>
   );
