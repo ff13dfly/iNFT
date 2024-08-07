@@ -25,7 +25,7 @@ function BountyMinting(props) {
   return (
     <Row className="pt-4">
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <h5 className="text-light">Minting</h5>
+        <h5>Minting</h5>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>

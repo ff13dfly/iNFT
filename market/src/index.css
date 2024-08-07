@@ -129,11 +129,11 @@ code {
 }
 
 .bounty_title{
-  border-bottom: 1px solid #8c8c8c;
+  border-bottom: 1px solid #f1ebe8;
 }
 
 .bounty_live{
-  background: #8c8c8c;
+  background: #f1ebe8;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
 }

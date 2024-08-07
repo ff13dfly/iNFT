@@ -28,7 +28,7 @@ function BountyComment(props) {
         <hr />
       </Col>
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-        <h5 className="text-light">Comments</h5>
+        <h5>Comments</h5>
       </Col>
       <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
         <button className="btn btn-md btn-default">More</button>

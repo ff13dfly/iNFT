@@ -110,7 +110,7 @@ function ListNFTs(props) {
 
   useEffect(() => {
     if (props.data.length === 0) {
-      setInfo("No iNFT result list.");
+      setInfo("No iNFTs.");
       setList([]);
     } else {
       setInfo("");
@@ -126,7 +126,7 @@ function ListNFTs(props) {
 
   return (
     <Row>
-      <Col className="pt-1" hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-4" hidden={!info ? true : false} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h4>{info}</h4>
       </Col>
       {list.length!==0 && list.map((row, index) => (     

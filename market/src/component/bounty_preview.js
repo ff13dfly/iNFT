@@ -97,7 +97,6 @@ function BountyPreview(props) {
           </Col>
         </Row>
         
-
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus data={bonus} coin={coin} template={data} />
 

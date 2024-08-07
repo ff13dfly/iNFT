@@ -9,7 +9,7 @@ import TPL from "../system/tpl";
 function BountyList(props) {
   const size = {
     row: [12],
-    grid: [4, 5, 3],
+    grid: [3, 4, 5],
   };
 
   let [page, setPage] = useState(1);
@@ -84,7 +84,7 @@ function BountyList(props) {
         }
       },page);
       
-    },500);
+    },300);
   }, [props.update]);
 
   return (
