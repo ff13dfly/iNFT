@@ -14,8 +14,7 @@ function Bounty(props) {
         head: [10, 2]
     };
 
-    let [data,setData]= useState({});
-    let [ active, setActive ]= useState("basic");
+    //let [data,setData]= useState({});
     let [ content, setContent] =useState("");
     let [ network, setNetwork ]= useState("anchor");
     let [ block, setBlock]=useState(0);
@@ -23,7 +22,7 @@ function Bounty(props) {
 
     const map={
         "basic":<BountyList link={props.link} dialog={props.dialog} extend={props.extend}/>,
-        "view": <BountyPreview data={data} link={props.link} dialog={props.dialog} extend={props.extend} />,
+        "view": <BountyPreview link={props.link} dialog={props.dialog} data={props.extend} />,
         "404":"404 page",
     }
 
@@ -34,14 +33,14 @@ function Bounty(props) {
     }
 
     useEffect(() => {
-        //console.log(props)
+        //console.log("Bounty entry:"+JSON.stringify(props))
         if(!props.extend){
             setHidden(false);
             setContent(map.basic);
         }else if(props.extend.anchor && props.extend.block){
             setHidden(true);
+            //setData(props.extend);
             setContent(map.view);
-            setData(props.extend);
         }else{
             setHidden(false);
             setContent(map.basic);

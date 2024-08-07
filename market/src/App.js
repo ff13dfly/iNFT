@@ -64,6 +64,7 @@ function App() {
       if(single!==target) setTarget(single);
     },
     linkTo:(name,param)=>{
+      //console.log(`LinkTo:${name}|${JSON.stringify(param)}`);
       setExtend({});    //clean the param cache
       const folder="";
       let url=!folder?`${window.location.origin}/${name}`:`${window.location.origin}/${folder}/${name}`;

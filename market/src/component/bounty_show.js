@@ -65,7 +65,6 @@ function BountyShow(props) {
       }
       if (data.coin) setCoin(data.coin);
     }
-    //console.log(props.data);
   }, [props.data]);
 
   return (
@@ -92,6 +91,7 @@ function BountyShow(props) {
             </Card.Text>
           </Card.Body>
         </Card>
+        <h6 className="pt-1">{data && data.alink?data.alink:""}</h6>
         <p>
           <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()} ( current: {block.toLocaleString()} )<br />
           <FaPizzaSlice />{data && data.template && data.template.cid ?

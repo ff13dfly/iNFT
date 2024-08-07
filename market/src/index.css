@@ -131,3 +131,15 @@ code {
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
 }
+
+.bounty_chat {
+  background: #7be1b3;
+  border-radius: 8px;
+  padding: 8px 10px 8px 10px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 20px;
+  display: inline-flex;
+  word-wrap: break-word;
+  font-weight: 500;
+}

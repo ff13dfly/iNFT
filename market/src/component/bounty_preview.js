@@ -1,6 +1,8 @@
 import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import CommentList from "./commnet_list";
+
 import tools from "../lib/tools";
 import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
@@ -36,7 +38,6 @@ function BountyPreview(props) {
       return "";
     },
     getThumb: (index) => {
-      console.log(data);
       if (!data || !data.series) return false;
       const all = data.series[index];
       return all.thumb[0];
@@ -48,7 +49,6 @@ function BountyPreview(props) {
     autoCache:(ck)=>{
       const alink=self.getAlink();
       API.bounty.view(alink,(res)=>{
-        console.log(res);
         if(!res.success || !res.data) return false;
 
         if(res.data.apply) setApply(res.data.apply);
@@ -60,6 +60,7 @@ function BountyPreview(props) {
         if(bt.template && bt.template.cid){
           TPL.view(bt.template.cid,(dt)=>{
             setData(dt);
+           // console.log(`Bonus update?`);
             setBonus(bt.bonus);
           });
         } 
@@ -68,6 +69,7 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
+    //console.log("Bounty preview:"+JSON.stringify(props));
     self.autoCache(()=>{
 
     });
@@ -109,7 +111,7 @@ function BountyPreview(props) {
         ))}
       </Col>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-        Commutication
+        <CommentList />
       </Col>
     </Row>
   );
