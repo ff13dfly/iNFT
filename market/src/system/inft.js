@@ -140,18 +140,12 @@ const self = {
                 return INDEXED.removeRow(db,fav_table,"name",name,ck);
             });
         },
-        list:(address,ck,step,page)=>{
+        list:(ck,page,step)=>{
             INDEXED.checkDB(DBname, (db) => {
                 const tbs = db.objectStoreNames;
                 if (!funs.checkTable(fav_table, tbs))return ck && ck({error:"no target "});
                 INDEXED.pageRows(db, fav_table, ck,{ page: !page?1:page, step: !step?12:step});
             });
-
-            // INDEXED.pageRows(db, table, (res) => {
-            //     if (res !== false) {
-            //       setList(res);
-            //     }
-            //   }, { page: n, step: step });
         },
     },
     

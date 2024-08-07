@@ -24,7 +24,7 @@ function AccountSelector(props) {
   }, [props.update]);
 
   return (
-    <select className="form-control" onChange={(ev)=>{
+    <select disabled={props.disable} className="form-control" onChange={(ev)=>{
       if(props.callback) props.callback(ev.target.value);
     }}>
       {list.map((row, index) => (
