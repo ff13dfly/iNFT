@@ -196,6 +196,28 @@ const self={
             });
         },
     },
+    comment:{
+        submit:(address,content,alink,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={bounty:alink,address:address,memo:content};
+                funs.request("comment","add",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to add comment."});
+                },param);
+            });
+        },
+        list:(alink,ck,page)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={bounty:alink,p:!page?1:page};
+                funs.request("comment","list",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to add comment."});
+                },param);
+            });
+        },
+    }
 };
 
 export default self;

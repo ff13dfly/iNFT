@@ -72,7 +72,7 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
-    //console.log("Bounty preview:"+JSON.stringify(props));
+    console.log("Bounty preview:"+JSON.stringify(props));
     self.autoCache(() => {
 
     });
@@ -118,8 +118,8 @@ function BountyPreview(props) {
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         
-        <CommentList />
-        <CommentSubmit />
+        <CommentList bounty={`anchor://${props.data.anchor}/${props.data.block}`}/>
+        <CommentSubmit bounty={`anchor://${props.data.anchor}/${props.data.block}`}/>
       </Col>
       
     </Row>

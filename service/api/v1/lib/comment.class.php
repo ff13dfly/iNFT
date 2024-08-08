@@ -11,7 +11,7 @@
 		
 		public function commentExsist($alink){
 			$warr=array(
-				"alink" => $alink,
+				"bounty" => $alink,
 			);
 			$page=0;
 			$arr=$this->commentList($page,$warr);
@@ -54,9 +54,9 @@
 
 		public function commentSearch($alink){
 			$warr=array(
-				'alink'=>$alink,
+				'bounty'=>$alink,
 			);
-			$arr=$this->bountyList(0,$warr);
+			$arr=$this->commentList(0,$warr);
 			//echo json_encode($arr);
 			return empty($arr)?FALSE:$arr[0];
 		}

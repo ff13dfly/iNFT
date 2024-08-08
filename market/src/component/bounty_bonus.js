@@ -31,7 +31,7 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    console.log(props.template);
+    //console.log(props.template);
     if(props.data){
       setList(props.data);
     }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import Config from "../system/config";
 import RUNTIME from "../system/runtime";
+import API from "../system/api";
 
 /* iNFT comment list
 *   @param  {string}    bounty           //bounty alink
@@ -25,7 +26,11 @@ function CommentList(props) {
   }
 
   useEffect(() => {
+    //console.log(props)
     setAvatar(self.getAvatar("abc"));
+    API.comment.list(props.bounty,(res)=>{
+      console.log(res);
+    });
   }, []);
 
   return (

@@ -14,6 +14,7 @@ function BountyComment(props) {
 
   let [avatar, setAvatar] = useState("imgs/logo.png");
 
+
   const self = {
 
   }
