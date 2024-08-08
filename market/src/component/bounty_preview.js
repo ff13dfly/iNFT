@@ -54,19 +54,18 @@ function BountyPreview(props) {
     autoCache: (ck) => {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
-        if (!res.success || !res.data) return false;
-
+        if (!res.success || !res.data) return ck && ck(false);
         if (res.data.apply) setApply(res.data.apply);
       });
 
       Bounty.get(alink, (local) => {
-        if (!local || local.length === 0) return false;
+        if (!local || local.length === 0) return ck && ck(false);
         const bt = local[0];
         if (bt.template && bt.template.cid) {
           TPL.view(bt.template.cid, (dt) => {
             setData(dt);
-            // console.log(`Bonus update?`);
             setBonus(bt.bonus);
+            return ck && ck(true);
           });
         }
       });
@@ -76,7 +75,7 @@ function BountyPreview(props) {
   useEffect(() => {
     console.log("Bounty preview:"+JSON.stringify(props));
     self.autoCache(() => {
-
+      console.log(data);
     });
   }, [props.data, props.extend]);
 
@@ -101,8 +100,12 @@ function BountyPreview(props) {
         
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus data={bonus} coin={coin} template={data} />
-
-        <BountyMinting template={""}/>
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <hr />
+          </Col>
+        </Row>
+        <BountyMinting template={data && data.cid?data.cid:""} bounty={`anchor://${props.data.anchor}/${props.data.block}`}/>
 
         <h5 className="pt-4">Bounty Detail</h5>
         {apply.map((row, index) => (

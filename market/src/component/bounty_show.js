@@ -105,7 +105,11 @@ function BountyShow(props) {
         <BountyBonus data={bonus} coin={coin} bounty={data.alink} template={!data.template || !data.template.raw?{}:data.template.raw}/>
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-        <BountyMinting template={props.data && props.data.template?props.data.template:""}/>
+        <Row className="pt-4">
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <BountyMinting template={props.data && props.data.template?props.data.template.cid:""} bounty={props.data && props.data.alink?props.data.alink:""}/>
+          </Col>
+        </Row>
         <BountyComment bounty={props.data && props.data.alink?props.data.alink:""}/>
       </Col>
     </Row>

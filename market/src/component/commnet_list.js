@@ -49,7 +49,7 @@ function CommentList(props) {
                 width="100%"
               />
             </Col>
-            <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
+            <Col className="pt-2" md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
               <div className="bounty_chat">{row.memo}</div>
             </Col>
           </Row>
