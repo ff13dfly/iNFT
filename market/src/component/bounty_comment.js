@@ -1,6 +1,9 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Config from "../system/config";
+import API from "../system/api";
+
 /* iNFT comment list
 *   @param  {string}    bounty           //bounty alink
 */
@@ -9,18 +12,25 @@ function BountyComment(props) {
   const size = {
     row: [12],
     comment: [2, 10],
-    left:[8,4],
+    left: [8, 4],
   };
 
-  let [avatar, setAvatar] = useState("imgs/logo.png");
-
+  let [list, setList] = useState([]);
 
   const self = {
-
+    getAvatar: (address) => {
+      const cfg = Config.get(["system", "avatar"]);
+      return `${cfg.base}/${address}.png${cfg.set}`;
+    },
   }
 
   useEffect(() => {
-    //console.log(props.bounty);
+    API.comment.list(props.bounty, (res) => {
+      if(!res.success) return false;
+      //const arr=res.data.reverse();
+      setList(res.data.slice(0,4).reverse());
+    });
+
   }, [props.bounty]);
 
   return (
@@ -35,47 +45,21 @@ function BountyComment(props) {
         <button className="btn btn-md btn-default">More</button>
       </Col>
       <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Row className="pb-4">
-          <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
-            <Image
-              className="avatar"
-              src={avatar}
-              roundedCircle
-              width="100%"
-            />
-          </Col>
-          <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
-            <div className="bounty_chat">It is a good one, go go go! Win 2 BTC in 2 days.Today is a good day.Today is a good day.</div>
-          </Col>
-        </Row>
-
-        <Row className="pb-4">
-          <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
-            <Image
-              className="avatar"
-              src={avatar}
-              roundedCircle
-              width="100%"
-            />
-          </Col>
-          <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
-            <div className="bounty_chat">Today is a good day.</div>
-          </Col>
-        </Row>
-
-        <Row className="pb-4">
-          <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
-            <Image
-              className="avatar"
-              src={avatar}
-              roundedCircle
-              width="100%"
-            />
-          </Col>
-          <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
-            <div className="bounty_chat">Today is a good day.</div>
-          </Col>
-        </Row>
+        {list.map((row, index) => (
+          <Row className="pb-2" key={index}>
+            <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
+              <Image
+                className="avatar"
+                src={self.getAvatar(row.address)}
+                roundedCircle
+                width="100%"
+              />
+            </Col>
+            <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
+              <div className="bounty_chat">{row.memo}</div>
+            </Col>
+          </Row>
+        ))}
       </Col>
     </Row>
   );

@@ -1,8 +1,7 @@
-import { Row, Col,Image } from "react-bootstrap";
+import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Config from "../system/config";
-import RUNTIME from "../system/runtime";
 import API from "../system/api";
 
 /* iNFT comment list
@@ -12,49 +11,52 @@ import API from "../system/api";
 function CommentList(props) {
   const size = {
     row: [12],
-    comment:[2, 10],
+    comment: [1, 11],
   };
 
   let [avatar, setAvatar] = useState("imgs/logo.png");
+  let [list, setList] = useState([]);
 
   const self = {
-    getAvatar: () => {
+    getAvatar: (address) => {
       const cfg = Config.get(["system", "avatar"]);
-      const addr = RUNTIME.account.get();
-      return `${cfg.base}/${addr}.png${cfg.set}`;
+      return `${cfg.base}/${address}.png${cfg.set}`;
     },
   }
 
   useEffect(() => {
     //console.log(props)
-    setAvatar(self.getAvatar("abc"));
-    API.comment.list(props.bounty,(res)=>{
-      console.log(res);
+    //setAvatar(self.getAvatar("abc"));
+    API.comment.list(props.bounty, (res) => {
+      if(!res.success) return false;
+      setList(res.data.reverse());
     });
-  }, []);
+  }, [props.update]);
 
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <h5>Comments</h5> 
+        <h5>Comments</h5>
       </Col>
-      <Col className="pt-2" style={{minHeight:"540px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Row className="pb-4">
-          <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
-            <Image
-              className="avatar"
-              src={avatar}
-              roundedCircle
-              width="100%"
-            />
-          </Col>
-          <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
-            <div className="bounty_chat">It is a good one, go go go! Win 2 BTC in 2 days.Today is a good day.Today is a good day.</div>
-          </Col>
-        </Row>
+      <Col className="pt-2" style={{ minHeight: "540px" }} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        {list.map((row, index) => (
+          <Row key={index} className="pb-4">
+            <Col className="" md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
+              <Image
+                className="avatar"
+                src={self.getAvatar(row.address)}
+                roundedCircle
+                width="100%"
+              />
+            </Col>
+            <Col md={size.comment[1]} lg={size.comment[1]} xl={size.comment[1]} xxl={size.comment[1]}>
+              <div className="bounty_chat">{row.memo}</div>
+            </Col>
+          </Row>
+        ))}
       </Col>
-      
     </Row>
+
   );
 }
 export default CommentList;

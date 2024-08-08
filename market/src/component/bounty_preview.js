@@ -26,6 +26,8 @@ function BountyPreview(props) {
   let [total, setTotal] = useState(0);
 
   let [apply, setApply] = useState([]);
+
+  let [update, setUpdate] = useState(0);
   const self = {
     getAlink: () => {
       return `anchor://${self.getAnchor()}/${self.getBlock()}`;
@@ -117,9 +119,10 @@ function BountyPreview(props) {
             ))}
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        
-        <CommentList bounty={`anchor://${props.data.anchor}/${props.data.block}`}/>
-        <CommentSubmit bounty={`anchor://${props.data.anchor}/${props.data.block}`}/>
+        <CommentList bounty={`anchor://${props.data.anchor}/${props.data.block}`} update={update}/>
+        <CommentSubmit bounty={`anchor://${props.data.anchor}/${props.data.block}`} callback={()=>{
+          setUpdate(update+1);
+        }}/>
       </Col>
       
     </Row>

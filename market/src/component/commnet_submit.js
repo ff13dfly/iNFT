@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import API from "../system/api";
+import RUNTIME from "../system/runtime";
 
 function CommentSubmit(props) {
   const size = {
@@ -9,9 +10,7 @@ function CommentSubmit(props) {
     left: [9,3],
   };
 
-  let [avatar, setAvatar] = useState("imgs/logo.png");
   let [content, setContent ]= useState("");
-
 
   const self = {
     changeContent:(ev)=>{
@@ -20,9 +19,11 @@ function CommentSubmit(props) {
     clickComment:(ev)=>{
       if(!content) return false;
       const alink=props.bounty;
-      const address="5DLgD2J6R7QRo8CuZRnT7ZiYmwUTLz2jmhUPc1Jd44LLrd9X";
+      const address = RUNTIME.account.get();
       API.comment.submit(address,content,alink,(res)=>{
         console.log(res);
+        if(!res.success) return false;
+        if(props.callback) props.callback();
       });
     },
   }
