@@ -1,5 +1,6 @@
 import { Row, Col, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import QRCode from "react-qr-code";
 
 import BountyComment from "./bounty_comment";
 import BountyMinting from "./bounty_minting";
@@ -76,7 +77,16 @@ function BountyShow(props) {
           <div className="qr pointer" hidden={!qr} onClick={(ev) => {
             self.clickQR();
           }}>
-            <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} />
+            {/* <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} /> */}
+            <QRCode 
+              bgColor={"#ffffff"}
+              fgColor={"#000000"}
+              title={"QR title"}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              // size={200}
+              value={"https://inft.w3os.net/market/bounty_reglrwnf/146805"} 
+              //viewBox={`0 0 256 256`}
+              />
           </div>
           <div className="template_thumb pointer" style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
             props.link("bounty", [props.data.name, props.data.block]);

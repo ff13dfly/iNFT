@@ -1,6 +1,8 @@
 import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import API from "../system/api";
+
 function BountyLoad(props) {
 
   const size = {
@@ -15,7 +17,9 @@ function BountyLoad(props) {
       setBounty(ev.target.value);
     },
     clickLoad:()=>{
-
+      API.bounty.view(bounty,(res)=>{
+        console.log(res);
+      });
     },
   }
   useEffect(() => {

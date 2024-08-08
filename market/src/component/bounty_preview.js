@@ -1,5 +1,6 @@
 import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import QRCode from "react-qr-code";
 
 import CommentList from "./commnet_list";
 import CommentSubmit  from "./commnet_submit";
@@ -91,7 +92,15 @@ function BountyPreview(props) {
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-            <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} />
+            <QRCode 
+              bgColor={"#ffffff"}
+              fgColor={"#000000"}
+              title={"QR title"}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              // size={200}
+              value={"https://inft.w3os.net/market/bounty_reglrwnf/146805"} 
+              //viewBox={`0 0 256 256`}
+              />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
             Start from

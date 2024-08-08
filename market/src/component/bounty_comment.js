@@ -49,7 +49,7 @@ function BountyComment(props) {
           <Row className="pb-2" key={index}>
             <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
               <Image
-                className="avatar"
+                className="avatar_bounty"
                 src={self.getAvatar(row.address)}
                 roundedCircle
                 width="100%"

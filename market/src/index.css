@@ -110,6 +110,12 @@ code {
   border: 1px solid #EEEEEE;
 }
 
+.avatar_bounty{
+  width: 60px;
+  height: 60px;
+  border: 1px solid #9ab4a1;
+}
+
 .qr{
   width: 200px;
   height: 200px;
