@@ -2,6 +2,8 @@ import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import API from "../system/api";
+import Bounty from "../system/bounty";
+import Network from "../network/router";
 
 function BountyLoad(props) {
 
@@ -11,6 +13,7 @@ function BountyLoad(props) {
   };
 
   let [bounty, setBounty]=useState("");
+  let [info, setInfo]=useState("");
 
   const self={
     changeBounty:(ev)=>{
@@ -19,7 +22,24 @@ function BountyLoad(props) {
     clickLoad:()=>{
       API.bounty.view(bounty,(res)=>{
         console.log(res);
+        if(!res.success){
+          return setInfo("No target bounty.");
+        }
+        
+        setBounty("");
+        
+        const chain=Network("anchor");
+        const name=self.getName(res.data.alink);
+        chain.view(name,"owner",(dt)=>{
+          const data=Bounty.convert(res.data,dt.address);
+          console.log(data);
+        });
       });
+    },
+    getName:(alink)=>{
+      const arr=alink.slice(9).split("/");
+      arr.pop();
+      return arr.join("/");
     },
   }
   useEffect(() => {
@@ -42,6 +62,7 @@ function BountyLoad(props) {
               self.clickLoad();
             }}>Load Bounty</button>
         </Col>
+        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>{info}</Col>
     </Row>
   );
 }

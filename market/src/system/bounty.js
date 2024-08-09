@@ -99,6 +99,22 @@ const self = {
 
         },
     },
+    convert:(raw,owner)=>{
+        const alink=raw.alink;
+        const more={
+            title:"",
+            desc:"",
+            template:"",
+            bonus:[],
+            coin:"",
+            start:0,
+            end:0,
+        };
+        const data=self.format.local(alink,owner,more);
+
+        data.status=raw.status;
+        return data;
+    },
     format:{
         status:()=>{
 
