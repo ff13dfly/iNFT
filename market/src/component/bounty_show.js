@@ -17,7 +17,7 @@ function BountyShow(props) {
   };
 
   let [ready, setReady] = useState(false);
-  let [data, setData] = useState({});   //bounty raw data with template detail
+  let [data, setData] = useState({});     //bounty raw data with template detail
   let [bonus, setBonus] = useState([]);
   let [coin, setCoin] = useState("");
   let [progress, setProgress] = useState([]);
@@ -112,7 +112,13 @@ function BountyShow(props) {
       </Col>
       <Col className="bounty_title" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
-        <BountyBonus data={bonus} coin={coin} bounty={data.alink} template={!data.template || !data.template.raw?{}:data.template.raw}/>
+        <BountyBonus 
+          data={bonus} 
+          coin={coin} 
+          bounty={props.data} 
+          template={!data.template || !data.template.raw?{}:data.template.raw}
+          dialog={props.dialog}
+        />
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
         <Row className="pt-4">

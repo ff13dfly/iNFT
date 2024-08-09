@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import BountyApply from "./bounty_apply";
 
 import API from "../system/api";
+import TPL from "../system/tpl";
 
 function BountyBonus(props) {
   const size = {
@@ -11,17 +12,13 @@ function BountyBonus(props) {
     grid: [4, 4, 4],
     left: [3,9],
   };
-
+  let [data, setData]= useState({});
   let [list, setList] = useState([]);
   let [progress, setProgress] = useState([]);
 
   const self = {
     clickApply: (index, alink) => {
-      console.log(index,alink);
-      API.bounty.view(alink, (res) => {
-        if (!res.success || !res.data) return false;
-        props.dialog.show(<BountyApply data={res.data} index={index} dialog={props.dialog} />, "Bounty apply");
-      });
+      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
     },
     getThumb: (index) => {
       if (!props.template || !props.template.series) return false;
@@ -31,8 +28,24 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    //console.log(props.template);
+    if(props.bounty){
+      if((typeof props.bounty)==="string"){
+        API.bounty.view(props.bounty,(res)=>{
+          console.log(res);
+          if(!res.success) return false;    //FIXME, more operation here.
+
+          const row=res.data;
+          TPL.view(row.template.cid,(dt)=>{
+            row.template.raw=dt;
+            setData(row);
+          });
+        });
+      }else{
+        setData(props.bounty);
+      }
+    }
     if(props.data){
+      console.log(props.data);
       setList(props.data);
     }
   }, [props.data]);
