@@ -155,3 +155,8 @@ code {
   word-wrap: break-word;
   font-weight: 500;
 }
+
+.playground_title{
+  border-left: 5px solid #988080;
+  padding-left: 5px;
+}
