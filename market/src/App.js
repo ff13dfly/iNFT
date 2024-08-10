@@ -25,7 +25,7 @@ import Detail from "./entry/detail";
 function App() {
 
   //parameters of router
-  let [content, setContent]=useState();
+  let [content, setContent]=useState("");
   let [target, setTarget]=useState("home");
   let [extend, setExtend ]=useState("");
 

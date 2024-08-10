@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import PriveiwINFT from "../component/inft_preview";
 import PartsINFT from "../component/inft_parts";
 import SeriesINFT from "../component/inft_series";
+import BasicINFT from "../component/inft_basic";
 import MockOffset from "../component/mock_offset";
 import MockHash from "../component/mock_hash";
 
@@ -47,6 +48,7 @@ function Playground(props) {
     let [full, setFull] = useState("imgs/empty.png");
     let [parts, setParts] = useState([]);
     let [series, setSeries] = useState([]);
+    let [basic, setBasic] = useState({});
 
     let [hideParts, setHideParts] = useState(false);
     let [hideSeries, setHideSeries] = useState(false);
@@ -96,10 +98,19 @@ function Playground(props) {
             }
             return arr;
         },
+        getBasic:(def)=>{
+            //console.log(def);
+            return {
+                cell:def.cell,
+                grid:def.grid,
+                size:def.size,
+            }
+        },
         show: (def) => {
             if (def.image) setFull(def.image);
             if (def.parts) setParts(def.parts);
             if (def.series) setSeries(def.series);
+            setBasic(self.getBasic(def));
             setShow(true);
         },
         getListFromOrgin: (map) => {
@@ -227,6 +238,7 @@ function Playground(props) {
                         </Col>
                     </Row>
                 </Col>
+
                 <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                     <Row className="pt-2">
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
@@ -266,6 +278,19 @@ function Playground(props) {
                             <hr />
                         </Col>
                     </Row>
+
+                    <Row>
+                        <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5>iNFT Basic</h5>
+                        </Col>
+                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <BasicINFT data={basic}/>
+                        </Col>
+                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <hr />
+                        </Col>
+                    </Row>
+
                     <Row className="pt-2">
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
                             <h5>iNFT Parts ( {parts.length} )</h5>

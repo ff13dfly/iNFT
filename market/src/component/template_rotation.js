@@ -1,4 +1,4 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col,Table } from "react-bootstrap";
 import { useState,useEffect } from "react";
 
 function TemplateRotation(props) {
@@ -24,10 +24,26 @@ function TemplateRotation(props) {
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Table>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+              <th>Definition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>part.rotation</td>
+              <td>{props.data && props.data[0]}</td>
+              <td>Part rotation value.</td>
+            </tr>
+          </tbody>
+        </Table>
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <hr/>
+
       </Col>
     </Row>
   );
