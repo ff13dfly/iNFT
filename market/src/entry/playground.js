@@ -51,9 +51,10 @@ function Playground(props) {
     let [basic, setBasic] = useState({});
 
     let [hideParts, setHideParts] = useState(false);
-    let [hideSeries, setHideSeries] = useState(false);
-    let [hideImage, setHideImage] = useState(false);
-    let [hideMock, setHideMock] = useState(false);
+    let [hideSeries, setHideSeries] = useState(true);
+    let [hideImage, setHideImage] = useState(true);
+    let [hideMock, setHideMock] = useState(true);
+    let [hideBasic, setHideBasic] = useState(false);
 
     const self = {
         changeSearch: (ev) => {
@@ -82,6 +83,9 @@ function Playground(props) {
         },
         switchParts: () => {
             setHideParts(!hideParts);
+        },
+        switchBasic: () => {
+            setHideBasic(!hideBasic);
         },
         switchImage: () => {
             setHideImage(!hideImage);
@@ -283,7 +287,12 @@ function Playground(props) {
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
                             <h5 className="playground_title">iNFT Basic</h5>
                         </Col>
-                        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
+                                self.switchBasic(ev);
+                            }}>{!hideBasic ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideBasic} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                             <BasicINFT data={basic}/>
                         </Col>
                         <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
@@ -293,7 +302,7 @@ function Playground(props) {
 
                     <Row className="pt-2">
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
-                            <h5 className="playground_title">iNFT Parts ( {parts.length} )</h5>
+                            <h5 className="playground_title">iNFT Parts ( {parts.length} pieces to combine iNFT )</h5>
                         </Col>
                         <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
                             <button className="btn btn-sm btn-light" onClick={(ev) => {
