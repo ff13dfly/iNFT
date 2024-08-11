@@ -1,14 +1,17 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import PriveiwINFT from "./inft_preview";
+
 import Network from "../network/router";
 import tools from "../lib/tools";
 
 import API from "../system/api";
 import TPL from "../system/tpl";
 import Config from "../system/config";
+import Bounty from "../system/bounty";
 
-import PriveiwINFT from "./inft_preview";
+import { FaCheck } from "react-icons/fa";
 
 function BountyApply(props) {
   const size = {
@@ -16,13 +19,13 @@ function BountyApply(props) {
     half: [6],
     right: [4, 8],
     left: [8, 4],
+
   };
 
   let [search, setSearch] = useState("");
   let [info, setInfo] = useState("");
   let [thumb, setThumb] = useState(`${window.location.origin}/imgs/logo.png`);
 
-  let [hiddenPreview, setHiddenPreview] = useState(true);
   let [disable, setDisable] = useState(true);
   let [hidden, setHidden] = useState(false);
 
@@ -30,6 +33,7 @@ function BountyApply(props) {
   let [template, setTemplate] = useState("");
   let [offset, setOffset] = useState([]);
   let [owner, setOwner] = useState("");
+  let [same, setSame]= useState(true);
 
   //apply details
   let [network, setNetwork] = useState("anchor");   //network to get bonus
@@ -67,21 +71,26 @@ function BountyApply(props) {
 
       });
     },
+    clickSame:()=>{
+      setSame(!same);
+      if(!same){
+        setReceiver(owner);
+      }else{
+        setReceiver("");
+      }
+    },
     clickApply: (ev) => {
       const alink = props.data.alink;
       self.getAnchor(search, (dt) => {
         const inft = `anchor://${dt.name}/${dt.block}`;
-        //1.write on chain
-        const name = self.getApplyName(8).toLocaleLowerCase();
-        const raw = self.getApplyData(inft);
-        const protocol = { fmt: "json", type: "data", ref: alink };    //"ref" is the keyword of Easy Protocol
 
-        const dapp = Config.get(["system", "name"]);
+        //1.write on chain
+        const name = Bounty.format.name("apply");
         const obj = {
           anchor: name,
-          raw: raw,
-          protocol: protocol,
-          dapp: dapp,
+          raw: Bounty.format.raw.apply(alink,props.index,inft,network,receiver),
+          protocol: Bounty.format.protocol.apply(alink),
+          dapp: Config.get(["system", "name"]),
         }
 
         const chain = Network("anchor");
@@ -99,9 +108,9 @@ function BountyApply(props) {
 
               //2.report to portal
               API.bounty.apply(alink, inft, rlink, (res) => {
-                console.log(res);
 
                 //3.save to local indexedDB
+
 
               });
             });
@@ -109,27 +118,12 @@ function BountyApply(props) {
         });
       });
     },
-    getApplyData: (inft_link) => {
-      //console.log(props.data,props.index);
-      return {
-        inft: inft_link,      //apply inft anchor link
-        target: props.data.alink,    //bounty anchor link
-        bonus: props.index,      //bonus index
-        receiver: {
-          network: network,
-          address: receiver,
-        }
-      }
-    },
-    getApplyName: (n) => {
-      return `apply_${tools.char(n)}`;
-    },
     showINFT: (inft) => {
       setHash(inft.hash);
       setOffset(inft.raw.offset);
       setOwner(inft.owner);
       setTemplate(inft.raw.tpl);
-      setHiddenPreview(false);
+      if(same) setReceiver(inft.owner);
     },
 
     checkValid: () => {
@@ -190,7 +184,7 @@ function BountyApply(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            {tools.shorten(owner, 12)}
+            iNFT owner: {tools.shorten(owner, 12)}
           </Col>
           <Col hidden={false} className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
 
@@ -198,11 +192,22 @@ function BountyApply(props) {
         </Row>
       </Col>
 
+      <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+        <input type="text" disabled={same}  className="form-control" placeholder="The account address to accept the bonus coins/token." value={receiver} onChange={(ev)=>{
+            self.changeReceiver(ev)
+        }} />
+      </Col>
+      <Col className="pt-2" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+            <button className={same ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
+              self.clickSame(ev)
+            }}><FaCheck /></button>
+            <span className="ml-10">Other receiver</span>
+      </Col>
 
       <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         {chainInfo}
       </Col>
-      <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+      <Col className="pt-2 text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
         <button disabled={disable} className="btn btn-md btn-primary" onClick={(ev) => {
           self.clickApply(ev);
         }}>Apply</button>

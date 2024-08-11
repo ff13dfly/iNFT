@@ -284,7 +284,7 @@
 			console.log("Here to show bounty details.",data);
 		});
 
-		const test_alink="anchor://distribute_vhvieuhepwsx/238976";
+		const test_alink="anchor://apply_jrjwqpji/290080";
 		Decoder(test_alink,startAPI,(data)=>{
 			console.log(test_alink,data);
 		});

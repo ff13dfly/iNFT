@@ -31,9 +31,6 @@ function BountyShow(props) {
     clickQR:()=>{
       setQR(!qr);
     },
-    // clickApply: (index, alink) => {
-    //   props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty apply");
-    // },
     calcBonus: (list) => {
       let amount = 0;
       for (let i = 0; i < list.length; i++) {

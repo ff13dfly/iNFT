@@ -10,7 +10,7 @@ $a->load("bounty");
 $a=Bounty::getInstance();
 
 $warr=array(
-    "status"    =>  BOUNTY_STATUS_OK,
+    "applied"    =>  1,
 );
 
 $arr=$a->bountyList($page,$warr);
