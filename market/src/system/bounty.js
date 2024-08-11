@@ -149,7 +149,7 @@ const self = {
                   cid:more.template,
                   orgin:"web3.storage",
                 },
-                payment: "ALINK_OF_PAYMENT",
+                payment: "",            //payment alink
                 bonus: more.bonus,
                 start: more.start,
                 end: more.end,

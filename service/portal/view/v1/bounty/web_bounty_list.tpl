@@ -33,6 +33,7 @@
 									<th>Start(block)</th>
 									<th>End(block)</th>
 									<th>Status</th>
+									<th>Applied</th>
 								</tr>
 
 								{%if count($F.list) neq 0%} {%foreach from=$F.list key=k item=v %}
@@ -46,6 +47,15 @@
 									<td>{%$v.start%}</td>
 									<td>{%$v.end%}</td>
 									<td>{%$v.status%}</td>
+									<td>
+										{%if $v.applied eq 1%}
+										<button class="btn btn-sm btn-warning bounty_offline"
+											data="{%$v.id%}">下架</button>
+										{%else%}
+										<button class="btn btn-sm btn-primary bounty_applied"
+											data="{%$v.id%}">上架</button>
+										{%/if%}
+									</td>
 								</tr>
 								{%/foreach%} {%/if%}
 							</table>
@@ -58,7 +68,25 @@
 </section>
 
 <script type="text/javascript">
+	$(".bounty_applied").off("click").on("click", function() {
+		$(this).prop("disabled",true);
+		const id = parseInt($(this).attr("data"));
+		const param={id:id};
+		const cfg = {mod:'bounty',act:'applied',param:param}
+		FF.fn.ajax(cfg, false, function(dt) {
+			if (dt.success)  location.reload();
+		})
+	});
 
+	$(".bounty_offline").off("click").on("click", function(){
+		$(this).prop("disabled",true);
+		const id = parseInt($(this).attr("data"));
+		const param={id:id};
+		const cfg = {mod:'bounty',act:'offline',param:param}
+		FF.fn.ajax(cfg, false, function(dt) {
+			if (dt.success)  location.reload();
+		})
+	});
 </script>
 
 {%include file="{%DEF_VERSION%}/common/web_footer.tpl" title=foo%}

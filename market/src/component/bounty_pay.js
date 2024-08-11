@@ -124,6 +124,7 @@ function BountyPay(props) {
 
             //3.check wether payed from local
             Bounty.get(alink,(local)=>{
+              console.log(local);
               if(local.error){
                 //FIXME, here to fresh local bounty information.
                 return false;
