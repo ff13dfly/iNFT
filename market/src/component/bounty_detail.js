@@ -1,9 +1,8 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col,Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
 import Network from "../network/router";
-import Config from "../system/config";
 
 function BountyDetail(props) {
   const size = {
@@ -13,9 +12,6 @@ function BountyDetail(props) {
   };
 
   let [list, setList] = useState([]);
-  let [total,setTotal] =useState("");
-  let [coin, setCoin]=useState("");
-  let [target, setTarget]=useState("");
 
   const self = {
     getParts: () => {
@@ -26,7 +22,6 @@ function BountyDetail(props) {
     selected: (bonus,coin) => {
       if (!props.data || !props.data.series) return false;
       const nlist = [];
-      let sum=0;
       for (let i = 0; i < bonus.length; i++) {
         const row = tools.clone(bonus[i]);
         const se = props.data.series[row.series];
@@ -34,11 +29,8 @@ function BountyDetail(props) {
         row.name = se.name;
         row.coin=coin;
         nlist.push(row);
-
-        sum+=row.bonus*row.amount;
       }
       setList(nlist);
-      setTotal(sum);
     },
     decode:(alink)=>{
       const str=alink.replace("anchor://","");
@@ -52,13 +44,6 @@ function BountyDetail(props) {
       if (dt) Network("anchor").view(dt, "anchor", (res) => {
         //1.list bonus and calc total
         self.selected(res.raw.bonus,res.raw.coin);
-
-        //2. set coin
-        setCoin(res.raw.coin);
-
-        //3. set receiver
-        const addr=Config.get(["bounty","receiver","anchor"]);
-        setTarget(addr);
       });
     },
   }
@@ -77,11 +62,22 @@ function BountyDetail(props) {
             </Col>
             <Col md={size.thumb[1]} lg={size.thumb[1]} xl={size.thumb[1]} xxl={size.thumb[1]}>
               <h5>#{row.series} {row.name}</h5>
-              <p>
-                Bonus <strong>{row.bonus}</strong> ${row.coin.toUpperCase()} <br/>
-                Wanted <strong>{row.amount}</strong> <br/>
-                Total <strong>{(row.amount*row.bonus).toLocaleString()}</strong> ${row.coin.toUpperCase()}
-              </p>
+              <Table>
+                <tbody>
+                  <tr>
+                    <td>Bonus</td>
+                    <td>{row.bonus.toLocaleString()} ${row.coin.toUpperCase()}</td>
+                  </tr>
+                  <tr>
+                    <td>Wanted</td>
+                    <td>{row.amount.toLocaleString()} {row.amount===1?"piece":"pieces"}</td>
+                  </tr>
+                  <tr>
+                    <td>Total</td>
+                    <td>{(row.amount*row.bonus).toLocaleString()} ${row.coin.toUpperCase()}</td>
+                  </tr>
+                </tbody>
+              </Table>
             </Col>
           </Row>
 

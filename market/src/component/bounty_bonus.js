@@ -31,7 +31,6 @@ function BountyBonus(props) {
     if(props.bounty){
       if((typeof props.bounty)==="string"){
         API.bounty.view(props.bounty,(res)=>{
-          console.log(res);
           if(!res.success) return false;    //FIXME, more operation here.
 
           const row=res.data;
@@ -45,7 +44,7 @@ function BountyBonus(props) {
       }
     }
     if(props.data){
-      console.log(props.data);
+      //console.log(props.data);
       setList(props.data);
     }
   }, [props.data]);

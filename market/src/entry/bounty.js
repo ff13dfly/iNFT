@@ -28,7 +28,7 @@ function Bounty(props) {
 
     const self = {
         clickAdd:(ev)=>{
-            props.dialog.show(<BountySubmit />,"Bounty Submission");
+            props.dialog.show(<BountySubmit dialog={props.dialog} />,"Bounty Submission");
         },
     }
 

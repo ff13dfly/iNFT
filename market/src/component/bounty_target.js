@@ -85,12 +85,18 @@ function BountyTarget(props) {
   useEffect(() => {
     if(props.link){
       Bounty.get(props.link,(dt)=>{
-        if(dt.length!==0){
-          self.selected(dt[0].bonus);
+        if(!dt.error){
+          self.selected(dt.bonus);
           setModify(false);
         }else{
           self.fresh();
         }
+        // if(dt.length!==0){
+        //   self.selected(dt[0].bonus);
+        //   setModify(false);
+        // }else{
+        //   self.fresh();
+        // }
       });
     }else{
       self.fresh();

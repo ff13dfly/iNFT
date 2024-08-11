@@ -40,9 +40,10 @@ function UserBounty(props) {
       props.dialog.show(<BountySubmit name={name} />, "Bounty Submission");
     },
     clickSync: (name) => {
-      Bounty.get(name, (dt) => {
-        if (!dt || dt.length === 0) return false;
-        const bt = dt[0];
+      Bounty.get(name, (bt) => {
+        if(bt.error) return false;
+        //if (!dt || dt.length === 0) return false;
+        //const bt = dt[0];
         console.log(bt);
         const name = bt.name;
         API.bounty.exsist(name, (res) => {

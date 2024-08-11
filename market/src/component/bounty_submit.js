@@ -34,9 +34,13 @@ function BountySubmit(props) {
 
   //step enable
   let [ready, setReady] = useState(false);
-  let [modify, setModify] = useState(true);       //wether modifable
+  //let [modify, setModify] = useState(true);       //wether modifable
   let [bounty, setBounty] = useState({});
   let [more, setMore] = useState({});
+
+  let [enableLoad, setEnableLoad] = useState(true);
+  let [enableSubmit, setEnableSubmit] = useState(false);
+  //let [enablePay, setEnablePay] = useState(true);
 
   //UI improvement
   let [tabs, setTabs] = useState({
@@ -82,6 +86,7 @@ function BountySubmit(props) {
       TPL.view(template, (dt) => {
         setData(dt);
         setReady(true);
+        //setModify(false);
       });
     },
     clickSubmit: () => {
@@ -91,8 +96,7 @@ function BountySubmit(props) {
       //1.write data on chain
       const raw = Bounty.format.raw.submit(addr, more);
       const protocol = Bounty.format.protocol.submit();
-      //const raw = self.getBountyData(addr);
-      //const protocol = { fmt: "json", type: "data", tpl: "bounty",app:"inft"};
+
       const dapp = Config.get(["system", "name"]);
       const obj = {
         anchor: name,
@@ -112,18 +116,20 @@ function BountySubmit(props) {
           const hash = res.hash;    //get the transaction hash
 
           chain.view({ name: name }, "anchor", (adata) => {
-            console.log(JSON.stringify(adata));
+            //console.log(JSON.stringify(adata));
 
             if (!adata) return setInfo("Failed to get the bounty anchor data.");
             const alink = `anchor://${name}/${adata.block}`;
-            //const bt = self.getLocalData(alink,addr);
+
             const bt = Bounty.format.local(alink, addr, more);
-            bt.status = 3;
+            bt.status = Bounty.status("bounty", "LOCAL_SAVED");
             bt.publish.block = adata.block;
             bt.publish.hash = hash;
 
+            //2.save the bounty data to local storage.
             Bounty.insert(bt, (dt) => {
-              //4.report to iNFT proxy system
+
+              //3.report to iNFT manage system
               const detail = {
                 bonus: bt.bonus,
                 desc: bt.desc,
@@ -131,12 +137,14 @@ function BountySubmit(props) {
                 payer: bt.payer,
               }
               API.bounty.submit(alink, bt.coin, bt.start, bt.end, JSON.stringify(bt.template), JSON.stringify(detail), (res) => {
-                //console.log(res);
-                if (res && res.success) {
-                  setAnchor(alink);
+                if (!res || !res.success) return setInfo("Failed to submit to system");
+
+                //4.update local status
+                setAnchor(alink);
+                Bounty.update.toReported(alink, () => {
+
                   return props.dailog.close();
-                }
-                setInfo("Failed to submit to system");
+                });
               });
             });
           });
@@ -163,15 +171,15 @@ function BountySubmit(props) {
       //1.write payment information on chain
       const chain = Network("anchor");
       chain.sign(obj, (res) => {
-        if(res.status!=="Finalized") return setPayInfo(res.msg);
+        if (res.status !== "Finalized") return setPayInfo(res.msg);
 
-        chain.view({name:name},"anchor",(dt)=>{
-          const alink=`anchor://${name}/${dt.block}`;
+        chain.view({ name: name }, "anchor", (dt) => {
+          const alink = `anchor://${name}/${dt.block}`;
           //2.update local record status
-          Bounty.update.toPayed(props.name,alink,()=>{
+          Bounty.update.toPayed(props.name, alink, () => {
             //3.submit the payment details to portal system 
-            API.bounty.payment(props.name,alink,(rows)=>{
-              
+            API.bounty.payment(props.name, alink, (rows) => {
+
             });
           });
         });
@@ -196,6 +204,7 @@ function BountySubmit(props) {
       setTemplate(bt.template.cid);
       setTimeout(() => {
         loadRef.current.click();
+        setEnableLoad(false);
       }, 200);
 
       if (bt.bonus) setBonus(bt.bonus);
@@ -206,14 +215,16 @@ function BountySubmit(props) {
     self.changeTabTitle("step_2");
     if (props.name) {
       setAnchor(props.name);
-      Bounty.get(props.name, (res) => {
-        if (!res || res.length === 0) return false;
-        const bty = res[0];
-        //console.log(bty);
+      Bounty.get(props.name, (bty) => {
+        //if (!res || res.length === 0) return false;
+        if(bty.error) return false;
+        //const bty = res[0];
         self.load(bty);
         setBounty(bty);
-        setModify(false);
+        //setModify(false);
       });
+    } else {
+      setEnableSubmit(true);
     }
   }, [props.name]);
 
@@ -234,13 +245,13 @@ function BountySubmit(props) {
           </Col>
 
           <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
-            <input type="text" className="form-control" placeholder="Input template CID"
+            <input type="text" disabled={!enableLoad} className="form-control" placeholder="Input template CID"
               value={template} onChange={(ev) => {
                 self.changeTemplate(ev);
               }} />
           </Col>
           <Col className="pt-2 text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-            <button className="btn btn-md btn-primary" ref={loadRef} onClick={(ev) => {
+            <button disabled={!enableLoad} className="btn btn-md btn-primary" ref={loadRef} onClick={(ev) => {
               self.clickLoad(ev);
             }}>Load</button>
           </Col>
@@ -257,7 +268,7 @@ function BountySubmit(props) {
                 Setup the details about the bounty and write on chain.
               </Col>
               <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyMore bounty={bounty} modify={modify} callback={(more) => {
+                <BountyMore bounty={bounty} callback={(more) => {
                   self.callbackMore(more);
                 }} />
               </Col>
@@ -270,7 +281,7 @@ function BountySubmit(props) {
                 {info}
               </Col>
               <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-                <button disabled={!modify} className="btn btn-md btn-primary" onClick={(ev) => {
+                <button disabled={!enableSubmit} className="btn btn-md btn-primary" onClick={(ev) => {
                   self.clickSubmit();
                 }}>Submit</button>
               </Col>

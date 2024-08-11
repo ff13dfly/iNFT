@@ -6,6 +6,7 @@ import Network from "../network/router";
 import Config from "../system/config";
 import API from "../system/api";
 import tools from "../lib/tools";
+import Bounty from "../system/bounty";
 
 import { FaCheck } from "react-icons/fa";
 
@@ -82,7 +83,6 @@ function BountyPay(props) {
     getBounty: (val, ck) => {
       const chain = Network("anchor");      //bounty data is base on Anchor Network
       chain.view(val, "anchor", (res) => {
-        //console.log(res);
         return ck && ck(res);
       });
     },
@@ -103,6 +103,7 @@ function BountyPay(props) {
     },
     autoSet: (alink) => {
       const bounty = self.decode(alink);
+      //1.get raw bounty data from anchor network
       if (bounty) {
         self.getBounty(bounty, (data) => {
           if (!data.raw || !data.raw.coin) return props.callback && props.callback({ error: "Invalid bounty anchor" });
@@ -115,19 +116,30 @@ function BountyPay(props) {
           const n = self.calcAmount(data.raw.bonus);
           setAmount(n);
 
+          //2.get target account address from portal
           API.bounty.target(net, (res) => {
             if (!res.success) return props.callback && props.callback({ error: "Failed to get target address to pay." })
             setTarget(res.target);
             setReady(true);
-          });
 
+            //3.check wether payed from local
+            Bounty.get(alink,(local)=>{
+              if(local.error){
+                //FIXME, here to fresh local bounty information.
+                return false;
+              }
+              if(local.payment) setReady(false);    //Payed, need to mute the pay function
+            })
+          });
         });
       }
     },
   }
 
   useEffect(() => {
+    //console.log(props);
     if (props.bounty) self.autoSet(props.bounty);
+
   }, [props.bounty]);
 
   return (
@@ -144,7 +156,7 @@ function BountyPay(props) {
             }}><FaCheck /></button>
           </Col>
           <Col hidden={payed} className="" md={size.transaction[1]} lg={size.transaction[1]} xl={size.transaction[1]} xxl={size.transaction[1]}>
-            <input className="form-control" type="text" placeholder={`Transaction hash of ${tools.toUp(network)} network`} onChange={(ev) => {
+            <input className="form-control" disabled={!ready} type="text" placeholder={`Transaction hash of ${tools.toUp(network)} network`} onChange={(ev) => {
               self.changeHash(ev);
             }} />
           </Col>

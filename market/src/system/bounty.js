@@ -1,3 +1,4 @@
+import { propTypes } from "react-bootstrap/esm/Image";
 import INDEXED from "../lib/indexed";
 import tools from "../lib/tools";
 
@@ -71,7 +72,10 @@ const self = {
     },
     get:(name,ck)=>{
         funs.checkDB(table,(db)=>{
-            INDEXED.searchRows(db,table,"name",name,ck);
+            INDEXED.searchRows(db,table,"name",name,(arr)=>{
+                if(arr.length!==1) return ck && ck({error:"Failed to get bounty"});
+                return ck && ck(arr[0]);
+            });
         });
     },
     list: (ck,filter,page,step) => {
@@ -83,6 +87,15 @@ const self = {
         toChain:(name,ck)=>{
             funs.checkDB(table,(db)=>{
 
+            });
+        },
+        toReported:(alink,ck)=>{
+            funs.checkDB(table,(db)=>{
+                INDEXED.searchRows(db,table,"name",alink,(rows)=>{
+                    if(rows.length!==1) return ck && ck({error:"Invalid bounty alink."});
+                    rows[0].status=process.bounty.REPORTED;
+                    INDEXED.updateRow(db,table,rows,ck);
+                });
             });
         },
         toPayed:(name,alink,ck)=>{
@@ -115,10 +128,12 @@ const self = {
         data.status=raw.status;
         return data;
     },
+    status:(cat,key)=>{
+        if(!process[cat]) return false;
+        if(!process[cat][key]) return false;
+        return process[cat][key];
+    },
     format:{
-        status:()=>{
-
-        },
         local:(alink,addr,more)=>{
             return {
                 name: alink,

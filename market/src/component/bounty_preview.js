@@ -59,9 +59,8 @@ function BountyPreview(props) {
         if (res.data.apply) setApply(res.data.apply);
       });
 
-      Bounty.get(alink, (local) => {
-        if (!local || local.length === 0) return ck && ck(false);
-        const bt = local[0];
+      Bounty.get(alink, (bt) => {
+        if(bt.error) return ck && ck(bt);
         if (bt.template && bt.template.cid) {
           TPL.view(bt.template.cid, (dt) => {
             setData(dt);

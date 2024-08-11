@@ -80,23 +80,26 @@ function BountyMore(props) {
       if (bt.desc) setDesc(bt.desc);
       if (bt.start) setStart(bt.start);
       if (bt.end) setEnd(bt.end);
-      if (bt.coin) {
-        setCoin(bt.coin);
-        const cs = self.getCoins();
-        setCoins(cs);
-      }
+      if (bt.coin) setCoin(bt.coin);
+        
+      const cs = self.getCoins();
+      setCoins(cs);
+
+      setDisable(!bt.name?false:true);
     },
   }
 
   useEffect(() => {
-    //console.log(props.bounty);
     self.load(props.bounty);
     Network("anchor").subscribe("bounty_submit", (bk, hash) => {
       setBlock(bk);
-      setStart(bk + 10000);
-      setEnd(bk + 30000);
+      if(start===0 && end===0){
+        setStart(bk + 10000);
+        setEnd(bk + 30000);
+      }
     });
-  }, [props.bounty,props.modify]);
+
+  }, [props.bounty]);
 
   return (
     <Row>
