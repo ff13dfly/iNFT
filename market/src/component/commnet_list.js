@@ -5,7 +5,8 @@ import Config from "../system/config";
 import API from "../system/api";
 
 /* iNFT comment list
-*   @param  {string}    bounty           //bounty alink
+*   @param  {string}    bounty      //bounty alink
+*   @param  {number}    [height]    //mini height of container
 */
 
 function CommentList(props) {
@@ -21,6 +22,10 @@ function CommentList(props) {
     getAvatar: (address) => {
       const cfg = Config.get(["system", "avatar"]);
       return `${cfg.base}/${address}.png${cfg.set}`;
+    },
+    getMinHeight:()=>{
+      if(props.height) return `${props.height}px`;
+      return "540px";
     },
   }
 
@@ -38,7 +43,7 @@ function CommentList(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Comments</h5>
       </Col>
-      <Col className="pt-2" style={{ minHeight: "540px" }} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" style={{ minHeight: self.getMinHeight()}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {list.map((row, index) => (
           <Row key={index} className="pb-4">
             <Col className="" md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>

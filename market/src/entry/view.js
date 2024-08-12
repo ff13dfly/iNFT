@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
 import AccountSign from "../component/account_sign";
+import BountyMinting from "../component/bounty_minting";
+import CommentList from "../component/commnet_list";
+import CommentSubmit from "../component/commnet_submit";
+
 import INFT from "../system/inft";
 import Network from "../network/router";
 
@@ -17,6 +21,9 @@ function View(props) {
     let [way, setWay] = useState("wallet");
     let [network,setNetwork] = useState("anchor");
 
+    let [template, setTemplate] = useState("");
+    let [update, setUpdate] = useState(0);
+    
     const payment={
         wallet:{},
         local:{},
@@ -36,13 +43,19 @@ function View(props) {
                 console.log(process);
             },pair.wallet,pair.address);
         },
+        getAlink:()=>{
+            return "abc";
+        },
     }
 
     useEffect(() => {
+        
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
             if(dt.network) setNetwork(dt.network);
             INFT.single(dt.name,(res)=>{
+                //console.log(res);
+                setTemplate(res.raw.tpl);
                 setData(res);
             });
         }
@@ -60,18 +73,29 @@ function View(props) {
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
                 <Row>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <DetailINFT data={data} link={props.link} />
                         <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         {!data || !data.local?"Network":"Local Cache"}
                     </Col>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        
+                        <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
+                            self.clickBuy(pair);
+                        }}/>
+                    </Col>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <hr />
+                    </Col>
                 </Row>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                <DetailINFT data={data} link={props.link} />
-                <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
-                    self.clickBuy(pair);
-                }}/>
+                <BountyMinting template={template} bounty={props.name}/>
+                <CommentList bounty={self.getAlink()} update={update} height={360} />
+                <CommentSubmit bounty={self.getAlink()} callback={() => {
+                    setUpdate(update + 1);
+                }} />
             </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 

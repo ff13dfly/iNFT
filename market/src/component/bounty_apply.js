@@ -17,7 +17,7 @@ function BountyApply(props) {
   const size = {
     row: [12],
     half: [6],
-    right: [4, 8],
+    right: [5,7],
     left: [8, 4],
 
   };
