@@ -26,9 +26,15 @@ The unit test follow the substrate standard. Just change directory to frame/anch
     cargo test --package pallet-anchor --features runtime-benchmarks
 ```
 
-### Compatibility
+Hard link the files to `polkadot-sdk` target folder `substrate/frame/anchor`.
 
-* Compiled successful on [https://github.com/paritytech/substrate/releases/tag/monthly-2023-02](https://github.com/paritytech/substrate/releases/tag/monthly-2023-02)
+```SHELL
+  cd ./polkadot-sdk/substrate/frame/anchor
+  ln ./pallet/src/lib.rs lib.rs
+  ln ./pallet/src/tests.rs tests.rs
+  ln ./pallet/src/weights.rs weights.rs
+  ln ./pallet/src/benchmarking.rs benchmarking.rs
+```
 
 ## Exposed Methods
 

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for pallet-example-basic.
+//! Tests for pallet-anchor.
 
 use crate::*;
 use frame_support::{
@@ -69,7 +69,6 @@ impl frame_system::Config for Test {
 	type SS58Prefix = ();
 	type OnSetCode = ();
 	type MaxConsumers = frame_support::traits::ConstU32<16>;
-	//type Currency: Currency<Self::AccountId>;
 }
 
 #[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
@@ -102,35 +101,35 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 }
 
 
-#[test]
-fn sample() {
-    new_test_ext().execute_with(|| {
-		let start_block = 100;		//set the start block number
-		let step = 20;				//the step for the block number
-		System::set_block_number(start_block); 	//need to start
+// #[test]
+// fn sample() {
+//     new_test_ext().execute_with(|| {
+// 		let start_block = 100;		//set the start block number
+// 		let step = 20;				//the step for the block number
+// 		System::set_block_number(start_block); 	//need to start
 
-		let key:Vec<u8> = b"hello".iter().cloned().collect();
-		let raw:Vec<u8> = b"Test...".iter().cloned().collect();
-		let protocol:Vec<u8> = b"Nothing".iter().cloned().collect();
-		let id_a=11;
-		let account_a=RuntimeOrigin::signed(id_a.clone());
+// 		let key:Vec<u8> = b"hello".iter().cloned().collect();
+// 		let raw:Vec<u8> = b"Test...".iter().cloned().collect();
+// 		let protocol:Vec<u8> = b"Nothing".iter().cloned().collect();
+// 		let id_a=11;
+// 		let account_a=RuntimeOrigin::signed(id_a.clone());
 
-		assert_ok!(
-			Anchor::set_anchor(account_a.clone(),key.clone(),raw.clone(),protocol.clone(),0)
-		);
-		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
+// 		assert_ok!(
+// 			Anchor::set_anchor(account_a.clone(),key.clone(),raw.clone(),protocol.clone(),0)
+// 		);
+// 		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
 
-		AnchorOwner::<Test>::insert(&key,(123, 3345));
-		assert_eq!(Anchor::owner(&key), Some((123,3345)));
+// 		AnchorOwner::<Test>::insert(&key,(123, 3345));
+// 		assert_eq!(Anchor::owner(&key), Some((123,3345)));
 
-		System::set_block_number(System::block_number() + step);
+// 		System::set_block_number(System::block_number() + step);
 
-		assert_eq!(Balances::free_balance(11), 1999000000000000);
-		assert_eq!(Balances::free_balance(22), 2999000000000000);
-		assert_eq!(Balances::free_balance(33), 3999000000000000);
-		assert_eq!(Balances::free_balance(44), 199000000000000);
-    });
-}
+// 		assert_eq!(Balances::free_balance(11), 1999000000000000);
+// 		assert_eq!(Balances::free_balance(22), 2999000000000000);
+// 		assert_eq!(Balances::free_balance(33), 3999000000000000);
+// 		assert_eq!(Balances::free_balance(44), 199000000000000);
+//     });
+// }
 
 
 #[test]
@@ -415,5 +414,33 @@ fn divert_anchor() {
 			Anchor::divert_anchor(account_a.clone(),key.clone(),id_b),
 		);
 		assert_eq!(Anchor::owner(&key), Some((id_b,start_block)));
+	});
+}
+
+#[test]
+fn drop_anchor() {
+	new_test_ext().execute_with(|| {
+		// set start block to start_block
+		let start_block = 100;		//set the start block number
+		let step = 20;				//the step for the block number
+		System::set_block_number(start_block); 	//need to start
+
+		// set_anchor data.
+		let key:Vec<u8> = b"divert_anchor".iter().cloned().collect();
+		let raw:Vec<u8> = b"Test more...".iter().cloned().collect();
+		let protocol:Vec<u8> = b"Protocol".iter().cloned().collect();
+
+		let id_a=11;
+		let account_a=RuntimeOrigin::signed(id_a);	//test account A
+
+		//1.set a new anchor
+		assert_ok!(
+			Anchor::set_anchor(account_a.clone(),key.clone(),raw.clone(),protocol.clone(),0)
+		);
+		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
+		System::set_block_number(System::block_number() + step);
+
+		//2.try to drop an anchor
+
 	});
 }

@@ -26,12 +26,26 @@ mod benchmarks {
 
     #[benchmark]
 	fn sell_anchor_benchmark() {
-        // let key:Vec<u8> = b"hello".iter().cloned().collect();
-        // let caller: T::AccountId = whitelisted_caller();
+        Ok(())
+    }
 
-        // #[extrinsic_call]
-        // set_anchor(RawOrigin::Signed(caller),key.clone(),raw.clone(),protocol.clone(),0);
+    #[benchmark]
+	fn unsell_anchor_benchmark() {
+        Ok(())
+    }
 
+    #[benchmark]
+	fn buy_anchor_benchmark() {
+        Ok(())
+    }
+
+    #[benchmark]
+	fn divert_anchor_benchmark() {
+        Ok(())
+    }
+
+    #[benchmark]
+	fn drop_anchor_benchmark() {
         Ok(())
     }
 

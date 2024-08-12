@@ -397,7 +397,7 @@ pub mod pallet {
 		/// Drop anchor to target account
 		#[pallet::call_index(5)]
 		#[pallet::weight(
-			<T as pallet::Config>::WeightInfo::set_unsell()
+			<T as pallet::Config>::WeightInfo::drop_anchor()
 		)]
 		pub fn drop_anchor(
 			origin: OriginFor<T>, 

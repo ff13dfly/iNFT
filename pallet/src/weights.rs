@@ -13,6 +13,7 @@ pub trait WeightInfo {
 	fn set_unsell() -> Weight;
 	fn buy_anchor() -> Weight;
 	fn divert_anchor() -> Weight;
+	fn drop_anchor() -> Weight;
 }
 
 /// Weights for pallet_example_basic using the Substrate node and recommended hardware.
@@ -43,6 +44,11 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 		Weight::from_parts(10_000_000, 12000)
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
+
+	fn drop_anchor() -> Weight {
+		Weight::from_parts(10_000_000, 12000)
+			.saturating_add(T::DbWeight::get().writes(1_u64))
+	}
 }
 
 // For backwards compatibility and tests
@@ -68,6 +74,11 @@ impl WeightInfo for () {
 	}
 
 	fn divert_anchor() -> Weight {
+		Weight::from_parts(10_000_000, 12000)
+			.saturating_add(RocksDbWeight::get().writes(1_u64))
+	}
+
+	fn drop_anchor() -> Weight {
 		Weight::from_parts(10_000_000, 12000)
 			.saturating_add(RocksDbWeight::get().writes(1_u64))
 	}
