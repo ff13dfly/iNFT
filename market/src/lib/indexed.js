@@ -261,7 +261,7 @@ const INDEXED = {
   *
   */
   pageRows: (db, table, ck, nav, search) => {
-    console.log(table,nav);
+    //console.log(table,nav);
     let list = [];
     const store = db.transaction(table, "readwrite").objectStore(table);
 

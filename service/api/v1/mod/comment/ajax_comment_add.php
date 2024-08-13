@@ -1,26 +1,26 @@
 <?php
 if(!defined('INFTAPI')) exit('error');
 
-$alink=$_F['request']['bounty'];
+$alink=$_F['request']['alink'];
 $address=$_F['request']['address'];
 $memo=$_F['request']['memo'];
 
 $result=array('success'=>FALSE);
 
 //1.check bounty
-$a->load("bounty");
-$a=Bounty::getInstance();
+// $a->load("bounty");
+// $a=Bounty::getInstance();
 
-if(!$a->bountyExsist($alink)){
-    $a=Config::getInstance();
-    $a->error("No such bounty");
-}
+// if(!$a->bountyExsist($alink)){
+//     $a=Config::getInstance();
+//     $a->error("No such bounty");
+// }
 
 $a->load("comment");
 $a=Comment::getInstance();
 
 $data=array(
-    "bounty"    =>  $alink,
+    "alink"    =>  $alink,
     "address"   =>  $address,
     "memo"      =>  $memo,
     "status"    =>  COMMENT_STATUS_OK,

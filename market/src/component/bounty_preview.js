@@ -136,8 +136,8 @@ function BountyPreview(props) {
         ))}
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        <CommentList bounty={self.getAlink()} update={update} />
-        <CommentSubmit bounty={self.getAlink()} callback={() => {
+        <CommentList alink={self.getAlink()} update={update} />
+        <CommentSubmit alink={self.getAlink()} callback={() => {
           setUpdate(update + 1);
         }} />
       </Col>

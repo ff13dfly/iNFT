@@ -32,11 +32,11 @@ function CommentList(props) {
   useEffect(() => {
     //console.log(props)
     //setAvatar(self.getAvatar("abc"));
-    API.comment.list(props.bounty, (res) => {
+    API.comment.list(props.alink, (res) => {
       if(!res.success) return false;
       setList(res.data.reverse());
     });
-  }, [props.update]);
+  }, [props.update,props.alink]);
 
   return (
     <Row>

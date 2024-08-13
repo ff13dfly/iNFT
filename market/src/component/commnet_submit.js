@@ -18,7 +18,7 @@ function CommentSubmit(props) {
     },
     clickComment:(ev)=>{
       if(!content) return false;
-      const alink=props.bounty;
+      const alink=props.alink;
       const address = RUNTIME.account.get();
       API.comment.submit(address,content,alink,(res)=>{
         console.log(res);
@@ -30,12 +30,12 @@ function CommentSubmit(props) {
 
   useEffect(() => {
     console.log(JSON.stringify(props))
-  }, []);
+  }, [props.alink]);
 
   return (
     <Row>
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-        <input type="text"  className="form-control" placeholder="Commnet of bounty" 
+        <input type="text"  className="form-control" placeholder="Commnet to submit" 
           value={content} 
           onChange={(ev)=>{
             self.changeContent(ev);

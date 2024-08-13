@@ -11,7 +11,7 @@
 		
 		public function commentExsist($alink){
 			$warr=array(
-				"bounty" => $alink,
+				"alink" => $alink,
 			);
 			$page=0;
 			$arr=$this->commentList($page,$warr);

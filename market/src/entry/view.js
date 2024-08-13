@@ -18,11 +18,9 @@ function View(props) {
     };
 
     let [data, setData] = useState();
-    let [way, setWay] = useState("wallet");
-    let [network,setNetwork] = useState("anchor");
-
     let [template, setTemplate] = useState("");
     let [update, setUpdate] = useState(0);
+    let [alink,setAlink] = useState("");
     
     const payment={
         wallet:{},
@@ -44,6 +42,7 @@ function View(props) {
             },pair.wallet,pair.address);
         },
         getAlink:()=>{
+            console.log(props);
             return "abc";
         },
     }
@@ -52,9 +51,8 @@ function View(props) {
         
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
-            if(dt.network) setNetwork(dt.network);
             INFT.single(dt.name,(res)=>{
-                //console.log(res);
+                setAlink(`anchor://${res.name}/${res.block}`);
                 setTemplate(res.raw.tpl);
                 setData(res);
             });
@@ -92,8 +90,8 @@ function View(props) {
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
                 <BountyMinting template={template} bounty={props.name}/>
-                <CommentList bounty={self.getAlink()} update={update} height={360} />
-                <CommentSubmit bounty={self.getAlink()} callback={() => {
+                <CommentList alink={alink} update={update} height={360} />
+                <CommentSubmit alink={alink} callback={() => {
                     setUpdate(update + 1);
                 }} />
             </Col>
