@@ -1,5 +1,5 @@
+// This file is part of anchor pallet.
 
-// Only enable this module for benchmarking.
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::*;

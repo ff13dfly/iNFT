@@ -28,7 +28,7 @@ module.exports = {
         ],
     },
     unit:{
-        anchor:"$MEKK",
+        anchor:"$ANK",
         tanssi:"$INFT",
     },
     proxy:true,             //system default proxy setting

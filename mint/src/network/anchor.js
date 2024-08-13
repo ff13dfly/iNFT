@@ -2,7 +2,8 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
 
 const config = {
-    node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
+    //node: "wss://dev2.metanchor.net",  //Tanssi appchain URI
+    node:"ws://127.0.0.1:9944",
     target: 12000,           //How long to create a new block
 }
 

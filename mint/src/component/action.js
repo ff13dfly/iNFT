@@ -187,6 +187,7 @@ function Action(props) {
                 //when more than one task, need closure to keep the index right.
                 ((task_index,target,raw,protocol,cid) => {
                     const cur=Data.getHash("cache","network");
+                    console.log(JSON.stringify({ anchor: target.name, raw: raw, protocol: protocol }));
                     Network(cur).write(pair, { anchor: target.name, raw: raw, protocol: protocol }, (process) => {
                         if (process.error) {
                             setDisable(false);
