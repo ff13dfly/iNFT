@@ -2,6 +2,7 @@ import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
+import MoreINFT from "../component/inft_more";
 import AccountSign from "../component/account_sign";
 import BountyMinting from "../component/bounty_minting";
 import CommentList from "../component/commnet_list";
@@ -13,8 +14,9 @@ import Network from "../network/router";
 function View(props) {
     const size = {
         row: [12],
-        header: [5, 7],
+        header:[5,7],
         buy:[8,2,2],
+        half:[6,6],
     };
 
     let [data, setData] = useState();
@@ -70,12 +72,15 @@ function View(props) {
             </Col>
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
                 <Row>
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        <DetailINFT data={data} link={props.link} />
+                    <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]} >
                         <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
+                        {!data || !data.local?"Network":"Local Cache"}
+                    </Col>
+                    <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]} >
+                        <DetailINFT data={data} link={props.link} />   
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        {!data || !data.local?"Network":"Local Cache"}
+                        <MoreINFT data={data} link={props.link} />   
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         

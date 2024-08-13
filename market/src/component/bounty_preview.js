@@ -7,7 +7,6 @@ import CommentSubmit from "./commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
 
-import tools from "../lib/tools";
 import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
 
@@ -97,7 +96,7 @@ function BountyPreview(props) {
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
               // size={200}
-              value={"https://inft.w3os.net/market/bounty_reglrwnf/146805"}
+              value={"https://inft.w3os.net/market/bounty/bounty_reglrwnf/146805"}
             //viewBox={`0 0 256 256`}
             />
           </Col>

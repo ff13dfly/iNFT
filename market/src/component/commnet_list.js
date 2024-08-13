@@ -30,9 +30,8 @@ function CommentList(props) {
   }
 
   useEffect(() => {
-    //console.log(props)
-    //setAvatar(self.getAvatar("abc"));
     API.comment.list(props.alink, (res) => {
+      console.log(res);
       if(!res.success) return false;
       setList(res.data.reverse());
     });
