@@ -1,9 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
-import { FaSlackHash,FaPizzaSlice,FaUserLock } from "react-icons/fa";
 
 import tools from "../lib/tools";
-
 
 /* iNFT render component parameters
 *   @param  {object}    data            //iNFT data

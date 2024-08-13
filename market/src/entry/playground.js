@@ -63,6 +63,9 @@ function Playground(props) {
         changeNetwork: (ev) => {
             setNetwork(ev.target.value);
         },
+        // clickSample:(cid)=>{
+            
+        // },
         clickLoad: (ev) => {
             setShow(false);
             if (network && search) {
@@ -191,6 +194,15 @@ function Playground(props) {
                         }}>Load Template</button>
                 </Col>
 
+                <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                    Sample
+                    <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
+                        props.link("playground", ["bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4"]);
+                    }}>bafkreibtt...rtgpyopn2e4</span>
+                    <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
+                        props.link("playground", ["bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i"]);
+                    }}>bafkreiddy...k4w5o2w5w4i</span>
+                </Col>
             </Row>
             <Row hidden={!show}>
                 <Col className="pt-2" md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >

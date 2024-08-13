@@ -66,9 +66,7 @@ function TemplateValue(props) {
           </tbody>
         </Table>
       </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-
-      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}></Col>
     </Row>
   );
 }
