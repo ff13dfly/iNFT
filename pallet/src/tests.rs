@@ -20,10 +20,9 @@
 use crate::*;
 use frame_support::{
 	assert_ok, derive_impl,assert_noop,
-	dispatch::{DispatchInfo, GetDispatchInfo},
-	traits::{ConstU64, OnInitialize},
 };
 use sp_core::H256;
+
 // The testing primitives are very useful for avoiding having to work with signatures
 // or public keys. `u64` is used as the `AccountId` and no `Signature`s are required.
 use sp_runtime::{
@@ -400,7 +399,7 @@ fn divert_anchor() {
 
 		let (id_a,id_b)=(11,22);
 		let account_a=RuntimeOrigin::signed(id_a);	//test account A
-		let account_b=RuntimeOrigin::signed(id_b);	//test account B
+		//let account_b=RuntimeOrigin::signed(id_b);	//test account B
 
 		//1.set a new anchor
 		assert_ok!(
@@ -441,6 +440,10 @@ fn drop_anchor() {
 		System::set_block_number(System::block_number() + step);
 
 		//2.try to drop an anchor
-
+		assert_ok!(
+			Anchor::drop_anchor(account_a.clone(),key.clone())
+		);
+		//FIXME, how to get the invalid account
+		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
 	});
 }

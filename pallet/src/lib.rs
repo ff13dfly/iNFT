@@ -49,9 +49,11 @@ use frame_system::ensure_signed;
 use sp_runtime::{
 	traits::{SaturatedConversion,StaticLookup},
 };
-//use sp_std::{convert::TryInto, prelude::*};
-//use core::{convert::TryInto, prelude::*};
+use hex;
+
+
 pub use pallet::*;
+
 
 // mod benchmarking;
 
@@ -397,7 +399,11 @@ pub mod pallet {
 			<AnchorOwner<T>>::try_mutate(&nkey, |status| -> DispatchResult {
 				let d = status.as_mut().ok_or(Error::<T>::UnexceptDataError)?;
 
-				//d.0 = "";			//set owner to useless account
+				let invalid_account = "444444444444444444444444444444444444444444444444";
+				let mut account_id_bytes = hex::decode(invalid_account).expect("Hex decode should not fail");
+				account_id_bytes.resize(32, 0);
+				let account_id: T::AccountId = T::AccountId::decode(&mut &account_id_bytes[..]).expect("Failed to decode into T::AccountId");
+				d.0 =account_id;
 
 				Ok(())
 			})?;
