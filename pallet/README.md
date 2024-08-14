@@ -33,11 +33,46 @@ Hard link the files to `polkadot-sdk` target folder `substrate/frame/anchor`.
 
 ```SHELL
   cd ./polkadot-sdk/substrate/frame/anchor
-  ln ./pallet/src/lib.rs lib.rs
-  ln ./pallet/src/tests.rs tests.rs
-  ln ./pallet/src/weights.rs weights.rs
-  ln ./pallet/src/benchmarking.rs benchmarking.rs
+  ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/Cargo.toml Cargo.toml
+  cd src
+  ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/lib.rs lib.rs
+  ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/tests.rs tests.rs
+  ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/weights.rs weights.rs
+  ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/benchmarking.rs benchmarking.rs
 ```
+
+### Intergration
+
+* Document: [https://docs.substrate.io/tutorials/build-application-logic/add-a-pallet/](https://docs.substrate.io/tutorials/build-application-logic/add-a-pallet/), this is out of time.
+
+* open `Cargo.toml` file and add `pallet-anchor = { path = "substrate/frame/anchor", default-features = false }` after `pallet-alliance`.
+
+* open `umbrella/Cargo.toml` to add `Anchor pallet`.
+
+* open `umbrella/src/lib.rs` to add `Anchor pallet`.
+
+* Open `substrate/bin/node/runtime/src/lib.rs` file.
+
+* Add pallet anchor to `mod runtime`, Search `#[frame_support::runtime]` then add the following code.
+
+  ```Rust
+  #[runtime::pallet_index(80)]
+  pub type Anchor = pallet_anchor:Pallet<Runtime>;
+  ```
+
+* Add the config, add the following code.
+  
+  ```Rust
+  impl pallet_anchor::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type Currency = Balances;
+    type WeightInfo = pallet_anchor::weights::SubstrateWeight<Runtime>;
+  }
+  ```
+
+### Benchmark
+
+* Open `substrate/bin/node/runtime/src/lib.rs` file and locate to `polkadot_sdk::frame_benchmarking::define_benchmarks!`
 
 ## Exposed Methods
 

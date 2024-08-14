@@ -429,6 +429,8 @@ fn drop_anchor() {
 		let raw:Vec<u8> = b"Test more...".iter().cloned().collect();
 		let protocol:Vec<u8> = b"Protocol".iter().cloned().collect();
 
+		let message:Vec<u8> = b"Last words...".iter().cloned().collect();
+
 		let id_a=11;
 		let account_a=RuntimeOrigin::signed(id_a);	//test account A
 
@@ -441,7 +443,7 @@ fn drop_anchor() {
 
 		//2.try to drop an anchor
 		assert_ok!(
-			Anchor::drop_anchor(account_a.clone(),key.clone())
+			Anchor::drop_anchor(account_a.clone(),key.clone(),message.clone())
 		);
 		//FIXME, how to get the invalid account
 		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));

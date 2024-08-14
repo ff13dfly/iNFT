@@ -1,14 +1,13 @@
 [package]
 name = "pallet-anchor"
-version = "2.0.0"
+version = "3.0.0"
 authors.workspace = true
 edition.workspace = true
-license = "MIT-0"
+license = "Apache-2.0"
 homepage = "https://substrate.io"
 repository.workspace = true
 description = "On-chain Linked List pallet."
 readme = "README.md"
-publish = false
 
 [lints]
 workspace = true
@@ -26,7 +25,7 @@ frame-system.workspace = true
 pallet-balances.workspace = true
 sp-io.workspace = true
 sp-runtime.workspace = true
-hex = "0.4"
+hex =  { workspace = true }
 
 [dev-dependencies]
 sp-core = { path = "../../primitives/core", default-features = false }

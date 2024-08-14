@@ -48,6 +48,7 @@ use frame_support::{
 use frame_system::ensure_signed;
 use sp_runtime::{
 	traits::{SaturatedConversion,StaticLookup},
+	Vec,
 };
 use hex;
 
@@ -69,16 +70,25 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 
+	// #[pallet::config]
+	// pub trait Config: pallet_balances::Config + frame_system::Config {
+	// 	type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+	// 	type WeightInfo: WeightInfo;
+	// 	type Currency: Currency<Self::AccountId>;
+	// }
+
 	#[pallet::config]
-	pub trait Config: pallet_balances::Config + frame_system::Config {
+	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type WeightInfo: WeightInfo;
 		type Currency: Currency<Self::AccountId>;
 	}
 
+	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
+	
 	#[pallet::pallet]
+	#[pallet::storage_version(STORAGE_VERSION)]
 	#[pallet::without_storage_info]
-	//#[pallet::generate_store(pub(super) trait Store)]
 	pub struct Pallet<T>(_);
 	
 	#[pallet::hooks]
@@ -144,6 +154,7 @@ pub mod pallet {
 	pub enum Event<T: Config> {
 		/// An anchor is set to selling status.
 		AnchorToSell(T::AccountId,u64,T::AccountId),	//(owner, price , target)
+		AnchorToDrop(T::AccountId,Vec<u8>),				//(owner, message left to bridge)
 	}
 
 	/// Hashmap to record anchor status, Anchor => ( Owner, last block )
@@ -380,7 +391,8 @@ pub mod pallet {
 		)]
 		pub fn drop_anchor(
 			origin: OriginFor<T>, 
-			key: Vec<u8>
+			key: Vec<u8>,
+			message:Vec<u8>				//this is for the bridge information
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
@@ -404,7 +416,7 @@ pub mod pallet {
 				account_id_bytes.resize(32, 0);
 				let account_id: T::AccountId = T::AccountId::decode(&mut &account_id_bytes[..]).expect("Failed to decode into T::AccountId");
 				d.0 =account_id;
-
+				Self::deposit_event(Event::AnchorToDrop(sender,message));
 				Ok(())
 			})?;
 
