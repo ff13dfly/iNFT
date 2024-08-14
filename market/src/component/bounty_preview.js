@@ -59,7 +59,7 @@ function BountyPreview(props) {
       });
 
       Bounty.get(alink, (bt) => {
-        if(bt.error) return ck && ck(bt);
+        if (bt.error) return ck && ck(bt);
         if (bt.template && bt.template.cid) {
           TPL.view(bt.template.cid, (dt) => {
             setData(dt);
@@ -95,9 +95,7 @@ function BountyPreview(props) {
               fgColor={"#000000"}
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              // size={200}
               value={"https://inft.w3os.net/market/bounty/bounty_reglrwnf/146805"}
-            //viewBox={`0 0 256 256`}
             />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
@@ -106,13 +104,14 @@ function BountyPreview(props) {
         </Row>
 
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
-        <BountyBonus 
-          data={bonus} 
-          coin={coin} 
+        <BountyBonus
+          data={bonus}
+          coin={coin}
           template={data}
           dialog={props.dialog}
-          bounty={self.getAlink()} 
-          />
+          bounty={self.getAlink()}
+        />
+
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <hr />
@@ -120,7 +119,7 @@ function BountyPreview(props) {
         </Row>
         <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} />
 
-        <h5 className="pt-4">Bounty Detail</h5>
+        <h5 className="pt-4">Apply Progress</h5>
         {apply.map((row, index) => (
           <Row key={index} className="pt-2">
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

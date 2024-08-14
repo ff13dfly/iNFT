@@ -1,13 +1,13 @@
 import { useState,useEffect } from "react";
 
-/* iNFT render component parameters
+/* progress bar
 *   @param  {number}    x             //cell amount of x
 *   @param  {number}    y             //cell amount of y
 *   @param  {number}    width         //cell width
 *   @param  {string}    [background]  //cell background color
 */
 
-function SVGGrid(props) {
+function SVGProgress(props) {
   
   let [list, setList]=useState([]);
 
@@ -32,4 +32,4 @@ function SVGGrid(props) {
     </svg>
   );
 }
-export default SVGGrid;
+export default SVGProgress;

@@ -83,7 +83,6 @@ function BountyList(props) {
           });
         }
       },page);
-      
     },300);
   }, [props.update]);
 
