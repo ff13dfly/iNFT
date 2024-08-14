@@ -24,6 +24,9 @@ The unit test follow the substrate standard. Just change directory to frame/anch
     cargo clean
     cargo test
     cargo test --package pallet-anchor --features runtime-benchmarks
+
+    cargo run --release --features runtime-benchmarks -- benchmark pallet --chain dev --steps 50 --repeat 20 --pallet pallet_anchor --extrinsic "*" --execution=wasm --wasm-execution=compiled --output ./pallets/pallet-anchor/src/weights.rs
+
 ```
 
 Hard link the files to `polkadot-sdk` target folder `substrate/frame/anchor`.

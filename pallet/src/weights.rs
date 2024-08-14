@@ -3,7 +3,6 @@
 #![allow(unused_imports)]
 
 use frame_support::{traits::Get, weights::{Weight, constants::RocksDbWeight}};
-//use sp_std::marker::PhantomData;
 use core::marker::PhantomData;
 
 /// Weight functions needed for pallet_example_basic.
@@ -16,7 +15,7 @@ pub trait WeightInfo {
 	fn drop_anchor() -> Weight;
 }
 
-/// Weights for pallet_example_basic using the Substrate node and recommended hardware.
+/// Weights for pallet_anchor using the Substrate node and recommended hardware.
 pub struct SubstrateWeight<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 

@@ -141,7 +141,7 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An anchor is set to selling status.
-		AnchorToSell(T::AccountId,u32,T::AccountId),	//(owner, price , target)
+		AnchorToSell(T::AccountId,u64,T::AccountId),	//(owner, price , target)
 	}
 
 	/// Hashmap to record anchor status, Anchor => ( Owner, last block )
@@ -152,30 +152,7 @@ pub mod pallet {
 	/// Selling anchor status, Anchor => ( Owner, Price, Target customer )
 	#[pallet::storage]
 	#[pallet::getter(fn selling)]
-	pub(super) type SellList<T: Config> = StorageMap<_, Twox64Concat, Vec<u8>, (T::AccountId, u32,T::AccountId)>;
-
-	//The genesis config type.
-	// #[pallet::genesis_config]
-	// pub struct GenesisConfig<T: Config> {
-	// 	pub fee: T::Balance,
-	// }
-
-	//The default value for the genesis config type.
-	// #[cfg(feature = "std")]
-	// impl<T: Config> Default for GenesisConfig<T> {
-	// 	fn default() -> Self {
-	// 		Self { fee: Default::default() }
-	// 	}
-	// }
-
-	//impl<T: Config> GenesisBuild<T> for GenesisConfig<T> {
-
-	// The build of genesis for the pallet.
-
-	// #[pallet::genesis_build]
-	// impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
-	// 	fn build(&self) {}
-	// }
+	pub(super) type SellList<T: Config> = StorageMap<_, Twox64Concat, Vec<u8>, (T::AccountId, u64,T::AccountId)>;
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
@@ -240,7 +217,7 @@ pub mod pallet {
 		pub fn sell_anchor(
 			origin: OriginFor<T>, 
 			key: Vec<u8>, 
-			price: u32, 
+			price: u64, 
 			target:<T::Lookup as StaticLookup>::Source		//select from exist accounts.
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
