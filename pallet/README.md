@@ -70,6 +70,20 @@ Hard link the files to `polkadot-sdk` target folder `substrate/frame/anchor`.
   }
   ```
 
+* Rust issue, need the proper version of Rust.
+  
+  ```BASH
+    rustup override set 1.78
+    rustup override unset
+
+    rustup update 1.78
+
+    rustup default stable
+    rustup default nightly
+    
+    rustup default nightly-2020-10-06
+  ```
+
 ### Benchmark
 
 * Open `substrate/bin/node/runtime/src/lib.rs` file and locate to `polkadot_sdk::frame_benchmarking::define_benchmarks!`

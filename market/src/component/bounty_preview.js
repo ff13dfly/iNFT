@@ -55,6 +55,7 @@ function BountyPreview(props) {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
         if (!res.success || !res.data) return ck && ck(false);
+        //console.log(res.data.apply);
         if (res.data.apply) setApply(res.data.apply);
       });
 

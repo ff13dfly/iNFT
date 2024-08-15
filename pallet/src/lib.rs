@@ -153,8 +153,8 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An anchor is set to selling status.
-		AnchorToSell(T::AccountId,u64,T::AccountId),	//(owner, price , target)
-		AnchorToDrop(T::AccountId,Vec<u8>),				//(owner, message left to bridge)
+		AnchorToSell(Vec<u8>,T::AccountId,u64,T::AccountId),	//(owner, price , target)
+		AnchorToDrop(Vec<u8>,T::AccountId,Vec<u8>),				//(owner, message left to bridge)
 	}
 
 	/// Hashmap to record anchor status, Anchor => ( Owner, last block )
@@ -251,7 +251,7 @@ pub mod pallet {
 
 			//4.put in sell list
 			<SellList<T>>::insert(nkey, (&sender, price, &target)); 			
-			Self::deposit_event(Event::AnchorToSell(sender,price,target));
+			Self::deposit_event(Event::AnchorToSell(key,sender,price,target));
 			Ok(())
 		}
 
@@ -416,7 +416,7 @@ pub mod pallet {
 				account_id_bytes.resize(32, 0);
 				let account_id: T::AccountId = T::AccountId::decode(&mut &account_id_bytes[..]).expect("Failed to decode into T::AccountId");
 				d.0 =account_id;
-				Self::deposit_event(Event::AnchorToDrop(sender,message));
+				Self::deposit_event(Event::AnchorToDrop(key,sender,message));
 				Ok(())
 			})?;
 
