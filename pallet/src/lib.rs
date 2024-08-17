@@ -70,13 +70,6 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 
-	// #[pallet::config]
-	// pub trait Config: pallet_balances::Config + frame_system::Config {
-	// 	type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
-	// 	type WeightInfo: WeightInfo;
-	// 	type Currency: Currency<Self::AccountId>;
-	// }
-
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;

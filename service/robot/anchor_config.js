@@ -25,10 +25,10 @@ exports.config = {
         ["5HMy4ULuRS15DveBH1Nbe6F45jinXQyVup9kpj6jYXnte7KH","123456"],
         ["5HptTZcjGoQkGqybXqspUynvtQU1brvieRZHMSkvU2PQuyPa","123456"],
     ],
-    "low":10000000,         //low balance
+    "low":3000,             //low balance
     "interval":12000,
     "autosave":5,           //how many rounds to save setting
-    "prefix":"xxx_",
+    "prefix":"im_",
     "folder":"log",
     "basic":"anchor_setting.json",
     "version":"1.0.0",

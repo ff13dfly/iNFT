@@ -51,6 +51,15 @@ function Bounty(props) {
             setBlock(bk);
         });
 
+        //14M4Qj1Bh3TEuaKchriMaLYd8oYUmgPfuSsXUYEGn21WGJB8
+        // chain.balance("14M4Qj1Bh3TEuaKchriMaLYd8oYUmgPfuSsXUYEGn21WGJB8",(dt)=>{
+        //     console.log(dt);
+        // });
+        
+        // chain.generate("111111",(dt)=>{
+        //     console.log(dt);
+        // }); 
+
     }, [props.extend]);
 
     return (

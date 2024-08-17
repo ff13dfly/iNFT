@@ -193,11 +193,11 @@ function BountyApply(props) {
       </Col>
 
       <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-        <input type="text" disabled={same}  className="form-control" placeholder="The account address to accept the bonus coins/token." value={receiver} onChange={(ev)=>{
+        <input type="text" hidden={same}  className="form-control" placeholder="The account address to accept the bonus coins/token." value={receiver} onChange={(ev)=>{
             self.changeReceiver(ev)
         }} />
       </Col>
-      <Col className="pt-2" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+      <Col className="pt-3 text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
             <button className={same ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
               self.clickSame(ev)
             }}><FaCheck /></button>
