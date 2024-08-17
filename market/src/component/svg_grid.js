@@ -17,7 +17,7 @@ function SVGGrid(props) {
       const w=props.width;
       for(let i=0;i<props.x;i++){
         for(let j=0;j<props.y;j++){
-          arr.push({x:i*w,y:j*w});
+          arr.push({x:i*w,y:j*w,width:w});
         }
       }
       setList(arr);
@@ -27,7 +27,16 @@ function SVGGrid(props) {
   return (
     <svg width={props.x*props.width} height={props.y*props.width} xmlns="http://www.w3.org/2000/svg">
       {list.map((row, index) => (
-          <rect key={index} x={row.x} y={row.y} width={props.width} height={props.width} fill={props.background} stroke="black" strokeWidth="1" />
+          <rect 
+            key={index} 
+            x={row.x} 
+            y={row.y} 
+            width={row.width} 
+            height={row.width} 
+            fill={props.background}
+            stroke="black" 
+            strokeWidth="1"
+          />
       ))}
     </svg>
   );

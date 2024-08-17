@@ -1,6 +1,7 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import Copy from "../lib/clipboard";
 import tools from "../lib/tools";
 import Network from "../network/router";
 
@@ -30,7 +31,8 @@ function UserBasic(props) {
       console.log(`Call metamask to transfer $INFT ERC20 Token.`);
     },
     clickAddress:(addr)=>{
-      console.log(addr);
+      //console.log(addr);
+      Copy(addr);
     },
     getAvatar: () => {
       const cfg = Config.get(["system", "avatar"]);
@@ -113,7 +115,9 @@ function UserBasic(props) {
         <h6 className="pointer pt-4" onClick={(ev)=>{
           self.clickAddress(address);
           self.callRecover("address");
-        }}>{tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" :`ml-5 ${recover.address}`} /></h6>
+        }}>
+          {tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" :`ml-5 ${recover.address}`}/>
+        </h6>
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

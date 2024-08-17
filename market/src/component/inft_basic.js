@@ -62,7 +62,7 @@ function BasicINFT(props) {
               <span>500</span>
             </Col>
             <Col md={size.schema[1]} lg={size.schema[1]} xl={size.schema[1]} xxl={size.schema[1]}>
-              <SVGGrid x={4} y={3} width={30} background={"#e3f3ab"}/>
+              <SVGGrid x={8} y={10} width={10} background={"#e3f3ab"}/>
             </Col>
             <Col md={size.schema[2]} lg={size.schema[2]} xl={size.schema[2]} xxl={size.schema[2]}>
 
