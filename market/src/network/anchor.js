@@ -13,7 +13,8 @@ const config = {
     target: dt.interval,           //How long to create a new block
 }
 
-const subs = {};      //subscribe funs
+const subs = {};        //subscribe funs
+const registry={};        //chainspec details
 
 const limits = {
     key: 40,					//Max length of anchor name ( ASCII character )
@@ -78,6 +79,9 @@ const funs = {
         }
         return map;
     },
+    detail:(obj)=>{
+        registry.decimals=obj.chainDecimals;
+    },
 }
 
 let wsAPI = null;
@@ -96,6 +100,8 @@ const self = {
         const provider = new WsProvider(uri);
         ApiPromise.create({ provider: provider }).then((api) => {
             console.log(`Linked to node ${uri}`);
+
+            funs.detail(api.registry);
             wsAPI = api;
             linking = false;
             Status.set(uri, 1);      //normal, update uri status
@@ -500,10 +506,13 @@ const self = {
         });
     },
     divide: () => {
-        return 1000000000000;
+        console.log(registry.decimals[0]);
+        
     },
-    accuracy: () => {
-        return 1000000000000;
+    accuracy: (ck) => {
+        self.init(()=>{
+            return  ck && ck( Math.pow(10, registry.decimals));
+        });
     },
     events:{        //TODO, here to add events listeners.
         payed:()=>{

@@ -49,6 +49,11 @@ function Bounty(props) {
         const chain=Network("anchor");
         chain.subscribe("bounty",(bk,hash)=>{
             setBlock(bk);
+            
+        });
+
+        chain.accuracy((dt)=>{
+            console.log(dt);
         });
 
         //14M4Qj1Bh3TEuaKchriMaLYd8oYUmgPfuSsXUYEGn21WGJB8

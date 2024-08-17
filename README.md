@@ -146,6 +146,10 @@
 
 - Bridge will package the mintings and save the merkel tree root on Etherum Network.
 
+- When somebody want to bridge the iNFT on Anchor Network to other blockchain network, just drop the iNFT on Anchor Network and leave the last words about which account to accept the bridged iNFT. Then no need to write the bridge information when it is on Anchor Network.
+
+- By `Last Words` way, the iNFT is simple on Anchor Network.
+
 - Leaf data sample
 
     ```Javascript
@@ -153,10 +157,9 @@
             "orgin":{       //data written on substrate chain
                 "name":"ANCHOR_NAME",
                 "raw":{
-                    "target":"bitcoin",         //mint by Bitcoin Network hash
+                    "target":"btc",             //mint by Bitcoin Network hash
                     "block":6123456,            //target Bitcoin block height
                     "salt":"SALT_ON_ETHER",     //salt on Etherum Network
-                    "receiver":"ETHER_ACCOUNT", //the receiver on Etherum Network
                     "offset":[],                //mint offset
                     "tpl":{                     //mint template
 
@@ -165,7 +168,7 @@
                 "protocol":{
                     "fmt":"data",
                     "type":"json",
-                    "tpl":"iNFT",
+                    "tpl":"inft",
                 },
                 "pre":0
             },
