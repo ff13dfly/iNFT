@@ -52,9 +52,13 @@ function Bounty(props) {
             
         });
 
-        chain.accuracy((dt)=>{
+        chain.view(3582,"blocknumber",(dt)=>{
             console.log(dt);
         });
+
+        // chain.accuracy((dt)=>{
+        //     console.log(dt);
+        // });
 
         //14M4Qj1Bh3TEuaKchriMaLYd8oYUmgPfuSsXUYEGn21WGJB8
         // chain.balance("14M4Qj1Bh3TEuaKchriMaLYd8oYUmgPfuSsXUYEGn21WGJB8",(dt)=>{

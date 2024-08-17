@@ -683,6 +683,7 @@ const self = {
 				stamp=ex.toHuman().method.args.now.replace(/,/gi, "");
 			}
 			if(index===0 || status[index]!=="ExtrinsicSuccess") return false;
+			
 			const dt = ex.toHuman();
 			if (dt.method.method === method) {
 				const res = dt.method;
