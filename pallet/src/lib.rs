@@ -95,9 +95,6 @@ pub mod pallet {
 
 	#[pallet::error]
 	pub enum Error<T> {
-		/// Anchor key length over load.
-		LengthMaxLimited,
-
 		///Anchor name max length.
 		KeyMaxLimited,
 

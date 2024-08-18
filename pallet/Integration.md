@@ -14,7 +14,23 @@
 
 ### How To
 
-* Add new folder `anchor` under `./pallets`, copy `Cargo_mini_template.toml` to `./pallets/anchor/Cargo_mini.toml`;
+* Add new folder `anchor` under `./pallets`, link source code from [https://github.com/ff13dfly/iNFT/tree/master/pallet](https://github.com/ff13dfly/iNFT/tree/master/pallet).
+
+  ```BASH
+    cd pallets/anchor
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/Cargo_mini_template.toml Cargo.toml
+
+    mkdir src
+    cd src
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/lib.rs lib.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/tests.rs tests.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/weights.rs weights.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/benchmarking.rs benchmarking.rs
+  ```
+
+*copy `Cargo_mini_template.toml` to `./pallets/anchor/Cargo_mini.toml`;
+
+* Link source to 
 
 * Add `Anchor Pallet` to root `Cargo.toml`.
 

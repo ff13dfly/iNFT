@@ -483,6 +483,7 @@ const self = {
 			});
 		});
 	},
+
 	
 	/************************/
 	/***Anchor market funs***/
@@ -599,6 +600,41 @@ const self = {
 				unlist = fun;
 			});
 
+		});
+	},
+
+	/*Divert anchor*/
+	divert: (pair, anchor, target, ck) => {
+		if (!self.ready()) return ck && ck({error:"No websocke link."});
+		anchor = anchor.toLocaleLowerCase();
+		if(self.limited(anchor)) return ck && ck({error:"Name error"});
+		self.owner(anchor,(owner)=>{
+			if(owner===pair.address) return ck && ck({error:"Your own anchor"});
+			try {
+				wsAPI.tx.anchor.divertAnchor(anchor,target).signAndSend(pair, (res) => {
+					return ck && ck(self.process(res));
+				});
+			} catch (error) {
+				return ck && ck({error:error});
+			}
+		});
+	},
+	
+	/*Drop anchor*/
+	drop: (pair, anchor, messsage, ck) => {
+		if (!self.ready()) return ck && ck({error:"No websocke link."});
+		anchor = anchor.toLocaleLowerCase();
+		if(self.limited(anchor)) return ck && ck({error:"Name error"});
+
+		self.owner(anchor,(owner)=>{
+			if(owner===pair.address) return ck && ck({error:"Your own anchor"});
+			try {
+				wsAPI.tx.anchor.dropAnchor(anchor,messsage).signAndSend(pair, (res) => {
+					return ck && ck(self.process(res));
+				});
+			} catch (error) {
+				return ck && ck({error:error});
+			}
 		});
 	},
 
@@ -772,6 +808,9 @@ module.exports={
 	sell:self.sell,				//set anchor to selling status
 	unsell:self.unsell,			//revoke anchor from selling status
 	buy:self.buy,				//buy selling anchor
+	divert:self.divert,			//divert anchor to target account
+	drop:self.drop,				//drop anchor and leave last words
+
 	hash:self.hash,				//get hash by block number.
 
 	full:self.full,				//get all related anchor.

@@ -99,38 +99,6 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	t.into()
 }
 
-
-// #[test]
-// fn sample() {
-//     new_test_ext().execute_with(|| {
-// 		let start_block = 100;		//set the start block number
-// 		let step = 20;				//the step for the block number
-// 		System::set_block_number(start_block); 	//need to start
-
-// 		let key:Vec<u8> = b"hello".iter().cloned().collect();
-// 		let raw:Vec<u8> = b"Test...".iter().cloned().collect();
-// 		let protocol:Vec<u8> = b"Nothing".iter().cloned().collect();
-// 		let id_a=11;
-// 		let account_a=RuntimeOrigin::signed(id_a.clone());
-
-// 		assert_ok!(
-// 			Anchor::set_anchor(account_a.clone(),key.clone(),raw.clone(),protocol.clone(),0)
-// 		);
-// 		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
-
-// 		AnchorOwner::<Test>::insert(&key,(123, 3345));
-// 		assert_eq!(Anchor::owner(&key), Some((123,3345)));
-
-// 		System::set_block_number(System::block_number() + step);
-
-// 		assert_eq!(Balances::free_balance(11), 1999000000000000);
-// 		assert_eq!(Balances::free_balance(22), 2999000000000000);
-// 		assert_eq!(Balances::free_balance(33), 3999000000000000);
-// 		assert_eq!(Balances::free_balance(44), 199000000000000);
-//     });
-// }
-
-
 #[test]
 fn set_anchor() {
     new_test_ext().execute_with(|| {
@@ -429,7 +397,7 @@ fn drop_anchor() {
 		let raw:Vec<u8> = b"Test more...".iter().cloned().collect();
 		let protocol:Vec<u8> = b"Protocol".iter().cloned().collect();
 
-		let message:Vec<u8> = b"Last words...".iter().cloned().collect();
+		let message:Vec<u8> = b"Last words".iter().cloned().collect();
 
 		let id_a=11;
 		let account_a=RuntimeOrigin::signed(id_a);	//test account A
@@ -445,6 +413,7 @@ fn drop_anchor() {
 		assert_ok!(
 			Anchor::drop_anchor(account_a.clone(),key.clone(),message.clone())
 		);
+
 		//FIXME, how to get the invalid account
 		assert_eq!(Anchor::owner(&key), Some((id_a,start_block)));
 	});
