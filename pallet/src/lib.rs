@@ -98,6 +98,9 @@ pub mod pallet {
 		///Anchor name max length.
 		KeyMaxLimited,
 
+		///Anchor last words max length.
+		LastWordsMaxLimited,
+
 		///Anchor raw data max limit.
 		Base64MaxLimited,
 
@@ -157,6 +160,13 @@ pub mod pallet {
 	#[pallet::getter(fn selling)]
 	pub(super) type SellList<T: Config> = StorageMap<_, Twox64Concat, Vec<u8>, (T::AccountId, u64,T::AccountId)>;
 
+	//limitation of anchor parameters
+	const NAME_MAX_LENGTH:u32=40;
+	const RAW_MAX_LENGTH:u32=4*1024*1024;
+	const PROTOCOL_MAX_LENGTH:u32=256;
+	const LAST_WORDS_LENGTH:u32=200;
+	const PRICE_MIN_VALUE:u32=0;
+
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		/// set a new anchor or update an exist anchor
@@ -175,9 +185,9 @@ pub mod pallet {
 			//0.check is on sell
 
 			//1.param check
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited);				//1.1.check key length, <40
-			ensure!(raw.len() < 4*1024*1024, Error::<T>::Base64MaxLimited);	//1.2.check raw(base64) length，<4M
-			ensure!(protocol.len() < 256, Error::<T>::ProtocolMaxLimited);	//1.3.check protocal length, <256
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited);				//1.1.check key length, <40
+			ensure!(raw.len() < RAW_MAX_LENGTH.try_into().unwrap(), Error::<T>::Base64MaxLimited);	//1.2.check raw(base64) length，<4M
+			ensure!(protocol.len() < PROTOCOL_MAX_LENGTH.try_into().unwrap(), Error::<T>::ProtocolMaxLimited);	//1.3.check protocal length, <256
 
 			//1.1.convert key to lowcase
 			let mut nkey:Vec<u8>;
@@ -227,8 +237,8 @@ pub mod pallet {
 			let target = T::Lookup::lookup(target)?;
 
 			//1.param check		
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
-			ensure!(price > 0, Error::<T>::PriceValueLimited); 
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
+			ensure!(price > PRICE_MIN_VALUE.try_into().unwrap(), Error::<T>::PriceValueLimited); 
 
 			//1.1.lowercase fix
 			let mut nkey:Vec<u8>;
@@ -245,6 +255,8 @@ pub mod pallet {
 			Ok(())
 		}
 
+
+
 		/// buy an anchor on-sell.
 		#[pallet::call_index(2)]
 		#[pallet::weight(
@@ -255,7 +267,7 @@ pub mod pallet {
 			key: Vec<u8>
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited);
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited);
 
 			//lowercase check
 			let mut nkey:Vec<u8>;
@@ -318,7 +330,7 @@ pub mod pallet {
 			
 			//1.param check
 			//1.1.check key length, <40
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited);
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited);
 
 			//1.2.lowercase check
 			let mut nkey:Vec<u8>;
@@ -352,7 +364,7 @@ pub mod pallet {
 			let target = T::Lookup::lookup(target)?;
 
 			//1.param check		
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
 
 			//1.1.lowercase fix
 			let mut nkey:Vec<u8>;
@@ -387,7 +399,8 @@ pub mod pallet {
 			let sender = ensure_signed(origin)?;
 
 			//1.param check		
-			ensure!(key.len() < 40, Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
+			ensure!(key.len() < NAME_MAX_LENGTH.try_into().unwrap(), Error::<T>::KeyMaxLimited); 	//1.1.check key length, <40
+			ensure!(message.len() < LAST_WORDS_LENGTH.try_into().unwrap(), Error::<T>::LastWordsMaxLimited);	//1.2.check last words length, <40
 
 			//1.1.lowercase fix
 			let mut nkey:Vec<u8>;
