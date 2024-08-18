@@ -146,8 +146,17 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An anchor is set to selling status.
-		AnchorToSell(Vec<u8>,T::AccountId,u64,T::AccountId),	//(owner, price , target)
-		AnchorToDrop(Vec<u8>,T::AccountId,Vec<u8>),				//(owner, message left to bridge)
+		AnchorToSell(Vec<u8>,T::AccountId,u64,T::AccountId),	//(name,owner, price , target)
+
+		
+		/// An anchor is bought, the owner changed.
+		AnchorBought(Vec<u8>,T::AccountId,u64,T::AccountId),	//(name,buyer, price , from)
+
+		/// An anchor is divertted, the owner changed.
+		AnchorDiverted(Vec<u8>,T::AccountId,T::AccountId),		//(name, from , to)
+
+		/// An anchor is dropped, the owner is set to blackhole account.
+		AnchorDropped(Vec<u8>,T::AccountId,Vec<u8>,T::AccountId),	//(name,owner, message left to bridge, blackhole account)
 	}
 
 	/// Hashmap to record anchor status, Anchor => ( Owner, last block )
@@ -255,8 +264,6 @@ pub mod pallet {
 			Ok(())
 		}
 
-
-
 		/// buy an anchor on-sell.
 		#[pallet::call_index(2)]
 		#[pallet::weight(
@@ -290,17 +297,16 @@ pub mod pallet {
 
 			//1.transfer specail amout to seller
 			let amount= anchor.1;
-			let basic:u128=1000000000000;
-			let tx=basic.saturating_mul(amount.into());
+			let to = anchor.0;
 
 			//1.1.check balance
-			ensure!(T::Currency::free_balance(&sender) >= tx.saturated_into(), Error::<T>::InsufficientBalance);
+			ensure!(T::Currency::free_balance(&sender) >= amount.saturated_into(), Error::<T>::InsufficientBalance);
 
 			//1.2.do transfer
 			let res=T::Currency::transfer(
 				&sender,		//transfer from
-				&anchor.0,		//transfer to
-				tx.saturated_into(),		//transfer amount
+				&to,			//transfer to
+				amount.saturated_into(),		//transfer amount
 				ExistenceRequirement::AllowDeath
 			);
 			ensure!(res.is_ok(), Error::<T>::TransferFailed);
@@ -308,10 +314,14 @@ pub mod pallet {
 			//2.change the owner of anchor 
 			<AnchorOwner<T>>::try_mutate(&nkey, |status| -> DispatchResult {
 				let d = status.as_mut().ok_or(Error::<T>::UnexceptDataError)?;
-				d.0 = sender;
+				d.0 = sender.clone();
 
 				//3.remove the anchor from sell list
 				<SellList<T>>::remove(&nkey);
+
+				//4.event trigger
+				Self::deposit_event(Event::AnchorBought(key,sender,amount,to));
+
 				Ok(())
 			})?;
 			Ok(())
@@ -378,8 +388,8 @@ pub mod pallet {
 			//2.change the owner of anchor 
 			<AnchorOwner<T>>::try_mutate(&nkey, |status| -> DispatchResult {
 				let d = status.as_mut().ok_or(Error::<T>::UnexceptDataError)?;
-				d.0 = target;		//set new owner
-
+				d.0 = target.clone();		//set new owner
+				Self::deposit_event(Event::AnchorDiverted(key,sender,target));
 				Ok(())
 			})?;
 
@@ -418,8 +428,8 @@ pub mod pallet {
 				let mut account_id_bytes = hex::decode(invalid_account).expect("Hex decode should not fail");
 				account_id_bytes.resize(32, 0);
 				let account_id: T::AccountId = T::AccountId::decode(&mut &account_id_bytes[..]).expect("Failed to decode into T::AccountId");
-				d.0 =account_id;
-				Self::deposit_event(Event::AnchorToDrop(key,sender,message));
+				d.0 = account_id.clone();
+				Self::deposit_event(Event::AnchorDropped(key,sender,message,account_id));
 				Ok(())
 			})?;
 
