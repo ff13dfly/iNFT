@@ -1,10 +1,9 @@
 import { useState,useEffect } from "react";
 
 /* Show image selected
-*   @param  {number}    x             //cell amount of x
-*   @param  {number}    y             //cell amount of y
-*   @param  {number}    width         //cell width
-*   @param  {string}    [background]  //cell background color
+*   @param  {object}    grid          //{x:10,y:15},  image grid             
+*   @param  {object}    selected      //{row:1,start:4,ex:0,ey:0,amount:8}
+*   @param  {object}    [background]  //{highlight:"#aabbcc",normal:"#ffffff"}
 */
 
 function SVGImage(props) {

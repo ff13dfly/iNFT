@@ -206,6 +206,7 @@ const self = {
             wsAPI.query.system.account(address, (res) => {
                 if (unsub != null) unsub();
                 const data = res.toJSON().data;
+                console.log(data);
                 return ck && ck(data);
             }).then((fun) => {
                 unsub = fun;
@@ -506,8 +507,8 @@ const self = {
         });
     },
     divide: () => {
-        console.log(registry.decimals[0]);
-        
+        //console.log(registry.decimals[0]);
+        return 1000000;
     },
     accuracy: (ck) => {
         self.init(()=>{

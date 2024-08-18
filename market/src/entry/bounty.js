@@ -52,9 +52,9 @@ function Bounty(props) {
             
         });
 
-        chain.view(3582,"blocknumber",(dt)=>{
-            console.log(dt);
-        });
+        // chain.view(3582,"blocknumber",(dt)=>{
+        //     console.log(dt);
+        // });
 
         // chain.accuracy((dt)=>{
         //     console.log(dt);
