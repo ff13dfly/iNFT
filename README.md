@@ -126,15 +126,15 @@
 
 - Create PoW iNFT asset.
 
-- Even the `Anchor Network` crashed, the asset created on `Etherum Network` is also valid.
+- Even the `Anchor Network` crashed, the asset created on `Ethereum Network` is also valid.
 
 ### Workflow
 
-- Create a `Salt` on `Etherum Network`, it is related to `Bitcoin Network`.
+- Create a `Salt` on `Ethereum Network`, it is related to `Bitcoin Network`.
 
 - Using the `Salt` as parameter to mint iNFT on substate `Anchor Network`.
 
-- `Bridge` package the mintings and save the merkel root hash on `Etherum Network`.
+- `Bridge` package the mintings and save the merkel root hash on `Ethereum Network`.
 
 - When want to create the asset of iNFT on `Anchor Network`, write the iNFT data and supply the merkel path.
 
@@ -144,7 +144,7 @@
 
 - `Substrate` chain such as Anchor Network is used to mint the iNFT.
 
-- Bridge will package the mintings and save the merkel tree root on Etherum Network.
+- Bridge will package the mintings and save the merkel tree root on Ethereum Network.
 
 - When somebody want to bridge the iNFT on Anchor Network to other blockchain network, just drop the iNFT on Anchor Network and leave the last words about which account to accept the bridged iNFT. Then no need to write the bridge information when it is on Anchor Network.
 
@@ -159,7 +159,7 @@
                 "raw":{
                     "target":"btc",             //mint by Bitcoin Network hash
                     "block":6123456,            //target Bitcoin block height
-                    "salt":"SALT_ON_ETHER",     //salt on Etherum Network
+                    "salt":"SALT_ON_ETHER",     //salt on Ethereum Network
                     "offset":[],                //mint offset
                     "tpl":{                     //mint template
 
