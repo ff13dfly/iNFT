@@ -6,6 +6,8 @@ import INFT from "../system/inft";
 
 /* iNFT minting list
 *   @param  {string}    template           //template cid
+*   @param  {string}    bounty             //bounty_name
+*   @param  {number}    amount             //amount to show, default=4
 */
 
 function BountyMinting(props) {
@@ -22,11 +24,12 @@ function BountyMinting(props) {
     filterINFTs: (arr, cid) => {
       //console.log(cid);
       const full = [];
+      const limit=!props.amount?4:props.amount
       for (let i = 0; i < arr.length; i++) {
         const row = arr[i];
         if (row.raw.tpl === cid) {
           full.push(row);
-          if (full.length === 4) return full;
+          if (full.length === limit) return full;
         }
       }
       return full;
@@ -44,9 +47,13 @@ function BountyMinting(props) {
             return setInfo(`0 iNFT on block ${block.toLocaleString()}`);
           }
           const arr = self.filterINFTs(infts, props.template);
+
+          for(let i=0;i<arr.length;i++){
+            arr[i].block=block;
+          }
+
           INFT.auto(arr, (fs) => {
             setInfo(`${infts.length} iNFTs on block ${block.toLocaleString()}`);
-            //console.log(fs.length);
             if (fs.length === 0) {
               return setList([{ bs64: `${window.location.origin}/imgs/logo.png` }]);
             }
@@ -68,7 +75,7 @@ function BountyMinting(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           {list.map((row, index) => (
-            <Col key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+            <Col className="pt-2" key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
               <Image
                 src={row.bs64}
                 rounded

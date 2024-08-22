@@ -27,8 +27,6 @@ function BountyPreview(props) {
   let [coin, setCoin] = useState("");
   let [total, setTotal] = useState(0);
 
-  let [apply, setApply] = useState([]);
-
   let [update, setUpdate] = useState(0);
   const self = {
     getAlink: () => {
@@ -193,9 +191,9 @@ function BountyPreview(props) {
             <hr />
           </Col>
         </Row>
-        <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} />
+        <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} amount={20}/>
 
-        <h5 className="pt-4">Apply Progress</h5>
+        {/* <h5 className="pt-4">Apply Progress</h5>
         {apply.map((row, index) => (
           <Row key={index} className="pt-2">
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -207,7 +205,7 @@ function BountyPreview(props) {
               <hr />
             </Col>
           </Row>
-        ))}
+        ))} */}
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <CommentList alink={self.getAlink()} update={update} />
