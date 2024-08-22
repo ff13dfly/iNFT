@@ -2,6 +2,7 @@
   "name": "w3os_inft_market",
   "version": "1.0.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@polkadot/api": "^10.11.2",
     "@polkadot/extension-dapp": "^0.48.1",

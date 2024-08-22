@@ -198,10 +198,17 @@ function Playground(props) {
                     Sample
                     <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
                         props.link("playground", ["bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4"]);
-                    }}>bafkreibtt...rtgpyopn2e4</span>
+                    }}>bafkreibtt...</span>
                     <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
                         props.link("playground", ["bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i"]);
-                    }}>bafkreiddy...k4w5o2w5w4i</span>
+                    }}>bafkreiddy...</span>
+                    <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
+                        props.link("playground", ["bafkreie37cu5w56yak35plt4shw7xco7mxopacilbphoao6g6b4eskeuvi"]);
+                    }}>bafkreie37...</span>
+<span className="pointer ml-10 text-secondary" onClick={(ev)=>{
+                        props.link("playground", ["bafkreid3jvmjgbdy4jyesbpjqmyde6mxvzxw427nmrqhinecc5q7o6zqqq"]);
+                    }}>bafkreid3j...</span>
+
                 </Col>
             </Row>
             <Row hidden={!show}>

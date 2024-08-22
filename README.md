@@ -2,27 +2,37 @@
 
 ## Overview
 
-- It is a new way to mint NFT by block hash and unmodified template file on chain.
+- It is a new way to mint NFT by block hash and unmodified template file on chain such as IPFS.
 
-- The design of template can make iNFT identifiable.
+- The design of template can make iNFT identifiable, the scarcity can be confirmed by template.
 
 - As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
-- Networks supported.
-    1. Anchor Network - Dev
-    2. Aptos Network - Dev
-    3. Solana Network - Dev
-
 - Try yourself.
-    1. [iNFT Template Editor](https://android.im/solana/editor);
-    2. [iNFT Minter](https://android.im/solana/minter);
-    3. [iNFT Market](https://android.im/solana/market);
+    1. [iNFT Market](https://inft.w3os.net/market);
+    2. [iNFT Bounty](https://inft.w3os.net/bounty);
+    3. [iNFT Minter](https://inft.w3os.net/minter);
+    4. [iNFT Editor](https://inft.w3os.net/editor);
+
+## System Structure
+
+- Market system.
+
+- Bounty merchant workflow.
+    ![Bounty Merchant Workflow](./diagram/bounty_merchant.jpg)
+
+- Bounty user workflow.
+    ![Bounty Merchant Workflow](./diagram/bounty_customer.jpg)
+
+## Roadmap
 
 ## Dapps
 
 ### Editor
 
-- It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
+- **Function**, It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
+
+- **Language and Framework**,   React ( Javascript )
 
 - Multi networks support, you can write the iNFT template on different blockchain network.
 
@@ -30,7 +40,9 @@
 
 ### Minter
 
-- The client Dapp for normal users.
+- **Function**, The client Dapp for normal users.
+
+- **Language and Framework**,   React ( Javascript )
 
 - Customer can explorer the templates, then mint on selected template.
 
@@ -40,21 +52,67 @@
 
 ### Market
 
-- Selling market of iNFT result. Customers can price the NFT themselves.
+- **Function**, Selling market of iNFT result. Customers can price the NFT themselves.
+
+- **Language and Framework**,   React ( Javascript )
 
 - Different networks supported.
+
+### Bounty
+
+- **Function**, Bounty for airdrop base on iNFT, merchant can publish bounty iNFT.
+
+- **Language and Framework**,   React ( Javascript )
+
+- Different networks supported. Full workflow on Anchor Network.
 
 ### Service
 
 #### Faucet
 
+- **Function**, User get airdrop from Anchor Network.
+
+- **Language and Framework**,   Node.js ( Javascript )
+
+- User get airdrop from Anchor Network.
+
 #### API
+
+- **Function**, get the bounty and cached iNFTs on server.
+
+- **Language and Framework**,  PHP, Redis, MySQL
+
+- Cooperating with `Cache Robot` to supply the iNFT data service.
 
 #### Portal
 
+- **Function**, managment portal for `market` and `bounty`.
+
+- **Language and Framework**,  PHP, Redis, MySQL
+
+- Bounty management. Put bounty on line or off line. Check the applying. Saving the bonus payment on Anchor Network.
+
 #### Cache Robot
 
+- **Function**, cache iNFT records and group them.
+
+- **Language and Framework**,   Node.js ( Javascript )
+
+- Group iNFTs by address.
+
+- Group iNFTs by template.
+
+- Record of iNFT history, including all actions (set, sell, buy, revoke, divert, drop)
+
+- Subcribe Anchor Network to update the history of iNFT.
+
 #### Minting Robot
+
+- **Function**, mint iNFT by setting.
+
+- **Language and Framework**,   Node.js ( Javascript )
+
+- Multi accounts support to mint iNFT.
 
 ## Definition of iNFT
 
@@ -115,8 +173,25 @@
                     },
                     ...         //iNFT is combined by pieces
                 ]
+            series:[        //description of rarity list
+                {"name":"","desc":""},
+                {"name":"","desc":""},
+                {"name":"","desc":""},
+                ...
+            ]
             version:"VERSTION",     //iNFT template
             auth:["AUTH_NAME"]      //auth name list
+        }
+    ```
+
+- iNFT mint data as follow. It is pretty simple to save gas fee.
+
+    ```Javascript
+        {
+            "tpl":"ID_OF_TEMPLATE_FILE",        //ID of IPFS file
+            "from":"ipfs",                      //source orgin
+            "origin":"web3.storage",            //where to storage
+            "offset":[0,3,0,3,6,5,3,9,7]        //optional, offset of mint following the template definition           
         }
     ```
 
@@ -157,13 +232,15 @@
             "orgin":{       //data written on substrate chain
                 "name":"ANCHOR_NAME",
                 "raw":{
-                    "target":"btc",             //mint by Bitcoin Network hash
-                    "block":6123456,            //target Bitcoin block height
-                    "salt":"SALT_ON_ETHER",     //salt on Etherum Network
-                    "offset":[],                //mint offset
-                    "tpl":{                     //mint template
-
-                    }
+                    "target":{
+                        "network":"btc",            //mint by Bitcoin Network hash
+                        "block":6123456,            //target Bitcoin block height
+                    },
+                    "salt":"SALT_ON_ETHER",         //salt on Etherum Network
+                    "offset":[],                    //mint offset
+                    "tpl":"ID_OF_TEMPLATE_FILE",    //ID of IPFS file
+                    "from":"ipfs",                  //source orgin
+                    "origin":"web3.storage",        //where to storage
                 }
                 "protocol":{
                     "fmt":"data",
