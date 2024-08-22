@@ -28,6 +28,7 @@ function BountyPreview(props) {
   let [total, setTotal] = useState(0);
 
   let [update, setUpdate] = useState(0);
+
   const self = {
     getAlink: () => {
       return `anchor://${self.getAnchor()}/${self.getBlock()}`;
@@ -114,9 +115,11 @@ function BountyPreview(props) {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
         if (!res.success || !res.data) return ck && ck(false);
+
+        //console.log(res);
+        setCoin(res.data.coin);   //set the bonus coin symbol
         if (res.data.apply){
           self.getFullData(res.data.apply,(map)=>{
-            //console.log(map);
             const arr=[];
             for(let i=0;i<res.data.apply.length;i++){
               //regroup data by anchor data
@@ -128,7 +131,8 @@ function BountyPreview(props) {
               arr.push(single);
             }
             console.log(arr);
-            //setApply(arr);
+
+            //calc the process here
           });
         } 
       });
@@ -144,9 +148,16 @@ function BountyPreview(props) {
         }
       });
     },
+
+    getBountyURL:()=>{
+      const base="https://inft.w3os.net/bounty";
+      if(props.data && props.data.anchor && props.data.block) return `${base}/${props.data.anchor}/${props.data.block}`;
+      return base;
+    },
   }
 
   useEffect(() => {
+    console.log(JSON.stringify(props));
     self.autoCache(() => {
       //console.log(data);
     });
@@ -169,7 +180,7 @@ function BountyPreview(props) {
               fgColor={"#000000"}
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={"https://inft.w3os.net/market/bounty/bounty_reglrwnf/146805"}
+              value={self.getBountyURL()}
             />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>

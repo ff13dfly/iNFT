@@ -20,12 +20,10 @@ function BountyShow(props) {
   let [data, setData] = useState({});     //bounty raw data with template detail
   let [bonus, setBonus] = useState([]);
   let [coin, setCoin] = useState("");
-  let [progress, setProgress] = useState([]);
   let [total, setTotal] = useState(0);
 
-  let [block, setBlock] = useState(0);    //current block number
-
   let [qr, setQR] = useState(false);
+  let [qrURL, setQrURL] = useState("");
 
   const self = {
     clickQR:()=>{
@@ -47,12 +45,20 @@ function BountyShow(props) {
     getCover: () => {
       return data.template && data.template.raw ? data.template.raw.image : `${window.location.origin}/imgs/logo.png`
     },
+
+    getQrURL:(dt)=>{
+      const base="https://inft.w3os.net/bounty";
+      if(dt.alink) return `${base}/${dt.alink.replace("anchor://","")}`;
+      return base;
+    },
   }
 
   useEffect(() => {
     setReady(false);
+    
     if (props.data && props.data.template) {
       const data = props.data;
+      setQrURL(self.getQrURL(data));
       setData(data);
       setReady(true);
 
@@ -74,15 +80,12 @@ function BountyShow(props) {
           <div className="qr pointer" hidden={!qr} onClick={(ev) => {
             self.clickQR();
           }}>
-            {/* <img src={`${window.location.origin}/imgs/minter.png`} alt="QR" style={{width:"100%"}} /> */}
             <QRCode 
               bgColor={"#ffffff"}
               fgColor={"#000000"}
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              // size={200}
               value={"https://inft.w3os.net/market/bounty_reglrwnf/146805"} 
-              //viewBox={`0 0 256 256`}
               />
           </div>
           <div className="template_thumb pointer" style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
@@ -99,7 +102,7 @@ function BountyShow(props) {
         </Card>
         <h6 className="pt-1">{data && data.alink?data.alink:""}</h6>
         <p>
-          <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()} ( current: {block.toLocaleString()} )<br />
+          <FaClock /> {parseInt(data.start).toLocaleString()} ~ {parseInt(data.end).toLocaleString()}<br />
           <FaPizzaSlice />{data && data.template && data.template.cid ?
             (<span className="pointer ml-5" onClick={(ev) => { props.link("playground", [data.template.cid]) }}>
               {tools.shorten(data.template.cid, 15)}

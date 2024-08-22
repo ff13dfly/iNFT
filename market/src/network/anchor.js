@@ -357,7 +357,6 @@ const self = {
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
                         if(hash==="0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
-                        console.log(hash);
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;
                             full.block.extrinsics.forEach((ex, index) => {
