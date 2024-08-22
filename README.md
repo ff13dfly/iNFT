@@ -8,11 +8,9 @@
 
 - As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
-- Try yourself.
-    1. [iNFT Market](https://inft.w3os.net/market);
-    2. [iNFT Bounty](https://inft.w3os.net/bounty);
-    3. [iNFT Minter](https://inft.w3os.net/minter);
-    4. [iNFT Editor](https://inft.w3os.net/editor);
+- Try iNFT full functions, [iNFT Market](https://inft.w3os.net/market);
+
+- Just minting, [iNFT Minter](https://inft.w3os.net/mint);
 
 ## System Structure
 
@@ -26,6 +24,20 @@
 
 ## Roadmap
 
+### Multi Chain Operation
+
+- Support multi chain airdrop by iNFT way, merchant can publish airdrop bounty on Anchor Network which is base on Substrate.
+
+- All actions are recorded on Anchor Network where the iNFT is minted on.
+
+### Multi Chain Asset
+
+- Using the BTC block hash as the target for iNFT, and the iNFT on Anchor Network can be transfer to Etherum Network by `Last Words` method. When the iNFT on Anchor Network is dropped, the **Last Words** is written on chain, it can be used to approve the iNFT and create one on Etherum Network.
+
+- Bridge ERC-20 token between Anchor Netwok and Etherum Network. By this way, Anchor Network can be restart frequently to keep it simple.
+
+- The history data of Anchor Network with the Etherum salt can be store on IPFS, and the Merkel root on Etherum Network. Even the Anchor Network is crushed down, the asset can still be approved.
+
 ## Dapps
 
 ### Editor
@@ -33,6 +45,8 @@
 - **Function**, It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
 
 - **Language and Framework**,   React ( Javascript )
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/editor](https://github.com/ff13dfly/iNFT/tree/master/editor)
 
 - Multi networks support, you can write the iNFT template on different blockchain network.
 
@@ -43,6 +57,8 @@
 - **Function**, The client Dapp for normal users.
 
 - **Language and Framework**,   React ( Javascript )
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/mint](https://github.com/ff13dfly/iNFT/tree/master/mint)
 
 - Customer can explorer the templates, then mint on selected template.
 
@@ -56,6 +72,8 @@
 
 - **Language and Framework**,   React ( Javascript )
 
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
+
 - Different networks supported.
 
 ### Bounty
@@ -63,6 +81,8 @@
 - **Function**, Bounty for airdrop base on iNFT, merchant can publish bounty iNFT.
 
 - **Language and Framework**,   React ( Javascript )
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
 
 - Different networks supported. Full workflow on Anchor Network.
 
@@ -74,6 +94,8 @@
 
 - **Language and Framework**,   Node.js ( Javascript )
 
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/airdrop](https://github.com/ff13dfly/iNFT/tree/master/service/airdrop)
+
 - User get airdrop from Anchor Network.
 
 #### API
@@ -81,6 +103,8 @@
 - **Function**, get the bounty and cached iNFTs on server.
 
 - **Language and Framework**,  PHP, Redis, MySQL
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/api](https://github.com/ff13dfly/iNFT/tree/master/service/api)
 
 - Cooperating with `Cache Robot` to supply the iNFT data service.
 
@@ -90,6 +114,8 @@
 
 - **Language and Framework**,  PHP, Redis, MySQL
 
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/portal](https://github.com/ff13dfly/iNFT/tree/master/service/portal)
+
 - Bounty management. Put bounty on line or off line. Check the applying. Saving the bonus payment on Anchor Network.
 
 #### Cache Robot
@@ -97,6 +123,8 @@
 - **Function**, cache iNFT records and group them.
 
 - **Language and Framework**,   Node.js ( Javascript )
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/history](https://github.com/ff13dfly/iNFT/tree/master/service/history)
 
 - Group iNFTs by address.
 
@@ -111,6 +139,8 @@
 - **Function**, mint iNFT by setting.
 
 - **Language and Framework**,   Node.js ( Javascript )
+
+- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/robot](https://github.com/ff13dfly/iNFT/tree/master/service/robot)
 
 - Multi accounts support to mint iNFT.
 

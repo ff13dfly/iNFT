@@ -24,7 +24,7 @@
 
 - Functions.
 
-- [ ] Latest mint result.
+- [x] Latest mint result.
 - [ ] On selling iNFT list.
 - [ ] Template list via API.
 
@@ -36,9 +36,9 @@
 
 - Functions.
 
-- [ ] Selling list.
-- [ ] Selling list filter.
-- [ ] iNFT selling detail.
+- [x] Selling list.
+- [x] Selling list filter.
+- [x] iNFT selling detail.
 
 ### Bounty
 
@@ -62,10 +62,10 @@
 - Functions
 
 - [x] Load template from web3.storage
-- [ ] Template hash mocker
-- [ ] Template parts detail
-- [ ] Template series detail
-- [ ] Template raw data preview
+- [x] Template hash mocker
+- [x] Template parts detail
+- [x] Template series detail
+- [x] Template raw data preview
 
 ### Support System
 
@@ -79,12 +79,12 @@
 
 - Functions
 
-- [ ] iNFT category list by address.
-- [ ] iNFT category list by template.
-- [ ] iNFT category list by block.
+- [x] iNFT category list by address.
+- [x] iNFT category list by template.
+- [x] iNFT category list by block.
 - [ ] iNFT actions on chain.
-- [ ] Bounty list.
-- [ ] Bounty submission.
+- [x] Bounty list.
+- [x] Bounty submission.
 
 #### Manage Portal
 
@@ -138,9 +138,9 @@
 - Functions
 
 - [ ] iNFT operation history data.
-- [ ] iNFT list by account address.
-- [ ] iNFT list by template.
-- [ ] iNFT list by block.
+- [x] iNFT list by account address.
+- [x] iNFT list by template.
+- [x] iNFT list by block.
 
 #### IFPS Agent Server
 
@@ -164,8 +164,8 @@
 
 - [x] New UI of mint
 - [x] Minting board
-- [ ] Template preview
-- [ ] iNFT management
+- [x] Template preview
+- [x] iNFT management
 - [ ] Multi chain support
 
 ## Editor
@@ -186,18 +186,16 @@
 
 - Language: Rust ( Substrate )
 
-- Github folder: []()
-
-- Demo: []()
+- Github folder: [https://github.com/ff13dfly/iNFT/tree/master/pallet](https://github.com/ff13dfly/iNFT/tree/master/pallet)
 
 - Functions.
 
 - [ ] Register of template.
 - [ ] Template remove.
 - [ ] Mint from template.
-- [ ] Anchor divert.
-- [ ] Anchro drop.
-- [ ] Update to latest version of Polkadot SDK ( Substrate ).
+- [x] Anchor divert.
+- [x] Anchro drop.
+- [x] Update to latest version of Polkadot SDK ( Substrate ).
 
 ## Resource
 
