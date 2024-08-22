@@ -284,9 +284,9 @@ const self = {
                 //console.log(data);
                 if (!data || !data.name) return self.auto(list, ck, final);
                 Network(net).view(data.block, "hash", (hash) => {
-                    data.price = single.price;
-                    data.free = single.free;
-                    data.target = single.target;
+                    data.price = single.price===undefined?0:single.price;
+                    data.free = single.free===undefined?false:single.free;
+                    data.target = single.target===undefined?"":single.target;
                     if (!data.Network) data.network = net;         //add default network settling
                     data.hash = hash;
 

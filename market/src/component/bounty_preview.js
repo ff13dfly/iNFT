@@ -7,9 +7,11 @@ import CommentSubmit from "./commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
 
+import Network from "../network/router";
+
 import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
-
+import INFT from "../system/inft";
 import API from "../system/api";
 
 function BountyPreview(props) {
@@ -51,12 +53,86 @@ function BountyPreview(props) {
       const dd = new Date(stamp * 1000);
       return dd.toDateString() + " " + dd.toLocaleTimeString();
     },
+    decode:(alink)=>{
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
+    },
+    decodeAlinks:(list)=>{
+      const arr=[];
+      for(let i=0;i<list.length;i++){
+        const row=list[i];
+        arr.push(self.decode(row));
+      }
+      return arr;
+    },
+    getAnchors:(list,ck,map)=>{
+      if(map===undefined) map={};
+      if(list.length===0) return ck && ck(map);
+      const sinlge=list.pop();
+      const chain=Network("anchor");
+      chain.view(sinlge,"anchor",(dt)=>{
+        if(dt!==false){
+          const key=`anchor://${sinlge.name}/${sinlge.block}`;
+          map[key]=dt;
+        }
+        return self.getAnchors(list,ck,map)
+      }); 
+    },
+    getFullData:(list,ck)=>{
+      const map={};   //cache for anchors
+
+      //1.group different anchors
+      const alinks=[],anks=[];
+      for(let i=0;i<list.length;i++){
+        const row=list[i];
+        alinks.push(row.link);
+        if(row.record) anks.push(row.record);
+        if(row.judge) anks.push(row.judge);
+        if(row.distribute) anks.push(row.distribute);
+      }
+
+      //2.get all iNFT datas
+      const ins=self.decodeAlinks(alinks);
+      INFT.auto(ins,(dt)=>{
+        for(let i=0;i<dt.length;i++){
+          const row=dt[i];
+          const key=`anchor://${row.name}/${row.block}`;
+          map[key]=row;
+        }
+
+        //3.get all anchors
+        const ans=self.decodeAlinks(anks);
+        self.getAnchors(ans,(dts)=>{
+          for(let k in dts) map[k]=dts[k];
+          return ck && ck(map);
+        });
+      });
+    },
+
     autoCache: (ck) => {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
         if (!res.success || !res.data) return ck && ck(false);
-        //console.log(res.data.apply);
-        if (res.data.apply) setApply(res.data.apply);
+        if (res.data.apply){
+          self.getFullData(res.data.apply,(map)=>{
+            //console.log(map);
+            const arr=[];
+            for(let i=0;i<res.data.apply.length;i++){
+              //regroup data by anchor data
+              const single=res.data.apply[i];
+              if(map[single.link]!==undefined) single.link=map[single.link];
+              if(map[single.record]!==undefined) single.record=map[single.record];
+              if(map[single.judge]!==undefined) single.judge=map[single.judge];
+              if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
+              arr.push(single);
+            }
+            console.log(arr);
+            //setApply(arr);
+          });
+        } 
       });
 
       Bounty.get(alink, (bt) => {
@@ -73,9 +149,8 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
-    console.log("Bounty preview:" + JSON.stringify(props));
     self.autoCache(() => {
-      console.log(data);
+      //console.log(data);
     });
   }, [props.data, props.extend]);
 

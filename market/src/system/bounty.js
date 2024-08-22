@@ -1,4 +1,3 @@
-import { propTypes } from "react-bootstrap/esm/Image";
 import INDEXED from "../lib/indexed";
 import tools from "../lib/tools";
 
@@ -189,7 +188,7 @@ const self = {
             payment:(hash,target,amount)=>{
                 return {
                     block:hash,
-                    target:target,
+                    bounty:target,
                     amount:amount,
                     status:"pay",
                 }
@@ -197,8 +196,10 @@ const self = {
             apply:(bounty,index,inft_link,network,address)=>{
                 return {
                     inft: inft_link,        //apply inft anchor link
-                    target: bounty,         //bounty anchor link
-                    bonus: index,           //bonus index
+                    bounty:{
+                        target:bounty,      //bounty anchor link
+                        bonus: index,       //bonus index
+                    },
                     receiver: {
                         network: network,
                         address: address,
@@ -206,7 +207,6 @@ const self = {
                     status:"apply",
                 }
             },
-
             divert:(divert_link)=>{
                 return {
                     status:"divert",

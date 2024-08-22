@@ -356,8 +356,8 @@ const self = {
                     //1.if set block,search directly
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
-                        //console.log(hash);
-
+                        if(hash==="0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
+                        console.log(hash);
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;
                             full.block.extrinsics.forEach((ex, index) => {
@@ -389,6 +389,9 @@ const self = {
                             } else {
                                 return ck && ck(false);
                             }
+                        }).catch((err)=>{
+                            console.log(err);
+                            return ck && ck(false);
                         });
                     });
 
