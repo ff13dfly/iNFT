@@ -25,12 +25,12 @@ function BountyComment(props) {
   }
 
   useEffect(() => {
-    API.comment.list(props.bounty, (res) => {
-      if(!res.success) return false;
-      //const arr=res.data.reverse();
-      setList(res.data.slice(0,4).reverse());
-    });
-
+    if(props.bounty){
+      API.comment.list(props.bounty, (res) => {
+        if(!res.success) return false;
+        setList(res.data.slice(0,4).reverse());
+      });
+    }
   }, [props.bounty]);
 
   return (

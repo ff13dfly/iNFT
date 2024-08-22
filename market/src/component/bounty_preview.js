@@ -52,93 +52,48 @@ function BountyPreview(props) {
       const dd = new Date(stamp * 1000);
       return dd.toDateString() + " " + dd.toLocaleTimeString();
     },
-    decode:(alink)=>{
-      const str=alink.replace("anchor://","");
-      const arr=str.split("/");
-      const block=parseInt(arr.pop());
-      if(isNaN(block)) return false;
-      return {name:arr.join("/"),block:block};
-    },
-    decodeAlinks:(list)=>{
-      const arr=[];
-      for(let i=0;i<list.length;i++){
-        const row=list[i];
-        arr.push(self.decode(row));
+    calcTotal:(bs)=>{
+      let amount=0;
+      for(let i=0;i<bs.length;i++){
+        const row=bs[i];
+        amount+=row.amount*row.bonus;
       }
-      return arr;
-    },
-    getAnchors:(list,ck,map)=>{
-      if(map===undefined) map={};
-      if(list.length===0) return ck && ck(map);
-      const sinlge=list.pop();
-      const chain=Network("anchor");
-      chain.view(sinlge,"anchor",(dt)=>{
-        if(dt!==false){
-          const key=`anchor://${sinlge.name}/${sinlge.block}`;
-          map[key]=dt;
-        }
-        return self.getAnchors(list,ck,map)
-      }); 
-    },
-    getFullData:(list,ck)=>{
-      const map={};   //cache for anchors
-
-      //1.group different anchors
-      const alinks=[],anks=[];
-      for(let i=0;i<list.length;i++){
-        const row=list[i];
-        alinks.push(row.link);
-        if(row.record) anks.push(row.record);
-        if(row.judge) anks.push(row.judge);
-        if(row.distribute) anks.push(row.distribute);
-      }
-
-      //2.get all iNFT datas
-      const ins=self.decodeAlinks(alinks);
-      INFT.auto(ins,(dt)=>{
-        for(let i=0;i<dt.length;i++){
-          const row=dt[i];
-          const key=`anchor://${row.name}/${row.block}`;
-          map[key]=row;
-        }
-
-        //3.get all anchors
-        const ans=self.decodeAlinks(anks);
-        self.getAnchors(ans,(dts)=>{
-          for(let k in dts) map[k]=dts[k];
-          return ck && ck(map);
-        });
-      });
+      return amount;
     },
 
     autoCache: (ck) => {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
         if (!res.success || !res.data) return ck && ck(false);
-
-        //console.log(res);
+        
         setCoin(res.data.coin);   //set the bonus coin symbol
-        if (res.data.apply){
-          self.getFullData(res.data.apply,(map)=>{
-            const arr=[];
-            for(let i=0;i<res.data.apply.length;i++){
-              //regroup data by anchor data
-              const single=res.data.apply[i];
-              if(map[single.link]!==undefined) single.link=map[single.link];
-              if(map[single.record]!==undefined) single.record=map[single.record];
-              if(map[single.judge]!==undefined) single.judge=map[single.judge];
-              if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
-              arr.push(single);
-            }
-            console.log(arr);
-
-            //calc the process here
-          });
-        } 
+        
+        // if (res.data.apply){
+        //   self.getFullData(res.data.apply,(map)=>{
+        //     const arr=[];
+        //     for(let i=0;i<res.data.apply.length;i++){
+        //       //regroup data by anchor data
+        //       const single=res.data.apply[i];
+        //       if(map[single.link]!==undefined) single.link=map[single.link];
+        //       if(map[single.record]!==undefined) single.record=map[single.record];
+        //       if(map[single.judge]!==undefined) single.judge=map[single.judge];
+        //       if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
+        //       arr.push(single);
+        //     }
+        //     console.log(arr);
+        //   });
+        // } 
+        return ck && ck(res.data);
       });
 
       Bounty.get(alink, (bt) => {
         if (bt.error) return ck && ck(bt);
+        //console.log(bt);
+        if(bt.bonus){
+          const n=self.calcTotal(bt.bonus);
+          setTotal(n.toLocaleString());
+        }
+
         if (bt.template && bt.template.cid) {
           TPL.view(bt.template.cid, (dt) => {
             setData(dt);
@@ -157,9 +112,9 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
-    console.log(JSON.stringify(props));
+    //console.log(JSON.stringify(props));
     self.autoCache(() => {
-      //console.log(data);
+
     });
   }, [props.data, props.extend]);
 
@@ -196,27 +151,12 @@ function BountyPreview(props) {
           dialog={props.dialog}
           bounty={self.getAlink()}
         />
-
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <hr />
           </Col>
         </Row>
         <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} amount={20}/>
-
-        {/* <h5 className="pt-4">Apply Progress</h5>
-        {apply.map((row, index) => (
-          <Row key={index} className="pt-2">
-            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              Target: <strong>{row.link}</strong><br />
-              on-chain record: <strong>{row.record}</strong><br />
-              Stamp: <strong>{self.getDate(row.stamp)}</strong>
-            </Col>
-            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <hr />
-            </Col>
-          </Row>
-        ))} */}
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <CommentList alink={self.getAlink()} update={update} />

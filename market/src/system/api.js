@@ -1,18 +1,19 @@
 import Local from "../lib/local";
-import Data from "../lib/data";
 import Config from "../system/config"
 import Status from "../system/status";
 
 const cfg=Config.get(["proxy","nodes","market"])[0];
 const site=`${cfg.protocol}${cfg.domain}`;
 
+let spam="";
+let lock=false;
 const funs={
     request:(mod,act,ck,param)=>{
         let url=`${site}?mod=${mod}&act=${act}`;
         if(param!==undefined){
             for(var k in param) url+=`&${k}=${param[k]}`;
         }
-        const spam=Data.getHash("cache","spam");
+        //const spam=Data.getHash("cache","spam");
         if(spam) url+=`&spam=${spam}`;
         console.log(url);
         fetch(url).then((response)=>{
@@ -23,7 +24,7 @@ const funs={
 
                     //check the spam expired status, reinit system.
                     if(dt.code && dt.code===444){
-                        Data.removeHash("cache","spam");
+                        spam="";
                         return self.init(()=>{
                             funs.request(mod,act,ck,param);
                         });
@@ -44,8 +45,11 @@ const funs={
 const self={
     init:(ck)=>{
         //1.check spam first;
-        const spam=Data.getHash("cache","spam");
+        if(lock) return setTimeout(()=>{
+            self.init(ck);
+        },50);
         if(spam) return ck && ck(true);
+        lock=true;
 
         Status.set(site,2);
         const uuid=Local.get("uuid");
@@ -66,7 +70,8 @@ const self={
                         return ck && ck({error:"Invalide data"});
                     } 
                     Status.set(site,1);
-                    Data.setHash("cache","spam",dt.spam);
+                    spam=dt.spam;
+                    lock=false;
                     return ck && ck(true);
                 },{uuid:res.uuid,token:res.token});
             });
@@ -77,7 +82,8 @@ const self={
                     return ck && ck({error:"Invalide data"});
                 } 
                 Status.set(site,1);
-                Data.setHash("cache","spam",res.spam);
+                spam=res.spam;
+                lock=false;
                 return ck && ck(true);
             },{uuid:uuid,token:token});
         }
