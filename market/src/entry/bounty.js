@@ -33,13 +33,11 @@ function Bounty(props) {
     }
 
     useEffect(() => {
-        //console.log("Bounty entry:"+JSON.stringify(props))
         if(!props.extend){
             setHidden(false);
             setContent(map.basic);
         }else if(props.extend.anchor && props.extend.block){
             setHidden(true);
-            //setData(props.extend);
             setContent(map.view);
         }else{
             setHidden(false);

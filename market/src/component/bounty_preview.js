@@ -25,6 +25,10 @@ function BountyPreview(props) {
   let [bonus, setBonus] = useState([]);
   let [coin, setCoin] = useState("");
   let [total, setTotal] = useState(0);
+  let [start, setStart]= useState(0);
+  let [end, setEnd]= useState(0);
+  let [desc, setDesc]= useState("");
+
 
   let [update, setUpdate] = useState(0);
 
@@ -68,6 +72,10 @@ function BountyPreview(props) {
         if (!res.success || !res.data) return ck && ck(false);
         
         setCoin(res.data.coin);   //set the bonus coin symbol
+        setStart(parseInt(res.data.start));
+        setEnd(parseInt(res.data.end));
+
+        setDesc(res.data.detail.desc);
         return ck && ck(res.data);
       });
 
@@ -97,8 +105,9 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
+    //console.log(props.data);
     self.autoCache(() => {
-
+      console.log(data);
     });
   }, [props.data, props.extend]);
 
@@ -131,12 +140,11 @@ function BountyPreview(props) {
                 </button>
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                Start from
+                <p>{desc}</p>
+                <p>Start from {start.toLocaleString()} to {end.toLocaleString()}</p>
               </Col>
-              
             </Row>
           </Col>
-          
         </Row>
 
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
@@ -147,6 +155,7 @@ function BountyPreview(props) {
           dialog={props.dialog}
           bounty={self.getAlink()}
         />
+        <p className="pt-2">Click icon to view detail.</p>
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <hr />

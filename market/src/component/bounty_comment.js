@@ -18,6 +18,17 @@ function BountyComment(props) {
   let [list, setList] = useState([]);
 
   const self = {
+    clickMore:()=>{
+      const bt=self.decode(props.bounty);
+      props.link("bounty", [bt.name, bt.block]);
+    },
+    decode:(alink)=>{
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
+    },
     getAvatar: (address) => {
       const cfg = Config.get(["system", "avatar"]);
       return `${cfg.base}/${address}.png${cfg.set}`;
@@ -42,9 +53,13 @@ function BountyComment(props) {
         <h5>Comments</h5>
       </Col>
       <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button className="btn btn-md btn-default">More</button>
+        <button className="btn btn-md btn-default" onClick={(ev)=>{
+          //console.log(props);
+          self.clickMore();
+        }}>More</button>
       </Col>
       <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <div className="container_comment">
         {list.map((row, index) => (
           <Row className="pb-2" key={index}>
             <Col md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
@@ -60,6 +75,7 @@ function BountyComment(props) {
             </Col>
           </Row>
         ))}
+        </div>
       </Col>
     </Row>
   );

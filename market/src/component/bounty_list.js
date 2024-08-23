@@ -16,29 +16,6 @@ function BountyList(props) {
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
 
-  //bounty will be written on chain
-  const format={
-    title:"Bounty of Happy PEPE",
-    desc:"Description of bounty.",
-    publisher:"5DhSQwEKYr5rwcEHagj4APs8VZWbz96ppkWoacGQKDfpsfQh",
-    period:{        //bounty valid period
-      start:0,
-      end:0,
-    },
-    bonus:[      //prize of bounty
-      {
-        place:0,        // the level of bounty
-        bonus:1,          //bonus amount of bounty
-        amount:10,        //how many winner
-        coin:"ETH",
-        desc:"The first place of winner",
-        target:[
-          {series:0,bonus:100,amount:10},
-        ],          
-      },
-    ],                                           
-  }
-
   const self = {
     getHolder: (n) => {
       const arr = []

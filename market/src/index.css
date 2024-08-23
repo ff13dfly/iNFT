@@ -142,7 +142,7 @@ code {
 }
 
 .bounty_title{
-  border-bottom: 1px solid #f1ebe8;
+  border-bottom: 4px solid #f1ebe8;
 }
 
 .bounty_live{
@@ -172,4 +172,11 @@ code {
   min-height: 360px;
   max-height: 360px;
   overflow: scroll;
+}
+
+.container_comment{
+  padding:10px 10px 10px 10px;
+  background: #FAFAFA;
+  min-height: 240px;
+  border-radius: 10px;
 }

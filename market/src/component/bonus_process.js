@@ -11,7 +11,7 @@ function BonusProcess(props) {
     row: [12],
     head: [4, 8],
     half: [6],
-    apply: [2,10],
+    apply: [3,9],
     winner:[3]
   };
 
@@ -139,7 +139,7 @@ function BonusProcess(props) {
         <hr />
       </Col>
       <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
-        <h5>Applied List</h5>
+        <h5>Submission</h5>
       </Col>
       <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
         Total {list.length} iNFTs

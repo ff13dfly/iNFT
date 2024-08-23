@@ -119,6 +119,7 @@ function BountyShow(props) {
           template={!data.template || !data.template.raw?{}:data.template.raw}
           dialog={props.dialog}
         />
+        <p className="pt-2">Click icon to view detail.</p>
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
         <Row className="pt-4">
@@ -126,7 +127,7 @@ function BountyShow(props) {
             <BountyMinting template={props.data && props.data.template?props.data.template.cid:""} bounty={props.data && props.data.alink?props.data.alink:""}/>
           </Col>
         </Row>
-        <BountyComment bounty={props.data && props.data.alink?props.data.alink:""}/>
+        <BountyComment bounty={props.data && props.data.alink?props.data.alink:""} link={props.link}/>
       </Col>
     </Row>
   );
