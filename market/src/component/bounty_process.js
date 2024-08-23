@@ -37,7 +37,9 @@ function BountyProcess(props) {
   }
   useEffect(() => {
     self.fresh();
-  }, [props.data,props.extend]);
+
+    console.log(props);
+  }, [props.data,props.index]);
 
   return (
     <Row>

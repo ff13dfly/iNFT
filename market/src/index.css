@@ -97,6 +97,13 @@ code {
   border-radius: 10px;
   margin-right: 10px;
 }
+
+.apply_thumb{
+  width:100%;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
 .bonus_thumb{
   width: 120px;
   height: 120px;

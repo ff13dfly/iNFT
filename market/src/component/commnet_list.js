@@ -31,7 +31,6 @@ function CommentList(props) {
 
   useEffect(() => {
     API.comment.list(props.alink, (res) => {
-      //console.log(res);
       if(!res.success) return false;
       setList(res.data.reverse());
     });

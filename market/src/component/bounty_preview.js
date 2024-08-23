@@ -7,12 +7,11 @@ import CommentSubmit from "./commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
 
-import Network from "../network/router";
-
 import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
-import INFT from "../system/inft";
 import API from "../system/api";
+
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 function BountyPreview(props) {
   const size = {
@@ -28,6 +27,8 @@ function BountyPreview(props) {
   let [total, setTotal] = useState(0);
 
   let [update, setUpdate] = useState(0);
+
+  let [fav, setFav] = useState(true);  //wether faved by user
 
   const self = {
     getAlink: () => {
@@ -67,28 +68,12 @@ function BountyPreview(props) {
         if (!res.success || !res.data) return ck && ck(false);
         
         setCoin(res.data.coin);   //set the bonus coin symbol
-        
-        // if (res.data.apply){
-        //   self.getFullData(res.data.apply,(map)=>{
-        //     const arr=[];
-        //     for(let i=0;i<res.data.apply.length;i++){
-        //       //regroup data by anchor data
-        //       const single=res.data.apply[i];
-        //       if(map[single.link]!==undefined) single.link=map[single.link];
-        //       if(map[single.record]!==undefined) single.record=map[single.record];
-        //       if(map[single.judge]!==undefined) single.judge=map[single.judge];
-        //       if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
-        //       arr.push(single);
-        //     }
-        //     console.log(arr);
-        //   });
-        // } 
         return ck && ck(res.data);
       });
 
       Bounty.get(alink, (bt) => {
         if (bt.error) return ck && ck(bt);
-        //console.log(bt);
+
         if(bt.bonus){
           const n=self.calcTotal(bt.bonus);
           setTotal(n.toLocaleString());
@@ -112,7 +97,6 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
-    //console.log(JSON.stringify(props));
     self.autoCache(() => {
 
     });
@@ -139,8 +123,20 @@ function BountyPreview(props) {
             />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-            Start from
+            <Row>
+              <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                <button className="btn btn-sm btn-default">
+                  <FaRegHeart hidden={fav} className="text-warning" size={20}/>
+                  <FaHeart hidden={!fav} className="text-warning" size={20}/>
+                </button>
+              </Col>
+              <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                Start from
+              </Col>
+              
+            </Row>
           </Col>
+          
         </Row>
 
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>

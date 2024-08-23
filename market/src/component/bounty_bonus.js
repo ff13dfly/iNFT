@@ -25,7 +25,7 @@ function BountyBonus(props) {
       props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty Apply");
     },
     clickProcess:(index)=>{
-      props.dialog.show(<BonusProcess data={data} index={index} dialog={props.dialog} />, "Bonus Process");
+      props.dialog.show(<BonusProcess data={data} index={index} dialog={props.dialog} />, `Bonus Process ( ${data.alink} )`);
     },
     getThumb: (index) => {
       if (!props.template || !props.template.series) return false;
@@ -115,32 +115,34 @@ function BountyBonus(props) {
       setProgress(map);
       setRefuse(rmap);
     },
+    freshProgress:(apples)=>{
+      self.getFullData(apples,(map)=>{
+        const arr=[];
+        for(let i=0;i<apples.length;i++){
+          //regroup data by anchor data
+          const single=apples[i];
+          if(map[single.link]!==undefined) single.link=map[single.link];
+          if(map[single.record]!==undefined) single.record=map[single.record];
+          if(map[single.judge]!==undefined) single.judge=map[single.judge];
+          if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
+          arr.push(single);
+        }
+        //console.log(arr);
+        self.decodeProgress(arr,props.data);
+        //console.log(pg);
+      });
+    },
   }
 
   useEffect(() => {
+    //console.log(props.bounty)
     if(props.bounty){
       if((typeof props.bounty)==="string"){
         API.bounty.view(props.bounty,(res)=>{
           if(!res.success) return false;    //FIXME, more operation here.
           const row=res.data;
 
-          //2.get the apply progress
-          self.getFullData(row.apply,(map)=>{
-            const arr=[];
-            for(let i=0;i<row.apply.length;i++){
-              //regroup data by anchor data
-              const single=res.data.apply[i];
-              if(map[single.link]!==undefined) single.link=map[single.link];
-              if(map[single.record]!==undefined) single.record=map[single.record];
-              if(map[single.judge]!==undefined) single.judge=map[single.judge];
-              if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
-              arr.push(single);
-            }
-            //console.log(arr);
-            self.decodeProgress(arr,props.data);
-            //console.log(pg);
-          });
-
+          self.freshProgress(row.apply);
           TPL.view(row.template.cid,(dt)=>{
             row.template.raw=dt;
             setData(row);
@@ -148,6 +150,7 @@ function BountyBonus(props) {
         });
       }else{
         setData(props.bounty);
+        if(props.bounty && props.bounty.apply) self.freshProgress(props.bounty.apply);
       }
     }
 
