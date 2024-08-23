@@ -176,7 +176,7 @@ function BountyBonus(props) {
                   Left {row.amount-(!progress[row.series] ? 0 : progress[row.series])} wanted.
                 </Col>
                 <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <button className="btn btn-md btn-primary" hidden={row.amount===(!progress[row.series] ? 0 : progress[row.series])} onClick={(ev) => {
+                  <button className="btn btn-md btn-primary" disabled={row.amount===(!progress[row.series] ? 0 : progress[row.series])} onClick={(ev) => {
                     self.clickApply(index, props.bounty);
                   }}>Apply</button>
                 </Col>

@@ -108,10 +108,7 @@ function BountyApply(props) {
 
               //2.report to portal
               API.bounty.apply(alink, inft, rlink, (res) => {
-
-                //3.save to local indexedDB
-
-
+                props.dialog.close();
               });
             });
           }
@@ -135,7 +132,7 @@ function BountyApply(props) {
     },
     showBonus: (data, index) => {
       const target = data.detail.bonus[index];
-      console.log(target);
+      //console.log(target);
       TPL.view(data.template.cid, (res) => {
         //console.log(res);
         const dt = res.series[target.series];
