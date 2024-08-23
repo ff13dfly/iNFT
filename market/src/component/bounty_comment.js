@@ -39,7 +39,7 @@ function BountyComment(props) {
     if(props.bounty){
       API.comment.list(props.bounty, (res) => {
         if(!res.success) return false;
-        setList(res.data.slice(0,4).reverse());
+        setList(res.data.slice(0,3).reverse());
       });
     }
   }, [props.bounty]);

@@ -46,13 +46,35 @@ const funs = {
     },
 }
 
+
 const self = {
+    map:(ck)=>{
+        self.list({},(arr)=>{
+            for(let i=0;i<arr.length;i++){
+                const row=arr[i];
+                cache[row.address]=true;
+            }
+            return ck && ck();
+        });
+    },
     get:(addr,ck)=>{
         const table="accounts";
         funs.checkDB(table,(db)=>{
             INDEXED.searchRows(db,table,"address",addr,ck);
         });
     },
+    exsist:(addr)=>{
+        if(cache[addr]) return true;
+        return false
+    },
+
+    list: (filter, ck, page, step) => {
+        const table="accounts";
+        funs.checkDB(table,(db)=>{
+            INDEXED.pageRows(db,table,ck,{page:page,step:step})
+        });
+    },
+
     generate: (network, ck) => {
         const gen = Network(network);
         if (gen === false) return ck && ck(false);
@@ -85,14 +107,6 @@ const self = {
             return ck && ck();
         });
     },
-
-    list: (filter, ck, page, step) => {
-        const table="accounts";
-        funs.checkDB(table,(db)=>{
-            INDEXED.pageRows(db,table,ck,{page:page,step:step})
-        });
-    },
-
     
     balance:(list,ck,net)=>{
         const chain = Network(!net?"anchor":net);

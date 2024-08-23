@@ -111,7 +111,7 @@ function BountyShow(props) {
         </p>
       </Col>
       <Col className="bounty_title" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        <h6>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h6>
+        <h5>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus 
           data={bonus} 
           coin={coin} 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import BountyApply from "./bounty_apply";
 
 import Config from "../system/config";
+import Account from "../system/account";
+
 import tools from "../lib/tools";
 
 function BonusProcess(props) {
@@ -12,7 +14,8 @@ function BonusProcess(props) {
     head: [4, 8],
     half: [6],
     apply: [3,9],
-    winner:[3]
+    winner:[3],
+    divert:[9,3],
   };
 
   let [list, setList] = useState([]);
@@ -24,6 +27,15 @@ function BonusProcess(props) {
       setTimeout(() => {
         props.dialog.show(<BountyApply data={props.data} index={props.index} dialog={props.dialog} />, "Bounty Apply");
       }, 200);
+    },
+    clickDivert:(name,addr)=>{
+      console.log(name,addr);
+      Account.get(addr,(dt)=>{
+        console.log(dt);
+      });
+    },
+    changePassword:(ev,addr)=>{
+
     },
     getTarget: () => {
       if (props.data.detail && props.data.detail.bonus) {
@@ -68,8 +80,8 @@ function BonusProcess(props) {
           arr.push(atom);
         }
       }
-
-      setList(arr);
+      //console.log(arr);
+      setList(arr.reverse());
 
       //2.filter out the winners;
       const nlist=[];
@@ -87,8 +99,9 @@ function BonusProcess(props) {
   }
 
   useEffect(() => {
-    self.applyList(props.data.apply, props.index);
-    //console.log(props);
+    Account.map((res)=>{
+      self.applyList(props.data.apply, props.index);
+    });
   }, [props.index]);
 
   return (
@@ -159,14 +172,22 @@ function BonusProcess(props) {
                       <p><strong>anchor://{row.inft.name}/{row.inft.block}</strong>, owner:<strong>{tools.shorten(row.inft.owner)}</strong></p>
                       {self.getApplyStatus(row.judge)}
                     </Col>
-                    {/* <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                  Judged by <strong>{tools.shorten(row.judge.owner,4)}</strong> on <strong>anchor://{row.judge.name}/{row.judge.block}</strong>
-                </Col> */}
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                       {row.distribute !== null ? "Payed" : "Waiting for distributition"}
                     </Col>
-                    <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                      <button className="btn btn-sm btn-primary">Divert</button>
+                    <Col className="text-end pt-1" md={size.divert[0]} lg={size.divert[0]} xl={size.divert[0]} xxl={size.divert[0]} >
+                      <input type="password" hidden={!Account.exsist(row.inft.owner)}  className="form-control" 
+                        placeholder={`Password of ${tools.shorten(row.inft.owner)}`} onChange={(ev)=>{
+                          self.changePassword(ev,row.inft.owner);
+                        }}/>
+                    </Col>
+                    <Col className="text-end pt-1" md={size.divert[1]} lg={size.divert[1]} xl={size.divert[1]} xxl={size.divert[1]} >
+                      <button 
+                        disabled={!Account.exsist(row.inft.owner)} 
+                        className={Account.exsist(row.inft.owner)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
+                        onClick={(ev)=>{
+                          self.clickDivert(row.inft.name,row.inft.owner);
+                        }}>Divert</button>
                     </Col>
                   </Row>
                 </Col>
