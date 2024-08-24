@@ -84,20 +84,16 @@ function View(props) {
                         <MoreINFT data={data} link={props.link} />   
                     </Col>
                     
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                    <Col style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
                             self.clickBuy(pair);
                         }}/>
                     </Col>
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        <hr />
-                    </Col>
                 </Row>
-                <BountyMinting template={template} bounty={props.name}/>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                
-                <CommentList alink={alink} update={update} height={360} />
+                {/* <BountyMinting template={template} bounty={props.name}/> */}
+                <CommentList alink={alink} update={update} height={612} />
                 <CommentSubmit alink={alink} callback={() => {
                     setUpdate(update + 1);
                 }} />

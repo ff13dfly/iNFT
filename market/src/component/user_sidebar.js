@@ -28,12 +28,12 @@ function UserSidebar(props) {
       icon: <FaCat size={20}  className="mr-5" color={self.getColor("inft")}/>,
       title: "My iNFTs",
     },
-    {
-      name: "bounty",
-      icon: <FaBitcoin size={20}  className="mr-5" color={self.getColor("bounty")}/>,
-      title: "Bounty",
-      desc:"Manage your bounty",
-    },
+    // {
+    //   name: "bounty",
+    //   icon: <FaBitcoin size={20}  className="mr-5" color={self.getColor("bounty")}/>,
+    //   title: "Bounty",
+    //   desc:"Manage your bounty",
+    // },
     {
       name: "account",
       icon: <FaUserFriends size={20}  className="mr-5" color={self.getColor("account")}/>,

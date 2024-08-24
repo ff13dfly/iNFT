@@ -7,15 +7,6 @@ $memo=$_F['request']['memo'];
 
 $result=array('success'=>FALSE);
 
-//1.check bounty
-// $a->load("bounty");
-// $a=Bounty::getInstance();
-
-// if(!$a->bountyExsist($alink)){
-//     $a=Config::getInstance();
-//     $a->error("No such bounty");
-// }
-
 $a->load("comment");
 $a=Comment::getInstance();
 

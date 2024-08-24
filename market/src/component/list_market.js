@@ -76,7 +76,7 @@ function ListMarket(props) {
             <Card.Body>
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
-                <strong>Price: </strong>$ANK  {row.price} 
+                <strong>Price: </strong> <span className="text-warning"><strong>{row.price}</strong></span> $ANK  
                 <br/>
                 <strong>Owner: </strong>{!row.owner?"":tools.shorten(row.owner)}
               </Card.Text>

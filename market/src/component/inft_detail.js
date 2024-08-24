@@ -23,32 +23,23 @@ function DetailINFT(props) {
 
   return (
     <Row className="pb-4">
-      <Col hidden={props.noPrice} className="pt-1" md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+      <Col hidden={props.noPrice} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <small>Price</small>
-      </Col>
-      <Col hidden={props.noPrice} className="pt-1" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
         <h3 className="text-warning">{props.data && props.data.price?props.data.price:0}</h3>
       </Col>
-
-      <Col className="pt-1" md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
-        <small>Network</small>
-      </Col>
-      <Col className="pt-1" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
-        <h3 className="text-warning">{tools.toUp(props.data && props.data.network?props.data.network:"")}</h3>
-      </Col>
-
-      <Col className="pt-1" md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+      <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <small>Name</small>
-      </Col>
-      <Col className="pt-1" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
         <h3 className="text-warning">{props.data && props.data.name?props.data.name:""}</h3>
       </Col>
 
-      <Col className="pt-1" md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+      <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <small>Block</small>
-      </Col>
-      <Col className="pt-1" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
         <h3 className="text-warning">{props.data && props.data.block?props.data.block.toLocaleString():0}</h3>
+      </Col>
+
+      <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <small>Network</small>
+        <h3 className="text-warning">{tools.toUp(props.data && props.data.network?props.data.network:"")}</h3>
       </Col>
     </Row>
   );
