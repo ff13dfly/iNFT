@@ -31,7 +31,7 @@ function UserINFT(props) {
     clickFav: (ev) => {
       setFav(!fav);
       if (!fav) {
-        console.log("here");
+        //console.log("here");
         const step = 12;
         INFT.fav.list((res) => {
           INFT.multi(res, (ans) => {

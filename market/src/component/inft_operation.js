@@ -39,7 +39,8 @@ function OperationINFT(props) {
       const chain=Network("anchor");
       self.getPair(target,(pair)=>{
         if(pair){
-          chain.sell(pair,name,price,(progress)=>{
+          const nprice=parseInt(price*chain.divide());
+          chain.sell(pair,name,nprice,(progress)=>{
             setInfo(progress.msg);
             if(progress.status==="Finalized"){
               setTimeout(() => {
@@ -183,7 +184,6 @@ function OperationINFT(props) {
           </Col>
         </Row>
       </Col>
-
       <Col className="text-end"  md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
       </Col>

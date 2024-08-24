@@ -160,8 +160,11 @@ const self = {
         if (!done) done = [];
         if (list.length === 0) return ck && ck(done);
         const single = list.pop();
+        //console.log(JSON.stringify(single));
         const chain = Network("anchor");
         chain.view(single, "anchor", (dt) => {
+            if(dt===false) return self.multi(list, ck, done);
+            //console.log(JSON.stringify(single));
             dt.block = single.block;
             dt.blocknumber = single.block;
             done.push(dt);
