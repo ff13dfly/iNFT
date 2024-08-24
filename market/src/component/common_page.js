@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 */
 
 function Page(props) {
-
   const size = {
     row: [12],
     board: [3]
@@ -42,11 +41,13 @@ function Page(props) {
       props.callback && props.callback(props.total);
     },
     getButtons:(current, step, total)=>{
-      //console.log(current,step,total);
+      console.log(props,current, step, total);
       const narr=[];
       const count=Math.floor(current/step);
       const start=(current%step===0?count-1:count)*step;
-      for (let i = 0; i < step; i++) {
+
+      for (let i = 0; i < step; i++){
+        if(start+i >= total) continue;
         narr.push({ page: start + i + 1 });
       }
       return narr;
@@ -75,6 +76,7 @@ function Page(props) {
   }
 
   useEffect(() => {
+    //console.log(props.total)
     self.fresh();
   }, [props.now, props.total, props.step]);
 

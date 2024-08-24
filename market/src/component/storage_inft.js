@@ -111,7 +111,6 @@ function StorageINFT(props) {
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Page show={show} align={"right"} now={page} step={10} total={total} callback={(n)=>{
-          //console.log(n);
           setPage(n);
           self.fresh(n);
         }}/>
