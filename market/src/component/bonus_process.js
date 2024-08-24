@@ -39,9 +39,9 @@ function BonusProcess(props) {
       const ak=self.decode(props.data.alink);
       //console.log(ak);
       chain.view(ak,"anchor",(dt)=>{
+        //FIXME, need to get the consignee from bounty raw data
         const target="5DLgD2J6R7QRo8CuZRnT7ZiYmwUTLz2jmhUPc1Jd44LLrd9X";
         Account.get(addr,(file)=>{
-          //console.log(file);
           try {
             chain.load(JSON.stringify(file[0]), password[name], (pair) => {
               chain.divert(pair,name,target,(res)=>{
@@ -57,8 +57,6 @@ function BonusProcess(props) {
             
           }
         });
-        
-
       });
     },
     changePassword:(ev,name)=>{
@@ -100,7 +98,7 @@ function BonusProcess(props) {
       const arr = [];
       for (let i = 0; i < aps.length; i++) {
         const row = aps[i];
-        const atom = { inft: null, judge: null, distribute: null, index:i }
+        const atom = { inft: null, judge: null, distribute: null,divert:"",index:i }
         if (row.record && row.record.raw && row.record.raw.bounty && row.record.raw.bounty.bonus === index) {
           atom.inft = row.link;
           atom.record=row.record;
@@ -112,10 +110,12 @@ function BonusProcess(props) {
             atom.distribute = row.distribute;
           }
 
+          if(row.divert) atom.divert=row.divert
+
           arr.push(atom);
         }
       }
-      //console.log(arr);
+      console.log(arr);
       setList(arr.reverse());
 
       //2.filter out the winners;
@@ -131,10 +131,19 @@ function BonusProcess(props) {
       }
       setWinners(nlist);
     },
+    hiddenPassword:(row)=>{
+      if(!Account.exsist(row.inft.owner)) return true;
+      if(row.divert!=="") return true;
+      return false;
+    },
+    disableDivert:(row)=>{
+
+    },
   }
 
   useEffect(() => {
     Account.map((res)=>{
+      console.log(props.data.apply);
       self.applyList(props.data.apply, props.index);
     });
   }, [props.index]);
@@ -211,15 +220,15 @@ function BonusProcess(props) {
                       {row.distribute !== null ? "Payed" : "Waiting for distributition"}
                     </Col>
                     <Col className="text-end pt-1" md={size.divert[0]} lg={size.divert[0]} xl={size.divert[0]} xxl={size.divert[0]} >
-                      <input type="password" hidden={!Account.exsist(row.inft.owner)}  className="form-control" 
+                      <input type="password" hidden={self.hiddenPassword(row)}  className="form-control" 
                         placeholder={`Password of ${tools.shorten(row.inft.owner)}`} onChange={(ev)=>{
                           self.changePassword(ev,row.inft.name);
                         }}/>
                     </Col>
                     <Col className="text-end pt-1" md={size.divert[1]} lg={size.divert[1]} xl={size.divert[1]} xxl={size.divert[1]} >
                       <button 
-                        disabled={!Account.exsist(row.inft.owner)} 
-                        className={Account.exsist(row.inft.owner)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
+                        disabled={self.hiddenPassword(row)}
+                        className={!self.hiddenPassword(row)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
                         onClick={(ev)=>{
                           self.clickDivert(row.inft.name,row.inft.owner,row.index);
                         }}>Divert</button>

@@ -32,7 +32,7 @@ function BountyBonus(props) {
       props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog} />, "Bounty Apply");
     },
     clickProcess:(index)=>{
-      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} />, `Bonus Process ( ${data.alink} )`);
+      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} />, `Bonus Process ( ${props.raw.alink} )`);
     },
     getThumb: (index) => {
       //console.log(props.template.series);
