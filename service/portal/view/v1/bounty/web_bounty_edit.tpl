@@ -49,180 +49,188 @@
 				</div>
 			</div>
 			<div class="col-lg-9">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-3">
-								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-									<h5>Bounty Apply</h5>
-								</a>
-							</div>
-							<div class="col-lg-9 text-right">
-								<h5 id="info">Linking...</h5>
-							</div>
-						</div>
-					</div>
-					<div class="panel-wrapper collapse in">
-						<div class="panel-body">
-							<table class="table table-hover">
-								<tr>
-									<th></th>
-									<th>iNFT</th>
-									<th>Progress</th>
-									<th>Created</th>
-									<th>Status</th>
-								</tr>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
 
-								{%if count($F.data.apply) neq 0%} {%foreach from=$F.data.apply key=k item=v %}
+								<div class="row">
+									<div class="col-lg-3">
+										<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip"
+											title="">
+											<h5>Bounty Distribition</h5>
+										</a>
+									</div>
+									<div class="col-lg-9 text-right">
+										<h5 id="info_distribute"></h5>
+									</div>
+								</div>
 
-								<tr>
-									<td></td>
-									<td>
-										<a href="#" target="_blank">{%$v.link%}</a>
-									</td>
-									<td>
-										Apply: <a href="#" target="_blank">{%$v.record%}</a> <br />
-										Judge: {%if !empty($v.judge)%}<a href="#"
-											target="_blank">{%$v.judge%}</a>{%/if%} <br />
-										Distribute: {%if !empty($v.distribute)%}<a href="#"
-											target="_blank">{%$v.distribute%}</a>{%/if%} <br />
-									</td>
-									<td>{%date("Ymd",$v.stamp)%}</td>
-									<td>
-										{%if $v.status eq BOUNTY_APPLY_SUBMITTED%}
-										<button class="btn btn-sm btn-primary apply_accept"
-											data="{%$k%}">Accept</button>
-										<button class="btn btn-sm btn-danger apply_refuse" data="{%$k%}">Refuse</button>
+							</div>
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body">
+									<div class="row">
+										{%if count($F.paying) eq 0%}
+										<div class="col-lg-12">
+											No apply to distribute.
+										</div>
 										{%else%}
-										{%if $v.status eq BOUNTY_APPLY_FAILED%}
-										<span class="text-dark">{%$F.status[$v.status]%}</span>
-										{%else%}
-										<span class="text-danger">{%$F.status[$v.status]%}</span>
+										<div class="col-lg-4">
+											<select class="form-control" id="payment_record">
+												{%foreach from=$F.paying key=k item=v %}
+												<option value="{%$v.index%}">[{%$k%}]-{%$v.record%}
+												<option>
+													{%/foreach%}
+											</select>
+										</div>
+										<div class="col-lg-6">
+											<input class="form-control" id="payment_hash" type="text"
+												placeholder="Transaction hash here.">
+										</div>
+										<div class="col-lg-2">
+											<button class="btn btn-md btn-primary" id="distribute_submit">Submit
+												Payment</button>
+										</div>
 										{%/if%}
-										{%/if%}
-									</td>
-								</tr>
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<div class="row">
+									<div class="col-lg-6">
+										Please select the account JSON file before any operation.
+									</div>
+									<div class="col-lg-6 text-right" id="distribute_info">
 
-								{%/foreach%} {%/if%}
-							</table>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="panel-footer">
-						<div class="row">
-							<div class="col-lg-6">
-								Please select the account JSON file before any operation.
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-lg-3">
+										<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip"
+											title="">
+											<h5>Bounty Apply</h5>
+										</a>
+									</div>
+									<div class="col-lg-9 text-right">
+										<h5 id="info">Linking...</h5>
+									</div>
+								</div>
 							</div>
-							<div class="col-lg-6 text-right" id="approve_info">
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body">
+									<table class="table table-hover">
+										<tr>
+											<th></th>
+											<th>iNFT</th>
+											<th>Progress</th>
+											<th>Created</th>
+											<th>Status</th>
+										</tr>
 
+										{%if count($F.data.apply) neq 0%} {%foreach from=$F.data.apply key=k item=v %}
+
+										<tr>
+											<td></td>
+											<td>
+												<a href="#" target="_blank">{%$v.link%}</a>
+											</td>
+											<td>
+												Apply: <a href="#" target="_blank">{%$v.record%}</a> <br />
+												Judge: {%if !empty($v.judge)%}<a href="#"
+													target="_blank">{%$v.judge%}</a>{%/if%} <br />
+												Distribute: {%if !empty($v.distribute)%}<a href="#"
+													target="_blank">{%$v.distribute%}</a>{%/if%} <br />
+											</td>
+											<td>{%date("Ymd",$v.stamp)%}</td>
+											<td>
+												{%if $v.status eq BOUNTY_APPLY_SUBMITTED%}
+												<button class="btn btn-sm btn-primary apply_accept"
+													data="{%$k%}">Accept</button>
+												<button class="btn btn-sm btn-danger apply_refuse"
+													data="{%$k%}">Refuse</button>
+												{%else%}
+												{%if $v.status eq BOUNTY_APPLY_FAILED%}
+												<span class="text-dark">{%$F.status[$v.status]%}</span>
+												{%else%}
+												<span class="text-danger">{%$F.status[$v.status]%}</span>
+												{%/if%}
+												{%/if%}
+											</td>
+										</tr>
+
+										{%/foreach%} {%/if%}
+									</table>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<div class="row">
+									<div class="col-lg-6">
+										Please select the account JSON file before any operation.
+									</div>
+									<div class="col-lg-6 text-right" id="approve_info">
+
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-6">
-								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-									<h5>Bounty Information</h5>
-								</a>
-							</div>
-							<div class="col-lg-6 text-right">
-								<h5 id="info_distribute"></h5>
-							</div>
-						</div>
-					</div>
-					<div class="panel-wrapper collapse in">
-						<div class="panel-body">
-
-						</div>
-					</div>
-					<div class="panel-footer">
-						{%$F.data.alink%}
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-9">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-
-						<div class="row">
-							<div class="col-lg-3">
-								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-									<h5>Bounty Distribition</h5>
-								</a>
-							</div>
-							<div class="col-lg-9 text-right">
-								<h5 id="info_distribute"></h5>
-							</div>
-						</div>
-
-					</div>
-					<div class="panel-wrapper collapse in">
-						<div class="panel-body">
-
-							<div class="row">
-								{%if count($F.paying) eq 0%}
-								<div class="col-lg-12">
-									No apply to distribute.
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-lg-6">
+										<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip"
+											title="">
+											<h5>Bounty Information</h5>
+										</a>
+									</div>
+									<div class="col-lg-6 text-right"></div>
 								</div>
-								{%else%}
-								<div class="col-lg-4">
-									<select class="form-control" id="payment_record">
-										{%foreach from=$F.paying key=k item=v %}
-										<option value="{%$v.index%}">[{%$k%}]-{%$v.record%}
-										<option>
-											{%/foreach%}
-									</select>
-								</div>
-								<div class="col-lg-6">
-									<input class="form-control" id="payment_hash" type="text"
-										placeholder="Transaction hash here.">
-								</div>
-								<div class="col-lg-2">
-									<button class="btn btn-md btn-primary" id="distribute_submit">Submit
-										Payment</button>
-								</div>
-								{%/if%}
 							</div>
-						</div>
-					</div>
-					<div class="panel-footer">
-						<div class="row">
-							<div class="col-lg-6">
-								Please select the account JSON file before any operation.
-							</div>
-							<div class="col-lg-6 text-right" id="distribute_info">
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body" id="bounty_info">
 
+								</div>
+							</div>
+							<div class="panel-footer">
+								{%$F.data.alink%}
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-lg-6">
+										<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip"
+											title="">
+											<h5>Bounty Payment</h5>
+										</a>
+									</div>
+									<div class="col-lg-6 text-right">
+									</div>
+								</div>
+							</div>
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body" id="payment_info">
 
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-6">
-								<a class="pull-left" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="">
-									<h5>Bounty Payment</h5>
-								</a>
+								</div>
 							</div>
-							<div class="col-lg-6 text-right">
-								<h5 id="info_distribute"></h5>
+							<div class="panel-footer">
+								{%$F.data.payment%}
 							</div>
 						</div>
-					</div>
-					<div class="panel-wrapper collapse in">
-						<div class="panel-body">
-
-						</div>
-					</div>
-					<div class="panel-footer">
-						{%$F.data.payment%}
 					</div>
 				</div>
 			</div>
@@ -284,18 +292,7 @@
 
 <script type="text/javascript">
 	//bounty information
-	Chain.init((API) => {
-	$("#info").html(`Node linked: ${node}`);
-	Decoder("{%$F.data.alink%}",startAPI,(data)=>{
-	if (data.error.length !== 0) return false;
-	console.log("Here to show bounty details.", data);
-	});
-
-	// const test_alink="anchor://apply_jrjwqpji/290080";
-	// Decoder(test_alink,startAPI,(data)=>{
-	// 	console.log(test_alink,data);
-	// });
-	});
+	
 </script>
 
 <script type="text/javascript">
@@ -384,8 +381,48 @@
 		fresh: () => {
 			location.reload();
 		},
+		fillBountyInfo: (bounty) => {
+			//console.log(bounty);
+			const raw=JSON.parse(bounty.raw);
+			//console.log(raw);
+			$("#bounty_info").html(`
+				<div class="row">
+					<div class="col-lg-3">Title</div>
+					<div class="col-lg-9">${raw.title}</div>
+					<div class="col-lg-12">${raw.publisher}</div>
+					<div class="col-lg-12">Start from ${raw.period.start} to ${raw.period.end}</div>
+				</div>
+			`);
+		},
+		fillPaymentInfo: (payment) => {
+			const raw=JSON.parse(payment.raw);
+			console.log(raw);
+			$("#payment_info").html(`
+				<div class="row">
+					<div class="col-lg-3">Amount</div>
+					<div class="col-lg-9">${raw.amount}</div>
+					<div class="col-lg-12">${raw.block}</div>
+				</div>
+			`);
+		},
 		autoRun: () => {
 			self.disableOperation();
+			Chain.init((API) => {
+				$("#info").html(`Node linked: ${node}`);
+				Decoder("{%$F.data.alink%}",startAPI,(bt)=>{
+					if (bt.error.length !== 0) return false;
+					const key=`${bt.location[0]}_${bt.location[1]}`;
+					self.fillBountyInfo(bt.data[key]);
+				});
+
+				console.log("{%$F.data.payment%}");
+
+				Decoder("{%$F.data.payment%}",startAPI,(res)=>{
+					if (res.error.length !== 0) return false;
+					const key=`${res.location[0]}_${res.location[1]}`;
+					self.fillPaymentInfo(res.data[key]);
+				});
+			});
 		},
 		decodeRecord: (alink, ck) => {
 			Decoder(alink, startAPI, (ank) => {

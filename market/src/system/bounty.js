@@ -182,7 +182,6 @@ const self = {
                       end: more.end,
                     },
                     bonus: more.bonus,
-                    status:"submit",
                   }
             },
             payment:(hash,target,amount)=>{
@@ -190,7 +189,6 @@ const self = {
                     block:hash,
                     bounty:target,
                     amount:amount,
-                    status:"pay",
                 }
             },
             apply:(bounty,index,inft_link,network,address)=>{
