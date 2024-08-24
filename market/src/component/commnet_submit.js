@@ -23,7 +23,8 @@ function CommentSubmit(props) {
       //console.log(alink);
       API.comment.submit(address,content,alink,(res)=>{
         if(!res.success) return false;
-        if(props.callback) props.callback();
+        setContent("");                       //clean the input content
+        if(props.callback) props.callback();      //callback to fresh
       });
     },
   }
@@ -33,7 +34,7 @@ function CommentSubmit(props) {
   }, [props.alink]);
 
   return (
-    <Row>
+    <Row className="pt-4">
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         <input type="text"  className="form-control" placeholder="Comment to submit" 
           value={content} 

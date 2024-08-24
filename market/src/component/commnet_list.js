@@ -41,7 +41,7 @@ function CommentList(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Comments</h5>
       </Col>
-      <Col className="pt-2" style={{ minHeight: self.getMinHeight()}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2 container_comment" style={{ minHeight: self.getMinHeight(),background:"#EEEEEE"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {list.map((row, index) => (
           <Row key={index} className="pb-4">
             <Col className="" md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>

@@ -455,6 +455,7 @@ const self = {
                                             protocol: protocol,
                                             pre: parseInt(dt.pre),
                                             signer: row.signer.Id,
+                                            owner:row.signer.Id,
                                             hash: value,
                                             block:bk.number,
                                             valid: true,

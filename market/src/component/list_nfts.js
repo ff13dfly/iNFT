@@ -13,30 +13,6 @@ import { FaAnchor } from "react-icons/fa";
 *   @param  {string}    network         //network
 */
 
-/*  iNFT data sample
-  {
-    "name":"xxx_40",
-    "raw":{
-      "tpl":"bafkreigkauu4hjwhzi3q6ar5jqfgh55b3exfxpoymasl4gt7wsbsw3nr4y",
-      "offset":[0,4,4,6],
-      "from":"ipfs",
-      "origin":"web3.storage"
-    },
-    "protocol":{
-      "type":"data",
-      "fmt":"json",
-      "tpl":"inft"
-    },
-    "pre":0,
-    "signer":"5HMy4ULuRS15DveBH1Nbe6F45jinXQyVup9kpj6jYXnte7KH",
-    "block":"0xb3e086e7a6ab4288405eae40e5708ff2c9c95ff5f2125a9f3394aaf66a539c54",
-    "hash":"0xb3e086e7a6ab4288405eae40e5708ff2c9c95ff5f2125a9f3394aaf66a539c54",
-    "valid":true,
-    "network":"anchor",
-    "blocknumber":13598
-  }
-*/
-
 function ListNFTs(props) {
   const size = {
     row: [12],
@@ -106,6 +82,9 @@ function ListNFTs(props) {
       if (!bs64) return `${window.location.origin}/imgs/logo.png`;
       return bs64;
     },
+    getOwner:(row)=>{
+
+    },
   }
 
   useEffect(() => {
@@ -132,15 +111,15 @@ function ListNFTs(props) {
       {list.length!==0 && list.map((row, index) => (     
         <Col key={index} className="pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
           <Card hidden={!ready} style={{ width: "100%" }}>
-            <a href={`/detail/${row.name}@${row.network}`} target="blank">
+            <a href={`/view/${row.name}`} target="blank">
               <Card.Img variant="top" src={self.showThumb(row.bs64)} />
             </a>
             <Card.Body>
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
-                {!row.signer ? "" : tools.shorten(row.signer)}
-                <FaAnchor /><span className="pt-1">{row.blocknumber}</span>
-
+                Owner: {!row.owner ? "" : tools.shorten(row.owner,8)}
+                <br/>
+                <FaAnchor /><span className="pt-1 ml-10">{parseInt(row.block).toLocaleString()}</span>
               </Card.Text>
             </Card.Body>
           </Card>

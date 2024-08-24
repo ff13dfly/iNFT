@@ -40,9 +40,7 @@ function SearchMarket(props) {
       const num = parseInt(search);
       if (!isNaN(num)) {
         chain.view(num, "blocknumber", (arr) => {
-          for (let i = 0; i < arr.length; i++) {
-            arr[i].blocknumber = num;
-          }
+          console.log(arr);
           if(props.callback) props.callback(arr,network);
           setEnable({
             selector: true,
@@ -52,7 +50,7 @@ function SearchMarket(props) {
         });
       } else {
         chain.view(search, "owner", (dt) => {
-          console.log(dt);
+          //console.log(dt);
           if (!dt || dt.error) {
             return setEnable({
               selector: true,
@@ -62,8 +60,7 @@ function SearchMarket(props) {
           }
 
           chain.view({ name: search, block: dt.block }, "anchor", (res) => {
-            res.blocknumber = dt.block;
-
+            //res.blocknumber = dt.block;
             if(props.callback) props.callback([res],network);
             setEnable({
               selector: true,

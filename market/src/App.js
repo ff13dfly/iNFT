@@ -26,7 +26,7 @@ function App() {
 
   //parameters of router
   let [content, setContent]=useState("");
-  let [target, setTarget]=useState("home");
+  let [target, setTarget]=useState("bounty");
   let [extend, setExtend ]=useState("");
 
   let [show,setShow]=useState(false);
@@ -119,8 +119,6 @@ function App() {
   useEffect(() => {
     self.checkding();
     setContent(router[target]);
-
-    //INDEXED.autoTest();
   }, [target,extend]);
 
   return (

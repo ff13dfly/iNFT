@@ -39,7 +39,7 @@ function Header(props) {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand >
-          <h3 className="pointer" onClick={(ev) => { props.link("home") }} >iNFT</h3>
+          <h3 className="pointer" onClick={(ev) => { props.link("bounty") }} >iNFT</h3>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
