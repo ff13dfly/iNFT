@@ -40,10 +40,7 @@ const funs = {
         funs.checkDB(table,(db)=>{
             INDEXED.insertRow(db, table, [row],ck);
         });
-    },
-    getDivide:()=>{
-        return 0.000000000001;
-    },
+    }
 }
 
 
@@ -110,6 +107,7 @@ const self = {
     
     balance:(list,ck,net)=>{
         const chain = Network(!net?"anchor":net);
+        const div=chain.divide();
         if(Array.isArray(list)){
             let working=0;
             const map={};
@@ -117,8 +115,9 @@ const self = {
                 const address=list[i];
                 working++;
                 chain.balance(address,(res)=>{
+                    console.log(res);
                     working--;
-                    map[address]=parseInt(res.free)*funs.getDivide();
+                    map[address]=parseFloat(parseInt(res.free)/div);
                     if(working<1) return ck && ck(map);
                 });
             }

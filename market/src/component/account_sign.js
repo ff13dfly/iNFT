@@ -34,8 +34,7 @@ function AccountSign(props) {
     changeAccount:(addr)=>{
       setInfo("");
       chain.balance(addr,(res)=>{
-        //console.log(res);
-        const val=res.free/chain.accuracy();
+        const val=parseFloat(res.free/chain.divide());
         setBalance(val);
       });
       setAddress(addr);

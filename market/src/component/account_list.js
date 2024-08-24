@@ -61,7 +61,7 @@ function AccountList(props) {
       }
 
       Account.balance(narr,(bs)=>{
-        //console.log(bs);
+        console.log(bs);
         setBalances(bs);
       });
     },
@@ -115,7 +115,7 @@ function AccountList(props) {
                     />
                   </Form>
                 </td>
-                <td>{!balances[row.address]?0:balances[row.address].toLocaleString()}</td>
+                <td>{!balances[row.address]?0:balances[row.address]}</td>
                 <td>{self.getDate(row.stamp)}</td>
                 <td>
                   <span className="pointer" onClick={(ev)=>{

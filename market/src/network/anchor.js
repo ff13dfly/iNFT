@@ -6,8 +6,6 @@ import Config from "../system/config";
 import Status from "../system/status";
 
 const dt = Config.get(["network", "anchor"]);
-//const status=Config.get(["system","status"]);
-
 const config = {
     node: dt.nodes[0],  //Tanssi appchain URI
     target: dt.interval,           //How long to create a new block
@@ -206,7 +204,7 @@ const self = {
             wsAPI.query.system.account(address, (res) => {
                 if (unsub != null) unsub();
                 const data = res.toJSON().data;
-                console.log(data);
+
                 return ck && ck(data);
             }).then((fun) => {
                 unsub = fun;
