@@ -5,6 +5,8 @@ import BountyApply from "./bounty_apply";
 
 import Config from "../system/config";
 import Account from "../system/account";
+import API from "../system/api";
+import Network from "../network/router";
 
 import tools from "../lib/tools";
 
@@ -21,6 +23,8 @@ function BonusProcess(props) {
   let [list, setList] = useState([]);
   let [winners,setWinners] = useState([]);
 
+  let [password, setPassword] = useState({});
+
   const self = {
     clickApply: () => {
       props.dialog.close();
@@ -28,17 +32,47 @@ function BonusProcess(props) {
         props.dialog.show(<BountyApply data={props.data} index={props.index} dialog={props.dialog} />, "Bounty Apply");
       }, 200);
     },
-    clickDivert:(name,addr)=>{
-      console.log(name,addr);
-      Account.get(addr,(dt)=>{
-        console.log(dt);
+    clickDivert:(name,addr,index)=>{
+      console.log(name,addr,index);
+      //console.log(props,name,addr,password);
+      const chain=Network("anchor");
+      const ak=self.decode(props.data.alink);
+      //console.log(ak);
+      chain.view(ak,"anchor",(dt)=>{
+        const target="5DLgD2J6R7QRo8CuZRnT7ZiYmwUTLz2jmhUPc1Jd44LLrd9X";
+        Account.get(addr,(file)=>{
+          //console.log(file);
+          try {
+            chain.load(JSON.stringify(file[0]), password[name], (pair) => {
+              chain.divert(pair,name,target,(res)=>{
+                console.log(res);
+                if(res.status==="Finalized"){
+                  API.bounty.divert(props.data.alink,index,res.hash,(final)=>{
+                    console.log(final);
+                  });
+                }
+              });
+            });
+          }catch (error) {
+            
+          }
+        });
+        
+
       });
     },
-    changePassword:(ev,addr)=>{
-
+    changePassword:(ev,name)=>{
+      password[name]=ev.target.value;
+      setPassword(tools.clone(password));
+    },
+    decode:(alink)=>{
+      const str=alink.replace("anchor://","");
+      const arr=str.split("/");
+      const block=parseInt(arr.pop());
+      if(isNaN(block)) return false;
+      return {name:arr.join("/"),block:block};
     },
     getTarget: () => {
-      console.log(props.template);
       if (props.data.detail && props.data.detail.bonus) {
         const bs = props.data.detail.bonus;
         const target = bs[props.index];
@@ -66,7 +100,7 @@ function BonusProcess(props) {
       const arr = [];
       for (let i = 0; i < aps.length; i++) {
         const row = aps[i];
-        const atom = { inft: null, judge: null, distribute: null }
+        const atom = { inft: null, judge: null, distribute: null, index:i }
         if (row.record && row.record.raw && row.record.raw.bounty && row.record.raw.bounty.bonus === index) {
           atom.inft = row.link;
           atom.record=row.record;
@@ -179,7 +213,7 @@ function BonusProcess(props) {
                     <Col className="text-end pt-1" md={size.divert[0]} lg={size.divert[0]} xl={size.divert[0]} xxl={size.divert[0]} >
                       <input type="password" hidden={!Account.exsist(row.inft.owner)}  className="form-control" 
                         placeholder={`Password of ${tools.shorten(row.inft.owner)}`} onChange={(ev)=>{
-                          self.changePassword(ev,row.inft.owner);
+                          self.changePassword(ev,row.inft.name);
                         }}/>
                     </Col>
                     <Col className="text-end pt-1" md={size.divert[1]} lg={size.divert[1]} xl={size.divert[1]} xxl={size.divert[1]} >
@@ -187,7 +221,7 @@ function BonusProcess(props) {
                         disabled={!Account.exsist(row.inft.owner)} 
                         className={Account.exsist(row.inft.owner)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
                         onClick={(ev)=>{
-                          self.clickDivert(row.inft.name,row.inft.owner);
+                          self.clickDivert(row.inft.name,row.inft.owner,row.index);
                         }}>Divert</button>
                     </Col>
                   </Row>

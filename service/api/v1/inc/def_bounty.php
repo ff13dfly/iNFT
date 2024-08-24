@@ -17,6 +17,7 @@ define('BOUNTY_STATUS_ALL_APPROVED',    9);
 define('BOUNTY_APPLY_APPROVED',     1);
 define('BOUNTY_APPLY_SUBMITTED',    2);
 define('BOUNTY_APPLY_FAILED',       4);
+define('BOUNTY_APPLY_DIVERTTED',    5);
 define('BOUNTY_APPLY_PAYED',        6);
 
 define('BOUNTY_TARGET',array(

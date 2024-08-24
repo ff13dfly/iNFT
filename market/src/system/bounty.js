@@ -176,7 +176,7 @@ const self = {
                       network:"",
                       address:"",
                     },
-                    receiver:more.receiver,         //address to accept the iNFT result.
+                    consignee:more.consignee,         //address to accept the iNFT result.
                     period: {
                       start: more.start,
                       end: more.end,

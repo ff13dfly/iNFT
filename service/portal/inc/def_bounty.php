@@ -17,8 +17,8 @@ define('BOUNTY_STATUS_ALL_APPROVED',    9);
 define('BOUNTY_APPLY_APPROVED',     1);
 define('BOUNTY_APPLY_SUBMITTED',    2);
 define('BOUNTY_APPLY_FAILED',       4);
+define('BOUNTY_APPLY_DIVERTTED',     5);
 define('BOUNTY_APPLY_PAYED',        6);
-define('BOUNTY_APPLY_DIVERTED',     7);         //iNFT divert to target account
 
 define('BOUNTY_TARGET',array(
     "anchor"    =>  "5DcpcBu1J4qpQRkeFy6Qcn9FxUm6knhvufnYpX62oHH1zWCx",

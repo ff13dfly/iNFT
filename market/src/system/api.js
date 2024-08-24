@@ -153,6 +153,16 @@ const self={
                 },param);
             });
         },
+        divert:(name,index,hash,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={bounty:name,hash:hash,index:index};
+                funs.request("bounty","divert",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to appy bounty."});
+                },param);
+            });
+        },
         target:(network,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});

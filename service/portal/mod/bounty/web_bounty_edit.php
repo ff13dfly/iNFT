@@ -22,7 +22,7 @@ $_F['status']=array(
     BOUNTY_APPLY_APPROVED  => "Waiting for diverting",
     BOUNTY_APPLY_FAILED  => "Invalid apply",
     BOUNTY_APPLY_PAYED  => "Distributed",
-    BOUNTY_APPLY_DIVERTED   =>  "Waiting for distributing",
+    BOUNTY_APPLY_DIVERTTED   =>  "Waiting for distributing",
 );
 
 $_F['data']=$bounty;

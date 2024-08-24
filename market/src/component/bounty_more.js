@@ -21,6 +21,7 @@ function BountyMore(props) {
   let [start, setStart] = useState(0);
   let [end, setEnd] = useState(0);
   let [coin, setCoin] = useState("ank");
+  let [consignee, setConsignee] = useState("");
 
   let [coins, setCoins] = useState([]);
   let [block, setBlock] = useState(0);
@@ -49,6 +50,10 @@ function BountyMore(props) {
       setDesc(ev.target.value);
       self.submit();
     },
+    changeAcceptor:(ev)=>{
+      setConsignee(ev.target.value);
+      self.submit();
+    },
     submit:()=>{
       if(props.callback) props.callback(self.getMoreData());
     },
@@ -58,7 +63,8 @@ function BountyMore(props) {
         desc: desc,
         coin: coin,
         start: start,
-        end: end
+        end: end,
+        consignee:consignee,
       };
     },
     getCoins: () => {
@@ -123,7 +129,7 @@ function BountyMore(props) {
 
       <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>Details about the bounty.</small>
-        <textarea className="form-control"disabled={disable}  cols={4} placeholder="The details of the bounty." value={desc} onChange={(ev) => {
+        <textarea className="form-control" disabled={disable}  cols={4} placeholder="The details of the bounty." value={desc} onChange={(ev) => {
           self.changeDesc(ev);
         }}></textarea>
       </Col>
@@ -132,7 +138,9 @@ function BountyMore(props) {
 
       <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>The account address to accept the bonus iNFT result.</small>
-        <input className="form-control" type="text" disabled={disable} placeholder="The account to accept iNFTs." />
+        <input className="form-control" type="text" disabled={disable} placeholder="The account to accept iNFTs." onChange={(ev)=>{
+          self.changeAcceptor(ev);
+        }}/>
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>
