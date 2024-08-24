@@ -321,13 +321,15 @@ const self = {
 
                     break;
                 case "detail":
-                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
-                        const exs = dt.block.extrinsics;
+                    wsAPI.rpc.chain.getBlock(value).then((res) => {
+                        //console.log(JSON.stringify(res));
+                        const exs = res.block.extrinsics;
                         if (exs.length === 1) return [];
-
+                        
                         const infts=[];
                         exs.forEach((ex, index) => {
                             if (index < 2) return false;
+                            console.log(ex.toJSON());
                             const row = ex.toHuman();
                             if(row.method && row.method.section==="anchor" && row.method.method==="setAnchor"){
                                 const dt=row.method.args;
@@ -352,7 +354,7 @@ const self = {
                     break;
                 case "blocknumber":   //value: hash(64)
                     wsAPI.rpc.chain.getBlockHash(value, (res) => {
-                        const hash = res.toHex();
+                        const hash = res.toHex()
                         return self.view(hash, "detail", ck);
                     });
                     break;

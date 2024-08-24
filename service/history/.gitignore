@@ -4,6 +4,8 @@
 .AppleDouble
 .LSOverride
 
+./yarn.lock
+
 node_modules
 
 history.tanssi.min.js
