@@ -434,8 +434,11 @@ const self = {
 
                     break;
                 case "detail":
-                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
-                        const exs = dt.block.extrinsics;
+                    wsAPI.rpc.chain.getBlock(value).then((res) => {
+                        //console.log(res.toJSON());
+                        const exs = res.block.extrinsics;
+                        const bk=res.block.header.toJSON();
+                        //console.log(bk);
                         const infts = [];
                         if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
@@ -443,20 +446,24 @@ const self = {
                             const row = ex.toHuman();
                             if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
                                 const dt = row.method.args;
+                                //console.log(dt);
                                 try {
                                     const protocol = JSON.parse(dt.protocol);
-                                    const raw = JSON.parse(dt.raw);
-                                    const inft = {
-                                        name: dt.key,
-                                        raw: raw,
-                                        protocol: protocol,
-                                        pre: parseInt(dt.pre),
-                                        signer: row.signer.Id,
-                                        hash: value,
-                                        valid: true,
-                                        network: "anchor",
+                                    if(protocol && protocol.tpl && protocol.tpl.toLowerCase() ==="inft"){
+                                        const raw = JSON.parse(dt.raw);
+                                        const inft = {
+                                            name: dt.key,
+                                            raw: raw,
+                                            protocol: protocol,
+                                            pre: parseInt(dt.pre),
+                                            signer: row.signer.Id,
+                                            hash: value,
+                                            block:bk.number,
+                                            valid: true,
+                                            network: "anchor",
+                                        }
+                                        infts.push(inft);
                                     }
-                                    infts.push(inft);
                                 } catch (error) {
 
                                 }

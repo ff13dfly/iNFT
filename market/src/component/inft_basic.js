@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import SVGGrid from "./svg_grid";
 
@@ -8,68 +8,86 @@ function BasicINFT(props) {
     row: [12],
     grid: [4],
     schema:[2,8,2],
+    cell:[3,6,3],
+    matrix:[3,6,3],
   };
 
+
+  let [x, setX]=useState(8);
+  let [y, setY]=useState(6);
+
+  let [w, setW]=useState(900);
+  let [h, setH]=useState(900);
+
+  let [cx,setCX]=useState(50);
+  let [cy,setCY]=useState(50);
+
   const self={
+    calcGridWidth:(x)=>{
+      if(x===0) return 10;
+      return 10*8/x;
+    },
   }
 
   useEffect(() => {
+    console.log(props.data);
+    if(props.data.grid){
+      setX(props.data.grid[0]);
+      setY(props.data.grid[1]);
+    }
 
-  }, []);
+    if(props.data.cell){
+      setCX(props.data.cell[0]);
+      setCY(props.data.cell[1]);
+    }
+
+    if(props.data.size){
+      setW(props.data.size[0]);
+      setH(props.data.size[1]);
+    }
+    
+  },[props.data]);
 
   return (
-    <Row>
+    <Row className="pt-2">
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
           <Row>
+            <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <strong>iNFT Size ( {w} * {h} )</strong>
+            </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <strong>iNFT Size</strong>
-            </Col>
-            <Col md={size.schema[0]} lg={size.schema[0]} xl={size.schema[0]} xxl={size.schema[0]}>
-              <span>500</span>
-            </Col>
-            <Col md={size.schema[1]} lg={size.schema[1]} xl={size.schema[1]} xxl={size.schema[1]}>
-              <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0" y="0" width="100" height="100" fill="#e3f3ab" stroke="black" strokeWidth="1" />
-                <rect x="25" y="25" width="50" height="50" fill="#fff3ab" stroke="black" strokeWidth="1" />
+              <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="120" height="120" fill="#e3f3ab" stroke="black" strokeWidth="1" />
               </svg>
             </Col>
-            <Col md={size.schema[2]} lg={size.schema[2]} xl={size.schema[2]} xxl={size.schema[2]}>
-
+          </Row>
+      </Col>
+      <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+          <Row>
+            <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <strong>Cell Size ( {cx} * {cy} )</strong>
             </Col>
-            <Col md={size.schema[0]} lg={size.schema[0]} xl={size.schema[0]} xxl={size.schema[0]}>
-            </Col>
-            <Col className="text-center" md={size.schema[1]} lg={size.schema[1]} xl={size.schema[1]} xxl={size.schema[1]}>
-              <span>500</span>
-            </Col>
-            <Col md={size.schema[2]} lg={size.schema[2]} xl={size.schema[2]} xxl={size.schema[2]}>
-
+            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="80" height="80" fill="#e3f3ab" stroke="black" strokeWidth="1" />
+              </svg>
             </Col>
           </Row>
       </Col>
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
           <Row>
+            <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <strong>Orginal Image Grid ( {x} * {y} )</strong>
+            </Col>
             <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <strong>Cell Size</strong>
+              <SVGGrid 
+                x={x} 
+                y={y} 
+                width={self.calcGridWidth(x)} background={"#e3f3ab"}/>
             </Col>
           </Row>
       </Col>
-      <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-          <Row>
-            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <strong>Orginal Image Grid</strong>
-            </Col>
-            <Col md={size.schema[0]} lg={size.schema[0]} xl={size.schema[0]} xxl={size.schema[0]}>
-              <span>500</span>
-            </Col>
-            <Col md={size.schema[1]} lg={size.schema[1]} xl={size.schema[1]} xxl={size.schema[1]}>
-              <SVGGrid x={8} y={10} width={10} background={"#e3f3ab"}/>
-            </Col>
-            <Col md={size.schema[2]} lg={size.schema[2]} xl={size.schema[2]} xxl={size.schema[2]}>
-
-            </Col>
-          </Row>
-      </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         Template basic parameters, raw: {JSON.stringify(props.data)}
       </Col>
     </Row>

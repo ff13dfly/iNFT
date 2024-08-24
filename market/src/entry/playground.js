@@ -51,7 +51,7 @@ function Playground(props) {
     let [basic, setBasic] = useState({});
 
     let [hideParts, setHideParts] = useState(false);
-    let [hideSeries, setHideSeries] = useState(true);
+    let [hideSeries, setHideSeries] = useState(false);
     let [hideImage, setHideImage] = useState(true);
     let [hideMock, setHideMock] = useState(true);
     let [hideBasic, setHideBasic] = useState(false);
