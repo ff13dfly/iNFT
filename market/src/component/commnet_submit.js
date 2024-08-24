@@ -21,7 +21,7 @@ function CommentSubmit(props) {
       const alink=props.alink;
       const address = RUNTIME.account.get();
       API.comment.submit(address,content,alink,(res)=>{
-        console.log(res);
+        //console.log(res);
         if(!res.success) return false;
         if(props.callback) props.callback();
       });
@@ -29,7 +29,7 @@ function CommentSubmit(props) {
   }
 
   useEffect(() => {
-    console.log(JSON.stringify(props))
+    //console.log(JSON.stringify(props))
   }, [props.alink]);
 
   return (

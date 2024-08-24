@@ -21,8 +21,6 @@ const funs={
             response.text().then((res)=>{
                 try {
                     const dt=JSON.parse(res);
-
-                    //check the spam expired status, reinit system.
                     if(dt.code && dt.code===444){
                         spam="";
                         return self.init(()=>{
@@ -31,6 +29,7 @@ const funs={
                     }
                     return ck && ck(dt);
                 } catch (error) {
+                    console.log(error);
                     return ck && ck({error:"Invalide content"})
                 }
             }).catch((error)=>{

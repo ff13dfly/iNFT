@@ -7,7 +7,6 @@ import CommentSubmit from "./commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
 
-import Bounty from "../system/bounty";
 import TPL from "../system/tpl";
 import API from "../system/api";
 
@@ -20,15 +19,14 @@ function BountyPreview(props) {
     left: [5, 7],
   };
 
-  let [data, setData] = useState({});
+  let [data, setData] = useState({});   //template data
+  let [raw, setRaw] = useState({});     //bounty data from backend
 
-  let [bonus, setBonus] = useState([]);
   let [coin, setCoin] = useState("");
   let [total, setTotal] = useState(0);
-  let [start, setStart]= useState(0);
-  let [end, setEnd]= useState(0);
-  let [desc, setDesc]= useState("");
-
+  let [start, setStart] = useState(0);
+  let [end, setEnd] = useState(0);
+  let [desc, setDesc] = useState("");
 
   let [update, setUpdate] = useState(0);
 
@@ -57,11 +55,11 @@ function BountyPreview(props) {
       const dd = new Date(stamp * 1000);
       return dd.toDateString() + " " + dd.toLocaleTimeString();
     },
-    calcTotal:(bs)=>{
-      let amount=0;
-      for(let i=0;i<bs.length;i++){
-        const row=bs[i];
-        amount+=row.amount*row.bonus;
+    calcTotal: (bs) => {
+      let amount = 0;
+      for (let i = 0; i < bs.length; i++) {
+        const row = bs[i];
+        amount += row.amount * row.bonus;
       }
       return amount;
     },
@@ -69,45 +67,41 @@ function BountyPreview(props) {
     autoCache: (ck) => {
       const alink = self.getAlink();
       API.bounty.view(alink, (res) => {
+        //console.log(res);
         if (!res.success || !res.data) return ck && ck(false);
-        
+
+        setRaw(res.data);
+
+        //1.bounty detail
+        const bs=res.data.detail.bonus;
+        //console.log(bs);
+        const n = self.calcTotal(bs);
+        setTotal(n.toLocaleString());
+
         setCoin(res.data.coin);   //set the bonus coin symbol
         setStart(parseInt(res.data.start));
         setEnd(parseInt(res.data.end));
 
         setDesc(res.data.detail.desc);
-        return ck && ck(res.data);
-      });
 
-      Bounty.get(alink, (bt) => {
-        if (bt.error) return ck && ck(bt);
-
-        if(bt.bonus){
-          const n=self.calcTotal(bt.bonus);
-          setTotal(n.toLocaleString());
-        }
-
-        if (bt.template && bt.template.cid) {
-          TPL.view(bt.template.cid, (dt) => {
-            setData(dt);
-            setBonus(bt.bonus);
-            return ck && ck(true);
-          });
-        }
+        //2.template cache;
+        TPL.view(res.data.template.cid, (dt) => {
+          setData(dt);
+          return ck && ck(true);
+        });
       });
     },
 
-    getBountyURL:()=>{
-      const base="https://inft.w3os.net/bounty";
-      if(props.data && props.data.anchor && props.data.block) return `${base}/${props.data.anchor}/${props.data.block}`;
+    getBountyURL: () => {
+      const base = "https://inft.w3os.net/bounty";
+      if (props.data && props.data.anchor && props.data.block) return `${base}/${props.data.anchor}/${props.data.block}`;
       return base;
     },
   }
 
   useEffect(() => {
-    //console.log(props.data);
     self.autoCache(() => {
-      console.log(data);
+
     });
   }, [props.data, props.extend]);
 
@@ -135,8 +129,8 @@ function BountyPreview(props) {
             <Row>
               <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <button className="btn btn-sm btn-default">
-                  <FaRegHeart hidden={fav} className="text-warning" size={20}/>
-                  <FaHeart hidden={!fav} className="text-warning" size={20}/>
+                  <FaRegHeart hidden={fav} className="text-warning" size={20} />
+                  <FaHeart hidden={!fav} className="text-warning" size={20} />
                 </button>
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
@@ -149,11 +143,9 @@ function BountyPreview(props) {
 
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus
-          data={bonus}
-          coin={coin}
+          raw={raw}
           template={data}
           dialog={props.dialog}
-          bounty={self.getAlink()}
         />
         <p className="pt-2">Click icon to view detail.</p>
         <Row>
@@ -161,7 +153,7 @@ function BountyPreview(props) {
             <hr />
           </Col>
         </Row>
-        <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} amount={20}/>
+        <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} amount={20} />
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <CommentList alink={self.getAlink()} update={update} />

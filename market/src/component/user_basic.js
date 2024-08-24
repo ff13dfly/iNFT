@@ -87,7 +87,7 @@ function UserBasic(props) {
       <Col md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-            Balance: <strong>{balance}</strong>
+            Balance: <strong>{balance}</strong> $ANK
 
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
@@ -120,7 +120,7 @@ function UserBasic(props) {
         </h6>
       </Col>
 
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      {/* <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Local setting</h5>
         <hr />
       </Col>
@@ -133,7 +133,7 @@ function UserBasic(props) {
         <button className="btn btn-md btn-danger" disabled={self.isAddressSetting()}>
           Clean Account Setting
         </button>
-      </Col>
+      </Col> */}
     </Row>
   );
 }

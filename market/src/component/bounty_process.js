@@ -29,7 +29,7 @@ function BountyProcess(props) {
     fresh:()=>{
       API.bounty.view(props.name,(res)=>{
         if(!res.success) return false;
-        //console.log(res.data);
+        
         setAnchorBounty(res.data.alink);
         setData(res.data);
       });

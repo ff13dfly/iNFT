@@ -87,9 +87,9 @@ function View(props) {
                             self.clickBuy(pair);
                         }}/>
                     </Col>
-                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                    {/* <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <hr />
-                    </Col>
+                    </Col> */}
                 </Row>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >

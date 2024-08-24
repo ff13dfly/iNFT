@@ -5,9 +5,12 @@ import BountyApply from "./bounty_apply";
 import BonusProcess from "./bonus_process";
 
 import Network from "../network/router";
-import API from "../system/api";
-import TPL from "../system/tpl";
 import INFT from "../system/inft";
+
+/* Bounty Bonus Detail
+*   @param  {object}    raw           //raw bounty data from backend
+*   @param  {object}    template      //template data
+*/
 
 function BountyBonus(props) {
   const size = {
@@ -15,20 +18,25 @@ function BountyBonus(props) {
     grid: [4, 4, 4],
     left: [3,9],
   };
-  let [data, setData]= useState({});
-  let [list, setList] = useState([]);
+  let [data, setData]= useState({});        //template raw data
+  let [list, setList] = useState([]);       //bonus list
+
+  let [coin,setCoin]= useState("");
+  //let [bounty, setBounty]= useState("");
+
   let [progress, setProgress] = useState({});
   let [refuse, setRefuse]= useState({});
 
   const self = {
-    clickApply: (index, alink) => {
-      props.dialog.show(<BountyApply data={data} index={index} dialog={props.dialog} />, "Bounty Apply");
+    clickApply: (index) => {
+      props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog} />, "Bounty Apply");
     },
     clickProcess:(index)=>{
-      props.dialog.show(<BonusProcess data={data} index={index} dialog={props.dialog} />, `Bonus Process ( ${data.alink} )`);
+      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} />, `Bonus Process ( ${data.alink} )`);
     },
     getThumb: (index) => {
-      if (!props.template || !props.template.series) return false;
+      //console.log(props.template.series);
+      if (!props.template || !props.template.series) return "";
       const all = props.template.series[index];
       return all.thumb[0];
     },
@@ -90,16 +98,17 @@ function BountyBonus(props) {
         });
       });
     },
-    decodeProgress:(aps,bouns)=>{
-      //console.log(aps,bouns)
+    decodeProgress:(aps,bonus)=>{
+      //console.log(JSON.stringify(bonus))
       const map={}
       const rmap={};
       for(let i=0;i<aps.length;i++){
         const single=aps[i];
+        //console.log(JSON.stringify(single))
         if(single.judge && single.judge.name){
           const raw=single.judge.raw;
-          if(bouns[raw.bonus]){
-            const ser=bouns[raw.bonus].series;
+          if(bonus[raw.bonus]){
+            const ser=bonus[raw.bonus].series;
             if(map[ser]===undefined) map[ser]=0;
             if(rmap[ser]===undefined) rmap[ser]=0;
 
@@ -115,7 +124,7 @@ function BountyBonus(props) {
       setProgress(map);
       setRefuse(rmap);
     },
-    freshProgress:(apples)=>{
+    freshProgress:(apples,bonus)=>{
       self.getFullData(apples,(map)=>{
         const arr=[];
         for(let i=0;i<apples.length;i++){
@@ -127,9 +136,7 @@ function BountyBonus(props) {
           if(map[single.distribute]!==undefined) single.distribute=map[single.distribute];
           arr.push(single);
         }
-        //console.log(arr);
-        self.decodeProgress(arr,props.data);
-        //console.log(pg);
+        self.decodeProgress(arr,bonus);
       });
     },
     applyDisalbe:(amount,series)=>{
@@ -138,29 +145,17 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    //console.log(props.bounty)
-    if(props.bounty){
-      if((typeof props.bounty)==="string"){
-        API.bounty.view(props.bounty,(res)=>{
-          if(!res.success) return false;    //FIXME, more operation here.
-          const row=res.data;
+    //console.log(props.template);
+    setData(props.template);
+    if(props.raw && props.raw.alink){
 
-          self.freshProgress(row.apply);
-          TPL.view(row.template.cid,(dt)=>{
-            row.template.raw=dt;
-            setData(row);
-          });
-        });
-      }else{
-        setData(props.bounty);
-        if(props.bounty && props.bounty.apply) self.freshProgress(props.bounty.apply);
-      }
+      const dt=props.raw;
+      self.freshProgress(dt.apply,dt.detail.bonus);
+      //setBounty(dt.alink);
+      setCoin(dt.coin);
+      setList(dt.detail.bonus);
     }
-
-    //3.show list of bonus
-    if(props.data) setList(props.data);
-    
-  }, [props.data]);
+  }, [props.raw,props.template]);
 
   return (
     <Row>
@@ -175,7 +170,7 @@ function BountyBonus(props) {
             <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
               <Row>
                 <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <strong>{row.bonus.toLocaleString()}</strong> ${props.coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
+                  <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
                   Left {row.amount-(!progress[row.series] ? 0 : progress[row.series])} wanted.
                 </Col>
                 <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -183,7 +178,7 @@ function BountyBonus(props) {
                     className={self.applyDisalbe(row.amount,row.series)?"btn btn-md btn-default":"btn btn-md btn-primary"} 
                     disabled={self.applyDisalbe(row.amount,row.series)} 
                     onClick={(ev) => {
-                      self.clickApply(index, props.bounty);
+                      self.clickApply(index);
                     }}>Apply</button>
                 </Col>
               </Row>

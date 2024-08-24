@@ -38,10 +38,11 @@ function BonusProcess(props) {
 
     },
     getTarget: () => {
+      console.log(props.template);
       if (props.data.detail && props.data.detail.bonus) {
         const bs = props.data.detail.bonus;
         const target = bs[props.index];
-        const ss = props.data.template.raw.series;
+        const ss = props.template.series;
         const series = ss[target.series];
         return series.thumb[0];
       }

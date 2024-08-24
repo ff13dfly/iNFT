@@ -19,7 +19,10 @@ import { FaCheck } from "react-icons/fa";
 function AccountSign(props) {
   const size = {
     row: [12],
-    buy: [1,5,4,2],
+    //buy: [1,5,4,2],
+    buy: [2,10,12,12],
+    grid:[9,3],
+    more:[5,4],
   };
 
   let [wallet, setWallet] = useState(true);
@@ -36,6 +39,7 @@ function AccountSign(props) {
       chain.balance(addr,(res)=>{
         const val=parseFloat(res.free/chain.divide());
         setBalance(val);
+        //setInfo(`Balance: ${val} $ANK`);
       });
       setAddress(addr);
     },
@@ -88,28 +92,33 @@ function AccountSign(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
-      <Col className="pt-1" md={size.buy[0]} lg={size.buy[0]} xl={size.buy[0]} xxl={size.buy[0]}>
+      <Col className="pt-2 pb-1 text-end" hidden={!wallet} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+        <span>Select accounts to buy.</span>
+      </Col>
+      <Col hidden={wallet} className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+        <AccountSelector network={"anchor"} callback={(addr) => {
+            self.changeAccount(addr);
+          }} />
+        {/* <small>Balance: {balance}</small> */}
+      </Col>
+      <Col className="pt-2 pb-2 text-end" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <button className={wallet ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
           self.clickWallet(ev)
         }}><FaCheck /></button>
+        {/* <span className="ml-10">{balance} $ANK</span>   */}
       </Col>
-      <Col hidden={wallet} className="" md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
-        <AccountSelector network={"anchor"} callback={(addr) => {
-          self.changeAccount(addr);
-        }} />
-        <small>Balance: {balance}</small>
+      <Col hidden={!wallet} className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+      
       </Col>
-      <Col hidden={!wallet} className="pt-2" md={size.buy[1]} lg={size.buy[1]} xl={size.buy[1]} xxl={size.buy[1]}>
-        Check to select accounts to buy.
-      </Col>
-      <Col hidden={wallet} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
+      <Col hidden={wallet} className="pt-2" md={size.more[0]} lg={size.more[0]} xl={size.more[0]} xxl={size.more[0]}>
         <input type="password" className="form-control" placeholder="password for account" value={password} onChange={(ev)=>{
           self.changePassword(ev);
         }}/>
       </Col>
-      <Col hidden={!wallet} md={size.buy[2]} lg={size.buy[2]} xl={size.buy[2]} xxl={size.buy[2]}>
+      <Col hidden={wallet} className="pt-2 text-end" md={size.more[1]} lg={size.more[1]} xl={size.more[1]} xxl={size.more[1]}>
+          <p className="pt-2">{balance}</p>
       </Col>
-      <Col className="text-end" md={size.buy[3]} lg={size.buy[3]} xl={size.buy[3]} xxl={size.buy[3]}>
+      <Col className="pt-2 text-end" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <button className="btn btn-md btn-primary" onClick={(ev)=>{
           self.clickSign();
         }}>{props.title}</button>
