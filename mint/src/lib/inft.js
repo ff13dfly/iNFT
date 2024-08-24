@@ -355,8 +355,6 @@ const self = {
         add:(name, tpl_cid, hash, block, creator,offset,network)=>{
             const single=funs.getINFT(name, tpl_cid, hash, block, creator,offset,network);
             raw.unshift(single);
-            //console.log(single);
-            //console.log(JSON.stringify(raw));
             return self.update();
         }   
     },

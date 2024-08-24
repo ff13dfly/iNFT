@@ -71,6 +71,7 @@ function View(props) {
                 </Breadcrumb>
             </Col>
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
+                
                 <Row>
                     <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]} >
                         <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
@@ -82,18 +83,20 @@ function View(props) {
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <MoreINFT data={data} link={props.link} />   
                     </Col>
+                    
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
                             self.clickBuy(pair);
                         }}/>
                     </Col>
-                    {/* <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <hr />
-                    </Col> */}
+                    </Col>
                 </Row>
+                <BountyMinting template={template} bounty={props.name}/>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                <BountyMinting template={template} bounty={props.name}/>
+                
                 <CommentList alink={alink} update={update} height={360} />
                 <CommentSubmit alink={alink} callback={() => {
                     setUpdate(update + 1);

@@ -92,13 +92,15 @@ function Result(props) {
             if (fa === undefined) return setInfo("Internal error: no account to setup.");
 
             const cur=Data.getHash("cache","network");
-            Network(cur).load(fa, password, (pair) => {
+            const chain=Network(cur);
+            chain.load(fa, password, (pair) => {
                 setPassword("");
-                Network(cur).sell(pair, name, price, (res) => {
+                const amount=parseInt(parseFloat(price)*chain.divide());
+                chain.sell(pair, name, amount, (res) => {
                     if (res.error) return setInfo(res.error);
                     setInfo(res.msg);
                     if (res.status === "Finalized") {
-                        INFT.single.selling(name,price,pair.address);
+                        INFT.single.selling(name,amount,pair.address);
                         self.show();        //will update the selling information automatically.
                     }
                 });
@@ -130,9 +132,10 @@ function Result(props) {
 
             //3.get selling status; Confirm from network. Fix the data automatically.
             const cur=Data.getHash("cache","network");
-            Network(cur).view(props.name, "selling", (dt) => {
+            const chain=Network(cur);
+            chain.view(props.name, "selling", (dt) => {
                 if (dt && dt.length === 3) {
-                    setMarket(`On selling, price ${dt[1]} unit.`);
+                    setMarket(`On selling, price ${parseFloat(dt[1]/chain.divide())} unit.`);
                     setSelling(true);
                 }else{
                     setMarket("");
@@ -144,9 +147,13 @@ function Result(props) {
 
     useEffect(() => {
         //0.set the selling status;
+
         if (props.price !== 0) {
+            const cur=Data.getHash("cache","network");
+            const chain=Network(cur);
+
             setSelling(true);
-            setMarket(`On selling, price ${props.price} unit.`);
+            setMarket(`On selling, price ${parseFloat(props.price/chain.divide())} unit.`);
         }
 
         //1.show render result;

@@ -3,9 +3,9 @@ module.exports = {
     //network:"tanssi",
     //network:"sui",
     node:[
-        "wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
+        //"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
         //"wss://wss.android.im",
-        //"ws://127.0.0.1:9944",
+        "ws://127.0.0.1:9944",
         //"wss://dev2.metanchor.net",
     ],
     default:[
