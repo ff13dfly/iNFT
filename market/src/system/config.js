@@ -27,7 +27,14 @@ const config={
             4:"failed",
             9:"unknown",        //unknow network status
             13:"error",         //no such url           
-        }
+        },
+        explorer:[
+            {
+                domain:"https://polkadot.js.org/apps/",
+                rpc:"rpc=",
+                query:"explorer/query/",
+            }
+        ]
     },
     bounty:{
         approver:{                  //accounts to accept bounty coins
@@ -327,7 +334,7 @@ const funs={
     /*  Set the account to check setting 
     * @param  {string}  addr     //account to get setting
     */
-     set:(addr,pass)=>{
+    set:(addr,pass)=>{
         if(addr) metadata.address=addr;
         if(pass) metadata.pass=pass;
         return true;

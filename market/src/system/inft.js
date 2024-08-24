@@ -176,13 +176,12 @@ const self = {
         if (map[name]) return ck && ck(map[name]);
         if (!normal) {
             Network("anchor").view(name, "selling", (data) => {
-                //console.log(data);
                 if (data === false) return ck && ck(false);
 
                 const row = {
                     name: name,
                     owner: data[0],
-                    price: parseInt(data[1]),
+                    price: data[1],
                     target: data[2],
                     free: data[0] === data[2],
                 }
@@ -283,10 +282,10 @@ const self = {
                 return self.auto(list, ck, final);
             }, indexkey);
         } else {
-            Network(net).view({ name: key }, "anchor", (data) => {
-                //console.log(data);
+            const chain=Network(net);
+            chain.view({ name: key }, "anchor", (data) => {
                 if (!data || !data.name) return self.auto(list, ck, final);
-                Network(net).view(data.block, "hash", (hash) => {
+                chain.view(data.block, "hash", (hash) => {
                     data.price = single.price===undefined?0:single.price;
                     data.free = single.free===undefined?false:single.free;
                     data.target = single.target===undefined?"":single.target;

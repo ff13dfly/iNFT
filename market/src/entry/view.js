@@ -83,7 +83,6 @@ function View(props) {
                         <MoreINFT data={data} link={props.link} />   
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                        
                         <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
                             self.clickBuy(pair);
                         }}/>

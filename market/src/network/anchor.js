@@ -349,7 +349,6 @@ const self = {
         });
     },
     view: (value, type, ck) => {
-        //console.log(value);
         self.init(() => {
             switch (type) {
                 case "anchor":
@@ -407,6 +406,7 @@ const self = {
                         unselling();
                         const dt = res.toJSON();
                         if (!dt) return ck && ck(false);
+                        dt[1]=parseFloat(dt[1]/self.divide());
                         return ck && ck(dt);
                     }).then((fun) => {
                         unselling = fun;
@@ -503,10 +503,11 @@ const self = {
                     const row = arr[i];
                     const key = row[0].toHuman();
                     const info = row[1].toHuman();
+                    const price=parseFloat(parseInt(info[1].replaceAll(",",""))/self.divide());
                     list.push({
                         name: key[0],
                         owner: info[0],
-                        price: parseInt(info[1]),
+                        price: price,
                         target: info[2],
                         free: info[0] === info[2],
                     });
@@ -516,7 +517,6 @@ const self = {
         });
     },
     divide: () => {
-        //console.log(registry.decimals[0]);
         return 1000000;
     },
     accuracy: (ck) => {

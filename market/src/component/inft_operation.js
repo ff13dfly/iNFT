@@ -39,7 +39,7 @@ function OperationINFT(props) {
       const chain=Network("anchor");
       self.getPair(target,(pair)=>{
         if(pair){
-          const nprice=parseInt(price*chain.divide());
+          const nprice=parseInt(parseFloat(price)*chain.divide());
           chain.sell(pair,name,nprice,(progress)=>{
             setInfo(progress.msg);
             if(progress.status==="Finalized"){
