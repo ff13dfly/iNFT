@@ -110,7 +110,7 @@ function MockOffset(props) {
               <Row>
                 <Col md={size.formulate[0]} lg={size.formulate[0]} xl={size.formulate[0]} xxl={size.formulate[0]}>{"("}</Col>
                 <Col md={size.formulate[1]} lg={size.formulate[1]} xl={size.formulate[1]} xxl={size.formulate[1]}>
-                  <button className={cur===index?"btn btn-sm btn-primary":"btn btn-sm btn-warning"} onClick={(ev)=>{
+                  <button className={cur===index?"btn btn-sm btn-primary":"btn btn-sm btn-info"} onClick={(ev)=>{
                     self.changeHex(index);
                   }}>
                     {self.getValueFromHash(props.hash,row.value[0],row.value[1],hex[index])}

@@ -118,7 +118,7 @@ function BountyShow(props) {
           template={!data.template || !data.template.raw?{}:data.template.raw}
           dialog={props.dialog}
         />
-        <p className="pt-2">Click icon to view detail.</p>
+        <p className="pt-2">Click thumb to view detail or divert iNFT.</p>
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
         <Row className="pt-4">

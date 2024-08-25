@@ -384,7 +384,7 @@
 		fillBountyInfo: (bounty) => {
 			//console.log(bounty);
 			const raw=JSON.parse(bounty.raw);
-			//console.log(raw);
+			console.log(raw);
 			$("#bounty_info").html(`
 				<div class="row">
 					<div class="col-lg-3">Title</div>

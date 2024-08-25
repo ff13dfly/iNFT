@@ -147,7 +147,7 @@ function BountyPreview(props) {
           template={data}
           dialog={props.dialog}
         />
-        <p className="pt-2">Click icon to view detail.</p>
+        <p className="pt-2">Click thumb to view detail or divert iNFT.</p>
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <hr />

@@ -142,7 +142,8 @@ function BountySubmit(props) {
                 //4.update local status
                 setAnchor(alink);
                 Bounty.update.toReported(alink, () => {
-                  return props.dailog.close();
+                  props.dialog.close();
+                  return true;
                 });
               });
             });

@@ -20,7 +20,7 @@ function Progress(props) {
     };
 
     const config={
-        round:40,           //full time to mint one
+        round:18,           //full time to mint one
         delay:18,           //interval of transactions
     }
 
