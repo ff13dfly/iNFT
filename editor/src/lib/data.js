@@ -3,7 +3,7 @@ let map={
     size:{              //template basic parameters
         cell:[50,50],      //image grid size as cell
         grid:[8,1],        //image line and row amounts
-        target:[360,360]   //NFT target size
+        target:[400,400]   //NFT target size
     },
     NFT:null,           //iNFT definition JSON file without image
     hash:null,          //mock hash to render iNFT

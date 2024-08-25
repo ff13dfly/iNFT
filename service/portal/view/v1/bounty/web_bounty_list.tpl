@@ -50,10 +50,10 @@
 									<td>
 										{%if $v.applied eq 1%}
 										<button class="btn btn-sm btn-warning bounty_offline"
-											data="{%$v.id%}">下架</button>
+											data="{%$v.id%}">OFF</button>
 										{%else%}
 										<button class="btn btn-sm btn-primary bounty_applied"
-											data="{%$v.id%}">上架</button>
+											data="{%$v.id%}">ON</button>
 										{%/if%}
 									</td>
 								</tr>

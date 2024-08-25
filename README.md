@@ -8,9 +8,13 @@
 
 - As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
-- Try iNFT full functions, [iNFT Market](https://inft.w3os.net/market);
+- Video: [Youtube Video URL]()
 
-- Just minting, [iNFT Minter](https://inft.w3os.net/mint);
+- PPT: [PPT URL]()
+
+- Try iNFT full functions, [iNFT Market](https://inft.w3os.net/market)
+
+- Just minting, [iNFT Minter](https://inft.w3os.net/mint)
 
 ## System Structure
 
@@ -286,3 +290,5 @@
     ```
 
 ## Resource
+
+### More Video

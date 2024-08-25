@@ -1,10 +1,8 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState } from "react";
 
 import  Data from "../lib/data";
 import tools from "../lib/tools";
-
-//let selected=0;
 
 function Basic(props) {
     const size = {
@@ -12,9 +10,8 @@ function Basic(props) {
         grid: [6,6],
     };
     const ss=Data.get("size");
-    //console.log(ss);
-    let [width,setWidth]=useState((ss.target===undefined || !ss.target[0])?360:ss.target[0]);
-    let [height,setHeight]=useState((ss.target===undefined || !ss.target[1])?360:ss.target[1]);
+    let [width,setWidth]=useState((ss.target===undefined || !ss.target[0])?400:ss.target[0]);
+    let [height,setHeight]=useState((ss.target===undefined || !ss.target[1])?400:ss.target[1]);
     let [cellX,setCellX]=useState((ss.cell===undefined || !ss.cell[0])?50:ss.cell[0]);      //cell的X轴像素宽度
     let [cellY,setCellY]=useState((ss.cell===undefined || !ss.cell[1])?50:ss.cell[1]);      //cell的Y轴像素宽度
     let [line,setLine]=useState((ss.grid===undefined || !ss.grid[0])?8:ss.grid[0]);        //X轴，每行多少个
@@ -23,8 +20,7 @@ function Basic(props) {
     const self={
         changeWidth:(ev)=>{
             const val=parseInt(ev.target.value);
-            //console.log(val);
-            const min=180,max=600;
+            const min=180,max=900;
             if(isNaN(val) || val<min){
                 setWidth(min);
                 self.saveSize(cellX,cellY,line,row,min,height);

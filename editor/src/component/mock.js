@@ -59,7 +59,7 @@ function Mocker(props) {
         }} value={selected}>
             <option value="0">Mock Template: None</option>
             <option value="ape">Mock Template: Bored Ape</option>
-            <option value="solana">Mock Template: Solana Logo</option>
+            {/* <option value="solana">Mock Template: Solana Logo</option> */}
         </select>
     )
 }
