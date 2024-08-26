@@ -19,7 +19,7 @@ function StorageINFT(props) {
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(1);
   let [step, setStep] = useState(12);
-  let [show,setShow] =useState(true);
+  let [show, setShow] = useState(true);
 
   const nameDB = Config.get(["storage", "DBname"]);
   const table = "infts";
@@ -41,10 +41,10 @@ function StorageINFT(props) {
     getDate: (stamp) => {
       return tools.day(stamp, "-");
     },
-    count:(ck)=>{
+    count: (ck) => {
       INDEXED.checkDB(nameDB, (db) => {
         INDEXED.countTable(db, table, (max) => {
-          setTotal(Math.ceil(max/step));
+          setTotal(Math.ceil(max / step));
           return ck && ck();
         })
       });
@@ -64,7 +64,7 @@ function StorageINFT(props) {
   };
 
   useEffect(() => {
-    self.count(()=>{
+    self.count(() => {
       self.fresh(page);
     });
   }, [props.update]);
@@ -96,13 +96,16 @@ function StorageINFT(props) {
                   }}><FaFileDownload /></span>
                 </td>
                 <td>
-                  <span className="pointer" onClick={(ev) => {
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickRemove(row.name);
-                  }}><FaSkullCrossbones /></span>
-
-                  <span className="pointer ml-5" onClick={(ev) => {
+                  }}>
+                    <FaSkullCrossbones size={18} />
+                  </button>
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickFresh(row.name);
-                  }}><FaSync /></span>
+                  }}>
+                    <FaSync size={18} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -110,10 +113,10 @@ function StorageINFT(props) {
         </Table>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Page show={show} align={"right"} now={page} step={10} total={total} callback={(n)=>{
+        <Page show={show} align={"right"} now={page} step={10} total={total} callback={(n) => {
           setPage(n);
           self.fresh(n);
-        }}/>
+        }} />
       </Col>
     </Row>
 

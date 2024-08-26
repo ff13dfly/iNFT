@@ -12,25 +12,25 @@ function StorageTemplat(props) {
 
   let [list, setList] = useState([]);
 
-  const nameDB =Config.get(["storage","DBname"]);
+  const nameDB = Config.get(["storage", "DBname"]);
   const table = "template";
 
-  const self={
-    clickRemove:(cid)=>{
+  const self = {
+    clickRemove: (cid) => {
       INDEXED.checkDB(nameDB, (db) => {
         if (INDEXED.checkTable(db.objectStoreNames, table)) {
-          INDEXED.removeRow(db,table,"cid",cid,(done)=>{
-            if(done) self.fresh();
+          INDEXED.removeRow(db, table, "cid", cid, (done) => {
+            if (done) self.fresh();
           });
         }
       });
     },
 
-    clickPlayground:(cid)=>{
+    clickPlayground: (cid) => {
 
     },
 
-    fresh:()=>{
+    fresh: () => {
       INDEXED.checkDB(nameDB, (db) => {
         if (INDEXED.checkTable(db.objectStoreNames, table)) {
           INDEXED.pageRows(db, table, (res) => {
@@ -41,7 +41,7 @@ function StorageTemplat(props) {
         }
       });
     },
-  }  
+  }
   useEffect(() => {
     self.fresh();
   }, []);
@@ -65,14 +65,22 @@ function StorageTemplat(props) {
             </td>
             <td>web3.storage</td>
             <td>
-              <span className="pointer ml-5"><FaFileDownload /></span>
+              <button className="btn btn-sm btn-default">
+                <FaFileDownload size={18} />
+              </button>
             </td>
             <td>
-              <span className="pointer" onClick={(ev)=>{
+              <button className="btn btn-sm btn-default" onClick={(ev) => {
                 self.clickRemove(row.cid);
-              }}><FaSkullCrossbones /></span>
-              <span className="pointer ml-5"><FaPizzaSlice /></span>
-              <span className="pointer ml-5"><FaSync /></span>
+              }}>
+                <FaSkullCrossbones size={18} />
+              </button>
+              <button className="btn btn-sm btn-default">
+                <FaPizzaSlice size={18} />
+              </button>
+              <button className="btn btn-sm btn-default">
+                <FaSync size={18} />
+              </button>
             </td>
           </tr>
         ))}

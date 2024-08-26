@@ -8,12 +8,13 @@ function SettingBasic(props) {
     normal: [9, 3],
     left: [8, 4],
     right: [4, 8],
+    password:[4,2,6]
   };
 
   let [ cache, setCache]=useState(true);            //template cache
   let [ thumb, setThumb ]=useState(true);           //iNFT thumb cache
   let [ checking, setChecking ]=useState(true);
-  let [ pass, setPass ]=useState(true);
+  let [ pass, setPass ]=useState(false);
 
   useEffect(() => {
 
@@ -46,8 +47,14 @@ function SettingBasic(props) {
           />
         </Form>
       </Col>
-      <Col hidden={!pass} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          Password setting page
+      <Col hidden={!pass} className="pt-2" md={size.password[0]} lg={size.password[0]} xl={size.password[0]} xxl={size.password[0]}>
+          <input type="password" className="form-control" placeholder="The password to encry the frontend cache." />
+      </Col>
+      <Col hidden={!pass} className="pt-2" md={size.password[1]} lg={size.password[1]} xl={size.password[1]} xxl={size.password[1]}>
+          <button className="btn btn-md btn-primary">Set Password</button>
+      </Col>
+      <Col hidden={!pass} className="pt-2" md={size.password[2]} lg={size.password[2]} xl={size.password[2]} xxl={size.password[2]}>
+
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

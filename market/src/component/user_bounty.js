@@ -144,12 +144,16 @@ function UserBounty(props) {
                   </a>
                 </td>
                 <td>
-                  <span className="pointer text-info" onClick={(ev) => {
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickProcess(row.name);
-                  }}><FaRoad size={24} /></span>
-                  <span className="pointer ml-5 text-info" onClick={(ev) => {
+                  }}>
+                    <FaRoad size={20} />
+                  </button>
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickPay(row.name);
-                  }}><FaBitcoin size={24} /></span>
+                  }}>
+                    <FaBitcoin size={20} />
+                  </button>
                 </td>
                 <td>
                   {row.start.toLocaleString()}
@@ -161,13 +165,17 @@ function UserBounty(props) {
                   {(new Date(row.stamp).toLocaleDateString())}
                 </td>
                 <td>
-                  <span className="pointer" onClick={(ev) => {
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickRemove(row.name);
-                  }}><FaSkullCrossbones size={20} /></span>
-                  
-                  <span className="pointer ml-5" onClick={(ev) => {
+                  }}>
+                    <FaSkullCrossbones size={20} />
+                  </button>
+
+                  <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickSync(row.name);
-                  }}><FaSyncAlt size={20} /></span>
+                  }}>
+                    <FaSyncAlt size={20} />
+                  </button>
                 </td>
               </tr>
             ))}

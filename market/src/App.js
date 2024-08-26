@@ -90,7 +90,6 @@ function App() {
     } 
   }
 
-  //all routers here
   const router={
     "home":<Home extend={extend}/>,
     "template":<Template extend={extend} link={self.linkTo}/>,
@@ -106,6 +105,8 @@ function App() {
     "setting":<Setting extend={extend} link={self.linkTo}/>,
     "user":<User extend={extend} link={self.linkTo}  dialog={self.dialog}/>,
     "404":<InvalidPage />,
+    "creativity":<InvalidPage />,       //editor version 2
+    "blacksmith":<InvalidPage />,       //multi minter tools
   }
 
   //use to active the target nav bar
