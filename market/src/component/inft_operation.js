@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Network from "../network/router";
 import Account from "../system/account";
 import INFT from "../system/inft";
+import tools from "../lib/tools";
 
 import {  FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -123,6 +124,7 @@ function OperationINFT(props) {
 
   useEffect(() => {
     self.fresh();
+    console.log(props);
   }, [props.data]);
 
   return (
@@ -133,7 +135,22 @@ function OperationINFT(props) {
             <img className="inft_thumb" src={props.data.bs64} alt="thumb of iNFT" />
           </Col>
           <Col md={size.detail[1]} lg={size.detail[1]} xl={size.detail[1]} xxl={size.detail[1]}>
-            More details.
+          <Row className="pb-4">
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <small>Name</small>
+              <h3 className="text-warning">{props.data && props.data.name?props.data.name:""}</h3>
+            </Col>
+
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <small>Block</small>
+              <h3 className="text-warning">{props.data && props.data.block?props.data.block.toLocaleString():0}</h3>
+            </Col>
+
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+              <small>Network</small>
+              <h3 className="text-warning">{tools.toUp(props.data && props.data.network?props.data.network:"")}</h3>
+            </Col>
+          </Row>
           </Col>
           <Col className="text-end" md={size.detail[2]} lg={size.detail[2]} xl={size.detail[2]} xxl={size.detail[2]}>
             <button className="btn btn-md btn-default" onClick={(ev)=>{

@@ -41,7 +41,7 @@ function Page(props) {
       props.callback && props.callback(props.total);
     },
     getButtons:(current, step, total)=>{
-      console.log(props,current, step, total);
+      //console.log(props,current, step, total);
       const narr=[];
       const count=Math.floor(current/step);
       const start=(current%step===0?count-1:count)*step;

@@ -120,7 +120,7 @@ function ListAddress(props) {
               <Card.Title>{row.name}</Card.Title>
               <Card.Text>
                 {!row.signer ? "" : tools.shorten(row.signer)}
-                <FaAnchor /><span className="pt-1">{row.blocknumber}</span>
+                <FaAnchor /><span className="pt-1 ml-10">{row.blocknumber}</span>
               </Card.Text>
             </Card.Body>
           </Card>

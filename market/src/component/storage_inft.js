@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FaSkullCrossbones, FaSync, FaFileDownload } from "react-icons/fa";
 
 
-import Page from "./common_page";
+import Page from "./common/common_page";
 
 import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
