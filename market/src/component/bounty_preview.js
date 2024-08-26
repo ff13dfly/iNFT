@@ -2,8 +2,8 @@ import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 
-import CommentList from "./commnet_list";
-import CommentSubmit from "./commnet_submit";
+import CommentList from "./comment/commnet_list";
+import CommentSubmit from "./comment/commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
 

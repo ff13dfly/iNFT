@@ -1,8 +1,8 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Config from "../system/config";
-import API from "../system/api";
+import Config from "../../system/config";
+import API from "../../system/api";
 
 /* iNFT comment list
 *   @param  {string}    bounty      //bounty alink

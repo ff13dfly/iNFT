@@ -1,8 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import API from "../system/api";
-import RUNTIME from "../system/runtime";
+import API from "../../system/api";
+import RUNTIME from "../../system/runtime";
 
 function CommentSubmit(props) {
   const size = {
