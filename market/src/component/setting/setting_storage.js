@@ -4,8 +4,8 @@ import { useState,useEffect } from "react";
 import StorageTemplat from "./storage_template";
 import StorageINFT from "./storage_inft";
 
-import INDEXED from "../lib/indexed";
-import Config from "../system/config";
+import INDEXED from "../../lib/indexed";
+import Config from "../../system/config";
 
 function SettingStorage(props) {
   const size = {

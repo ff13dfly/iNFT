@@ -1,16 +1,16 @@
 import { Row, Col, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import BountySubmit from "./bounty/bounty_submit";
-import BountyProcess from "./bounty/bounty_process";
-import BountyLoad from "./bounty/bounty_load";
+import BountySubmit from "../bounty/bounty_submit";
+import BountyProcess from "../bounty/bounty_process";
+import BountyLoad from "../bounty/bounty_load";
 
-import Config from "../system/config";
-import Bounty from "../system/bounty";
-import API from "../system/api";
-import TPL from "../system/tpl";
+import Config from "../../system/config";
+import Bounty from "../../system/bounty";
+import API from "../../system/api";
+import TPL from "../../system/tpl";
 
-import INDEXED from "../lib/indexed";
+import INDEXED from "../../lib/indexed";
 
 import { FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
 

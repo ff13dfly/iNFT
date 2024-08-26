@@ -5,13 +5,11 @@ import Header from "./component/common/common_header";
 import Footer from "./component/common/common_footer";
 
 import Home from "./entry/home";
-import Template from "./entry/template";
 import Playground from "./entry/playground";
 import Editor from "./entry/editor";
 import Minter from "./entry/minter";
 import Market from "./entry/market";
 import Bounty from "./entry/bounty";
-import Explorer from "./entry/explorer";
 import Setting from "./entry/setting";
 import User from "./entry/user";
 import Creativity from "./entry/creativity";
@@ -95,14 +93,12 @@ function App() {
 
   const router={
     "home":<Home extend={extend}/>,
-    "template":<Template extend={extend} link={self.linkTo}/>,
     "market":<Market extend={extend} link={self.linkTo}/>,
     "minter":<Minter extend={extend}/>,
     "editor":<Editor extend={extend}/>,
     "playground":<Playground extend={extend} link={self.linkTo}/>,
     "view":<View extend={extend} link={self.linkTo}/>,
     "detail":<Detail extend={extend} link={self.linkTo}/>,
-    "explorer":<Explorer extend={extend}/>,
     "preview":<Preview extend={extend} link={self.linkTo}/>,
     "bounty":<Bounty extend={extend} link={self.linkTo} dialog={self.dialog}/>,
     "setting":<Setting extend={extend} link={self.linkTo}/>,

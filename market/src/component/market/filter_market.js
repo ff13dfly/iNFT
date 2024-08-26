@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import { FaTh, FaThLarge, FaThList, FaGem, FaCheck } from "react-icons/fa";
 
-import INFT from "../system/inft";
-import TPL from "../system/tpl";
+import INFT from "../../system/inft";
+import TPL from "../../system/tpl";
 
 let selected = [];      //selected template, can keep status after rendering
 function FilterMarket(props) {

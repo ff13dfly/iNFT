@@ -1,7 +1,7 @@
 import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import DetailINFT from "../component/inft_detail";
+import DetailINFT from "../component/market/inft_detail";
 
 import INFT from "../system/inft";
 

@@ -1,12 +1,12 @@
 import { Row, Col, Card, Placeholder } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import OperationINFT from "./inft_operation";
+import OperationINFT from "../market/inft_operation";
 
-import Render from "../lib/render";
-import tools from "../lib/tools";
-import TPL from "../system/tpl";
-import INFT from "../system/inft";
+import Render from "../../lib/render";
+import tools from "../../lib/tools";
+import TPL from "../../system/tpl";
+import INFT from "../../system/inft";
 
 import { FaAnchor } from "react-icons/fa";
 

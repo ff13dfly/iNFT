@@ -1,12 +1,12 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Copy from "../lib/clipboard";
-import tools from "../lib/tools";
-import Network from "../network/router";
+import Copy from "../../lib/clipboard";
+import tools from "../../lib/tools";
+import Network from "../../network/router";
 
-import Config from "../system/config";
-import RUNTIME from "../system/runtime";
+import Config from "../../system/config";
+import RUNTIME from "../../system/runtime";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 

@@ -1,22 +1,21 @@
 import { Row, Col, Card, Placeholder } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import API from "../system/api";
-import TPL from "../system/tpl";
+import Network from "../../network/router";
+import INFT from "../../system/inft";
 
-function ListTemplate(props) {
+import tools from "../../lib/tools";
+
+let first=true;
+function ListMarket(props) {
   const size = {
     row: [12],
-    grid: [4],
+    grid: [3],
   };
-
-  let [page, setPage] = useState(1);
-  let [step, setStep] = useState(12);
 
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
-
-  let [info,setInfo]=useState("");
+  let [info, setInfo] = useState("Loading");
 
   const self = {
     getHolder: (n) => {
@@ -26,37 +25,42 @@ function ListTemplate(props) {
       }
       return arr;
     },
-    getTemplates:(arr,ck,map)=>{
-      if(map===undefined) map=[];
-      if(arr.length===0) return ck && ck(map);
-      const single=arr.pop();
-      TPL.view(single,(dt)=>{
-        dt.hash=single;
-        map.push(dt);
-        return self.getTemplates(arr,ck,map)
+    show:()=>{
+      setInfo("Getting selling iNFTs from network");
+      Network("anchor").market((arr) => {
+        //console.log(JSON.stringify(arr));
+        setInfo("Getting template from IPFS then rendering iNFTs.");
+        const nlist = self.getHolder(arr.length);
+        setList(nlist);
+        INFT.auto(arr,(fs)=>{
+          //console.log(fs);
+          setList(fs);
+          setReady(true);
+          if(first) props.fresh("filter");
+          first=false;
+        });
       });
+    },
+    search:(condition)=>{
+      setReady(false);
+      if(condition.template){
+        INFT.search(condition.template,"template",(arr)=>{
+          setReady(true);
+          setList(arr);
+        });
+      }else{
+
+      }
     },
   }
 
   useEffect(() => {
-    //console.log(`Ready to fresh`);
-    API.template(page, (res) => {
-      //console.log(res);
-      if (res.data && res.data.length !== 0) {
-        const nlist = self.getHolder(res.data.length);
-        setList(nlist);
-
-        self.getTemplates(res.data,(tpls)=>{
-          //console.log(tpls);
-          setReady(true);
-          setList(tpls);
-        });
-      }else{
-        setInfo("Failed to get template list.");
-        setReady(true);
-      }
-    },step);
-  }, [props.update]);
+    if(!props.filter){
+      self.show();
+    }else{
+      self.search(props.filter);
+    }
+  }, [props.filter]);
 
   return (
     <Row>
@@ -65,18 +69,16 @@ function ListTemplate(props) {
       </Col>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
-
-          <Card hidden={!ready} style={{ width: "100%" }} className="pointer" onClick={
-            (ev) => { props.link("preview", [row.hash]);}
+          <Card hidden={!ready} className="pointer" onClick={
+            (ev) => { props.link("view", [row.name]) }
           }>
-            <div className="template_thumb" style={{ backgroundImage:`url(${!row.image?`${window.location.origin}/imgs/logo.png`:row.image})`}}></div>
-
+            <Card.Img variant="top" src={row.bs64} />
             <Card.Body>
-              <Card.Title>{!row.name?"":row.name}</Card.Title>
+              <Card.Title>{row.name}</Card.Title>
               <Card.Text>
-                  Size: {!row.size?0:row.size[0]}px * {!row.size?0:row.size[1]}px <br/>
-                  Cell: {!row.cell?0:row.cell[0]}px * {!row.cell?0:row.cell[1]}px <br/>
-                  {!row.hash?"":row.hash}
+                <strong>Price: </strong> <span className="text-warning"><strong>{row.price}</strong></span> $ANK  
+                <br/>
+                <strong>Owner: </strong>{!row.owner?"":tools.shorten(row.owner)}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -98,4 +100,4 @@ function ListTemplate(props) {
     </Row>
   );
 }
-export default ListTemplate;
+export default ListMarket;

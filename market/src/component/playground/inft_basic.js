@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import SVGGrid from "./svg_grid";
+import SVGGrid from "../common/svg_grid";
 
 function BasicINFT(props) {
   const size = {

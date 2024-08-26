@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import ParameterINFT from "./inft_parameter";
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 /* iNFT parts preview
 *   @param  {array}     data          //parts array

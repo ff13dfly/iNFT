@@ -1,12 +1,12 @@
 import { Row, Col, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import PriveiwINFT from "../component/inft_preview";
-import PartsINFT from "../component/inft_parts";
-import SeriesINFT from "../component/inft_series";
-import BasicINFT from "../component/inft_basic";
-import MockOffset from "../component/mock_offset";
-import MockHash from "../component/mock_hash";
+import PriveiwINFT from "../component/common/inft_preview";
+import PartsINFT from "../component/playground/inft_parts";
+import SeriesINFT from "../component/playground/inft_series";
+import BasicINFT from "../component/playground/inft_basic";
+import MockOffset from "../component/playground/mock_offset";
+import MockHash from "../component/playground/mock_hash";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

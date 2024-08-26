@@ -2,8 +2,8 @@ import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FaRegCopy, FaCopy, FaFileDownload, FaSkullCrossbones, FaSync, FaPizzaSlice } from "react-icons/fa";
 
-import INDEXED from "../lib/indexed";
-import Config from "../system/config";
+import INDEXED from "../../lib/indexed";
+import Config from "../../system/config";
 
 function StorageTemplat(props) {
   const size = {

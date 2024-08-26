@@ -1,25 +1,22 @@
 import { Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
-import { useEffect,useState } from "react";
-
-import Network from "../network/router";
-import tools from "../lib/tools";
-
-import ListNFTs from "../component/list_nfts";
+import Network from "../../network/router";
+import ListNFTs from "../list_nfts";
+import tools from "../../lib/tools";
 
 //Anchor Network 13598
 //Tanssi Network 411191
 
-function Explorer(props) {
-
+function SelectNetwork(props) {
     const size = {
         row: [12],
         search: [3, 5, 4],
-        header: [4, 8]
     };
 
-    let [ list, setList]=useState([]);
+    let [data, setData] = useState([]);
     let [search, setSearch] = useState("");
+    let [list, setList] = useState([]);
     let [network, setNetwork] = useState("anchor");        //default network
     let [enable, setEnable] = useState({
         selector: true,
@@ -27,10 +24,10 @@ function Explorer(props) {
         button: true,
     });
 
-    let [data, setData] = useState([]);
     let [amount, setAmount] = useState(0);
 
-    const self={
+
+    const self = {
         changeSearch: (ev) => {
             setSearch(ev.target.value);
         },
@@ -61,6 +58,7 @@ function Explorer(props) {
                     })
                 });
             } else {
+                console.log("here")
                 api.view(search,"owner",(dt)=>{
                     console.log(dt);
                     if(!dt || dt.error){
@@ -72,8 +70,7 @@ function Explorer(props) {
                     }
 
                     api.view({name:search,block:dt.block},"anchor",(res)=>{
-                        res.blocknumber=dt.block;
-                        setData([res]);
+                        console.log(res);
                         setAmount(1);
                         setEnable({
                             selector: true,
@@ -100,7 +97,7 @@ function Explorer(props) {
     }, []);
 
     return (
-        <Row className="pt-2">
+        <Row className="pb-4">
             <Col className="pt-1" md={size.search[0]} lg={size.search[0]} xl={size.search[0]} xxl={size.search[0]}>
                 <select name="" className="form-control"
                     value={network}
@@ -129,10 +126,12 @@ function Explorer(props) {
                     }}>Search</button>
             </Col>
             <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                Total {amount} iNFTs at block {search}, check raw data on POLKADOT_URL
+            </Col>
+            <Col className="pt-1" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <ListNFTs data={data} network={network} />
             </Col>
         </Row>
-    )
+    );
 }
-
-export default Explorer;
+export default SelectNetwork;

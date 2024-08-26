@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import TPL from "../system/tpl";
+import TPL from "../../system/tpl";
 
 /* iNFT series preview
 *   @param  {array}     data          //series array

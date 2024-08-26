@@ -4,7 +4,7 @@ import { FaSlackHash, FaPizzaSlice, FaUserLock } from "react-icons/fa";
 
 import QRCode from "react-qr-code";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 
 /* iNFT render component parameters

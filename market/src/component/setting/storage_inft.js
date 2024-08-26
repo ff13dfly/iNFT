@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { FaSkullCrossbones, FaSync, FaFileDownload } from "react-icons/fa";
 
 
-import Page from "./common/common_page";
+import Page from "../common/common_page";
 
-import tools from "../lib/tools";
-import INDEXED from "../lib/indexed";
+import tools from "../../lib/tools";
+import INDEXED from "../../lib/indexed";
 
-import Config from "../system/config";
+import Config from "../../system/config";
 
 function StorageINFT(props) {
   const size = {

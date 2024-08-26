@@ -1,12 +1,12 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import UserBasic from "../component/user_basic";
-import UserSidebar from "../component/user_sidebar";
-import UserINFT from "../component/user_inft";
-import UserAccount from "../component/user_account";
-import UserBounty from "../component/user_bounty";
-import User404 from "../component/user_404";
+import UserBasic from "../component/user/user_basic";
+import UserSidebar from "../component/user/user_sidebar";
+import UserINFT from "../component/user/user_inft";
+import UserAccount from "../component/user/user_account";
+import UserBounty from "../component/user/user_bounty";
+import User404 from "../component/user/user_404";
 
 function User(props) {
     const size = {

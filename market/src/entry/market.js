@@ -1,10 +1,10 @@
 import {  Row, Col } from "react-bootstrap";
 import { useState } from "react";
 
-import FilterMarket from "../component/filter_market";
-import ListMarket from "../component/list_market";
-import SearchMarket from "../component/search_market";
-import ListNFTs from "../component/list_nfts";
+import FilterMarket from "../component/market/filter_market";
+import ListMarket from "../component/market/list_market";
+import SearchMarket from "../component/market/search_market";
+import ListNFTs from "../component/market/list_nfts";
 
 function Market(props) {
     const size = {

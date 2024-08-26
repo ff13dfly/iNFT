@@ -1,8 +1,8 @@
 import {  Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect,useState } from "react";
 
-import ListSeries from "../component/list_series";
-import PriveiwINFT from "../component/inft_preview";
+import ListSeries from "../component/market/list_series";
+import PriveiwINFT from "../component/common/inft_preview";
 import TPL from "../system/tpl";
 import tools from "../lib/tools";
 

@@ -1,10 +1,10 @@
 import { Row, Col, Card, Placeholder } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Render from "../lib/render";
-import tools from "../lib/tools";
-import TPL from "../system/tpl";
-import INFT from "../system/inft";
+import Render from "../../lib/render";
+import tools from "../../lib/tools";
+import TPL from "../../system/tpl";
+import INFT from "../../system/inft";
 
 import { FaAnchor } from "react-icons/fa";
 

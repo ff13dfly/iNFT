@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ProcessDetail from "../process_detail";
+import ProcessDetail from "./process_detail";
 
 import tools from "../../lib/tools";
 import Bounty from "../../system/bounty";

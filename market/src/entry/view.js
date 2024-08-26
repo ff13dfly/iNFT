@@ -1,8 +1,8 @@
 import { Row, Col, Breadcrumb } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import DetailINFT from "../component/inft_detail";
-import MoreINFT from "../component/inft_more";
+import DetailINFT from "../component/market/inft_detail";
+import MoreINFT from "../component/market/inft_more";
 import AccountSign from "../component/account/account_sign";
 import CommentList from "../component/comment/commnet_list";
 import CommentSubmit from "../component/comment/commnet_submit";

@@ -1,10 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
-import Account from "../system/account";
-import INFT from "../system/inft";
-import tools from "../lib/tools";
+import Network from "../../network/router";
+import Account from "../../system/account";
+import INFT from "../../system/inft";
+import tools from "../../lib/tools";
 
 import {  FaHeart, FaRegHeart } from "react-icons/fa";
 

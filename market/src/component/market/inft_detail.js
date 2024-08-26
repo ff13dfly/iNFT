@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 /* iNFT render component parameters
 *   @param  {object}    data            //iNFT data

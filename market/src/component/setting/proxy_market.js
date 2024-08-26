@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 
 import { FaLightbulb, FaSkullCrossbones, FaSync } from "react-icons/fa";
 
-import tools from "../lib/tools";
-import Config from "../system/config";
-import Status from "../system/status";
+import tools from "../../lib/tools";
+import Config from "../../system/config";
+import Status from "../../system/status";
 
 function ProxyMarket(props) {
   const size = {

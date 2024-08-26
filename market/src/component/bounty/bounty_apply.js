@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import PriveiwINFT from "../inft_preview";
+import PriveiwINFT from "../common/inft_preview";
 
 import Network from "../../network/router";
 import tools from "../../lib/tools";

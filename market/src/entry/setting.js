@@ -1,13 +1,13 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import SettingSidebar from "../component/setting_sidebar";
-import SettingBasic from "../component/setting_basic";
-import SettingNetwork from "../component/setting_network";
-import SettingStorage from "../component/setting_storage";
-import Setting404 from "../component/setting_404";
-import SettingSample from "../component/setting_sample";
-import SettingProxy from "../component/setting_proxy";
+import SettingSidebar from "../component/setting/setting_sidebar";
+import SettingBasic from "../component/setting/setting_basic";
+import SettingNetwork from "../component/setting/setting_network";
+import SettingStorage from "../component/setting/setting_storage";
+import Setting404 from "../component/setting/setting_404";
+import SettingSample from "../component/setting/setting_sample";
+import SettingProxy from "../component/setting/setting_proxy";
 
 function Setting(props) {
     const size = {
