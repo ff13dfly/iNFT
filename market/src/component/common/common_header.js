@@ -1,8 +1,8 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useState,useEffect } from "react";
 
-import tools from "../lib/tools";
-import RUNTIME from "../system/runtime";
+import tools from "../../lib/tools";
+import RUNTIME from "../../system/runtime";
 
 import { FaCog } from "react-icons/fa";
 

@@ -1,8 +1,8 @@
 import { Container,Modal} from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Header from "./component/common_header";
-import Footer from "./component/common_footer";
+import Header from "./component/common/common_header";
+import Footer from "./component/common/common_footer";
 
 import Home from "./entry/home";
 import Template from "./entry/template";

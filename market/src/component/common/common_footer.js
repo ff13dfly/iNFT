@@ -1,5 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function Footer(props) {
 
