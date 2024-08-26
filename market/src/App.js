@@ -14,6 +14,9 @@ import Bounty from "./entry/bounty";
 import Explorer from "./entry/explorer";
 import Setting from "./entry/setting";
 import User from "./entry/user";
+import Creativity from "./entry/creativity";
+import Blacksmith from "./entry/blacksmith";
+
 
 import View from "./entry/view";
 import InvalidPage from "./entry/404";
@@ -104,9 +107,9 @@ function App() {
     "bounty":<Bounty extend={extend} link={self.linkTo} dialog={self.dialog}/>,
     "setting":<Setting extend={extend} link={self.linkTo}/>,
     "user":<User extend={extend} link={self.linkTo}  dialog={self.dialog}/>,
+    "creativity":<Creativity extend={extend} link={self.linkTo}  dialog={self.dialog}/>,       //editor version 2
+    "blacksmith":<Blacksmith extend={extend} link={self.linkTo}  dialog={self.dialog}/>,       //multi minter tools
     "404":<InvalidPage />,
-    "creativity":<InvalidPage />,       //editor version 2
-    "blacksmith":<InvalidPage />,       //multi minter tools
   }
 
   //use to active the target nav bar

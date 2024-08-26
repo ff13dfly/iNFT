@@ -10,6 +10,30 @@ function Header(props) {
 
   let [login, setLogin]=useState("Login");
 
+  const navs=[
+    {
+      name:"market",
+    },
+    {
+      name:"bounty",
+    },
+    {
+      name:"playground",
+    },
+    {
+      name:"blacksmith",
+    },
+    {
+      name:"creativity",
+    },
+    {
+      name:"minter",
+    },
+    {
+      name:"editor",
+    },
+  ]
+
   const self={
     clickLogin:()=>{
       if(login==="Login"){
@@ -44,15 +68,20 @@ function Header(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={(ev) => { props.link("market") }} >
+          {navs.map((row, index) => (
+            <Nav.Link key={index} onClick={(ev) => { props.link(row.name) }} >
+              <h5 className={props.active === row.name? "text-warning" : ""}>{tools.toUp(row.name)}</h5>
+            </Nav.Link>
+          ))}
+            {/* <Nav.Link onClick={(ev) => { props.link("market") }} >
               <h5 className={props.active === "market" ? "text-warning" : ""}>Market</h5>
             </Nav.Link>
             <Nav.Link onClick={(ev) => { props.link("bounty") }} >
               <h5 className={props.active === "bounty" ? "text-warning" : ""}>Bounty</h5>
             </Nav.Link>
-            {/* <Nav.Link onClick={(ev) => { props.link("explorer") }}>
+            <Nav.Link onClick={(ev) => { props.link("explorer") }}>
               <h5 className={props.active === "explorer" ? "text-warning" : ""}>Explorer</h5>
-            </Nav.Link> */}
+            </Nav.Link>
             <Nav.Link onClick={(ev) => { props.link("playground") }}>
               <h5 className={props.active === "playground" ? "text-warning" : ""}>Playground</h5>
             </Nav.Link>
@@ -61,7 +90,7 @@ function Header(props) {
             </Nav.Link>
             <Nav.Link onClick={(ev) => { props.link("editor") }}>
               <h5 className={props.active === "editor" ? "text-warning" : ""}>Editor</h5>
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
         <Navbar.Toggle />
