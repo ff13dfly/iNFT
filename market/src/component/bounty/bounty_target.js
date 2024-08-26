@@ -2,8 +2,8 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
 
-import tools from "../lib/tools";
-import Bounty from "../system/bounty";
+import tools from "../../lib/tools";
+import Bounty from "../../system/bounty";
 
 function BountyTarget(props) {
   const size = {

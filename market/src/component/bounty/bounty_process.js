@@ -1,13 +1,13 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ProcessDetail from "./process_detail";
+import ProcessDetail from "../process_detail";
 
-import tools from "../lib/tools";
-import Bounty from "../system/bounty";
-import TPL from "../system/tpl";
+import tools from "../../lib/tools";
+import Bounty from "../../system/bounty";
+import TPL from "../../system/tpl";
 
-import API from "../system/api";
+import API from "../../system/api";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 

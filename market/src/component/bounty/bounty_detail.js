@@ -1,8 +1,8 @@
 import { Row, Col,Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import tools from "../lib/tools";
-import Network from "../network/router";
+import tools from "../../lib/tools";
+import Network from "../../network/router";
 
 function BountyDetail(props) {
   const size = {

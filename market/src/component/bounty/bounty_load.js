@@ -1,9 +1,9 @@
 import { Container,Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import API from "../system/api";
-import Bounty from "../system/bounty";
-import Network from "../network/router";
+import API from "../../system/api";
+import Bounty from "../../system/bounty";
+import Network from "../../network/router";
 
 function BountyLoad(props) {
 

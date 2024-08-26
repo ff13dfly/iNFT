@@ -7,15 +7,15 @@ import BountyDetail from "./bounty_detail";
 import BountyPay from "./bounty_pay";
 import BountyMore from "./bounty_more";
 
-import Network from "../network/router";
+import Network from "../../network/router";
 
-import TPL from "../system/tpl";
-import RUNTIME from "../system/runtime";
-import Config from "../system/config";
-import Bounty from "../system/bounty";
-import API from "../system/api";
+import TPL from "../../system/tpl";
+import RUNTIME from "../../system/runtime";
+import Config from "../../system/config";
+import Bounty from "../../system/bounty";
+import API from "../../system/api";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 function BountySubmit(props) {
   const size = {

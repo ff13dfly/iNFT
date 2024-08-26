@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 import BountyApply from "./bounty_apply";
 
-import Config from "../system/config";
-import Account from "../system/account";
-import API from "../system/api";
-import Network from "../network/router";
+import Config from "../../system/config";
+import Account from "../../system/account";
+import API from "../../system/api";
+import Network from "../../network/router";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 function BonusProcess(props) {
   const size = {

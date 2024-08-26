@@ -1,10 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
+import Network from "../../network/router";
 
-import tools from "../lib/tools";
-import Config from "../system/config";
+import tools from "../../lib/tools";
+import Config from "../../system/config";
 
 function BountyMore(props) {
   const size = {

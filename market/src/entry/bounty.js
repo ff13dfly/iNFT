@@ -1,9 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useState,useEffect } from "react";
 
-import BountyList from "../component/bounty_list";
-import BountySubmit from "../component/bounty_submit";
-import BountyPreview from "../component/bounty_preview";
+import BountyList from "../component/bounty/bounty_list";
+import BountySubmit from "../component/bounty/bounty_submit";
+import BountyPreview from "../component/bounty/bounty_preview";
 
 import tools from "../lib/tools";
 import Network from "../network/router";

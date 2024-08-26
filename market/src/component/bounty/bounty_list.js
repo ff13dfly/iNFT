@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import BountyShow from "./bounty_show";
 
-import API from "../system/api";
-import TPL from "../system/tpl";
+import API from "../../system/api";
+import TPL from "../../system/tpl";
 
 function BountyList(props) {
   const size = {

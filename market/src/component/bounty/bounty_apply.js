@@ -1,15 +1,15 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import PriveiwINFT from "./inft_preview";
+import PriveiwINFT from "../inft_preview";
 
-import Network from "../network/router";
-import tools from "../lib/tools";
+import Network from "../../network/router";
+import tools from "../../lib/tools";
 
-import API from "../system/api";
-import TPL from "../system/tpl";
-import Config from "../system/config";
-import Bounty from "../system/bounty";
+import API from "../../system/api";
+import TPL from "../../system/tpl";
+import Config from "../../system/config";
+import Bounty from "../../system/bounty";
 
 import { FaCheck } from "react-icons/fa";
 

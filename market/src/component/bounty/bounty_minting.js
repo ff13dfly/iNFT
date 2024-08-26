@@ -1,8 +1,8 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
-import INFT from "../system/inft";
+import Network from "../../network/router";
+import INFT from "../../system/inft";
 
 /* iNFT minting list
 *   @param  {string}    template           //template cid

@@ -2,11 +2,11 @@ import { Row, Col } from "react-bootstrap";
 
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
-import Config from "../system/config";
-import API from "../system/api";
-import tools from "../lib/tools";
-import Bounty from "../system/bounty";
+import Network from "../../network/router";
+import Config from "../../system/config";
+import API from "../../system/api";
+import tools from "../../lib/tools";
+import Bounty from "../../system/bounty";
 
 import { FaCheck } from "react-icons/fa";
 

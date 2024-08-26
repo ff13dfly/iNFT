@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import BountyApply from "./bounty_apply";
 import BonusProcess from "./bonus_process";
 
-import Network from "../network/router";
-import INFT from "../system/inft";
+import Network from "../../network/router";
+import INFT from "../../system/inft";
 
 /* Bounty Bonus Detail
 *   @param  {object}    raw           //raw bounty data from backend

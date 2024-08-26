@@ -6,7 +6,7 @@ import BountyComment from "./bounty_comment";
 import BountyMinting from "./bounty_minting";
 import BountyBonus from "./bounty_bonus";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
 
 function BountyShow(props) {
