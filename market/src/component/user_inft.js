@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import AccountSelector from "./account_selector";
+import AccountSelector from "./account/account_selector";
 import ListAddress from "./list_address";
 
 import Page from "./common/common_page";

@@ -1,8 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import AccountAdd from "./account_add";
-import AccountList from "./account_list";
+import AccountAdd from "./account/account_add";
+import AccountList from "./account/account_list";
 
 function UserAccount(props) {
   const size = {

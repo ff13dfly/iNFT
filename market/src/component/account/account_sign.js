@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import AccountSelector from "./account_selector";
 
-import Network from "../network/router";
-import Account from "../system/account";
-import Config from "../system/config";
+import Network from "../../network/router";
+import Account from "../../system/account";
+import Config from "../../system/config";
 
 import { FaCheck } from "react-icons/fa";
 

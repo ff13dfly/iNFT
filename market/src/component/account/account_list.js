@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 
 import { FaCopy, FaFileDownload, FaSkullCrossbones, FaPaperPlane } from "react-icons/fa";
 
-import Account from "../system/account";
+import Account from "../../system/account";
+import Config from "../../system/config";
 
-import INDEXED from "../lib/indexed";
-import Copy from "../lib/clipboard";
-import tools from "../lib/tools";
-
-import Config from "../system/config";
+import INDEXED from "../../lib/indexed";
+import Copy from "../../lib/clipboard";
+import tools from "../../lib/tools";
 
 function AccountList(props) {
   const size = {

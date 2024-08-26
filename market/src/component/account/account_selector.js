@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Account from "../system/account";
+import Account from "../../system/account";
 
 function AccountSelector(props) {
   const size = {

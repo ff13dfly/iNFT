@@ -1,9 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
-import Account from "../system/account";
-import tools from "../lib/tools";
+import Network from "../../network/router";
+import Account from "../../system/account";
+import tools from "../../lib/tools";
 
 function AccountLoad(props) {
   const size = {

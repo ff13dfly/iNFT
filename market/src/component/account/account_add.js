@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AccountLoad from "./account_load";
 import AccountGenerate from "./account_generate";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 import { FaRegPlusSquare,FaUpload } from "react-icons/fa";
 

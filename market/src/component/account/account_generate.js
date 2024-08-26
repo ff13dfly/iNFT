@@ -1,11 +1,11 @@
 import { Row, Col, Image, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
+import Network from "../../network/router";
 
-import Account from "../system/account";
-import Config from "../system/config";
-import tools from "../lib/tools";
+import Account from "../../system/account";
+import Config from "../../system/config";
+import tools from "../../lib/tools";
 
 function AccountGenerate(props) {
   const size = {

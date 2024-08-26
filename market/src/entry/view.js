@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 
 import DetailINFT from "../component/inft_detail";
 import MoreINFT from "../component/inft_more";
-import AccountSign from "../component/account_sign";
-//import BountyMinting from "../component/bounty_minting";
+import AccountSign from "../component/account/account_sign";
 import CommentList from "../component/commnet_list";
 import CommentSubmit from "../component/commnet_submit";
 
