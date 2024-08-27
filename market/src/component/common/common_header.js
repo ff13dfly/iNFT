@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import tools from "../../lib/tools";
 import RUNTIME from "../../system/runtime";
@@ -8,41 +8,46 @@ import { FaCog } from "react-icons/fa";
 
 function Header(props) {
 
-  let [login, setLogin]=useState("Login");
+  let [login, setLogin] = useState("Login");
 
-  const navs=[
+  const navs = [
     {
-      name:"market",
+      name: "market",
+      icon:"",
     },
     {
-      name:"bounty",
+      name: "bounty",
+      icon:"",
     },
     {
-      name:"playground",
+      name: "playground",
+      icon:"",
     },
     {
-      name:"blacksmith",
+      name: "blacksmith",
+      icon:"",
     },
     {
-      name:"creativity",
+      name: "creativity",
+      icon:"",
     },
-    {
-      name:"minter",
-    },
-    {
-      name:"editor",
-    },
+    // {
+    //   name:"minter",
+    // },
+    // {
+    //   name:"editor",
+    // },
   ]
 
-  const self={
-    clickLogin:()=>{
-      if(login==="Login"){
-        RUNTIME.auto((addr)=>{
+  const self = {
+    clickLogin: () => {
+      if (login === "Login") {
+        RUNTIME.auto((addr) => {
           console.log(addr);
-          setLogin(tools.shorten(addr,5));
+          setLogin(tools.shorten(addr, 5));
         });
-        
-      }else{
+
+      } else {
         props.link("user");
       }
     },
@@ -50,12 +55,12 @@ function Header(props) {
 
   useEffect(() => {
     //console.log(props);
-    if(props.active==="user" && login==="Login"){
+    if (props.active === "user" && login === "Login") {
       setLogin("Checking...");
-      setTimeout(()=>{
+      setTimeout(() => {
         setLogin("Login");
         self.clickLogin();
-      },1500);
+      }, 1500);
     }
   }, [props.active]);
 
@@ -68,39 +73,21 @@ function Header(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-          {navs.map((row, index) => (
-            <Nav.Link key={index} onClick={(ev) => { props.link(row.name) }} >
-              <h5 className={props.active === row.name? "text-warning" : ""}>{tools.toUp(row.name)}</h5>
-            </Nav.Link>
-          ))}
-            {/* <Nav.Link onClick={(ev) => { props.link("market") }} >
-              <h5 className={props.active === "market" ? "text-warning" : ""}>Market</h5>
-            </Nav.Link>
-            <Nav.Link onClick={(ev) => { props.link("bounty") }} >
-              <h5 className={props.active === "bounty" ? "text-warning" : ""}>Bounty</h5>
-            </Nav.Link>
-            <Nav.Link onClick={(ev) => { props.link("explorer") }}>
-              <h5 className={props.active === "explorer" ? "text-warning" : ""}>Explorer</h5>
-            </Nav.Link>
-            <Nav.Link onClick={(ev) => { props.link("playground") }}>
-              <h5 className={props.active === "playground" ? "text-warning" : ""}>Playground</h5>
-            </Nav.Link>
-            <Nav.Link onClick={(ev) => { props.link("minter") }}>
-              <h5 className={props.active === "minter" ? "text-warning" : ""}>Minter</h5>
-            </Nav.Link>
-            <Nav.Link onClick={(ev) => { props.link("editor") }}>
-              <h5 className={props.active === "editor" ? "text-warning" : ""}>Editor</h5>
-            </Nav.Link> */}
+            {navs.map((row, index) => (
+              <Nav.Link key={index} onClick={(ev) => { props.link(row.name) }} >
+                <h5 className={props.active === row.name ? "text-warning" : ""}>{tools.toUp(row.name)}</h5>
+              </Nav.Link>
+            ))}
           </Nav>
         </Navbar.Collapse>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-              <button className={props.active==="user"?"btn btn-md btn-default text-info":"btn btn-md btn-default"} onClick={(ev) => { 
-                self.clickLogin();
-              }}>{login}</button>
+            <button className={props.active === "user" ? "btn btn-md btn-default text-info" : "btn btn-md btn-default"} onClick={(ev) => {
+              self.clickLogin();
+            }}>{login}</button>
             <span className="ml-5 text-secondary">|</span>
-            <span className={props.active==="setting"?"pointer text-warning":"pointer"} onClick={(ev) => { 
+            <span className={props.active === "setting" ? "pointer text-warning" : "pointer"} onClick={(ev) => {
               props.link("setting");
             }}>
               <FaCog className="ml-5" size={16} />
