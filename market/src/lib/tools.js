@@ -62,6 +62,7 @@ const self = {
     return hexString;
   },
   decode:(alink)=>{
+    if(typeof(alink)!=="string") return false;
     const str=alink.replace("anchor://","");
     const arr=str.split("/");
     const block=parseInt(arr.pop());

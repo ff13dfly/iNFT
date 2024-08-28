@@ -50,21 +50,20 @@ function BountyShow(props) {
 
     getQrURL:(dt)=>{
       const base="https://inft.w3os.net/bounty";
-      if(dt.alink) return `${base}/${dt.alink.replace("anchor://","")}`;
+      if(dt.alink!==undefined) return `${base}/${dt.alink.replace("anchor://","")}`;
       return base;
     },
 
     getTemplateCID:()=>{
-      console.log();
       if(props.template && props.template.cid) return props.template.cid;
       return "";
     },
     getBountyAlink:()=>{
-      if(props.data && props.data.name && props.data.block)return `anchor://${props.data.name}/${props.data.block}`;
+      if(props.data && props.data.alink)return props.data.alink;
       return false;
     },
     getPeriod:()=>{
-      return "";
+      return `~`;
     },
     getTitle:()=>{
 
@@ -121,7 +120,7 @@ function BountyShow(props) {
           </Card.Body>
         </Card>
         <h6 className="pt-1">{self.getBountyAlink()}</h6>
-        <p>
+        <p className="pt-1">
           <FaClock /> {self.getPeriod()}<br />
           <FaPizzaSlice />{(<span className="pointer ml-5" onClick={(ev) => { props.link("playground", [self.getTemplateCID()]) }}>
               {tools.shorten(self.getTemplateCID(), 15)}

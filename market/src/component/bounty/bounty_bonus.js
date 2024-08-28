@@ -69,10 +69,10 @@ function BountyBonus(props) {
       const alinks=[],anks=[];
       for(let i=0;i<list.length;i++){
         const row=list[i];
-        alinks.push(row.link);
-        if(row.record) anks.push(row.record);
-        if(row.judge) anks.push(row.judge);
-        if(row.distribute) anks.push(row.distribute);
+        if(typeof(row.link)==="string")alinks.push(row.link);
+        if(row.record && typeof(row.record)==="string") anks.push(row.record);
+        if(row.judge && typeof(row.judge)==="string") anks.push(row.judge);
+        if(row.distribute && typeof(row.distribute)==="string") anks.push(row.distribute);
       }
 
       //2.get all iNFT datas
@@ -93,7 +93,6 @@ function BountyBonus(props) {
       });
     },
     decodeProgress:(aps,bonus)=>{
-      //console.log(JSON.stringify(bonus))
       const map={}
       const rmap={};
       for(let i=0;i<aps.length;i++){
@@ -122,7 +121,6 @@ function BountyBonus(props) {
       self.getFullData(apples,(map)=>{
         const arr=[];
         for(let i=0;i<apples.length;i++){
-          //regroup data by anchor data
           const single=apples[i];
           if(map[single.link]!==undefined) single.link=map[single.link];
           if(map[single.record]!==undefined) single.record=map[single.record];
@@ -139,8 +137,8 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    console.log(props.template);
-    
+    //console.log(props.template);
+
     setData(props.template);
     if(props.raw && props.raw.alink){
       const dt=props.raw;

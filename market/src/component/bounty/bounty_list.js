@@ -31,7 +31,6 @@ function BountyList(props) {
       if(!bts) bts=[];
       if(list.length===0) return ck && ck(bts);
       const row=list.pop();
-      const tp=row.template;
       const anchor=tools.decode(row.alink);
 
       const chain=Network("anchor");
@@ -58,7 +57,6 @@ function BountyList(props) {
       API.bounty.list((res)=>{
         if(res && res.success && res.data){
           self.prepareData(res.data,(bts)=>{
-            console.log(bts)
             setList(bts);
             setReady(true);
           });

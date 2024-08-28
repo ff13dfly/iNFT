@@ -34,7 +34,6 @@ function BonusProcess(props) {
     },
     clickDivert:(name,addr,index)=>{
       console.log(name,addr,index);
-      //console.log(props,name,addr,password);
       const chain=Network("anchor");
       const ak=tools.decode(props.data.alink);
 
@@ -135,7 +134,6 @@ function BonusProcess(props) {
   }
 
   useEffect(() => {
-    console.log(props.data);
     Account.map((res)=>{
       self.applyList(props.data.apply, props.index);
     });

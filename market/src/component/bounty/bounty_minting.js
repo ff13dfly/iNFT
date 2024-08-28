@@ -22,7 +22,6 @@ function BountyMinting(props) {
 
   const self = {
     filterINFTs: (arr, cid) => {
-      //console.log(cid);
       const full = [];
       const limit=!props.amount?4:props.amount
       for (let i = 0; i < arr.length; i++) {
