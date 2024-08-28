@@ -10,6 +10,9 @@ import BountyMinting from "./bounty_minting";
 import TPL from "../../system/tpl";
 import API from "../../system/api";
 
+import tools from "../../lib/tools";
+import Network from "../../network/router";
+
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 function BountyPreview(props) {
@@ -66,26 +69,26 @@ function BountyPreview(props) {
 
     autoCache: (ck) => {
       const alink = self.getAlink();
-      API.bounty.view(alink, (res) => {
-        //console.log(res);
-        if (!res.success || !res.data) return ck && ck(false);
 
-        setRaw(res.data);
+      const chain=Network("anchor");
+      chain.view(tools.decode(alink),"anchor",(res)=>{
 
-        //1.bounty detail
-        const bs=res.data.detail.bonus;
-        //console.log(bs);
+        
+
+        const bs=res.raw.bonus;
         const n = self.calcTotal(bs);
         setTotal(n.toLocaleString());
 
-        setCoin(res.data.coin);   //set the bonus coin symbol
-        setStart(parseInt(res.data.start));
-        setEnd(parseInt(res.data.end));
+        setCoin(res.raw.coin);
 
-        setDesc(res.data.detail.desc);
+        API.bounty.view(alink, (dt) => {
+          const bounty=dt.data;
+          bounty.orgin=res;
+          setRaw(bounty);
+        });
 
-        //2.template cache;
-        TPL.view(res.data.template.cid, (dt) => {
+        const cid=res.raw.template.cid;
+        TPL.view(cid,(dt)=>{
           setData(dt);
           return ck && ck(true);
         });
@@ -93,14 +96,14 @@ function BountyPreview(props) {
     },
 
     getBountyURL: () => {
-      const base = "https://inft.w3os.net/bounty";
+      const base = `${window.location.origin}/bounty`;
       if (props.data && props.data.anchor && props.data.block) return `${base}/${props.data.anchor}/${props.data.block}`;
       return base;
     },
   }
 
   useEffect(() => {
-    console.log(props.data);
+    //console.log(self.getBountyURL())
     self.autoCache(() => {
 
     });

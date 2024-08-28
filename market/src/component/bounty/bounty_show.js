@@ -26,7 +26,7 @@ function BountyShow(props) {
   let [total, setTotal] = useState(0);
 
   let [qr, setQR] = useState(false);
-  let [qrURL, setQrURL] = useState("");
+  let [qrURL, setQrURL] = useState(window.location.origin);
 
   const self = {
     clickQR:()=>{
@@ -48,10 +48,8 @@ function BountyShow(props) {
       return props.template && props.template.raw ? props.template.raw.image : `${window.location.origin}/imgs/logo.png`
     },
 
-    getQrURL:(dt)=>{
-      const base="https://inft.w3os.net/bounty";
-      if(dt.alink!==undefined) return `${base}/${dt.alink.replace("anchor://","")}`;
-      return base;
+    getQrURL:(alink)=>{
+      return `${window.location.origin}/bounty/${alink.replace("anchor://","")}`;
     },
 
     getTemplateCID:()=>{
@@ -75,10 +73,11 @@ function BountyShow(props) {
 
   useEffect(() => {
     //in order to avoid fake list show
+    console.log(props.data);
     if(props.data && props.data.alink){
       setReady(false);
       const raw = props.data.orgin.raw;
-      setQrURL(self.getQrURL(raw));
+      setQrURL(self.getQrURL(props.data.alink));
       setReady(true);
       if (raw.bonus) {
         setTotal(self.calcBonus(raw.bonus));
@@ -104,14 +103,14 @@ function BountyShow(props) {
               fgColor={"#000000"}
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={"https://inft.w3os.net/market/bounty_reglrwnf/146805"} 
+              value={qrURL} 
               />
           </div>
           <div className="template_thumb pointer" style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
-            props.link("bounty", [props.data.name, props.data.block]);
+            props.link("bounty", [props.data.orgin.name, props.data.orgin.block]);
           }}></div>
           <Card.Body className="pointer" onClick={(ev) => {
-            props.link("bounty", [props.data.name, props.data.block]);
+            props.link("bounty", [props.data.orgin.name, props.data.orgin.block]);
           }}>
             <Card.Title>{self.getTitle()}</Card.Title>
             <Card.Text>

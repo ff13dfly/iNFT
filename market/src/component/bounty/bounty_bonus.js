@@ -137,11 +137,12 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    //console.log(props.template);
+    //console.log(props.raw);
 
     setData(props.template);
     if(props.raw && props.raw.alink){
       const dt=props.raw;
+      //console.log(dt)
 
       self.freshProgress(dt.apply,dt.detail.bonus);
 

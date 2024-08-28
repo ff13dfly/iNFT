@@ -163,6 +163,10 @@ code {
   font-weight: 500;
 }
 
+.border_bottom{
+  border-bottom:1px solid #FFFFFF;
+}
+
 .playground_title{
   border-left: 5px solid #988080;
   padding-left: 5px;

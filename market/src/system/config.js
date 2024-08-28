@@ -34,7 +34,8 @@ const config={
                 rpc:"rpc=",
                 query:"explorer/query/",
             },
-        ]
+        ],
+        minter:"",
     },
     bounty:{
         approver:{                  //accounts to accept bounty coins
