@@ -9,7 +9,7 @@ import tools from "../../lib/tools";
 import INFT from "../../system/inft";
 
 /* Bounty Bonus Detail
-*   @param  {object}    raw           //raw bounty data from backend
+*   @param  {object}    raw           //raw bounty on chain
 *   @param  {object}    template      //template data
 */
 
@@ -139,15 +139,16 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    //console.log(props.template);
+    console.log(props.template);
+    
     setData(props.template);
     if(props.raw && props.raw.alink){
-
       const dt=props.raw;
+
       self.freshProgress(dt.apply,dt.detail.bonus);
-      //setBounty(dt.alink);
+
       setCoin(dt.coin);
-      setList(dt.detail.bonus);
+      setList(dt.orgin.raw.bonus);
     }
   }, [props.raw,props.template]);
 

@@ -18,6 +18,7 @@ foreach($arr as $k=>$v){
     $arr[$k]['detail']=json_decode(htmlspecialchars_decode($v["detail"]),true);
     $arr[$k]['template']=json_decode(htmlspecialchars_decode($v["template"]),true);
     $arr[$k]['apply']=json_decode(htmlspecialchars_decode($v["apply"]),true);
+    unset($arr[$k]["id"]);
 }
 
 $result['data']=$arr;

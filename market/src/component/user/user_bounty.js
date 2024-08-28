@@ -168,7 +168,7 @@ function UserBounty(props) {
                   <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickRemove(row.name);
                   }}>
-                    <FaSkullCrossbones size={20} />
+                    <FaSkullCrossbones className="text-warning" size={20} />
                   </button>
 
                   {/* <button className="btn btn-sm btn-default" onClick={(ev) => {

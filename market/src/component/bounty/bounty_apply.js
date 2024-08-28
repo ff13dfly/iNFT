@@ -131,12 +131,9 @@ function BountyApply(props) {
       chain.view({ name: name }, "anchor", ck);
     },
     showBonus: (data, index) => {
-      const target = data.detail.bonus[index];
-      //console.log(target);
+      const target = data.orgin.raw.bonus[index];
       TPL.view(data.template.cid, (res) => {
-        //console.log(res);
         const dt = res.series[target.series];
-        //console.log(dt)
         setThumb(dt.thumb[0]);
       });
     },

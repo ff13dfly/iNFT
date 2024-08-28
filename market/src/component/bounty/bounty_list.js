@@ -6,6 +6,7 @@ import BountyShow from "./bounty_show";
 import API from "../../system/api";
 import TPL from "../../system/tpl";
 import tools from "../../lib/tools";
+import Network from "../../network/router";
 
 function BountyList(props) {
   const size = {
@@ -13,6 +14,7 @@ function BountyList(props) {
     grid: [3, 4, 5],
   };
 
+  //TODO, need to page the bounties and add page component.
   let [page, setPage] = useState(1);
   let [list, setList] = useState([]);
   let [ready, setReady] = useState(false);
@@ -31,13 +33,20 @@ function BountyList(props) {
       const row=list.pop();
       const tp=row.template;
       const anchor=tools.decode(row.alink);
-      row.name=anchor.name;
-      row.block=anchor.block;
-      TPL.view(tp.cid,(dt)=>{
-        row.template.raw=dt;
-        bts.push(row);
-        return self.prepareData(list,ck,bts);
-      })
+
+      const chain=Network("anchor");
+      chain.view(anchor,"anchor",(res)=>{
+        if(res===false) return self.prepareData(list,ck,bts);
+        if(!res.raw || !res.raw.template || !res.raw.template.cid) return self.prepareData(list,ck,bts);
+        const cid=res.raw.template.cid;
+        TPL.view(cid,(dt)=>{
+          row.template=res.raw.template;
+          row.template.raw=dt;
+          row.orgin=res;
+          bts.push(row);
+          return self.prepareData(list,ck,bts);
+        });
+      });
     },
   }
 
@@ -49,6 +58,7 @@ function BountyList(props) {
       API.bounty.list((res)=>{
         if(res && res.success && res.data){
           self.prepareData(res.data,(bts)=>{
+            console.log(bts)
             setList(bts);
             setReady(true);
           });
@@ -61,7 +71,12 @@ function BountyList(props) {
     <Row>
       {list.map((row, index) => (
         <Col className="justify-content-around pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-          <BountyShow data={row} link={props.link} dialog={props.dialog}/>
+          <BountyShow 
+            data={row}
+            template={row.template}
+            link={props.link} 
+            dialog={props.dialog}
+          />
         </Col>
       ))}
       <Col hidden={ready} className="justify-content-around pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >

@@ -64,8 +64,8 @@ function BonusProcess(props) {
       setPassword(tools.clone(password));
     },
     getTarget: () => {
-      if (props.data.detail && props.data.detail.bonus) {
-        const bs = props.data.detail.bonus;
+      if (props.data.orgin && props.data.orgin.raw && props.data.orgin.raw.bonus) {
+        const bs = props.data.orgin.raw.bonus;
         const target = bs[props.index];
         const ss = props.template.series;
         const series = ss[target.series];
@@ -135,8 +135,8 @@ function BonusProcess(props) {
   }
 
   useEffect(() => {
+    console.log(props.data);
     Account.map((res)=>{
-      //console.log(props.data.apply);
       self.applyList(props.data.apply, props.index);
     });
   }, [props.index]);
@@ -151,13 +151,13 @@ function BonusProcess(props) {
       <Col md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <strong>{props.data.detail.desc}</strong>
+            <strong>{props.data.orgin.raw.desc}</strong>
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            Bonus #{props.index}: template series {props.data.detail.bonus[props.index].series}
+            Bonus #{props.index}: template series {props.data.orgin.raw.bonus[props.index].series}
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            Progress: {props.data.detail.bonus[props.index].amount} wanted, {list.length} submission
+            Progress: {props.data.orgin.raw.bonus[props.index].amount} wanted, {list.length} submission
           </Col>
           <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <button className="btn btn-md btn-primary" onClick={(ev) => {

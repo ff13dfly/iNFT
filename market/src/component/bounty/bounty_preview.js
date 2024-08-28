@@ -100,6 +100,7 @@ function BountyPreview(props) {
   }
 
   useEffect(() => {
+    console.log(props.data);
     self.autoCache(() => {
 
     });
