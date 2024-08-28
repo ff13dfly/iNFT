@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import API from "../../system/api";
 import Bounty from "../../system/bounty";
@@ -7,13 +7,11 @@ import Network from "../../network/router";
 
 import tools from "../../lib/tools";
 
-
 /* Template creator basic setting
 *   @param  {function}    callback        //callback to 
 */
 
 function BountyLoad(props) {
-
   const size = {
     row: [12],
     right:[8,4]
@@ -28,47 +26,44 @@ function BountyLoad(props) {
     },
     clickLoad:()=>{
       setInfo("");
+      if(!bounty) return setInfo("Please input the bounty alink");
+      
       const chain=Network("anchor");
       const ank=tools.decode(bounty);
-      //console.log(ank);
+
+      if(ank===false) return setInfo("Invalid bounty alink");
+
       chain.view(ank,"anchor",(data)=>{
         setBounty("");        //clean the bounty alink to avoid multi insert
+        //1. no target anchor data
         if(data===false) {
           return setInfo("No such bounty");
         }
 
-        Bounty.exsist(bounty,(exsist)=>{
-          if(exsist) return setInfo("Already launched.");
+        //2. not a bounty anchor
+        if(data.protocol.tpl!=="bounty") return setInfo("Invalid bounty anchor protocol");
 
-          const more=data.raw;
-          const row=Bounty.format.local(bounty,data.owner,more);
-          console.log(row);
-          Bounty.insert(row,(res)=>{
-            if(res===true && props.callback) props.callback(bounty);
+        //3. check wether registered
+        API.bounty.view(bounty,(res)=>{
+
+          //4. save to local indexedDB
+          Bounty.exsist(bounty,(exsist)=>{
+            if(exsist) return setInfo("Already launched.");
+            const more=data.raw;
+            const row=Bounty.format.local(bounty,data.owner,more);
+
+            //4.1. add register status;
+            row.register=res.success?true:false;
+
+            Bounty.insert(row,(res)=>{
+              //5. callback to fresh bounty list
+              if(res===true && props.callback) props.callback(bounty);
+            });
           });
         });
       });
-      
-      // API.bounty.view(bounty,(res)=>{
-      //   console.log(res);
-      //   if(!res.success){
-      //     return setInfo("No target bounty.");
-      //   }
-        
-      //   setBounty("");
-        
-      //   const chain=Network("anchor");
-      //   const name=self.getName(res.data.alink);
-      //   chain.view(name,"owner",(dt)=>{
-      //     const data=Bounty.convert(res.data,dt.address);
-      //     console.log(data);
-      //   });
-      // });
     }
   }
-  useEffect(() => {
-
-  }, []);
 
   return (
       <Row className="pt-2">
