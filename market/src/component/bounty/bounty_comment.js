@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Config from "../../system/config";
 import API from "../../system/api";
 
+import tools from "../../lib/tools";
+
 /* iNFT comment list
 *   @param  {string}    bounty           //bounty alink
 */
@@ -19,15 +21,8 @@ function BountyComment(props) {
 
   const self = {
     clickMore:()=>{
-      const bt=self.decode(props.bounty);
+      const bt=tools.decode(props.bounty);
       props.link("bounty", [bt.name, bt.block]);
-    },
-    decode:(alink)=>{
-      const str=alink.replace("anchor://","");
-      const arr=str.split("/");
-      const block=parseInt(arr.pop());
-      if(isNaN(block)) return false;
-      return {name:arr.join("/"),block:block};
     },
     getAvatar: (address) => {
       const cfg = Config.get(["system", "avatar"]);

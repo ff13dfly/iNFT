@@ -1,4 +1,4 @@
-import { Container,Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import API from "../../system/api";
@@ -20,21 +20,24 @@ function BountyLoad(props) {
       setBounty(ev.target.value);
     },
     clickLoad:()=>{
-      API.bounty.view(bounty,(res)=>{
-        console.log(res);
-        if(!res.success){
-          return setInfo("No target bounty.");
-        }
+      const chain=Network("anchor");
+      const ank=self.getName(bounty);
+      console.log(ank);
+      // API.bounty.view(bounty,(res)=>{
+      //   console.log(res);
+      //   if(!res.success){
+      //     return setInfo("No target bounty.");
+      //   }
         
-        setBounty("");
+      //   setBounty("");
         
-        const chain=Network("anchor");
-        const name=self.getName(res.data.alink);
-        chain.view(name,"owner",(dt)=>{
-          const data=Bounty.convert(res.data,dt.address);
-          console.log(data);
-        });
-      });
+      //   const chain=Network("anchor");
+      //   const name=self.getName(res.data.alink);
+      //   chain.view(name,"owner",(dt)=>{
+      //     const data=Bounty.convert(res.data,dt.address);
+      //     console.log(data);
+      //   });
+      // });
     },
     getName:(alink)=>{
       const arr=alink.slice(9).split("/");

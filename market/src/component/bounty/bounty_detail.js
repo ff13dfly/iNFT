@@ -32,15 +32,8 @@ function BountyDetail(props) {
       }
       setList(nlist);
     },
-    decode:(alink)=>{
-      const str=alink.replace("anchor://","");
-      const arr=str.split("/");
-      const block=parseInt(arr.pop());
-      if(isNaN(block)) return false;
-      return {name:arr.join("/"),block:block};
-    },
     fresh: (alink) => {
-      const dt=self.decode(alink);
+      const dt=tools.decode(alink);
       if (dt) Network("anchor").view(dt, "anchor", (res) => {
         //1.list bonus and calc total
         self.selected(res.raw.bonus,res.raw.coin);

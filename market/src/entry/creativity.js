@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useState } from "react";
 
 import CreativityBasic from "../component/creativity/creativity_basic"
+import CreativityMock from "../component/creativity/creativity_mock";
 
 function Creativity(props) {
     const size = {
@@ -19,6 +20,7 @@ function Creativity(props) {
             </Col>
             <Col md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
                 Operation here.
+                <CreativityMock />
             </Col>
         </Row>
     )

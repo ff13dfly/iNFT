@@ -73,13 +73,6 @@ function BountyPay(props) {
         });
       }
     },
-    decode: (alink) => {
-      const str = alink.replace("anchor://", "");
-      const arr = str.split("/");
-      const block = parseInt(arr.pop());
-      if (isNaN(block)) return false;
-      return { name: arr.join("/"), block: block };
-    },
     getBounty: (val, ck) => {
       const chain = Network("anchor");      //bounty data is base on Anchor Network
       chain.view(val, "anchor", (res) => {
@@ -102,7 +95,7 @@ function BountyPay(props) {
       return n;
     },
     autoSet: (alink) => {
-      const bounty = self.decode(alink);
+      const bounty = tools.decode(alink);
       //1.get raw bounty data from anchor network
       if (bounty) {
         self.getBounty(bounty, (data) => {

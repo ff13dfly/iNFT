@@ -61,6 +61,13 @@ const self = {
     if (hexString.length > len) return false
     return hexString;
   },
+  decode:(alink)=>{
+    const str=alink.replace("anchor://","");
+    const arr=str.split("/");
+    const block=parseInt(arr.pop());
+    if(isNaN(block)) return false;
+    return {name:arr.join("/"),block:block};
+  },
   download: (filename, text, type) => {
     var element = document.createElement("a");
 

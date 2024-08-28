@@ -5,6 +5,7 @@ import BountyApply from "./bounty_apply";
 import BonusProcess from "./bonus_process";
 
 import Network from "../../network/router";
+import tools from "../../lib/tools";
 import INFT from "../../system/inft";
 
 /* Bounty Bonus Detail
@@ -40,18 +41,11 @@ function BountyBonus(props) {
       const all = props.template.series[index];
       return all.thumb[0];
     },
-    decode:(alink)=>{
-      const str=alink.replace("anchor://","");
-      const arr=str.split("/");
-      const block=parseInt(arr.pop());
-      if(isNaN(block)) return false;
-      return {name:arr.join("/"),block:block};
-    },
     decodeAlinks:(list)=>{
       const arr=[];
       for(let i=0;i<list.length;i++){
         const row=list[i];
-        arr.push(self.decode(row));
+        arr.push(tools.decode(row));
       }
       return arr;
     },

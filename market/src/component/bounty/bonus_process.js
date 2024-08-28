@@ -36,8 +36,8 @@ function BonusProcess(props) {
       console.log(name,addr,index);
       //console.log(props,name,addr,password);
       const chain=Network("anchor");
-      const ak=self.decode(props.data.alink);
-      //console.log(ak);
+      const ak=tools.decode(props.data.alink);
+
       chain.view(ak,"anchor",(dt)=>{
         //FIXME, need to get the consignee from bounty raw data
         const target="5DLgD2J6R7QRo8CuZRnT7ZiYmwUTLz2jmhUPc1Jd44LLrd9X";
@@ -62,13 +62,6 @@ function BonusProcess(props) {
     changePassword:(ev,name)=>{
       password[name]=ev.target.value;
       setPassword(tools.clone(password));
-    },
-    decode:(alink)=>{
-      const str=alink.replace("anchor://","");
-      const arr=str.split("/");
-      const block=parseInt(arr.pop());
-      if(isNaN(block)) return false;
-      return {name:arr.join("/"),block:block};
     },
     getTarget: () => {
       if (props.data.detail && props.data.detail.bonus) {
@@ -115,7 +108,7 @@ function BonusProcess(props) {
           arr.push(atom);
         }
       }
-      console.log(arr);
+      //console.log(arr);
       setList(arr.reverse());
 
       //2.filter out the winners;
@@ -143,7 +136,7 @@ function BonusProcess(props) {
 
   useEffect(() => {
     Account.map((res)=>{
-      console.log(props.data.apply);
+      //console.log(props.data.apply);
       self.applyList(props.data.apply, props.index);
     });
   }, [props.index]);
