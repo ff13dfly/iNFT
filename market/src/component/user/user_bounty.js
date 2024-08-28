@@ -121,7 +121,7 @@ function UserBounty(props) {
               <th>Alink</th>
               <th>Manage</th>
               <th>Loaded</th>
-              <th>Operation</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -171,11 +171,11 @@ function UserBounty(props) {
                     <FaSkullCrossbones size={20} />
                   </button>
 
-                  <button className="btn btn-sm btn-default" onClick={(ev) => {
+                  {/* <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickSync(row.name);
                   }}>
                     <FaSyncAlt size={20} />
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}

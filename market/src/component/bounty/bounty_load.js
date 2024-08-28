@@ -34,6 +34,8 @@ function BountyLoad(props) {
       if(ank===false) return setInfo("Invalid bounty alink");
 
       chain.view(ank,"anchor",(data)=>{
+        console.log(data);
+
         setBounty("");        //clean the bounty alink to avoid multi insert
         //1. no target anchor data
         if(data===false) {

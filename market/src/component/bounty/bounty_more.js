@@ -31,31 +31,33 @@ function BountyMore(props) {
   const self = {
     changeTitle: (ev) => {
       setTitle(ev.target.value);
-      self.submit();
+      self.submit("title",ev.target.value);
     },
     changeStart: (ev) => {
       setStart(parseInt(ev.target.value));
-      self.submit();
+      self.submit("start",ev.target.value);
     },
     changeEnd: (ev) => {
       setEnd(parseInt(ev.target.value));
-      self.submit();
+      self.submit("end",ev.target.value);
     },
     changeCoin: (ev) => {
       const val = ev.target.value;
       setCoin(val.toLocaleLowerCase());
-      self.submit();
+      self.submit("coin",ev.target.value);
     },
     changeDesc: (ev) => {
       setDesc(ev.target.value);
-      self.submit();
+      self.submit("desc",ev.target.value);
     },
-    changeAcceptor:(ev)=>{
+    changeConsignee:(ev)=>{
       setConsignee(ev.target.value);
-      self.submit();
+      self.submit("consignee",ev.target.value);
     },
-    submit:()=>{
-      if(props.callback) props.callback(self.getMoreData());
+    submit:(key,val)=>{
+      const dt=self.getMoreData();
+      dt[key]=val;      //get the value before status updated.
+      if(props.callback) props.callback(dt);
     },
     getMoreData: () => {
       return {
@@ -139,7 +141,7 @@ function BountyMore(props) {
       <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>The account address to accept the bonus iNFT result.</small>
         <input className="form-control" type="text" disabled={disable} placeholder="The account to accept iNFTs." onChange={(ev)=>{
-          self.changeAcceptor(ev);
+          self.changeConsignee(ev);
         }}/>
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
@@ -164,8 +166,6 @@ function BountyMore(props) {
       <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         Current block number: {block.toLocaleString()}, {6}s per block.
       </Col>
-
-      
     </Row>
   );
 }

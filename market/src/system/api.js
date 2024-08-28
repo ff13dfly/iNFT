@@ -136,7 +136,7 @@ const self={
         register:(name,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={name:name};
+                const param={alink:name};
                 funs.request("bounty","register",(res)=>{
                     if(res.success) return ck && ck(res);
                     return ck && ck({error:"Failed to register bounty."});

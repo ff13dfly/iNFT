@@ -86,17 +86,16 @@ function BountySubmit(props) {
       TPL.view(template, (dt) => {
         setData(dt);
         setReady(true);
-        //setModify(false);
       });
     },
-    clickSubmit: () => {
+    clickRegister:()=>{
       const addr = RUNTIME.account.get();
-      const name = Bounty.format.name("submit");
+      if(!addr) return setInfo("No valid account yet.");
 
-      //1.write data on chain
+      //1.write bounty on chain
+      const name = Bounty.format.name("submit");
       const raw = Bounty.format.raw.submit(addr, more);
       const protocol = Bounty.format.protocol.submit();
-
       const dapp = Config.get(["system", "name"]);
       const obj = {
         anchor: name,
@@ -104,52 +103,36 @@ function BountySubmit(props) {
         protocol: protocol,
         dapp: dapp,
       }
-
       const chain = Network("anchor");
       chain.sign(obj, (res) => {
         setInfo(res.msg);
-
-        if (res.status === "Finalized") {
+        if (res.status === "Finalized"){
           setTimeout(() => {
             setInfo("");
           }, 1500);
-          const hash = res.hash;    //get the transaction hash
-
+          //const hash = res.hash;    //get the transaction hash
           chain.view({ name: name }, "anchor", (adata) => {
-            //console.log(JSON.stringify(adata));
-
             if (!adata) return setInfo("Failed to get the bounty anchor data.");
+
+            //2.register the bounty on portal
             const alink = `anchor://${name}/${adata.block}`;
+            API.bounty.register(alink,(portal)=>{
+              if(!portal.success) return setInfo("Failed to regoster on portal.");
 
-            const bt = Bounty.format.local(alink, addr, more);
-            bt.status = Bounty.status("bounty", "LOCAL_SAVED");
-            bt.publish.block = adata.block;
-            bt.publish.hash = hash;
+              //3. save the bounty on local
+              const row=Bounty.format.local(alink,addr,raw);
+              row.register=true;
 
-            //2.save the bounty data to local storage.
-            Bounty.insert(bt, (dt) => {
+              Bounty.insert(row,(res)=>{
 
-              //3.report to iNFT manage system
-              const detail = {
-                bonus: bt.bonus,
-                desc: bt.desc,
-                publish: bt.publish,
-                payer: bt.payer,
-              }
-              API.bounty.submit(alink, bt.coin, bt.start, bt.end, JSON.stringify(bt.template), JSON.stringify(detail), (res) => {
-                if (!res || !res.success) return setInfo("Failed to submit to system");
-
-                //4.update local status
                 setAnchor(alink);
-                Bounty.update.toReported(alink, () => {
-                  props.dialog.close();
-                  return true;
-                });
+                props.dialog.close();
+                return true;
               });
             });
           });
         }
-      }, "subwallet");
+      });
     },
     callbackPay: (status, target, amount) => {
       if (status.error) return setPayInfo(status.error);
@@ -196,6 +179,7 @@ function BountySubmit(props) {
       setBonus(arr);
     },
     callbackMore: (more) => {
+      console.log(more);
       more.template = template;
       more.bonus = bonus;
       setMore(tools.clone(more));
@@ -282,7 +266,8 @@ function BountySubmit(props) {
               </Col>
               <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button disabled={!enableSubmit} className="btn btn-md btn-primary" onClick={(ev) => {
-                  self.clickSubmit();
+                  //self.clickSubmit();
+                  self.clickRegister();
                 }}>Submit</button>
               </Col>
             </Row>
