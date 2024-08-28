@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 *   @param  {string}    hash        //unique hash
 */
 
-function TemplateUnder(props) {
+function TemplateList(props) {
   const size = {
     row: [12],
   };
@@ -22,13 +22,13 @@ function TemplateUnder(props) {
   }, []);
 
   return (
-    <div style={{marginTop:"400px"}}>
       <Row>
-        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          Mocker float on bottom
+        {list.map((row, index) => (
+        <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          {JSON.stringify(row)}
         </Col>
+      ))}
       </Row>
-    </div>
   );
 }
-export default TemplateUnder;
+export default TemplateList;

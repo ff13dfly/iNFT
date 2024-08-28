@@ -1,6 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import TemplateList from "./template_list";
+
+import tools from "../../lib/tools";
+
 /* Template creator basic setting
 *   @param  {string}    uuid        //unique name
 */
@@ -15,7 +19,7 @@ function CreativityNav(props) {
     {
       title: "Templates",
       operation: "template operation component",
-      under: "a",
+      under:<TemplateList />,
     },
     {
       title: "Image",
@@ -39,11 +43,12 @@ function CreativityNav(props) {
     },
   ]
 
-  let [current, setCurrent] = useState(0);
+  let [show, setShow] = useState({0:true});
 
   const self = {
     router: (order) => {
-      setCurrent(order);
+      show[order]=!show[order]?true:(!show[order]);
+      setShow(tools.clone(show));
     },
   }
 
@@ -65,7 +70,7 @@ function CreativityNav(props) {
               }}>
               <h6>{row.title}</h6>  
             </Col>
-            <Col hidden={index!==current} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col hidden={show[index]?false:true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               {row.under}
             </Col>
           </Row>
