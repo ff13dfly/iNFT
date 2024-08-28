@@ -94,6 +94,8 @@ function BountySubmit(props) {
 
       //1.write bounty on chain
       const name = Bounty.format.name("submit");
+
+      more.bonus = bonus;   //update bonus detail
       const raw = Bounty.format.raw.submit(addr, more);
       const protocol = Bounty.format.protocol.submit();
       const dapp = Config.get(["system", "name"]);
@@ -181,7 +183,6 @@ function BountySubmit(props) {
     callbackMore: (more) => {
       console.log(more);
       more.template = template;
-      more.bonus = bonus;
       setMore(tools.clone(more));
     },
     load: (bt) => {
@@ -257,7 +258,7 @@ function BountySubmit(props) {
                 }} />
               </Col>
               <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget data={data} link={anchor} callback={(dt) => {
+                <BountyTarget template={data} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>

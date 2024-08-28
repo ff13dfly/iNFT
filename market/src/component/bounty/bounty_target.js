@@ -5,6 +5,12 @@ import { FaSkullCrossbones } from "react-icons/fa";
 import tools from "../../lib/tools";
 import Bounty from "../../system/bounty";
 
+/* Template creator basic setting
+*   @param  {function}    callback        //ck( BONUS_ARRAY )
+*   @param  {object}      template        //template data
+*   @param  {string}      [linke]         //alink of bounty, when editing, need this one
+*/
+
 function BountyTarget(props) {
   const size = {
     row: [12],
@@ -52,10 +58,10 @@ function BountyTarget(props) {
       if(props.callback) props.callback(data);
     },
     fresh:()=>{
-      if(!props.data || !props.data.series) return false;
+      if(!props.template || !props.template.series) return false;
       const nlist=[];
-      for(let i=0;i<props.data.series.length;i++){
-        const se=props.data.series[i];
+      for(let i=0;i<props.template.series.length;i++){
+        const se=props.template.series[i];
         const row=tools.clone(single);
         row.series=i;
         row.thumb=se.thumb[0];
@@ -66,13 +72,13 @@ function BountyTarget(props) {
       self.update(nlist);
     },
     selected:(bonus)=>{
-      if(!props.data || !props.data.series) return false;
+      if(!props.template || !props.template.series) return false;
 
       const nlist=[];
       for(let i=0;i<bonus.length;i++){
         const row=tools.clone(bonus[i]);
-        //console.log(row,props.data.series);
-        const se=props.data.series[row.series];
+        //console.log(row,props.template.series);
+        const se=props.template.series[row.series];
         row.thumb=se.thumb[0];
         row.name=se.name;
         nlist.push(row);
@@ -91,17 +97,11 @@ function BountyTarget(props) {
         }else{
           self.fresh();
         }
-        // if(dt.length!==0){
-        //   self.selected(dt[0].bonus);
-        //   setModify(false);
-        // }else{
-        //   self.fresh();
-        // }
       });
     }else{
       self.fresh();
     }
-  }, [props.data,props.bonus]);
+  }, [props.template,props.bonus]);
 
   return (
     <Row>
