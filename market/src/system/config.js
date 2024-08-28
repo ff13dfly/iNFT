@@ -33,7 +33,7 @@ const config={
                 domain:"https://polkadot.js.org/apps/",
                 rpc:"rpc=",
                 query:"explorer/query/",
-            }
+            },
         ]
     },
     bounty:{

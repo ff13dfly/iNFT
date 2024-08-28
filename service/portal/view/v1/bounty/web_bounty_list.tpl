@@ -12,7 +12,7 @@
 		</ul>
 
 		<h3>Bounty List
-			<small>Bounty of template mining.</small>
+			<small>Bounty management, accept or refuse apply of bounty.</small>
 		</h3>
 		<div class="row">
 			<div class="col-lg-12">
@@ -26,6 +26,7 @@
 								<tr>
 									<th></th>
 									<th>ID</th>
+									<th>Sync</th>
 									<th>Alink</th>
 									<th>Description</th>
 									<th>Coin</th>
@@ -40,6 +41,10 @@
 								<tr class="text-left">
 									<td><input type="checkbox" class="check_list" value="{%$v.id%}" /></td>
 									<td class="id">{%$v.id%}</td>
+									<td>
+										<button {%if $v.start neq 0 %}disabled{%/if%}
+											class="btn btn-sm btn-primary bounty_sync" data="{%$v.alink%}">Sync</button>
+									</td>
 									<td><a href="?mod=bounty&act=edit&id={%$v.id%}">{%$v.alink%}</a></td>
 									<td>{%$v.detail.desc%}</td>
 									<td>{%$v.coin%}</td>
@@ -69,22 +74,22 @@
 
 <script type="text/javascript">
 	$(".bounty_applied").off("click").on("click", function() {
-		$(this).prop("disabled",true);
+		$(this).prop("disabled", true);
 		const id = parseInt($(this).attr("data"));
 		const param={id:id};
 		const cfg = {mod:'bounty',act:'applied',param:param}
 		FF.fn.ajax(cfg, false, function(dt) {
-			if (dt.success)  location.reload();
+			if (dt.success) location.reload();
 		})
 	});
 
-	$(".bounty_offline").off("click").on("click", function(){
-		$(this).prop("disabled",true);
+	$(".bounty_offline").off("click").on("click", function() {
+		$(this).prop("disabled", true);
 		const id = parseInt($(this).attr("data"));
 		const param={id:id};
 		const cfg = {mod:'bounty',act:'offline',param:param}
 		FF.fn.ajax(cfg, false, function(dt) {
-			if (dt.success)  location.reload();
+			if (dt.success) location.reload();
 		})
 	});
 </script>

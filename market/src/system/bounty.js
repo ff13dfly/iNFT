@@ -77,6 +77,12 @@ const self = {
             });
         });
     },
+    exsist:(name,ck)=>{
+        self.get(name,(res)=>{
+            if(res.error) return ck && ck(false);
+            return ck && ck(true);
+        });
+    },
     list: (ck,filter,page,step) => {
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
@@ -133,40 +139,23 @@ const self = {
         return process[cat][key];
     },
     format:{
-        local:(alink,addr,more)=>{
-            return {
-                name: alink,
-                title: more.title,
-                desc: more.desc,
-                publish:{
-                  network:"anchor",
-                  address:addr, 
-                  block:0,              //anchor block
-                  hash:"",              //setAnchor transaction hash
-                },
-                template:{
-                  cid:more.template,
-                  orgin:"web3.storage",
-                },
-                payment: "",            //payment alink
-                bonus: more.bonus,
-                start: more.start,
-                end: more.end,
-                coin: more.coin,
-                status: 1, 
-                stamp:tools.stamp(),    
-              }
+        local:(alink,addr,more)=>{      //more is the same as {format.raw.submit}
+            const dt=tools.clone(more);
+            dt.name=alink;
+            dt.publisher=addr;
+            dt.stamp=tools.stamp();
+            return dt;
         },
         name:(type)=>{
             if(!prefix[type]) return false;
             return `${prefix[type]}${tools.char(8).toLocaleLowerCase()}`;
         },
         raw:{
-            submit:(addr,more)=>{
+            submit:(publisher,more)=>{
                 return {
                     title: more.title,
                     desc: more.desc,
-                    publisher: addr,
+                    publisher: publisher,       //address or something else.            
                     coin: more.coin,
                     template: {
                       cid: more.template,

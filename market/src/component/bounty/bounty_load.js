@@ -5,6 +5,13 @@ import API from "../../system/api";
 import Bounty from "../../system/bounty";
 import Network from "../../network/router";
 
+import tools from "../../lib/tools";
+
+
+/* Template creator basic setting
+*   @param  {function}    callback        //callback to 
+*/
+
 function BountyLoad(props) {
 
   const size = {
@@ -20,9 +27,28 @@ function BountyLoad(props) {
       setBounty(ev.target.value);
     },
     clickLoad:()=>{
+      setInfo("");
       const chain=Network("anchor");
-      const ank=self.getName(bounty);
-      console.log(ank);
+      const ank=tools.decode(bounty);
+      //console.log(ank);
+      chain.view(ank,"anchor",(data)=>{
+        setBounty("");        //clean the bounty alink to avoid multi insert
+        if(data===false) {
+          return setInfo("No such bounty");
+        }
+
+        Bounty.exsist(bounty,(exsist)=>{
+          if(exsist) return setInfo("Already launched.");
+
+          const more=data.raw;
+          const row=Bounty.format.local(bounty,data.owner,more);
+          console.log(row);
+          Bounty.insert(row,(res)=>{
+            if(res===true && props.callback) props.callback(bounty);
+          });
+        });
+      });
+      
       // API.bounty.view(bounty,(res)=>{
       //   console.log(res);
       //   if(!res.success){
@@ -38,12 +64,7 @@ function BountyLoad(props) {
       //     console.log(data);
       //   });
       // });
-    },
-    getName:(alink)=>{
-      const arr=alink.slice(9).split("/");
-      arr.pop();
-      return arr.join("/");
-    },
+    }
   }
   useEffect(() => {
 

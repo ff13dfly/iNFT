@@ -12,7 +12,7 @@ import TPL from "../../system/tpl";
 
 import INDEXED from "../../lib/indexed";
 
-import { FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
+import { FaCopy,FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -102,11 +102,13 @@ function UserBounty(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <BountyLoad fresh={""} />
+        <BountyLoad fresh={""} callback={(alink)=>{
+          self.fresh();
+        }} />
       </Col>
 
       <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <h5>Bounty List</h5>
+        <h5>Fav Bounty List</h5>
       </Col>
 
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
@@ -115,12 +117,10 @@ function UserBounty(props) {
             <tr>
               <th></th>
               <th>Title</th>
-              <th>Coin</th>
+              <th>Prize</th>
               <th>Alink</th>
-              <th>Process</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Created</th>
+              <th>Manage</th>
+              <th>Loaded</th>
               <th>Operation</th>
             </tr>
           </thead>
@@ -129,18 +129,7 @@ function UserBounty(props) {
               <tr key={index}>
                 <td>
                   <a href={`http://localhost:3000/playground/${row.template.cid}`} target="_blank" rel="noreferrer">
-                  <img className="template_icon" src={row.thumb} alt="template thumb" />
-                  </a>
-                </td>
-                <td>
-                  {row.title}
-                </td>
-                <td>
-                  ${row.coin.toUpperCase()}
-                </td>
-                <td>
-                  <a href="https://polkadot.js.org/apps/?rpc=ws://localhost:9944#/chainstate" target="_blank" rel="noreferrer">
-                    {row.name}
+                    <img className="template_icon" src={row.thumb} alt="template thumb" />
                   </a>
                 </td>
                 <td>
@@ -149,17 +138,28 @@ function UserBounty(props) {
                   }}>
                     <FaRoad size={20} />
                   </button>
+                  {row.title}
+                </td>
+                <td>
+                  ${row.coin.toUpperCase()}
+                </td>
+                <td>
+                  <button className="btn btn-sm btn-default">
+                    <FaCopy className="" size={18}/>
+                  </button>
+                  <a href="https://polkadot.js.org/apps/?rpc=ws://localhost:9944#/chainstate" target="_blank" rel="noreferrer">
+                    {row.name}
+                  </a>
+                </td>
+                <td>
+                  {/*
+                    TODO, here to check wether the owner of bounty
+                  */}
                   <button className="btn btn-sm btn-default" onClick={(ev) => {
                     self.clickPay(row.name);
                   }}>
                     <FaBitcoin size={20} />
                   </button>
-                </td>
-                <td>
-                  {row.start.toLocaleString()}
-                </td>
-                <td>
-                  {row.end.toLocaleString()}
                 </td>
                 <td>
                   {(new Date(row.stamp).toLocaleDateString())}

@@ -5,7 +5,6 @@ import BountyShow from "./bounty_show";
 
 import API from "../../system/api";
 import TPL from "../../system/tpl";
-
 import tools from "../../lib/tools";
 
 function BountyList(props) {
@@ -31,7 +30,7 @@ function BountyList(props) {
       if(list.length===0) return ck && ck(bts);
       const row=list.pop();
       const tp=row.template;
-      const anchor=self.tools(row.alink);
+      const anchor=tools.decode(row.alink);
       row.name=anchor.name;
       row.block=anchor.block;
       TPL.view(tp.cid,(dt)=>{
