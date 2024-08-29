@@ -186,3 +186,20 @@ code {
   overflow:scroll;
   border-radius: 10px;
 }
+
+.container_preview{
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  left:0px;
+  bottom:80px;
+}
+
+.content_mock{
+  background: #EEEEEE;
+  width:60%;
+  margin: 0 auto;
+  padding: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}

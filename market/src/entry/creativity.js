@@ -1,4 +1,4 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col,Tabs, Tab } from "react-bootstrap";
 import { useState } from "react";
 
 import CreativityNav from "../component/creativity/creativity_nav"
@@ -24,10 +24,29 @@ function Creativity(props) {
                 <CreativityNav update={self.updateContent} />
             </Col>
             <Col md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
-                Operation here.
-                {content}
-                <CreativityMock />
+                <Tabs
+                defaultActiveKey="step_1"
+                id="uncontrolled-tab-example"
+                className="mb-3"
+                fill
+                onSelect={(active) => {
+                    
+                }}
+                >
+                    <Tab eventKey="image" title={"Image"}>
+
+                    </Tab>
+                    <Tab eventKey="parts" title={"Parts"}>
+
+                    </Tab>
+                    <Tab eventKey="series" title={"Series"}>
+
+                    </Tab>
+                
+                </Tabs>
+                
             </Col>
+            <CreativityMock />
         </Row>
     )
 }
