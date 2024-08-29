@@ -7,6 +7,12 @@ import Account from "../../system/account";
 import Config from "../../system/config";
 import tools from "../../lib/tools";
 
+//TODO, need to support multi chain in future
+/* Account Generator
+*   @param  {string}    network       //targe network [anchor, tanssi, polkadot, ...]
+*   @param  {function}  dialog        //system dialog 
+*/
+
 function AccountGenerate(props) {
   const size = {
     row: [12],

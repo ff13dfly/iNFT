@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 
 import Account from "../../system/account";
 
+/* Account Selector
+*   @param  {string}    network       //targe network [anchor, tanssi, polkadot, ...]
+*   @param  {function}  [callback]      //callback function
+*/
+
 function AccountSelector(props) {
   const size = {
     row: [12],

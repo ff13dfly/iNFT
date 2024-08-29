@@ -5,6 +5,11 @@ import Network from "../../network/router";
 import Account from "../../system/account";
 import tools from "../../lib/tools";
 
+/* Account management homepage
+*   @param  {string}    network       //targe network [anchor, tanssi, polkadot, ...]
+*   @param  {function}  [callback]    //callback function
+*/
+
 function AccountLoad(props) {
   const size = {
     row: [12],

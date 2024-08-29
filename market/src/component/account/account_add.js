@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import AccountLoad from "./account_load";
 import AccountGenerate from "./account_generate";
@@ -8,28 +8,33 @@ import tools from "../../lib/tools";
 
 import { FaRegPlusSquare,FaUpload } from "react-icons/fa";
 
+/* Adding account
+*   @param  {number}    update        //fresh tag, force to fresh on this
+*   @param  {function}  dialog        //system dialog 
+*/
+
 function AccountAdd(props) {
   const size = {
     row: [12],
     account: [6, 6],
   };
-
-  let [current, setCurrent] =useState("anchor");
   
   const self={
     clickAdd:(ev)=>{
       if(props.dialog) props.dialog.show(<AccountGenerate dialog={props.dialog}/>,"Account Generator")
     },
     clickImport:(ev)=>{
+      const network="anchor"
       if(props.dialog){
-        props.dialog.show(<AccountLoad network={current} callback={()=>{
+        props.dialog.show(<AccountLoad network={network} callback={()=>{
 
-        }}/>,`Import Account ( ${tools.toUp(current)} Network )`)
+        }}/>,`Import Account ( ${tools.toUp(network)} Network )`)
       }
     },
   }
 
   useEffect(() => {
+    
   }, [props.update]);
 
   return (

@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import AccountAdd from "../account/account_add";
 import AccountList from "../account/account_list";
 
+/* Account management homepage
+*   @param  {function}  dialog        //system dialog
+*/
+
 function UserAccount(props) {
   const size = {
     row: [12],
@@ -37,10 +41,10 @@ function UserAccount(props) {
         <h5>Account List</h5>
       </Col>
       <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
-        <AccountAdd fresh={self.fresh} update={update} dialog={props.dialog}/>
+        <AccountAdd update={update} dialog={props.dialog}/>
       </Col>
       <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <AccountList fresh={self.fresh} update={update} dialog={props.dialog}/>
+        <AccountList update={update} dialog={props.dialog}/>
       </Col>
     </Row>
   );

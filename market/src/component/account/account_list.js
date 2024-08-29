@@ -1,4 +1,4 @@
-import { Row, Col, Table, Form } from "react-bootstrap";
+import { Row, Col, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaCopy, FaFileDownload, FaSkullCrossbones, FaPaperPlane } from "react-icons/fa";
@@ -9,6 +9,12 @@ import Config from "../../system/config";
 import INDEXED from "../../lib/indexed";
 import Copy from "../../lib/clipboard";
 import tools from "../../lib/tools";
+
+//TODO, neet to add filter to show accounts of different network
+/*  Account 
+*   @param  {number}    update        //fresh tag, force to fresh on this
+*   @param  {function}  dialog        //system dialog 
+*/
 
 function AccountList(props) {
   const size = {
