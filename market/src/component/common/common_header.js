@@ -6,6 +6,10 @@ import RUNTIME from "../../system/runtime";
 
 import { FaCog } from "react-icons/fa";
 
+/* System footer
+*   @param  {string}    active       //selected nav name
+*/
+
 function Header(props) {
 
   let [login, setLogin] = useState("Login");

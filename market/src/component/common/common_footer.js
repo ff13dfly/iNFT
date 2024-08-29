@@ -1,8 +1,11 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
 
-function Footer(props) {
+/* System footer
 
+*/
+
+function Footer(props) {
   const size = {
     row: [12],
     board: [3]

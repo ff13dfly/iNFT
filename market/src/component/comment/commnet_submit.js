@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import API from "../../system/api";
 import RUNTIME from "../../system/runtime";
 
+/* iNFT comment list
+*   @param  {string}    alink       //alink
+*   @param  {function}  callback    //callback when comment added
+*/
+
 function CommentSubmit(props) {
   const size = {
     row: [12],

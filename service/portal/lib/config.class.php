@@ -48,8 +48,9 @@ class Config extends CORE{
 			}
 		}
 		//1.获取根目录的位置
-		if(null!==FOLDER_BASIC)$this->_F['rootPath']=$_SERVER['DOCUMENT_ROOT'].DS.FOLDER_BASIC.DS;
-		else $this->_F['rootPath']='';
+		$this->_F['rootPath']='';
+		//if(null!==FOLDER_BASIC)$this->_F['rootPath']=$_SERVER['DOCUMENT_ROOT'].DS.FOLDER_BASIC.DS;
+		//else $this->_F['rootPath']='';
 		
 		//2.对请求进行路由
 		$pre=$this->checkRequest();
