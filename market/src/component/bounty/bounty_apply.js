@@ -13,6 +13,12 @@ import Bounty from "../../system/bounty";
 
 import { FaCheck } from "react-icons/fa";
 
+/* Bonus apply submission dailog
+*   @param  {object}    data        //raw bounty data from backend, the anchor data is docked on key "orgin"
+*   @param  {number}    index       //index of bonus
+*   @param  {function}  dialog      //system dialog 
+*/
+
 function BountyApply(props) {
   const size = {
     row: [12],

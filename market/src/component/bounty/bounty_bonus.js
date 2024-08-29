@@ -23,7 +23,6 @@ function BountyBonus(props) {
   let [list, setList] = useState([]);       //bonus list
 
   let [coin,setCoin]= useState("");
-  //let [bounty, setBounty]= useState("");
 
   let [progress, setProgress] = useState({});
   let [refuse, setRefuse]= useState({});

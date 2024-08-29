@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import tools from "../../lib/tools";
 import Network from "../../network/router";
 
+/* Bounty payment detail
+*   @param  {object}    template      //template data
+*   @param  {string}    bounty        //bounty alink
+*/
+
 function BountyDetail(props) {
   const size = {
     row: [12],
@@ -15,16 +20,16 @@ function BountyDetail(props) {
 
   const self = {
     getParts: () => {
-      if (!props.data || !props.data.parts) return 0;
-      return props.data.parts.length;
+      if (!props.template || !props.template.parts) return 0;
+      return props.template.parts.length;
     },
 
     selected: (bonus,coin) => {
-      if (!props.data || !props.data.series) return false;
+      if (!props.template || !props.template.series) return false;
       const nlist = [];
       for (let i = 0; i < bonus.length; i++) {
         const row = tools.clone(bonus[i]);
-        const se = props.data.series[row.series];
+        const se = props.template.series[row.series];
         row.thumb = se.thumb[0];
         row.name = se.name;
         row.coin=coin;
@@ -42,8 +47,8 @@ function BountyDetail(props) {
   }
 
   useEffect(() => {
-    self.fresh(props.link);
-  }, [props.data,props.link]);
+    self.fresh(props.bounty);
+  }, [props.template,props.bounty]);
 
   return (
     <Row className="pt-2">

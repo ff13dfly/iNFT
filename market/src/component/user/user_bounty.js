@@ -62,7 +62,7 @@ function UserBounty(props) {
       });
     },
     clickProcess: (name) => {
-      props.dialog.show(<BountyProcess name={name} />, "Bounty Process Dashboard");
+      props.dialog.show(<BountyProcess bounty={name} />, "Bounty Process Dashboard");
     },
     getThumb: (arr, ck, tpls, map) => {
       if (tpls && tpls.length === 0) return ck && ck(map);

@@ -17,6 +17,10 @@ import API from "../../system/api";
 
 import tools from "../../lib/tools";
 
+/* Bounty submission entry
+*   @param  {function}  dialog      //system dialog 
+*/
+
 function BountySubmit(props) {
   const size = {
     row: [12],
@@ -241,7 +245,7 @@ function BountySubmit(props) {
             }}>Load</button>
           </Col>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <BountyTemplate data={data} />
+            <BountyTemplate template={data} />
           </Col>
         </Row>
       </Tab>
@@ -283,7 +287,7 @@ function BountySubmit(props) {
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyDetail link={anchor} data={data} />
+                <BountyDetail bounty={anchor} template={data} />
               </Col>
               <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
                 self.callbackPay(status, target, total);

@@ -10,9 +10,9 @@ import Bounty from "../../system/bounty";
 
 import { FaCheck } from "react-icons/fa";
 
-/* iNFT render component parameters
+/* Bounty payment detail
 *   @param  {string}    title           //button title
-*   @param  {string}    network         //network to filter account
+*   @param  {string}    bounty          //alink of bounty
 *   @param  {function}  [callback]      //callback function 
 */
 

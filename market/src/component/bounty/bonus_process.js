@@ -10,6 +10,13 @@ import Network from "../../network/router";
 
 import tools from "../../lib/tools";
 
+/* Show the progress of bonus
+*   @param  {object}    raw         //raw bounty data from backend, the anchor data is docked on key "orgin"
+*   @param  {object}    template    //template data 
+*   @param  {number}    index       //index of bonus
+*   @param  {function}  dialog      //system dialog 
+*/
+
 function BonusProcess(props) {
   const size = {
     row: [12],

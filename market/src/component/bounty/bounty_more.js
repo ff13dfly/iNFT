@@ -6,6 +6,11 @@ import Network from "../../network/router";
 import tools from "../../lib/tools";
 import Config from "../../system/config";
 
+/* iNFT minting list
+*   @param  {string}    bounty             //bounty_name
+*   @param  {function}  callback           //ck( INPUT_DATA ),callback function
+*/
+
 function BountyMore(props) {
   const size = {
     row: [12],

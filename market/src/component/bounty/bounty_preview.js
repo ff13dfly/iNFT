@@ -15,6 +15,13 @@ import Network from "../../network/router";
 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
+/* Bounty Preview, entry of view
+*   @param  {function}    link        //system link function
+*   @param  {function}    dailog      //system dialog 
+*   @param  {string[]}    extent      //input from url without entry
+*/
+
+
 function BountyPreview(props) {
   const size = {
     row: [12],

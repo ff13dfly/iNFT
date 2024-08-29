@@ -1,6 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+/* Template creator basic setting
+*   @param  {object}      template        //template data
+*/
+
 function BountyTemplate(props) {
   const size = {
     row: [12],
@@ -13,18 +17,18 @@ function BountyTemplate(props) {
 
   const self = {
     getParts:()=>{
-      if(!props.data || !props.data.parts) return 0;
-      return props.data.parts.length;
+      if(!props.template || !props.template.parts) return 0;
+      return props.template.parts.length;
     },
     fresh:()=>{
-      const dt = props.data;
+      const dt = props.template;
       if(dt.series) setSeries(dt.series);
     },
   }
   
   useEffect(() => {
     self.fresh();
-  }, [props.data]);
+  }, [props.template]);
 
   return (
     <Row className="pt-2">

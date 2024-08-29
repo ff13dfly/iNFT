@@ -6,9 +6,7 @@ import tools from "../../lib/tools";
 import Bounty from "../../system/bounty";
 
 /* Template creator basic setting
-*   @param  {function}    callback        //ck( BONUS_ARRAY )
 *   @param  {object}      template        //template data
-*   @param  {string}      [linke]         //alink of bounty, when editing, need this one
 */
 
 function BountyTarget(props) {

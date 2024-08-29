@@ -9,6 +9,11 @@ import API from "../../system/api";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
+
+/* Bounty detail for mini board
+*   @param  {object}    raw          //raw bounty data from backend, the anchor data is docked on key "orgin"
+*/
+
 function ProcessDetail(props) {
   const size = {
     row: [12],

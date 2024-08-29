@@ -8,6 +8,13 @@ import TPL from "../../system/tpl";
 import tools from "../../lib/tools";
 import Network from "../../network/router";
 
+/* Bounty list, entry of list
+*   @param  {function}    link        //system link function
+*   @param  {function}    dailog      //system dialog 
+*   @param  {string[]}    extent      //input from url without entry
+*/
+
+
 function BountyList(props) {
   const size = {
     row: [12],

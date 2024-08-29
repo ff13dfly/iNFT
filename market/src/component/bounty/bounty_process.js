@@ -11,6 +11,10 @@ import API from "../../system/api";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
+/* Bounty bonus process mini board
+*   @param  {string}    bounty          //alink of bounty
+*/
+
 function BountyProcess(props) {
   const size = {
     row: [12],
@@ -27,7 +31,7 @@ function BountyProcess(props) {
 
   const self={
     fresh:()=>{
-      API.bounty.view(props.name,(res)=>{
+      API.bounty.view(props.bounty,(res)=>{
         if(!res.success) return false;
         
         setAnchorBounty(res.data.alink);
@@ -37,9 +41,7 @@ function BountyProcess(props) {
   }
   useEffect(() => {
     self.fresh();
-
-    console.log(props);
-  }, [props.data,props.index]);
+  }, [props.bounty]);
 
   return (
     <Row>
@@ -49,7 +51,7 @@ function BountyProcess(props) {
             <h5>Bounty details ( {anchorBounty} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
-        <ProcessDetail data={data}/>
+        <ProcessDetail raw={data}/>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
 
