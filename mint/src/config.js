@@ -5,8 +5,8 @@ module.exports = {
     node:[
         //"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
         //"wss://wss.android.im",
-        "ws://127.0.0.1:9944",
-        //"wss://dev2.metanchor.net",
+        //"ws://127.0.0.1:9944",
+        "wss://dev3.metanchor.net",
     ],
     default:[
         "bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",  //BTC tree
@@ -17,7 +17,7 @@ module.exports = {
     ],
     faucet:{
         tanssi:"https://faucet.w3os.net",
-        anchor:"",
+        anchor:"https://faucet.w3os.net",
     },
     agent:{
         inft:[

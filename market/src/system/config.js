@@ -136,16 +136,26 @@ const config={
         nodes:{
             market:[
                 {
-                    domain:"localhost/iNFT/service/api/",
-                    protocol:"http://",
+                    domain:"api.inft.w3os.net",
+                    protocol:"https://",
                     partten:"php",
                     orgin:"W3OS",
-
                     lang:"php",
                     desc:"",
                     funs:"",
                     def:"",                 //get the definition of API (JSON format)
-                }
+                },
+                {
+                    domain:"localhost/iNFT/service/api/",
+                    protocol:"http://",
+                    partten:"php",
+                    orgin:"W3OS",
+                    lang:"php",
+                    desc:"",
+                    funs:"",
+                    def:"",                 //get the definition of API (JSON format)
+                },
+                
             ],
             ipfs:[
                 {
@@ -182,8 +192,8 @@ const config={
                 bonus:true,
             },
             nodes:[
+                "wss://dev3.metanchor.net",
                 "ws://localhost:9944",
-                "wss://dev2.metanchor.net",
             ],
             interval:3000,
             wallet:[

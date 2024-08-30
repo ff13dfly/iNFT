@@ -158,7 +158,7 @@ function Account(props) {
             const cur=Data.getHash("cache","network");
             Network(cur).balance(address, (res) => {
                 const divide = Network(cur).divide();
-                setBalance(tools.toF(res.free * (1 / divide), 8));
+                setBalance(parseFloat(res.free / divide));
             })
         },
         show: () => {

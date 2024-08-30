@@ -66,12 +66,10 @@ const self = {
         });
     },
     getDivide:()=>{
-        return 1000000000000;
+        return 1000000;
     },
     getMulti:()=>{
-        //basic:1000000000000, multi: 10000
-        //0000000000000
-        return 100000000;
+        return 1;
     },
     format:(obj)=>{
         return JSON.stringify(obj)
@@ -134,12 +132,12 @@ const self = {
         //1.check balance is enough;
         self.balance(day,(pair)=>{
             if(exhoused || pair===false) return false;      //wethe low balance
-            self.output(`Start to transfer ${tools.toF(amount*0.0001,6)} to ${target} on ${day}`,"primary");
+            self.output(`Start to transfer ${amount} to ${target} on ${day}`,"primary");
 
             const m=self.getMulti();
             try {
-                const m=self.getMulti();
-                wsAPI.tx.balances.transferAllowDeath(target,parseInt(amount*m)).signAndSend(pair, (res) => {
+                //const m=self.getMulti();
+                wsAPI.tx.balances.transferAllowDeath(target,parseInt(amount)).signAndSend(pair, (res) => {
                     const status = res.status.toJSON();
                     if(status && status.finalized){
                         map[target][day].confirmed=true;
@@ -181,11 +179,11 @@ self.init(()=>{
 
             //console.log(`Here to link to Tanssi appchain`);
             app.get("/:address",(req, res)=>{
-                if(exhoused) return res.send({error:"Faucet pool is exhoused today."});
-
                 const addr=req.params.address;
                 self.output(`Request Address:${addr}`,"primary");
                 if(addr.length!==48) return res.send({error:"Invalid request."});
+
+                if(exhoused) return res.send({error:"Faucet pool is exhoused today."});
 
                 const range=!map[addr]?config.amount.first:config.amount.normal;
                 const day=tools.day();
