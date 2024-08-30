@@ -24,13 +24,6 @@ class Config extends CORE{
 	/***************基础环境配置问题******************/
 	/********************************************/
 	
-	public function checkCoordinate($x,$y,$n){
-		if(!is_numeric($x) || !is_numeric($y) || !is_numeric($n)
-		|| $x<MIN_X || $x>MAX_Y || $y<MIN_Y || $y>MAX_Y
-		|| $n<MIN_WORLD || $n>MAX_WORLD)return FALSE;
-		return TRUE;
-	}
-	
 	public function configEnv($mod=DEFAULT_MOD,$act=DEFAULT_ACT){
 		$_GET['mod']=isset($_GET['mod'])?$_GET['mod']:$mod;
 		$_GET['act']=isset($_GET['act'])?$_GET['act']:$act;

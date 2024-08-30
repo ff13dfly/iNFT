@@ -15,7 +15,7 @@ if($page>=$param['total'] && $param['total']!=0){
 
 $arr=$a->adminList($page);
 $_F['list']=$arr;
-$_F['title']='管理员列表';
+$_F['title']='Adminstors List';
 
 $step=$a->getStep();
 $a=Config::getinstance();

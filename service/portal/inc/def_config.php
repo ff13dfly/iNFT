@@ -18,8 +18,8 @@ define('CON_AJAX',		'ajax_');
 
 define('DEFAULT_ADMIN_EXPIRE', 300);
 
-define('DEFAULT_MOD',	'inft');
-define('DEFAULT_ACT',	'overview');
+define('DEFAULT_MOD',	'bounty');
+define('DEFAULT_ACT',	'list');
 
 //默认规则，值约大约危险
 define('ERROR_LEVEL_1',	1);

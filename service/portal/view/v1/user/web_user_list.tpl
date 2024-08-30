@@ -16,11 +16,11 @@
 			<div class="col-lg-12 col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						用户列表
+						User List
 						<a class="pull-right" href="#" data-tool="panel-collapse" data-toggle="tooltip" title="点击收起操作面板">
 							<em class="fa fa-minus"></em>
 						</a>
-						<a href="?mod=user&act=trash">垃圾桶</a>
+						<a href="?mod=user&act=trash">Trash</a>
 						<button class="btn btn-xs btn-danger" style="margin-left: 10px;float:right" id="cache_clear" data="{%$F.row.id%}">清理缓存</button><span id="info_me" style="margin-left: 10px;"></span>
 						<button class="btn btn-xs btn-primary" style="margin-left: 10px;float:right" id="cache_auto" data="{%$F.row.id%}">自动缓存</button><span id="info_me" style="margin-left: 10px;"></span>
 					</div>
@@ -30,14 +30,14 @@
 							<tr>
 								<th></th>
 								<th><a href="?mod=user&act=list&od=id{%if $F.dec%}&dc=0{%/if%}">ID</a></th>
-								<th>头像</th>
-								<th><a href="?mod=user&act=list&od=name{%if $F.dec%}&dc=0{%/if%}">用户名</a></th>
-								<th><a href="?mod=user&act=list&od=phone{%if $F.dec%}&dc=0{%/if%}">手机</a></th>
+								<th>Avatar</th>
+								<th><a href="?mod=user&act=list&od=name{%if $F.dec%}&dc=0{%/if%}">Name</a></th>
+								<th><a href="?mod=user&act=list&od=phone{%if $F.dec%}&dc=0{%/if%}">Mobil</a></th>
 								<th>UUID</th>
-								<th>性别</th>
-								<th><a href="?mod=user&act=list&od=from{%if $F.dec%}&dc=0{%/if%}">来源</a></th>
-								<th><a href="?mod=user&act=list&od=login{%if $F.dec%}&dc=0{%/if%}">最后登录</a></th>
-								<th>操作</th>
+								<th>Sex</th>
+								<th><a href="?mod=user&act=list&od=from{%if $F.dec%}&dc=0{%/if%}">Orgin</a></th>
+								<th><a href="?mod=user&act=list&od=login{%if $F.dec%}&dc=0{%/if%}">Last login</a></th>
+								<th>Operation</th>
 							</tr>
 
 							{%if count($F.list) neq 0%} {%foreach from=$F.list key=k item=v %}

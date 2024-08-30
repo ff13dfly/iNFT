@@ -25,12 +25,11 @@
 							<tr>
 								<th></th>
 								<th>ID</th>
-								<th>用户名</th>
-								<th>管理世界</th>
-								<th>手机</th>
-								<th>邮件</th>
-								<th>创建时间</th>
-								<th>操作</th>
+								<th>Administror Name</th>
+								<th>Mobile</th>
+								<th>Email</th>
+								<th>Create</th>
+								<th>Opreation</th>
 							</tr>
 
 							{%if count($F.list) neq 0%} {%foreach from=$F.list key=k item=v %}
@@ -38,7 +37,6 @@
 								<td><input type="checkbox" class="check_list" value="{%$v.rid%}" /></td>
 								<td class="id">{%$v.uid%}</td>
 								<td class="nobreak">{%$v.name%}</td>
-								<td>{%$v.world%}</td>
 								<td>{%$v.phone%}</td>
 								<td>{%$v.email%}</td>
 								<td>{%$v.ctime|date_format:'%Y-%m-%d'%}</td>

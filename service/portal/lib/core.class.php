@@ -7,7 +7,7 @@ class CORE {
 
 	protected static function init($className) {
 		if (!isset(self::$instanceMap[$className])){
-			self::loadDefine(strtolower($className));		//加载组件配置的定义
+			self::loadDefine(strtolower($className));		//load class related definition
 			$object = new $className;
 			if ($object instanceof CORE) self::$instanceMap[$className] = $object;
 			else exit('[core]error,please check your code...');
@@ -28,16 +28,16 @@ class CORE {
 	}
 
 	public function dbStart() {
-		self::loadDefine('database');		//加载基础定义
-		self::loadDefine('cache');			//加载基础定义
-		$this -> pdoConnect();			//数据库连接
+		self::loadDefine('database');		//load database config
+		self::loadDefine('cache');			//load redis cache config
+		$this -> pdoConnect();				//link to database
 	}
 	
 	public function dbClose() {
 		
 	}
 	
-	public function loadController($mod,$act,$type=CON_WEIXIN){
+	public function loadController($mod,$act,$type=CON_WEB){
 		return PATH_CONTROLLER.DS.$mod.DS.$type.$mod.CONNECTOR.$act.SUFFIX_CONTROLLER;		
 	}
 	
@@ -140,7 +140,7 @@ class CORE {
 		
 		$cols = '`'.implode('`,`',$this -> getCol($arr)).'`';
 		$sql = "SELECT $cols FROM $table ";
-		$sql.=' WHERE '.$where.' in ('.implode($ids,',').')';
+		$sql.=' WHERE '.$where.' in ('.implode(',',$ids).')';
 		if($order) $sql .= $order;
 		return $this -> getArray($sql);
 	}

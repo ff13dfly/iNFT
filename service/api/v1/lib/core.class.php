@@ -139,7 +139,7 @@ class CORE {
 		
 		$cols = '`'.implode('`,`',$this -> getCol($arr)).'`';
 		$sql = "SELECT $cols FROM $table ";
-		$sql.=' WHERE '.$where.' in ('.implode($ids,',').')';
+		$sql.=' WHERE '.$where.' in ('.implode(',',$ids).')';
 		if($order) $sql .= $order;
 		return $this -> getArray($sql);
 	}
@@ -170,7 +170,7 @@ class CORE {
 		$arr = $this -> getArray($sql);
 		if(empty($arr))return FALSE;
 
-		$cols = '`'.implode($this -> getCol($arr), '`,`').'`';
+		$cols = '`'.implode('`,`',$this -> getCol($arr)).'`';
 		$sql = "SELECT $cols FROM `$table` ";
 		
 		if(is_array($warr) && !empty($warr)){
