@@ -1,7 +1,5 @@
 exports.config = {
     "name":"template",
-    //"node":"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
-    //"node":"ws://127.0.0.1:9944",       //test  
     "account":[     //select the account by day%account.length
         ["5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd","123456"],
         ["5GnaMMdmqFrUWpDsiC2FXotJ4cwnQcMDKCnygo8CviDGDsHd","123456"],
