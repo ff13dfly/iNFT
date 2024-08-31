@@ -10,8 +10,7 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 /* Component Sample
 *   @param  {string}    hash        //unique hash
 */
-
-function CreativityMock(props) {
+function CreativityPreview(props) {
   const size = {
     row: [12],
     left:[8,4],
@@ -31,6 +30,8 @@ function CreativityMock(props) {
   let [hidden, setHidden] = useState(false);
   let [cmap, setCmap]=useState(style.show);
 
+  //tag for the first running of creativity.
+  let first=true;
   const self = {
     clickHide:(ev)=>{
       setCmap(tools.clone(!hidden?style.hidden:style.show));
@@ -41,6 +42,14 @@ function CreativityMock(props) {
   useEffect(() => {
     const arr=[{mock:"a"},{mock:"b"}]
     setList(arr);
+
+    if(hidden===false && first===true){
+      setTimeout(()=>{
+        setCmap(tools.clone(style.hidden));
+        setHidden(true);
+        first=false;
+      },3000)
+    }
   }, []);
 
   return (
@@ -73,4 +82,4 @@ function CreativityMock(props) {
     </div>
   );
 }
-export default CreativityMock;
+export default CreativityPreview;

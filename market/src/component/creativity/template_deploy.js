@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 
 /* Component Sample
 *   @param  {string}    hash        //unique hash
-*   @param  {string}    active      //active gene template
 */
 
-function TemplateList(props) {
+function TemplateDeploy(props) {
   const size = {
     row: [12],
   };
@@ -24,12 +23,10 @@ function TemplateList(props) {
 
   return (
       <Row>
-        {list.map((row, index) => (
-        <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          {JSON.stringify(row)}
+        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          Deploy Gene 
         </Col>
-      ))}
       </Row>
   );
 }
-export default TemplateList;
+export default TemplateDeploy;

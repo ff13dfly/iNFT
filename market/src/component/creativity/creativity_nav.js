@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import TemplateList from "./template_list";
+import TemplateDeploy from "./template_deploy";
 
 import tools from "../../lib/tools";
 
@@ -17,37 +18,42 @@ function CreativityNav(props) {
 
   const navs = [
     {
-      title: "Templates",
+      title: "Gene Local List",
       operation: "template operation component",
-      under:<TemplateList />,
+      under: <TemplateList />,
     },
+    // {
+    //   title: "Image",
+    //   operation: "image under operation",
+    //   under: "b",
+    // },
+    // {
+    //   title: "Components",
+    //   operation: "Components under operation",
+    //   under: "c",
+    // },
+    // {
+    //   title: "Series",
+    //   operation: "series under operation",
+    //   under: "d",
+    // },
     {
-      title: "Image",
-      operation: "image under operation",
-      under: "b",
-    },
-    {
-      title: "Components",
-      operation: "Components under operation",
-      under: "c",
-    },
-    {
-      title: "Series",
-      operation: "series under operation",
-      under: "d",
-    },
-    {
-      title: "Deploy",
+      title: "Deployment",
       operation: "deploy under operation",
-      under: "e",
+      under: <TemplateDeploy />,
+    },
+    {
+      title: "Published",
+      operation: "deploy under operation",
+      under: <TemplateList />,
     },
   ]
 
-  let [show, setShow] = useState({0:true});
+  let [show, setShow] = useState({ 0: true });
 
   const self = {
     router: (order) => {
-      show[order]=!show[order]?true:(!show[order]);
+      show[order] = !show[order] ? true : (!show[order]);
       setShow(tools.clone(show));
     },
   }
@@ -68,9 +74,9 @@ function CreativityNav(props) {
               md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} onClick={(ev) => {
                 self.router(index)
               }}>
-              <h6>{row.title}</h6>  
+              <h6>{row.title}</h6>
             </Col>
-            <Col hidden={show[index]?false:true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col hidden={show[index] ? false : true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               {row.under}
             </Col>
           </Row>

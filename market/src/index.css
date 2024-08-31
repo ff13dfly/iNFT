@@ -181,8 +181,8 @@ code {
 .container_comment{
   padding:10px 10px 10px 10px;
   background: #FAFAFA;
-  min-height: 258px;
-  max-height: 258px;
+  min-height: 234px;
+  max-height: 234px;
   overflow:scroll;
   border-radius: 10px;
 }

@@ -46,7 +46,7 @@
 											class="btn btn-sm btn-primary bounty_sync" data="{%$v.alink%}">Sync</button>
 									</td>
 									<td><a href="?mod=bounty&act=edit&id={%$v.id%}">{%$v.alink%}</a></td>
-									<td>{%$v.detail.desc%}</td>
+									<td></td>
 									<td>{%$v.coin%}</td>
 									<td>{%count($v.apply)%}</td>
 									<td>{%$v.start%}</td>

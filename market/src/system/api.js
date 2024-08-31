@@ -13,7 +13,6 @@ const funs={
         if(param!==undefined){
             for(var k in param) url+=`&${k}=${param[k]}`;
         }
-        //const spam=Data.getHash("cache","spam");
         if(spam) url+=`&spam=${spam}`;
         console.log(url);
         fetch(url).then((response)=>{
@@ -21,11 +20,17 @@ const funs={
             response.text().then((res)=>{
                 try {
                     const dt=JSON.parse(res);
-                    if(dt.code && dt.code===444){
-                        spam="";
-                        return self.init(()=>{
-                            funs.request(mod,act,ck,param);
-                        });
+                    if(dt.message && dt.message.code){
+                        //Clean the invalid UUID or Token
+                        //1.USER_ERROR_NO_UUID, 2.USER_ERROR_WRONG_TOKEN
+                        if(dt.message.code===1 || dt.message.code===2){
+                            spam="";
+                            Local.remove("uuid");
+                            Local.remove("token");
+                            return self.init(()=>{
+                                funs.request(mod,act,ck,param);
+                            });
+                        }
                     }
                     return ck && ck(dt);
                 } catch (error) {
