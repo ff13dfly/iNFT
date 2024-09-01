@@ -8,6 +8,7 @@ import Config from "../../system/config";
 import Bounty from "../../system/bounty";
 import Account from "../../system/account";
 import RUNTIME from "../../system/runtime";
+import INFT from "../../system/inft";
 
 import tools from "../../lib/tools";
 
@@ -86,16 +87,16 @@ function BountyApply(props) {
 
         //2.check iNFT valid
         // when test apply, comment these codes
-        // const target = props.data.orgin.raw.bonus[props.index];
-        // const tpl=props.data.template;
-        // const check=INFT.check(inft,tpl,target);
-        // let amount=0;
-        // for(let i=0;i<check.length;i++){
-        //   if(check[i]===0) amount++;
-        // }
-        // if(amount!==0){
-        //   return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
-        // }
+        const target = props.data.orgin.raw.bonus[props.index];
+        const tpl=props.data.template;
+        const check=INFT.check(inft,tpl,target);
+        let amount=0;
+        for(let i=0;i<check.length;i++){
+          if(check[i]===0) amount++;
+        }
+        if(amount!==0){
+          return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
+        }
 
         //3.check wether owned by main account
         const checkOwner = inft.owner;

@@ -52,6 +52,14 @@ const self = {
   toF: (a,fix)=>{
     fix=fix||3;return parseFloat(a.toFixed(fix))
   },
+  toHex: (val, len) => {
+    let hexString = val.toString(16);
+    while (hexString.length < len) {
+      hexString = "0" + hexString;
+    }
+    if (hexString.length > len) return false
+    return hexString;
+  },
   download:(filename,text,type)=>{
     var element = document.createElement("a");
 

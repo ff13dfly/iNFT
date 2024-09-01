@@ -19,7 +19,7 @@ const config = {
     },
 }
 
-let agent = false;    //wether use agent
+let agent = false;     //wether use agent
 let local = true;     //get template from local
 const funs = {
     checkTable: (from, list) => {
