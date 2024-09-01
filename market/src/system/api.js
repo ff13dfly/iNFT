@@ -21,8 +21,6 @@ const funs={
                 try {
                     const dt=JSON.parse(res);
                     if(dt.message && dt.message.code){
-                        //Clean the invalid UUID or Token
-                        //1.USER_ERROR_NO_UUID, 2.USER_ERROR_WRONG_TOKEN
                         if(dt.message.code===1 || dt.message.code===2){
                             spam="";
                             Local.remove("uuid");
@@ -34,8 +32,7 @@ const funs={
                     }
                     return ck && ck(dt);
                 } catch (error) {
-                    console.log(error);
-                    return ck && ck({error:"Invalide content"})
+                    return ck && ck({error:"Invalide content, please chech the response from server."})
                 }
             }).catch((error)=>{
                 return ck && ck({error:error});

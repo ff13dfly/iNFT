@@ -89,6 +89,7 @@ function BountyPreview(props) {
         setCoin(res.raw.coin);
 
         API.bounty.view(alink, (dt) => {
+          if(dt.error) return console.log(dt);
           const bounty=dt.data;
           bounty.orgin=res;
           setRaw(bounty);
@@ -156,6 +157,7 @@ function BountyPreview(props) {
         <BountyBonus
           raw={raw}
           template={data}
+          coin={coin}
           dialog={props.dialog}
         />
         <p className="pt-2">Click thumb to view detail or divert iNFT.</p>

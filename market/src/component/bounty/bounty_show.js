@@ -73,7 +73,7 @@ function BountyShow(props) {
 
   useEffect(() => {
     //in order to avoid fake list show
-    console.log(props.data);
+    //console.log(props.data);
     if(props.data && props.data.alink){
       setReady(false);
       const raw = props.data.orgin.raw;

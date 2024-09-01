@@ -397,6 +397,7 @@ const self = {
                                 if (dt.method === "setAnchor" && dt.args.key === value.name) {
                                     data = {
                                         owner: row.signer.Id,
+                                        signer:row.signer.Id,
                                         name: dt.args.key,
                                         raw: dt.args.raw,
                                         protocol: dt.args.protocol,
@@ -412,7 +413,12 @@ const self = {
                                 try {
                                     data.raw = JSON.parse(data.raw);
                                     data.protocol = JSON.parse(data.protocol);
-                                    return ck && ck(data);
+
+                                    //check the owner, in case the anchor is [sold, diverted, dropped]
+                                    self.view(data.name,"owner",(res)=>{
+                                        if(data.owner!==res.address) data.owner=res.address;
+                                        return ck && ck(data);
+                                    });
                                 } catch (error) {
                                     return ck && ck(data);
                                 }

@@ -95,6 +95,9 @@ const self = {
       return ("0" + (byte & 0xFF).toString(16)).slice(-2);
     }).join("");
   },
+  getHashValue:(hash,start,step)=>{
+    return parseInt(`0x${hash.substr(start+2,step)}`);
+  },
   hexToU8: (hexString) => {
     if (hexString.length % 2 !== 0) {
       throw new Error("Hex string must have an even number of characters");

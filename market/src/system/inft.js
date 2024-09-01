@@ -1,9 +1,10 @@
 import TPL from "./tpl";
-import Render from "../lib/render";
 import Network from "../network/router";
-import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
 import Config from "./config";
+
+import Render from "../lib/render";
+import tools from "../lib/tools";
 
 const config = {
     indexDB: "inftDB",
@@ -113,6 +114,35 @@ const self = {
     },
     disableLocal: () => {
         local = false;
+    },
+    check:(inft,template,bonus)=>{
+        const gene=[];
+        const rarity=[];
+  
+        //1.get template offset;
+        const parts=template.raw.parts;
+        for(let i=0;i<parts.length;i++){
+          const part=parts[i];
+          if(!part.value) return false;
+          if(!part.rarity || !part.rarity[bonus.series]) return false;
+  
+          gene.push(part.value);
+          rarity.push(part.rarity[bonus.series]);
+        }
+  
+        //2.get iNFT offset and hash;
+        const offset=!inft.raw.offset?[]:inft.raw.offset;   //iNFT offset
+        const hash=inft.hash;
+  
+        //3.calc result and compare with series value
+        const check=[];
+        for(let i=0;i<gene.length;i++){
+          const value=gene[i];
+          const arr=rarity[i];
+          const val=((!offset[i]?0:offset[i])+value[3]+ tools.getHashValue(hash,value[0],value[1]))%value[2];
+          check.push(!arr.includes(val)?0:1);
+        }
+        return check;
     },
     fav:{
         exsist:(name,ck)=>{

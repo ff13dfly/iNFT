@@ -8,6 +8,7 @@ import Config from "../../system/config";
 import Bounty from "../../system/bounty";
 import Account from "../../system/account";
 import RUNTIME from "../../system/runtime";
+import INFT from "../../system/inft";
 
 import tools from "../../lib/tools";
 
@@ -84,7 +85,20 @@ function BountyApply(props) {
 
         self.showINFT(inft);
 
-        //2.check wether owned by main account
+        //2.check iNFT valid
+        const target = props.data.orgin.raw.bonus[props.index];
+        const tpl=props.data.template;
+        const check=INFT.check(inft,tpl,target);
+
+        let amount=0;
+        for(let i=0;i<check.length;i++){
+          if(check[i]===0) amount++;
+        }
+        if(amount!==0){
+          return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
+        }
+
+        //3.check wether owned by main account
         const checkOwner=inft.owner;
         RUNTIME.auto((addr) => {
           if(addr===checkOwner){
@@ -92,7 +106,7 @@ function BountyApply(props) {
             setDisable(false);
             return true;
           }
-          //3.check wether owned by sub accounts
+          //4.check wether owned by sub accounts
           Account.check(checkOwner, (exsist) => {
             if(!exsist){
               setSub(false);
@@ -116,6 +130,8 @@ function BountyApply(props) {
     clickApply: (ev) => {
       const alink = props.data.alink;
       self.getAnchor(search, (dt) => {
+        
+
         //1.check the anchor status
         const owner = dt.owner;   //iNFT owner
         Account.check(owner, (exsist) => {
@@ -153,6 +169,9 @@ function BountyApply(props) {
       });
     },
 
+    calcHashValue:(hash,start,step)=>{
+      return parseInt(`0x${hash.substr(start+2,step)}`);
+    },
     applyByWallet:(obj,ck)=>{
 
     },
@@ -248,7 +267,9 @@ function BountyApply(props) {
       
       <Col className="pt-2" hidden={!sub} md={size.sub[0]} lg={size.sub[0]} xl={size.sub[0]} xxl={size.sub[0]}>
         <input type="password" className="form-control" value={password} 
-          placeholder={`Password of ${tools.shorten(owner,6)}`}/>
+          placeholder={`Password of ${tools.shorten(owner,6)}`} onChange={(ev)=>{
+            self.changePassword(ev);
+          }}/>
       </Col>
       <Col className="pt-2" hidden={!sub}  md={size.sub[1]} lg={size.sub[1]} xl={size.sub[1]} xxl={size.sub[1]}>
         {chainInfo}
