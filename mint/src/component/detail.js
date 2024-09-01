@@ -152,8 +152,8 @@ function Detail(props) {
                     ( <button className={dec?"btn btn-md btn-secondary":"btn btn-md btn-secondary text-warning"} onClick={()=>{
                         self.clickValue();
                     }}><strong>{dec?parseInt(`0x${value}`):`0x${value}`}</strong></button>+ 
-                    <button className="btn btn-md btn-secondary" disabled>{offsetTemplate}</button>+ 
-                    <button className="btn btn-md btn-secondary" disabled>0</button> ) % <button className="btn btn-md btn-secondary" disabled>{dvd}</button> =  
+                    <span>{offsetTemplate}</span>+ 
+                    <span>0</span> ) % <button className="btn btn-md btn-secondary" disabled>{dvd}</button> =  
                     <button className="btn btn-md text-warning pl-2" disabled>{(parseInt(`0x${value}`)+offsetTemplate) % dvd}</button> 
                 </h5>
             </Col>
@@ -196,11 +196,8 @@ function Detail(props) {
                     </Col>
                 </Row>
             </Col>
+            
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                <small>Range of part at orgin image.</small>
-                <PartSection only={false} index={selected} selected={(parseInt(`0x${value}`)+offsetTemplate) % dvd} template={props.alink}/>
-            </Col>
-            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 iNFT template {parts.length} parts selector.
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
@@ -216,6 +213,10 @@ function Detail(props) {
                         </Col>
                     ))}
                 </Row>
+            </Col>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                <small>Range of part at orgin image.</small>
+                <PartSection only={false} index={selected} selected={(parseInt(`0x${value}`)+offsetTemplate) % dvd} template={props.alink}/>
             </Col>
         </Row>
     )

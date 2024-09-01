@@ -19,10 +19,13 @@ function PartSection(props) {
     let [width, setWidth]=useState(400);
     let [height, setHeight]=useState(50);
     let [bs64, setBS64] = useState("image/section.png");
+    //let [rate, setRate]=useState(1);
 
     let [grid, setGrid]=useState([]);
 
     const cut_id = "pre_cut";
+    const base_width=380;
+
     const self = {
         showSection:(index,cid)=>{
             if(!cid){
@@ -52,8 +55,9 @@ function PartSection(props) {
             //1.calc the section size;
             const s_w=def.grid[0]*w;        //section width;
             const s_h=h*(1+eY)*br;          //section height;
-            setWidth(s_w);
-            setHeight(s_h);
+            const rate=s_w>base_width?(base_width/s_w):1;
+            setWidth(s_w*rate);
+            setHeight(s_h*rate);
 
             //2.cut the section from orgin image
             Render.drop(cut_id);
@@ -66,19 +70,20 @@ function PartSection(props) {
                     height:h*(1+eY),        //selected cell height
                     offset:gX,              //first cell offset amount
                     line:max,              //amount per line
+                    rate:rate
                 }
                 if(!props.only)self.showCover(divide,props.selected,cfg)
-            });
+            },rate);
         },
         showCover:(n,selected,cfg)=>{
             //console.log(cfg);
             let arr=[]
             for(let i=0;i<n;i++){
                 arr.push({
-                    wX:cfg.width,         //mask width, w*(1+eX)
-                    wY:cfg.height,         //mask height
-                    mX:((i+cfg.offset)%cfg.line)*cfg.width,                 //calc the row break
-                    mY:Math.floor((i+cfg.offset)/cfg.line)*cfg.height,      //calc the row break
+                    wX:cfg.width*cfg.rate,         //mask width, w*(1+eX)
+                    wY:cfg.height*cfg.rate,         //mask height
+                    mX:((i+cfg.offset)%cfg.line)*cfg.width*cfg.rate,                 //calc the row break
+                    mY:Math.floor((i+cfg.offset)/cfg.line)*cfg.height*cfg.rate,      //calc the row break
                     active:i===selected
                 })
             }
@@ -105,7 +110,18 @@ function PartSection(props) {
                         color: `${row.active?"#ff0000":"#ffffff"}`,
                     }}>{order}</div>
                 ))}
-                <img src={bs64} width={width} height={height} alt="The target section of orgin template"/>
+
+                <div className="full" 
+                    style={{
+                        backgroundImage:`url(${bs64})`,
+                        width:`${width}px`,
+                        height:`${height}px`
+                    }}></div>
+                {/* <img 
+                    src={bs64} 
+                    width={width} 
+                    height={height}
+                    alt="The target section of orgin template"/> */}
             </Col>
         </Row>
     )

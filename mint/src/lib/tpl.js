@@ -276,7 +276,6 @@ const self = {
                 return self.add(config.default, self.auto);
             } else {
                 funs.cacheIPFS(only_first ? [list[0]] : list, (dels) => {
-                    console.log(dels)
                     //1. need to remove the dels templates
                     if (dels.length !== 0) {
                         console.log(`Need to remove invalid templates.`);
@@ -291,7 +290,6 @@ const self = {
         });
     },
     cache:(alinks,ck)=>{
-        console.log(JSON.stringify(alinks));
         if (local) {
             funs.getLocal(alinks, (left) => {
                 return ck && ck(left);

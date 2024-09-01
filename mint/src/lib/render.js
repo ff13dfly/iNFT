@@ -166,7 +166,8 @@ const Render= {
             }
         }
     },
-    cut:(pen,bs64,w,h,row,line,step,ck)=>{
+    cut:(pen,bs64,w,h,row,line,step,ck,rate)=>{
+        console.log(rate);
         Render.reset(pen);
         const img = new Image();
         img.src = bs64;
@@ -178,7 +179,7 @@ const Render= {
             const dx=w*line;
             const dy=h*step;
             
-            pen.drawImage(img, cx , cy , dx , dy , vx, vy, dx, dy);
+            pen.drawImage(img, cx , cy , dx , dy , vx, vy, !rate?dx:dx*rate, !rate?dy:dy*rate);
             setTimeout(()=>{
                 const b64=pen.canvas.toDataURL("image/jpeg");
                 return ck && ck(b64);
