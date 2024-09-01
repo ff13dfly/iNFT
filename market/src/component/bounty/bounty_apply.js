@@ -8,7 +8,6 @@ import Config from "../../system/config";
 import Bounty from "../../system/bounty";
 import Account from "../../system/account";
 import RUNTIME from "../../system/runtime";
-import INFT from "../../system/inft";
 
 import tools from "../../lib/tools";
 
@@ -28,8 +27,8 @@ function BountyApply(props) {
     row: [12],
     half: [6],
     right: [5, 7],
-    left: [8, 4],
-    sub:[5,3],
+    left: [9, 3],
+    sub: [5, 4],
   };
 
   //rendering parameters
@@ -44,7 +43,7 @@ function BountyApply(props) {
 
   let [disable, setDisable] = useState(true);   //Apply function disable/enable
   let [sub, setSub] = useState(false);          //Wether owned by sub account
-  let [password, setPassword]=useState("");     //sub account password
+  let [password, setPassword] = useState("");     //sub account password
 
   //apply parameters
   let [same, setSame] = useState(true);             //Wether use the iNFT owner as bonus receiver  
@@ -61,7 +60,7 @@ function BountyApply(props) {
     changeReceiver: (ev) => {
       setReceiver(ev.target.value);
     },
-    changePassword:(ev)=>{
+    changePassword: (ev) => {
       setPassword(ev.target.value);
     },
     changeSearch: (ev) => {
@@ -70,7 +69,7 @@ function BountyApply(props) {
       setSearch(name);
 
       self.initApply();
-      
+
       //1.get the iNFT result to show
       self.getAnchor(name, (inft) => {
         if (inft === false) {
@@ -86,33 +85,33 @@ function BountyApply(props) {
         self.showINFT(inft);
 
         //2.check iNFT valid
-        const target = props.data.orgin.raw.bonus[props.index];
-        const tpl=props.data.template;
-        const check=INFT.check(inft,tpl,target);
-
-        let amount=0;
-        for(let i=0;i<check.length;i++){
-          if(check[i]===0) amount++;
-        }
-        if(amount!==0){
-          return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
-        }
+        // when test apply, comment these codes
+        // const target = props.data.orgin.raw.bonus[props.index];
+        // const tpl=props.data.template;
+        // const check=INFT.check(inft,tpl,target);
+        // let amount=0;
+        // for(let i=0;i<check.length;i++){
+        //   if(check[i]===0) amount++;
+        // }
+        // if(amount!==0){
+        //   return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
+        // }
 
         //3.check wether owned by main account
-        const checkOwner=inft.owner;
+        const checkOwner = inft.owner;
         RUNTIME.auto((addr) => {
-          if(addr===checkOwner){
+          if (addr === checkOwner) {
             setSub(false);
             setDisable(false);
             return true;
           }
           //4.check wether owned by sub accounts
           Account.check(checkOwner, (exsist) => {
-            if(!exsist){
+            if (!exsist) {
               setSub(false);
               setDisable(true);
               return true;
-            } 
+            }
             setSub(true);
             setDisable(false);
           });
@@ -128,56 +127,88 @@ function BountyApply(props) {
       }
     },
     clickApply: (ev) => {
-      const alink = props.data.alink;
       self.getAnchor(search, (dt) => {
-        
+        if (dt === false) {
+          return setChainInfo("Invalid iNFT");
+        }
+
+        //0.prepare the apply_anchor
+        const alink = props.data.alink;
+        const inft_alink = `anchor://${dt.name}/${dt.block}`;
+        const name = Bounty.format.name("apply");
+        const obj = {
+          anchor: name,
+          raw: Bounty.format.raw.apply(alink, props.index, inft_alink, network, receiver),
+          protocol: Bounty.format.protocol.apply(alink),
+          dapp: Config.get(["system", "name"]),
+        }
 
         //1.check the anchor status
         const owner = dt.owner;   //iNFT owner
-        Account.check(owner, (exsist) => {
-          //2.write on chain
-          const inft = `anchor://${dt.name}/${dt.block}`;
-          const name = Bounty.format.name("apply");
-          const obj = {
-            anchor: name,
-            raw: Bounty.format.raw.apply(alink, props.index, inft, network, receiver),
-            protocol: Bounty.format.protocol.apply(alink),
-            dapp: Config.get(["system", "name"]),
-          }
-
-          const chain = Network("anchor");
-          chain.sign(obj, (res) => {
-            setChainInfo(res.msg);
-
-            if (res.status === "Finalized") {
-              setTimeout(() => {
-                setChainInfo("");
-              }, 1500);
-
-              self.getAnchor(name, (record) => {
-                console.log(record);
-                const rlink = `anchor://${record.name}/${record.block}`;
-
-                //3.report to portal
-                API.bounty.apply(alink, inft, rlink, (res) => {
-                  props.dialog.close();
-                });
-              });
-            }
+        if (sub) {
+          Account.check(owner, (exsist) => {
+            if(!exsist) return setChainInfo("No sub account to go on.");
+            //console.log(exsist, sub);
+            self.applyBySubAccount(owner,password,obj, inft_alink);
           });
-        });
+        } else {
+          RUNTIME.auto((addr) => {
+            if (owner !== addr) return setChainInfo("Not the owner of iNFT.");
+            self.applyByWallet(obj, inft_alink);
+          });
+        }
       });
     },
+    applyByWallet: (obj, inft_alink) => {
+      const alink = props.data.alink;
+      const chain = Network("anchor");
+      chain.sign(obj, (res) => {
+        setChainInfo(res.msg);
+        if (res.status === "Finalized") {
+          setTimeout(() => {
+            setChainInfo("");
+          }, 1500);
 
-    calcHashValue:(hash,start,step)=>{
-      return parseInt(`0x${hash.substr(start+2,step)}`);
+          self.getAnchor(obj.anchor, (record) => {
+            const rlink = `anchor://${record.name}/${record.block}`;
+            API.bounty.apply(alink, inft_alink, rlink, (res) => {
+              props.dialog.close();
+            });
+          });
+        }
+      });
     },
-    applyByWallet:(obj,ck)=>{
-
-    },
-    applyBySubAccount:(obj,ck)=>{
+    applyBySubAccount: (addr,pass, obj, inft_alink) => {
+      console.log(addr,pass, obj, inft_alink);
+      Account.get(addr,(arr)=>{
+        if(arr.length!==1) return setChainInfo("Invalid sub account.");
+        const chain=Network("anchor");
+        try {
+          chain.load(JSON.stringify(arr[0]), password, (pair) => {
+            if(pair.error) return setChainInfo(pair.error);
+            chain.write(pair,obj,(res)=>{
+              setChainInfo(res.msg);
+              if (res.status === "Finalized") {
+                setTimeout(() => {
+                  setChainInfo("");
+                }, 1500);
       
-    },
+                self.getAnchor(obj.anchor, (record) => {
+                  const rlink = `anchor://${record.name}/${record.block}`;
+                  const alink = props.data.alink;
+                  API.bounty.apply(alink, inft_alink, rlink, (res) => {
+                    props.dialog.close();
+                  });
+                });
+              }
+            });
+          });
+        } catch (error) {
+          return setChainInfo("Invalid account encry file.");
+        }
+      });
+      
+    },  
 
     showINFT: (inft) => {
       setHash(inft.hash);
@@ -187,7 +218,7 @@ function BountyApply(props) {
       if (same) setReceiver(inft.owner);
     },
 
-    initApply:()=>{
+    initApply: () => {
       setInfo("");
       setHidden(false);
       setSub(false);
@@ -264,14 +295,14 @@ function BountyApply(props) {
         }}><FaCheck /></button>
         <span className="ml-10">Other receiver</span>
       </Col>
-      
+
       <Col className="pt-2" hidden={!sub} md={size.sub[0]} lg={size.sub[0]} xl={size.sub[0]} xxl={size.sub[0]}>
-        <input type="password" className="form-control" value={password} 
-          placeholder={`Password of ${tools.shorten(owner,6)}`} onChange={(ev)=>{
+        <input type="password" className="form-control" value={password}
+          placeholder={`Password of ${tools.shorten(owner, 6)}`} onChange={(ev) => {
             self.changePassword(ev);
-          }}/>
+          }} />
       </Col>
-      <Col className="pt-2" hidden={!sub}  md={size.sub[1]} lg={size.sub[1]} xl={size.sub[1]} xxl={size.sub[1]}>
+      <Col className="pt-2" hidden={!sub} md={size.sub[1]} lg={size.sub[1]} xl={size.sub[1]} xxl={size.sub[1]}>
         {chainInfo}
       </Col>
       <Col className="pt-2" hidden={sub} md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>

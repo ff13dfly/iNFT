@@ -61,7 +61,6 @@ const self = {
         });
     },
     check:(addr,ck)=>{
-        console.log(addr);
         if(cache===null) return self.map(()=>{
             self.check(addr,ck);
         });
