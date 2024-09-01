@@ -77,6 +77,7 @@ function BountyShow(props) {
     if(props.data && props.data.alink){
       setReady(false);
       const raw = props.data.orgin.raw;
+      //console.log(raw);
       setQrURL(self.getQrURL(props.data.alink));
       setReady(true);
       if (raw.bonus) {

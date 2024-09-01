@@ -26,7 +26,6 @@
 								<tr>
 									<th></th>
 									<th>ID</th>
-									<th>Sync</th>
 									<th>Alink</th>
 									<th>Description</th>
 									<th>Coin</th>
@@ -41,10 +40,6 @@
 								<tr class="text-left">
 									<td><input type="checkbox" class="check_list" value="{%$v.id%}" /></td>
 									<td class="id">{%$v.id%}</td>
-									<td>
-										<button {%if $v.start neq 0 %}disabled{%/if%}
-											class="btn btn-sm btn-primary bounty_sync" data="{%$v.alink%}">Sync</button>
-									</td>
 									<td><a href="?mod=bounty&act=edit&id={%$v.id%}">{%$v.alink%}</a></td>
 									<td></td>
 									<td>{%$v.coin%}</td>

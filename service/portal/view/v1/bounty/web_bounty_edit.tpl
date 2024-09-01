@@ -195,7 +195,9 @@
 											<h5>Bounty Information</h5>
 										</a>
 									</div>
-									<div class="col-lg-6 text-right"></div>
+									<div class="col-lg-6 text-right">
+										<button class="btn btn-sm btn-primary bounty_sync" data="{%$F.data.alink%}">Sync</button>
+									</div>
 								</div>
 							</div>
 							<div class="panel-wrapper collapse in">
@@ -367,6 +369,7 @@
 		enalbeOperation: () => {
 			$(".apply_accept").prop("disabled", false);
 			$(".apply_refuse").prop("disabled", false);
+			$(".bounty_sync").prop("disabled", false);
 			$("#distribute_submit").prop("disabled", false);
 			$("#payment_record").prop("disabled", false);
 			$("#payment_hash").prop("disabled", false);
@@ -374,6 +377,7 @@
 		disableOperation: () => {
 			$(".apply_accept").prop("disabled", true);
 			$(".apply_refuse").prop("disabled", true);
+			$(".bounty_sync").prop("disabled", true);
 			$("#distribute_submit").prop("disabled", true);
 			$("#payment_record").prop("disabled", true);
 			$("#payment_hash").prop("disabled", true);

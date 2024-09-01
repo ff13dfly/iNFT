@@ -50,7 +50,6 @@ function Header(props) {
           console.log(addr);
           setLogin(tools.shorten(addr, 5));
         });
-
       } else {
         props.link("user");
       }
@@ -58,7 +57,6 @@ function Header(props) {
   }
 
   useEffect(() => {
-    //console.log(props);
     if (props.active === "user" && login === "Login") {
       setLogin("Checking...");
       setTimeout(() => {

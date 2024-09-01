@@ -4,7 +4,7 @@ import tools from "../lib/tools";
 import Config from "./config";
 import Network from "../network/router";
 
-const cache={}      //cache the account
+let cache=null      //cache the account
 
 const funs = {
     checkDB:(table,ck)=>{
@@ -43,10 +43,10 @@ const funs = {
     }
 }
 
-
 const self = {
     map:(ck)=>{
         self.list({},(arr)=>{
+            if(cache===null) cache={};
             for(let i=0;i<arr.length;i++){
                 const row=arr[i];
                 cache[row.address]=true;
@@ -60,9 +60,18 @@ const self = {
             INDEXED.searchRows(db,table,"address",addr,ck);
         });
     },
-    exsist:(addr)=>{
+    check:(addr,ck)=>{
+        console.log(addr);
+        if(cache===null) return self.map(()=>{
+            self.check(addr,ck);
+        });
+        if(cache[addr]) return ck && ck(true);
+        return ck && ck(false);
+    },
+    exsist:(addr,ck)=>{
+        if(cache===null) return self.map();
         if(cache[addr]) return true;
-        return false
+        return false;
     },
 
     list: (filter, ck, page, step) => {

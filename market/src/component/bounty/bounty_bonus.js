@@ -11,6 +11,7 @@ import INFT from "../../system/inft";
 /* Bounty Bonus Detail
 *   @param  {object}    raw           //raw bounty on chain
 *   @param  {object}    template      //template data
+*   @param  {string}    coin          //bonus coin
 */
 
 function BountyBonus(props) {
@@ -137,7 +138,8 @@ function BountyBonus(props) {
 
   useEffect(() => {
     //console.log(props.raw);
-
+    if(props.coin) setCoin(props.coin);
+    
     setData(props.template);
     if(props.raw && props.raw.alink){
       const dt=props.raw;
@@ -145,7 +147,7 @@ function BountyBonus(props) {
 
       self.freshProgress(dt.apply,dt.detail.bonus);
 
-      setCoin(dt.coin);
+      
       setList(dt.orgin.raw.bonus);
     }
   }, [props.raw,props.template]);

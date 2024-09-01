@@ -23,6 +23,11 @@ function CreativityNav(props) {
       under: <TemplateList />,
     },
     // {
+    //   title: "Image Cell List",
+    //   operation: "template operation component",
+    //   under: <TemplateList />,
+    // },
+    // {
     //   title: "Image",
     //   operation: "image under operation",
     //   under: "b",

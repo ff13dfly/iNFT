@@ -1,15 +1,17 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import PriveiwINFT from "../common/inft_preview";
-
 import Network from "../../network/router";
-import tools from "../../lib/tools";
-
 import API from "../../system/api";
 import TPL from "../../system/tpl";
 import Config from "../../system/config";
 import Bounty from "../../system/bounty";
+import Account from "../../system/account";
+import RUNTIME from "../../system/runtime";
+
+import tools from "../../lib/tools";
+
+import PriveiwINFT from "../common/inft_preview";
 
 import { FaCheck } from "react-icons/fa";
 
@@ -20,31 +22,37 @@ import { FaCheck } from "react-icons/fa";
 */
 
 function BountyApply(props) {
+  //Bootstrap Col setting
   const size = {
     row: [12],
     half: [6],
-    right: [5,7],
+    right: [5, 7],
     left: [8, 4],
-
+    sub:[5,3],
   };
 
-  let [search, setSearch] = useState("");
-  let [info, setInfo] = useState("");
-  let [thumb, setThumb] = useState(`${window.location.origin}/imgs/logo.png`);
+  //rendering parameters
+  let [thumb, setThumb] = useState(`${window.location.origin}/imgs/logo.png`);    //Wanted iNFT thumb
+  let [search, setSearch] = useState("");       //iNFT name to search
+  let [info, setInfo] = useState("");           //iNFT search result
+  let [hidden, setHidden] = useState(false);    //Wethe hide the search iNFT thumb
+  let [hash, setHash] = useState("");           //iNFT result hash
+  let [template, setTemplate] = useState("");   //iNFT result gene template cid
+  let [offset, setOffset] = useState([]);       //iNFT result offset
+  let [owner, setOwner] = useState("");         //iNFT result owner
 
-  let [disable, setDisable] = useState(true);
-  let [hidden, setHidden] = useState(false);
+  let [disable, setDisable] = useState(true);   //Apply function disable/enable
+  let [sub, setSub] = useState(false);          //Wether owned by sub account
+  let [password, setPassword]=useState("");     //sub account password
 
-  let [hash, setHash] = useState("");
-  let [template, setTemplate] = useState("");
-  let [offset, setOffset] = useState([]);
-  let [owner, setOwner] = useState("");
-  let [same, setSame]= useState(true);
+  //apply parameters
+  let [same, setSame] = useState(true);             //Wether use the iNFT owner as bonus receiver  
+  let [receiver, setReceiver] = useState("");       //receive address
+  let [chainInfo, setChainInfo] = useState("");     //apply button clicked status
 
-  //apply details
+  //FIXME, need to get this from coin setting
   let [network, setNetwork] = useState("anchor");   //network to get bonus
-  let [receiver, setReceiver] = useState("");        //receive address
-  let [chainInfo, setChainInfo] = useState("");      //apply button clicked status
+
   const self = {
     changeNetwork: (ev) => {
       setNetwork(ev.target.value);
@@ -52,15 +60,17 @@ function BountyApply(props) {
     changeReceiver: (ev) => {
       setReceiver(ev.target.value);
     },
+    changePassword:(ev)=>{
+      setPassword(ev.target.value);
+    },
     changeSearch: (ev) => {
 
       const name = ev.target.value;
       setSearch(name);
 
-      setInfo("");
-      setHidden(false);
-      //setHiddenPreview(true);
-
+      self.initApply();
+      
+      //1.get the iNFT result to show
       self.getAnchor(name, (inft) => {
         if (inft === false) {
           setHidden(true);
@@ -73,64 +83,96 @@ function BountyApply(props) {
         }
 
         self.showINFT(inft);
-        setDisable(false);
 
+        //2.check wether owned by main account
+        const checkOwner=inft.owner;
+        RUNTIME.auto((addr) => {
+          if(addr===checkOwner){
+            setSub(false);
+            setDisable(false);
+            return true;
+          }
+          //3.check wether owned by sub accounts
+          Account.check(checkOwner, (exsist) => {
+            if(!exsist){
+              setSub(false);
+              setDisable(true);
+              return true;
+            } 
+            setSub(true);
+            setDisable(false);
+          });
+        });
       });
     },
-    clickSame:()=>{
+    clickSame: () => {
       setSame(!same);
-      if(!same){
+      if (!same) {
         setReceiver(owner);
-      }else{
+      } else {
         setReceiver("");
       }
     },
     clickApply: (ev) => {
       const alink = props.data.alink;
       self.getAnchor(search, (dt) => {
-        const inft = `anchor://${dt.name}/${dt.block}`;
-
-        //1.write on chain
-        const name = Bounty.format.name("apply");
-        const obj = {
-          anchor: name,
-          raw: Bounty.format.raw.apply(alink,props.index,inft,network,receiver),
-          protocol: Bounty.format.protocol.apply(alink),
-          dapp: Config.get(["system", "name"]),
-        }
-
-        const chain = Network("anchor");
-        chain.sign(obj, (res) => {
-          setChainInfo(res.msg);
-
-          if (res.status === "Finalized") {
-            setTimeout(() => {
-              setChainInfo("");
-            }, 1500);
-
-            self.getAnchor(name, (record) => {
-              console.log(record);
-              const rlink = `anchor://${record.name}/${record.block}`;
-
-              //2.report to portal
-              API.bounty.apply(alink, inft, rlink, (res) => {
-                props.dialog.close();
-              });
-            });
+        //1.check the anchor status
+        const owner = dt.owner;   //iNFT owner
+        Account.check(owner, (exsist) => {
+          //2.write on chain
+          const inft = `anchor://${dt.name}/${dt.block}`;
+          const name = Bounty.format.name("apply");
+          const obj = {
+            anchor: name,
+            raw: Bounty.format.raw.apply(alink, props.index, inft, network, receiver),
+            protocol: Bounty.format.protocol.apply(alink),
+            dapp: Config.get(["system", "name"]),
           }
+
+          const chain = Network("anchor");
+          chain.sign(obj, (res) => {
+            setChainInfo(res.msg);
+
+            if (res.status === "Finalized") {
+              setTimeout(() => {
+                setChainInfo("");
+              }, 1500);
+
+              self.getAnchor(name, (record) => {
+                console.log(record);
+                const rlink = `anchor://${record.name}/${record.block}`;
+
+                //3.report to portal
+                API.bounty.apply(alink, inft, rlink, (res) => {
+                  props.dialog.close();
+                });
+              });
+            }
+          });
         });
       });
     },
+
+    applyByWallet:(obj,ck)=>{
+
+    },
+    applyBySubAccount:(obj,ck)=>{
+      
+    },
+
     showINFT: (inft) => {
       setHash(inft.hash);
       setOffset(inft.raw.offset);
       setOwner(inft.owner);
       setTemplate(inft.raw.tpl);
-      if(same) setReceiver(inft.owner);
+      if (same) setReceiver(inft.owner);
     },
 
-    checkValid: () => {
-
+    initApply:()=>{
+      setInfo("");
+      setHidden(false);
+      setSub(false);
+      setDisable(true);
     },
     getAnchor: (name, ck) => {
       const chain = Network("anchor");
@@ -193,18 +235,25 @@ function BountyApply(props) {
       </Col>
 
       <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-        <input type="text" hidden={same}  className="form-control" placeholder="The account address to accept the bonus coins/token." value={receiver} onChange={(ev)=>{
-            self.changeReceiver(ev)
+        <input type="text" hidden={same} className="form-control" placeholder="The account address to accept the bonus coins/token." value={receiver} onChange={(ev) => {
+          self.changeReceiver(ev)
         }} />
       </Col>
       <Col className="pt-3 text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-            <button className={same ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
-              self.clickSame(ev)
-            }}><FaCheck /></button>
-            <span className="ml-10">Other receiver</span>
+        <button className={same ? "btn btn-sm btn-default" : "btn btn-sm btn-primary"} onClick={(ev) => {
+          self.clickSame(ev)
+        }}><FaCheck /></button>
+        <span className="ml-10">Other receiver</span>
       </Col>
-
-      <Col className="pt-2" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+      
+      <Col className="pt-2" hidden={!sub} md={size.sub[0]} lg={size.sub[0]} xl={size.sub[0]} xxl={size.sub[0]}>
+        <input type="password" className="form-control" value={password} 
+          placeholder={`Password of ${tools.shorten(owner,6)}`}/>
+      </Col>
+      <Col className="pt-2" hidden={!sub}  md={size.sub[1]} lg={size.sub[1]} xl={size.sub[1]} xxl={size.sub[1]}>
+        {chainInfo}
+      </Col>
+      <Col className="pt-2" hidden={sub} md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         {chainInfo}
       </Col>
       <Col className="pt-2 text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
