@@ -68,20 +68,20 @@ function CreativityNav(props) {
   }, []);
 
   return (
-    <Row>
+    <Row className="creativity-container">
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
 
       </Col>
       {navs.map((row, index) => (
         <Col key={index} className="border_bottom" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <Row>
-            <Col className="bg-secondary text-white pointer pt-2 pb-1"
+            <Col className="bg-secondary text-white pointer pt-2 pb-1 creativity-nav"
               md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} onClick={(ev) => {
                 self.router(index)
               }}>
               <h6>{row.title}</h6>
             </Col>
-            <Col hidden={show[index] ? false : true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col className="creativity-under" hidden={show[index] ? false : true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               {row.under}
             </Col>
           </Row>

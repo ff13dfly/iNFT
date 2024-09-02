@@ -50,13 +50,13 @@ function CreativityBasic(props) {
 
   return (
     <Row>
-      <Col className="pt-1" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
+      <Col className="bg-creativity pt-1" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
         <Row hidden={!(pages[active]==="basic")} style={{height:"65px"}}>
           <Col className="pt-1" md={size.basic[0]} lg={size.basic[0]} xl={size.basic[0]} xxl={size.basic[0]}>
             <h5>Basic Parameter</h5>
           </Col>
           <Col className="pt-4 text-center" md={size.basic[1]} lg={size.basic[1]} xl={size.basic[1]} xxl={size.basic[1]}>
-            Size
+            <h6>Size</h6>
           </Col>
           <Col md={size.basic[2]} lg={size.basic[2]} xl={size.basic[2]} xxl={size.basic[2]}>
             <small>iNFT Width</small>
@@ -71,7 +71,7 @@ function CreativityBasic(props) {
             }} />
           </Col>
           <Col className="pt-4 text-center" md={size.basic[4]} lg={size.basic[4]} xl={size.basic[4]} xxl={size.basic[4]}>
-            Cell
+            <h6>Cell</h6>
           </Col>
           <Col md={size.basic[5]} lg={size.basic[5]} xl={size.basic[5]} xxl={size.basic[5]}>
             <small>Cell Width</small>
@@ -98,7 +98,7 @@ function CreativityBasic(props) {
           </Col>
         </Row>
       </Col>
-      <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
+      <Col className=" bg-creativity text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
         <button className="btn btn-sm btn-default" onClick={(ev)=>{
           self.clickMoreUp(ev);
         }}><FaAngleDoubleUp /></button><br />

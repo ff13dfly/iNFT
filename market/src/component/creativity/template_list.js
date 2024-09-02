@@ -26,7 +26,7 @@ function TemplateList(props) {
   }
 
   useEffect(() => {
-    const arr = [{ mock: "a" }, { mock: "b" }]
+    const arr = [{ file: "abc" }, { file: "b3" }]
     setList(arr);
   }, []);
 

@@ -56,7 +56,7 @@ function CreativityPreview(props) {
     <div className="container_preview">
       <Row className="content_mock" style={cmap}>
         <Col className="text-start" md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-          <h5 className="pt-2">Template Preview</h5>
+          <h5 className="pt-2">iNFT Preview</h5>
         </Col>
         <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
           <button className="btn btn-md btn-default" onClick={(ev)=>{

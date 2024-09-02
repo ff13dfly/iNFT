@@ -163,10 +163,6 @@ code {
   font-weight: 500;
 }
 
-.border_bottom{
-  border-bottom:1px solid #FFFFFF;
-}
-
 .playground_title{
   border-left: 5px solid #988080;
   padding-left: 5px;
@@ -208,4 +204,29 @@ code {
   border-right: 1px solid #988080;
   height: 100%;
   min-height: 600px;
+}
+
+.bg-creativity{
+  background: #EEEEEE;
+}
+
+.border_bottom{
+  border-bottom:1px solid #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.creativity-nav{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.creativity-under{
+  border: 1px solid #EEEEEE;
+  padding: 10px 5px 10px 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.creativity-container{
+  padding-left: 10px;
 }
