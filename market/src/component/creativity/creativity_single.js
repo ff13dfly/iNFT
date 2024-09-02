@@ -8,6 +8,7 @@ import PartsList from "./parts_list";
 import TemplateRaw from "./template_raw";
 
 import PartsOverview from "./parts_overview";
+import SeriesOverview from "./series_overview";
 
 /* Component Sample
 *   @param  {string}    name        //unique name to load data from local indexedDB
@@ -32,7 +33,7 @@ function CreativitySingle(props) {
     <Tabs
       defaultActiveKey="image"
       id="uncontrolled-tab-example"
-      className="mb-3"
+      className="mb-3 pt-2"
       fill
       onSelect={(active) => {
 
@@ -49,14 +50,10 @@ function CreativitySingle(props) {
         </Row>
       </Tab>
       <Tab eventKey="parts" title={<h6>Gene Parts</h6>}>
-        <Row>
-          <Col md={size.parts[0]} lg={size.parts[0]} xl={size.parts[0]} xxl={size.parts[0]} >
-            <PartsOverview />
-          </Col>
-        </Row>
+        <PartsOverview />
       </Tab>
       <Tab eventKey="series" title={<h6>Scarcity Series</h6>}>
-        Series Selection
+        <SeriesOverview />
       </Tab>
       <Tab eventKey="raw" title={<h6>Raw JSON</h6>}>
         <TemplateRaw />

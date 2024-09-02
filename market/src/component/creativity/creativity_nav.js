@@ -20,7 +20,7 @@ function CreativityNav(props) {
     {
       title: "Gene Local List",
       operation: "template operation component",
-      under: <TemplateList />,
+      under: <TemplateList show={props.show} />,
     },
     // {
     //   title: "Image Cell List",
@@ -45,12 +45,12 @@ function CreativityNav(props) {
     {
       title: "Deployment",
       operation: "deploy under operation",
-      under: <TemplateDeploy />,
+      under: <TemplateDeploy show={props.show} />,
     },
     {
       title: "Published",
       operation: "deploy under operation",
-      under: <TemplateList />,
+      under: <TemplateList show={props.show}/>,
     },
   ]
 

@@ -4,15 +4,13 @@ import { useState } from "react";
 import CreativityNav from "../component/creativity/creativity_nav"
 import CreativityPreview from "../component/creativity/creativity_preview";
 
-import CreativitySingle from "../component/creativity/creativity_single";
-
 import { FaAlignJustify,FaExpandArrowsAlt } from "react-icons/fa";
 
 function Creativity(props) {
     const size = {
         row: [12],
         layout: [10, 2],
-        head:[9,3],
+        head:[10,2],
         parts:[4,4,4],
         left:[9,3]
     };
@@ -32,8 +30,8 @@ function Creativity(props) {
 
     return (
         <Row className="pt-2">
-            <Col md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
-                Information of selected Gene ( template detail ).
+            <Col className="pt-2" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
+                Selected file: ***.json, created on 2024-09-03
             </Col>
             <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
                 <button className="btn btn-md btn-default" >
@@ -50,10 +48,12 @@ function Creativity(props) {
                 lg={sidebar?size.layout[0]:size.row[0]} 
                 xl={sidebar?size.layout[0]:size.row[0]} 
                 xxl={sidebar?size.layout[0]:size.row[0]}>
-                <CreativitySingle />
+                {content}
+                {/* <CreativityBasic />
+                <CreativitySingle /> */}
             </Col>
             <Col className="pt-2" hidden={!sidebar} md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
-                <CreativityNav update={self.updateContent} />
+                <CreativityNav show={self.updateContent} />
             </Col>
             <CreativityPreview />
         </Row>

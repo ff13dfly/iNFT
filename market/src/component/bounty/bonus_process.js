@@ -7,7 +7,6 @@ import { FaCopy } from "react-icons/fa";
 
 import BountyApply from "./bounty_apply";
 
-import Config from "../../system/config";
 import Account from "../../system/account";
 import API from "../../system/api";
 import Network from "../../network/router";
@@ -162,9 +161,29 @@ function BonusProcess(props) {
       if(data===null) return "Not yet.";
       return `anchor://${data.name}/${data.block}`
     },
+    calcRarity: (parts, index) => {
+      let n = 1;    //target
+      let m = 1;    //sum
+      for (let i = 0; i < parts.length; i++) {
+        const row = parts[i];
+        const rt = row.rarity[index];
+        const divide = row.value[2];
+        n = n * rt.length;
+        m = m * divide;
+      }
+      return parseInt(m / n).toLocaleString();
+    },
+    getSeriesOption:()=>{
+      const series=props.data.template.raw.series;
+      const target=series[props.index];
+      //console.log(target);
+      return target.count.toLocaleString();
+    },
   }
 
   useEffect(() => {
+    console.log(props.data);
+
     //need to map the local account first, then the Account.exsist is aync
     Account.map((res)=>{
       self.applyList(props.data.apply, props.index);
@@ -181,10 +200,16 @@ function BonusProcess(props) {
       <Col md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <strong>Bonus #{props.index}, {props.data.orgin.raw.desc}</strong>
+            <strong>Bonus #{props.index}</strong>, {props.data.orgin.raw.desc}
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            Gene series {props.data.orgin.raw.bonus[props.index].series}, scarerity
+            <strong>Prize</strong>: <strong className="text-warning mr-5">{props.data.orgin.raw.bonus[props.index].bonus}</strong>
+            ${props.data.orgin.raw.coin.toUpperCase()}
+          </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            Gene series {props.data.orgin.raw.bonus[props.index].series}, 
+            total <strong>{self.getSeriesOption()}</strong> options, 
+            rarity <strong>1/{self.calcRarity(props.template.parts,props.index)}</strong>.  
           </Col>
           <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             Progress: {props.data.orgin.raw.bonus[props.index].amount} wanted, {list.length} submission

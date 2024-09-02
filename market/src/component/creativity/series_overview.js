@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 *   @param  {string}    hash        //unique hash
 */
 
-function PartsOverview(props) {
+function SeriesOverview(props) {
   const size = {
     row: [12],
     grid:[2,6,4]
@@ -14,6 +14,7 @@ function PartsOverview(props) {
   let [list, setList] = useState([]);
 
   const self = {
+    
   }
 
   useEffect(() => {
@@ -31,17 +32,18 @@ function PartsOverview(props) {
             </Col>
           ))}
           <Col style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <button className="btn btn-md btn-primary">+ New Part</button>
+            <button className="btn btn-md btn-primary">+ New Series</button>
           </Col>
         </Row>
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-          Part detail.
+          Series detail.<br/>
+          Part select.
       </Col>
       <Col md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
-          More information.
+          Series Thumb List.
       </Col>
     </Row>
   );
 }
-export default PartsOverview;
+export default SeriesOverview;

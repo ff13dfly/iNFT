@@ -38,7 +38,7 @@ function TemplateRaw(props) {
         </Form>
       </Col>
       <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <textarea className="form-control" disabled rows={24}></textarea>
+        <textarea className="form-control" disabled rows={22}></textarea>
       </Col>
     </Row>
   );
