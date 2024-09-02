@@ -1,5 +1,5 @@
 import { Row, Col, Form } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import NetworkList from "./network_list";
 

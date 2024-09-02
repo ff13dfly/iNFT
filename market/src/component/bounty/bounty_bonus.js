@@ -12,6 +12,7 @@ import INFT from "../../system/inft";
 *   @param  {object}    raw           //raw bounty on chain
 *   @param  {object}    template      //template data
 *   @param  {string}    coin          //bonus coin
+*   @param  {function}  fresh         //fresh bounty list function
 */
 
 function BountyBonus(props) {
@@ -30,10 +31,10 @@ function BountyBonus(props) {
 
   const self = {
     clickApply: (index) => {
-      props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog} />, "Bounty Apply");
+      props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog} fresh={props.fresh}/>, "Bounty Apply");
     },
     clickProcess:(index)=>{
-      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} />, `Bonus Process ( ${props.raw.alink} )`);
+      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} fresh={props.fresh}/>, `Bonus Process ( ${props.raw.alink} )`);
     },
     getThumb: (index) => {
       //console.log(props.template.series);
@@ -143,9 +144,7 @@ function BountyBonus(props) {
     setData(props.template);
     if(props.raw && props.raw.alink){
       const dt=props.raw;
-      //console.log(dt)
-
-      self.freshProgress(dt.apply,dt.detail.bonus);
+      self.freshProgress(dt.apply,dt.orgin.raw.bonus);
 
       
       setList(dt.orgin.raw.bonus);

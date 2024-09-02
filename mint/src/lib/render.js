@@ -167,7 +167,6 @@ const Render= {
         }
     },
     cut:(pen,bs64,w,h,row,line,step,ck,rate)=>{
-        console.log(rate);
         Render.reset(pen);
         const img = new Image();
         img.src = bs64;

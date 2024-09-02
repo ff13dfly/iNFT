@@ -13,6 +13,10 @@ const RUNTIME={
         get:()=>{
             return cache.address;
         },
+        avatar:(addr)=>{
+            const cfg = Config.get(["system", "avatar"]);
+            return `${cfg.base}/${addr}.png${cfg.set}`;
+        },
     },
     auto:async (ck)=>{
         //1.try to get the account;

@@ -87,16 +87,16 @@ function BountyApply(props) {
 
         //2.check iNFT valid
         // when test apply, comment these codes
-        const target = props.data.orgin.raw.bonus[props.index];
-        const tpl=props.data.template;
-        const check=INFT.check(inft,tpl,target);
-        let amount=0;
-        for(let i=0;i<check.length;i++){
-          if(check[i]===0) amount++;
-        }
-        if(amount!==0){
-          return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
-        }
+        // const target = props.data.orgin.raw.bonus[props.index];
+        // const tpl=props.data.template;
+        // const check=INFT.check(inft,tpl,target);
+        // let amount=0;
+        // for(let i=0;i<check.length;i++){
+        //   if(check[i]===0) amount++;
+        // }
+        // if(amount!==0){
+        //   return setInfo(`${amount} ${amount===1?"part":"parts"} are not matched of this iNFT.`);
+        // }
 
         //3.check wether owned by main account
         const checkOwner = inft.owner;
@@ -173,6 +173,7 @@ function BountyApply(props) {
           self.getAnchor(obj.anchor, (record) => {
             const rlink = `anchor://${record.name}/${record.block}`;
             API.bounty.apply(alink, inft_alink, rlink, (res) => {
+              if(props.fresh) props.fresh();
               props.dialog.close();
             });
           });
@@ -198,6 +199,7 @@ function BountyApply(props) {
                   const rlink = `anchor://${record.name}/${record.block}`;
                   const alink = props.data.alink;
                   API.bounty.apply(alink, inft_alink, rlink, (res) => {
+                    if(props.fresh) props.fresh();
                     props.dialog.close();
                   });
                 });

@@ -12,6 +12,7 @@ import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
 /* Mint result of nearby blocks
 *   @param  {object}    data        //raw anchor data of bounty
 *   @param  {object}    template    //template raw data
+*   @param  {function}  fresh       //fresh the bounty list function
 */
 
 function BountyShow(props) {
@@ -134,6 +135,7 @@ function BountyShow(props) {
           coin={coin} 
           template={props.template && props.template.raw}
           dialog={props.dialog}
+          fresh={props.fresh}     //force to fresh the bounty list
         />
         <p className="pt-2">Click thumb to view detail or divert iNFT.</p>
       </Col>

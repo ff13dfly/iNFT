@@ -54,13 +54,7 @@ function BountyList(props) {
         });
       });
     },
-  }
-
-  useEffect(() => {
-    const hlist = self.getHolder(1);
-    setList(hlist);
-
-    setTimeout(()=>{
+    fresh:()=>{
       API.bounty.list((res)=>{
         if(res && res.success && res.data){
           self.prepareData(res.data,(bts)=>{
@@ -69,6 +63,15 @@ function BountyList(props) {
           });
         }
       },page);
+    },
+  }
+
+  useEffect(() => {
+    const hlist = self.getHolder(1);
+    setList(hlist);
+
+    setTimeout(()=>{
+      self.fresh()
     },300);
   }, [props.update]);
 
@@ -78,6 +81,7 @@ function BountyList(props) {
         <Col className="justify-content-around pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
           <BountyShow 
             data={row}
+            fresh={self.fresh}
             template={row.template}
             link={props.link} 
             dialog={props.dialog}

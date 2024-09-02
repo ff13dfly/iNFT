@@ -1,12 +1,17 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import { FaLightbulb,FaPencilAlt,FaBalanceScale,FaFunnelDollar,FaPaperPlane } from "react-icons/fa";
+
+import { FaCopy } from "react-icons/fa";
+
 import BountyApply from "./bounty_apply";
 
 import Config from "../../system/config";
 import Account from "../../system/account";
 import API from "../../system/api";
 import Network from "../../network/router";
+import RUNTIME from "../../system/runtime";
 
 import tools from "../../lib/tools";
 
@@ -29,32 +34,41 @@ function BonusProcess(props) {
 
   let [list, setList] = useState([]);
   let [winners,setWinners] = useState([]);
-
   let [password, setPassword] = useState({});
+  let [info, setInfo]= useState({});
 
   const self = {
+    changePassword:(ev,name)=>{
+      password[name]=ev.target.value;
+      setPassword(tools.clone(password));
+    },
     clickApply: () => {
       props.dialog.close();
       setTimeout(() => {
-        props.dialog.show(<BountyApply data={props.data} index={props.index} dialog={props.dialog} />, "Bounty Apply");
+        props.dialog.show(<BountyApply data={props.data} index={props.index} dialog={props.dialog} fresh={props.fresh} />, "Bounty Apply");
       }, 200);
     },
     clickDivert:(name,addr,index)=>{
-      console.log(name,addr,index);
       const chain=Network("anchor");
       const ak=tools.decode(props.data.alink);
-
       chain.view(ak,"anchor",(dt)=>{
-        //FIXME, need to get the consignee from bounty raw data
-        const target="5DLgD2J6R7QRo8CuZRnT7ZiYmwUTLz2jmhUPc1Jd44LLrd9X";
+        const target=props.data.orgin.raw.consignee;
         Account.get(addr,(file)=>{
           try {
             chain.load(JSON.stringify(file[0]), password[name], (pair) => {
               chain.divert(pair,name,target,(res)=>{
-                console.log(res);
+                //fresh target 
+                info[ak.name]=res.message;
+                setInfo(tools.clone(info));
+
                 if(res.status==="Finalized"){
                   API.bounty.divert(props.data.alink,index,res.hash,(final)=>{
-                    console.log(final);
+                    if(final.success){
+                      info[ak.name]="";
+                      setInfo(tools.clone(info));   //set messsage
+
+                      if(props.fresh) props.fresh();    //fresh bounty data
+                    }
                   });
                 }
               });
@@ -65,10 +79,7 @@ function BonusProcess(props) {
         });
       });
     },
-    changePassword:(ev,name)=>{
-      password[name]=ev.target.value;
-      setPassword(tools.clone(password));
-    },
+    
     getTarget: () => {
       if (props.data.orgin && props.data.orgin.raw && props.data.orgin.raw.bonus) {
         const bs = props.data.orgin.raw.bonus;
@@ -83,15 +94,30 @@ function BonusProcess(props) {
       const dd=new Date(stamp);
       return dd.toLocaleDateString();
     },
-    getApplyStatus: (judge) => {
-      if (judge === null) return "Pending";
-      return judge.raw.result ? "Acceptted" : "Refused"
+    getApplyStatus: (row) => {
+      //console.log(row);
+      const judge=row.judge;
+      const distribute=row.distribute;
+      if(distribute!==null) return "Distribute";
+      if (judge === null) return "Pending, waiting for judgement.";
+      if(judge.raw.result===false) return  "Refused, try more, :-)";
+      if(row.divert!=="") return  "Congratulation, waiting for prize!";
+      return "Acceptted, please divert the iNFT."
     },
-    getAvatar: (addr) => {
-      const cfg = Config.get(["system", "avatar"]);
-      return `${cfg.base}/${addr}.png${cfg.set}`;
+    disabeDivert:(row)=>{
+      if(!Account.exsist(row.inft.owner)) return true;
+      if(row.divert!=="") return true;
+      if(!password[row.inft.name]) return true;
+      return false;
     },
-
+    //check wether hide the divert operation part
+    hideDivert:(row)=>{
+      if(row.judge===null) return true;
+      if(row.distribute!==null) return true;
+      if(row.divert!=="") return true;
+      if(row.judge.raw.result===false) return true;   //if refused, hide divert operation
+      return false;
+    },
     applyList: (aps, index) => {
       //1.filter out the bonus submissions
       const arr = [];
@@ -114,33 +140,32 @@ function BonusProcess(props) {
           arr.push(atom);
         }
       }
-      //console.log(arr);
-      setList(arr.reverse());
+      setList(arr.reverse());   //put the latest on top of the list
 
       //2.filter out the winners;
+      const ws=self.getWinners(arr);
+      setWinners(ws);
+    },
+    getWinners:(arr)=>{
       const nlist=[];
       for (let i = 0; i < arr.length; i++) {
         const row=arr[i];
-        //console.log(row);
         if(row.judge!==null && row.judge.raw && row.judge.raw.result){
           nlist.push({
             address:row.record.raw.receiver.address,
           });
         }
       }
-      setWinners(nlist);
+      return nlist;
     },
-    hiddenPassword:(row)=>{
-      if(!Account.exsist(row.inft.owner)) return true;
-      if(row.divert!=="") return true;
-      return false;
-    },
-    disableDivert:(row)=>{
-
+    getAnchorLink:(data)=>{
+      if(data===null) return "Not yet.";
+      return `anchor://${data.name}/${data.block}`
     },
   }
 
   useEffect(() => {
+    //need to map the local account first, then the Account.exsist is aync
     Account.map((res)=>{
       self.applyList(props.data.apply, props.index);
     });
@@ -156,12 +181,12 @@ function BonusProcess(props) {
       <Col md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            <strong>{props.data.orgin.raw.desc}</strong>
+            <strong>Bonus #{props.index}, {props.data.orgin.raw.desc}</strong>
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-            Bonus #{props.index}: template series {props.data.orgin.raw.bonus[props.index].series}
+            Gene series {props.data.orgin.raw.bonus[props.index].series}, scarerity
           </Col>
-          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             Progress: {props.data.orgin.raw.bonus[props.index].amount} wanted, {list.length} submission
           </Col>
           <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
@@ -178,7 +203,7 @@ function BonusProcess(props) {
               <Col key={index} className="text-center"  md={size.winner[0]} lg={size.winner[0]} xl={size.winner[0]} xxl={size.winner[0]} >
                 
                 <Image
-                  src={self.getAvatar(row.address)}
+                  src={RUNTIME.account.avatar(row.address)}
                   rounded
                   width="100%"
                   style={{ minHeight: "80px" }}
@@ -202,31 +227,45 @@ function BonusProcess(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
         <Row className="container_apply">
           {list.map((row, index) => (
-            <Col className="pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col className="pb-3" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               <Row>
                 <Col md={size.apply[0]} lg={size.apply[0]} xl={size.apply[0]} xxl={size.apply[0]} >
                   <img src={row.inft.bs64} className="apply_thumb" alt="" />
-
+                  <strong>anchor://{row.inft.name}/{row.inft.block}</strong>
                 </Col>
                 <Col md={size.apply[1]} lg={size.apply[1]} xl={size.apply[1]} xxl={size.apply[1]} >
                   <Row>
+                    
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                      <p><strong>anchor://{row.inft.name}/{row.inft.block}</strong>, owner:<strong>{tools.shorten(row.inft.owner)}</strong></p>
-                      {self.getApplyStatus(row.judge)}
+                      Owned by <strong>{tools.shorten(row.inft.owner)}</strong>
+                      <span className="pointer ml-10"><FaCopy size={20}/></span>
+                    </Col>
+                    <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                      <FaLightbulb className="text-secondary mr-5" size={18}/> <strong className="text-info">{self.getApplyStatus(row)}</strong>
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
-                      {row.distribute !== null ? "Payed" : "Waiting for distributition"}
+                      <FaPencilAlt className="text-secondary mr-5" size={18}/> {self.getAnchorLink(row.record)}
                     </Col>
-                    <Col className="text-end pt-1" md={size.divert[0]} lg={size.divert[0]} xl={size.divert[0]} xxl={size.divert[0]} >
-                      <input type="password" hidden={self.hiddenPassword(row)}  className="form-control" 
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                      <FaBalanceScale className="text-secondary mr-5" size={18}/> {self.getAnchorLink(row.judge)}
+                    </Col>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                      <FaPaperPlane className="text-secondary mr-5" size={18}/> {!row.divert?"Not yet.":tools.shorten(row.divert,20)}
+                    </Col>
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                      <FaFunnelDollar className="text-secondary mr-5" size={18}/> {self.getAnchorLink(row.distribute)}
+                    </Col>
+                    <Col hidden={self.hideDivert(row)} className="text-end pt-1" md={size.divert[0]} lg={size.divert[0]} xl={size.divert[0]} xxl={size.divert[0]} >
+                      <input type="password"  className="form-control" 
                         placeholder={`Password of ${tools.shorten(row.inft.owner)}`} onChange={(ev)=>{
                           self.changePassword(ev,row.inft.name);
                         }}/>
+                      <small>{!info[row.inft.name]?"":info[row.inft.name]}</small>
                     </Col>
-                    <Col className="text-end pt-1" md={size.divert[1]} lg={size.divert[1]} xl={size.divert[1]} xxl={size.divert[1]} >
+                    <Col hidden={self.hideDivert(row)} className="text-end pt-1" md={size.divert[1]} lg={size.divert[1]} xl={size.divert[1]} xxl={size.divert[1]} >
                       <button 
-                        disabled={self.hiddenPassword(row)}
-                        className={!self.hiddenPassword(row)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
+                        disabled={self.disabeDivert(row)}
+                        className={!self.disabeDivert(row)?"btn btn-md btn-primary":"btn btn-sm btn-default"} 
                         onClick={(ev)=>{
                           self.clickDivert(row.inft.name,row.inft.owner,row.index);
                         }}>Divert</button>

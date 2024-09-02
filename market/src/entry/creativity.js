@@ -6,7 +6,7 @@ import CreativityPreview from "../component/creativity/creativity_preview";
 
 import CreativitySingle from "../component/creativity/creativity_single";
 
-import { FaAlignJustify } from "react-icons/fa";
+import { FaAlignJustify,FaExpandArrowsAlt } from "react-icons/fa";
 
 function Creativity(props) {
     const size = {
@@ -36,7 +36,9 @@ function Creativity(props) {
                 Information of selected Gene ( template detail ).
             </Col>
             <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
-                <button className="btn btn-md btn-default" >Full Screen</button>
+                <button className="btn btn-md btn-default" >
+                    <FaExpandArrowsAlt size={20}/>
+                </button>
                 <button className={sidebar?"btn btn-md btn-default":"btn btn-md btn-default text-warning"} onClick={(ev)=>{
                     self.clickSidebar(ev);
                 }}>

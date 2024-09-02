@@ -7,7 +7,6 @@ import TPL from "./tpl";
 //!important, page starts from 0 here;
 //!important, "raw" save the data the same as Localstorage, then the thumbs are cached on "imgs"
 
-
 let raw=[];         //raw list of iNFT, copy of localstorage data
 const map={};       //iNFT kv cache;  {name:"INDEX_IN_RAW"}
 const imgs={};      //images cache by name, big one.
