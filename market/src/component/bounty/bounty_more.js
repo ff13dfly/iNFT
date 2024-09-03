@@ -29,7 +29,7 @@ function BountyMore(props) {
   let [consignee, setConsignee] = useState("");
 
   let [coins, setCoins] = useState([]);
-  let [block, setBlock] = useState(0);
+  //let [block, setBlock] = useState(0);
 
   let [disable, setDisable] = useState(true);
 
@@ -104,13 +104,13 @@ function BountyMore(props) {
 
   useEffect(() => {
     self.load(props.bounty);
-    Network("anchor").subscribe("bounty_submit", (bk, hash) => {
-      setBlock(bk);
-      if(start===0 && end===0){
-        setStart(bk + 10000);
-        setEnd(bk + 30000);
-      }
-    });
+    // Network("anchor").subscribe("bounty_submit", (bk, hash) => {
+    //   setBlock(bk);
+    //   if(start===0 && end===0){
+    //     setStart(bk + 10000);
+    //     setEnd(bk + 30000);
+    //   }
+    // });
 
   }, [props.bounty]);
 
@@ -152,7 +152,7 @@ function BountyMore(props) {
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>
 
-      <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+      {/* <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Bounty start at block</small>
         <input type="number" disabled={disable} className="form-control" placeholder="Start of bounty"
           value={start} onChange={(ev) => {
@@ -170,7 +170,7 @@ function BountyMore(props) {
 
       <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         Current block number: {block.toLocaleString()}, {6}s per block.
-      </Col>
+      </Col> */}
     </Row>
   );
 }
