@@ -25,10 +25,13 @@ const funs={
                             spam="";
                             Local.remove("uuid");
                             Local.remove("token");
-                            return self.init(()=>{
-                                funs.request(mod,act,ck,param);
-                            });
+                        }else if(dt.message.code===444){
+                            spam="";
                         }
+
+                        return self.init(()=>{
+                            funs.request(mod,act,ck,param);
+                        });
                     }
                     return ck && ck(dt);
                 } catch (error) {

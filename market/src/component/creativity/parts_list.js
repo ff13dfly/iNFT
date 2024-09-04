@@ -46,21 +46,24 @@ function PartsList(props) {
           <button className="btn btn-sm btn-primary mr-5" key={index}> #{index}</button>
         ))}
       </Col>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <Row>
-          <Col className="pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <small>Start Line</small>
             <input type="number" className="form-control" value={ex} onChange={(ev) => {
               self.changeEX(ev);
             }} />
           </Col>
-          <Col className="pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <small>Start Row</small>
             <input type="number" className="form-control" value={ey} onChange={(ev) => {
               self.changeEY(ev);
             }} />
           </Col>
         </Row>
+      </Col>
+      <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            SVG overview
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />

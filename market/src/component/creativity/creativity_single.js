@@ -2,7 +2,6 @@ import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import ImageOrgin from "./image_orgin";
-import ImageGrid from "./image_grid";
 import ImageOperation from "./image_operation";
 
 import PartsList from "./parts_list";
@@ -12,6 +11,8 @@ import TemplateRaw from "./template_raw";
 
 import PartsOverview from "./parts_overview";
 import SeriesOverview from "./series_overview";
+
+import { FaImage,FaCode,FaDna,FaPuzzlePiece,FaBraille } from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    name        //unique name to load data from local indexedDB
@@ -41,7 +42,7 @@ function CreativitySingle(props) {
       onSelect={(active) => {
 
       }}>
-      <Tab eventKey="image" title={<h6>Image Editor</h6>}>
+      <Tab eventKey="image" title={<h6><FaImage size={24} className="mr-10" />Image Editor</h6>}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
             <ImageOperation />
@@ -53,13 +54,13 @@ function CreativitySingle(props) {
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="parts" title={<h6>Gene Parts</h6>}>
+      <Tab eventKey="parts" title={<h6><FaPuzzlePiece size={24} className="mr-10" />Gene Parts</h6>}>
         <PartsOverview />
       </Tab>
-      <Tab eventKey="series" title={<h6>Scarcity Series</h6>}>
+      <Tab eventKey="series" title={<h6><FaBraille size={24} className="mr-10" />Scarcity Series</h6>}>
         <SeriesOverview />
       </Tab>
-      <Tab eventKey="raw" title={<h6>Raw JSON</h6>}>
+      <Tab eventKey="raw" title={<h6><FaCode size={24} className="mr-10" />Raw JSON</h6>}>
         <TemplateRaw />
       </Tab>
     </Tabs>

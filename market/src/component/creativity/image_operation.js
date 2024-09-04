@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import ImageGrid from "./image_grid";
 
-import { FaCopy, FaFileImage,FaAngleLeft,FaAngleRight, FaDownload} from "react-icons/fa";
+import { FaCopy, FaFileImage,FaTrashAlt,FaAngleLeft,FaAngleRight, FaDownload} from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    hash        //unique hash
@@ -12,7 +12,7 @@ import { FaCopy, FaFileImage,FaAngleLeft,FaAngleRight, FaDownload} from "react-i
 function ImageOperation(props) {
   const size = {
     row: [12],
-    opt:[3,4,3]
+    opt:[3,4,5]
   };
 
   const self = {
@@ -27,8 +27,9 @@ function ImageOperation(props) {
       <Col md={size.opt[0]} lg={size.opt[0]} xl={size.opt[0]} xxl={size.opt[0]}>
         {/* <span>Panel</span> */}
         <button className="btn btn-sm btn-default"><FaCopy size={20}/></button> 
-        <button className="btn btn-sm btn-default"><FaFileImage size={20}/></button>  |
-        
+        <button className="btn btn-sm btn-default"><FaFileImage size={20}/></button>
+        <span className="ml-10 mr-5">|</span>
+        <button className="btn btn-sm btn-default"><FaTrashAlt size={20}/></button>
       </Col>
       <Col  md={size.opt[1]} lg={size.opt[1]} xl={size.opt[1]} xxl={size.opt[1]}>
         <ImageGrid />
