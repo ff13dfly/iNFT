@@ -33,40 +33,38 @@ function BountySubmit(props) {
   const loadRef = useRef(null);
 
   //submission details
-  let [template, setTemplate] = useState("");
-  let [bonus, setBonus] = useState([]);
+  let [template, setTemplate] = useState({});       //template details
+  let [search, setSearch] = useState("");             //template hash search value
+  let [bonus, setBonus] = useState([]);             //bonus setting
 
   //step enable
-  let [ready, setReady] = useState(false);
-  //let [modify, setModify] = useState(true);       //wether modifable
-  let [bounty, setBounty] = useState({});
-  let [more, setMore] = useState({});
+  let [ready, setReady] = useState(false);          //when template is valid, set to true  
+  let [bounty, setBounty] = useState({});           //when editing, get the bounty data from frontend
+  let [more, setMore] = useState({});               //more parameter from sub component, set here.
 
-  let [enableLoad, setEnableLoad] = useState(true);
-  let [enableSubmit, setEnableSubmit] = useState(false);
-  //let [enablePay, setEnablePay] = useState(true);
+  let [enableLoad, setEnableLoad] = useState(true);         //wether `load template` disabled, for editing mode
+  let [enableSubmit, setEnableSubmit] = useState(false);    //wether `submit` disabled, for editing mode
 
   //UI improvement
-  let [tabs, setTabs] = useState({
+  let [tabs, setTabs] = useState({      //tabs title
     "step_1": <span><strong className="text-secondary">Step 1 : </strong><strong>Template</strong></span>,
     "step_2": <span><strong className="text-secondary">Step 2 : </strong><strong className="text-secondary">Bonus</strong></span>,
     "step_3": <span><strong className="text-secondary">Step 3 : </strong><strong className="text-secondary">Payment</strong></span>,
   });
+  let [enable, setEnable] = useState({  //tabs enable values
+    "step_1": true,
+    "step_2": false,
+    "step_3": false,
+  });
 
   //sub component params
-  //let [series, setSeries] = useState([]);
-  let [data, setData] = useState({});
   let [anchor, setAnchor] = useState("");     //alink of bounty
-
   let [info, setInfo] = useState("");         //writing status
-
-
-  let [pay, setPay] = useState(false);
   let [payInfo, setPayInfo] = useState("");     //paying status
 
   const self = {
-    changeTemplate: (ev) => {
-      setTemplate(ev.target.value);
+    changeSearch: (ev) => {
+      setSearch(ev.target.value);
     },
     changeTabTitle: (active) => {
       const ts = {
@@ -87,57 +85,73 @@ function BountySubmit(props) {
       setTabs(ntabs);
     },
     clickLoad: (ev) => {
-      TPL.view(template, (dt) => {
-        setData(dt);
+      TPL.view(search, (dt) => {
+        if (dt === false) {
+          return setSearch("");
+        }
+
+        setTemplate(dt);
         setReady(true);
+
+        enable["step_2"] = true;
+        setEnable(tools.clone(enable));
+
+        setTimeout(() => {
+
+        }, 500);
       });
     },
-    clickRegister:()=>{
-      const addr = RUNTIME.account.get();
-      if(!addr) return setInfo("No valid account yet.");
+    clickRegister: () => {
+      //console.log(JSON.stringify(more));
+      RUNTIME.auto((addr) => {
+        if (!addr) return setInfo("No valid account yet.");
+        //1.write bounty on chain
+        const name = Bounty.format.name("submit");
+        more.bonus = bonus;   //update bonus detail
+        if(!more.consignee) more.consignee=addr;
+        const raw = Bounty.format.raw.submit(addr, more);
+        const protocol = Bounty.format.protocol.submit();
+        const dapp = Config.get(["system", "name"]);
+        const obj = {
+          anchor: name,
+          raw: raw,
+          protocol: protocol,
+          dapp: dapp,
+        }
+        const chain = Network("anchor");
+        chain.sign(obj, (res) => {
+          setInfo(res.msg);
+          if (res.status === "Finalized") {
+            setTimeout(() => {
+              setInfo("");
+            }, 1500);
+            //const hash = res.hash;    //get the transaction hash
+            chain.view({ name: name }, "anchor", (adata) => {
+              if (!adata) return setInfo("Failed to get the bounty anchor data.");
 
-      //1.write bounty on chain
-      const name = Bounty.format.name("submit");
+              //2.register the bounty on portal
+              const alink = `anchor://${name}/${adata.block}`;
+              API.bounty.register(alink, (portal) => {
+                if (!portal.success) return setInfo("Failed to regoster on portal.");
 
-      more.bonus = bonus;   //update bonus detail
-      const raw = Bounty.format.raw.submit(addr, more);
-      const protocol = Bounty.format.protocol.submit();
-      const dapp = Config.get(["system", "name"]);
-      const obj = {
-        anchor: name,
-        raw: raw,
-        protocol: protocol,
-        dapp: dapp,
-      }
-      const chain = Network("anchor");
-      chain.sign(obj, (res) => {
-        setInfo(res.msg);
-        if (res.status === "Finalized"){
-          setTimeout(() => {
-            setInfo("");
-          }, 1500);
-          //const hash = res.hash;    //get the transaction hash
-          chain.view({ name: name }, "anchor", (adata) => {
-            if (!adata) return setInfo("Failed to get the bounty anchor data.");
+                //3. save the bounty on local
+                const row = Bounty.format.local(alink, addr, raw);
+                row.register = true;
 
-            //2.register the bounty on portal
-            const alink = `anchor://${name}/${adata.block}`;
-            API.bounty.register(alink,(portal)=>{
-              if(!portal.success) return setInfo("Failed to regoster on portal.");
+                Bounty.insert(row, (res) => {
 
-              //3. save the bounty on local
-              const row=Bounty.format.local(alink,addr,raw);
-              row.register=true;
+                  setAnchor(alink);
 
-              Bounty.insert(row,(res)=>{
+                  enable["step_3"] = true;
+                  setEnable(tools.clone(enable));
 
-                setAnchor(alink);
-                props.dialog.close();
-                return true;
+                  props.dialog.close();
+                  return true;
+                });
               });
             });
-          });
-        }
+          }
+        });
       });
     },
     callbackPay: (status, target, amount) => {
@@ -185,8 +199,11 @@ function BountySubmit(props) {
       setBonus(arr);
     },
     callbackMore: (more) => {
-      console.log(more);
-      more.template = template;
+      more.template = {
+        cid:template.cid,
+        origin:!template.orgin?"web3.storage":template.orgin,
+      };
+      //console.log(JSON.stringify(more));
       setMore(tools.clone(more));
     },
     load: (bt) => {
@@ -201,18 +218,16 @@ function BountySubmit(props) {
   }
 
   useEffect(() => {
-    self.changeTabTitle("step_2");
     if (props.name) {
+      self.changeTabTitle("step_2");
       setAnchor(props.name);
       Bounty.get(props.name, (bty) => {
-        //if (!res || res.length === 0) return false;
-        if(bty.error) return false;
-        //const bty = res[0];
+        if (bty.error) return false;
         self.load(bty);
         setBounty(bty);
-        //setModify(false);
       });
     } else {
+      self.changeTabTitle("step_1");
       setEnableSubmit(true);
     }
   }, [props.name]);
@@ -227,7 +242,7 @@ function BountySubmit(props) {
         self.changeTabTitle(active);
       }}
     >
-      <Tab eventKey="step_1" title={tabs.step_1}>
+      <Tab eventKey="step_1" disabled={!enable["step_1"]} title={tabs.step_1}>
         <Row>
           <Col className="text-info" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Select a template for bounty which is storage on IPFS.
@@ -235,8 +250,8 @@ function BountySubmit(props) {
 
           <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
             <input type="text" disabled={!enableLoad} className="form-control" placeholder="Input template CID"
-              value={template} onChange={(ev) => {
-                self.changeTemplate(ev);
+              value={search} onChange={(ev) => {
+                self.changeSearch(ev);
               }} />
           </Col>
           <Col className="pt-2 text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
@@ -245,11 +260,11 @@ function BountySubmit(props) {
             }}>Load</button>
           </Col>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <BountyTemplate template={data} />
+            <BountyTemplate template={template} />
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="step_2" title={tabs.step_2}>
+      <Tab eventKey="step_2" disabled={!enable["step_2"]} title={tabs.step_2}>
         <Row>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
@@ -262,7 +277,7 @@ function BountySubmit(props) {
                 }} />
               </Col>
               <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget template={data} callback={(dt) => {
+                <BountyTarget template={template} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
@@ -271,7 +286,6 @@ function BountySubmit(props) {
               </Col>
               <Col className="text-end" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
                 <button disabled={!enableSubmit} className="btn btn-md btn-primary" onClick={(ev) => {
-                  //self.clickSubmit();
                   self.clickRegister();
                 }}>Submit</button>
               </Col>
@@ -279,15 +293,15 @@ function BountySubmit(props) {
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="step_3" title={tabs.step_3}>
+      <Tab eventKey="step_3" disabled={!enable["step_3"]} title={tabs.step_3}>
         <Row>
-          <Col hidden={pay} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
               <Col className="text-info" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 Payment details.
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyDetail bounty={anchor} template={data} />
+                <BountyDetail bounty={anchor} template={template} />
               </Col>
               <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
                 self.callbackPay(status, target, total);

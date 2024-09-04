@@ -1,10 +1,11 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Network from "../../network/router";
+import { FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
 
 import tools from "../../lib/tools";
 import Config from "../../system/config";
+import RUNTIME from "../../system/runtime";
 
 /* iNFT minting list
 *   @param  {string}    bounty             //bounty_name
@@ -21,10 +22,10 @@ function BountyMore(props) {
   };
 
   //submission details
-  let [title, setTitle] = useState("");
-  let [desc, setDesc] = useState("");
-  let [start, setStart] = useState(0);
-  let [end, setEnd] = useState(0);
+  let [title, setTitle] = useState("");           //input of bounty title
+  let [desc, setDesc] = useState("");             //input of bounty desc
+  let [start, setStart] = useState(0);            //input of bounty start block, when 0, start now
+  let [end, setEnd] = useState(0);                //input of bounty end block, when 0, valid until bonus done
   let [coin, setCoin] = useState("ank");
   let [consignee, setConsignee] = useState("");
 
@@ -32,6 +33,8 @@ function BountyMore(props) {
   //let [block, setBlock] = useState(0);
 
   let [disable, setDisable] = useState(true);
+
+  let [more, setMore]= useState(false);
 
   const self = {
     changeTitle: (ev) => {
@@ -63,6 +66,9 @@ function BountyMore(props) {
       const dt=self.getMoreData();
       dt[key]=val;      //get the value before status updated.
       if(props.callback) props.callback(dt);
+    },
+    clickMore:(ev)=>{
+      setMore(!more);
     },
     getMoreData: () => {
       return {
@@ -104,14 +110,9 @@ function BountyMore(props) {
 
   useEffect(() => {
     self.load(props.bounty);
-    // Network("anchor").subscribe("bounty_submit", (bk, hash) => {
-    //   setBlock(bk);
-    //   if(start===0 && end===0){
-    //     setStart(bk + 10000);
-    //     setEnd(bk + 30000);
-    //   }
-    // });
-
+    RUNTIME.auto((addr) => {
+      if(addr) setConsignee(addr);
+    });
   }, [props.bounty]);
 
   return (
@@ -125,29 +126,54 @@ function BountyMore(props) {
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         <small>Bonus coin</small>
-        <select className="form-control" disabled={disable} value={coin.toUpperCase()} onChange={(ev) => {
-          self.changeCoin(ev);
-        }}>
+        <select 
+          className="form-control" 
+          disabled={disable} 
+          value={coin.toUpperCase()} 
+          onChange={(ev) => {
+            self.changeCoin(ev);
+          }}>
           {coins.map((row, index) => (
             <option key={index} value={row.coin}>{tools.toUp(row.network)}: {row.coin}</option>
           ))}
         </select>
       </Col>
 
-      <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+      <Col hidden={!more} className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>Details about the bounty.</small>
-        <textarea className="form-control" disabled={disable}  cols={4} placeholder="The details of the bounty." value={desc} onChange={(ev) => {
-          self.changeDesc(ev);
-        }}></textarea>
+        <textarea 
+          className="form-control" 
+          disabled={disable}  
+          cols={4} 
+          placeholder="The details of the bounty." 
+          value={desc} 
+          onChange={(ev) => {
+            self.changeDesc(ev);
+          }}></textarea>
       </Col>
-      <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+      <Col hidden={more} className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+        
+      </Col>
+      <Col className="text-end pt-2" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
+        More setting
+        <button className="btn btn-md btn-default" onClick={(ev)=>{
+          self.clickMore(ev);
+        }}>
+          <FaAngleDoubleDown />
+        </button>
       </Col>
 
-      <Col className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
+      <Col hidden={!more} className="pt-2" md={size.normal[0]} lg={size.normal[0]} xl={size.normal[0]} xxl={size.normal[0]}>
         <small>The account address to accept the bonus iNFT result.</small>
-        <input className="form-control" type="text" disabled={disable} placeholder="The account to accept iNFTs." onChange={(ev)=>{
-          self.changeConsignee(ev);
-        }}/>
+        <input 
+          className="form-control" 
+          type="text" 
+          disabled={disable} 
+          placeholder="The account to accept iNFTs." 
+          value={consignee}
+          onChange={(ev)=>{
+            self.changeConsignee(ev);
+          }}/>
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>

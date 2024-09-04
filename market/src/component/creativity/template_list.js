@@ -19,8 +19,8 @@ function TemplateList(props) {
   const self = {
     clickGene: (index) => {
       if (props.show) props.show(<div>
-        <CreativityBasic />
-        <CreativitySingle />
+        <CreativityBasic sidebar={props.sidebar} />
+        <CreativitySingle sidebar={props.sidebar}/>
       </div>);
     },
   }

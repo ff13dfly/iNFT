@@ -8,7 +8,8 @@ import tools from "../../lib/tools";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {boolean}    sidebar        //wether show sidebar
+
 */
 function CreativityPreview(props) {
   const size = {

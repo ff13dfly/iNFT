@@ -53,7 +53,7 @@ function Creativity(props) {
                 <CreativitySingle /> */}
             </Col>
             <Col className="pt-2" hidden={!sidebar} md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
-                <CreativityNav show={self.updateContent} />
+                <CreativityNav show={self.updateContent} sidebar={sidebar}/>
             </Col>
             <CreativityPreview />
         </Row>

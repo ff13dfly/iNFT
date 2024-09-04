@@ -2,12 +2,13 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import TemplateList from "./template_list";
-import TemplateDeploy from "./template_deploy";
+//import TemplateDeploy from "./template_deploy";
 
 import tools from "../../lib/tools";
 
 /* Template creator basic setting
-*   @param  {string}    uuid        //unique name
+*   @param  {function}    show        //function to update content on home page
+*   @param  {boolean}     sidebar     //wether the sidebar is hidden
 */
 
 function CreativityNav(props) {
@@ -20,7 +21,7 @@ function CreativityNav(props) {
     {
       title: "Gene Local List",
       operation: "template operation component",
-      under: <TemplateList show={props.show} />,
+      under: <TemplateList show={props.show} sidebar={props.sidebar} />,
     },
     // {
     //   title: "Image Cell List",
@@ -42,16 +43,16 @@ function CreativityNav(props) {
     //   operation: "series under operation",
     //   under: "d",
     // },
-    {
-      title: "Deployment",
-      operation: "deploy under operation",
-      under: <TemplateDeploy show={props.show} />,
-    },
-    {
-      title: "Published",
-      operation: "deploy under operation",
-      under: <TemplateList show={props.show}/>,
-    },
+    // {
+    //   title: "Deployment",
+    //   operation: "deploy under operation",
+    //   under: <TemplateDeploy show={props.show} />,
+    // },
+    // {
+    //   title: "Published",
+    //   operation: "deploy under operation",
+    //   under: <TemplateList show={props.show}/>,
+    // },
   ]
 
   let [show, setShow] = useState({ 0: true });

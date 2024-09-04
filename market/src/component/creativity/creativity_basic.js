@@ -14,7 +14,7 @@ function CreativityBasic(props) {
     info:[2,10]
   };
 
-  const pages=["basic","info"];
+  const pages=["basic","info","deploy"];
 
   let [width, setWidth] = useState(900);
   let [height, setHeigth] = useState(900);
@@ -94,6 +94,17 @@ function CreativityBasic(props) {
             <p>
               Basic information of iNFT<br /> 
               Create stamp and more infomation.
+            </p>
+          </Col>
+        </Row>
+        <Row hidden={!(pages[active]==="deploy")} style={{height:"65px"}}>
+          <Col className="pt-1" md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+            <h5>Deploy Operation</h5>
+          </Col>
+          <Col className="pt-1" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+            <p>
+              Deploy Gene template to web3.0 networks<br /> 
+              Such as web3.storage, Crust, Cess.
             </p>
           </Col>
         </Row>
