@@ -35,7 +35,7 @@ const config={
                 query:"explorer/query/",
             },
         ],
-        minter:"",
+        minter:"https://minter.inft.w3os.net",
     },
     bounty:{
         approver:{                  //accounts to accept bounty coins

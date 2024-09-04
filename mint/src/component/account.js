@@ -59,7 +59,7 @@ function Account(props) {
                 self.show();
                 INFT.auto();
 
-                props.dialog(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic}/>,"Seed Details");
+                props.dialog(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic} address={fa.address}/>,"Seed Details");
                 props.fresh();
             })
         },

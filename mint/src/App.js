@@ -14,10 +14,7 @@ import QR from "./lib/QR";
 import TPL from "./lib/tpl";
 import INFT from "./lib/inft";
 import VERSION from "./lib/version";
-
 import Data from "./lib/data";
-
-import Tanssi from "./network/tanssi";
 
 function App() {
   let [update, setUpdate] = useState(0);
@@ -65,8 +62,7 @@ function App() {
     checking: () => {
       const io = self.decode(window.location.hash);
       if (io === false) return true;
-
-      //window.location.hash = "";        //clear the hash after decode
+      //console.log(io);
       plugin.run(io.act, io.param);
     },
     regQR: () => {
@@ -76,7 +72,6 @@ function App() {
       
       const UI={dialog:self.dialog,toast:null,fresh:self.fresh}
       plugin.setUI(UI);
-      //console.log(`QR function set successful.`);
       return true;
     },
     autosetNetwork:(ck)=>{
@@ -86,6 +81,8 @@ function App() {
         if(ns[key]!==null) arr.push(key);
       }
 
+      Network(config.network).setNode(config.node[0]);    //set the active node for app
+      
       Data.setHash("cache","network",config.network);
       Data.setHash("cache","support",arr);
 

@@ -6,7 +6,9 @@ import BountyComment from "./bounty_comment";
 import BountyMinting from "./bounty_minting";
 import BountyBonus from "./bounty_bonus";
 
+import Config from "../../system/config";
 import tools from "../../lib/tools";
+
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
 
 /* Mint result of nearby blocks
@@ -50,7 +52,9 @@ function BountyShow(props) {
     },
 
     getQrURL:(alink)=>{
-      return `${window.location.origin}/bounty/${alink.replace("anchor://","")}`;
+      //`${window.location.origin}/bounty/${alink.replace("anchor://","")}`;
+      const minter=Config.get(["system","minter"]);
+      return `${minter}#${props.template.cid}`;
     },
 
     getTemplateCID:()=>{
@@ -78,7 +82,6 @@ function BountyShow(props) {
     if(props.data && props.data.alink){
       setReady(false);
       const raw = props.data.orgin.raw;
-      //console.log(raw);
       setQrURL(self.getQrURL(props.data.alink));
       setReady(true);
       if (raw.bonus) {

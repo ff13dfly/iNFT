@@ -11,6 +11,7 @@ function Seed(props) {
         row: [12],
         back: [10, 2],
         list:[4],
+        seed:[9,3],
     };
 
     let [list, setList] = useState([]);
@@ -40,7 +41,7 @@ function Seed(props) {
     }
 
     useEffect(() => {
-        //console.log(props.mnemonic);
+        console.log(props);
         const nlist = self.getArrayFromMnemonic(props.mnemonic);
         setList(nlist);
 
@@ -49,11 +50,15 @@ function Seed(props) {
     return (
         <Row>
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                Important, please copy 
-                <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
-                    self.clickCopy(props.mnemonic);
-                    self.clickRecover("copy");
-                }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
+                <p className="text-center">
+                    {props.address.substr(0,23)}<br/>
+                    {props.address.substr(23)}
+                </p>
+                
+                {/* <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
+                    self.clickCopy(props.address);
+                    self.clickRecover("address");
+                }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button> */}
             </Col>
             <Col className="pb-2 text-end" sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace className="pointer" size={40} color={"#FFAABB"} onClick={(ev) => {
@@ -70,9 +75,16 @@ function Seed(props) {
                     </button>
                 </Col>
             ))}
-            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="pt-2" sm={size.seed[0]} xs={size.seed[0]}>
                 This <strong>SEED</strong> is used to recover your account or create encried JSON files.
             </Col>
+            <Col className="pt-3 text-end" sm={size.seed[1]} xs={size.seed[1]}>
+                <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
+                    self.clickCopy(props.mnemonic);
+                    self.clickRecover("copy");
+                }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
+            </Col>
+            
         </Row>
     )
 }

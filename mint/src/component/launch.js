@@ -62,6 +62,10 @@ function Launch(props) {
                 return self.decode(cid,ck,step);
             }else{
                 return TPL.view(cid,(raw)=>{
+                    if(raw===false){
+                        return self.append(`Error: failed to load template, please check the network connection.`);
+                    }
+
                     format[key](raw[key]);
                     setTimeout(()=>{
                         return self.decode(cid,ck,step);
