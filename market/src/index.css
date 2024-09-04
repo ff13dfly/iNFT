@@ -230,3 +230,28 @@ code {
 .creativity-container{
   padding-left: 10px;
 }
+
+.orgin-container{
+  width: 100%;
+  min-height: 100px;
+  background-size: cover; /* Scale the background image to cover the element */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+}
+
+.orgin-cover{
+  margin: 0 auto;
+  border: 1px solid #7be1b3;
+  background: #9ab4a1;
+  border-radius: 10px;
+  min-height: 50px;
+  min-width: 50px;
+  opacity: 0.5;
+  cursor: pointer;
+  float: left;
+  text-align: center;
+}
+
+.orgin-cover h3{
+  opacity: 1;
+}

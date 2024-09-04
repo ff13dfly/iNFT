@@ -25,14 +25,15 @@ function PartsOverview(props) {
     <Row>
       <Col className="parts_border" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <button className="btn btn-md btn-default">+ New Part</button>
+          </Col>
           {list.map((row, index) => (
             <Col key={index} className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
               <button className="btn btn-md btn-primary">#{index}</button>
             </Col>
           ))}
-          <Col style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <button className="btn btn-md btn-primary">+ New Part</button>
-          </Col>
+          
         </Row>
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>

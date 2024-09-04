@@ -2,8 +2,11 @@ import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import ImageOrgin from "./image_orgin";
+import ImageGrid from "./image_grid";
+import ImageOperation from "./image_operation";
 
 import PartsList from "./parts_list";
+
 
 import TemplateRaw from "./template_raw";
 
@@ -41,10 +44,11 @@ function CreativitySingle(props) {
       <Tab eventKey="image" title={<h6>Image Editor</h6>}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
-            
+            <ImageOperation />
             <ImageOrgin />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]} >
+            
             <PartsList />
           </Col>
         </Row>
