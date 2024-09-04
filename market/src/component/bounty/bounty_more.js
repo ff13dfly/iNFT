@@ -159,7 +159,7 @@ function BountyMore(props) {
         <button className="btn btn-md btn-default" onClick={(ev)=>{
           self.clickMore(ev);
         }}>
-          <FaAngleDoubleDown />
+          {!more?<FaAngleDoubleDown />:<FaAngleDoubleUp />}
         </button>
       </Col>
 
@@ -178,7 +178,7 @@ function BountyMore(props) {
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
       </Col>
 
-      {/* <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+      <Col hidden={!more} md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Bounty start at block</small>
         <input type="number" disabled={disable} className="form-control" placeholder="Start of bounty"
           value={start} onChange={(ev) => {
@@ -186,17 +186,13 @@ function BountyMore(props) {
           }} />
       </Col>
 
-      <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+      <Col hidden={!more} md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <small>Bounty end at block</small>
         <input type="number" disabled={disable} className="form-control" placeholder="End of bounty"
           value={end} onChange={(ev) => {
             self.changeEnd(ev);
           }} />
       </Col>
-
-      <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Current block number: {block.toLocaleString()}, {6}s per block.
-      </Col> */}
     </Row>
   );
 }

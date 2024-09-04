@@ -60,6 +60,7 @@ function BountySubmit(props) {
   //sub component params
   let [anchor, setAnchor] = useState("");     //alink of bounty
   let [info, setInfo] = useState("");         //writing status
+  let [infoLoad,setInfoLoad]= useState("");         //writing status
   let [payInfo, setPayInfo] = useState("");     //paying status
 
   const self = {
@@ -85,9 +86,14 @@ function BountySubmit(props) {
       setTabs(ntabs);
     },
     clickLoad: (ev) => {
+      self.cleanTemplate();
+      if(search.length!==59){
+        return setInfoLoad("Invalid template cid.");
+      }
       TPL.view(search, (dt) => {
         if (dt === false) {
-          return setSearch("");
+          setSearch("");
+          return setInfoLoad("Invalid template cid.");
         }
 
         setTemplate(dt);
@@ -215,6 +221,11 @@ function BountySubmit(props) {
 
       if (bt.bonus) setBonus(bt.bonus);
     },
+    cleanTemplate:()=>{
+      setInfoLoad("");
+      setTemplate({});
+      setReady(false);
+    },
   }
 
   useEffect(() => {
@@ -258,6 +269,9 @@ function BountySubmit(props) {
             <button disabled={!enableLoad} className="btn btn-md btn-primary" ref={loadRef} onClick={(ev) => {
               self.clickLoad(ev);
             }}>Load</button>
+          </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            {infoLoad}
           </Col>
           <Col hidden={!ready} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <BountyTemplate template={template} />

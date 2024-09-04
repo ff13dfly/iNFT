@@ -22,7 +22,11 @@ function BountyTemplate(props) {
     },
     fresh:()=>{
       const dt = props.template;
-      if(dt.series) setSeries(dt.series);
+      if(dt.series){
+        setSeries(dt.series);
+      }else{
+        setSeries([]);
+      }
     },
   }
   
