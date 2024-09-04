@@ -29,13 +29,11 @@ function BountyPreview(props) {
     left: [5, 7],
   };
 
-  let [data, setData] = useState({});   //template data
+  let [template, setTemplate] = useState({});   //template data
   let [raw, setRaw] = useState({});     //bounty data from backend
 
   let [coin, setCoin] = useState("");
   let [total, setTotal] = useState(0);
-  let [start, setStart] = useState(0);
-  let [end, setEnd] = useState(0);
   let [desc, setDesc] = useState("");
 
   let [update, setUpdate] = useState(0);
@@ -57,8 +55,8 @@ function BountyPreview(props) {
       return "";
     },
     getThumb: (index) => {
-      if (!data || !data.series) return false;
-      const all = data.series[index];
+      if (!template || !template.series) return false;
+      const all = template.series[index];
       return all.thumb[0];
     },
     getDate: (stamp) => {
@@ -76,28 +74,26 @@ function BountyPreview(props) {
 
     autoCache: (ck) => {
       const alink = self.getAlink();
-
       const chain=Network("anchor");
       chain.view(tools.decode(alink),"anchor",(res)=>{
-
-        
-
         const bs=res.raw.bonus;
         const n = self.calcTotal(bs);
         setTotal(n.toLocaleString());
-
         setCoin(res.raw.coin);
 
-        API.bounty.view(alink, (dt) => {
-          if(dt.error) return console.log(dt);
-          const bounty=dt.data;
-          bounty.orgin=res;
-          setRaw(bounty);
-        });
-
         const cid=res.raw.template.cid;
-        TPL.view(cid,(dt)=>{
-          setData(dt);
+        TPL.view(cid,(gene)=>{
+          setTemplate(gene);
+
+          API.bounty.view(alink, (dt) => {
+            if(dt.error) return console.log(dt);
+            const bounty=dt.data;
+            bounty.orgin=res;
+            bounty.template=gene;
+
+            setRaw(bounty);
+          });
+
           return ck && ck(true);
         });
       });
@@ -147,7 +143,7 @@ function BountyPreview(props) {
               </Col>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                 <p>{desc}</p>
-                <p>Start from {start.toLocaleString()} to {end.toLocaleString()}</p>
+                <p>~</p>
               </Col>
             </Row>
           </Col>
@@ -156,7 +152,7 @@ function BountyPreview(props) {
         <h5 className="pt-4">Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus
           raw={raw}
-          template={data}
+          template={template}
           coin={coin}
           dialog={props.dialog}
         />
@@ -166,7 +162,7 @@ function BountyPreview(props) {
             <hr />
           </Col>
         </Row>
-        <BountyMinting template={data && data.cid ? data.cid : ""} bounty={self.getAlink()} amount={20} />
+        <BountyMinting template={template && template.cid ? template.cid : ""} bounty={self.getAlink()} amount={20} />
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
         <CommentList alink={self.getAlink()} update={update} />

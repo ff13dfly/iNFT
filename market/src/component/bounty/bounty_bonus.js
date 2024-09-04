@@ -21,20 +21,17 @@ function BountyBonus(props) {
     grid: [4, 4, 4],
     left: [3,9],
   };
-  let [data, setData]= useState({});        //template raw data
+  
   let [list, setList] = useState([]);       //bonus list
-
-  let [coin,setCoin]= useState("");
-
   let [progress, setProgress] = useState({});
   let [refuse, setRefuse]= useState({});
 
   const self = {
     clickApply: (index) => {
-      props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog} fresh={props.fresh}/>, "Bounty Apply");
+      props.dialog.show(<BountyApply data={props.raw} index={index} dialog={props.dialog}/>, "Bounty Apply");
     },
     clickProcess:(index)=>{
-      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog} fresh={props.fresh}/>, `Bonus Process ( ${props.raw.alink} )`);
+      props.dialog.show(<BonusProcess data={props.raw} template={props.template} index={index} dialog={props.dialog}/>, `Bonus Process ( ${props.raw.alink} )`);
     },
     getThumb: (index) => {
       //console.log(props.template.series);
@@ -138,10 +135,6 @@ function BountyBonus(props) {
   }
 
   useEffect(() => {
-    //console.log(props.raw);
-    if(props.coin) setCoin(props.coin);
-    
-    setData(props.template);
     if(props.raw && props.raw.alink){
       const dt=props.raw;
       self.freshProgress(dt.apply,dt.orgin.raw.bonus);
@@ -164,7 +157,7 @@ function BountyBonus(props) {
             <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
               <Row>
                 <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                  <strong>{row.bonus.toLocaleString()}</strong> ${coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
+                  <strong>{row.bonus.toLocaleString()}</strong> ${props.coin.toUpperCase()} ( {!progress[row.series] ? 0 : progress[row.series]}/{row.amount} ) <br />
                   Left {row.amount-(!progress[row.series] ? 0 : progress[row.series])} wanted.
                 </Col>
                 <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

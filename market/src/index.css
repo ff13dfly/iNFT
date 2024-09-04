@@ -129,7 +129,7 @@ code {
   position: absolute;
   background: #AAAAAA;
   float: right;
-  right:5px;
+  right:15px;
   top:5px;
   z-index: 999;
 }

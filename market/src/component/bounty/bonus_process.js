@@ -174,21 +174,18 @@ function BonusProcess(props) {
       return parseInt(m / n).toLocaleString();
     },
     getSeriesOption:()=>{
-      const series=props.data.template.raw.series;
+      const series=props.template.series;
       const target=series[props.index];
-      //console.log(target);
       return target.count.toLocaleString();
     },
   }
 
   useEffect(() => {
-    console.log(props.data);
-
     //need to map the local account first, then the Account.exsist is aync
     Account.map((res)=>{
       self.applyList(props.data.apply, props.index);
     });
-  }, [props.index]);
+  }, [props.raw,props.template]);
 
   return (
     <Row>

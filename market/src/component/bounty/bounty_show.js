@@ -66,7 +66,9 @@ function BountyShow(props) {
       return false;
     },
     getPeriod:()=>{
-      return `~`;
+      if(!props.data.orgin || !props.data.orgin.raw || !props.data.orgin.raw.period) return "Invalid period.";
+      const tdata=props.data.orgin.raw.period;
+      return `From ${tdata.start===0?"now":tdata.start.toLocaleString()} to ${tdata.end===0?"all done":tdata.start.toLocaleString()}`;
     },
     getTitle:()=>{
 
@@ -89,7 +91,6 @@ function BountyShow(props) {
       }
       if (raw.coin) setCoin(raw.coin);
     }
-
     
   }, [props.data]);
 
@@ -103,13 +104,20 @@ function BountyShow(props) {
           <div className="qr pointer" hidden={!qr} onClick={(ev) => {
             self.clickQR();
           }}>
-            <QRCode 
-              bgColor={"#ffffff"}
-              fgColor={"#000000"}
-              title={"QR title"}
-              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={qrURL} 
-              />
+            <Row style={{background:"#F0FAF0",borderRadius: "5px",}}>
+              <Col className="pt-3" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                <QRCode 
+                bgColor={"#ffffff"}
+                fgColor={"#000000"}
+                title={"QR title"}
+                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                value={qrURL} 
+                />
+              </Col>
+              <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+                Scan to mint target iNFT.
+              </Col>
+            </Row>
           </div>
           <div className="template_thumb pointer" style={{backgroundImage: `url(${self.getCover()})` }} onClick={(ev) => {
             props.link("bounty", [props.data.orgin.name, props.data.orgin.block]);
