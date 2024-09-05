@@ -55,7 +55,7 @@ function UserSidebar(props) {
         <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <button className={`sidebar text-start btn btn-md ${(props.active!==row.name?"btn-default":"btn-info")}`} onClick={(ev) => {
             props.link("user", [row.name]);
-          }}><p>{row.icon}</p>  <h5>{row.title}</h5></button>
+          }}><p>{row.icon}</p><h5>{row.title}</h5></button>
         </Col>
       ))}
     </Row>

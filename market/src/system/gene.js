@@ -31,19 +31,35 @@ const funs={
         }
         return false;
     },
-    format:()=>{
-        const name=tools.char(10);
-        return {
-            name:name,
-            size:[900,900],
-            cell:[100,100],
-            image:"",
-            grid:[8,4],
-            parts:[],
-            series:[],
-            deploy:[],
-            stamp:tools.stamp(),
-        };
+    format:{
+        gene:()=>{
+            const name=tools.char(10);
+            return {
+                name:name,
+                size:[900,900],
+                cell:[100,100],
+                image:"",
+                grid:[8,4],
+                parts:[],
+                series:[],
+                deploy:[],
+                stamp:tools.stamp(),
+            };
+        },
+        series:()=>{
+            return {
+                title:"",
+                desc:"",
+            }
+        },
+        part:()=>{
+            return {
+                value:[],
+                position:[],
+                rotation:[],
+                rarety:[],
+            }
+        }
     },
 }
 
@@ -71,7 +87,7 @@ const self={
         });
     },
     add:(ck)=>{
-        const row=funs.format();
+        const row=funs.format.gene();
         funs.checkDB(table, (db) => {
             INDEXED.insertRow(db, table, [row], ck);
         });
