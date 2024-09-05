@@ -9,6 +9,7 @@ import tools from "../../lib/tools";
 /* Template creator basic setting
 *   @param  {function}    show        //function to update content on home page
 *   @param  {boolean}     sidebar     //wether the sidebar is hidden
+*   @param  {function}    fresh       //entry fresh function, update the title
 */
 
 function CreativityNav(props) {
@@ -19,9 +20,14 @@ function CreativityNav(props) {
 
   const navs = [
     {
+      title: "Creativity Center",
+      operation: "template operation component",
+      under: "Here to go",
+    },
+    {
       title: "Gene Local List",
       operation: "template operation component",
-      under: <TemplateList show={props.show} sidebar={props.sidebar} />,
+      under: <TemplateList show={props.show} sidebar={props.sidebar} fresh={props.fresh} />,
     },
     // {
     //   title: "Image Cell List",

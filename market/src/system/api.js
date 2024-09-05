@@ -20,18 +20,23 @@ const funs={
             response.text().then((res)=>{
                 try {
                     const dt=JSON.parse(res);
+
+                    if(dt.code && dt.code===444){
+                        spam="";
+                        return self.init(()=>{
+                            funs.request(mod,act,ck,param);
+                        });
+                    } 
+
                     if(dt.message && dt.message.code){
                         if(dt.message.code===1 || dt.message.code===2){
                             spam="";
                             Local.remove("uuid");
                             Local.remove("token");
-                        }else if(dt.message.code===444){
-                            spam="";
+                            return self.init(()=>{
+                                funs.request(mod,act,ck,param);
+                            });
                         }
-
-                        return self.init(()=>{
-                            funs.request(mod,act,ck,param);
-                        });
                     }
                     return ck && ck(dt);
                 } catch (error) {

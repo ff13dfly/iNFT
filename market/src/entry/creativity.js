@@ -16,8 +16,8 @@ function Creativity(props) {
     };
 
     let [content, setContent] = useState("");
-
     let [sidebar, setSidebar] = useState(true);
+    let [title, setTitle] = useState("Gene template editor.");
 
     const self = {
         clickSidebar:(ev)=>{
@@ -26,12 +26,15 @@ function Creativity(props) {
         updateContent: (ctx) => {
             setContent(ctx);
         },
+        fresh:(memo)=>{
+            setTitle(memo);
+        },
     }
 
     return (
         <Row className="pt-2">
             <Col className="pt-2" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]} >
-                Selected file: ***.json, created on 2024-09-03
+                {title}
             </Col>
             <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
                 <button className="btn btn-md btn-default" >
@@ -53,7 +56,7 @@ function Creativity(props) {
                 <CreativitySingle /> */}
             </Col>
             <Col className="pt-2" hidden={!sidebar} md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
-                <CreativityNav show={self.updateContent} sidebar={sidebar}/>
+                <CreativityNav show={self.updateContent} sidebar={sidebar} fresh={self.fresh}/>
             </Col>
             <CreativityPreview />
         </Row>

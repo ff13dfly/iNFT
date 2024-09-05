@@ -6,6 +6,7 @@ import Network from "../network/router";
 
 let cache=null      //cache the account
 
+const table="accounts";
 const funs = {
     checkDB:(table,ck)=>{
         const cfg = Config.get(["storage"]);
@@ -36,7 +37,6 @@ const funs = {
         return tools.char(n);
     },
     insertToDB: (row, ck) => {
-        const table="accounts";
         funs.checkDB(table,(db)=>{
             INDEXED.insertRow(db, table, [row],ck);
         });
@@ -55,7 +55,7 @@ const self = {
         });
     },
     get:(addr,ck)=>{
-        const table="accounts";
+        
         funs.checkDB(table,(db)=>{
             INDEXED.searchRows(db,table,"address",addr,ck);
         });
@@ -74,7 +74,6 @@ const self = {
     },
 
     list: (filter, ck, page, step) => {
-        const table="accounts";
         funs.checkDB(table,(db)=>{
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });

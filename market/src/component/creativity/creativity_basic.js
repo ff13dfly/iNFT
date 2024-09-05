@@ -45,8 +45,8 @@ function CreativityBasic(props) {
   }
 
   useEffect(() => {
-    console.log(active,pages[active],!(pages[active]==="basic"))
-  }, []);
+    
+  }, [props.name]);
 
   return (
     <Row>

@@ -127,6 +127,27 @@ const config={
                     stamp:{unique: false},
                 },
             },
+            gene:{
+                keyPath:"name",
+                map:{
+                    name:{ unique: true },
+                    image:{unique:false},           //the editing image data will be saved as cache
+                    size:{unique:false},
+                    cell:{unique:false},
+                    grid:{unique:false},
+                    series:{unique:false},
+                    parts:{unique:false},
+                    deploy:{unique:false},
+                    stamp:{unique:false},
+                },
+            },
+            editing:{
+                keyPath:"name",
+                map:{
+                    name:{ unique: true },
+                    history:{unique:false},
+                }
+            },
         },
     },
     proxy:{             //all agent url here
