@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import ImageGrid from "./image_grid";
+import PartSelector from "./parts_selector";
 
 import { FaCopy, FaFileImage,FaTrashAlt,FaAngleLeft,FaAngleRight, FaDownload} from "react-icons/fa";
 
@@ -12,7 +13,8 @@ import { FaCopy, FaFileImage,FaTrashAlt,FaAngleLeft,FaAngleRight, FaDownload} fr
 function ImageOperation(props) {
   const size = {
     row: [12],
-    opt:[3,4,5]
+    opt:[3,4,5],
+    parts:[1,11],
   };
 
   const self = {
@@ -41,6 +43,15 @@ function ImageOperation(props) {
         <button className="btn btn-sm btn-default"><FaAngleLeft size={20}/></button> 
         <button className="btn btn-sm btn-default"><FaAngleRight size={20}/></button>
       </Col>
+      <Col className="pt-2" md={size.parts[0]} lg={size.parts[0]} xl={size.parts[0]} xxl={size.parts[0]}>
+        <h6>Parts</h6>
+      </Col>
+      <Col className="pt-1" md={size.parts[1]} lg={size.parts[1]} xl={size.parts[1]} xxl={size.parts[1]}>
+        <PartSelector amount={10} callback={(index)=>{
+
+        }}/>
+      </Col>
+      
     </Row>
   );
 }

@@ -38,13 +38,10 @@ function PartsList(props) {
     setList(arr);
   }, []);
 
-
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        {list.map((row, index) => (
-          <button className="btn btn-sm btn-primary mr-5" key={index}> #{index}</button>
-        ))}
+        <h5>Image Parameter</h5>
       </Col>
       <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <Row>

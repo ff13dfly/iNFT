@@ -55,7 +55,7 @@ function PartsDetail(props) {
       <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col className="pt-2" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
-            <h6>Hash Setting</h6>
+            <h5>Hash Setting</h5>
           </Col>
           <Col className="pt-2 text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
             <button className="btn btn-sm btn-default" onClick={(ev) => {
@@ -100,7 +100,7 @@ function PartsDetail(props) {
         
         <Row>
           <Col className="pt-2" md={size.head[0]} lg={size.head[0]} xl={size.head[0]} xxl={size.head[0]}>
-            <h6>Image Setting</h6>
+            <h5>Image Setting</h5>
           </Col>
           <Col className="pt-2 text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]}>
             <button className="btn btn-sm btn-default" onClick={(ev) => {

@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import { FaCheck } from "react-icons/fa";
+
 /* Mint result of nearby blocks
 *   @param  {string}    address        //blocks previous amount, default to 10
 */
@@ -8,10 +10,11 @@ import { useEffect, useState } from "react";
 function MintTask(props) {
   const size = {
     row: [12],
-    layout: [5, 7],
+    layout: [7,5],
     run: [9, 3],
     config: [3, 9],
     title: [5, 7],
+    left:[7,5],
   };
 
   let [list, setList] = useState([]);
@@ -45,62 +48,77 @@ function MintTask(props) {
 
       <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
         <Row className="pt-2">
-          <Col md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
-            <h5>Minting</h5>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <h6>Task setting ( ACCOUNT_ADDRESS )</h6>
           </Col>
-          <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
-            Status
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <input
+              className="form-control"
+              placeholder="Input the CID of gene template."
+              type="text"
+              value={template}
+              onChange={(ev) => {
+                self.changeTemplate(ev);
+              }} />
           </Col>
-
+          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <small>Offset to mint</small>
+            <Row>
+              <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+                <button className="btn btn-md mr-5 btn-secondary">0</button>
+                <button className="btn btn-md mr-5 btn-secondary">0</button>
+                <button className="btn btn-md mr-5 btn-warning">0</button>
+                <button className="btn btn-md mr-5 btn-secondary">0</button>
+              </Col>
+              <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+              <button className={"btn btn-sm btn-primary"} onClick={(ev) => {
+              
+              }}><FaCheck size={14}/></button>
+              <span className="ml-10">Ramdon<br/>Offset</span> 
+              </Col>
+            </Row>
+          </Col>
+          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <small>Select block hash to mint iNFT</small>
+            <select className="form-control">
+              <option value={"account_01"}>Anchor Block Hash</option>
+              <option value={"account_02"}>Bitcoin Block Hash</option>
+            </select>
+          </Col>
         </Row>
       </Col>
 
       <Col md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]}>
         <Row className="pt-2">
-          <Col className="pt-1" md={size.config[0]} lg={size.config[0]} xl={size.config[0]} xxl={size.config[0]}>
-            <h5>Template</h5>
+          <Col md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
+            <h6>Processing</h6>
           </Col>
-          <Col md={size.config[1]} lg={size.config[1]} xl={size.config[1]} xxl={size.config[1]}>
-            <input className="form-control" type="text" value={template} onChange={(ev) => {
-              self.changeTemplate(ev);
-            }} />
+          <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
+            Status
           </Col>
-        </Row>
-
-        <Row className="pt-2">
-          <Col md={size.config[0]} lg={size.config[0]} xl={size.config[0]} xxl={size.config[0]}>
-            <h5>Offset</h5>
+          <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
+              <img className="view_thumb" src={`${window.location.origin}/imgs/logo.png`} alt="" />
           </Col>
-          <Col md={size.config[1]} lg={size.config[1]} xl={size.config[1]} xxl={size.config[1]}>
-            Offset Value
+          <Col className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
+              <p>Starting, on </p>
           </Col>
-        </Row>
-
-        <Row>
-          <Col md={size.config[0]} lg={size.config[0]} xl={size.config[0]} xxl={size.config[0]}>
-            <h5>Multi Chain</h5>
-          </Col>
-          <Col md={size.config[1]} lg={size.config[1]} xl={size.config[1]} xxl={size.config[1]}>
-            Bitcoin block selector<br/>
-            Ether salt info
-          </Col>
-        </Row>
-
-        <Row className="pt-2">
-          <Col md={size.run[0]} lg={size.run[0]} xl={size.run[0]} xxl={size.run[0]}>
-            {info}
-          </Col>
-          <Col className="text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
-            <button className="btn btn-md btn-primary" hidden={running} onClick={(ev) => {
-              self.clickRun(ev);
-            }}>Run</button>
-            <button className="btn btn-md btn-danger" hidden={!running} onClick={(ev) => {
-              self.clickStop(ev);
-            }}>Stop</button>
+          <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Row>
+              <Col md={size.run[0]} lg={size.run[0]} xl={size.run[0]} xxl={size.run[0]}>
+                {info}
+              </Col>
+              <Col className="text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
+                <button className="btn btn-md btn-primary" hidden={running} onClick={(ev) => {
+                  self.clickRun(ev);
+                }}>Run</button>
+                <button className="btn btn-md btn-danger" hidden={!running} onClick={(ev) => {
+                  self.clickStop(ev);
+                }}>Stop</button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Col>
-
     </Row>
   );
 }
