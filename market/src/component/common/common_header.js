@@ -47,7 +47,6 @@ function Header(props) {
     clickLogin: () => {
       if (login === "Login") {
         RUNTIME.auto((addr) => {
-          console.log(addr);
           setLogin(tools.shorten(addr, 5));
         });
       } else {
@@ -57,10 +56,11 @@ function Header(props) {
   }
 
   useEffect(() => {
-    if (props.active === "user" && login === "Login") {
+    //(props.active === "user" && login === "Login")
+    if (login === "Login") {
       setLogin("Checking...");
       setTimeout(() => {
-        setLogin("Login");
+        //setLogin("Login");
         self.clickLogin();
       }, 1500);
     }

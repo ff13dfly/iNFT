@@ -26,7 +26,36 @@ function CreativitySingle(props) {
     left:[9,3]
   };
 
+  let [active,setActive]=useState("image");
+
+  const tabs={
+    image:{
+      title:"Image Editor",
+      icon:<FaImage size={24} className="mr-10" />,
+    },
+    parts:{
+      title:"Gene Parts",
+      icon:<FaPuzzlePiece size={24} className="mr-10" />,
+    },
+    series:{
+      title:"Scarcity Series",
+      icon:<FaBraille size={24} className="mr-10" />,
+    },
+    raw:{
+      title:"Raw JSON",
+      icon:<FaCode size={24} className="mr-10" />,
+    },
+  }
+
   const self = {
+    getTitle:(tab)=>{
+      if(!tabs[tab]) return "";
+      const target=tabs[tab];
+      return (
+        <h6 className={active===tab?"text-dark":"text-secondary"}>
+          {target.icon} {target.title}
+        </h6>)
+    },
   }
 
   useEffect(() => {
@@ -39,10 +68,10 @@ function CreativitySingle(props) {
       id="uncontrolled-tab-example"
       className="mb-3 pt-2"
       fill
-      onSelect={(active) => {
-
+      onSelect={(tab) => {
+        setActive(tab);
       }}>
-      <Tab eventKey="image" title={<h6><FaImage size={24} className="mr-10" />Image Editor</h6>}>
+      <Tab eventKey="image" title={self.getTitle("image")}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
             <ImageOperation name={props.name}/>
@@ -53,13 +82,13 @@ function CreativitySingle(props) {
           </Col>
         </Row>
       </Tab>
-      <Tab eventKey="parts" title={<h6><FaPuzzlePiece size={24} className="mr-10" />Gene Parts</h6>}>
+      <Tab eventKey="parts" title={self.getTitle("parts")}>
         <PartsOverview name={props.name}/>
       </Tab>
-      <Tab eventKey="series" title={<h6><FaBraille size={24} className="mr-10" />Scarcity Series</h6>}>
+      <Tab eventKey="series" title={self.getTitle("series")}>
         <SeriesOverview name={props.name}/>
       </Tab>
-      <Tab eventKey="raw" title={<h6><FaCode size={24} className="mr-10" />Raw JSON</h6>}>
+      <Tab eventKey="raw" title={self.getTitle("raw")}>
         <TemplateRaw name={props.name}/>
       </Tab>
     </Tabs>

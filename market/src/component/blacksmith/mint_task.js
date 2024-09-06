@@ -1,15 +1,18 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaCheck } from "react-icons/fa";
+import { FaCheck,FaWindowClose } from "react-icons/fa";
 
 /* Mint result of nearby blocks
-*   @param  {string}    address        //blocks previous amount, default to 10
+*   @param  {string}    address         //blocks previous amount, default to 10
+*   @param  {number}    index           //task index number
+*   @param  {function}  remove          //remove function
 */
 
 function MintTask(props) {
   const size = {
     row: [12],
+    half:[6],
     layout: [7,5],
     run: [9, 3],
     config: [3, 9],
@@ -32,6 +35,9 @@ function MintTask(props) {
     },
     clickStop: (ev) => {
       setRunning(false);
+    },
+    clickRemove:(ev)=>{
+      if(props.remove) props.remove(props.index);
     },
   }
 
@@ -74,11 +80,11 @@ function MintTask(props) {
               <button className={"btn btn-sm btn-primary"} onClick={(ev) => {
               
               }}><FaCheck size={14}/></button>
-              <span className="ml-10">Ramdon<br/>Offset</span> 
+              <span className="ml-10">Ramdon</span> 
               </Col>
             </Row>
           </Col>
-          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
             <small>Select block hash to mint iNFT</small>
             <select className="form-control">
               <option value={"account_01"}>Anchor Block Hash</option>
@@ -94,7 +100,9 @@ function MintTask(props) {
             <h6>Processing</h6>
           </Col>
           <Col className="text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
-            Status
+              <button className="btn btn-sm btn-default" onClick={(ev) => {
+                  self.clickRemove(ev);
+              }}><FaWindowClose className="text-danger" /></button>
           </Col>
           <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
               <img className="view_thumb" src={`${window.location.origin}/imgs/logo.png`} alt="" />
@@ -102,11 +110,14 @@ function MintTask(props) {
           <Col className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
               <p>Starting, on </p>
           </Col>
-          <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <Row>
               <Col md={size.run[0]} lg={size.run[0]} xl={size.run[0]} xxl={size.run[0]}>
-                {info}
+                <input type="password" className="form-control" placeholder="Password to run" />
               </Col>
+              {/* <Col md={size.run[0]} lg={size.run[0]} xl={size.run[0]} xxl={size.run[0]}>
+                {info}
+              </Col> */}
               <Col className="text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
                 <button className="btn btn-md btn-primary" hidden={running} onClick={(ev) => {
                   self.clickRun(ev);

@@ -141,13 +141,27 @@ const config={
                     stamp:{unique:false},
                 },
             },
-            editing:{
+            task:{
                 keyPath:"name",
                 map:{
-                    name:{ unique: true },
-                    history:{unique:false},
-                }
-            },
+                    name:{ unique:true},
+                    index:{unique:true},
+                    gene:{unique:false},
+                    offset:{unique:false},
+                    prefix:{unique:false},          //anchor name prefix
+                    nonce:{unique:false},           //the order of minting
+                    address:{unique:false},
+                    stamp:{unique:false},
+                }, 
+            }
+
+            // editing:{
+            //     keyPath:"name",
+            //     map:{
+            //         name:{ unique: true },
+            //         history:{unique:false},
+            //     }
+            // },
         },
     },
     proxy:{             //all agent url here

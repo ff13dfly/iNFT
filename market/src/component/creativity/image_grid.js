@@ -1,4 +1,4 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Component Sample
@@ -28,22 +28,28 @@ function ImageGrid(props) {
 
   return (
     <Row>
-      <Col className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+      <Col className="pt-1" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         Line
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        <input type="number" className="form-control" value={line} onChange={(ev) => {
+        <Form.Control size="sm" type="number" name="line" placeholder="Image Line" value={line} onChange={(ev) => {
           self.changeLine(ev);
         }} />
+        {/* <input type="number" className="form-control" value={line} onChange={(ev) => {
+          self.changeLine(ev);
+        }} /> */}
       </Col>
 
-      <Col className="pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+      <Col className="pt-1" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         Row
       </Col>
       <Col md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
-        <input type="number" className="form-control" value={row} onChange={(ev) => {
+        <Form.Control size="sm" type="number" name="row" placeholder="Image Row" value={row} onChange={(ev) => {
           self.changeRow(ev);
         }} />
+        {/* <input type="number" className="form-control" value={row} onChange={(ev) => {
+          self.changeRow(ev);
+        }} /> */}
       </Col>
     </Row>
   );

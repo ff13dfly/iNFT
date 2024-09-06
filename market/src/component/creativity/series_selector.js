@@ -41,7 +41,7 @@ function SeriesSelector(props) {
         <h5>Select the parts value to create series.</h5>
       </Col>
       {list.map((row, index) => (
-      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
             #{index} Part
