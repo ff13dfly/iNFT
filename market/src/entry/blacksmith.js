@@ -6,6 +6,7 @@ import tools from "../lib/tools";
 import Minting from "../component/common/common_minting";
 import MintNearby from "../component/blacksmith/mint_nearby";
 import MintTask from "../component/blacksmith/mint_task";
+import MiniTask from "../component/blacksmith/mini_task";
 import MintAccount from "../component/blacksmith/mint_account";
 
 function Blacksmith(props) {
@@ -35,8 +36,11 @@ function Blacksmith(props) {
                     self.callbackAccount(addr);
                 }}/>
                 {list.map((row, index) => (
-                    <MintTask key={index} address={row.address} />
+                    <MiniTask key={index} address={row.address} />
                 ))}
+                {/* {list.map((row, index) => (
+                    <MintTask key={index} address={row.address} />
+                ))} */}
             </Col>
             <Col className="pt-2" md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
                 <Minting uuid={"blacksmith_minting"} template={""}/>
