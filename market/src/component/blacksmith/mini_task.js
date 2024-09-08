@@ -13,7 +13,7 @@ function MiniTask(props) {
   const size = {
     row: [12],
     left: [2, 10],
-    title: [6, 4, 2],
+    title: [7, 4, 1],
     run: [6, 4, 2],
     nft: [4, 7],
     layout: [11, 1]
@@ -107,10 +107,10 @@ function MiniTask(props) {
             </Form.Select>
           </Col>
           <Col md={size.nft[1]} lg={size.nft[1]} xl={size.nft[1]} xxl={size.nft[1]}>
-            <button className="btn btn-sm mr-5 btn-secondary">0</button>
-            <button className="btn btn-sm mr-5 btn-secondary">0</button>
-            <button className="btn btn-sm mr-5 btn-warning">0</button>
-            <button className="btn btn-sm mr-5 btn-secondary">0</button>
+            <button disabled={running} className="btn btn-sm mr-5 btn-secondary">0</button>
+            <button disabled={running} className="btn btn-sm mr-5 btn-secondary">0</button>
+            <button disabled={running} className="btn btn-sm mr-5 btn-warning">0</button>
+            <button disabled={running} className="btn btn-sm mr-5 btn-secondary">0</button>
           </Col>
         </Row>
 

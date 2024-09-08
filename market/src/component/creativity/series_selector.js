@@ -48,7 +48,12 @@ function SeriesSelector(props) {
           </Col>
           <Col md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]}>
             {row.map((data, vkey) => (
-              <button key={vkey} className="btn btn-sm btn-default mr-5">{data.value}</button>
+              <button 
+                key={vkey} 
+                className={vkey===3?"btn btn-sm btn-primary mr-5":"btn btn-sm btn-secondary mr-5"}
+                onClick={(ev)=>{
+
+                }}>{data.value}</button>
             ))}
           </Col>
         </Row>

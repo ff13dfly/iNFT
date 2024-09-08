@@ -154,6 +154,36 @@ Buy the selling anchor.
     }
 ```
 
+### divert_anchor
+
+Divert the anchor to target account.
+
+```RUST
+    pub fn divert_anchor(
+      origin: OriginFor<T>, 
+      key: Vec<u8>,
+      target:<T::Lookup as StaticLookup>::Source
+    ) -> DispatchResult {
+      // code here.
+      Ok(())
+    }
+```
+
+### drop_anchor
+
+Drop the anchor and leave the last word for crossing chain.
+
+```RUST
+    pub fn drop_anchor(
+      origin: OriginFor<T>, 
+      key: Vec<u8>,
+      message:Vec<u8>
+    ) -> DispatchResult {
+      // code here.
+      Ok(())
+    }
+```
+
 ## Storages
 
 ### AnchorOwner
@@ -196,5 +226,41 @@ When an anchor is set to selling status, will trigger this event.
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
       AnchorToSell(T::AccountId,u32,T::AccountId),  //(owner, price , target)
+    }
+  ```
+
+### AnchorBought
+
+When an anchor is bought, will trigger this event.
+
+  ```RUST
+    #[pallet::event]
+    #[pallet::generate_deposit(pub(super) fn deposit_event)]
+    pub enum Event<T: Config> {
+      AnchorBought(Vec<u8>,T::AccountId,u64,T::AccountId)   //(name,buyer, price , from)
+    }
+  ```
+
+### AnchorDiverted
+
+When an anchor is diverted to anybody, will trigger this event.
+
+  ```RUST
+    #[pallet::event]
+    #[pallet::generate_deposit(pub(super) fn deposit_event)]
+    pub enum Event<T: Config> {
+      AnchorDiverted(Vec<u8>,T::AccountId,T::AccountId)   //(name, from , to)
+    }
+  ```
+
+### AnchorDropped
+
+When an anchor is dropped, will trigger this event.
+
+  ```RUST
+    #[pallet::event]
+    #[pallet::generate_deposit(pub(super) fn deposit_event)]
+    pub enum Event<T: Config> {
+      AnchorDropped(Vec<u8>,T::AccountId,Vec<u8>,T::AccountId)  //(name,owner, message left to bridge, blackhole account)
     }
   ```

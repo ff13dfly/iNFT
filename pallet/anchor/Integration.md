@@ -14,18 +14,18 @@
 
 ### How To
 
-* Add new folder `anchor` under `./pallets`, link source code from [https://github.com/ff13dfly/iNFT/tree/master/pallet](https://github.com/ff13dfly/iNFT/tree/master/pallet).
+* Add new folder `anchor` under `./pallets`, link source code from [https://github.com/ff13dfly/iNFT/tree/master/pallet](https://github.com/ff13dfly/iNFT/tree/master/pallet). The substrate template folder `/Users/fuzhongqiang/Desktop/www/pure`
 
   ```BASH
     cd pallets/anchor
-    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/Cargo_mini_template.toml Cargo.toml
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/Cargo_mini_template.toml Cargo.toml
 
     mkdir src
     cd src
-    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/lib.rs lib.rs
-    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/tests.rs tests.rs
-    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/weights.rs weights.rs
-    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/src/benchmarking.rs benchmarking.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/src/lib.rs lib.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/src/tests.rs tests.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/src/weights.rs weights.rs
+    ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/src/benchmarking.rs benchmarking.rs
   ```
 
 *copy `Cargo_mini_template.toml` to `./pallets/anchor/Cargo_mini.toml`;
@@ -68,4 +68,3 @@
 * Modify the `tokenSymbol` to `ANK`. Open the file `./node/src/chain_spec.rs` to search `tokenSymbol`.Replace it with the name you love.
 
 ## Resource
-
