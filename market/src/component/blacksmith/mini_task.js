@@ -1,12 +1,14 @@
 import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaCheck, FaWindowClose } from "react-icons/fa";
+import Network from "../../network/router";
 
-/* Mint result of nearby blocks
-*   @param  {string}    address         //blocks previous amount, default to 10
-*   @param  {number}    index           //task index number
-*   @param  {function}  remove          //remove function
+import { FaWindowClose } from "react-icons/fa";
+
+/* Mini task, show the details of minting robot
+*   @param  {number}    key           //list order
+*   @param  {object}    data          //task detail local
+*   @param  {function}  remove        //task remove function
 */
 
 function MiniTask(props) {
@@ -19,15 +21,19 @@ function MiniTask(props) {
     layout: [11, 1]
   };
 
-  let [list, setList] = useState([]);
   let [info, setInfo] = useState("");
   let [running, setRunning] = useState(false);    //wether the task is running
 
-  let [template, setTemplate] = useState("");
+  let [template, setTemplate] = useState(props.data.gene.cid);
+  let [balance, setBalance]= useState(0);                         //balance of minting account
+  let [password, setPassword]= useState("");                      //minting account 
 
   const self = {
     changeTemplate: (ev) => {
       setTemplate(ev.target.value);
+    },
+    changePassword:(ev)=>{
+      setPassword(ev.target.value);
     },
     clickRun: (ev) => {
       setRunning(true);
@@ -35,17 +41,21 @@ function MiniTask(props) {
     clickStop: (ev) => {
       setRunning(false);
     },
-    clickRemove: (ev) => {
-      console.log("Remove task.")
-      if (props.remove) props.remove(props.index);
+    clickRemove: (name) => {
+      if (props.remove) props.remove(name);
     },
   }
 
-
   useEffect(() => {
-    const arr = [{ mock: "a" }, { mock: "b" }]
-    setList(arr);
-  }, []);
+    console.log(props);
+
+    //1.set balance of address
+    const chain=Network(props.data.network);
+    chain.balance(props.data.address,(dt)=>{
+      setBalance(dt.free);
+    });
+
+  }, [props.data]);
 
   return (
     <Row>
@@ -61,7 +71,8 @@ function MiniTask(props) {
           <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
             <Row>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <small><strong>#2</strong>, 5CSTSUDaBdmET2n6ju9mmpEKwFVqaFtmB8YdB23GMYCJSgmw, $INFT 1.335456 </small>
+                <small><strong>Task: {props.data.name}</strong>, {props.data.address}<br/>
+                $INFT {balance}, prefix: {props.data.more.prefix} </small>
               </Col>
               <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <Form.Control
@@ -69,19 +80,12 @@ function MiniTask(props) {
                   type="text"
                   disabled={running}
                   placeholder="Input the CID of gene template."
-                  value={template} onChange={(ev) => {
+                  value={template} 
+                  onChange={(ev) => {
                     self.changeTemplate(ev);
                   }} />
               </Col>
               <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  disabled={running}
-                  placeholder="iNFT prefix of name."
-                  value={template} onChange={(ev) => {
-                    self.changeTemplate(ev);
-                  }} />
               </Col>
               <Col className="text-end" md={size.title[2]} lg={size.title[2]} xl={size.title[2]} xxl={size.title[2]}>
 
@@ -93,7 +97,7 @@ function MiniTask(props) {
               className="btn btn-sm btn-default"
               disabled={running}
               onClick={(ev) => {
-              self.clickRemove(ev);
+              self.clickRemove(props.data.name);
             }}><FaWindowClose className={running?"text-secondary":"text-danger"} /></button>
           </Col>
         </Row>
@@ -124,8 +128,9 @@ function MiniTask(props) {
               type="password"
               disabled={running}
               placeholder="Password to run"
-              value={template} onChange={(ev) => {
-                self.changeTemplate(ev);
+              value={password} 
+              onChange={(ev) => {
+                self.changePassword(ev);
               }} />
           </Col>
           <Col className="text-end" md={size.run[2]} lg={size.run[2]} xl={size.run[2]} xxl={size.run[2]}>

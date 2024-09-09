@@ -88,6 +88,12 @@ const self = {
             INDEXED.pageRows(db, table, ck, { page: page, step: step })
         });
     },
+    remove:(name,ck)=>{
+        funs.checkDB(table, (db) => {
+            if(db.error) return ck && ck(db);
+            INDEXED.removeRow(db, table, "name", name, ck);
+        });
+    },
     update: {
         toChain: (name, ck) => {
             funs.checkDB(table, (db) => {

@@ -121,8 +121,8 @@ const config={
             ifav:{               //fav list on local 
                 keyPath:"name",
                 map:{
-                    name:{ unique: true },
-                    address:{unique: false},
+                    name:{ unique: true },          //iNFT name
+                    address:{unique: false},        //
                     block:{unique: false},
                     stamp:{unique: false},
                 },
@@ -130,7 +130,7 @@ const config={
             gene:{
                 keyPath:"name",
                 map:{
-                    name:{ unique: true },
+                    name:{ unique: true },          //
                     image:{unique:false},           //the editing image data will be saved as cache
                     size:{unique:false},
                     cell:{unique:false},
@@ -144,24 +144,15 @@ const config={
             task:{
                 keyPath:"name",
                 map:{
-                    name:{ unique:true},
-                    index:{unique:true},
-                    gene:{unique:false},
-                    offset:{unique:false},
-                    prefix:{unique:false},          //anchor name prefix
-                    nonce:{unique:false},           //the order of minting
-                    address:{unique:false},
-                    stamp:{unique:false},
+                    name:{ unique:true},            //robot name
+                    gene:{unique:false},            //{cid:"",orgin:""}, template detail 
+                    offset:{unique:false},          //offset of iNFT
+                    network:{unique:false},         //target network
+                    address:{unique:false},         //mint robot account
+                    more:{unique:false},            //{prefix:"a_",nonce:1}, more setting of minting, 
+                    stamp:{unique:false},           //create stamp
                 }, 
             }
-
-            // editing:{
-            //     keyPath:"name",
-            //     map:{
-            //         name:{ unique: true },
-            //         history:{unique:false},
-            //     }
-            // },
         },
     },
     proxy:{             //all agent url here

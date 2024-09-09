@@ -5,14 +5,11 @@ import BountySubmit from "../bounty/bounty_submit";
 import BountyProcess from "../bounty/bounty_process";
 import BountyLoad from "../bounty/bounty_load";
 
-import Config from "../../system/config";
 import Bounty from "../../system/bounty";
 import API from "../../system/api";
 import TPL from "../../system/tpl";
 
-import INDEXED from "../../lib/indexed";
-
-import { FaCopy,FaBitcoin, FaSyncAlt, FaSkullCrossbones, FaRoad } from "react-icons/fa";
+import { FaCopy,FaBitcoin, FaSkullCrossbones, FaRoad } from "react-icons/fa";
 
 function UserBounty(props) {
   const size = {
@@ -20,20 +17,10 @@ function UserBounty(props) {
   };
 
   let [list, setList] = useState([]);
-
-  const def = Config.get(["bounty", "status"]);
-  const nameDB = Config.get(["storage", "DBname"]);
-  const table = "bounty";
-
   const self = {
     clickRemove: (name) => {
-      //console.log(name);
-      INDEXED.checkDB(nameDB, (db) => {
-        if (INDEXED.checkTable(db.objectStoreNames, table)) {
-          INDEXED.removeRow(db, table, "name", name, (done) => {
-            if (done) self.fresh();
-          });
-        }
+      Bounty.remove(name,(res)=>{
+        if(res===true) return self.fresh;
       });
     },
     clickPay: (name) => {

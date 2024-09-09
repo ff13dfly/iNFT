@@ -67,6 +67,7 @@ const table = "gene";
 const self={
     list: (ck, page, step) => {
         funs.checkDB(table, (db) => {
+            
             INDEXED.pageRows(db, table, ck, {page: page, step: step })
         });
     },
@@ -90,6 +91,12 @@ const self={
         const row=funs.format.gene();
         funs.checkDB(table, (db) => {
             INDEXED.insertRow(db, table, [row], ck);
+        });
+    },
+    remove:(name,ck)=>{
+        funs.checkDB(table, (db) => {
+            if(db.error) return ck && ck(db);
+            INDEXED.removeRow(db, table, "name", name, ck);
         });
     },
     update:{

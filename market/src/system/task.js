@@ -3,9 +3,6 @@ import Config from "./config";
 
 import tools from "../lib/tools";
 
-const cache={}          //image cache
-let active=null;        //active gene template
-
 const table = "task";
 const funs={
     checkDB: (table, ck) => {
@@ -33,17 +30,21 @@ const funs={
         return false;
     },
     format:{
-        task:()=>{
-            const name=tools.char(10);
+        task:(address)=>{
+            const name=`task_${tools.char(8).toLocaleLowerCase()}`;
             return {
                 name:name,
-                size:[900,900],
-                cell:[100,100],
-                image:"",
-                grid:[8,4],
-                parts:[],
-                series:[],
-                deploy:[],
+                gene:{
+                    cid:"bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",          //default treasure tree
+                    orgin:"web3.storage",
+                },
+                offset:[],
+                network:"anchor",
+                address:address,
+                more:{
+                    prefix:`${tools.char(5).toLocaleLowerCase()}_`,
+                    nonce:0,
+                },
                 stamp:tools.stamp(),
             };
         }
@@ -53,8 +54,8 @@ const funs={
 
 const self={
     list: (ck, page, step) => {
-        funs.checkDB(table, (db) => {
-            INDEXED.pageRows(db, table, ck, {page: page, step: step })
+        return funs.checkDB(table, (db) => {
+            return INDEXED.pageRows(db, table, ck, {page: page, step: step })
         });
     },
     get:(name,ck)=>{
@@ -65,10 +66,16 @@ const self={
             });
         });
     },
-    add:(ck)=>{
-        const row=funs.format.task();
+    add:(address,ck)=>{
+        return funs.checkDB(table, (db) => {
+            const row=funs.format.task(address);
+            return INDEXED.insertRow(db, table, [row], ck);
+        });
+    },
+    remove:(name,ck)=>{
         funs.checkDB(table, (db) => {
-            INDEXED.insertRow(db, table, [row], ck);
+            if(db.error) return ck && ck(db);
+            INDEXED.removeRow(db, table, "name", name, ck);
         });
     },
     update:{
