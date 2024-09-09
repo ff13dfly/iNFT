@@ -4,11 +4,9 @@ import { useEffect, useState } from "react";
 import ImageOrgin from "./image_orgin";
 import ImageOperation from "./image_operation";
 
+import CreativityBasic from "./creativity_basic";
 import PartsList from "./parts_list";
-
-
 import TemplateRaw from "./template_raw";
-
 import PartsOverview from "./parts_overview";
 import SeriesOverview from "./series_overview";
 
@@ -41,6 +39,10 @@ function CreativitySingle(props) {
       title:"Scarcity Series",
       icon:<FaBraille size={24} className="mr-10" />,
     },
+    basic:{
+      title:"Basic Setting",
+      icon:<FaBraille size={24} className="mr-10" />,
+    },
     raw:{
       title:"Raw JSON",
       icon:<FaCode size={24} className="mr-10" />,
@@ -71,6 +73,9 @@ function CreativitySingle(props) {
       onSelect={(tab) => {
         setActive(tab);
       }}>
+      <Tab eventKey="basic" title={self.getTitle("basic")}>
+        <CreativityBasic name={props.name}/>
+      </Tab>
       <Tab eventKey="image" title={self.getTitle("image")}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
@@ -88,6 +93,7 @@ function CreativitySingle(props) {
       <Tab eventKey="series" title={self.getTitle("series")}>
         <SeriesOverview name={props.name}/>
       </Tab>
+      
       <Tab eventKey="raw" title={self.getTitle("raw")}>
         <TemplateRaw name={props.name}/>
       </Tab>

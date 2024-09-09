@@ -2,7 +2,6 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import TemplateList from "./template_list";
-//import TemplateDeploy from "./template_deploy";
 
 import tools from "../../lib/tools";
 
@@ -30,36 +29,6 @@ function CreativityNav(props) {
       operation: "template operation component",
       under: <TemplateList show={props.show} fullscreen={props.fullscreen} fresh={props.fresh} update={props.update} />,
     },
-    // {
-    //   title: "Image Cell List",
-    //   operation: "template operation component",
-    //   under: <TemplateList />,
-    // },
-    // {
-    //   title: "Image",
-    //   operation: "image under operation",
-    //   under: "b",
-    // },
-    // {
-    //   title: "Components",
-    //   operation: "Components under operation",
-    //   under: "c",
-    // },
-    // {
-    //   title: "Series",
-    //   operation: "series under operation",
-    //   under: "d",
-    // },
-    // {
-    //   title: "Deployment",
-    //   operation: "deploy under operation",
-    //   under: <TemplateDeploy show={props.show} />,
-    // },
-    // {
-    //   title: "Published",
-    //   operation: "deploy under operation",
-    //   under: <TemplateList show={props.show}/>,
-    // },
   ]
 
   let [show, setShow] = useState({ 0: true });
@@ -72,7 +41,7 @@ function CreativityNav(props) {
   }
 
   useEffect(() => {
-    
+
   }, []);
 
   return (

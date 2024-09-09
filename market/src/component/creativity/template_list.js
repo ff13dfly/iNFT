@@ -29,10 +29,11 @@ function TemplateList(props) {
     clickGene: (index,name,stamp) => {
       setActive(index);
       //1.show UI on entry page
-      if (props.show) props.show(<div>
-        <CreativityBasic name={name} fullscreen={props.fullscreen}/>
-        <CreativitySingle name={name} fullscreen={props.fullscreen}/>
-      </div>);
+      // if (props.show) props.show(<div>
+      //   <CreativityBasic name={name} fullscreen={props.fullscreen}/>
+      //   <CreativitySingle name={name} fullscreen={props.fullscreen}/>
+      // </div>);
+      if (props.show) props.show(<CreativitySingle name={name} fullscreen={props.fullscreen}/>);
 
       //2. fresh entry page title
       if(props.fresh) props.fresh(`Selected gene template: ${name}, created on ${tools.day(stamp,"-")}`);
