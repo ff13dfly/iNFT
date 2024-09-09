@@ -8,6 +8,7 @@ import tools from "../../lib/tools";
 
 /* Template creator basic setting
 *   @param  {function}    show        //function to update content on home page
+*   @param  {number}      update      //force to update
 *   @param  {boolean}     sidebar     //wether the sidebar is hidden
 *   @param  {function}    fresh       //entry fresh function, update the title
 */
@@ -27,7 +28,7 @@ function CreativityNav(props) {
     {
       title: "Gene Local List",
       operation: "template operation component",
-      under: <TemplateList show={props.show} sidebar={props.sidebar} fresh={props.fresh} />,
+      under: <TemplateList show={props.show} fullscreen={props.fullscreen} fresh={props.fresh} update={props.update} />,
     },
     // {
     //   title: "Image Cell List",
@@ -71,14 +72,11 @@ function CreativityNav(props) {
   }
 
   useEffect(() => {
-
+    
   }, []);
 
   return (
     <Row className="creativity-container">
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-
-      </Col>
       {navs.map((row, index) => (
         <Col key={index} className="border_bottom" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <Row>

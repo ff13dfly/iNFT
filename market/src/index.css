@@ -237,8 +237,16 @@ code {
 }
 
 .orgin-container{
+  max-height: 500px;
+  min-height: 500px;
+  height: 500px;
   width: 100%;
-  min-height: 100px;
+  overflow: auto;
+}
+
+.orgin-image{
+  width: 100%;
+  height:900px;
   background-size: cover; /* Scale the background image to cover the element */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the background image from repeating */
@@ -246,15 +254,24 @@ code {
 
 .orgin-cover{
   margin: 0 auto;
-  border: 1px solid #7be1b3;
-  background: #9ab4a1;
   border-radius: 10px;
   min-height: 50px;
   min-width: 50px;
-  opacity: 0.5;
   cursor: pointer;
   float: left;
   text-align: center;
+}
+
+.cover-default{
+  border: 1px solid #7be1b3;
+  background: #9ab4a1;
+  opacity: 0.4;
+}
+
+.cover-active{
+  border: 1px solid #e17b7b;
+  background: #b49a9a;
+  opacity: 0.8;
 }
 
 .orgin-cover h3{

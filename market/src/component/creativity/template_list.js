@@ -12,6 +12,9 @@ import { FaDna } from "react-icons/fa";
 /* Component Sample
 *   @param  {string}    hash        //unique hash
 *   @param  {string}    active      //active gene template
+*   @param  {function}  show          // set content to show on entry creativity.js
+*   @param  {function}  [fresh]         // show the title content
+*   @param  {function}  [fullscreen]  //get the fullscreen status
 */
 
 function TemplateList(props) {
@@ -27,8 +30,8 @@ function TemplateList(props) {
       setActive(index);
       //1.show UI on entry page
       if (props.show) props.show(<div>
-        <CreativityBasic sidebar={props.sidebar} name={name}/>
-        <CreativitySingle sidebar={props.sidebar} name={name}/>
+        <CreativityBasic name={name} fullscreen={props.fullscreen}/>
+        <CreativitySingle name={name} fullscreen={props.fullscreen}/>
       </div>);
 
       //2. fresh entry page title

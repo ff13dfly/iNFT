@@ -5,6 +5,7 @@ import { FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    hash        //unique hash
+*   @param  {function}  [fullscreen]  //get the fullscreen status
 */
 function CreativityBasic(props) {
   const size = {
@@ -45,7 +46,7 @@ function CreativityBasic(props) {
   }
 
   useEffect(() => {
-    
+    console.log(props.fullscreen());
   }, [props.name]);
 
   return (

@@ -16,7 +16,7 @@ function Creativity(props) {
     };
 
     let [content, setContent] = useState("");
-    let [sidebar, setSidebar] = useState(true);
+    let [sidebar, setSidebar] = useState(true);                     //wether show the sidebar
     let [title, setTitle] = useState("Gene template editor.");
 
     const self = {
@@ -25,6 +25,9 @@ function Creativity(props) {
         },
         updateContent: (ctx) => {
             setContent(ctx);
+        },
+        fullscreen:()=>{
+            return !sidebar;
         },
         fresh:(memo)=>{
             setTitle(memo);
@@ -37,13 +40,10 @@ function Creativity(props) {
                 {title}
             </Col>
             <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
-                <button className="btn btn-md btn-default" >
-                    <FaExpandArrowsAlt size={20}/>
-                </button>
                 <button className={sidebar?"btn btn-md btn-default":"btn btn-md btn-default text-warning"} onClick={(ev)=>{
                     self.clickSidebar(ev);
                 }}>
-                    <FaAlignJustify size={20}/>
+                    <FaExpandArrowsAlt size={20}/>
                 </button>
             </Col>
             <Col className="pt-2" 
@@ -56,9 +56,13 @@ function Creativity(props) {
                 <CreativitySingle /> */}
             </Col>
             <Col className="pt-2" hidden={!sidebar} md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
-                <CreativityNav show={self.updateContent} sidebar={sidebar} fresh={self.fresh}/>
+                <CreativityNav 
+                    show={self.updateContent} 
+                    fullscreen={self.fullscreen}
+                    fresh={self.fresh}
+                />
             </Col>
-            <CreativityPreview />
+            <CreativityPreview/>
         </Row>
     )
 }
