@@ -140,29 +140,6 @@ function FilterMarket(props) {
         <span className="ml-10">|</span>
         <FaGem size={18} className="ml-10" />
         <span className="ml-5">{min}~{max}</span>
-        {/* <Row hidden={!editing}>
-          <Col md={size.price[0]} lg={size.price[0]} xl={size.price[0]} xxl={size.price[0]}>
-            <input type="number" className="form-control" placeholder="Min" value={min} onChange={(ev)=>{
-              self.changeMin(ev);
-            }}/>
-          </Col>
-          <Col md={size.price[1]} lg={size.price[1]} xl={size.price[1]} xxl={size.price[1]}>
-            <input type="number" className="form-control" placeholder="Max" value={max} onChange={(ev)=>{
-              self.changeMax(ev);
-            }}/>
-          </Col>
-          <Col className="text-end" md={size.price[2]} lg={size.price[2]} xl={size.price[2]} xxl={size.price[2]}>
-            <button className="btn btn-sm btn-primary mt-1">Search</button>
-          </Col>
-        </Row>
-        <Row hidden={editing}>
-          <Col  md={size.price[0]} lg={size.price[0]} xl={size.price[0]} xxl={size.price[0]}></Col>
-          <Col className="pt-1 text-end" md={size.price[1]} lg={size.price[1]} xl={size.price[1]} xxl={size.price[1]}></Col>
-          <Col className="text-end" md={size.price[2]} lg={size.price[2]} xl={size.price[2]} xxl={size.price[2]}>
-            <FaGem size={18}/>
-            <span className="ml-5">{min}~{max}</span> 
-          </Col>
-        </Row> */}
       </Col>
     </Row>
   );

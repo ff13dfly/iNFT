@@ -38,15 +38,18 @@ function StorageINFT(props) {
     clickFresh: (name) => {
       console.log(name);
     },
+    
     getDate: (stamp) => {
       return tools.day(stamp, "-");
     },
     count: (ck) => {
       INDEXED.checkDB(nameDB, (db) => {
-        INDEXED.countTable(db, table, (max) => {
-          setTotal(Math.ceil(max / step));
-          return ck && ck();
-        })
+        if (INDEXED.checkTable(db.objectStoreNames, table)) {
+          INDEXED.countTable(db, table, (max) => {
+            setTotal(Math.ceil(max / step));
+            return ck && ck();
+          });
+        }
       });
     },
     fresh: (n) => {

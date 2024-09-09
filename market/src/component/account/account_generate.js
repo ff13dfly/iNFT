@@ -5,7 +5,11 @@ import Network from "../../network/router";
 
 import Account from "../../system/account";
 import Config from "../../system/config";
+
+import Copy from "../../lib/clipboard";
 import tools from "../../lib/tools";
+
+import { FaCopy} from "react-icons/fa";
 
 //TODO, need to support multi chain in future
 /* Account Generator
@@ -16,47 +20,66 @@ import tools from "../../lib/tools";
 function AccountGenerate(props) {
   const size = {
     row: [12],
-    generate:[3,5,4],
-    left:[4,8],
-    right:[8,4],
-    grid:[3],
+    generate: [3, 5, 4],
+    left: [4, 8],
+    right: [8, 4],
+    mnemonic:[10,2],
+    grid: [3],
   };
 
 
   let [networks, setNetworks] = useState([]);
   let [current, setCurrent] = useState("");
-  
-  let [info,setInfo] = useState("");
-  let [password, setPassword]  = useState("");
 
-  let [accountFile,setAccountFile] = useState({});
-  let [words, setWords]= useState([]);
-  let [thumb, setThumb]= useState("");
+  let [info, setInfo] = useState("");
+  let [password, setPassword] = useState("");
+
+  let [accountFile, setAccountFile] = useState({});
+  let [words, setWords] = useState([]);
+  let [thumb, setThumb] = useState("");
 
   let [saveInfo, setSaveInfo] = useState("Set the password to save account to local cache.");
+
+  let [recover, setRecover] = useState({});   //copied status 
 
   const self = {
     changeNetwork: (ev) => {
       setCurrent(ev.target.value);
-      
+
     },
-    changePassword:(ev)=>{
+    changePassword: (ev) => {
       setPassword(ev.target.value);
-      if(!ev.target.value){
+      if (!ev.target.value) {
         setSaveInfo("Set the password to save account to local cache.");
-      }else{
+      } else {
         setSaveInfo("");
       }
     },
-    clickGenerate:(ev)=>{
-      console.log(current,password);
-      const chain=Network(current);
-      if(chain.generate)chain.generate(password,(pair,mnemonic)=>{
-        console.log(pair,mnemonic);
+    clickCopy: () => {
+      Copy(words.join(" "));
+    },
+    callRecover: (key, at) => {
+      if (!recover[key]) {
+        recover[key] = "text-warning";
+        setRecover(tools.copy(recover));
+        setTimeout(() => {
+          delete recover[key];
+          setRecover(tools.copy(recover));
+        }, !at ? 1000 : at);
+      }
+    },
+    clickSaveAccount:(ev)=>{
+      console.log(accountFile);
+    },
+    clickGenerate: (ev) => {
+      console.log(current, password);
+      const chain = Network(current);
+      if (chain.generate) chain.generate(password, (pair, mnemonic) => {
+        console.log(pair, mnemonic);
         setAccountFile(pair);
         setWords(mnemonic.split(" "));
         setThumb(self.getAvatar(pair.address));
-        if(password) setSaveInfo("")
+        if (password) setSaveInfo("")
       });
     },
     getAvatar: (addr) => {
@@ -99,16 +122,16 @@ function AccountGenerate(props) {
         </select>
       </Col>
       <Col md={size.generate[1]} lg={size.generate[1]} xl={size.generate[1]} xxl={size.generate[1]}>
-        <input className="form-control" type="password" value={password} 
+        <input className="form-control" type="password" value={password}
           placeholder="Password for account"
-          onChange={(ev)=>{
+          onChange={(ev) => {
             self.changePassword(ev);
-          }}/>
+          }} />
       </Col>
       <Col className="text-end" md={size.generate[2]} lg={size.generate[2]} xl={size.generate[2]} xxl={size.generate[2]}>
-          <button className="btn btn-md btn-primary" onClick={(ev)=>{
-            self.clickGenerate(ev);
-          }}>Generate</button>
+        <button className="btn btn-md btn-primary" onClick={(ev) => {
+          self.clickGenerate(ev);
+        }}>Generate</button>
       </Col>
       <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
@@ -119,40 +142,54 @@ function AccountGenerate(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-          <Image
-            src={thumb}
-            rounded
-            width="100%"
-            style={{ minHeight: "80px" }}
-          />
-           
+            <Image
+              src={thumb}
+              rounded
+              width="100%"
+              style={{ minHeight: "80px" }}
+            />
+
           </Col>
-          <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+          <Col className="pt-2" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
             <Row>
-            <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-              <Badge className="bg-danger">Warning</Badge>
-              <span className="ml-5">These words is used to generate the account.</span> 
-            </Col>
-            {words.map((row, index) => (
-               <Col className="text-center pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
-                  <button className="btn btn-md btn-info" style={{width:"100px"}} key={index}>{row}</button>
-               </Col>
-            ))}
+              <Col md={size.mnemonic[0]} lg={size.mnemonic[0]} xl={size.mnemonic[0]} xxl={size.mnemonic[0]}>
+                <Badge className="bg-danger">Warning</Badge>
+                <span className="ml-5">These words is used to generate the account.</span>
+              </Col>
+              <Col className="text-end" md={size.mnemonic[1]} lg={size.mnemonic[1]} xl={size.mnemonic[1]} xxl={size.mnemonic[1]}>
+                <button className="btn btn-sm btn-default" onClick={(ev) => {
+                    self.clickCopy();
+                    self.callRecover("mnemonic");
+                  }}>
+                    <FaCopy className={!recover["mnemonic"] ? "" : recover["mnemonic"]} size={18}/>
+                  </button>
+              </Col>
+              {words.map((row, index) => (
+                <Col className="text-center pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                  <button className="btn btn-md btn-info" style={{ width: "100px" }} key={index}>{row}</button>
+                </Col>
+              ))}
+              
             </Row>
           </Col>
         </Row>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        Address : {!accountFile.address?"":accountFile.address}        
+        Address : {!accountFile.address ? "" : accountFile.address}
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
       <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
-          {saveInfo}
+        {saveInfo}
       </Col>
       <Col className="text-end" md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
-        <button disabled={!password || !accountFile.address} className="btn btn-md btn-primary">Save Account</button>
+        <button 
+          disabled={!password || !accountFile.address} 
+          className="btn btn-md btn-primary" 
+          onClick={(ev)=>{
+            self.clickSaveAccount(ev);
+          }}>Save Account</button>
       </Col>
     </Row>
   );
