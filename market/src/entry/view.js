@@ -19,14 +19,8 @@ function View(props) {
     };
 
     let [data, setData] = useState();
-    let [template, setTemplate] = useState("");
     let [update, setUpdate] = useState(0);
     let [alink,setAlink] = useState("");
-    
-    const payment={
-        wallet:{},
-        local:{},
-    }
 
     const self = {
         checkName:(str)=>{
@@ -36,15 +30,10 @@ function View(props) {
             return {name:arr.join("@"),network:network}
         },
         clickBuy:(pair)=>{
-            //console.log(`Buying...`,pair,data);
             const chain=Network("anchor");
             chain.buy(pair.signer,data.name,(process)=>{
                 console.log(process);
             },pair.wallet,pair.address);
-        },
-        getAlink:()=>{
-            console.log(props);
-            return "abc";
         },
     }
 
@@ -54,7 +43,6 @@ function View(props) {
             const dt=self.checkName(props.extend.name);
             INFT.single(dt.name,(res)=>{
                 setAlink(`anchor://${res.name}/${res.block}`);
-                setTemplate(res.raw.tpl);
                 setData(res);
             });
         }
@@ -91,7 +79,6 @@ function View(props) {
                 </Row>
             </Col>
             <Col md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
-                {/* <BountyMinting template={template} bounty={props.name}/> */}
                 <CommentList alink={alink} update={update} height={612} />
                 <CommentSubmit alink={alink} callback={() => {
                     setUpdate(update + 1);

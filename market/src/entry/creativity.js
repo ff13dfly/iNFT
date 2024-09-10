@@ -4,7 +4,8 @@ import { useState } from "react";
 import CreativityNav from "../component/creativity/creativity_nav"
 import CreativityPreview from "../component/creativity/creativity_preview";
 
-import { FaAlignJustify,FaExpandArrowsAlt } from "react-icons/fa";
+import { FaExpandArrowsAlt } from "react-icons/fa";
+
 
 function Creativity(props) {
     const size = {
@@ -40,11 +41,11 @@ function Creativity(props) {
                 {title}
             </Col>
             <Col className="text-end" md={size.head[1]} lg={size.head[1]} xl={size.head[1]} xxl={size.head[1]} >
-                <button className={sidebar?"btn btn-md btn-default":"btn btn-md btn-default text-warning"} onClick={(ev)=>{
-                    self.clickSidebar(ev);
-                }}>
-                    <FaExpandArrowsAlt size={20}/>
-                </button>
+                <button 
+                    className={sidebar?"btn btn-md btn-default":"btn btn-md btn-default text-warning"} 
+                    onClick={(ev)=>{
+                        self.clickSidebar(ev);
+                    }}><FaExpandArrowsAlt size={20}/></button>
             </Col>
             <Col className="pt-2" 
                 md={sidebar?size.layout[0]:size.row[0]} 
@@ -52,8 +53,6 @@ function Creativity(props) {
                 xl={sidebar?size.layout[0]:size.row[0]} 
                 xxl={sidebar?size.layout[0]:size.row[0]}>
                 {content}
-                {/* <CreativityBasic />
-                <CreativitySingle /> */}
             </Col>
             <Col className="pt-2" hidden={!sidebar} md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
                 <CreativityNav 

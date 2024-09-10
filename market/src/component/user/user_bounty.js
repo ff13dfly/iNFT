@@ -104,7 +104,7 @@ function UserBounty(props) {
             <tr>
               <th></th>
               <th>Title</th>
-              <th>Prize</th>
+              <th>Coin/Token</th>
               <th>Alink</th>
               <th>Manage</th>
               <th>Loaded</th>
@@ -128,7 +128,7 @@ function UserBounty(props) {
                   {row.title}
                 </td>
                 <td>
-                  ${row.coin.toUpperCase()}
+                  ${row.coin.toUpperCase()} (Network)
                 </td>
                 <td>
                   <button className="btn btn-sm btn-default">

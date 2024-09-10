@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import BoardOverall from "../component/home/board_overall";
 import Slide from "../component/home/slide";
 import SectionLatest from "../component/home/section_latest";
@@ -11,19 +9,6 @@ import BannerTemplate from "../component/home/banner_template";
 import Footer from "../component/common/common_footer"
 
 function Home(props) {
-    const size = {
-        row: [12],
-        flow:[3,6,3]
-    };
-
-    const self={
-
-    }
-
-    useEffect(() => {
-        
-    }, [props.update]);
-
     return (
         <div>
             <BoardOverall />

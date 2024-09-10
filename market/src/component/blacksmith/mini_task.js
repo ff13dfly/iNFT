@@ -8,7 +8,7 @@ import Task from "../../system/task";
 import Account from "../../system/account";
 import tools from "../../lib/tools";
 
-import { FaWindowClose } from "react-icons/fa";
+import { FaWindowClose,FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 /* Mini task, show the details of minting robot
 *   @param  {number}    key           //list order
@@ -21,9 +21,10 @@ function MiniTask(props) {
   const size = {
     row: [12],
     left: [2, 10],
-    title: [9, 3],
+    title: [8,3,1],
     run: [4, 6, 2],
-    layout: [11, 1]
+    layout: [11, 1],
+    info:[10,2]
   };
 
   let [info, setInfo] = useState("");
@@ -34,6 +35,7 @@ function MiniTask(props) {
   let [password, setPassword] = useState("");                     //minting account 
   let [offset, setOffset] = useState([]);                         //minting offset setting 
 
+  let [more, setMore]= useState(false);   //wether show more setting
 
   const self = {
     changeTemplate: (ev) => {
@@ -50,6 +52,9 @@ function MiniTask(props) {
       setRunning(true);
       self.start(password, props.data.name);
       setPassword("");      //reset the password
+    },
+    clickMore:()=>{
+      setMore(!more);
     },
     clickStop: (ev) => {
       setInfo("Waiting for the last minting to finalize.");
@@ -227,10 +232,23 @@ function MiniTask(props) {
           <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
             <Row>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <small><strong>Task: {props.data.name}</strong>, {props.data.address}<br />
-                  $INFT {balance}, prefix: {props.data.more.prefix}, amount: {props.data.more.nonce} </small>
+                <small><strong>Task: {props.data.name}</strong>, {props.data.address}</small>
               </Col>
-              <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
+              <Col md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
+                
+              <small>$INFT {balance}, prefix: {props.data.more.prefix}, amount: {props.data.more.nonce} </small>
+              </Col>
+              <Col className="text-end" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
+              <button className="btn btn-sm btn-default" onClick={(ev) => {
+                self.clickMore()
+              }}>
+                {!more ? <FaChevronDown /> : <FaChevronUp />}
+              </button>
+              </Col>
+            </Row>
+            
+            <Row hidden={!more}>
+              <Col   className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <Form.Control
                   size="sm"
                   type="text"
@@ -241,7 +259,7 @@ function MiniTask(props) {
                     self.changeTemplate(ev);
                   }} />
               </Col>
-              <Col className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
+              <Col  className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <Form.Select size="sm" disabled={running}>
                   <option value={"account_01"}>Anchor Block Hash</option>
                   <option value={"account_02"}>Bitcoin Block Hash</option>
@@ -260,7 +278,7 @@ function MiniTask(props) {
         </Row>
 
 
-        <Row className="pt-2">
+        <Row hidden={!more} className="pt-2">
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <strong className="mr-10">Offset</strong>
             {offset.map((row, index) => (

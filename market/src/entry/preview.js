@@ -16,10 +16,6 @@ function Preview(props) {
     let [template, setTemplate]=useState("");
     let [hash,setHash]=useState("0x0e70dc74951952060b5600949828445eb0acbc6d9b8dbcc396c853f8891")
 
-    const self = {
-
-    }
-
     useEffect(() => {
         if(props.extend  && props.extend.name){
             const cid = props.extend.name;

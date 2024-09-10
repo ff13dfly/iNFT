@@ -32,7 +32,7 @@ function Detail(props) {
                 setData(res);
             },true);
         }
-    }, [props.update,props.extend]);
+    }, [props.extend]);
 
     return (
         <Row className="pt-2">

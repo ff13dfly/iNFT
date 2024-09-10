@@ -25,13 +25,7 @@ function Setting(props) {
 
     let [ active, setActive ]= useState("basic");
     let [ content, setContent] =useState("");
-
-    const self = {
-        fresh: () => {
-
-        },
-    }
-
+    
     useEffect(() => {
         if(props.extend && props.extend.mod){
             const mod=props.extend.mod;

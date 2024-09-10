@@ -63,9 +63,6 @@ function Playground(props) {
         changeNetwork: (ev) => {
             setNetwork(ev.target.value);
         },
-        // clickSample:(cid)=>{
-            
-        // },
         clickLoad: (ev) => {
             setShow(false);
             if (network && search) {

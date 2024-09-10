@@ -64,7 +64,6 @@ function Blacksmith(props) {
                 <Minting uuid={"blacksmith_minting"} template={""}/>
                 <MintNearby amount={10}/>
             </Col>
-            
         </Row>
     )
 }
