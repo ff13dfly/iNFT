@@ -109,6 +109,26 @@ const funs = {
 }
 
 const self = {
+    format:{
+        raw:(cid,offset,network,salt)=>{
+            const raw = {
+                tpl: cid,                       //ipfs cid
+                offset: !offset?[]:offset,
+                from: "ipfs",                   //storage way
+                origin: "web3.storage",         //storage origianl
+            }
+            if(network!==undefined) raw.target=network;         //for target blockhash ,multi chain parameters
+            if(salt!==undefined) raw.salt=salt;                 //for cross chai, multi chain parameters
+            return raw;
+        },
+        protocol:()=>{
+            return {
+                type:"data",
+                fmt:"json",
+                tpl:"inft",
+            }
+        },
+    },
     enableLocal: () => {
         local = true;
     },

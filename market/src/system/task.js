@@ -79,7 +79,24 @@ const self={
         });
     },
     update:{
-        
+        offset:(name,offset,ck)=>{
+            funs.checkDB(table, (db) => {
+                INDEXED.searchRows(db, table, "name", name, (rows) => {
+                    if (rows.length !== 1) return ck && ck({ error: "Invalid task." });
+                    rows[0].offset = offset;
+                    INDEXED.updateRow(db, table, rows, ck);
+                });
+            });
+        },
+        nonce:(name,index,ck)=>{
+            funs.checkDB(table, (db) => {
+                INDEXED.searchRows(db, table, "name", name, (rows) => {
+                    if (rows.length !== 1) return ck && ck({ error: "Invalid task." });
+                    rows[0].more.nonce = index;
+                    INDEXED.updateRow(db, table, rows, ck);
+                });
+            });
+        },
     },
 }
 export default self;

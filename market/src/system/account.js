@@ -55,7 +55,6 @@ const self = {
         });
     },
     get:(addr,ck)=>{
-        
         funs.checkDB(table,(db)=>{
             INDEXED.searchRows(db,table,"address",addr,ck);
         });

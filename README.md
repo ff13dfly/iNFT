@@ -223,7 +223,7 @@
     ```Javascript
         {
             "tpl":"ID_OF_TEMPLATE_FILE",        //ID of IPFS file
-            "from":"ipfs",                      //source orgin
+            "from":"ipfs",                      //source origin
             "origin":"web3.storage",            //where to storage
             "offset":[0,3,0,3,6,5,3,9,7]        //optional, offset of mint following the template definition           
         }
@@ -263,7 +263,7 @@
 
     ```Javascript
         {
-            "orgin":{       //data written on substrate chain
+            "origin":{       //data written on substrate chain
                 "name":"ANCHOR_NAME",
                 "raw":{
                     "target":{
