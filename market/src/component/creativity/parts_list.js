@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import CommonNumber from "../common/common_number";
+
 /* Component Sample
 *   @param  {string}    hash        //unique hash
 */
@@ -43,69 +45,38 @@ function PartsList(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Image Parameter</h5>
       </Col>
-      <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-        <Row>
-          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <small>Start Line</small>
-            <input type="number" className="form-control" value={ex} onChange={(ev) => {
-              self.changeEX(ev);
-            }} />
-          </Col>
-          <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <small>Start Row</small>
-            <input type="number" className="form-control" value={ey} onChange={(ev) => {
-              self.changeEY(ev);
-            }} />
-          </Col>
-        </Row>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={ex} title={"Start Line"} callback={(val) => {
+          console.log(val);
+        }} />
       </Col>
-      <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            SVG overview
+      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={ey} title={"Start Row"} callback={(val) => {
+          console.log(val);
+        }} />
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <hr />
       </Col>
-      <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <Row>
-          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <small>Part Options</small>
-          </Col>
-          <Col className="text-center" md={size.amount[0]} lg={size.amount[0]} xl={size.amount[0]} xxl={size.amount[0]}>
-            <button className="btn btn-sm btn-default">-</button>
-          </Col>
-          <Col className="text-center" md={size.amount[1]} lg={size.amount[1]} xl={size.amount[1]} xxl={size.amount[1]}>
-            <input type="number" className="form-control text-center" value={amount} onChange={(ev) => {
-              self.changeAmount(ev);
-            }} />
-          </Col>
-          <Col className="text-center" md={size.amount[2]} lg={size.amount[2]} xl={size.amount[2]} xxl={size.amount[2]}>
-            <button className="btn btn-sm btn-default">+</button>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col className="pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Part X Extend</small>
-            <input type="number" className="form-control" value={ex} onChange={(ev) => {
-              self.changeEX(ev);
-            }} />
-          </Col>
-          <Col className="pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Part Y Extend</small>
-            <input type="number" className="form-control" value={ey} onChange={(ev) => {
-              self.changeEY(ev);
-            }} />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <small>Offset</small>
-            <input type="number" className="form-control" value={offset} onChange={(ev) => {
-              self.changeOffset(ev);
-            }} />
-          </Col>
-        </Row>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={amount} title={"Part Options"} callback={(val) => {
+          console.log(val);
+        }} />
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={ex} title={"Part X Extend"} callback={(val) => {
+          console.log(val);
+        }} />
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={ey} title={"Part Y Extend"} callback={(val) => {
+          console.log(val);
+        }} />
+      </Col>
+      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+        <CommonNumber value={offset} title={"Offset"} callback={(val) => {
+          console.log(val);
+        }} />
       </Col>
     </Row>
   );

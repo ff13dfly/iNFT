@@ -1,6 +1,8 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import CommonNumber from "../common/common_number";
+
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 /* Component Sample
@@ -13,6 +15,7 @@ function PartsDetail(props) {
     row: [12],
     head: [9, 3],
     half: [6],
+    input:[3,6,3],
   };
 
   let [start, setStart] = useState(24);
@@ -67,28 +70,24 @@ function PartsDetail(props) {
         </Row>
         <Row hidden={!expandHash}>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Start of hash to cut</small>
-            <input type="number" className="form-control" value={start} onChange={(ev) => {
-              self.changeStart(ev);
-            }} />
+            <CommonNumber value={start} title={"Start of hash to cut"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Step after start to cut</small>
-            <input type="number" className="form-control" value={step} onChange={(ev) => {
-              self.changeStep(ev);
-            }} />
+            <CommonNumber value={step} title={"Step after start to cut"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Options to select image part</small>
-            <input type="number" className="form-control" value={divide} onChange={(ev) => {
-              self.changeDivide(ev);
-            }} />
+            <CommonNumber value={divide} title={"Options to select image part"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Offset of gene template</small>
-            <input type="number" className="form-control" value={offset} onChange={(ev) => {
-              self.changeOffset(ev);
-            }} />
+            <CommonNumber value={offset} title={"Offset of gene template"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
         </Row>
         
@@ -116,41 +115,34 @@ function PartsDetail(props) {
             Image cut parameters.
           </Col>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Start row to cut image</small>
-            <input type="number" className="form-control" value={start} onChange={(ev) => {
-              self.changeStart(ev);
-            }} />
+            <CommonNumber value={start} title={"Start row to cut image"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-2" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Start line to cut image</small>
-            <input type="number" className="form-control" value={step} onChange={(ev) => {
-              self.changeStep(ev);
-            }} />
+            <CommonNumber value={step} title={"Start line to cut image"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             Image combining parameters.
           </Col>
           <Col className="pt-1" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Part position X on iNFT</small>
-            <input type="number" className="form-control" value={start} onChange={(ev) => {
-              self.changeStart(ev);
-            }} />
+            <CommonNumber value={step} title={"Part position X on iNFT"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-1" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Part position Y on iNFT</small>
-            <input type="number" className="form-control" value={step} onChange={(ev) => {
-              self.changeStep(ev);
-            }} />
+            <CommonNumber value={step} title={"Part position Y on iNFT"} callback={(val)=>{
+              console.log(val);
+            }}/>
           </Col>
           <Col className="pt-1" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <small>Part rotation on iNFT</small>
-            <input type="number" className="form-control" value={start} onChange={(ev) => {
-              self.changeStart(ev);
-            }} />
+            <CommonNumber value={step} title={"Part rotation on iNFT"} callback={(val)=>{
+              console.log(val);
+            }}/>    
           </Col>
-          
         </Row>
-
       </Col>
     </Row>
   );
