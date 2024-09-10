@@ -556,9 +556,10 @@ const self = {
         return 1000000;
     },
     accuracy: (ck) => {
-        self.init(()=>{
-            return  ck && ck( Math.pow(10, registry.decimals));
-        });
+        return 1000000;
+        // self.init(()=>{
+        //     return  ck && ck( Math.pow(10, registry.decimals));
+        // });
     },
     events:{        //TODO, here to add events listeners.
         payed:()=>{

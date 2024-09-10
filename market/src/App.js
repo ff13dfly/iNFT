@@ -21,10 +21,7 @@ import InvalidPage from "./entry/404";
 import Preview from "./entry/preview";
 import Detail from "./entry/detail";
 
-//import INDEXED from "./lib/indexed";
-
 function App() {
-
   //parameters of router
   let [content, setContent]=useState("");
   let [target, setTarget]=useState("bounty");

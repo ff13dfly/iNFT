@@ -47,6 +47,7 @@ function RouterPayment(props) {
     getPaymentBySymbol:(coin)=>{
 
       return {type:"coin",network:"anchor"}
+      //return {type:"coin",network:"solana"}
     },
     calcAmount: (bonus) => {
       let n = 0;
@@ -59,13 +60,17 @@ function RouterPayment(props) {
     autoSet:(bonus,coin,ck)=>{
       //1.set the amount of payment;
       const n=self.calcAmount(bonus);
-      setAmount(n);
 
       //2.set the receiver of the payment;
-      API.bounty.target(coin,(res)=>{
-        if(res.success && res.target) setTarget(res.target);
-        return ck && ck();
-      });
+      //check target to avoid multi request to portal API
+      if(!target){
+        API.bounty.target(coin,(res)=>{
+          if(!res.success || !res.target) return setInfo(`Failed to get the target account.`);
+          return ck && ck(n,res.target);
+        });
+      }else{
+        return ck && ck(n);
+      }
     },
   }
 
@@ -77,8 +82,10 @@ function RouterPayment(props) {
         if(bty.error) return setInfo(bty.error);
         
         const pay=self.getPaymentBySymbol(bty.coin);
-        self.autoSet(bty.bonus,bty.coin,()=>{
+        self.autoSet(bty.bonus,bty.coin,(n,addr)=>{
           //1.set the target account and amount
+          setAmount(n);
+          if(addr!==undefined)setTarget(addr);
 
           //2.router to the target payment component
           if(router[pay.type] && router[pay.type][pay.network]){
@@ -89,7 +96,7 @@ function RouterPayment(props) {
         });
       });
     }
-  }, []);
+  }, [target]);   //must related to `target` to pass the value to sub component
 
   return (
     <Row>
