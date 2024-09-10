@@ -40,7 +40,8 @@ function BountyProcess(props) {
     },
   }
   useEffect(() => {
-    self.fresh();
+    console.log(props.bounty);
+    //self.fresh();
   }, [props.bounty]);
 
   return (
@@ -51,7 +52,7 @@ function BountyProcess(props) {
             <h5>Bounty details ( {anchorBounty} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
-        <ProcessDetail raw={data}/>
+        {/* <ProcessDetail raw={data}/> */}
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
 

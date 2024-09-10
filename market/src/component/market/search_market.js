@@ -50,7 +50,7 @@ function SearchMarket(props) {
         });
       } else {
         chain.view(search, "owner", (dt) => {
-          //console.log(dt);
+          if(props.callback) props.callback([],network);
           if (!dt || dt.error) {
             return setEnable({
               selector: true,

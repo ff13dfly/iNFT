@@ -473,18 +473,15 @@ const self = {
                     break;
                 case "detail":
                     wsAPI.rpc.chain.getBlock(value).then((res) => {
-                        //console.log(res.toJSON());
                         const exs = res.block.extrinsics;
                         const bk=res.block.header.toJSON();
-                        //console.log(bk);
                         const infts = [];
                         if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
-                            if (index < 2) return false;
                             const row = ex.toHuman();
+                            if(!row.isSigned) return false;     //skip the unsigned, no iNFT
                             if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
                                 const dt = row.method.args;
-                                //console.log(dt);
                                 try {
                                     const protocol = JSON.parse(dt.protocol);
                                     if(protocol && protocol.tpl && protocol.tpl.toLowerCase() ==="inft"){
@@ -511,7 +508,7 @@ const self = {
                         return ck && ck(infts);
                     });
                     break;
-                case "blocknumber":   //value: hash(64)
+                case "blocknumber":   //value: number
                     wsAPI.rpc.chain.getBlockHash(value, (res) => {
                         const hash = res.toHex();
                         return self.view(hash, "detail", ck);

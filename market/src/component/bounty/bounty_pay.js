@@ -131,7 +131,6 @@ function BountyPay(props) {
   }
 
   useEffect(() => {
-    //console.log(props);
     if (props.bounty) self.autoSet(props.bounty);
 
   }, [props.bounty]);

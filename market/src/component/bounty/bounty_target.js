@@ -7,6 +7,7 @@ import Bounty from "../../system/bounty";
 
 /* Template creator basic setting
 *   @param  {object}      template        //template data
+*   @param  {string}      [bounty]        //bounty alink, if empty, not submit yet.
 */
 
 function BountyTarget(props) {
@@ -87,8 +88,8 @@ function BountyTarget(props) {
   }
 
   useEffect(() => {
-    if(props.link){
-      Bounty.get(props.link,(dt)=>{
+    if(props.bounty){
+      Bounty.get(props.bounty,(dt)=>{
         if(!dt.error){
           self.selected(dt.bonus);
           setModify(false);

@@ -156,7 +156,7 @@ function BountyMore(props) {
       </Col>
       <Col className="text-end pt-2" md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
         More setting
-        <button className="btn btn-md btn-default" onClick={(ev)=>{
+        <button className="btn btn-md btn-default ml-5" onClick={(ev)=>{
           self.clickMore(ev);
         }}>
           {!more?<FaAngleDoubleDown />:<FaAngleDoubleUp />}

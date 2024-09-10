@@ -60,7 +60,7 @@ function BountySubmit(props) {
   //sub component params
   let [anchor, setAnchor] = useState("");     //alink of bounty
   let [info, setInfo] = useState("");         //writing status
-  let [infoLoad,setInfoLoad]= useState("");         //writing status
+  let [infoLoad,setInfoLoad]= useState("");    //writing status
   let [payInfo, setPayInfo] = useState("");     //paying status
 
   const self = {
@@ -213,7 +213,8 @@ function BountySubmit(props) {
       setMore(tools.clone(more));
     },
     load: (bt) => {
-      setTemplate(bt.template.cid);
+      //console.log(bt);
+      setSearch(bt.template.cid);
       setTimeout(() => {
         loadRef.current.click();
         setEnableLoad(false);
@@ -226,18 +227,28 @@ function BountySubmit(props) {
       setTemplate({});
       setReady(false);
     },
+    setEditMode:()=>{
+      setAnchor(props.name);
+      self.changeTabTitle("step_3");
+      enable["step_2"] = true;
+      enable["step_3"] = true;
+      setEnable(tools.clone(enable));
+    },
   }
 
   useEffect(() => {
+    console.log(props);
     if (props.name) {
-      self.changeTabTitle("step_2");
-      setAnchor(props.name);
+      //1.edit mode, need to set all the parameters
+      self.setEditMode();
       Bounty.get(props.name, (bty) => {
         if (bty.error) return false;
         self.load(bty);
         setBounty(bty);
       });
     } else {
+
+      //2.adding mode, enable submit button
       self.changeTabTitle("step_1");
       setEnableSubmit(true);
     }
@@ -291,7 +302,7 @@ function BountySubmit(props) {
                 }} />
               </Col>
               <Col className="" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <BountyTarget template={template} callback={(dt) => {
+                <BountyTarget template={template} bounty={props.name} callback={(dt) => {
                   self.callbackBonus(dt);
                 }} />
               </Col>
@@ -317,9 +328,9 @@ function BountySubmit(props) {
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyDetail bounty={anchor} template={template} />
               </Col>
-              <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
+              {/* <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
                 self.callbackPay(status, target, total);
-              }} />
+              }} /> */}
               <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 {payInfo}
               </Col>

@@ -24,7 +24,7 @@ function UserBounty(props) {
       });
     },
     clickPay: (name) => {
-      props.dialog.show(<BountySubmit name={name} />, "Bounty Submission");
+      props.dialog.show(<BountySubmit name={name} dialog={props.dialog}/>, "Bounty Submission");
     },
     clickSync: (name) => {
       Bounty.get(name, (bt) => {
