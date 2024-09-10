@@ -49,7 +49,7 @@ function MockHash(props) {
       }
     },
     groupHash: (str) => {
-      const pure = str.substr(2);
+      const pure = str.substring(2);
       const arr = [];
       const group = 4;
       let temp = [];

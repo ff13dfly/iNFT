@@ -214,8 +214,8 @@ const funs={
             const [start, step, divide, offset] = part.value;
             const mk = parseInt(divide) + parseInt(offset) + parseInt(value);
             const replace = tools.toHex(mk, step);
-            const head_str = mock.substr(0, start + 2)
-            const tail_str = mock.substr(2 + start + step);
+            const head_str = mock.substring(0, start + 2)
+            const tail_str = mock.substring(2 + start + step);
             mock = `${head_str}${replace}${tail_str}`;
         }
         return mock;

@@ -45,13 +45,13 @@ function MockOffset(props) {
 
     },
     getValueFromHash:(hash,start,step,isHex)=>{
-      const pure=hash.substr(2);
-      const val=`0x${pure.substr(start,step)}`;
+      const pure=hash.substring(2);
+      const val=`0x${pure.substring(start,step)}`;
       return  isHex?val:parseInt(val);
     },
     getSelected:(divide,hash,start,step,offset_templat,offset_user)=>{
-      const pure=hash.substr(2);
-      const val=parseInt(`0x${pure.substr(start,step)}`);
+      const pure=hash.substring(2);
+      const val=parseInt(`0x${pure.substring(start,step)}`);
       const result=val+offset_templat+offset_user
       return result%divide;
     },

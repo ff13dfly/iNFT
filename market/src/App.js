@@ -46,9 +46,9 @@ function App() {
     bounty:["anchor","block"],        //definition of input parameters
   }
   const self={
-    checkding:()=>{
+    checking:()=>{
       const path=window.location.pathname;
-      const arr=path.substr(1).split("/");
+      const arr=path.substring(1).split("/");
       const single=arr.shift();
       if(!single) return true;      //no route, return immediately
 
@@ -117,7 +117,7 @@ function App() {
 
 
   useEffect(() => {
-    self.checkding();
+    self.checking();
     setContent(router[target]);
   }, [target,extend]);
 

@@ -183,10 +183,10 @@ const self={
                 },param);
             });
         },
-        target:(network,ck)=>{
+        target:(coin,ck)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={network:network};
+                const param={symbol:coin};
                 funs.request("bounty","target",(res)=>{
                     if(res.success) return ck && ck(res);
                     return ck && ck({error:"Failed to get bounty payment target details."});

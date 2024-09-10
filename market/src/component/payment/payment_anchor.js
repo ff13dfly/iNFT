@@ -10,27 +10,19 @@ function PaymentAnchor(props) {
     row: [12],
   };
 
-  let [list, setList] = useState([]);
-
   const self = {
     
   }
 
   useEffect(() => {
-    const arr=[{mock:"a"},{mock:"b"}]
-    setList(arr);
-  }, []);
+    console.log(props);
+  }, [props.target, props.amount]);
 
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-
+        Anchor Payment
       </Col>
-      {list.map((row, index) => (
-        <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          {JSON.stringify(row)}
-        </Col>
-      ))}
     </Row>
   );
 }

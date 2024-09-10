@@ -161,7 +161,7 @@ const self = {
                 const ndata = {
                     title: more.title,
                     desc: more.desc,
-                    publisher: publisher,       //address or something else.  
+                    publisher: publisher,              //address of the bounty publisher 
                     consignee: more.consignee,         //address to accept the iNFT result.          
                     coin: more.coin,
                     template:more.template,

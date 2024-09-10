@@ -25,7 +25,7 @@ const self = {
   },
   shorten: (addr, n) => {
     if (n === undefined) n = 10;
-    return addr.substr(0, n) + "..." + addr.substr(addr.length - n, n);
+    return addr.substring(0, n) + "..." + addr.substring(addr.length - n, n);
   },
   copy: (arr_obj) => {
     return JSON.parse(JSON.stringify(arr_obj));
@@ -37,7 +37,7 @@ const self = {
     return Array.from(new Set(arr));
   },
   tail: (str, n) => {
-    return str.substr(0, n) + "...";
+    return str.substring(0, n) + "...";
   },
   empty: (obj) => {
     if (JSON.stringify(obj) === "{}") return true;
@@ -96,7 +96,7 @@ const self = {
     }).join("");
   },
   getHashValue:(hash,start,step)=>{
-    return parseInt(`0x${hash.substr(start+2,step)}`);
+    return parseInt(`0x${hash.substring(start+2,step)}`);
   },
   hexToU8: (hexString) => {
     if (hexString.length % 2 !== 0) {
@@ -104,7 +104,7 @@ const self = {
     }
     const u8array = new Uint8Array(hexString.length / 2);
     for (let i = 0; i < hexString.length; i += 2) {
-      u8array[i / 2] = parseInt(hexString.substr(i, 2), 16);
+      u8array[i / 2] = parseInt(hexString.substring(i, 2), 16);
     }
     return u8array;
   },

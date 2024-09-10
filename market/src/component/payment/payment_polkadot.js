@@ -24,13 +24,8 @@ function PaymentPolkadot(props) {
   return (
     <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-
+        Polkadot Payment ( hash / wallet )
       </Col>
-      {list.map((row, index) => (
-        <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          {JSON.stringify(row)}
-        </Col>
-      ))}
     </Row>
   );
 }

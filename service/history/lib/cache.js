@@ -55,7 +55,7 @@ const file={
         });
     },
     hash:function(n){
-        return Math.random().toString(36).substr(n!=undefined?n:5);
+        return Math.random().toString(36).substring(n!=undefined?n:5);
     },
     read:(name,ck)=>{
         var str=md5(name);
@@ -87,7 +87,7 @@ const file={
     },
     getPath:(str,folder,level,skip)=>{
         let path=skip?"":(folder+"/");
-        for(var i=0;i<level;i++) path+=str.substr(i+i,2) +"/";
+        for(var i=0;i<level;i++) path+=str.substring(i+i,2) +"/";
         return path;
     },
 };
@@ -189,8 +189,6 @@ const self={
             const img=row.raw.imgs[i];
             const arr=img.split(";base64,");
             const type=arr[0].split(":image/");
-            //console.log(`Orginal [${i}] : ${img.substr(0,200)}`);
-            //console.log(`Prefix : ${arr[0]} , raw: ${arr[1].substr(0,200)}` );
 
             file.img(arr[1],i,type[1],function(index,target){
                 //console.log(`img-${index} : ${cfg.server}${target}`);

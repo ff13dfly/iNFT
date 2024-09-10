@@ -9,8 +9,8 @@
 			return BOUNTY_PAGE_STEP;
 		}
 
-		public function bountyTarget($network){
-			if(isset(BOUNTY_TARGET[$network])) return BOUNTY_TARGET[$network];
+		public function bountyTarget($coin){
+			if(isset(BOUNTY_TARGET[$coin])) return BOUNTY_TARGET[$coin];
 			return false;
 		}
 		

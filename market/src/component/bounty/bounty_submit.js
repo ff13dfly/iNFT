@@ -4,8 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import BountyTarget from "./bounty_target";
 import BountyTemplate from "./bounty_template";
 import BountyDetail from "./bounty_detail";
-import BountyPay from "./bounty_pay";
 import BountyMore from "./bounty_more";
+import RouterPayment from "../payment/router_payment";
 
 import Network from "../../network/router";
 
@@ -34,7 +34,7 @@ function BountySubmit(props) {
 
   //submission details
   let [template, setTemplate] = useState({});       //template details
-  let [search, setSearch] = useState("");             //template hash search value
+  let [search, setSearch] = useState("");           //template hash search value
   let [bonus, setBonus] = useState([]);             //bonus setting
 
   //step enable
@@ -58,10 +58,10 @@ function BountySubmit(props) {
   });
 
   //sub component params
-  let [anchor, setAnchor] = useState("");     //alink of bounty
+  let [anchor, setAnchor] = useState(!props.name?"":props.name);     //alink of bounty
   let [info, setInfo] = useState("");         //writing status
   let [infoLoad,setInfoLoad]= useState("");    //writing status
-  let [payInfo, setPayInfo] = useState("");     //paying status
+  //let [payInfo, setPayInfo] = useState("");     //paying status
 
   const self = {
     changeSearch: (ev) => {
@@ -160,40 +160,40 @@ function BountySubmit(props) {
         });
       });
     },
-    callbackPay: (status, target, amount) => {
-      if (status.error) return setPayInfo(status.error);
-      if (!status.finalized) return setPayInfo(JSON.stringify(status));
+    // callbackPay: (status, target, amount) => {
+    //   if (status.error) return setPayInfo(status.error);
+    //   if (!status.finalized) return setPayInfo(JSON.stringify(status));
 
-      const dapp = Config.get(["system", "name"]);
-      const name = Bounty.format.name("payment");
-      const raw = Bounty.format.raw.payment(status.finalized, target, amount);
-      const protocol = Bounty.format.protocol.payment(props.name);
-      //console.log(name, raw, protocol);
+    //   const dapp = Config.get(["system", "name"]);
+    //   const name = Bounty.format.name("payment");
+    //   const raw = Bounty.format.raw.payment(status.finalized, target, amount);
+    //   const protocol = Bounty.format.protocol.payment(props.name);
+    //   //console.log(name, raw, protocol);
 
-      const obj = {
-        anchor: name,
-        raw: raw,
-        protocol: protocol,
-        dapp: dapp,
-      }
+    //   const obj = {
+    //     anchor: name,
+    //     raw: raw,
+    //     protocol: protocol,
+    //     dapp: dapp,
+    //   }
 
-      //1.write payment information on chain
-      const chain = Network("anchor");
-      chain.sign(obj, (res) => {
-        if (res.status !== "Finalized") return setPayInfo(res.msg);
+    //   //1.write payment information on chain
+    //   const chain = Network("anchor");
+    //   chain.sign(obj, (res) => {
+    //     if (res.status !== "Finalized") return setPayInfo(res.msg);
 
-        chain.view({ name: name }, "anchor", (dt) => {
-          const alink = `anchor://${name}/${dt.block}`;
-          //2.update local record status
-          Bounty.update.toPayed(props.name, alink, () => {
-            //3.submit the payment details to portal system 
-            API.bounty.payment(props.name, alink, (rows) => {
+    //     chain.view({ name: name }, "anchor", (dt) => {
+    //       const alink = `anchor://${name}/${dt.block}`;
+    //       //2.update local record status
+    //       Bounty.update.toPayed(props.name, alink, () => {
+    //         //3.submit the payment details to portal system 
+    //         API.bounty.payment(props.name, alink, (rows) => {
 
-            });
-          });
-        });
-      });
-    },
+    //         });
+    //       });
+    //     });
+    //   });
+    // },
     callbackBonus: (list) => {
       const arr = [];
       for (let i = 0; i < list.length; i++) {
@@ -237,14 +237,15 @@ function BountySubmit(props) {
   }
 
   useEffect(() => {
-    console.log(props);
     if (props.name) {
+      //console.log(props.name);
       //1.edit mode, need to set all the parameters
       self.setEditMode();
       Bounty.get(props.name, (bty) => {
         if (bty.error) return false;
         self.load(bty);
         setBounty(bty);
+        setAnchor(props.name);    //set alink of bounty
       });
     } else {
 
@@ -328,13 +329,12 @@ function BountySubmit(props) {
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <BountyDetail bounty={anchor} template={template} />
               </Col>
-              {/* <BountyPay title={"Pay Now"} bounty={anchor} callback={(status, target, total) => {
-                self.callbackPay(status, target, total);
-              }} /> */}
-              <Col className="text-end" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                {payInfo}
-              </Col>
             </Row>
+          </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <RouterPayment bounty={anchor} callback={(amount,accounts,more)=>{
+              console.log(amount,accounts,more);
+            }}/>
           </Col>
         </Row>
       </Tab>
