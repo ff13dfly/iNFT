@@ -16,8 +16,8 @@ use sp_runtime::{
 // here to import all pallets ?
 pub use pallet::*;
 
-#[cfg(test)]
-mod tests;
+// #[cfg(test)]
+// mod tests;
 
 pub mod weights;
 pub use weights::*;

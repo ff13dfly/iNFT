@@ -6,6 +6,11 @@
 
 ## Running
 
+* After building the substrate node by `cargo build -p minimal-template-node --release`, run the node by following command.
+
+  ```BASH
+    ./target/release/minimal-template-node  --dev --rpc-port 8833 --state-pruning archive
+  ```
 
 ## Details
 

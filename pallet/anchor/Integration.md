@@ -55,18 +55,19 @@
   ```
 
 
-* Add `Anchor Pallet` to runtime, two parts as follow.
+* Add `Anchor Pallet` to `./runtime/src/lib.rs`, two parts as follow.
 
   ```RUST
     #[runtime]
     mod runtime {
       ...
 
-      /// Anchor Pallet,linked list on chain.
+      /// Anchor Pallet, linked list on chain.
       #[runtime::pallet_index(6)]
       pub type Anchor = pallet_anchor::Pallet<Runtime>;
     }
 
+    //after `impl pallet_minimal_template::Config for Runtime {}`
     impl pallet_anchor::Config for Runtime {
       type RuntimeEvent = RuntimeEvent;
       type Currency = Balances;

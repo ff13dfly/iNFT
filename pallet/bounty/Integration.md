@@ -37,7 +37,7 @@
 
     [workspace.dependencies]
     ...,
-    pallet-anchor = { path = "./pallets/bounty", default-features = false }
+    pallet-bounty = { path = "./pallets/bounty", default-features = false }
   ```
 
 * Add `Bounty Pallet` to `./runtime/Cargo.toml`.
@@ -59,11 +59,12 @@
     mod runtime {
       ...
 
-      /// Bounty Pallet,linked list on chain.
-      #[runtime::bounty_index(7)]
+      /// Bounty Pallet, authority for bounty
+      #[runtime::pallet_index(7)]
       pub type Bounty = pallet_bounty::Pallet<Runtime>;
     }
 
+    //after `impl pallet_minimal_template::Config for Runtime {}`
     impl pallet_bounty::Config for Runtime {
       type RuntimeEvent = RuntimeEvent;
       type Currency = Balances;
