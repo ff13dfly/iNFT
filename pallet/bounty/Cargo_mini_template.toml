@@ -1,7 +1,7 @@
 [package]
 name = "pallet-bounty"
 description = "iNFT bounty authority."
-version = "3.0.0"
+version = "1.0.0"
 license = "Unlicense"
 authors.workspace = true
 homepage.workspace = true
@@ -27,6 +27,7 @@ frame-system = {version = "37.0.0",default-features = false}
 
 sp-io = {workspace = true }
 sp-runtime = {workspace = true }
+sp-core = {workspace = true }
 hex = { version = "0.4.3", default-features = false }
 
 [features]

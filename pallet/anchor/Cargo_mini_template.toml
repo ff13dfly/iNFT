@@ -27,6 +27,7 @@ frame-system = {version = "37.0.0",default-features = false}
 
 sp-io = {workspace = true }
 sp-runtime = {workspace = true }
+sp-core = {workspace = true }
 hex = { version = "0.4.3", default-features = false }
 
 [features]

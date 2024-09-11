@@ -28,10 +28,6 @@
     ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/anchor/src/benchmarking.rs benchmarking.rs
   ```
 
-*copy `Cargo_mini_template.toml` to `./pallets/anchor/Cargo_mini.toml`;
-
-* Link source to 
-
 * Add `Anchor Pallet` to root `Cargo.toml`.
 
   ```TOML
@@ -45,6 +41,19 @@
     ...,
     pallet-anchor = { path = "./pallets/anchor", default-features = false }
   ```
+
+* Add `Anchor Pallet` to `./runtime/Cargo.toml`.
+  
+  ```RUST
+    [dependencies]
+    ...
+    pallet-anchor.workspace = true
+
+    [features]
+    ...
+    "pallet-anchor/std",
+  ```
+
 
 * Add `Anchor Pallet` to runtime, two parts as follow.
 
@@ -64,7 +73,5 @@
       type WeightInfo = pallet_anchor::weights::SubstrateWeight<Runtime>;
     }
   ```
-
-* Modify the `tokenSymbol` to `ANK`. Open the file `./node/src/chain_spec.rs` to search `tokenSymbol`.Replace it with the name you love.
 
 ## Resource

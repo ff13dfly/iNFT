@@ -26,9 +26,7 @@
     ln /Users/fuzhongqiang/Desktop/www/iNFT/pallet/bounty/src/benchmarking.rs benchmarking.rs
   ```
 
-* copy `Cargo_mini_template.toml` to `./pallets/bounty/Cargo_mini.toml`;
-
-* Add `Bounty Pallet` to root `Cargo.toml`.
+* Add `Bounty Pallet` to root `Cargo.toml`. Two places are needed to modify.
 
   ```TOML
     [workspace]
@@ -42,16 +40,28 @@
     pallet-anchor = { path = "./pallets/bounty", default-features = false }
   ```
 
-* Add `Bounty Pallet` to runtime, two parts as follow.
+* Add `Bounty Pallet` to `./runtime/Cargo.toml`.
+  
+  ```RUST
+    [dependencies]
+    ...
+    pallet-bounty.workspace = true
+
+    [features]
+    ...
+    "pallet-bounty/std",
+  ```
+
+* Add `Bounty Pallet` to runtime, two parts as follow. The path is `./runtime/src/lib.rs`
 
   ```RUST
     #[runtime]
     mod runtime {
       ...
 
-      /// Anchor Pallet,linked list on chain.
+      /// Bounty Pallet,linked list on chain.
       #[runtime::bounty_index(7)]
-      pub type Anchor = pallet_bounty::Pallet<Runtime>;
+      pub type Bounty = pallet_bounty::Pallet<Runtime>;
     }
 
     impl pallet_bounty::Config for Runtime {
@@ -60,7 +70,5 @@
       type WeightInfo = pallet_bounty::weights::SubstrateWeight<Runtime>;
     }
   ```
-
-* Modify the `tokenSymbol` to `ANK`. Open the file `./node/src/chain_spec.rs` to search `tokenSymbol`.Replace it with the name you love.
-
+  
 ## Resource

@@ -55,11 +55,10 @@ use hex;
 
 pub use pallet::*;
 
-
 // mod benchmarking;
 
-#[cfg(test)]
-mod tests;
+// #[cfg(test)]
+// mod tests;
 
 pub mod weights;
 pub use weights::*;

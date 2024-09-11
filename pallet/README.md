@@ -4,6 +4,9 @@
 
 * Anchor Network is a droppable blockchain, the gas fee is pretty low.
 
+## Running
+
+
 ## Details
 
 ### Account Format
