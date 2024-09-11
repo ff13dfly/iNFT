@@ -97,9 +97,30 @@
 
 ### Explorer
 
-* [https://etherscan.io/](https://etherscan.io/)
+* [https://github.com/gobitfly/etherchain-light.git](https://github.com/gobitfly/etherchain-light.git), setting on `config.json`.
 
-* There is `BlockScout` suggested by ChatGTP4go, [https://github.com/blockscout/blockscout.git](https://github.com/blockscout/blockscout.git)
+    ```Javascript
+        {
+            "ethereum": {
+                "rpc": "http://localhost:8545" // Ganache RPC URL
+            },
+            "web": {
+                "port": 3000
+            }
+        }
+    ```
+
+* [https://etherscan.io/](https://etherscan.io/), no local node support.
+
+* There is `BlockScout` suggested by ChatGTP4go, [https://github.com/blockscout/blockscout.git](https://github.com/blockscout/blockscout.git). `Mix` is complex to install, will try later.
+
+    ```BASH
+        # install mix
+        brew install mix
+
+        # run blockscout
+        mix phx.server
+    ```
 
 ### DApp
 
