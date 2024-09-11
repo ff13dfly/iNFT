@@ -4,7 +4,7 @@ import { useState } from "react";
 import CreativityNav from "../component/creativity/creativity_nav"
 import CreativityPreview from "../component/creativity/creativity_preview";
 
-import { FaExpandArrowsAlt } from "react-icons/fa";
+import { FaExpandArrowsAlt,FaCompressArrowsAlt } from "react-icons/fa";
 
 
 function Creativity(props) {
@@ -45,7 +45,7 @@ function Creativity(props) {
                     className={sidebar?"btn btn-md btn-default":"btn btn-md btn-default text-warning"} 
                     onClick={(ev)=>{
                         self.clickSidebar(ev);
-                    }}><FaExpandArrowsAlt size={20}/></button>
+                    }}>{!sidebar?<FaCompressArrowsAlt size={20}/>:<FaExpandArrowsAlt size={20}/>}</button>
             </Col>
             <Col className="pt-2" 
                 md={sidebar?size.layout[0]:size.row[0]} 

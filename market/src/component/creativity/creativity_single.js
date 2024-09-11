@@ -10,7 +10,7 @@ import TemplateRaw from "./template_raw";
 import PartsOverview from "./parts_overview";
 import SeriesOverview from "./series_overview";
 
-import { FaImage,FaCode,FaPuzzlePiece,FaBraille } from "react-icons/fa";
+import { FaImage,FaCogs,FaPuzzlePiece,FaBraille,FaCloudUploadAlt } from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    name        //unique name to load data from local indexedDB
@@ -41,11 +41,11 @@ function CreativitySingle(props) {
     },
     basic:{
       title:"Basic Setting",
-      icon:<FaBraille size={24} className="mr-10" />,
+      icon:<FaCogs size={24} className="mr-10" />,
     },
     raw:{
-      title:"Raw JSON",
-      icon:<FaCode size={24} className="mr-10" />,
+      title:"IPFS Deployment",
+      icon:<FaCloudUploadAlt size={24} className="mr-10" />,
     },
   }
 

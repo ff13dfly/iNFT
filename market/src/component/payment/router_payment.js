@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import PaymentAnchor from "./payment_anchor";
 import PaymentPolkadot from "./payment_polkadot";
 import PaymentSolana from "./payment_solana";
-import TokenEtherum from "./token_etherum";
+import PaymentEthereum from "./payment_ethereum";
+import TokenEthereum from "./token_ethereum";
 import TokenPolkadot from "./token_polkadot";
 import TokenSolana from "./token_solana";
 
@@ -33,10 +34,11 @@ function RouterPayment(props) {
     coin:{
       anchor:<PaymentAnchor target={target} amount={amount} callback={props.callback}/>,
       polkadot:<PaymentPolkadot target={target} amount={amount} callback={props.callback}/>,
+      ethereum:<PaymentEthereum target={target} amount={amount} callback={props.callback}/>,
       solana:<PaymentSolana target={target} amount={amount} callback={props.callback}/>,
     },
     token:{
-      etherum:<TokenEtherum target={target} amount={amount} callback={props.callback}/>,
+      ethereum:<TokenEthereum target={target} amount={amount} callback={props.callback}/>,
       polkadot:<TokenPolkadot target={target} amount={amount} callback={props.callback}/>,
       solana:<TokenSolana target={target} amount={amount} callback={props.callback}/>,
     },

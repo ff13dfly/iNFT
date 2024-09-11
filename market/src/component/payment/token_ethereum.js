@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 *   @param  {string}    hash        //unique hash
 */
 
-function TokenEtherum(props) {
+function TokenEthereum(props) {
   const size = {
     row: [12],
   };
@@ -29,4 +29,4 @@ function TokenEtherum(props) {
     </Row>
   );
 }
-export default TokenEtherum;
+export default TokenEthereum;

@@ -1,10 +1,8 @@
 # Substrate Modification
 
-* Anchor is an On-chain Linked List pallet for [substrate](https://github.com/paritytech/substrate), it is based on substrate transfer extension.
+* These pallets is for iNFT system.  `Anchor` is the pallet which can record the iNFT minting data on chain, can be traded between accounts easily. `Bounty` is the pallet to record the authority, when somebody want to mint bounty iNFT need to buy a ticket that is recorded on this pallet.
 
-* You can storage data on chain by anchor, as this way, it is a On-chain Key-value Storage.
-
-* Anchor is also can be treaded as Name Service, you can own special anchor name by initializing it. 
+* Anchor Network is a droppable blockchain, the gas fee is pretty low.
 
 ## Details
 
