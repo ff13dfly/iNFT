@@ -71,6 +71,12 @@ pub mod pallet {
 		///Low balance of ticket buyer
 		InsufficientBalance,
 
+		///The bounty is expired.
+		ExpiredBounty,
+
+		///Ticket already exsist
+		TicketExsisted,
+
 		///Transaction failed by any reason.
 		TransferFailed,
 
@@ -184,10 +190,20 @@ pub mod pallet {
 			
 			match bounty {
 				Some((to, price, expired)) => {
-					//3.1. check balance
+					//3.1. check wether expired
+					if expired!= zero {
+						let current_block_number = <frame_system::Pallet<T>>::block_number();
+						ensure!(current_block_number <= expired, Error::<T>::ExpiredBounty);
+					}
+
+					//3.2.check wether ticket exsist;
+					let ticket =<Tickets<T>>::get((&name,&block,&sender));
+					ensure!(!ticket.is_none(), Error::<T>::TicketExsisted);
+					
+					//3.3. check balance
 					ensure!(<T as pallet::Config>::Currency::free_balance(&sender) >= price.saturated_into(), Error::<T>::InsufficientBalance);
 
-					//3.2.do transfer
+					//3.4.do transfer
 					let transaction=<T as pallet::Config>::Currency::transfer(
 						&sender,		//transfer from
 						&to,			//transfer to
@@ -196,9 +212,9 @@ pub mod pallet {
 					);
 					ensure!(transaction.is_ok(), Error::<T>::TransferFailed);
 
-					//4.check wether ticket exsist;
-					let current_block_number = <frame_system::Pallet<T>>::block_number();
-					<Tickets<T>>::insert((name,block,&sender), current_block_number);
+					//5.insert the ticket record;
+					let record_block_number = <frame_system::Pallet<T>>::block_number();
+					<Tickets<T>>::insert((name,block,&sender), record_block_number);
 					Ok(())
 				},
 				None => {
@@ -206,36 +222,5 @@ pub mod pallet {
 				}
 			}	
         }
-
-		// #[pallet::call_index(2)]
-		// #[pallet::weight(
-		// 	<T as pallet::Config>::WeightInfo::create()
-		// )]
-		// pub fn update_price(
-		// 	origin: OriginFor<T>,
-		// 	name: Vec<u8>,
-		// 	block:BlockNumberFor<T>,
-		// 	price: u64
-		// ) -> DispatchResult {
-		// 	let sender = ensure_signed(origin)?;
-
-        //     Ok(())
-        // }
-
-		// #[pallet::call_index(3)]
-		// #[pallet::weight(
-		// 	<T as pallet::Config>::WeightInfo::create()
-		// )]
-		// pub fn update_expire(
-		// 	origin: OriginFor<T>,
-		// 	name: Vec<u8>,
-		// 	block:BlockNumberFor<T>,
-		// 	price: u64
-		// ) -> DispatchResult {
-		// 	let sender = ensure_signed(origin)?;
-
-        //     Ok(())
-        // }
-
     }
 }
