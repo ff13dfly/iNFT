@@ -162,8 +162,12 @@ pub mod pallet {
 	#[pallet::getter(fn owner)]
 	pub(super) type AnchorOwner<T: Config> = StorageMap<
 		_, 
-		Twox64Concat,Vec<u8>, 							//unique anchor name
-		(T::AccountId,BlockNumberFor<T>)	//({owner of anchor}, {last setAnchor blocknumber})
+		Twox64Concat,
+		Vec<u8>, 							//unique anchor name
+		(
+			T::AccountId,			//wner of anchor
+			BlockNumberFor<T>		//last setAnchor blocknumber
+		)
 	>;
 
 	/// Selling anchor status, Anchor => ( Owner, Price, Target customer )
@@ -171,8 +175,13 @@ pub mod pallet {
 	#[pallet::getter(fn selling)]
 	pub(super) type SellList<T: Config> = StorageMap<
 		_,
-		Twox64Concat,Vec<u8>,							//unique anchor name
-		(T::AccountId, u64, T::AccountId)	//({owner of anchor}, {price of anchor} ,{target buyer})
+		Twox64Concat,
+		Vec<u8>,							//unique anchor name
+		(
+			T::AccountId, 			//owner of anchor
+			u64, 					//price of anchor
+			T::AccountId			//target buyer
+		)
 	>;
 
 	//limitation of anchor parameters
@@ -215,7 +224,7 @@ pub mod pallet {
 			//2.check anchor to determine add or update
 			if data.is_none() {
 				let val:u64=0;
-				let zero :BlockNumberFor<T> = val.saturated_into();
+				let zero:BlockNumberFor<T> = val.saturated_into();
 				ensure!(pre == zero, Error::<T>::PreAnchorFailed);
 
 				//2.1.create new anchor
@@ -446,11 +455,6 @@ pub mod pallet {
 	}
 
 	impl<T: Config> Pallet<T> {
-
-		// pub fn is_owner(key:Vec<u8>,who:T::AccountId) -> u32 {
-		// 	let data=<AnchorOwner<T>>::get(&key);
-		// 	123
-		// }
 
 		///check the anchor owner. For other pallet to check anchor owner.
 		pub fn is_owner(anchor_name: &Vec<u8>, account: &T::AccountId) -> bool {

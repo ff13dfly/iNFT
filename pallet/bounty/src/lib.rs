@@ -53,6 +53,26 @@ pub mod pallet {
 
     #[pallet::error]
 	pub enum Error<T> {
+		///Anchor do not belong to the account
+		AnchorNotBelogToAccount,
+
+		///No zero blocknumber of bounty
+		NoZeroBlocknumber,
+
+		///Bounty price can not more than 20M ( the limitation of $ANK )
+		PriceMaxLimited,
+
+		///Bounty already exsist.
+		BountyExsisted,
+
+		///Bounty is not exsisted.
+		BountyNotExsisted,
+
+		///Low balance of ticket buyer
+		InsufficientBalance,
+
+		///Transaction failed by any reason.
+		TransferFailed,
 
         ///unknown anchor owner data in storage.
 		UnexceptError,
@@ -62,7 +82,7 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An bounty is created.
-		BountyCreated(Vec<u8>, u64, T::AccountId, u64, T::AccountId),		//(name,blocknumber,owner, price , expired)
+		BountyCreated(Vec<u8>, BlockNumberFor<T>, T::AccountId, u64, BlockNumberFor<T>),		//(name,blocknumber,owner, price , expired)
     }
 
 
@@ -75,7 +95,11 @@ pub mod pallet {
 			NMapKey<Twox64Concat, Vec<u8>>,				//anchor name of bounty
 			NMapKey<Twox64Concat, BlockNumberFor<T>>,	//bounty update blocknumber
 		),
-		(T::AccountId, u64, BlockNumberFor<T>)			// ( { owner of bounty }, { price of ticket }, { expired blocknumer } )
+		(
+			T::AccountId,			//owner of bounty
+			u64, 					//price of ticket
+			BlockNumberFor<T>		// expired blocknumer
+		)			
 	>;
  
 	/// Multi-key storage map to save the tickets record. (Bounty, Block, Account) => ( call blocknumber )
@@ -91,6 +115,8 @@ pub mod pallet {
 		BlockNumberFor<T>								// blocknumber of buying stamptime
 	>;
 
+	const MAX_PRICE:u64=1000000*20000000;
+
     #[pallet::call]
 	impl<T: Config> Pallet<T> {
 
@@ -105,27 +131,32 @@ pub mod pallet {
 			price: u64, 						//ticket price of the bounty
 			expired:BlockNumberFor<T>			//the expired blocknumber, when expired, can not buy. 0 for unlimited
 		) -> DispatchResult {
-			let sender = ensure_signed(origin)?;
-
-			//1.check the owner of bounty anchor
-
-			//error on "pallet_anchor", associated type `pallet_anchor` not found
-			//let result=T::pallet_anchor::is_owner(&name,sender);
 			
-			//error on "is_owner", not found in `pallet_anchor`
-			//let result=pallet_anchor::is_owner(&name,sender);
+			//1.Parameters checking
+			//1.1.confirm the price limit
+			ensure!(price < MAX_PRICE, Error::<T>::PriceMaxLimited);
 
-			//error on "pallet_anchor", not a type`
-			//let result=<pallet_anchor<T>>::is_owner(&name,sender);
+			let val:u64=0;
+			let zero :BlockNumberFor<T> = val.saturated_into();
+			ensure!(block != zero, Error::<T>::NoZeroBlocknumber);
 
-			//error on "is_owner", not found in `pallet_anchor`
-			//let result=pallet_anchor::<T>::is_owner(&name,sender);
+			//2.confirm the ownship of anchor to setup bounty.
+			let sender = ensure_signed(origin)?;
+			let owned=anchor::Pallet::<T>::is_owner(&name,&sender);
+			ensure!(owned, Error::<T>::AnchorNotBelogToAccount);
 
-			//the function or associated item `is_owner` exists for struct `Pallet<T>`, but its trait bounds were not satisfied
-			//error on "is_owner", function or associated item cannot be called on `Pallet<T>` due to unsatisfied trait bounds
-			//let result=pallet_anchor::Pallet::<T>::is_owner(&name,sender);
+			//3. check wether exsist
+			let bounty =<Bounty<T>>::get((&name,&block));
+			ensure!(bounty.is_none(),Error::<T>::BountyExsisted);
 
-			let result=anchor::Pallet::<T>::is_owner(&name,&sender);
+			//4.insert bounty data
+			<Bounty<T>>::insert(
+				(&name,&block), 
+				(&sender,&price,&expired)
+			);
+
+			//5.deposit eveen
+			Self::deposit_event(Event::BountyCreated(name,block,sender,price,expired));
 
             Ok(())
         }
@@ -139,43 +170,72 @@ pub mod pallet {
 			name: Vec<u8>,
 			block:BlockNumberFor<T>
 		) -> DispatchResult {
+
+			//1.Parameters checking
+			//1.1.confirm the price limit
+			let val:u64=0;
+			let zero :BlockNumberFor<T> = val.saturated_into();
+			ensure!(block != zero, Error::<T>::NoZeroBlocknumber);
+			
+			//2.confirm bounty exsist
 			let sender = ensure_signed(origin)?;
+			let bounty =<Bounty<T>>::get((&name,&block));
+			ensure!(bounty.is_none(), Error::<T>::BountyNotExsisted);
+			
+			match bounty {
+				Some((to, price, expired)) => {
+					//3.1. check balance
+					ensure!(<T as pallet::Config>::Currency::free_balance(&sender) >= price.saturated_into(), Error::<T>::InsufficientBalance);
 
-			let current_block_number = <frame_system::Pallet<T>>::block_number();
-			<Tickets<T>>::insert((name,block,&sender), current_block_number);
+					//3.2.do transfer
+					let transaction=<T as pallet::Config>::Currency::transfer(
+						&sender,		//transfer from
+						&to,			//transfer to
+						price.saturated_into(),		//ticket price to pay
+						ExistenceRequirement::AllowDeath
+					);
+					ensure!(transaction.is_ok(), Error::<T>::TransferFailed);
 
-            Ok(())
+					//4.check wether ticket exsist;
+					let current_block_number = <frame_system::Pallet<T>>::block_number();
+					<Tickets<T>>::insert((name,block,&sender), current_block_number);
+					Ok(())
+				},
+				None => {
+					return Err(Error::<T>::BountyNotExsisted.into());
+				}
+			}	
         }
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(
-			<T as pallet::Config>::WeightInfo::create()
-		)]
-		pub fn update_price(
-			origin: OriginFor<T>,
-			name: Vec<u8>,
-			block:BlockNumberFor<T>,
-			price: u64
-		) -> DispatchResult {
-			let sender = ensure_signed(origin)?;
+		// #[pallet::call_index(2)]
+		// #[pallet::weight(
+		// 	<T as pallet::Config>::WeightInfo::create()
+		// )]
+		// pub fn update_price(
+		// 	origin: OriginFor<T>,
+		// 	name: Vec<u8>,
+		// 	block:BlockNumberFor<T>,
+		// 	price: u64
+		// ) -> DispatchResult {
+		// 	let sender = ensure_signed(origin)?;
 
-            Ok(())
-        }
+        //     Ok(())
+        // }
 
-		#[pallet::call_index(3)]
-		#[pallet::weight(
-			<T as pallet::Config>::WeightInfo::create()
-		)]
-		pub fn update_expire(
-			origin: OriginFor<T>,
-			name: Vec<u8>,
-			block:BlockNumberFor<T>,
-			price: u64
-		) -> DispatchResult {
-			let sender = ensure_signed(origin)?;
+		// #[pallet::call_index(3)]
+		// #[pallet::weight(
+		// 	<T as pallet::Config>::WeightInfo::create()
+		// )]
+		// pub fn update_expire(
+		// 	origin: OriginFor<T>,
+		// 	name: Vec<u8>,
+		// 	block:BlockNumberFor<T>,
+		// 	price: u64
+		// ) -> DispatchResult {
+		// 	let sender = ensure_signed(origin)?;
 
-            Ok(())
-        }
+        //     Ok(())
+        // }
 
     }
 }
