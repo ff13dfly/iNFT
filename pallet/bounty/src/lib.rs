@@ -13,8 +13,8 @@ use sp_runtime::{
 	Vec,
 };
 
-// here to import all pallets ?
-pub use pallet::*;
+pub use pallet::*;					//must put here
+pub use pallet_anchor as anchor; 
 
 // #[cfg(test)]
 // mod tests;
@@ -29,7 +29,7 @@ pub mod pallet {
 	use frame_system::pallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: frame_system::Config + anchor::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type WeightInfo: WeightInfo;
 		type Currency: Currency<Self::AccountId>;
@@ -84,9 +84,9 @@ pub mod pallet {
 	pub(super) type Tickets<T: Config> = StorageNMap<	
 		_,
 		(
-			NMapKey<Blake2_128Concat, T::AccountId>,	//ticket buyer account
 			NMapKey<Twox64Concat, Vec<u8>>,				//anchor name of bounty
-			NMapKey<Twox64Concat, BlockNumberFor<T>>	//bounty update blocknumber
+			NMapKey<Twox64Concat, BlockNumberFor<T>>,	//bounty update blocknumber
+			NMapKey<Blake2_128Concat, T::AccountId>,	//ticket buyer account
 		),	
 		BlockNumberFor<T>								// blocknumber of buying stamptime
 	>;
@@ -109,9 +109,24 @@ pub mod pallet {
 
 			//1.check the owner of bounty anchor
 
-			//2.check wether created
+			//error on "pallet_anchor", associated type `pallet_anchor` not found
+			//let result=T::pallet_anchor::is_owner(&name,sender);
+			
+			//error on "is_owner", not found in `pallet_anchor`
+			//let result=pallet_anchor::is_owner(&name,sender);
 
-			//3.
+			//error on "pallet_anchor", not a type`
+			//let result=<pallet_anchor<T>>::is_owner(&name,sender);
+
+			//error on "is_owner", not found in `pallet_anchor`
+			//let result=pallet_anchor::<T>::is_owner(&name,sender);
+
+			//the function or associated item `is_owner` exists for struct `Pallet<T>`, but its trait bounds were not satisfied
+			//error on "is_owner", function or associated item cannot be called on `Pallet<T>` due to unsatisfied trait bounds
+			//let result=pallet_anchor::Pallet::<T>::is_owner(&name,sender);
+
+			let result=anchor::Pallet::<T>::is_owner(&name,&sender);
+
             Ok(())
         }
 
@@ -125,6 +140,9 @@ pub mod pallet {
 			block:BlockNumberFor<T>
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+
+			let current_block_number = <frame_system::Pallet<T>>::block_number();
+			<Tickets<T>>::insert((name,block,&sender), current_block_number);
 
             Ok(())
         }

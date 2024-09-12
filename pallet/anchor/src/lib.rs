@@ -299,7 +299,7 @@ pub mod pallet {
 			}
 
 			//0.3.check anchor owner
-			let _owner=<AnchorOwner<T>>::get(&nkey).ok_or(Error::<T>::AnchorNotExists)?;
+			//let _owner=<AnchorOwner<T>>::get(&nkey).ok_or(Error::<T>::AnchorNotExists)?;
 
 			//1.transfer specail amout to seller
 			let amount= anchor.1;
@@ -309,13 +309,13 @@ pub mod pallet {
 			ensure!(T::Currency::free_balance(&sender) >= amount.saturated_into(), Error::<T>::InsufficientBalance);
 
 			//1.2.do transfer
-			let res=T::Currency::transfer(
+			let transaction=T::Currency::transfer(
 				&sender,		//transfer from
 				&to,			//transfer to
 				amount.saturated_into(),		//transfer amount
 				ExistenceRequirement::AllowDeath
 			);
-			ensure!(res.is_ok(), Error::<T>::TransferFailed);
+			ensure!(transaction.is_ok(), Error::<T>::TransferFailed);
 
 			//2.change the owner of anchor 
 			<AnchorOwner<T>>::try_mutate(&nkey, |status| -> DispatchResult {
@@ -430,8 +430,8 @@ pub mod pallet {
 			<AnchorOwner<T>>::try_mutate(&nkey, |status| -> DispatchResult {
 				let d = status.as_mut().ok_or(Error::<T>::UnexceptDataError)?;
 
-				let invalid_account = "444444444444444444444444444444444444444444444444";
-				let mut account_id_bytes = hex::decode(invalid_account).expect("Hex decode should not fail");
+				let blackhole_account = "444444444444444444444444444444444444444444444444";
+				let mut account_id_bytes = hex::decode(blackhole_account).expect("Hex decode should not fail");
 				account_id_bytes.resize(32, 0);
 				let account_id: T::AccountId = T::AccountId::decode(&mut &account_id_bytes[..]).expect("Failed to decode into T::AccountId");
 				d.0 = account_id.clone();
@@ -440,6 +440,24 @@ pub mod pallet {
 			})?;
 
 			Ok(())
+		}
+
+		
+	}
+
+	impl<T: Config> Pallet<T> {
+
+		// pub fn is_owner(key:Vec<u8>,who:T::AccountId) -> u32 {
+		// 	let data=<AnchorOwner<T>>::get(&key);
+		// 	123
+		// }
+
+		///check the anchor owner. For other pallet to check anchor owner.
+		pub fn is_owner(anchor_name: &Vec<u8>, account: &T::AccountId) -> bool {
+			match <AnchorOwner<T>>::get(anchor_name) {
+				Some(status) => &status.0 == account,
+				None => false,
+			}
 		}
 	}
 }

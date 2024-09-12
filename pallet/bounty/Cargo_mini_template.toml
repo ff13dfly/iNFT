@@ -20,6 +20,7 @@ scale-info = { features = [
 	"derive",
 ], workspace = true }
 pallet-balances = {workspace = true }
+pallet-anchor = {workspace = true }
 
 frame = { features = ["experimental", "runtime"], workspace = true }
 frame-support={version = "37.0.0",default-features = false}
