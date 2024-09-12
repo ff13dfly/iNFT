@@ -79,6 +79,18 @@
 
 * Locate to the file  `node\src\chain_spec.rs`. The code is the same as `Token Symbol` setting.
 
+### Network Name
+
+* Modify the network name from `minimal-template-runtime` to `anchor-network`. Locate to the file  `runtime\src\lib.rs`.
+
+  ```Rust
+    pub const VERSION: RuntimeVersion = RuntimeVersion {
+      spec_name: create_runtime_str!("anchor-network"),             //default, minimal-template-runtime
+      impl_name: create_runtime_str!("anchor-network"),
+      ...
+    };
+  ```
+
 ## Resource
 
 * Get the documents by Rust command `cargo doc --open`, you can get the URL `{ROOT_FOLDER_OF_PROJECT}/target/doc/minimal_template_node/index.html`.

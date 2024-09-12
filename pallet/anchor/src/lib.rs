@@ -147,7 +147,6 @@ pub mod pallet {
 		/// An anchor is set to selling status.
 		AnchorToSell(Vec<u8>,T::AccountId,u64,T::AccountId),	//(name,owner, price , target)
 
-		
 		/// An anchor is bought, the owner changed.
 		AnchorBought(Vec<u8>,T::AccountId,u64,T::AccountId),	//(name,buyer, price , from)
 
@@ -161,12 +160,20 @@ pub mod pallet {
 	/// Hashmap to record anchor status, Anchor => ( Owner, last block )
 	#[pallet::storage]
 	#[pallet::getter(fn owner)]
-	pub(super) type AnchorOwner<T: Config> = StorageMap<_, Twox64Concat, Vec<u8>, (T::AccountId,BlockNumberFor<T>)>;
+	pub(super) type AnchorOwner<T: Config> = StorageMap<
+		_, 
+		Twox64Concat,Vec<u8>, 							//unique anchor name
+		(T::AccountId,BlockNumberFor<T>)	//({owner of anchor}, {last setAnchor blocknumber})
+	>;
 
 	/// Selling anchor status, Anchor => ( Owner, Price, Target customer )
 	#[pallet::storage]
 	#[pallet::getter(fn selling)]
-	pub(super) type SellList<T: Config> = StorageMap<_, Twox64Concat, Vec<u8>, (T::AccountId, u64,T::AccountId)>;
+	pub(super) type SellList<T: Config> = StorageMap<
+		_,
+		Twox64Concat,Vec<u8>,							//unique anchor name
+		(T::AccountId, u64, T::AccountId)	//({owner of anchor}, {price of anchor} ,{target buyer})
+	>;
 
 	//limitation of anchor parameters
 	const NAME_MAX_LENGTH:u32=40;

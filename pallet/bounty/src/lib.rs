@@ -68,22 +68,27 @@ pub mod pallet {
 
     /// Hashmap to record bounty, (Bounty Anchor, Block) => ( Owner, Price, Expired Blocknumber )
 	#[pallet::storage]
-	#[pallet::getter(fn bountyOwner)]
-	pub(super) type Bounty<T: Config> = StorageMap<	
-		_, 
-		Twox64Concat,
-		(Vec<u8>,BlockNumberFor<T>),
-		(T::AccountId,u64,BlockNumberFor<T>)
+	#[pallet::getter(fn bounty)]
+	pub(super) type Bounty<T: Config> = StorageNMap<	
+		_,
+		(
+			NMapKey<Twox64Concat, Vec<u8>>,				//anchor name of bounty
+			NMapKey<Twox64Concat, BlockNumberFor<T>>,	//bounty update blocknumber
+		),
+		(T::AccountId, u64, BlockNumberFor<T>)			// ( { owner of bounty }, { price of ticket }, { expired blocknumer } )
 	>;
  
 	/// Multi-key storage map to save the tickets record. (Bounty, Block, Account) => ( call blocknumber )
 	#[pallet::storage]
-	#[pallet::getter(fn accountTicket)]
-	pub(super) type Tickets<T: Config> = StorageMap<	
-		_, 
-		Twox64Concat,
-		(T::AccountId,Vec<u8>,BlockNumberFor<T>),
-		BlockNumberFor<T>
+	#[pallet::getter(fn access)]
+	pub(super) type Tickets<T: Config> = StorageNMap<	
+		_,
+		(
+			NMapKey<Blake2_128Concat, T::AccountId>,	//ticket buyer account
+			NMapKey<Twox64Concat, Vec<u8>>,				//anchor name of bounty
+			NMapKey<Twox64Concat, BlockNumberFor<T>>	//bounty update blocknumber
+		),	
+		BlockNumberFor<T>								// blocknumber of buying stamptime
 	>;
 
     #[pallet::call]
@@ -129,6 +134,21 @@ pub mod pallet {
 			<T as pallet::Config>::WeightInfo::create()
 		)]
 		pub fn update_price(
+			origin: OriginFor<T>,
+			name: Vec<u8>,
+			block:BlockNumberFor<T>,
+			price: u64
+		) -> DispatchResult {
+			let sender = ensure_signed(origin)?;
+
+            Ok(())
+        }
+
+		#[pallet::call_index(3)]
+		#[pallet::weight(
+			<T as pallet::Config>::WeightInfo::create()
+		)]
+		pub fn update_expire(
 			origin: OriginFor<T>,
 			name: Vec<u8>,
 			block:BlockNumberFor<T>,
