@@ -63,7 +63,6 @@ function AccountList(props) {
       }
 
       Account.balance(narr, (bs) => {
-        console.log(bs);
         setBalances(bs);
       });
     },

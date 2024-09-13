@@ -36,7 +36,9 @@ function MiniTask(props) {
   let [balance, setBalance] = useState(0);                        //balance of minting account
   let [password, setPassword] = useState("");                     //minting account 
   let [offset, setOffset] = useState([]);                         //minting offset setting 
-  let [hash, setHash] = useState("0x0000000000000000000000000000000000000000000000000000000000000000");       //
+
+  let [nonce, setNonce] = useState(props.data.more.nonce);
+  let [hash, setHash] = useState("0x0000000000000000000000000000000000000000000000000000000000000000");       //hash to preview iNFT
 
   let [more, setMore] = useState(false);   //wether show more setting
 
@@ -207,6 +209,8 @@ function MiniTask(props) {
                         if (process.hash) setHash(process.hash);
 
                         //1.update the nonce of minting
+                        setNonce(index);  //update amount
+                        self.balance();   //update balance
                         Task.update.nonce(name, index, (res) => {
                           if (res.error) return setInfo(res.error);
                         });
@@ -231,16 +235,20 @@ function MiniTask(props) {
         }, 300);
       })(pass);
     },
+    balance:()=>{
+      const chain = Network(props.data.network);
+      const div=chain.divide();
+      chain.balance(props.data.address, (dt) => {
+        setBalance(parseFloat(parseInt(dt.free)/div));
+      });
+    },
   }
 
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
 
     //1.set balance of address
-    const chain = Network(props.data.network);
-    chain.balance(props.data.address, (dt) => {
-      setBalance(dt.free);
-    });
+    self.balance();
 
     //2.calc the offset
     if (!props.data.offset || props.data.offset.length === 0) {
@@ -287,7 +295,7 @@ function MiniTask(props) {
               </Col>
               <Col md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
 
-                <small>$INFT {balance}, prefix: {props.data.more.prefix}, amount: {props.data.more.nonce} </small>
+                <small><strong>{balance}</strong> $ANK, prefix: {props.data.more.prefix}, amount: {nonce} </small>
               </Col>
               <Col className="text-end" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
                 <button className="btn btn-sm btn-default" onClick={(ev) => {

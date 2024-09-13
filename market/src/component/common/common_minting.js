@@ -26,10 +26,14 @@ function Minting(props) {
       const limit = !props.amount ? 4 : props.amount
       for (let i = 0; i < arr.length; i++) {
         const row = arr[i];
-        if (cid && row.raw.tpl === cid) {
+        if(!cid){
           full.push(row);
-          if (full.length === limit) return full;
+        }else{
+          if (row.raw.tpl === cid) {
+            full.push(row);
+          }
         }
+        if (full.length === limit) return full;
       }
       return full;
     },
@@ -39,7 +43,6 @@ function Minting(props) {
   useEffect(() => {
     const chain = Network("anchor");
     chain.subscribe(`minting_${props.uuid}`, (block, hash) => {
-
       chain.view(hash, "detail", (infts) => {
         if (infts.length === 0) {
           setList([{ bs64: `${window.location.origin}/imgs/logo.png` }]);
