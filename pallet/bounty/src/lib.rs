@@ -71,6 +71,9 @@ pub mod pallet {
 		///Low balance of ticket buyer
 		InsufficientBalance,
 
+		///Not allowed creator to buy ticket 
+		NotAllowedByCreator,
+
 		///The bounty is expired.
 		ExpiredBounty,
 
@@ -186,7 +189,7 @@ pub mod pallet {
 			//2.confirm bounty exsist
 			let sender = ensure_signed(origin)?;
 			let bounty =<Bounty<T>>::get((&name,&block));
-			ensure!(bounty.is_none(), Error::<T>::BountyNotExsisted);
+			ensure!(!bounty.is_none(), Error::<T>::BountyNotExsisted);
 			
 			match bounty {
 				Some((to, price, expired)) => {
@@ -196,14 +199,17 @@ pub mod pallet {
 						ensure!(current_block_number <= expired, Error::<T>::ExpiredBounty);
 					}
 
-					//3.2.check wether ticket exsist;
+					//3.2. check wether the creator
+					ensure!(&to!=&sender, Error::<T>::NotAllowedByCreator);
+
+					//3.3.check wether ticket exsist;
 					let ticket =<Tickets<T>>::get((&name,&block,&sender));
-					ensure!(!ticket.is_none(), Error::<T>::TicketExsisted);
+					ensure!(ticket.is_none(), Error::<T>::TicketExsisted);
 					
-					//3.3. check balance
+					//3.4. check balance
 					ensure!(<T as pallet::Config>::Currency::free_balance(&sender) >= price.saturated_into(), Error::<T>::InsufficientBalance);
 
-					//3.4.do transfer
+					//3.5.do transfer
 					let transaction=<T as pallet::Config>::Currency::transfer(
 						&sender,		//transfer from
 						&to,			//transfer to

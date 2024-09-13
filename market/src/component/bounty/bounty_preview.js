@@ -130,7 +130,8 @@ function BountyPreview(props) {
               fgColor={"#000000"}
               title={"QR title"}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={self.getBountyURL()}
+              // value={self.getBountyURL()}
+              value={"https://minter.inft.w3os.net"}
             />
           </Col>
           <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
