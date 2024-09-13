@@ -19,9 +19,17 @@
 * Locate to the file  `runtime\src\lib.rs`, the code is as follow:
 
   ```RUST
+    //set the value
     parameter_types! {
       pub const Version: RuntimeVersion = VERSION;
       pub const SS58Prefix: u16 = 42;   //[0:Polkadot, 1:Kusama, 42:Substrate]
+    }
+
+    //set to runtime
+    #[derive_impl(frame_system::config_preludes::SolochainDefaultConfig)]
+    impl frame_system::Config for Runtime {
+      ...
+      type SS58Prefix = SS58Prefix;
     }
   ```
 

@@ -1,6 +1,8 @@
 import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import PriveiwINFT from "../common/inft_preview";
+
 import Network from "../../network/router";
 import TPL from "../../system/tpl";
 import INFT from "../../system/inft";
@@ -8,7 +10,7 @@ import Task from "../../system/task";
 import Account from "../../system/account";
 import tools from "../../lib/tools";
 
-import { FaWindowClose,FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaWindowClose, FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 /* Mini task, show the details of minting robot
 *   @param  {number}    key           //list order
@@ -16,15 +18,15 @@ import { FaWindowClose,FaChevronUp, FaChevronDown } from "react-icons/fa";
 *   @param  {function}  remove        //task remove function
 */
 
-let abord=false;              //abord tag
+let abord = false;              //abord tag
 function MiniTask(props) {
   const size = {
     row: [12],
     left: [2, 10],
-    title: [8,3,1],
-    run: [4, 6, 2],
+    title: [8, 3, 1],
+    run: [6, 4, 2],
     layout: [11, 1],
-    info:[10,2]
+    info: [10, 2]
   };
 
   let [info, setInfo] = useState("");
@@ -34,12 +36,28 @@ function MiniTask(props) {
   let [balance, setBalance] = useState(0);                        //balance of minting account
   let [password, setPassword] = useState("");                     //minting account 
   let [offset, setOffset] = useState([]);                         //minting offset setting 
+  let [hash, setHash] = useState("0x0000000000000000000000000000000000000000000000000000000000000000");       //
 
-  let [more, setMore]= useState(false);   //wether show more setting
+  let [more, setMore] = useState(false);   //wether show more setting
 
   const self = {
     changeTemplate: (ev) => {
-      setTemplate(ev.target.value);
+      const cid = ev.target.value;
+      setTemplate(cid);
+
+      //1.check the cid
+      if (cid.length === 59) {
+
+        //2.check the gene
+        TPL.view(cid, (dt) => {
+          if (dt !== false) {
+            //3.update the gene
+            self.updateTemplate(props.data.name, cid, (res) => {
+              if (res !== true) return setInfo("Gene updated.");
+            });
+          }
+        });
+      }
     },
     changePassword: (ev) => {
       setPassword(ev.target.value);
@@ -53,15 +71,15 @@ function MiniTask(props) {
       self.start(password, props.data.name);
       setPassword("");      //reset the password
     },
-    clickMore:()=>{
-      setMore(!more);
-    },
     clickStop: (ev) => {
       setInfo("Waiting for the last minting to finalize.");
-      abord=true;
+      abord = true;
     },
     clickRemove: (name) => {
       if (props.remove) props.remove(name);
+    },
+    clickMore: () => {
+      setMore(!more);
     },
     clickOffset: (index, max) => {
 
@@ -98,6 +116,13 @@ function MiniTask(props) {
         return ck && ck(arr);
       });
     },
+    mergeOffset:(list)=>{
+      const arr=[];
+      for(let i=0;i<list.length;i++){
+        arr.push(list[i].value);
+      }
+      return arr;
+    },
     updateOffset: (name, arr, ck) => {
       const narr = [];
       for (let i = 0; i < arr.length; i++) {
@@ -106,9 +131,17 @@ function MiniTask(props) {
       }
       return Task.update.offset(name, narr, ck);
     },
-    
+    updateTemplate: (name, cid, ck) => {
+      return Task.update.gene(name, cid, ck);
+    },
+    updateNonce:(name,n,ck)=>{
+      return Task.update.nonce(name, n, ck);
+    },
+
     start: (pass, name) => {
       return (() => {
+        let first=true;   //first run tag
+
         setTimeout(() => {
           Task.get(name, (dt) => {
             //1.check task details.
@@ -144,39 +177,48 @@ function MiniTask(props) {
                   }
 
                   //5.minting iNFT on chain
-                  let index=parseInt(dt.more.nonce)+1;
-                  const loop=(ck)=>{
+                  let index = parseInt(dt.more.nonce) + 1;
+                  const loop = (ck) => {
                     //a.prepare the anchor data;
-                    const prefix=dt.more.prefix;
-                    const anchor_name=`${prefix}${index}`;
-                    const raw=INFT.format.raw(dt.gene.cid,dt.offset);
-                    const protocol=INFT.format.protocol();
-                    const anchor={ anchor: anchor_name, raw: raw, protocol: protocol };
+                    const prefix = dt.more.prefix;
+                    const anchor_name = `${prefix}${index}`;
+                    const raw = INFT.format.raw(dt.gene.cid, dt.offset);
+                    const protocol = INFT.format.protocol();
+                    const anchor = { anchor: anchor_name, raw: raw, protocol: protocol };
 
                     setInfo(`Minting: ${anchor_name}`);
                     chain.write(pair, anchor, (process) => {
-                      if(process.error){
-                        setRunning(false);
-                        return setInfo(process.error);
+                      if (process.error) {
+                        if(first){
+                          Task.update.nonce(props.data.name,(index+1),()=>{
+                            first=false;
+                            return loop();
+                          });
+                        }else{
+                          setRunning(false);
+                          return setInfo(process.error);
+                        }
                       }
                       setInfo(process.msg);
 
                       //b.operation after finalized
-                      if(process.status==="Finalized"){
+                      if (process.status === "Finalized") {
+                        first=false; 
+                        if (process.hash) setHash(process.hash);
 
                         //1.update the nonce of minting
-                        Task.update.nonce(name,index,(res)=>{
-                          if(res.error) return setInfo(res.error);
+                        Task.update.nonce(name, index, (res) => {
+                          if (res.error) return setInfo(res.error);
                         });
 
                         //2.abord the task
-                        if(abord===true){
+                        if (abord === true) {
                           setRunning(false);    //stop running
-                          abord=false;           //reset flag
+                          abord = false;           //reset flag
                           return setInfo(`Task abord.`);
-                        }else{
+                        } else {
                           index++;
-                          return setTimeout(loop,300);
+                          return setTimeout(loop, 300);
                         }
                       }
                     });
@@ -204,6 +246,7 @@ function MiniTask(props) {
     if (!props.data.offset || props.data.offset.length === 0) {
       //2.1. get random offset
       self.getOffset(props.data.gene.cid, (os) => {
+
         setOffset(os);
 
         //2.2.update the offset setting
@@ -224,7 +267,15 @@ function MiniTask(props) {
         <hr />
       </Col>
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
-        <img className="view_thumb" src={`${window.location.origin}/imgs/logo.png`} alt="" />
+        <PriveiwINFT
+          id={`apply_view_${props.data.name}`}
+          hash={hash}
+          hidden={false}
+          template={template}
+          offset={self.mergeOffset(offset)}
+          force={true}
+          hightlight={false}
+        />
       </Col>
 
       <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
@@ -235,20 +286,20 @@ function MiniTask(props) {
                 <small><strong>Task: {props.data.name}</strong>, {props.data.address}</small>
               </Col>
               <Col md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
-                
-              <small>$INFT {balance}, prefix: {props.data.more.prefix}, amount: {props.data.more.nonce} </small>
+
+                <small>$INFT {balance}, prefix: {props.data.more.prefix}, amount: {props.data.more.nonce} </small>
               </Col>
               <Col className="text-end" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
-              <button className="btn btn-sm btn-default" onClick={(ev) => {
-                self.clickMore()
-              }}>
-                {!more ? <FaChevronDown /> : <FaChevronUp />}
-              </button>
+                <button className="btn btn-sm btn-default" onClick={(ev) => {
+                  self.clickMore()
+                }}>
+                  {!more ? <FaChevronDown /> : <FaChevronUp />}
+                </button>
               </Col>
             </Row>
-            
+
             <Row hidden={!more}>
-              <Col   className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
+              <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]}>
                 <Form.Control
                   size="sm"
                   type="text"
@@ -259,7 +310,7 @@ function MiniTask(props) {
                     self.changeTemplate(ev);
                   }} />
               </Col>
-              <Col  className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
+              <Col className="pt-2" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]}>
                 <Form.Select size="sm" disabled={running}>
                   <option value={"account_01"}>Anchor Block Hash</option>
                   <option value={"account_02"}>Bitcoin Block Hash</option>
@@ -297,6 +348,10 @@ function MiniTask(props) {
 
         <Row className="pt-2">
           <Col md={size.run[0]} lg={size.run[0]} xl={size.run[0]} xxl={size.run[0]}>
+            {info}
+          </Col>
+          <Col className="pt-1 text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
+            
             <Form.Control
               size="sm"
               type="password"
@@ -306,9 +361,6 @@ function MiniTask(props) {
               onChange={(ev) => {
                 self.changePassword(ev);
               }} />
-          </Col>
-          <Col className="pt-1 text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
-            {info}
           </Col>
           <Col className="text-end" md={size.run[2]} lg={size.run[2]} xl={size.run[2]} xxl={size.run[2]}>
             <button className="btn btn-sm btn-primary" hidden={running} onClick={(ev) => {

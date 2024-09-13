@@ -19,7 +19,7 @@ import tools from "../../lib/tools";
 function AccountList(props) {
   const size = {
     row: [12],
-    balance: [9, 3]
+    balance: [6,6]
   };
 
   let [list, setList] = useState([]);
@@ -112,7 +112,7 @@ function AccountList(props) {
                     <Col md={size.balance[0]} lg={size.balance[0]} xl={size.balance[0]} xxl={size.balance[0]}>
                       {!balances[row.address] ? 0 : balances[row.address]}
                     </Col>
-                    <Col md={size.balance[1]} lg={size.balance[1]} xl={size.balance[1]} xxl={size.balance[1]}>
+                    <Col className="text-end" md={size.balance[1]} lg={size.balance[1]} xl={size.balance[1]} xxl={size.balance[1]}>
                       <button className="btn btn-sm btn-default">
                         <FaPaperPlane size={18}/>
                       </button>

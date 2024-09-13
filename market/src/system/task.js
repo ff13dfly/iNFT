@@ -88,11 +88,20 @@ const self={
                 });
             });
         },
-        nonce:(name,index,ck)=>{
+        gene:(name,cid,ck)=>{
             funs.checkDB(table, (db) => {
                 INDEXED.searchRows(db, table, "name", name, (rows) => {
                     if (rows.length !== 1) return ck && ck({ error: "Invalid task." });
-                    rows[0].more.nonce = index;
+                    rows[0].gene.cid = cid;
+                    INDEXED.updateRow(db, table, rows, ck);
+                });
+            });
+        },
+        nonce:(name,n,ck)=>{
+            funs.checkDB(table, (db) => {
+                INDEXED.searchRows(db, table, "name", name, (rows) => {
+                    if (rows.length !== 1) return ck && ck({ error: "Invalid task." });
+                    rows[0].more.nonce = n;
                     INDEXED.updateRow(db, table, rows, ck);
                 });
             });

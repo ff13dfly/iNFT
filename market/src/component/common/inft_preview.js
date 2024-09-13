@@ -71,6 +71,7 @@ function PriveiwINFT(props) {
     }
 
     useEffect(() => {
+        //console.log(JSON.stringify(props.offset));
         //!important, when animation is going on and the hash is not changed, fresh should be forbidden
         if (!props.template || !props.hash) {
 
