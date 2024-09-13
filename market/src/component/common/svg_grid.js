@@ -12,7 +12,7 @@ function SVGGrid(props) {
   let [list, setList]=useState([]);
 
   useEffect(() => {
-    console.log(props.x,props.y);
+    //console.log(props.x,props.y);
     if(props.x && props.y){
       const arr=[];
       const w=props.width;
