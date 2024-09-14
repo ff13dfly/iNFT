@@ -560,10 +560,8 @@ const self = {
         //     return  ck && ck( Math.pow(10, registry.decimals));
         // });
     },
-    signByWallet:(dapp,fun,params,ck)=>{
-
-    },
     bounty: {
+
         //create the bounty ticket on chain
         create: (dapp, obj, ck) => {
             self.init(() => {
@@ -587,45 +585,50 @@ const self = {
                             const injector = await web3FromAddress(address);
                             const tx=wsAPI.tx.bounty.create(obj.name, obj.block, amount, obj.expire);
                             tx.signAndSend(address, { signer: injector.signer }, (res) => {
-                                console.log(res);
+                                const status = res.status.toJSON();
+                                return ck && ck(status);
                             });
                         });
                     });
                 });
             });
         },
-
+        //wether bounty ticket setting.
         exsist: (name, block, ck) => {
-            let unsub = null;
-            //console.log(wsAPI.query.bounty);
-            wsAPI.query.bounty.bounty(name, block, (res) => {
-                unsub();
-                const dt = res.toJSON();
-                if (!dt) return ck && ck(false);
-                return ck && ck({ owner: dt[0], price: dt[1], expire: dt[2] });
-            }).then((fun) => {
-                unsub = fun;
+            self.init(() => {
+                let unsub = null;
+                wsAPI.query.bounty.bounty(name, block, (res) => {
+                    unsub();
+                    const dt = res.toJSON();
+                    if (!dt) return ck && ck(false);
+                    return ck && ck({ owner: dt[0], price: dt[1], expire: dt[2] });
+                }).then((fun) => {
+                    unsub = fun;
+                });
             });
         },
 
         //buy a ticket
         ticket: (dapp, obj, ck) => {
             self.init(() => {
-                
+
             });
         },
         //check wether bought ticket
         check: (name, block, addr, ck) => {
-            let unsub = null;
-            wsAPI.query.bounty.Tickets(name, block, addr, (res) => {
-                unsub();
-                const dt = res.toJSON();
-                if (!dt) return ck && ck(false);
+            self.init(() => {
+                let unsub = null;
+                wsAPI.query.bounty.tickets(name, block, addr, (res) => {
+                    unsub();
+                    const dt = res.toJSON();
+                    if (!dt) return ck && ck(false);
 
-                return ck && ck({ block: dt });
-            }).then((fun) => {
-                unsub = fun;
+                    return ck && ck({ block: dt });
+                }).then((fun) => {
+                    unsub = fun;
+                });
             });
+            
         },
     },
     events: {        //TODO, here to add events listeners.

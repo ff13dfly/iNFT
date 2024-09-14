@@ -1,6 +1,8 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import UseCharge from "./user_charge";
+
 import Copy from "../../lib/clipboard";
 import tools from "../../lib/tools";
 import Network from "../../network/router";
@@ -8,7 +10,7 @@ import Network from "../../network/router";
 import Config from "../../system/config";
 import RUNTIME from "../../system/runtime";
 
-import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
+import {  FaCopy } from "react-icons/fa";
 
 function UserBasic(props) {
 
@@ -28,7 +30,7 @@ function UserBasic(props) {
 
   const self = {
     clickCharge: (ev) => {
-      console.log(`Call metamask to transfer $INFT ERC20 Token.`);
+      if(props.dialog)props.dialog.show(<UseCharge dailog={props.dialog} />,"Account Charge");
     },
     clickAddress:(addr)=>{
       //console.log(addr);
@@ -52,8 +54,6 @@ function UserBasic(props) {
     fresh: () => {
       const url = self.getAvatar();
       const addr = RUNTIME.account.get();
-
-      console.log(addr);
       if (!addr || addr === null) return setTimeout(() => {
         self.fresh();
       }, 500);
@@ -74,6 +74,7 @@ function UserBasic(props) {
   }
 
   useEffect(() => {
+    console.log(props);
     self.fresh();
   }, []);
 
@@ -90,8 +91,8 @@ function UserBasic(props) {
             Balance: <strong>{balance}</strong> $ANK
 
           </Col>
-          <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-            <button className="btn btn-sm btn-primary" onClick={(ev) => {
+          <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+            <button className="btn btn-md btn-primary" onClick={(ev) => {
               self.clickCharge(ev);
             }}>Charge</button>
           </Col>
