@@ -8,9 +8,10 @@ import TPL from "../../system/tpl";
 import INFT from "../../system/inft";
 import Task from "../../system/task";
 import Account from "../../system/account";
+import Cache from "../../lib/data";
 import tools from "../../lib/tools";
 
-import { FaWindowClose, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaWindowClose, FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
 
 /* Mini task, show the details of minting robot
 *   @param  {number}    key           //list order
@@ -189,6 +190,8 @@ function MiniTask(props) {
                     const anchor = { anchor: anchor_name, raw: raw, protocol: protocol };
 
                     setInfo(`Minting: ${anchor_name}`);
+                    Cache.setHash("minting",props.data.name,true);    //set global running status to "true"
+
                     chain.write(pair, anchor, (process) => {
                       if (process.error) {
                         if(first){
@@ -197,6 +200,7 @@ function MiniTask(props) {
                             return loop();
                           });
                         }else{
+                          Cache.setHash("minting",props.data.name,false); //set global running status to "false"
                           setRunning(false);
                           return setInfo(process.error);
                         }
@@ -219,6 +223,8 @@ function MiniTask(props) {
                         if (abord === true) {
                           setRunning(false);    //stop running
                           abord = false;           //reset flag
+                          Cache.setHash("minting",props.data.name,false); //set global running status to "false"
+
                           return setInfo(`Task abord.`);
                         } else {
                           index++;
@@ -254,9 +260,7 @@ function MiniTask(props) {
     if (!props.data.offset || props.data.offset.length === 0) {
       //2.1. get random offset
       self.getOffset(props.data.gene.cid, (os) => {
-
         setOffset(os);
-
         //2.2.update the offset setting
         self.updateOffset(props.data.name, os, (res) => {
           if (res !== true) return setInfo(JSON.stringify(res));
@@ -267,6 +271,14 @@ function MiniTask(props) {
         setOffset(os);
       }, props.data.offset);
     }
+
+    //3.check the minting status;
+    const status=Cache.getHash("minting",props.data.name);
+    if(status===true){
+      setRunning(true);
+
+    }
+
   }, [props.data]);
 
   return (
@@ -291,17 +303,23 @@ function MiniTask(props) {
           <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
             <Row>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-                <small><strong>Task: {props.data.name}</strong>, {props.data.address}</small>
+                <small>
+                  Task <strong>{props.data.name}</strong>,  
+                  {props.data.address}
+                </small>
               </Col>
               <Col md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
-
-                <small><strong>{balance}</strong> $ANK, prefix: {props.data.more.prefix}, amount: {nonce} </small>
+                <small>
+                  <strong>{balance}</strong> $ANK, 
+                  prefix: <strong className="mr-5">{props.data.more.prefix}</strong>,
+                  nonce: <strong>{nonce}</strong>
+                </small>
               </Col>
               <Col className="text-end" md={size.info[1]} lg={size.info[1]} xl={size.info[1]} xxl={size.info[1]}>
                 <button className="btn btn-sm btn-default" onClick={(ev) => {
                   self.clickMore()
                 }}>
-                  {!more ? <FaChevronDown /> : <FaChevronUp />}
+                  {!more ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}
                 </button>
               </Col>
             </Row>

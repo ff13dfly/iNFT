@@ -82,8 +82,11 @@ function MintNearby(props) {
         <h5>Recent iNFTs</h5>
       </Col>
       {list.map((row, index) => (
-        <Col key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-          <small>Block {row.block}</small>
+        <Col className="pt-2" key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <small>
+            Block <strong>{parseInt(row.block).toLocaleString()}</strong>, 
+            total <strong>{row.data.length}</strong> {row.data.length>1?"iNFTs":"iNFT"}
+          </small>
           <ListNearby data={row.data} network={"anchor"}/>
         </Col>
       ))}

@@ -84,7 +84,7 @@ function Minting(props) {
                 style={{ border: "1px solid #EEEEEE" }}
               />
             </Col>
-          ))}
+          ))} 
         </Row>
       </Col>
     </Row>

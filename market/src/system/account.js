@@ -121,7 +121,6 @@ const self = {
                 const address=list[i];
                 working++;
                 chain.balance(address,(res)=>{
-                    console.log(res);
                     working--;
                     map[address]=parseFloat(parseInt(res.free)/div);
                     if(working<1) return ck && ck(map);
