@@ -12,7 +12,7 @@ const config = {
 }
 
 const subs = {};        //subscribe funs
-const registry={};        //chainspec details
+const registry = {};        //chainspec details
 
 const limits = {
     key: 40,					//Max length of anchor name ( ASCII character )
@@ -77,8 +77,8 @@ const funs = {
         }
         return map;
     },
-    detail:(obj)=>{
-        registry.decimals=obj.chainDecimals;
+    detail: (obj) => {
+        registry.decimals = obj.chainDecimals;
     },
 }
 
@@ -180,12 +180,12 @@ const self = {
             const dest = { Id: to };
             const m = self.accuracy();
             try {
-                if(!wallet){
+                if (!wallet) {
                     wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(pair, (res) => {
                         const status = res.status.toJSON();
                         return ck && ck(status);
                     });
-                }else{
+                } else {
                     wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(address, { signer: pair }, (res) => {
                         const status = res.status.toJSON();
                         return ck && ck(status);
@@ -279,7 +279,6 @@ const self = {
             const allAccounts = await web3Accounts();
             const account = allAccounts[0];
             const injector = await web3FromAddress(account.address);
-            //console.log(injector);
             const tx = wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre);
             tx.signAndSend(account.address, { signer: injector.signer }, (res) => {
                 const dt = res.toHuman();
@@ -305,7 +304,7 @@ const self = {
                         if (bc.free < cost) return ck && ck({ error: "Low balance" });
                         try {
                             if (wallet) {
-                                console.log(address,pair);
+                                console.log(address, pair);
                                 wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(address, { signer: pair }, (res) => {
                                     const dt = res.toHuman();
                                     funs.decodeProcess(dt, (status) => {
@@ -346,12 +345,12 @@ const self = {
             });
         });
     },
-    divert: (pair, name,target, ck) => {
+    divert: (pair, name, target, ck) => {
         self.init(() => {
             self.view(name, "owner", (signer) => {
                 if (signer === false || pair.address !== signer.address) return ck && ck({ error: "Invalid owner of iNFT." });
                 try {
-                    wsAPI.tx.anchor.divertAnchor(name,target).signAndSend(pair, (res) => {
+                    wsAPI.tx.anchor.divertAnchor(name, target).signAndSend(pair, (res) => {
                         const dt = res.toHuman();
                         funs.decodeProcess(dt, (status) => {
                             return ck && ck(status);
@@ -363,12 +362,12 @@ const self = {
             });
         });
     },
-    drop: (pair, name,lastwords, ck) => {
+    drop: (pair, name, lastwords, ck) => {
         self.init(() => {
             self.view(name, "owner", (signer) => {
                 if (signer === false || pair.address !== signer.address) return ck && ck({ error: "Invalid owner of iNFT." });
                 try {
-                    wsAPI.tx.anchor.dropAnchor(name,lastwords).signAndSend(pair, (res) => {
+                    wsAPI.tx.anchor.dropAnchor(name, lastwords).signAndSend(pair, (res) => {
                         const dt = res.toHuman();
                         funs.decodeProcess(dt, (status) => {
                             return ck && ck(status);
@@ -387,7 +386,7 @@ const self = {
                     //1.if set block,search directly
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
-                        if(hash==="0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
+                        if (hash === "0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;
                             full.block.extrinsics.forEach((ex, index) => {
@@ -397,7 +396,7 @@ const self = {
                                 if (dt.method === "setAnchor" && dt.args.key === value.name) {
                                     data = {
                                         owner: row.signer.Id,
-                                        signer:row.signer.Id,
+                                        signer: row.signer.Id,
                                         name: dt.args.key,
                                         raw: dt.args.raw,
                                         protocol: dt.args.protocol,
@@ -415,8 +414,8 @@ const self = {
                                     data.protocol = JSON.parse(data.protocol);
 
                                     //check the owner, in case the anchor is [sold, diverted, dropped]
-                                    self.view(data.name,"owner",(res)=>{
-                                        if(data.owner!==res.address) data.owner=res.address;
+                                    self.view(data.name, "owner", (res) => {
+                                        if (data.owner !== res.address) data.owner = res.address;
                                         return ck && ck(data);
                                     });
                                 } catch (error) {
@@ -425,7 +424,7 @@ const self = {
                             } else {
                                 return ck && ck(false);
                             }
-                        }).catch((err)=>{
+                        }).catch((err) => {
                             console.log(err);
                             return ck && ck(false);
                         });
@@ -444,7 +443,7 @@ const self = {
                         unselling();
                         const dt = res.toJSON();
                         if (!dt) return ck && ck(false);
-                        dt[1]=parseFloat(dt[1]/self.divide());
+                        dt[1] = parseFloat(dt[1] / self.divide());
                         return ck && ck(dt);
                     }).then((fun) => {
                         unselling = fun;
@@ -474,17 +473,17 @@ const self = {
                 case "detail":
                     wsAPI.rpc.chain.getBlock(value).then((res) => {
                         const exs = res.block.extrinsics;
-                        const bk=res.block.header.toJSON();
+                        const bk = res.block.header.toJSON();
                         const infts = [];
                         if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
                             const row = ex.toHuman();
-                            if(!row.isSigned) return false;     //skip the unsigned, no iNFT
+                            if (!row.isSigned) return false;     //skip the unsigned, no iNFT
                             if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
                                 const dt = row.method.args;
                                 try {
                                     const protocol = JSON.parse(dt.protocol);
-                                    if(protocol && protocol.tpl && protocol.tpl.toLowerCase() ==="inft"){
+                                    if (protocol && protocol.tpl && protocol.tpl.toLowerCase() === "inft") {
                                         const raw = JSON.parse(dt.raw);
                                         const inft = {
                                             name: dt.key,
@@ -492,9 +491,9 @@ const self = {
                                             protocol: protocol,
                                             pre: parseInt(dt.pre),
                                             signer: row.signer.Id,
-                                            owner:row.signer.Id,
+                                            owner: row.signer.Id,
                                             hash: value,
-                                            block:bk.number,
+                                            block: bk.number,
                                             valid: true,
                                             network: "anchor",
                                         }
@@ -539,7 +538,7 @@ const self = {
                     const row = arr[i];
                     const key = row[0].toHuman();
                     const info = row[1].toHuman();
-                    const price=parseFloat(parseInt(info[1].replaceAll(",",""))/self.divide());
+                    const price = parseFloat(parseInt(info[1].replaceAll(",", "")) / self.divide());
                     list.push({
                         name: key[0],
                         owner: info[0],
@@ -561,22 +560,76 @@ const self = {
         //     return  ck && ck( Math.pow(10, registry.decimals));
         // });
     },
-    bounty:{
+    signByWallet:(dapp,fun,params,ck)=>{
+
+    },
+    bounty: {
         //create the bounty ticket on chain
-        create:(pair,name,block,ck)=>{
+        create: (dapp, obj, ck) => {
+            self.init(() => {
+                self.view({ name: obj.name, block: obj.block }, "anchor", (data) => {
+                    if (data === false) return ck && ck({ error: "Invalid bounty on chain" });
+                    self.bounty.exsist(obj.name,obj.block,async (is)=>{
+                        if(is!==false) return ck && ck({ error: "Bounty setting exsists." });
+                        
+                        const extensions = await web3Enable(dapp);
+                        if (extensions.length === 0) {
+                            return ck && ck({ error: "No subwallet extention" });
+                        }
+                        const allAccounts = await web3Accounts();
+                        const address = allAccounts[0].address;                   
+                        if (data.owner !== address) return ck && ck({ error: "Not the owner of bounty." });
 
+                        self.balance(address, async (bs) => {
+                            const amount = parseInt(parseFloat(obj.price) * self.divide());
+                            if (bs.free < (amount + 10)) return ck && ck({ error: `Low balance of ${address}` });
+
+                            const injector = await web3FromAddress(address);
+                            const tx=wsAPI.tx.bounty.create(obj.name, obj.block, amount, obj.expire);
+                            tx.signAndSend(address, { signer: injector.signer }, (res) => {
+                                console.log(res);
+                            });
+                        });
+                    });
+                });
+            });
         },
-        //buy a ticket
-        ticket:(pair,name,block,ck)=>{
 
+        exsist: (name, block, ck) => {
+            let unsub = null;
+            //console.log(wsAPI.query.bounty);
+            wsAPI.query.bounty.bounty(name, block, (res) => {
+                unsub();
+                const dt = res.toJSON();
+                if (!dt) return ck && ck(false);
+                return ck && ck({ owner: dt[0], price: dt[1], expire: dt[2] });
+            }).then((fun) => {
+                unsub = fun;
+            });
+        },
+
+        //buy a ticket
+        ticket: (dapp, obj, ck) => {
+            self.init(() => {
+                
+            });
         },
         //check wether bought ticket
-        check:(name,block,addr,ck)=>{
+        check: (name, block, addr, ck) => {
+            let unsub = null;
+            wsAPI.query.bounty.Tickets(name, block, addr, (res) => {
+                unsub();
+                const dt = res.toJSON();
+                if (!dt) return ck && ck(false);
 
+                return ck && ck({ block: dt });
+            }).then((fun) => {
+                unsub = fun;
+            });
         },
     },
-    events:{        //TODO, here to add events listeners.
-        payed:()=>{
+    events: {        //TODO, here to add events listeners.
+        payed: () => {
 
         },
     },

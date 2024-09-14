@@ -33,9 +33,9 @@ function BountyTicket(props) {
         {info}
       </Col>
       <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
-        <button className="btn btn-sm btn-primary" onClick={(ev)=>{
+        <button className="btn btn-md btn-warning" onClick={(ev)=>{
           self.clickBuyTicket(ev);
-        }}>Buy Now!</button>
+        }}>Buy Ticket!</button>
       </Col>
     </Row>
   );

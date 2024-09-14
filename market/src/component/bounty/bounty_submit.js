@@ -160,40 +160,6 @@ function BountySubmit(props) {
         });
       });
     },
-    // callbackPay: (status, target, amount) => {
-    //   if (status.error) return setPayInfo(status.error);
-    //   if (!status.finalized) return setPayInfo(JSON.stringify(status));
-
-    //   const dapp = Config.get(["system", "name"]);
-    //   const name = Bounty.format.name("payment");
-    //   const raw = Bounty.format.raw.payment(status.finalized, target, amount);
-    //   const protocol = Bounty.format.protocol.payment(props.name);
-    //   //console.log(name, raw, protocol);
-
-    //   const obj = {
-    //     anchor: name,
-    //     raw: raw,
-    //     protocol: protocol,
-    //     dapp: dapp,
-    //   }
-
-    //   //1.write payment information on chain
-    //   const chain = Network("anchor");
-    //   chain.sign(obj, (res) => {
-    //     if (res.status !== "Finalized") return setPayInfo(res.msg);
-
-    //     chain.view({ name: name }, "anchor", (dt) => {
-    //       const alink = `anchor://${name}/${dt.block}`;
-    //       //2.update local record status
-    //       Bounty.update.toPayed(props.name, alink, () => {
-    //         //3.submit the payment details to portal system 
-    //         API.bounty.payment(props.name, alink, (rows) => {
-
-    //         });
-    //       });
-    //     });
-    //   });
-    // },
     callbackBonus: (list) => {
       const arr = [];
       for (let i = 0; i < list.length; i++) {
