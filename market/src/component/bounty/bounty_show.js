@@ -5,6 +5,7 @@ import QRCode from "react-qr-code";
 import BountyComment from "./bounty_comment";
 import BountyMinting from "./bounty_minting";
 import BountyBonus from "./bounty_bonus";
+import BountyTicket from "./bounty_ticket";
 
 import Config from "../../system/config";
 import tools from "../../lib/tools";
@@ -140,6 +141,7 @@ function BountyShow(props) {
         </p>
       </Col>
       <Col className="bounty_title" md={size.grid[1]} lg={size.grid[1]} xl={size.grid[1]} xxl={size.grid[1]}>
+        
         <h5>Bonus ( Total {total.toLocaleString()} ${coin.toUpperCase()} )</h5>
         <BountyBonus 
           raw={props.data}
@@ -149,6 +151,7 @@ function BountyShow(props) {
           fresh={props.fresh}     //force to fresh the bounty list
         />
         <p className="pt-2">Click thumb to view detail or divert iNFT.</p>
+        <BountyTicket  bounty={props.data.alink}/>
       </Col>
       <Col className="bounty_live" md={size.grid[2]} lg={size.grid[2]} xl={size.grid[2]} xxl={size.grid[2]}>
         <Row className="pt-4">

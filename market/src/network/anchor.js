@@ -561,6 +561,20 @@ const self = {
         //     return  ck && ck( Math.pow(10, registry.decimals));
         // });
     },
+    bounty:{
+        //create the bounty ticket on chain
+        create:(pair,name,block,ck)=>{
+
+        },
+        //buy a ticket
+        ticket:(pair,name,block,ck)=>{
+
+        },
+        //check wether bought ticket
+        check:(name,block,addr,ck)=>{
+
+        },
+    },
     events:{        //TODO, here to add events listeners.
         payed:()=>{
 

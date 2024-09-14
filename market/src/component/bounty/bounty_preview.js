@@ -6,6 +6,7 @@ import CommentList from "../comment/commnet_list";
 import CommentSubmit from "../comment/commnet_submit";
 import BountyBonus from "./bounty_bonus";
 import BountyMinting from "./bounty_minting";
+import BountyTicket from "./bounty_ticket";
 
 import TPL from "../../system/tpl";
 import API from "../../system/api";
@@ -46,12 +47,10 @@ function BountyPreview(props) {
     },
     getAnchor: () => {
       if (props.data && props.data.anchor) return props.data.anchor
-      if (props.extend && props.extend.anchor) return props.extend.anchor
       return "";
     },
     getBlock: () => {
-      if (props.data && props.data.block) return props.data.block
-      if (props.extend && props.extend.block) return props.extend.block
+      if (props.data && props.data.block) return props.data.block;
       return "";
     },
     getThumb: (index) => {
@@ -158,6 +157,7 @@ function BountyPreview(props) {
           dialog={props.dialog}
         />
         <p className="pt-2">Click thumb to view detail or divert iNFT.</p>
+        <BountyTicket  bounty={self.getAlink()}/>
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             <hr />
