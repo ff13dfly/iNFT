@@ -64,7 +64,7 @@ function AccountLoad(props) {
           const sign = JSON.parse(file);
           sign.network=props.network;
           Account.import(password,sign,()=>{
-
+            
           });
         });
       } catch (error) {

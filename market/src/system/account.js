@@ -77,25 +77,19 @@ const self = {
             INDEXED.pageRows(db,table,ck,{page:page,step:step})
         });
     },
-
-    generate: (network, ck) => {
-        const gen = Network(network);
-        if (gen === false) return ck && ck(false);
-        const pass = funs.randomPassword();
-
-        gen.generate(pass, (row) => {
-
-            //1.saving the password to config
-            Config.set(["account", "password", row.address], pass);
-
-            //2.insert the address data to indexedDB
-            row.stamp = tools.stamp();
+    add:(row,ck)=>{
+        row.stamp = tools.stamp();
+        const address=row.address;
+        self.get(address,(arr)=>{
+            if(arr.length!==0) return ck && ck({error:"Account exsist."});
             funs.insertToDB(row, (res) => {
-                console.log(res);
+                if(res!==true) return ck && ck({error:"Failed to insert to indexeDB."});
+                return ck && ck(res);
             });
         });
+        
     },
-
+    
     import:(pass,row,ck)=>{
         //console.log(pass,row);
         //0.check wether loaded;
@@ -106,8 +100,8 @@ const self = {
         //2.insert the address data to indexedDB
         row.stamp = tools.stamp();
         funs.insertToDB(row, (res) => {
-            console.log(res);
-            return ck && ck();
+            if(res!==true) return ck && ck({error:"Failed to insert to indexeDB."});
+            return ck && ck(res);
         });
     },
     

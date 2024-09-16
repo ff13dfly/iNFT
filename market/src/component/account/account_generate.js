@@ -1,5 +1,5 @@
 import { Row, Col, Image, Badge } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 
 import Network from "../../network/router";
 
@@ -42,6 +42,8 @@ function AccountGenerate(props) {
 
   let [recover, setRecover] = useState({});   //copied status 
 
+  const ref = useRef(null);
+
   const self = {
     changeNetwork: (ev) => {
       setCurrent(ev.target.value);
@@ -69,10 +71,17 @@ function AccountGenerate(props) {
       }
     },
     clickSaveAccount:(ev)=>{
-      console.log(accountFile);
+      accountFile.metadata={
+        from:"iNFT Market",
+      };
+      setPassword(""); 
+      Account.add(accountFile,(done)=>{
+        if(done.error) return setInfo(done.error);
+
+      });
     },
     clickGenerate: (ev) => {
-      console.log(current, password);
+      //console.log(current, password);
       const chain = Network(current);
       if (chain.generate) chain.generate(password, (pair, mnemonic) => {
         console.log(pair, mnemonic);
@@ -129,7 +138,7 @@ function AccountGenerate(props) {
           }} />
       </Col>
       <Col className="text-end" md={size.generate[2]} lg={size.generate[2]} xl={size.generate[2]} xxl={size.generate[2]}>
-        <button className="btn btn-md btn-primary" onClick={(ev) => {
+        <button className="btn btn-md btn-primary" ref={ref} onClick={(ev) => {
           self.clickGenerate(ev);
         }}>Generate</button>
       </Col>
@@ -165,7 +174,7 @@ function AccountGenerate(props) {
                   </button>
               </Col>
               {words.map((row, index) => (
-                <Col className="text-center pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+                <Col key={index} className="text-center pt-2" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
                   <button className="btn btn-md btn-info" style={{ width: "100px" }} key={index}>{row}</button>
                 </Col>
               ))}
