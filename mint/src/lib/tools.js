@@ -24,7 +24,7 @@ const self = {
   },
   shorten: (addr, n) => {
     if (n === undefined) n = 10;
-    return addr.substring(0, n) + "..." + addr.substring(addr.length - n, n);
+    return addr.substring(0, n) + "..." + addr.substring(addr.length - n);
   },
   copy:(arr_obj)=>{
     return JSON.parse(JSON.stringify(arr_obj));
