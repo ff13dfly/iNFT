@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Header from "./component/common/common_header";
 import Footer from "./component/common/common_footer";
 
-import Home from "./entry/home";
+//import Home from "./entry/home";
+import Dashboard from "./entry/dashboard";
 import Playground from "./entry/playground";
 import Editor from "./entry/editor";
 import Minter from "./entry/minter";
@@ -24,7 +25,7 @@ import Detail from "./entry/detail";
 function App() {
   //parameters of router
   let [content, setContent]=useState("");
-  let [target, setTarget]=useState("bounty");
+  let [target, setTarget]=useState("home");
   let [extend, setExtend ]=useState("");
 
   let [show,setShow]=useState(false);
@@ -89,7 +90,7 @@ function App() {
   }
 
   const router={
-    "home":<Home extend={extend}/>,
+    "home":<Dashboard extend={extend}/>,
     "market":<Market extend={extend} link={self.linkTo}/>,
     "minter":<Minter extend={extend}/>,
     "editor":<Editor extend={extend}/>,

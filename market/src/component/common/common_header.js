@@ -6,6 +6,8 @@ import RUNTIME from "../../system/runtime";
 
 import { FaCog } from "react-icons/fa";
 
+import { MdCurrencyExchange } from "react-icons/md";
+import { GiCardExchange } from "react-icons/gi";
 /* System footer
 *   @param  {string}    active       //selected nav name
 */
@@ -17,7 +19,7 @@ function Header(props) {
   const navs = [
     {
       name: "market",
-      icon:"",
+      //icon:<GiCardExchange size={24} color="#FF0000"/>,
     },
     {
       name: "bounty",
@@ -35,12 +37,6 @@ function Header(props) {
       name: "creativity",
       icon:"",
     },
-    // {
-    //   name:"minter",
-    // },
-    // {
-    //   name:"editor",
-    // },
   ]
 
   const self = {
@@ -70,14 +66,14 @@ function Header(props) {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand >
-          <h3 className="pointer" onClick={(ev) => { props.link("bounty") }} >iNFT</h3>
+          <h3 className="pointer" onClick={(ev) => { props.link("home") }} >iNFT</h3>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {navs.map((row, index) => (
               <Nav.Link key={index} onClick={(ev) => { props.link(row.name) }} >
-                <h5 className={props.active === row.name ? "text-warning" : ""}>{tools.toUp(row.name)}</h5>
+                {row.icon?row.icon:( <h5 className={props.active === row.name ? "text-warning" : ""}>{tools.toUp(row.name)}</h5>)}
               </Nav.Link>
             ))}
           </Nav>

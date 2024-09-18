@@ -6,11 +6,11 @@ import tools from "../../lib/tools";
 import TPL from "../../system/tpl";
 import INFT from "../../system/inft";
 
-import { FaAnchor } from "react-icons/fa";
 
 /* iNFT list component
 *   @param  {array}     data            //iNFT[], list of iNFT to show
 *   @param  {string}    network         //network
+*   @param  {number}    [grid]          //react cols, default 3
 */
 
 function ListNearby(props) {
@@ -85,9 +85,14 @@ function ListNearby(props) {
     getOwner:(row)=>{
 
     },
+    getCols:()=>{
+      if(!props.grid) return size.grid[0];
+      return props.grid;
+    },
   }
 
   useEffect(() => {
+    console.log(props);
     if (props.data.length === 0) {
       setInfo("No iNFTs.");
       setList([]);
@@ -109,13 +114,12 @@ function ListNearby(props) {
         <h6>{info}</h6>
       </Col>
       {list.length!==0 && list.map((row, index) => (     
-        <Col key={index} className="pt-2" lg={size.grid[0]} xxl={size.grid[0]} md={size.grid[0]}>
+        <Col key={index} className="pt-2" lg={self.getCols()} xxl={self.getCols()} md={self.getCols()}>
           <Card hidden={!ready} style={{ width: "100%" }}>
             <a href={`/view/${row.name}`} target="blank">
               <Card.Img variant="top" src={self.showThumb(row.bs64)} />
             </a>
             <Card.Body>
-              <Card.Title></Card.Title>
               <Card.Text>
                 {row.name}<br/>
                 {!row.owner ? "" : tools.shorten(row.owner,6)}

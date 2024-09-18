@@ -8,6 +8,7 @@ import INFT from "../../system/inft";
 *   @param  {string}    uuid                //unique name
 *   @param  {string}    [template]           //template cid
 *   @param  {number}    [amount]             //amount to show, default=4
+*   @param  {number}    [grid]              //cell grid for react
 */
 
 function Minting(props) {
@@ -37,6 +38,10 @@ function Minting(props) {
       }
       return full;
     },
+    calcGrid:()=>{
+      if(!props.grid) return size.grid[0];
+      return props.grid;
+    },
   }
 
 
@@ -45,7 +50,7 @@ function Minting(props) {
     chain.subscribe(`minting_${props.uuid}`, (block, hash) => {
       chain.view(hash, "detail", (infts) => {
         if (infts.length === 0) {
-          setList([{ bs64: `${window.location.origin}/imgs/logo.png` }]);
+          setList([{bs64: `${window.location.origin}/imgs/logo.png` }]);
           return setInfo(`0 iNFT on block ${block.toLocaleString()}`);
         }
         const arr = self.filterINFTs(infts, props.template);
@@ -76,7 +81,14 @@ function Minting(props) {
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <Row>
           {list.map((row, index) => (
-            <Col className="pt-2" key={index} md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
+            <Col 
+              className="pt-2" 
+              key={index} 
+              md={self.calcGrid()} 
+              lg={self.calcGrid()} 
+              xl={self.calcGrid()} 
+              xxl={self.calcGrid()}
+            >
               <Image
                 src={row.bs64}
                 rounded

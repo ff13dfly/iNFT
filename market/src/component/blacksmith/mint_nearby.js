@@ -7,8 +7,8 @@ import Network from "../../network/router";
 
 /* Mint result of nearby blocks
 *   @param  {number}    [depth]        //blocks previous amount, default to 10
+*   @param  {number}    [grid]         //react cols amount
 */
-
 
 function MintNearby(props) {
   const size = {
@@ -87,7 +87,7 @@ function MintNearby(props) {
             Block <strong>{parseInt(row.block).toLocaleString()}</strong>, 
             total <strong>{row.data.length}</strong> {row.data.length>1?"iNFTs":"iNFT"}
           </small>
-          <ListNearby data={row.data} network={"anchor"}/>
+          <ListNearby data={row.data} network={"anchor"} grid={!props.grid?3:props.grid}/>
         </Col>
       ))}
     </Row>

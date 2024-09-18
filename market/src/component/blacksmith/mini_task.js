@@ -156,7 +156,9 @@ function MiniTask(props) {
 
             //2.get sub account from local
             const addr = dt.address;
+            console.log(addr);
             Account.get(addr, (fs) => {
+              //console.log(fs);
               if (fs.length !== 1) {
                 setRunning(false);
                 return setInfo("Invalid sub account.");
