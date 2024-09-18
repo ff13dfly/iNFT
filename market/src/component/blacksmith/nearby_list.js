@@ -92,7 +92,7 @@ function ListNearby(props) {
   }
 
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
     if (props.data.length === 0) {
       setInfo("No iNFTs.");
       setList([]);

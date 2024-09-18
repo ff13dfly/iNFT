@@ -1,6 +1,9 @@
 import INDEXED from "../lib/indexed";
 import Config from "./config";
 
+import Account from "./account";
+import Network from "../network/router";
+import INFT from "./inft";
 import tools from "../lib/tools";
 
 const table = "task";
@@ -51,8 +54,142 @@ const funs={
     },
 }
 
+const callbacks={}      //task callbacks dock here, can be reset
+const tags={}           //running tags here
+const running={}        //running task dock here
 
 const self={
+    stop:(name)=>{
+        tags[name]=true;            //set the stop tag;
+        return true;
+    },
+    reset:(name)=>{
+        delete(running[name]);
+        return true;
+    },
+    running:(name)=>{
+        //console.log(running[name],running);
+        if(running[name]) return true;
+        return false;
+    },
+    callback:(name,callback)=>{
+        callbacks[name]=callback;
+        return true;
+    },
+    start:(pass,name,callback)=>{
+        callbacks[name]=callback;
+        if(running[name]) return true;      //if task exsist, return true
+        (()=>{
+            let first=0;   //first auto fix amount
+            const max=3;    //max fix tryes
+            setTimeout(() => {
+                self.get(name, (dt) => {
+                    const ck=callbacks[name];
+                    if (dt.error){
+                        ck && ck({error:dt.error});
+                        return false;
+                    } 
+
+                    ck && ck({message:"Task confirmed."});
+
+                    const addr = dt.address;
+                    Account.get(addr, (fs) => {
+                        const ck=callbacks[name];
+                        if (fs.length !== 1){
+                            ck && ck({error:"Invalid sub account."})
+                            return false;
+                        }
+                        ck && ck({message:"Checking balance of account."});
+
+                        const chain = Network(dt.network);
+                        chain.balance(addr, (balance) => {
+                            const ck=callbacks[name];
+
+                            if (balance.free < 10){
+                                ck && ck({error:"Low balance of account."})
+                                return false;
+                            } 
+
+                            ck && ck({message:"Decoding encried JSON account file."});
+                            const chain = Network(dt.network);
+                            chain.load(JSON.stringify(fs[0]), pass, (pair) => {
+                                const ck=callbacks[name];
+                                if (pair.error) {
+                                    ck && ck({error:pair.error});
+                                    return false;
+                                }
+
+                                let index = parseInt(dt.more.nonce) + 1;
+                                const loop = (pair,ckLoop) => {
+                                    const ck=callbacks[name];
+
+                                    //a.prepare the anchor data;
+                                    const prefix = dt.more.prefix;
+                                    const anchor_name = `${prefix}${index}`;
+                                    const raw = INFT.format.raw(dt.gene.cid, dt.offset);
+                                    const protocol = INFT.format.protocol();
+                                    const anchor = { anchor: anchor_name, raw: raw, protocol: protocol };
+
+                                    ck && ck({message:`Minting: ${anchor_name}`});
+
+                                    chain.write(pair, anchor, (process) => {
+
+                                        if (process.error) {
+                                            if(first<max){
+                                                ck && ck({message:`Failed to write, auto fix.`});
+                                                first++;
+                                                return self.update.nonce(name,index+1,()=>{
+                                                    first=false;
+                                                    return loop(pair);
+                                                });
+                                            }else{
+                                                ck && ck({error:process.error})
+                                                return false;
+                                            }
+                                        }
+
+                                        ck && ck({message:process.msg});
+
+                                        //b.operation after finalized
+                                        if (process.status === "Finalized") {
+                                            console.log(running);
+
+                                            first=false; 
+                                            if (process.hash) ck && ck({hash:process.hash});
+
+                                            //1.update the nonce of minting
+                                            self.update.nonce(name, index, (res) => {
+                                                if (res.error){
+                                                    ck && ck({error:res.error})
+                                                    return false;
+                                                }
+
+                                                ck && ck({nonce:index});
+
+                                                if (tags[name] === true) {
+                                                    delete tags[name]
+                                                    ck && ck({message:`Task abord.`,exit:true});
+                                                    delete callbacks[name];
+                                                    return false;
+                                                } else {
+                                                    index++;
+                                                    return setTimeout(()=>{
+                                                        loop(pair);
+                                                    },300);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                running[name]=true;     //set running tag
+                                loop(pair);     //run the loop
+                            });
+                        });
+                    });
+                });
+            },300);     //wait 300ms to start the running
+        })(pass,name);
+    },
     list: (ck, page, step) => {
         return funs.checkDB(table, (db) => {
             return INDEXED.pageRows(db, table, ck, {page: page, step: step })

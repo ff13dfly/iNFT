@@ -5,10 +5,10 @@ import PriveiwINFT from "../common/inft_preview";
 
 import Network from "../../network/router";
 import TPL from "../../system/tpl";
-import INFT from "../../system/inft";
+//import INFT from "../../system/inft";
 import Task from "../../system/task";
-import Account from "../../system/account";
-import Cache from "../../lib/data";
+//import Account from "../../system/account";
+//import Cache from "../../lib/data";
 import tools from "../../lib/tools";
 
 import { FaWindowClose, FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
@@ -19,7 +19,6 @@ import { FaWindowClose, FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/f
 *   @param  {function}  remove        //task remove function
 */
 
-let abord = false;              //abord tag
 function MiniTask(props) {
   const size = {
     row: [12],
@@ -31,7 +30,7 @@ function MiniTask(props) {
   };
 
   let [info, setInfo] = useState("");
-  let [running, setRunning] = useState(false);                    //wether the task is running
+  let [running, setRunning] = useState(true);                    //wether the task is running
 
   let [template, setTemplate] = useState(props.data.gene.cid);    //gene template CID
   let [balance, setBalance] = useState(0);                        //balance of minting account
@@ -65,18 +64,19 @@ function MiniTask(props) {
     changePassword: (ev) => {
       setPassword(ev.target.value);
     },
+
     clickRun: (ev) => {
-      //self.start(password,"333abc");
       setInfo("");
       if (!password) return setInfo("Invalid password.");
       setInfo("Ready to go.");
       setRunning(true);
-      self.start(password, props.data.name);
       setPassword("");      //reset the password
+      //self.start(password, props.data.name);
+      Task.start(password, props.data.name, self.decoder);
     },
     clickStop: (ev) => {
       setInfo("Waiting for the last minting to finalize.");
-      abord = true;
+      Task.stop(props.data.name);
     },
     clickRemove: (name) => {
       if (props.remove) props.remove(name);
@@ -140,109 +140,6 @@ function MiniTask(props) {
     updateNonce:(name,n,ck)=>{
       return Task.update.nonce(name, n, ck);
     },
-
-    start: (pass, name) => {
-      return (() => {
-        let first=true;   //first run tag
-
-        setTimeout(() => {
-          Task.get(name, (dt) => {
-            //1.check task details.
-            if (dt.error) {
-              setRunning(false);
-              return setInfo(dt.error);
-            }
-            setInfo("Task confirmed.");
-
-            //2.get sub account from local
-            const addr = dt.address;
-            console.log(addr);
-            Account.get(addr, (fs) => {
-              //console.log(fs);
-              if (fs.length !== 1) {
-                setRunning(false);
-                return setInfo("Invalid sub account.");
-              }
-
-              //3.check balance of account
-              setInfo("Checking balance of account.");
-              const chain = Network(dt.network);
-              chain.balance(addr, (balance) => {
-                if (balance.free < 10) {
-                  setRunning(false);
-                  return setInfo("Low balance of account.");
-                }
-
-                //4.decode JSON file to get pair
-                setInfo("Decoding encried JSON account file.");
-                chain.load(JSON.stringify(fs[0]), pass, (pair) => {
-                  if (pair.error) {
-                    setRunning(false);
-                    return setInfo(pair.error);
-                  }
-
-                  //5.minting iNFT on chain
-                  let index = parseInt(dt.more.nonce) + 1;
-                  const loop = (ck) => {
-                    //a.prepare the anchor data;
-                    const prefix = dt.more.prefix;
-                    const anchor_name = `${prefix}${index}`;
-                    const raw = INFT.format.raw(dt.gene.cid, dt.offset);
-                    const protocol = INFT.format.protocol();
-                    const anchor = { anchor: anchor_name, raw: raw, protocol: protocol };
-
-                    setInfo(`Minting: ${anchor_name}`);
-                    Cache.setHash("minting",props.data.name,true);    //set global running status to "true"
-
-                    chain.write(pair, anchor, (process) => {
-                      if (process.error) {
-                        if(first){
-                          Task.update.nonce(props.data.name,(index+1),()=>{
-                            first=false;
-                            return loop();
-                          });
-                        }else{
-                          Cache.setHash("minting",props.data.name,false); //set global running status to "false"
-                          setRunning(false);
-                          return setInfo(process.error);
-                        }
-                      }
-                      setInfo(process.msg);
-
-                      //b.operation after finalized
-                      if (process.status === "Finalized") {
-                        first=false; 
-                        if (process.hash) setHash(process.hash);
-
-                        //1.update the nonce of minting
-                        setNonce(index);  //update amount
-                        self.balance();   //update balance
-                        Task.update.nonce(name, index, (res) => {
-                          if (res.error) return setInfo(res.error);
-                        });
-
-                        //2.abord the task
-                        if (abord === true) {
-                          setRunning(false);    //stop running
-                          abord = false;           //reset flag
-                          Cache.setHash("minting",props.data.name,false); //set global running status to "false"
-
-                          return setInfo(`Task abord.`);
-                        } else {
-                          index++;
-                          return setTimeout(loop, 300);
-                        }
-                      }
-                    });
-                  };
-                  loop();
-                });
-              });
-            });
-          });
-        }, 300);
-      })(pass);
-    },
     balance:()=>{
       const chain = Network(props.data.network);
       const div=chain.divide();
@@ -250,37 +147,62 @@ function MiniTask(props) {
         setBalance(parseFloat(parseInt(dt.free)/div));
       });
     },
+    decoder:(response)=>{
+      console.log(response);
+
+        if(response.message) setInfo(response.message);
+
+        if(response.nonce){
+          self.balance();
+          setNonce(response.nonce);
+        }
+
+        if(response.hash){
+          setHash(response.hash);
+        }
+
+        if(response.error){
+          setInfo(response.error);
+          setRunning(false);
+        }
+
+        if(response.exit){
+          setRunning(false);
+        }
+    },
+    fresh:()=>{
+      //1.set balance of address
+      self.balance();
+
+      //2.calc the offset
+      if (!props.data.offset || props.data.offset.length === 0) {
+        //2.1. get random offset
+        self.getOffset(props.data.gene.cid, (os) => {
+          setOffset(os);
+          //2.2.update the offset setting
+          self.updateOffset(props.data.name, os, (res) => {
+            if (res !== true) return setInfo(JSON.stringify(res));
+          });
+        });
+      } else {
+        self.getOffset(props.data.gene.cid, (os) => {
+          setOffset(os);
+        }, props.data.offset);
+      }
+    },
   }
 
   useEffect(() => {
-    //console.log(props);
 
-    //1.set balance of address
-    self.balance();
+    self.fresh();   //fresh details
+                    //check running
+    //console.log(props.data.name,Task.running(props.data.name));
 
-    //2.calc the offset
-    if (!props.data.offset || props.data.offset.length === 0) {
-      //2.1. get random offset
-      self.getOffset(props.data.gene.cid, (os) => {
-        setOffset(os);
-        //2.2.update the offset setting
-        self.updateOffset(props.data.name, os, (res) => {
-          if (res !== true) return setInfo(JSON.stringify(res));
-        });
-      });
-    } else {
-      self.getOffset(props.data.gene.cid, (os) => {
-        setOffset(os);
-      }, props.data.offset);
+    if(!Task.running(props.data.name)){
+      setRunning(false);
+    }else{
+      Task.callback(props.data.name,self.decoder);
     }
-
-    //3.check the minting status;
-    const status=Cache.getHash("minting",props.data.name);
-    if(status===true){
-      setRunning(true);
-
-    }
-
   }, [props.data]);
 
   return (
