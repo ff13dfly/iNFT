@@ -2,11 +2,11 @@
 
 ## Overview
 
-- It is a new way to mint NFT by block hash and unmodified template file on chain such as IPFS.
+- It is a new PoW way to mint NFT by block hash and gene template file on IPFS.
 
-- The design of template can make iNFT identifiable, the scarcity can be confirmed by template.
+- The design of gene template can make iNFT identifiable, the scarcity can be confirmed.
 
-- As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
+- As the block hash of blockchain network is random and unique, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can compare value between different networks by mathematics scarcity.
 
 - Try iNFT full functions, [iNFT System](https://inft.w3os.net)
 
