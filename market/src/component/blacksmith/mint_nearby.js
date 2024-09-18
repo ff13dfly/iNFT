@@ -77,7 +77,7 @@ function MintNearby(props) {
   }, [props.amount]);
 
   return (
-    <Row className="pt-4">
+    <Row>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Recent iNFTs</h5>
       </Col>
