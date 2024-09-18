@@ -44,7 +44,9 @@ const funs = {
             return ck && ck({ msg: "Trying to write.", success: true, status: "Retracted", code: 4 });       //not everytime
         } else if (obj.status.Finalized) {
             return ck && ck({ msg: "Done, write to network", success: true, status: "Finalized", hash: obj.status.Finalized, code: 8 });
-        } else {
+        } else if (obj.status.Usurped){
+            return ck && ck({ msg: "Unknow type: usurped", success: true, status: "Usurped", code: 4 });
+        }else {
             return ck && ck({ error: "Unknow result" });
         }
     },
@@ -221,15 +223,15 @@ const self = {
 
             const pre = 0;
             try {
-                wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {
+                wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {   
                     const dt = res.toHuman();
                     //console.log(dt);
                     funs.decodeProcess(dt, (status) => {
-                        //console.log(status);
                         return ck && ck(status);
                     });
                 });
             } catch (error) {
+                console.log("Error here.");
                 return ck && ck(error);
             }
         });

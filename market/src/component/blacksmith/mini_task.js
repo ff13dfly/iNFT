@@ -5,10 +5,7 @@ import PriveiwINFT from "../common/inft_preview";
 
 import Network from "../../network/router";
 import TPL from "../../system/tpl";
-//import INFT from "../../system/inft";
 import Task from "../../system/task";
-//import Account from "../../system/account";
-//import Cache from "../../lib/data";
 import tools from "../../lib/tools";
 
 import { FaWindowClose, FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
@@ -119,9 +116,9 @@ function MiniTask(props) {
         return ck && ck(arr);
       });
     },
-    mergeOffset:(list)=>{
-      const arr=[];
-      for(let i=0;i<list.length;i++){
+    mergeOffset: (list) => {
+      const arr = [];
+      for (let i = 0; i < list.length; i++) {
         arr.push(list[i].value);
       }
       return arr;
@@ -137,40 +134,38 @@ function MiniTask(props) {
     updateTemplate: (name, cid, ck) => {
       return Task.update.gene(name, cid, ck);
     },
-    updateNonce:(name,n,ck)=>{
+    updateNonce: (name, n, ck) => {
       return Task.update.nonce(name, n, ck);
     },
-    balance:()=>{
+    balance: () => {
       const chain = Network(props.data.network);
-      const div=chain.divide();
+      const div = chain.divide();
       chain.balance(props.data.address, (dt) => {
-        setBalance(parseFloat(parseInt(dt.free)/div));
+        setBalance(parseFloat(parseInt(dt.free) / div));
       });
     },
-    decoder:(response)=>{
-      console.log(response);
+    decoder: (response) => {
+      if (response.message) setInfo(response.message);
 
-        if(response.message) setInfo(response.message);
+      if (response.nonce) {
+        self.balance();
+        setNonce(response.nonce);
+      }
 
-        if(response.nonce){
-          self.balance();
-          setNonce(response.nonce);
-        }
+      if (response.hash) {
+        setHash(response.hash);
+      }
 
-        if(response.hash){
-          setHash(response.hash);
-        }
+      if (response.error) {
+        setInfo(response.error);
+        setRunning(false);
+      }
 
-        if(response.error){
-          setInfo(response.error);
-          setRunning(false);
-        }
-
-        if(response.exit){
-          setRunning(false);
-        }
+      if (response.exit) {
+        setRunning(false);
+      }
     },
-    fresh:()=>{
+    fresh: () => {
       //1.set balance of address
       self.balance();
 
@@ -195,13 +190,13 @@ function MiniTask(props) {
   useEffect(() => {
 
     self.fresh();   //fresh details
-                    //check running
+    //check running
     //console.log(props.data.name,Task.running(props.data.name));
 
-    if(!Task.running(props.data.name)){
+    if (!Task.running(props.data.name)) {
       setRunning(false);
-    }else{
-      Task.callback(props.data.name,self.decoder);
+    } else {
+      Task.callback(props.data.name, self.decoder);
     }
   }, [props.data]);
 
@@ -228,13 +223,13 @@ function MiniTask(props) {
             <Row>
               <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
                 <small>
-                  Task <strong>{props.data.name}</strong>,  
+                  Task <strong>{props.data.name}</strong>,
                   {props.data.address}
                 </small>
               </Col>
               <Col md={size.info[0]} lg={size.info[0]} xl={size.info[0]} xxl={size.info[0]}>
                 <small>
-                  <strong>{balance}</strong> $ANK, 
+                  <strong>{balance}</strong> $ANK,
                   prefix: <strong className="mr-5">{props.data.more.prefix}</strong>,
                   nonce: <strong>{nonce}</strong>
                 </small>
@@ -301,7 +296,7 @@ function MiniTask(props) {
             {info}
           </Col>
           <Col className="pt-1 text-end" md={size.run[1]} lg={size.run[1]} xl={size.run[1]} xxl={size.run[1]}>
-            
+
             <Form.Control
               size="sm"
               type="password"

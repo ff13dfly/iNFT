@@ -7,6 +7,11 @@ import INFT from "./inft";
 import tools from "../lib/tools";
 
 const table = "task";
+const callbacks={}      //task callbacks dock here, can be reset
+const tags={}           //running tags here
+const running={}        //running task dock here
+let dog=null;
+
 const funs={
     checkDB: (table, ck) => {
         const cfg = Config.get(["storage"]);
@@ -52,15 +57,22 @@ const funs={
             };
         }
     },
+    watchdog:()=>{
+        const stamp=tools.stamp();
+        console.log(JSON.stringify(running));
+        for(var k in running){
+            if(stamp-running[k]>10*1000){
+                if(callbacks[k]) callbacks[k]({message:`Task status update.`,exit:true});
+                delete running[k];
+            }
+        }
+    }
 }
-
-const callbacks={}      //task callbacks dock here, can be reset
-const tags={}           //running tags here
-const running={}        //running task dock here
 
 const self={
     stop:(name)=>{
         tags[name]=true;            //set the stop tag;
+        
         return true;
     },
     reset:(name)=>{
@@ -77,6 +89,12 @@ const self={
         return true;
     },
     start:(pass,name,callback)=>{
+        if(dog===null){
+            dog=setInterval(()=>{
+                funs.watchdog()
+            },3000);
+        }
+
         callbacks[name]=callback;
         if(running[name]) return true;      //if task exsist, return true
         (()=>{
@@ -133,7 +151,6 @@ const self={
                                     ck && ck({message:`Minting: ${anchor_name}`});
 
                                     chain.write(pair, anchor, (process) => {
-
                                         if (process.error) {
                                             if(first<max){
                                                 ck && ck({message:`Failed to write, auto fix.`});
@@ -143,7 +160,10 @@ const self={
                                                     return loop(pair);
                                                 });
                                             }else{
-                                                ck && ck({error:process.error})
+                                                ck && ck({error:process.error});
+                                                delete tags[name];
+                                                delete running[name];
+                                                delete callbacks[name];
                                                 return false;
                                             }
                                         }
@@ -152,7 +172,8 @@ const self={
 
                                         //b.operation after finalized
                                         if (process.status === "Finalized") {
-                                            console.log(running);
+                                            //console.log(running);
+                                            running[name]=tools.stamp();
 
                                             first=false; 
                                             if (process.hash) ck && ck({hash:process.hash});
@@ -167,7 +188,8 @@ const self={
                                                 ck && ck({nonce:index});
 
                                                 if (tags[name] === true) {
-                                                    delete tags[name]
+                                                    delete tags[name];
+                                                    delete running[name];
                                                     ck && ck({message:`Task abord.`,exit:true});
                                                     delete callbacks[name];
                                                     return false;
@@ -181,7 +203,7 @@ const self={
                                         }
                                     });
                                 }
-                                running[name]=true;     //set running tag
+                                running[name]=tools.stamp();     //set running tag
                                 loop(pair);     //run the loop
                             });
                         });

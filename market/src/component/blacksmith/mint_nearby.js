@@ -77,7 +77,7 @@ function MintNearby(props) {
   }, [props.amount]);
 
   return (
-    <Row>
+    <Row className="pt-4">
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <h5>Recent iNFTs</h5>
       </Col>
@@ -87,7 +87,7 @@ function MintNearby(props) {
             Block <strong>{parseInt(row.block).toLocaleString()}</strong>, 
             total <strong>{row.data.length}</strong> {row.data.length>1?"iNFTs":"iNFT"}
           </small>
-          <ListNearby data={row.data} network={"anchor"} grid={!props.grid?3:props.grid}/>
+          <ListNearby data={row.data} network={"anchor"} grid={!props.grid?6:props.grid}/>
         </Col>
       ))}
     </Row>
