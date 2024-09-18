@@ -47,6 +47,7 @@ const funs = {
         } else if (obj.status.Usurped){
             return ck && ck({ msg: "Unknow type: usurped", success: true, status: "Usurped", code: 4 });
         }else {
+            console.log(obj);
             return ck && ck({ error: "Unknow result" });
         }
     },

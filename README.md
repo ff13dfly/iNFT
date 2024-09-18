@@ -8,39 +8,9 @@
 
 - As every blockchain network have random block hash, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can balance value between different networks by mathematics scarcity.
 
-- Video: [Youtube Video URL]()
+- Try iNFT full functions, [iNFT System](https://inft.w3os.net)
 
-- PPT: [PPT URL]()
-
-- Try iNFT full functions, [iNFT Market](https://inft.w3os.net/market)
-
-- Just minting, [iNFT Minter](https://inft.w3os.net/mint)
-
-## System Structure
-
-- Market system.
-
-- Bounty merchant workflow.
-    ![Bounty Merchant Workflow](./diagram/bounty_merchant.jpg)
-
-- Bounty user workflow.
-    ![Bounty Merchant Workflow](./diagram/bounty_customer.jpg)
-
-## Roadmap
-
-### Multi Chain Operation
-
-- Support multi chain airdrop by iNFT way, merchant can publish airdrop bounty on Anchor Network which is base on Substrate.
-
-- All actions are recorded on Anchor Network where the iNFT is minted on.
-
-### Multi Chain Asset
-
-- Using the BTC block hash as the target for iNFT, and the iNFT on Anchor Network can be transfer to Ethereum Network by `Last Words` method. When the iNFT on Anchor Network is dropped, the **Last Words** is written on chain, it can be used to approve the iNFT and create one on Ethereum Network.
-
-- Bridge ERC-20 token between Anchor Netwok and Ethereum Network. By this way, Anchor Network can be restart frequently to keep it simple.
-
-- The history data of Anchor Network with the Ethereum salt can be store on IPFS, and the Merkel root on Ethereum Network. Even the Anchor Network is crushed down, the asset can still be approved.
+- Just minting, [iNFT Minter](https://minter.inft.w3os.net)
 
 ## Dapps
 

@@ -59,7 +59,7 @@ const funs={
     },
     watchdog:()=>{
         const stamp=tools.stamp();
-        console.log(JSON.stringify(running));
+        //console.log(JSON.stringify(running));
         for(var k in running){
             if(stamp-running[k]>10*1000){
                 if(callbacks[k]) callbacks[k]({message:`Task status update.`,exit:true});
