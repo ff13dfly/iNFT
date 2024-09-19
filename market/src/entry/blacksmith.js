@@ -6,6 +6,8 @@ import MintNearby from "../component/blacksmith/mint_nearby";
 import MiniTask from "../component/blacksmith/mini_task";
 import MintAccount from "../component/blacksmith/mint_account";
 
+import EffectionFlame from "../component/common/flame_effection";
+
 import Task from "../system/task";
 
 function Blacksmith(props) {
@@ -44,7 +46,6 @@ function Blacksmith(props) {
 
     return (
         <Row className="pt-2">
-            
             <Col className="pt-2" md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]} >
                 <MintAccount callback={(addr)=>{
                     self.callbackAccount(addr);
@@ -59,6 +60,7 @@ function Blacksmith(props) {
                         self.callbackRemove(name)
                     }}/>
                 ))}
+                <EffectionFlame />
             </Col>
             <Col className="pt-2" md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
                 <Minting uuid={"blacksmith_minting"} template={""}/>

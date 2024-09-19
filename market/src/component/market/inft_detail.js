@@ -18,7 +18,7 @@ function DetailINFT(props) {
   };
 
   useEffect(() => {
-    //console.log(props.data);
+    console.log(props.data);
   }, []);
 
   return (

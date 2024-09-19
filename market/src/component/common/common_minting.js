@@ -82,7 +82,7 @@ function Minting(props) {
         <Row>
           {list.map((row, index) => (
             <Col 
-              className="pt-2" 
+              className="pt-2 box" 
               key={index} 
               md={self.calcGrid()} 
               lg={self.calcGrid()} 

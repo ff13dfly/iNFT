@@ -42,9 +42,10 @@ function View(props) {
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
             INFT.single(dt.name,(res)=>{
+                console.log(res);
                 setAlink(`anchor://${res.name}/${res.block}`);
                 setData(res);
-            });
+            },true);
         }
     }, [props.update,props.extend]);
 
@@ -58,7 +59,6 @@ function View(props) {
                 </Breadcrumb>
             </Col>
             <Col md={size.header[0]} lg={size.header[0]} xl={size.header[0]} xxl={size.header[0]} >
-                
                 <Row>
                     <Col md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]} >
                         <img className="view_thumb" src={(!data||!data.bs64)?`${window.location.origin}/imgs/logo.png`:data.bs64}  alt="thumb"/>
@@ -71,7 +71,7 @@ function View(props) {
                         <MoreINFT data={data} link={props.link} />   
                     </Col>
                     
-                    <Col style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                    <Col hidden={(!data || !data.price)?true:false} style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <AccountSign title={"Buy now"} network={"anchor"} callback={(pair)=>{
                             self.clickBuy(pair);
                         }}/>

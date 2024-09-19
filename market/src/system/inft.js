@@ -242,7 +242,6 @@ const self = {
             });
         } else {
             Network("anchor").view(name, "owner", (data) => {
-                //console.log(data);
                 const row = {
                     name: name,
                     owner: data.address,
