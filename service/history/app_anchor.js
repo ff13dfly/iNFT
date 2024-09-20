@@ -23,6 +23,7 @@ const entry = {
 
 //global tags
 let catchup = false;          //when cache get the block_subcribe, set this tag to true
+let all_done=false;             //when all iNFTs is cached, set this tag;
 
 //functions
 let linking = false;
@@ -188,11 +189,18 @@ const self = {
         //0.check the done_right data
         if(status.done_right>=status.block_subcribe) return self.toLeft(status);
 
+        //FIXME, change the logical here, to the left first
+        //1.cache all history data
         return self.toRight(status,()=>{
-            catchup=true;
+            catchup=true;       //
             output(`Catch up the subcribe.`,"primary",true);
             self.toLeft(status,()=>{
                 output(`Great! All iNFTs are cached.`,"success",true);
+
+                console.log("Here to go");
+                //2.cache the new iNFTs when caching
+
+                //all_done=true;
             });
         });
     },
@@ -218,8 +226,7 @@ if(DEBUG && debug_config.clean) return self.reset();
 
 //1.load the cache status from Redis
 let first = true;         //first subcribe tag
-let map=null;             //subcribe cache, before catchup, cache iNFTs here.
-let gap=null;             //when saving cached iNFTs, new subcribe iNFTs here.
+let gap=null;             //subcribe cache, before catchup, cache iNFTs here.
 self.load((status) => {
     if(status===false) return output(`Failed to load status from Redis. Please check the system`,"error",true);
     output(`Load status successful, ready to link to Anchor Network for the next step.`,"primary",true);
@@ -263,11 +270,13 @@ self.load((status) => {
 
             output(`[${block.toLocaleString()}] ${hash} , ${list.length} iNFTs.`);
 
+            
             //2.2. record the recent data.
             if(catchup){
                 output(`Storage the iNFTs per block.`);
+                //TODO, cache the iNFT immediately
             }else{
-                output(`Cache the iNFTs records, when catchup, start to storage.`);
+                //TODO, set the RIGHT_BLOCK_VALUE to the current block
             }
         });
     });

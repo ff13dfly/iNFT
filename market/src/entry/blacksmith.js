@@ -60,7 +60,7 @@ function Blacksmith(props) {
                         self.callbackRemove(name)
                     }}/>
                 ))}
-                <EffectionFlame />
+                {/* <EffectionFlame /> */}
             </Col>
             <Col className="pt-2" md={size.layout[1]} lg={size.layout[1]} xl={size.layout[1]} xxl={size.layout[1]} >
                 <Minting uuid={"blacksmith_minting"} template={""}/>
