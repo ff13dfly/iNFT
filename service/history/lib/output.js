@@ -16,6 +16,12 @@ const self={
             console.log(theme[type], `[${stamp()}] ` + ctx);
         }
     },
+    br:(ctx)=>{
+        console.log(
+            theme.dark,
+            `**********************************************${!ctx?"":ctx}**********************************************`
+        );
+    },
 }
 
 module.exports = self;

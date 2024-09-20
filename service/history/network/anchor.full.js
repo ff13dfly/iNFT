@@ -418,6 +418,15 @@ const self = {
 		}
 		return arr;
 	},
+
+	getSelling:(list,block,hash)=>{
+		//console.log(JSON.stringify(list));
+		const arr=[];
+		for(let i=0;i<list.length;i++){
+
+		}
+		return arr;
+	},
 	
 	full:(hash,block,ck)=>{
 		const result={
@@ -433,7 +442,7 @@ const self = {
 			wsAPI.query.system.events.at(hash,(evs)=>{
 				//1.get setAnchor
 				result.set =self.getINFTs(self.filter(dt, "setAnchor",self.status(evs)),block,hash);
-				result.sell = self.filter(dt, "sellAnchor",self.status(evs));
+				result.sell = self.getSelling(self.filter(dt, "sellAnchor",self.status(evs)),block,hash);
 				result.buy = self.filter(dt, "buyAnchor",self.status(evs));
 				result.revoke = self.filter(dt, "revokeAnchor",self.status(evs));
 				

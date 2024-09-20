@@ -37,21 +37,24 @@ const self={
 *   @param  {function}      ck          //callback function
 */
 module.exports =(map,left,ck)=>{
-    output(`Got iNFT related anchors, ready to cache. Write on left side: ${left}`,"primary",true);
+    output(`Got iNFT related anchors, ready to cache. Write on ${!left?"RIGHT":"LEFT"} side: `,"dark",true);
     const keys=config.keys;
     const prefix=keys.prefix;
     let done=false;                 //wether callback
 
-    //!important, the map is order by block number, when push to the queue from the left side, need to change the order
+    //!important, the map is order by block number, 
+    //!important, when push to the queue from the left side, need to change the order
+
     const arr=self.getArrayFromMap(map,left);
+
+    //output(`Total ${arr.lenght} blocks need to cache.`,"success",true);
 
     let working=0;     //working tag, when it is 0, callback
 
     for(let k=0;k<arr.length;k++){
         const data=arr[k];
         const block=data.block;
-        output(`Got block [${block}] list`,"success",true);
-
+        output(`Working on block [${block}] anchor related list.`,"success",true);
         if(data.set===null && data.sell===null && data.buy===null && data.revoke===null ){
             continue;
         }
