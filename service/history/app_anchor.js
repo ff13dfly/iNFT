@@ -182,7 +182,7 @@ const self = {
             self.toRight(status, () => {
                 output(`RIGHT done, to ${status.block_subcribe}.`, "primary", true);
                 working = false;
-                br(" Caching Done ");   //seperator;
+                br(" Cached ");   //seperator;
             });
         }else{
             self.toLeft(status, () => {
@@ -190,7 +190,7 @@ const self = {
                 self.toRight(status, () => {
                     output(`RIGHT done, to ${status.block_subcribe}.`, "primary", true);
                     working = false;
-                    br(" Caching Done ");   //seperator;
+                    br(" Cached ");   //seperator;
                 });
             });
         }
@@ -198,7 +198,7 @@ const self = {
 };
 
 output(`\n____________iNFT____________Robot____________Anchor____________Network____________iNFT____________`, "success", true);
-output(`Start iNFT history cache robot ( version ${config.version} ), author: Fuu, 2024.06`, "", true);
+output(`Start iNFT history cache robot ( version ${config.version} ), author: ${config.auth}, ${config.update}`, "", true);
 output(`Will storage iNFT data to local Redis, then the Market API can use these data.`, "", true);
 
 //0. handle unknown error

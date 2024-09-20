@@ -17,5 +17,8 @@ exports.config = {
             "block":"block_",
             "raw":"ank_",               //raw anchor data
         }
-    }
+    },
+    "version":"2.0.0",
+    "update":"2024.9",
+    "auth":"Fuu",
 };
