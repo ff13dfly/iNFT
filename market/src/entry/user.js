@@ -8,6 +8,8 @@ import UserAccount from "../component/user/user_account";
 import UserBounty from "../component/user/user_bounty";
 import User404 from "../component/user/user_404";
 
+import Network from "../network/router";
+
 function User(props) {
     const size = {
         sidebar: [2, 10],
@@ -38,6 +40,13 @@ function User(props) {
         }else{
             setContent(map[active]);
         }
+
+        const chain=Network("ethereum");
+        const erc20_address="0x9105c2ff36d2455d15273024dd0b002c8d2781f6";
+        chain.check(erc20_address,()=>{
+
+        });
+
     }, [props.extend]);
     
     return (

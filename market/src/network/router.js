@@ -10,6 +10,7 @@
 
 import TANSSI from "./tanssi";
 import ANCHOR from "./anchor";
+import ETHEREUM from "./ethereum";
 
 const format={
     init:(ck,network)=>{                    //link to network node init function
@@ -77,6 +78,7 @@ const map={     //support networks
     anchor:ANCHOR,
     tanssi:TANSSI,
     solana:null,
+    ethereum:ETHEREUM,
     polkadto:null,
     aptos:null,
     sui:null,

@@ -74,7 +74,7 @@ function UserBasic(props) {
   }
 
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
     self.fresh();
   }, []);
 
