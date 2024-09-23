@@ -15,7 +15,7 @@
 
 import {Web3} from "web3";
 import abi from "erc-20-abi";
-import tools from "../lib/tools";
+import tools from "./tools";
 
 const config = {
     node: "https://holesky.infura.io/v3/799349fbc6ff411983d3d1feba0a3bc7",  //Tanssi appchain URI

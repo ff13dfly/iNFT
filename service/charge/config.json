@@ -1,0 +1,19 @@
+{
+    "name":"charge",
+    "anchor":{
+        "node":["ws://localhost:9944"]
+    },
+    "redis":{
+        "host":"localhost",
+        "port":6379,
+        "auth":""
+    },
+    "keys":{
+        "sum":"usdt_total_amount",
+        "count":"usdt_transaction_amount",
+        "history":"usdt_transaction_map"
+    },
+    "version":"2.0.0",
+    "update":"2024.9",
+    "auth":"Fuu"
+}
