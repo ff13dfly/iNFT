@@ -1,5 +1,8 @@
 {
     "name":"charge",
+    "server":{
+        "port":6677
+    },
     "anchor":{
         "node":["ws://localhost:9944"]
     },
