@@ -102,20 +102,22 @@ const self={
             type: 0x2,
 
             //type 2 transaction EIP-1559 transactions
-            gas: web3.utils.toHex(50000000),
-            maxFeePerGas:web3.utils.toHex(web3.utils.toWei("3", "gwei")),
-            maxPriorityFeePerGas: web3.utils.toHex(35),
+            maxFeePerGas:web3.utils.toWei("200", "gwei"),
+            maxPriorityFeePerGas: web3.utils.toWei("3", "gwei"),
           };
+
+          const gas_estimate = await web3.eth.estimateGas(tx);      //must get the suggest gas fee here
+          tx.gas=gas_estimate;
 
           const signedTx = await web3.eth.accounts.signTransaction(tx, signer.privateKey);
             console.log("Raw transaction data: " + signedTx.rawTransaction);
+
           const receipt = await web3.eth
             .sendSignedTransaction(signedTx.rawTransaction)
             .once("transactionHash", (txhash) => {
             console.log(`Mining transaction ...`);
             console.log(`https://holesky.etherscan.io/tx/${txhash}`);
             });
-        // The transaction is now on chain!
         console.log(`Mined in block ${receipt.blockNumber}`);
     },
     send:async (tokenHolder, walletSecret, toAddress, amount)=>{ 
