@@ -45,6 +45,8 @@ function User(props) {
         const check_address="0xD4C8251C06C5776Fa2B488c6bCbE1Bf819D92d83";
         chain.balance(check_address,(bs)=>{
             console.log(`Here:${bs}`);
+
+            //block 2387045, index: 13
             const transaction_hash="0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac";
             chain.view(transaction_hash,(dt)=>{
                 console.log(dt);

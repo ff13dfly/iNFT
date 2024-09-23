@@ -60,11 +60,19 @@ const self={
         });
     },
     view:(hash,ck)=>{
+        
         //https://community.infura.io/t/web3-js-how-to-track-erc-20-token-transfers-specific-address-token/5571
         console.log(`Ready to check transaction hash: ${hash}`);
         self.init(()=>{
             console.log(`web3.js is ready`);
-            W3.eth.getTransactionReceipt(hash).then(ck);
+            W3.eth.getTransactionReceipt(hash).then((data)=>{
+                const dt=W3.eth.abi.decodeLog(
+                    abi[9].inputs,
+                    data.logs[0].data,
+                    data.logs[0].topics
+                );
+                console.log(dt);
+            });
         });
     },
     token:async ()=>{
