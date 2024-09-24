@@ -9,6 +9,7 @@
 
 //https://support.infura.io/building-with-infura/javascript-typescript/how-to-send-erc20-tokens-web3js
 //https://docs.infura.io/tutorials/ethereum/send-a-transaction/use-web3.js
+//https://docs.metamask.io/wallet/how-to/connect/
 
 // $INFT 3.1415926 transaction hash
 //0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac
@@ -72,6 +73,9 @@ const self={
                 return ck && ck(dt);
             });
         });
+    },
+    charge:(amount,ck)=>{
+
     },
     token:async ()=>{
         const web3 = new Web3(

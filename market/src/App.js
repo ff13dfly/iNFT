@@ -57,7 +57,7 @@ function App() {
         for(let i=0;i<pattern[single].length;i++){
           param[pattern[single][i]]=arr[i];
         }
-        //console.log(`Decoding params: ${JSON.stringify(param)}`);
+        
         if(JSON.stringify(param)!==JSON.stringify(extend)) setExtend(param);
       }
       if(single!==target) setTarget(single);

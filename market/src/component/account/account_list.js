@@ -1,7 +1,7 @@
 import { Row, Col, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaCopy, FaFileDownload, FaSkullCrossbones, FaPaperPlane } from "react-icons/fa";
+import { FaCopy, FaFileDownload, FaSkullCrossbones, FaPaperPlane,FaFaucet } from "react-icons/fa";
 
 import Account from "../../system/account";
 import Config from "../../system/config";
@@ -109,11 +109,15 @@ function AccountList(props) {
                 <td>
                   <Row>
                     <Col md={size.balance[0]} lg={size.balance[0]} xl={size.balance[0]} xxl={size.balance[0]}>
+                      
                       {!balances[row.address] ? 0 : balances[row.address]}
                     </Col>
                     <Col className="text-end" md={size.balance[1]} lg={size.balance[1]} xl={size.balance[1]} xxl={size.balance[1]}>
                       <button className="btn btn-sm btn-default">
                         <FaPaperPlane size={18}/>
+                      </button>
+                      <button className="btn btn-sm btn-default">
+                        <FaFaucet size={18}/>
                       </button>
                     </Col>
                   </Row>
