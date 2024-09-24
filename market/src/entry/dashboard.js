@@ -27,7 +27,11 @@ function Dashboard(props) {
     let [info, setInfo]=useState("");
 
     useEffect(() => {
-        API.trend.overview((dt)=>{
+        // API.trend.overview((dt)=>{
+        //     console.log(dt);
+        // });
+
+        API.trend.chart(61555,100,(dt)=>{
             console.log(dt);
         });
     }, []);

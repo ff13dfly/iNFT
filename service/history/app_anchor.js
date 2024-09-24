@@ -157,6 +157,7 @@ const self = {
         const len = arr.length;
         //output(`Last block to cache:${arr[len - 1]}`);
         self.read(arr, (map) => {
+            //console.log(JSON.stringify(map));
             const left = false;
             if (!tools.empty(map)) {
                 Saving(map, left, () => {

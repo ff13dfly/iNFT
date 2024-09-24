@@ -263,6 +263,17 @@ const self={
                 });
             });
         },
+        chart:(start,step,ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                const param={start:start,step:step};
+                funs.request("trend","chart",(res)=>{
+                    if(res.success) return ck && ck(res);
+
+                    return ck && ck({error:"Failed to get data."});
+                },param);
+            });
+        },
     },
 };
 

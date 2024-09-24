@@ -95,6 +95,7 @@ function UserBounty(props) {
     },
     fresh: () => {
       Bounty.list((arr) => {
+        console.log(arr);
         self.getThumb(arr, (map) => {
           for (let i = 0; i < arr.length; i++) {
             arr[i].thumb = map[arr[i].template.cid].thumb;
@@ -133,6 +134,7 @@ function UserBounty(props) {
               <th>Title</th>
               <th>Coin/Token</th>
               <th>Alink</th>
+              <th>Publisher</th>
               <th>Manage</th>
               <th>Loaded</th>
               <th></th>
@@ -164,6 +166,9 @@ function UserBounty(props) {
                   <a href="https://polkadot.js.org/apps/?rpc=ws://localhost:9944#/chainstate" target="_blank" rel="noreferrer">
                     {row.name}
                   </a>
+                </td>
+                <td>
+                  {tools.shorten(row.publisher,4)}
                 </td>
                 <td>
                   {/*

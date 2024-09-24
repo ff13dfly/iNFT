@@ -14,4 +14,14 @@
 			$json=$this->getKey($key);
 			return json_decode($json,true);
 		}
+
+		public function trendChart($start,$step){
+			$arr=array();
+			for($i=0;$i<$step;$i++){
+				$block=$start-$i;
+				$amount=$this->lenList(TREND_PREFIX_BLOCK.$block);
+				$arr[]=array($block,$amount);
+			}
+			return $arr;
+		}
 	}
