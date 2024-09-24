@@ -19,7 +19,6 @@ import { FaCheck } from "react-icons/fa";
 function AccountSign(props) {
   const size = {
     row: [12],
-    //buy: [1,5,4,2],
     buy: [2,10,12,12],
     grid:[9,3],
     more:[5,4],

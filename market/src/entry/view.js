@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import DetailINFT from "../component/market/inft_detail";
 import MoreINFT from "../component/market/inft_more";
 import AccountSign from "../component/account/account_sign";
+import AccountSell from "../component/account/account_sell";
 import CommentList from "../component/comment/commnet_list";
 import CommentSubmit from "../component/comment/commnet_submit";
 
@@ -35,14 +36,16 @@ function View(props) {
                 console.log(process);
             },pair.wallet,pair.address);
         },
+        getPermitOfSell:()=>{
+            console.log(props.extend.name);
+            return false;
+        },
     }
 
     useEffect(() => {
-        
         if(props.extend  && props.extend.name){
             const dt=self.checkName(props.extend.name);
             INFT.single(dt.name,(res)=>{
-                console.log(res);
                 setAlink(`anchor://${res.name}/${res.block}`);
                 setData(res);
             },true);
@@ -69,6 +72,10 @@ function View(props) {
                     </Col>
                     <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                         <MoreINFT data={data} link={props.link} />   
+                    </Col>
+
+                    <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                        <AccountSell anchor={alink} />
                     </Col>
                     
                     <Col hidden={(!data || !data.price)?true:false} style={{marginTop:"150px"}} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >

@@ -67,7 +67,7 @@ const self = {
         if(cache[addr]) return ck && ck(true);
         return ck && ck(false);
     },
-    exsist:(addr,ck)=>{
+    exsist:(addr)=>{
         if(cache===null) return self.map();
         if(cache[addr]) return true;
         return false;
