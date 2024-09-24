@@ -205,6 +205,18 @@ const config={
             price:[
                 {}
             ],
+            faucet:[
+                {
+                    domain:"faucet.inft.w3os.net",
+                    protocol:"https://",
+                    partten:"",
+                    orgin:"W3OS",
+                    lang:"Javascript",
+                    desc:"",
+                    funs:"",
+                    def:"",                 //get the definition of API (JSON format)
+                }, 
+            ]
         },
     },
     network:{

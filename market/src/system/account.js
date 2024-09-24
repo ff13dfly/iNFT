@@ -55,7 +55,7 @@ const self = {
         });
     },
     get:(addr,ck)=>{
-        console.log(addr,table);
+        //console.log(addr,table);
         funs.checkDB(table,(db)=>{
             INDEXED.searchRows(db,table,"address",addr,ck);
         });
@@ -88,7 +88,6 @@ const self = {
                 return ck && ck(res);
             });
         });
-        
     },
     
     import:(pass,row,ck)=>{

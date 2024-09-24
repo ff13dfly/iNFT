@@ -125,8 +125,12 @@ function NetworkList(props) {
               </Form>
             </td>
             <td>
-              <span className="pointer"><FaSkullCrossbones /></span>
-              <span className="pointer ml-5"><FaSync /></span>
+              <button className="btn btn-sm btn-default">
+                    <FaSkullCrossbones size={18}/>
+                  </button>
+              <button className="btn btn-sm btn-default">
+                    <FaSync size={18}/>
+                  </button>
             </td>
           </tr>
         ))}

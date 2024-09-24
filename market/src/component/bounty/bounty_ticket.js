@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 
 import Network from "../../network/router";
 import tools from "../../lib/tools";
-
+import Config from "../../system/config";
+import RUNTIME from "../../system/runtime";
 
 /* Pay for ticket component
 *   @param  {string}    bounty       //bounty_name, alink of bounty
@@ -20,19 +21,38 @@ function BountyTicket(props) {
 
   const self = {
     clickBuyTicket:(ev)=>{
-
-    },
-    checkTicket:(addr,bounty,block,ck)=>{
-
+      console.log(`Here to buy ticket, price:${price},bounty:${props.bounty}`);
+      const dapp = Config.get(["system", "name"]);
+      const param=tools.decode(props.bounty);
+      param.price=price;
+      const chain=Network("anchor");
+      chain.bounty.ticket(dapp,param,(res)=>{
+        console.log(res);
+      });
     },
     checkBounty:(alink)=>{
+      //1. wether bounty exsist
       const data=tools.decode(alink);
       const chain=Network("anchor");
       chain.bounty.exsist(data.name,data.block,(bt)=>{
-
-        if(bt===false) setHidden(true);
-
+        if(bt===false) return setHidden(true);
         setPrice(parseFloat(bt.price/chain.divide()));
+
+        //2.wether the owner of bounty
+        chain.view(data, "anchor", (dt) => {
+          RUNTIME.auto((addr)=>{
+            console.log(dt,addr===dt.owner);
+            if(addr===dt.owner) return setHidden(true);
+
+            //3.wether bought ticket yet
+            chain.bounty.check(data.name,data.block,addr,(bought)=>{
+              console.log(bought);
+              if(bought===true)  return setHidden(true);
+              setHidden(false);
+            });
+            
+          });
+        });
       });
     },
   }
@@ -43,7 +63,7 @@ function BountyTicket(props) {
   }, [props.bounty]);
 
   return (
-    <Row show={(!hidden).toString()} className="ticket-buying pt-4 pb-4 mr-5 ml-5">
+    <Row hidden={hidden} className="ticket-buying pt-4 pb-4 mr-5 ml-5">
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
         Ticket <strong>{price}</strong> $ANK to join!
       </Col>

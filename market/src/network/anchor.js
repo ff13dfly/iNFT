@@ -613,8 +613,25 @@ const self = {
 
         //buy a ticket
         ticket: (dapp, obj, ck) => {
-            self.init(() => {
-
+            self.init( async () => {
+                const allAccounts = await web3Accounts();
+                const address = allAccounts[0].address;
+                self.view({ name: obj.name, block: obj.block }, "anchor", (data) => {
+                    console.log(data);
+                    if(data.owner===address) return ck && ck({error:"Can not buy ticket when you are the owner of bounty."});
+                    
+                    self.balance(address, async (bs) => {
+                        const amount = parseInt(parseFloat(obj.price) * self.divide());
+                        if (bs.free < (amount + 10)) return ck && ck({ error: `Low balance of ${address}` });
+                        const injector = await web3FromAddress(address);
+                        const tx=wsAPI.tx.bounty.ticket(obj.name, obj.block);
+                        tx.signAndSend(address, { signer: injector.signer }, (res) => {
+                            const status = res.status.toJSON();
+                            return ck && ck(status);
+                        });
+                    });
+                });
+                
             });
         },
         //check wether bought ticket
