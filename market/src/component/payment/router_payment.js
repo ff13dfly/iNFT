@@ -11,7 +11,6 @@ import TokenSolana from "./token_solana";
 
 import Bounty from "../../system/bounty";
 import API from "../../system/api";
-import tools from "../../lib/tools";
 
 /* Payment router, by checking coin symbol to load proper payment component.
 *   @param  {string}    bounty        //amount of payment;

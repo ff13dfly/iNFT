@@ -298,8 +298,8 @@ function BountySubmit(props) {
             </Row>
           </Col>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <RouterPayment bounty={anchor} callback={(amount,accounts,more)=>{
-              console.log(amount,accounts,more);
+            <RouterPayment bounty={anchor} callback={(amount,from_to,more)=>{
+              console.log(amount,from_to,more);
             }}/>
           </Col>
         </Row>

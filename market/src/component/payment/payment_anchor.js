@@ -39,10 +39,19 @@ function PaymentAnchor(props) {
       setInfo("");
       const chain=Network("anchor");
       const dapp = Config.get(["system", "name"]);
+      //console.log("here",props.target,props.amount);
       chain.wallet(dapp,(injector,walletAddress)=>{
-        // chain.transfer(injector.signer,props.target,props.amount,(status)=>{
-        //   console.log(status);
-        // },true,walletAddress);
+        chain.transfer(injector.signer,props.target,props.amount,(status)=>{
+          //console.log(status);
+          if(status.finalized){
+            const final_block=status.finalized
+            if(props.callback)  props.callback(
+              props.amount,
+              {from:walletAddress,to:props.target},
+              {hash:final_block},
+            )
+          }
+        },true,walletAddress);
       });
     }
   }
