@@ -252,7 +252,18 @@ const self={
                 },param);
             });
         },
-    }
+    },
+    trend:{
+        overview:(ck)=>{
+            self.init((ready)=>{
+                if(ready.error) return ck && ck({error:"Internal error."});
+                funs.request("trend","overview",(res)=>{
+                    if(res.success) return ck && ck(res);
+                    return ck && ck({error:"Failed to get data."});
+                });
+            });
+        },
+    },
 };
 
 export default self;

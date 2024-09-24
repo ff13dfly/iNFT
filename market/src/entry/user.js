@@ -46,8 +46,11 @@ function User(props) {
         chain.balance(check_address,(bs)=>{
             console.log(`Here:${bs}`);
 
-            //block 2387045, index: 13
-            chain.token();
+            /*Transaction of ERC20 Demo*/
+            //transaction
+            //chain.token();
+
+            /*Review transaction of ERC20 Demo*/
             // const transaction_hash="0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac";
             // chain.view(transaction_hash,(dt)=>{
             //     console.log(dt);

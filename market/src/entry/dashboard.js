@@ -11,6 +11,8 @@ import ChartAmount from "../component/dashboard/chart_amount";
 import ChartVolume from "../component/dashboard/chart_volume";
 import ChartMarket from "../component/dashboard/chart_market";
 
+import API from "../system/api";
+
 function Dashboard(props) {
     const size={
         row:[12],
@@ -25,7 +27,9 @@ function Dashboard(props) {
     let [info, setInfo]=useState("");
 
     useEffect(() => {
-
+        API.trend.overview((dt)=>{
+            console.log(dt);
+        });
     }, []);
     
 
