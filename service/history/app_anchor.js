@@ -162,7 +162,7 @@ const self = {
             if (!tools.empty(map)) {
                 //console.log(`Data: ${JSON.stringify(map)}`)
                 Saving(map, left, () => {
-                    //self.rightDone(status,len,ck);
+                    self.rightDone(status,len,ck);
                 });
             } else {
                 self.rightDone(status,len,ck);

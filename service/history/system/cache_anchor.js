@@ -137,7 +137,7 @@ module.exports =(map,left,ck)=>{
                 //working++;
                 const row=data.sell[i];
                 const name=row.args.key;
-                console.log(`sell[${i}]:`+JSON.stringify(row));
+                //console.log(`sell[${i}]:`+JSON.stringify(row));
 
                 //1.1. push to selling queue;  
                 
@@ -164,11 +164,23 @@ module.exports =(map,left,ck)=>{
                 //working++;
                 const row=data.buy[i];
                 const name=row.args.key;
+                console.log(`buy[${i}]:`+JSON.stringify(row));
                 //1.1. remove from selling queue;
 
                 //1.2. push to done queue;
                 
                 //1.2. push to history queue;
+                working++;
+                const qu_history=`${prefix.history}${name}`;
+                const history=[block,row.index,row.stamp,"buy",row.signer];
+                REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,"error");
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
+                },left);
 
                 //1.3. push to block queue;
             }
@@ -185,7 +197,6 @@ module.exports =(map,left,ck)=>{
                 //1.2. push to history queue;
                 working++;
                 const qu_history=`${prefix.history}${name}`;
-                console.log(qu_history);
                 const history=[block,row.index,row.stamp,"revoke",row.signer];
                 REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
                     working--;
@@ -201,18 +212,20 @@ module.exports =(map,left,ck)=>{
         }
 
         if(data.divert!==null){
-            for(let i=0;i<data.revoke.length;i++){
-                const row=data.revoke[i];
+            for(let i=0;i<data.divert.length;i++){
+                const row=data.divert[i];
                 const name=row.args.key;
 
+                //1.1. push to history queue;
             }
         }
 
         if(data.drop!==null){
-            for(let i=0;i<data.revoke.length;i++){
-                const row=data.revoke[i];
+            for(let i=0;i<data.drop.length;i++){
+                const row=data.drop[i];
                 const name=row.args.key;
 
+                //1.1. push to history queue;
             }
         }
     }

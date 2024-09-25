@@ -457,12 +457,14 @@ const self = {
 
 	getBuying:(list,block,hash)=>{
 		//console.log(JSON.stringify(list));
-
 		const arr=[];
 		for(let i=0;i<list.length;i++){
-			const row=list[i].args;
-			if(row.raw.length>1000) continue;		//skip huge anchor
+			const row=list[i];
+			//if(row.raw.length>1000) continue;		//skip huge anchor
 			//console.log(JSON.stringify(row));
+			row.block=block;
+			row.hash=hash;
+			arr.push(row);
 		}
 		return arr;
 	},
