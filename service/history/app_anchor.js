@@ -160,20 +160,20 @@ const self = {
             //console.log(JSON.stringify(map));
             const left = false;
             if (!tools.empty(map)) {
+                //console.log(`Data: ${JSON.stringify(map)}`)
                 Saving(map, left, () => {
-                    status.done_right = status.done_right + len;
-                    REDIS.setKey(config.keys.status, JSON.stringify(status), (res, err) => {
-                        if (err !== undefined) return output(`Failed to save data on Redis. Please check the system`, "error", true);
-                        return self.toRight(status, ck);
-                    });
+                    //self.rightDone(status,len,ck);
                 });
             } else {
-                status.done_right = status.done_right + len;
-                REDIS.setKey(config.keys.status, JSON.stringify(status), (res, err) => {
-                    if (err !== undefined) return output(`Failed to save data on Redis. Please check the system`, "error", true);
-                    return self.toRight(status, ck);
-                });
+                self.rightDone(status,len,ck);
             }
+        });
+    },
+    rightDone:(status,step,ck)=>{
+        status.done_right = status.done_right + step;
+        REDIS.setKey(config.keys.status, JSON.stringify(status), (res, err) => {
+            if (err !== undefined) return output(`Failed to save data on Redis. Please check the system`, "error", true);
+            return self.toRight(status, ck);
         });
     },
     autoCache: (status) => {

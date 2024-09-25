@@ -423,7 +423,46 @@ const self = {
 		//console.log(JSON.stringify(list));
 		const arr=[];
 		for(let i=0;i<list.length;i++){
+			// const row=list[i].args;
+			// const target=row.target.Id;
+			// const atom={
+			// 	name:row.key,
+			// 	block:block,
+			// 	hash:hash,
+			// 	target:row.target.Id,
+			// 	price:parseInt(row.price.replace(/,/gi,"")),
+			// 	free:target===list[i].owner,
+			// }
+			const row=list[i];
+			row.args.price=parseInt(row.args.price.replace(/,/gi,""));
+			row.block=block;
+			row.hash=hash;
 
+			arr.push(row);
+		}
+		return arr;
+	},
+
+	getRevoking:(list,block,hash)=>{
+		console.log("Revoke full data:"+JSON.stringify(list));
+		const arr=[];
+		for(let i=0;i<list.length;i++){
+			const row=list[i];
+			row.block=block;
+			row.hash=hash;
+			arr.push(row);
+		}
+		return arr;
+	},
+
+	getBuying:(list,block,hash)=>{
+		//console.log(JSON.stringify(list));
+
+		const arr=[];
+		for(let i=0;i<list.length;i++){
+			const row=list[i].args;
+			if(row.raw.length>1000) continue;		//skip huge anchor
+			//console.log(JSON.stringify(row));
 		}
 		return arr;
 	},
@@ -443,8 +482,8 @@ const self = {
 				//1.get setAnchor
 				result.set =self.getINFTs(self.filter(dt, "setAnchor",self.status(evs)),block,hash);
 				result.sell = self.getSelling(self.filter(dt, "sellAnchor",self.status(evs)),block,hash);
-				result.buy = self.filter(dt, "buyAnchor",self.status(evs));
-				result.revoke = self.filter(dt, "revokeAnchor",self.status(evs));
+				result.buy = self.getBuying(self.filter(dt, "buyAnchor",self.status(evs)));
+				result.revoke = self.getRevoking(self.filter(dt, "unsellAnchor",self.status(evs)));
 				
 				//2.new method
 				result.divert=self.filter(dt, "divertAnchor",self.status(evs));

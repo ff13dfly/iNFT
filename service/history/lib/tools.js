@@ -2,6 +2,10 @@ const self = {
   stamp: () => {
     return new Date().getTime();
   },
+  cleanThound:(num)=>{
+    if(!num) return false;
+    return num.toString().replace(/,/gi,"");
+  }, 
   day:()=>{
     const dt = new Date();
     const year = dt.getFullYear();

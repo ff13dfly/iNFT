@@ -80,7 +80,6 @@ module.exports =(map,left,ck)=>{
                 //1.2. push to template queue;
                 working++;
                 const qu_template=`${prefix.template}${NFT.tpl}`;
-                //console.log(`Template queue: ${qu_template}`);
                 REDIS.pushQueue(qu_template,key,(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,"error");
@@ -93,8 +92,7 @@ module.exports =(map,left,ck)=>{
                 //1.3. push to history queue;
                 working++;
                 const qu_history=`${prefix.history}${name}`;
-                const history=[block,row.index,"set",row.signer];
-                //console.log(`History queue: ${qu_history}`);
+                const history=[block,row.index,row.stamp,"set",row.signer];
                 REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
                     working--;
                     if(err) output(`Error:${err}`,"error");
@@ -134,12 +132,28 @@ module.exports =(map,left,ck)=>{
         }
 
         if(data.sell!==null){
+            //console.log("sell:"+JSON.stringify(data.sell));
             for(let i=0;i<data.sell.length;i++){
-                working++;
+                //working++;
                 const row=data.sell[i];
-                //1.1. push to selling queue;
+                const name=row.args.key;
+                console.log(`sell[${i}]:`+JSON.stringify(row));
+
+                //1.1. push to selling queue;  
                 
                 //1.2. push to history queue;
+                working++;
+                const qu_history=`${prefix.history}${name}`;
+                //console.log(qu_history);
+                const history=[block,row.index,row.stamp,"sell",row.signer,row.args.target.Id,row.args.price];
+                REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,"error");
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
+                },left);
 
                 //1.3. push to block queue;
             }
@@ -147,8 +161,9 @@ module.exports =(map,left,ck)=>{
 
         if(data.buy!==null){
             for(let i=0;i<data.buy.length;i++){
-                working++;
+                //working++;
                 const row=data.buy[i];
+                const name=row.args.key;
                 //1.1. remove from selling queue;
 
                 //1.2. push to done queue;
@@ -160,23 +175,45 @@ module.exports =(map,left,ck)=>{
         }
 
         if(data.revoke!==null){
-            for(let i=0;i<data.buy.length;i++){
-                working++;
-                const row=data.buy[i];
+            //console.log("revoke:"+JSON.stringify(data.revoke));
+            for(let i=0;i<data.revoke.length;i++){
+                //working++;
+                const row=data.revoke[i];
+                const name=row.args.key;
                 //1.1. remove from selling queue;
                 
                 //1.2. push to history queue;
+                working++;
+                const qu_history=`${prefix.history}${name}`;
+                console.log(qu_history);
+                const history=[block,row.index,row.stamp,"revoke",row.signer];
+                REDIS.pushQueue(qu_history,JSON.stringify(history),(res,err)=>{
+                    working--;
+                    if(err) output(`Error:${err}`,"error");
+                    if(working<1){
+                        done=true;
+                        return ck && ck();
+                    } 
+                },left);
 
                 //1.3. push to block queue;
             }
         }
 
         if(data.divert!==null){
+            for(let i=0;i<data.revoke.length;i++){
+                const row=data.revoke[i];
+                const name=row.args.key;
 
+            }
         }
 
         if(data.drop!==null){
+            for(let i=0;i<data.revoke.length;i++){
+                const row=data.revoke[i];
+                const name=row.args.key;
 
+            }
         }
     }
 
