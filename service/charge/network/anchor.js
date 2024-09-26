@@ -1,16 +1,5 @@
-import { mnemonicGenerate } from "@polkadot/util-crypto";
-import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
-import { web3Accounts, web3Enable, web3FromAddress } from "@polkadot/extension-dapp";
 
-import Config from "../system/config";
-import Status from "../system/status";
-
-const dt = Config.get(["network", "anchor"]);
-const config = {
-    node: dt.nodes[0],  //Tanssi appchain URI
-    target: dt.interval,           //How long to create a new block
-}
-
+const { ApiPromise, WsProvider,Keyring } = require("@polkadot/api");
 const subs = {};        //subscribe funs
 const registry = {};        //chainspec details
 
@@ -87,9 +76,10 @@ const funs = {
 
 let wsAPI = null;
 let linking = false;
+let uri_node="";
 const self = {
     init: (ck) => {
-        const uri = config.node;
+        const uri = uri_node;
         if (linking) return setTimeout(() => {
             self.init(ck);
         }, 500);
@@ -97,7 +87,6 @@ const self = {
         if (wsAPI !== null) return ck && ck(wsAPI);
 
         linking = true;
-        Status.set(uri, 2);      //trying, update uri status
         const provider = new WsProvider(uri);
         ApiPromise.create({ provider: provider }).then((api) => {
             console.log(`Linked to node ${uri}`);
@@ -105,7 +94,6 @@ const self = {
             funs.detail(api.registry);
             wsAPI = api;
             linking = false;
-            Status.set(uri, 1);      //normal, update uri status
             //add the listener;
             wsAPI.rpc.chain.subscribeFinalizedHeads((lastHeader) => {
                 const data = JSON.parse(JSON.stringify(lastHeader));
@@ -118,10 +106,12 @@ const self = {
             return ck && ck(wsAPI);
         }).catch((error) => {
             console.log(error);
-            Status.set(uri, 4);  //failed, update uri status
             linking = false;
             return ck && ck(error);
         });
+    },
+    set:(uri)=>{
+        uri_node=uri;
     },
     metadata: (ck) => {
         self.init(() => {
@@ -238,16 +228,6 @@ const self = {
         });
     },
 
-    wallet: async (dapp, ck) => {
-        const extensions = await web3Enable(dapp);
-        if (extensions.length === 0) {
-            return ck && ck({ error: "No subwallet extention" });
-        }
-        const allAccounts = await web3Accounts();
-        const account = allAccounts[0];
-        const injector = await web3FromAddress(account.address);
-        return ck && ck(injector, account.address);
-    },
     sell: (pair, name, price, ck, target) => {
         self.init(() => {
             self.view(name, "owner", (signer) => {
@@ -264,34 +244,6 @@ const self = {
                 }
             });
         });
-    },
-    sign: async (obj, ck, wallet, param) => {
-        self.init(async () => {
-            let { anchor, raw, protocol } = obj;
-            if (typeof protocol !== "string") protocol = JSON.stringify(protocol);
-            if (typeof raw !== "string") raw = JSON.stringify(raw);
-            if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
-
-            const pre = 0;
-
-            const extensions = await web3Enable(obj.dapp);
-            if (extensions.length === 0) {
-                return ck && ck({ error: "No subwallet extention" });
-            }
-
-            const allAccounts = await web3Accounts();
-            const account = allAccounts[0];
-            const injector = await web3FromAddress(account.address);
-            const tx = wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre);
-            tx.signAndSend(account.address, { signer: injector.signer }, (res) => {
-                const dt = res.toHuman();
-                funs.decodeProcess(dt, (status) => {
-                    return ck && ck(status);
-                });
-            }).catch((error) => {
-                return ck && ck({ error: "Sign error, maybe low balance." });
-            });
-        })
     },
     buy: (pair, anchor, ck, wallet, address) => {
         self.init(() => {
@@ -473,43 +425,6 @@ const self = {
                     });
 
                     break;
-                case "detail":
-                    wsAPI.rpc.chain.getBlock(value).then((res) => {
-                        const exs = res.block.extrinsics;
-                        const bk = res.block.header.toJSON();
-                        const infts = [];
-                        if (exs.length === 1) return ck && ck(infts);
-                        exs.forEach((ex, index) => {
-                            const row = ex.toHuman();
-                            if (!row.isSigned) return false;     //skip the unsigned, no iNFT
-                            if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
-                                const dt = row.method.args;
-                                try {
-                                    const protocol = JSON.parse(dt.protocol);
-                                    if (protocol && protocol.tpl && protocol.tpl.toLowerCase() === "inft") {
-                                        const raw = JSON.parse(dt.raw);
-                                        const inft = {
-                                            name: dt.key,
-                                            raw: raw,
-                                            protocol: protocol,
-                                            pre: parseInt(dt.pre),
-                                            signer: row.signer.Id,
-                                            owner: row.signer.Id,
-                                            hash: value,
-                                            block: bk.number,
-                                            valid: true,
-                                            network: "anchor",
-                                        }
-                                        infts.push(inft);
-                                    }
-                                } catch (error) {
-
-                                }
-                            }
-                        });
-                        return ck && ck(infts);
-                    });
-                    break;
                 case "blocknumber":   //value: number
                     wsAPI.rpc.chain.getBlockHash(value, (res) => {
                         const hash = res.toHex();
@@ -557,109 +472,9 @@ const self = {
     divide: () => {
         return 1000000;
     },
-    accuracy: (ck) => {
+    accuracy: () => {
         return 1000000;
-        // self.init(()=>{
-        //     return  ck && ck( Math.pow(10, registry.decimals));
-        // });
-    },
-    bounty: {
-
-        //create the bounty ticket on chain
-        create: (dapp, obj, ck) => {
-            self.init(() => {
-                self.view({ name: obj.name, block: obj.block }, "anchor", (data) => {
-                    if (data === false) return ck && ck({ error: "Invalid bounty on chain" });
-                    self.bounty.exsist(obj.name,obj.block,async (is)=>{
-                        if(is!==false) return ck && ck({ error: "Bounty setting exsists." });
-                        
-                        const extensions = await web3Enable(dapp);
-                        if (extensions.length === 0) {
-                            return ck && ck({ error: "No subwallet extention" });
-                        }
-                        const allAccounts = await web3Accounts();
-                        const address = allAccounts[0].address;                   
-                        if (data.owner !== address) return ck && ck({ error: "Not the owner of bounty." });
-
-                        self.balance(address, async (bs) => {
-                            const amount = parseInt(parseFloat(obj.price) * self.divide());
-                            if (bs.free < (amount + 10)) return ck && ck({ error: `Low balance of ${address}` });
-
-                            const injector = await web3FromAddress(address);
-                            const tx=wsAPI.tx.bounty.create(obj.name, obj.block, amount, obj.expire);
-                            tx.signAndSend(address, { signer: injector.signer }, (res) => {
-                                const status = res.status.toJSON();
-                                return ck && ck(status);
-                            });
-                        });
-                    });
-                });
-            });
-        },
-        //wether bounty ticket setting.
-        exsist: (name, block, ck) => {
-            self.init(() => {
-                let unsub = null;
-                wsAPI.query.bounty.bounty(name, block, (res) => {
-                    unsub();
-                    const dt = res.toJSON();
-                    if (!dt) return ck && ck(false);
-                    return ck && ck({ owner: dt[0], price: dt[1], expire: dt[2] });
-                }).then((fun) => {
-                    unsub = fun;
-                });
-            });
-        },
-
-        //buy a ticket
-        ticket: (dapp, obj, ck) => {
-            self.init(() => {
-
-            });
-        },
-        //check wether bought ticket
-        check: (name, block, addr, ck) => {
-            self.init(() => {
-                let unsub = null;
-                wsAPI.query.bounty.tickets(name, block, addr, (res) => {
-                    unsub();
-                    const dt = res.toJSON();
-                    if (!dt) return ck && ck(false);
-
-                    return ck && ck({ block: dt });
-                }).then((fun) => {
-                    unsub = fun;
-                });
-            });
-            
-        },
-    },
-    events: {        //TODO, here to add events listeners.
-        payed: () => {
-
-        },
-    },
-    test: () => {
-        test.auto();
-    }
-}
-
-const test = {
-    auto: () => {
-        test.test_view();
-        test.test_metadata();
-    },
-    test_metadata: () => {
-        self.metadata((dt) => {
-            console.log(dt.toHuman());
-        });
-    },
-    test_view: () => {
-        const block = 384394;
-        self.view(block, "blocknumber", (dt) => {
-            console.log(dt);
-        });
     },
 }
 
-export default self;
+module.exports = self;

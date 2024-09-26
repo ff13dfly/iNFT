@@ -13,9 +13,9 @@
 // $INFT 3.1415926 transaction hash
 //0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac
 
-import {Web3} from "web3";
-import abi from "erc-20-abi";
-import tools from "./tools";
+const {Web3}=require("web3");
+const abi=require("erc-20-abi");
+const tools=require("../lib/tools");
 
 const config = {
     node: "https://holesky.infura.io/v3/799349fbc6ff411983d3d1feba0a3bc7",  //Tanssi appchain URI
@@ -157,4 +157,4 @@ const self={
     }
 }
 
-export default self;
+module.exports = self;

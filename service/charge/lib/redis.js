@@ -15,10 +15,18 @@ const self={
             return ck && ck(res);
         });
     },
-    setKey:(key,value,ck)=>{
+    setKey:(key,value,ck,at)=>{
         client.set(key,value).then((res,err) => {
             if(err) return ck && ck(err);
-            return ck && ck(res);
+
+            if(at!==undefined){
+                client.expire(key,at).then((res,err) => {
+                    if(err) return ck && ck(err);
+                    return ck && ck(res);
+                });
+            }else{
+                return ck && ck(res);
+            }
         });
     },
     setHash:(main,key,val,ck)=>{

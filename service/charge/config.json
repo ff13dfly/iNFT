@@ -3,8 +3,9 @@
     "server":{
         "port":6677
     },
-    "anchor":{
-        "node":["ws://localhost:9944"]
+    "network":{
+        "anchor":["ws://localhost:9944"],
+        "ether":[""]
     },
     "redis":{
         "host":"localhost",
@@ -15,6 +16,7 @@
         "sum":"usdt_total_amount",
         "count":"usdt_transaction_amount",
         "history":"usdt_transaction_map",
+        "prefix_salt":"charge_salt_",
         "prefix_record":"charge_usdt_",
         "prefix_account":"chaget_account_"
     },
