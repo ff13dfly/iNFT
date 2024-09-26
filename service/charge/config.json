@@ -14,8 +14,10 @@
     "keys":{
         "sum":"usdt_total_amount",
         "count":"usdt_transaction_amount",
-        "history":"usdt_transaction_map"
+        "history":"usdt_transaction_map",
+        "prefix":"charge_usdt_"
     },
+    "rate":19.99,
     "version":"2.0.0",
     "update":"2024.9",
     "auth":"Fuu"

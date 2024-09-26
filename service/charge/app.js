@@ -3,14 +3,10 @@ const IO = require("./lib/file.js");
 const { output } = require("./lib/output.js");
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const { REDIS } = require("./lib/redis.js");
 
 const args = process.argv.slice(2);
 const config_file=!args[0]?"config.json":args[0];
-
-
-
-
 
 const self={
     init:(ck)=>{
@@ -25,10 +21,13 @@ const self={
                 const config=JSON.parse(data);
                 return ck && ck(config);
             } catch (error) {
-                //console.log(error);
                 return ck && ck({error:"Failed to parse config file."});
             }
         });
+    },
+    checkHash:(hash,ck)=>{
+
+        return ck && ck(19.99);
     },
 };
 
@@ -61,9 +60,32 @@ self.init((cfg)=>{
         app.get("/:hash", (req, res) => {
             const hash = req.params.hash;
             if(hash.length!==66) return res.send({ error: "Invalid transaction hash." });
-            res.send(hash);
+            //res.send(hash);
+
+            const prefix=cfg.keys.prefix;
+            const key=`${prefix}${hash}`;
+            
+            REDIS.exsistKey(key,(here)=>{
+                if(here) return res.send({error: "Dumplicate request." });
+                self.checkHash(hash,(amount)=>{
+                    console.log(key,amount);
+
+                    //1.saving the hash and set the status 
+                    const row={
+                        usdt:amount,
+                        rate:cfg.rate,
+                        coin:0,
+                        hash:hash,
+                    }
+
+                    //2.sent the $ANK coin;
+
+                    //3.update charge order status
+
+                    //4.update the overview data
+
+                });
+            });
         });
     });
-
-    
 });
