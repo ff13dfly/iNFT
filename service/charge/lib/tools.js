@@ -26,6 +26,9 @@ const self = {
     if (n === undefined) n = 10;
     return addr.substr(0, n) + "..." + addr.substr(addr.length - n, n);
   },
+  clone:(arr_obj)=>{
+    return JSON.parse(JSON.stringify(arr_obj));
+  },
   copy:(arr_obj)=>{
     return JSON.parse(JSON.stringify(arr_obj));
   },
