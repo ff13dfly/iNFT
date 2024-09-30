@@ -27,7 +27,6 @@ const status={
 };
 const self={
     init:(ck)=>{
-        
         IO.read(config_file,(data)=>{
             if(data.error) return ck && ck({error:"Failed to load config file."});
             try {
@@ -82,8 +81,7 @@ self.init((cfg)=>{
         app.get("/bind", (req, res) => {
             //1.get the salt
             const salt=tools.char(16);
-            const prefix=cfg.keys.prefix_salt;
-            const key=`${prefix}${salt}`;
+            const key=`${cfg.keys.prefix_salt}${salt}`;
             const expired=30*60;            //30 mins expire
             const record={
                 stamp:tools.stamp(),
@@ -93,6 +91,7 @@ self.init((cfg)=>{
             //2.save the cache record
             console.log(record,key);
             REDIS.setKey(key,JSON.stringify(record),(done)=>{
+                if(!done) return res.send({error:"Internal error, redis crush down."});
                 res.send({salt:salt,expire:expired});
             },expired);
         });
@@ -100,11 +99,41 @@ self.init((cfg)=>{
         app.get("/check/:anchor/:block", (req, res) => {
             const anchor=req.params.anchor;     //PoE anchor name
             const block=req.params.block;       //PoE record blocknumber
-            AnchorJS.view({name:anchor,block:block},"anchor",(data)=>{
-                console.log(data);
-            }); 
 
-            res.send("");
+            //1. confirm the PoE anchor
+            AnchorJS.view({name:anchor,block:block},"anchor",(ak)=>{
+                if(ak===false) return res.send({error:"No target anchor to confirm account relationship"});
+                try {
+                    const json=JSON.parse(ak.data);
+                    //2.check the network and account
+                    if(!json.salt) return res.send({error:"Invalid account confirmation"});
+                    console.log(json);
+
+                    const key=`${cfg.keys.prefix_salt}${json.salt}`;
+                    REDIS.getKey(key,(record)=>{
+                        console.log(record);
+                    },expired);
+
+                    const local={
+                        anchor:`anchor://${anchor}/${block}`,
+                        address:json.address,
+                        network:json.network,
+                    }
+
+                    const akey=`${cfg.keys.prefix_record}${ak.owner}`;
+                    REDIS.setKey(key,JSON.stringify(local),(res)=>{
+                        if(!done) return res.send({error:"Internal error, redis crush down."});
+                        res.send({success:true});
+                    });
+
+                } catch (error) {
+                    return res.send({error:"Failed to decode check account"});
+                }
+                console.log(data);
+
+                res.send("");
+            }); 
+            
         });
 
 

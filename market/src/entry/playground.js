@@ -263,7 +263,20 @@ function Playground(props) {
                 </Col>
 
                 <Col className="pt-2" md={size.header[1]} lg={size.header[1]} xl={size.header[1]} xxl={size.header[1]} >
+                    
                     <Row className="pt-2">
+                        {/* <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
+                            <h5 className="playground_title">iNFT Series ( {series.length} )</h5>
+                        </Col>
+                        <Col className="pt-2 text-end" md={size.title[1]} lg={size.title[1]} xl={size.title[1]} xxl={size.title[1]} >
+                            <button className="btn btn-sm btn-light" onClick={(ev) => {
+                                self.switchSeries(ev);
+                            }}>{!hideSeries ? <FaEye /> : <FaEyeSlash />}</button>
+                        </Col>
+                        <Col hidden={hideSeries} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+                            <SeriesINFT template={search} fresh={self.single} />
+                        </Col> */}
+
                         <Col className="pt-2" md={size.title[0]} lg={size.title[0]} xl={size.title[0]} xxl={size.title[0]} >
                             <h5 className="playground_title">Mock Data</h5>
                         </Col>
@@ -272,6 +285,7 @@ function Playground(props) {
                                 self.switchMock(ev);
                             }}>{!hideMock ? <FaEye /> : <FaEyeSlash />}</button>
                         </Col>
+
                         <Col hidden={hideMock} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
                             <MockOffset parts={parts} hash={hash} offset={offset} selected={selected} callback={(res, act) => {
                                 if (res) setOffset(res);
