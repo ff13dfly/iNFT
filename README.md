@@ -2,125 +2,125 @@
 
 ## Overview
 
-- It is a new PoW way to mint NFT by block hash and gene template file on IPFS.
+* It is a new PoW way to mint NFT by block hash and gene template file on IPFS.
 
-- The design of gene template can make iNFT identifiable, the scarcity can be confirmed.
+* The design of gene template can make iNFT identifiable, the scarcity can be confirmed.
 
-- As the block hash of blockchain network is random and unique, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can compare value between different networks by mathematics scarcity.
+* As the block hash of blockchain network is random and unique, iNFT can be deployed to multi chain. It is pretty interesting that Dapp can compare value between different networks by mathematics scarcity.
 
-- Try iNFT full functions, [iNFT System](https://inft.w3os.net)
+* Try iNFT full functions, [iNFT System](https://inft.w3os.net)
 
-- Just minting, [iNFT Minter](https://minter.inft.w3os.net)
+* Just minting, [iNFT Minter](https://minter.inft.w3os.net)
 
 ## Dapps
 
 ### Editor
 
-- **Function**, It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
+* **Function**, It is the tools for designer to set the parameters for iNFT. Only the source image needed, the iNFT parts can be added here.
 
-- **Language and Framework**,   React ( Javascript )
+* **Language and Framework**,   React ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/editor](https://github.com/ff13dfly/iNFT/tree/master/editor)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/editor](https://github.com/ff13dfly/iNFT/tree/master/editor)
 
-- Multi networks support, you can write the iNFT template on different blockchain network.
+* Multi networks support, you can write the iNFT template on different blockchain network.
 
-- Single iNFT file upload/download support.
+* Single iNFT file upload/download support.
 
 ### Minter
 
-- **Function**, The client Dapp for normal users.
+* **Function**, The client Dapp for normal users.
 
-- **Language and Framework**,   React ( Javascript )
+* **Language and Framework**,   React ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/mint](https://github.com/ff13dfly/iNFT/tree/master/mint)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/mint](https://github.com/ff13dfly/iNFT/tree/master/mint)
 
-- Customer can explorer the templates, then mint on selected template.
+* Customer can explorer the templates, then mint on selected template.
 
-- The list of result can be checked from minter.
+* The list of result can be checked from minter.
 
-- In some network, you can manage your account here.
+* In some network, you can manage your account here.
 
 ### Market
 
-- **Function**, Selling market of iNFT result. Customers can price the NFT themselves.
+* **Function**, Selling market of iNFT result. Customers can price the NFT themselves.
 
-- **Language and Framework**,   React ( Javascript )
+* **Language and Framework**,   React ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
 
-- Different networks supported.
+* Different networks supported.
 
 ### Bounty
 
-- **Function**, Bounty for airdrop base on iNFT, merchant can publish bounty iNFT.
+* **Function**, Bounty for airdrop base on iNFT, merchant can publish bounty iNFT.
 
-- **Language and Framework**,   React ( Javascript )
+* **Language and Framework**,   React ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/market](https://github.com/ff13dfly/iNFT/tree/master/market)
 
-- Different networks supported. Full workflow on Anchor Network.
+* Different networks supported. Full workflow on Anchor Network.
 
 ### Service
 
 #### Faucet
 
-- **Function**, User get airdrop from Anchor Network.
+* **Function**, User get airdrop from Anchor Network.
 
-- **Language and Framework**,   Node.js ( Javascript )
+* **Language and Framework**,   Node.js ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/airdrop](https://github.com/ff13dfly/iNFT/tree/master/service/airdrop)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/airdrop](https://github.com/ff13dfly/iNFT/tree/master/service/airdrop)
 
-- User get airdrop from Anchor Network.
+* User get airdrop from Anchor Network.
 
 #### API
 
-- **Function**, get the bounty and cached iNFTs on server.
+* **Function**, get the bounty and cached iNFTs on server.
 
-- **Language and Framework**,  PHP, Redis, MySQL
+* **Language and Framework**,  PHP, Redis, MySQL
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/api](https://github.com/ff13dfly/iNFT/tree/master/service/api)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/api](https://github.com/ff13dfly/iNFT/tree/master/service/api)
 
-- Cooperating with `Cache Robot` to supply the iNFT data service.
+* Cooperating with `Cache Robot` to supply the iNFT data service.
 
 #### Portal
 
-- **Function**, managment portal for `market` and `bounty`.
+* **Function**, managment portal for `market` and `bounty`.
 
-- **Language and Framework**,  PHP, Redis, MySQL
+* **Language and Framework**,  PHP, Redis, MySQL
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/portal](https://github.com/ff13dfly/iNFT/tree/master/service/portal)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/portal](https://github.com/ff13dfly/iNFT/tree/master/service/portal)
 
-- Bounty management. Put bounty on line or off line. Check the applying. Saving the bonus payment on Anchor Network.
+* Bounty management. Put bounty on line or off line. Check the applying. Saving the bonus payment on Anchor Network.
 
 #### Cache Robot
 
-- **Function**, cache iNFT records and group them.
+* **Function**, cache iNFT records and group them.
 
-- **Language and Framework**,   Node.js ( Javascript )
+* **Language and Framework**,   Node.js ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/history](https://github.com/ff13dfly/iNFT/tree/master/service/history)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/history](https://github.com/ff13dfly/iNFT/tree/master/service/history)
 
-- Group iNFTs by address.
+* Group iNFTs by address.
 
-- Group iNFTs by template.
+* Group iNFTs by template.
 
-- Record of iNFT history, including all actions (set, sell, buy, revoke, divert, drop)
+* Record of iNFT history, including all actions (set, sell, buy, revoke, divert, drop)
 
-- Subcribe Anchor Network to update the history of iNFT.
+* Subcribe Anchor Network to update the history of iNFT.
 
 #### Minting Robot
 
-- **Function**, mint iNFT by setting.
+* **Function**, mint iNFT by setting.
 
-- **Language and Framework**,   Node.js ( Javascript )
+* **Language and Framework**,   Node.js ( Javascript )
 
-- **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/robot](https://github.com/ff13dfly/iNFT/tree/master/service/robot)
+* **Github URL**, [https://github.com/ff13dfly/iNFT/tree/master/service/robot](https://github.com/ff13dfly/iNFT/tree/master/service/robot)
 
-- Multi accounts support to mint iNFT.
+* Multi accounts support to mint iNFT.
 
 ## Definition of iNFT
 
-- The template of iNFT definition as follow. 
+* The template of iNFT definition as follow. 
 
     ```Javascript
         //iNFT template
@@ -188,7 +188,7 @@
         }
     ```
 
-- iNFT mint data as follow. It is pretty simple to save gas fee.
+* iNFT mint data as follow. It is pretty simple to save gas fee.
 
     ```Javascript
         {
@@ -203,33 +203,33 @@
 
 ### Goal
 
-- Create PoW iNFT asset.
+* Create PoW iNFT asset.
 
-- Even the `Anchor Network` crashed, the asset created on `Ethereum Network` is also valid.
+* Even the `Anchor Network` crashed, the asset created on `Ethereum Network` is also valid.
 
 ### Workflow
 
-- Create a `Salt` on `Ethereum Network`, it is related to `Bitcoin Network`.
+* Create a `Salt` on `Ethereum Network`, it is related to `Bitcoin Network`.
 
-- Using the `Salt` as parameter to mint iNFT on substate `Anchor Network`.
+* Using the `Salt` as parameter to mint iNFT on substate `Anchor Network`.
 
-- `Bridge` package the mintings and save the merkel root hash on `Ethereum Network`.
+* `Bridge` package the mintings and save the merkel root hash on `Ethereum Network`.
 
-- When want to create the asset of iNFT on `Anchor Network`, write the iNFT data and supply the merkel path.
+* When want to create the asset of iNFT on `Anchor Network`, write the iNFT data and supply the merkel path.
 
-- Validor confirm the iNFT, the iNFT on `Anchor Network` will be dropped then.
+* Validor confirm the iNFT, the iNFT on `Anchor Network` will be dropped then.
 
 ### Howto
 
-- `Substrate` chain such as Anchor Network is used to mint the iNFT.
+* `Substrate` chain such as Anchor Network is used to mint the iNFT.
 
-- Bridge will package the mintings and save the merkel tree root on Ethereum Network.
+* Bridge will package the mintings and save the merkel tree root on Ethereum Network.
 
-- When somebody want to bridge the iNFT on Anchor Network to other blockchain network, just drop the iNFT on Anchor Network and leave the last words about which account to accept the bridged iNFT. Then no need to write the bridge information when it is on Anchor Network.
+* When somebody want to bridge the iNFT on Anchor Network to other blockchain network, just drop the iNFT on Anchor Network and leave the last words about which account to accept the bridged iNFT. Then no need to write the bridge information when it is on Anchor Network.
 
-- By `Last Words` way, the iNFT is simple on Anchor Network.
+* By `Last Words` way, the iNFT is simple on Anchor Network.
 
-- Leaf data sample
+* Leaf data sample
 
     ```Javascript
         {

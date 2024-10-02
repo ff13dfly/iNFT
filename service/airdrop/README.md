@@ -1,20 +1,20 @@
 # Faucet Service
 
-- Language: Javascript, support: NodeJS.
+* Language: Javascript, support: NodeJS.
 
-- Airdrop to request account. Will record daily to avoid DDOS.
+* Airdrop to request account. Will record daily to avoid DDOS.
 
-- 3 accounts for airdrop, turn by (day%3).
+* 3 accounts for airdrop, turn by (day%3).
 
 ## Airdrop Daily
 
 ## Deployment
 
-- Server URL: https://faucet.w3os.net
+* Server URL: https://faucet.w3os.net
 
-- Create task on Jenkins to copy the application and accounts to server.
+* Create task on Jenkins to copy the application and accounts to server.
 
-- Build to min file by `esbuild`.
+* Build to min file by `esbuild`.
 
     ```SHELL
         #Need esbuild support

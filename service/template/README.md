@@ -1,16 +1,16 @@
 # Temaplate Cache Service
 
-- Language: Javascript, support: NodeJS.
+* Language: Javascript, support: NodeJS.
 
-- Cache the IPFS files.
+* Cache the IPFS files.
 
 ## Deployment
 
-- Server URL: https://ipfs.w3os.net
+* Server URL: https://ipfs.w3os.net
 
-- Create task on Jenkins to copy the application and IPFS files to server.
+* Create task on Jenkins to copy the application and IPFS files to server.
 
-- Build to min file by `esbuild`.
+* Build to min file by `esbuild`.
 
     ```SHELL
         #Need esbuild support
@@ -22,7 +22,7 @@
         iptables -I INPUT -p tcp --dport 8188 -j ACCEPT
     ```
 
-- Nignx setting
+* Nignx setting
 
     ```SHELL
 

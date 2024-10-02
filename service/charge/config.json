@@ -7,6 +7,10 @@
         "anchor":["ws://localhost:9944"],
         "ether":[""]
     },
+    "record":{
+        "anchor":"chargeme",
+        "account":"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg"
+    },
     "redis":{
         "host":"localhost",
         "port":6379,

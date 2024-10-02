@@ -1,18 +1,18 @@
 # Anchor Cache Service
 
-- Language: Javascript, support: NodeJS.
+* Language: Javascript ( NodeJS ).
 
-- Cache the anchors to local.
+* Cache the anchors to local.
 
 ## Functions
 
-- Cache iNFT to local. Save as file, one file per hour.
+* Cache iNFT to local. Save as file, one file per hour.
 
 ## Deployment
 
-- Server URL: https://api.w3os.net
+* Server URL: https://api.w3os.net
 
-- Build to min file by `esbuild`.
+* Build to min file by `esbuild`.
 
     ```SHELL
         #Need esbuild support
@@ -29,7 +29,7 @@
         iptables -I INPUT -p tcp --dport 7766 -j ACCEPT
     ```
 
-- Nignx setting
+* Nignx setting
 
     ```SHELL
 
@@ -39,9 +39,9 @@
 
 ### Anchor
 
-- Raw anchor data sample, storage as the data on block.
+* Raw anchor data sample, storage as the data on block.
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.hset("raw","ANCHOR_NAME","ANCHOR_DATA")
@@ -62,9 +62,9 @@
 
 ### Block
 
-- Cache the block iNFT list
+* Cache the block iNFT list
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.hset("block","BLOCk_NUMBER","SAMPLE")
@@ -73,9 +73,9 @@
 
 ### History
 
-- Cache the iNFT history by Anchor name.
+* Cache the iNFT history by Anchor name.
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.lPush("ANCHOR_NAME","ACTIONS")
@@ -84,9 +84,9 @@
 
 ### Selling
 
-- Cache the iNFT list by selling status
+* Cache the iNFT list by selling status
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.lPush("SELLING","ANCHOR_NAME")
@@ -95,9 +95,9 @@
 
 ### Done
 
-- Cache the iNFT list by sold status
+* Cache the iNFT list by sold status
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.lPush("SELLING","ANCHOR_NAME")
@@ -106,9 +106,9 @@
 
 ### Template
 
-- Cache the iNFT list by template
+* Cache the iNFT list by template
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.lPush("TEMPLATE_NAME","ANCHOR_NAME")
@@ -117,9 +117,9 @@
 
 ### Account
 
-- Cache the iNFT list by owner account
+* Cache the iNFT list by owner account
 
-- Sample.
+* Sample.
 
     ```Javascript
         // redis.lPush("ACCOUNT_ADDRESS","ANCHOR_NAME")

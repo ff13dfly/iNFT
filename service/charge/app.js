@@ -73,6 +73,10 @@ self.init((cfg)=>{
         output(`[Bind salt]  http://localhost:${cfg.server.port}/bind`,"primary", true);
         output(`[PoE check] http://localhost:${cfg.server.port}/check/${demo_anchor}/${demo_block}`,"primary", true);
         
+        //Checking actions.
+        //1.check the record anchor owner
+        //2.check params to clean the local record and build from anchor record
+
         app.get("/", (req, res) => {
             res.send("");
         });
@@ -182,12 +186,13 @@ self.init((cfg)=>{
 
                         //3.sent the $ANK coin;
 
-                        //4.update charge order status
+                        //4.add record to "ANCHOR_RECORD" on chain
+
+                        //5.update charge order status
                         const norder=tools.clone(row);
                         norder.status=status.payment.ANK_PAYMENT_DONE;
 
-                        //5.update the overview data
-
+                        //6.update the overview data
 
                     });
                 });
