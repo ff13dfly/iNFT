@@ -24,12 +24,17 @@
 
 ## PoE
 
-* The PoE(Proof Of Exsistence) sample JSON data.
+* The PoE(Proof Of Exsistence) sample JSON data. The owner of anchor is treated as the accept account.
 
     ```Javascript
+
+        //String format:
+        //{"salt":"iVmMlBwToJvNuHrL","network":"ethereum","account":"0xD4C8251C06C5776Fa2B488c6bCbE1Bf819D92d83"}
         {
             "salt":"SALT_FROM_CHARGE_SERVER",
-            "network":"",
-            "account":"ACCOUNT_OF_TARGET_NETWORK",
+            "network":"ethereum",
+            "account":"ACCOUNT_OF_TARGET_NETWORK",   
         }
+
+       
     ```
