@@ -16,6 +16,11 @@
         "port":6379,
         "auth":""
     },
+    "accounts":[
+        ["5DHyRTPRocpjSfSWU8qegHWkYEUYzJhrviLSEoxVuKT3FvjU","c123456"],
+        ["5Gub3J2cGDphDd9uMt6wcPpJezgxMQ2esvXK1gaY935xaXfr","c123456"],
+        ["5HBVRKCjWxSQUEEiguSKbGJLCmLgpA9RfhJJqfx9abwLqSWR","c123456"]
+    ],
     "keys":{
         "sum":"usdt_total_amount",
         "count":"usdt_transaction_amount",

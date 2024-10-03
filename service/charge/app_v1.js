@@ -8,6 +8,8 @@ const IO = require("./lib/file.js");
 const { output } = require("./lib/output.js");
 const { REDIS } = require("./lib/redis.js");
 
+const Token=require("./system/recover.js");
+
 //networks
 const AnchorJS = require("./network/anchor.js");
 const Ether = require("./network/ethereum.js");
@@ -33,6 +35,8 @@ const self = {
             if (data.error) return ck && ck({ error: "Failed to load config file." });
             try {
                 const config = JSON.parse(data);
+
+
                 AnchorJS.set(config.network.anchor[0]);
                 return ck && ck(config);
             } catch (error) {
@@ -40,23 +44,24 @@ const self = {
             }
         });
     },
-    checkHashToGetAmount: (hash, ck) => {
-        const result={  
-            amount:19.9,                                                //transaction amount
-            account:"0xD4C8251C06C5776Fa2B488c6bCbE1Bf819D92d83",       //signer account
-            stamp:0,                                                    //transaction timestamp
-        };
-        return ck && ck(result);
+    config:(cfg,ck)=>{
+
     },
     recordOnChain:(from,charge,ck)=>{
         
     },
-    payANK: (addr,amount, ck) => {
-        const result={
-            hash:"TRANSACTION_HASH",
-            index:0,
-        }
-        return ck && ck(result);
+    getAccountToPay:(amount,accounts,ck,ignore)=>{
+
+        console.log(accounts);
+    },
+    payANK: (addr,amount,accounts,ck) => {
+        self.getAccountToPay(amount,(pair)=>{
+            const result={
+                hash:"TRANSACTION_HASH",
+                index:0,
+            }
+            return ck && ck(result);
+        });
     },
 };
 
@@ -167,7 +172,7 @@ self.init((cfg) => {
 
             REDIS.exsistKey(key, (here) => {
                 if (here) return res.send({ error: "Dumplicate request." });
-                self.checkHashToGetAmount(hash, (basic) => {
+                Token.check(hash, (basic) => {
 
                     //1.saving the hash and set the status 
                     const record = {
@@ -188,7 +193,7 @@ self.init((cfg) => {
                             try {
                                 const adata=JSON.parse(local);
                                 //3.sent the $ANK coin;
-                                self.payANK(adata.address,basic.amount,(trans)=>{
+                                self.payANK(adata.address,basic.amount,cfg.account,(trans)=>{
 
                                     //4.add record to "ANCHOR_RECORD" on chain
                                     const from={
