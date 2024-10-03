@@ -1,4 +1,7 @@
-
+/* check the related account between ethereum and anchor
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 const tools = require("../lib/tools.js");
 const { REDIS } = require("../lib/redis.js");
 const AnchorJS = require("../network/anchor.js");

@@ -1,3 +1,7 @@
+/* Charge the target Anchor Network account, record the charge on chain
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 
 const { REDIS } = require("../lib/redis.js");
 const AnchorJS = require("../network/anchor.js");

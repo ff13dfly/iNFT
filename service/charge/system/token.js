@@ -1,3 +1,8 @@
+/* check the token on Ethereum Network
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
+
 const Ether = require("../network/ethereum.js");
 
 let config=null;

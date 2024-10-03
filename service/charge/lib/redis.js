@@ -1,3 +1,7 @@
+/* Redis library for NodeJS
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 const redis = require("redis");
 const client = redis.createClient();
 client.connect();

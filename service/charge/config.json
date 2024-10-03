@@ -9,7 +9,8 @@
     },
     "record":{
         "anchor":"chargeme",
-        "account":"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg"
+        "account":"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg",
+        "password":"123456"
     },
     "redis":{
         "host":"localhost",

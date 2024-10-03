@@ -1,3 +1,7 @@
+/* basic functions by my own
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 const self = {
   stamp: () => {
     return new Date().getTime();

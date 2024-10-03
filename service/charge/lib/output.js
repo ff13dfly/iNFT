@@ -1,3 +1,7 @@
+/* output in console
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 const theme = {
     error: "\x1b[31m%s\x1b[0m",
     success: "\x1b[36m%s\x1b[0m",

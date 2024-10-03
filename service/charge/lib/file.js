@@ -1,3 +1,7 @@
+/* read local file
+ *  auth: Fuu
+ *  date: 2024-10-3
+ */
 const fs = require("fs");
 const file = {
     read: (target, ck, toJSON, toBase64) => {
