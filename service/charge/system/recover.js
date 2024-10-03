@@ -1,7 +1,7 @@
 const { REDIS } = require("../lib/redis.js");
 
 let config=null;
-const Recover = {
+const self = {
     set:(setting)=>{
         config=setting;
     },
@@ -10,4 +10,4 @@ const Recover = {
     },
 };
 
-module.exports = Recover;
+module.exports = self;

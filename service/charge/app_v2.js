@@ -3,9 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 //library
-const tools = require("./lib/tools.js");
 const IO = require("./lib/file.js");
-const { output } = require("./lib/output.js");
 
 //system
 const SYSTEM={
@@ -14,27 +12,12 @@ const SYSTEM={
     token:require("./system/token.js"),
     transaction:require("./system/transaction.js"),
 }
-
-
-const { REDIS } = require("./lib/redis.js");
-
 //networks
 const AnchorJS = require("./network/anchor.js");
-const Ether = require("./network/ethereum.js");
+//const Ether = require("./network/ethereum.js");
 
 const args = process.argv.slice(2);
 const config_file = !args[0] ? "config.json" : args[0];
-const status = {
-    payment: {
-        ANK_PAYMENT_DONE: 1,             //$ANK payed
-        WAITING_FOR_PAYMENT: 2,          //
-        CHECK_FAILED: 44,
-    },
-    salt: {
-        PENDING: 6,
-        CHECKED: 1,
-    },
-};
 const self = {
     init: (ck) => {
         IO.read(config_file, (data) => {
@@ -55,27 +38,14 @@ const self = {
             if(SYSTEM[k].set)SYSTEM[k].set(cfg);
         }
     },
-    getAccountToPay:(amount,accounts,ck,ignore)=>{
-
-        console.log(accounts);
-    },
-    payANK: (addr,amount,accounts,ck) => {
-        self.getAccountToPay(amount,(pair)=>{
-            const result={
-                hash:"TRANSACTION_HASH",
-                index:0,
-            }
-            return ck && ck(result);
-        });
-    },
 };
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let server = null;
 self.init((cfg) => {
+    const { output } = require("./lib/output.js");
     if (cfg.error) return output(`Error to load config file: ${config_file}`, "error", true);
 
     const server = app.listen(cfg.server.port, function () {
@@ -99,7 +69,6 @@ self.init((cfg) => {
         //Checking actions.
         //1.check the record anchor owner
         //2.check params to clean the local record and build from anchor record
-
         app.get("/", (req, res) => {
             res.send("");
         });
@@ -130,60 +99,23 @@ self.init((cfg) => {
 
         //app.get("/:hash/:anchor/:block", (req, res) => {
         app.get("/:hash", (req, res) => {
+
+            //1.confirm duplicate request, local record
             const hash = req.params.hash;       //payment hash
             SYSTEM.transaction.exsist(hash,(here)=>{
-                if(here!==false) return res.send(here);     //if exsist, return the error;
+                if(here.error) return res.send(here);     //if exsist, return the error;
 
-                Token.check(hash, (basic) => {
+                //2.get the amount by payin transaction hash
+                SYSTEM.token.check(hash, (basic) => {
+                    if(basic.eror) return res.send(basic);
 
-                    //1.saving the hash and set the status 
-                    const record = {
-                        usdt: basic.amount,
-                        rate: cfg.rate,
-                        coin: 0,
-                        hash: hash,
-                        status: status.payment.WAITING_FOR_PAYMENT,
-                    }
-                    REDIS.setKey(key, JSON.stringify(record), (tag) => {
-                        if (!tag) return res.send({ error: "Internal error, failed to tag." });
-                        console.log(key);
-                        //2.get the Substrate account by record
+                    SYSTEM.account.exsist(basic.account,(binded)=>{
+                        if(binded.eror) return res.send(binded);
 
-                        const akey = `${cfg.keys.prefix_record}${basic.account}`;
-                        REDIS.getKey(akey, (local) => {
-                            if (!local) return res.send({ error: "Failed to get related account." });
-                            try {
-                                const adata=JSON.parse(local);
-                                //3.sent the $ANK coin;
-                                self.payANK(adata.address,basic.amount,cfg.account,(trans)=>{
+                        SYSTEM.transaction.run(basic.account,basic.amount,(done)=>{
+                            if(done.eror) return res.send(done);
 
-                                    //4.add record to "ANCHOR_RECORD" on chain
-                                    const from={
-                                        network:"",
-                                        transaction:"",
-                                    };
-                                    const charge={
-                                        network:"anchor",
-                                        finalization:"",
-                                        address:"",
-                                        index:2,
-                                    };
-                                    self.recordOnChain(from,charge,(ready)=>{
-                                        //5.update charge order status
-                                        const recordN = tools.clone(record);
-                                        recordN.status = status.payment.ANK_PAYMENT_DONE;
-
-                                        //6.update the overview data
-                                    });
-
-                                    
-                                });
-                            } catch (error) {
-                                return res.send({ error: "Failed to decode local account record." });
-                            }
-
-                            
-
+                            //return the anchor record for client to confirm
                         });
                     });
                 });

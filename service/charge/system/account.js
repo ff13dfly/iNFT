@@ -16,13 +16,24 @@ const status = {
 };
 
 let config=null;
-const Account = {
+const self = {
     set:(setting)=>{
         config=setting;
     },
     exsist:(addr,ck)=>{
-
+        const akey = `${confg.keys.prefix_record}${addr}`;
+        REDIS.getKey(akey, (local) => {
+            if (!local) return ck && ck({ error: "Failed to get related account." });
+            try {
+                const data=JSON.parse(local);
+                return ck && ck(data);
+            }catch (error) {
+                return ck && ck({ error: "Failed to decode local account record." });
+            }
+        });
     },
+
+    //TODO, need to impove, check the record to avoid multi request.
     bind:(name,block,ck)=>{
         AnchorJS.view({ name: name, block: block }, "anchor", (ak) => {
             if (ak === false) return ck && ck({ error: "No target anchor to confirm account relationship" });
@@ -47,6 +58,7 @@ const Account = {
         });
 
     },
+
     salt:(ck)=>{
         const salt = tools.char(16);
         const key = `${config.keys.prefix_salt}${salt}`;
@@ -60,9 +72,9 @@ const Account = {
         console.log(record, key);
         REDIS.setKey(key, JSON.stringify(record), (done) => {
             if (!done) return ck && ck({ error: "Internal error, redis crush down." });
-            ck && ck({ salt: salt, expire: expired });
+            return ck && ck({ salt: salt, expire: expired });
         }, expired);
     },
 };
 
-module.exports = Account;
+module.exports = self;

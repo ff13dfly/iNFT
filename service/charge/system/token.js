@@ -1,7 +1,7 @@
 const Ether = require("../network/ethereum.js");
 
 let config=null;
-const Token = {
+const self = {
     set:(setting)=>{
         config=setting;
     },
@@ -19,4 +19,4 @@ const Token = {
     },
 };
 
-module.exports = Token;
+module.exports = self;
