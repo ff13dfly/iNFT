@@ -107,16 +107,19 @@ self.init((cfg) => {
 
                 //2.get the amount by payin transaction hash
                 SYSTEM.token.check(hash, (basic) => {
-                    if(basic.eror) return res.send(basic);
+                    if(basic.error) return res.send(basic);
 
                     SYSTEM.account.exsist(basic.account,(binded)=>{
-                        if(binded.eror) return res.send(binded);
+                        if(binded.error) return res.send(binded);
 
-                        SYSTEM.transaction.run(basic.account,basic.amount,(done)=>{
+                        //console.log(binded);
+                        const target=binded.address;
+                        const amount=basic.amount;
+                        const more={rate:20};
+                        SYSTEM.transaction.run(target,amount,(done)=>{
                             if(done.eror) return res.send(done);
-
-                            //return the anchor record for client to confirm
-                        });
+                            res.send(done);
+                        },more);
                     });
                 });
             });

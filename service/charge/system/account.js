@@ -24,7 +24,7 @@ const self = {
         config=setting;
     },
     exsist:(addr,ck)=>{
-        const akey = `${confg.keys.prefix_record}${addr}`;
+        const akey = `${config.keys.prefix_record}${addr}`;
         REDIS.getKey(akey, (local) => {
             if (!local) return ck && ck({ error: "Failed to get related account." });
             try {

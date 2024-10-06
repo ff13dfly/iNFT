@@ -4,6 +4,7 @@
 .AppleDouble
 .LSOverride
 
+config.json
 account
 node_modules
 yarn.lock

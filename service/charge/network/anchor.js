@@ -171,15 +171,14 @@ const self = {
     transfer: (pair, to, amount, ck, wallet, address) => {
         self.init(() => {
             const dest = { Id: to };
-            const m = self.accuracy();
             try {
                 if (!wallet) {
-                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(pair, (res) => {
+                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount)).signAndSend(pair, (res) => {
                         const status = res.status.toJSON();
                         return ck && ck(status);
                     });
                 } else {
-                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount * m)).signAndSend(address, { signer: pair }, (res) => {
+                    wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount)).signAndSend(address, { signer: pair }, (res) => {
                         const status = res.status.toJSON();
                         return ck && ck(status);
                     });
@@ -212,7 +211,7 @@ const self = {
             if (typeof raw !== "string") raw = JSON.stringify(raw);
             if (funs.limited(anchor, raw, protocol)) return ck && ck({ error: "Params error" });
 
-            const pre = 0;
+            const pre = !obj.pre?0:parseInt(obj.pre);
             try {
                 wsAPI.tx.anchor.setAnchor(anchor, raw, protocol, pre).signAndSend(pair, (res) => {   
                     const dt = res.toHuman();
