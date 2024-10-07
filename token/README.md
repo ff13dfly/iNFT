@@ -8,6 +8,8 @@
 
 * Assets on Ethereum Network. It is the target asset network on iNFT system. Need to keep the balance result and generate NFT from iNFT.
 
+* The first step to create ERC20 iNFT, and can be traded via `uniswap`.
+
 ## Test Network
 
 ### Sepolia
@@ -24,7 +26,15 @@
 
 * Follow the document to set up the liquid pool [https://support.uniswap.org/hc/en-us/articles/20915582427917-How-to-add-liquidity-to-Uniswap-v2](https://support.uniswap.org/hc/en-us/articles/20915582427917-How-to-add-liquidity-to-Uniswap-v2). The `Uniswap` here [https://app.uniswap.org/swap](https://app.uniswap.org/swap)
 
-## Local Test Envirment
+### Holesky
+
+* Need to add `Holesky` network mannually, the setting as follow.![Holesky Network Setting](./images/holesky_network_setting.png)
+
+* Faucet is needed, URL here [https://cloud.google.com/application/web3/faucet/ethereum/holesky](https://cloud.google.com/application/web3/faucet/ethereum/holesky).
+
+* The ERC20 `inftToken` is deployed successful, please check here [https://holesky.etherscan.io/address/0x9105c2ff36d2455d15273024dd0b002c8d2781f6](https://holesky.etherscan.io/address/0x9105c2ff36d2455d15273024dd0b002c8d2781f6)
+
+## Local Test Envirment ( Ignore )
 
 ### Truffle
 
