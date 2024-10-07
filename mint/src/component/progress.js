@@ -6,7 +6,7 @@ import { FaIdBadge } from "react-icons/fa";
 import Result from "../component/result"
 import Network from "../network/router";
 
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 import Local from "../lib/local";
 import Data from "../lib/data";
 

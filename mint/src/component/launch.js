@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import tools from "../lib/tools";
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 
 import { FaChevronRight } from "react-icons/fa";
 

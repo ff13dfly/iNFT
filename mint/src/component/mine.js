@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaHeart, FaRegHeart } from "react-icons/fa";
 
 import Result from "./result";
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 
 //put the filter here to keep the status even the <Mine> freshed.
 let page=1;

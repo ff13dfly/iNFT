@@ -1,6 +1,6 @@
-import Local from "./local";
-import tools from "./tools";
-import Render from "./render";
+import Local from "../lib/local";
+import tools from "../lib/tools";
+import Render from "../lib/render";
 import TPL from "./tpl";
 
 //This is the lib for iNFT local, cache all data including the filter queue

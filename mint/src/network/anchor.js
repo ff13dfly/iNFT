@@ -244,6 +244,28 @@ const self = {
             });
         });
     },
+    market: (ck) => {
+        self.init(() => {
+            wsAPI.query.anchor.sellList.entries().then((arr) => {
+                let list = [];
+                if (!arr) return ck && ck(list);
+                for (let i = 0; i < arr.length; i++) {
+                    const row = arr[i];
+                    const key = row[0].toHuman();
+                    const info = row[1].toHuman();
+                    const price = parseFloat(parseInt(info[1].replaceAll(",", "")) / self.divide());
+                    list.push({
+                        name: key[0],
+                        owner: info[0],
+                        price: price,
+                        target: info[2],
+                        free: info[0] === info[2],
+                    });
+                }
+                return ck && ck(list);
+            });
+        });
+    },
     view: (value, type, ck) => {
         self.init(() => {
             switch (type) {
@@ -251,7 +273,7 @@ const self = {
                     //1.if set block,search directly
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
-
+                        if (hash === "0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
                         wsAPI.rpc.chain.getBlock(hash).then((full) => {
                             let data = null;
                             full.block.extrinsics.forEach((ex, index) => {
@@ -261,11 +283,14 @@ const self = {
                                 if (dt.method === "setAnchor" && dt.args.key === value.name) {
                                     data = {
                                         owner: row.signer.Id,
+                                        signer: row.signer.Id,
                                         name: dt.args.key,
                                         raw: dt.args.raw,
                                         protocol: dt.args.protocol,
                                         pre: parseInt(dt.args.pre),
-                                        block: value.block
+                                        block: value.block,
+                                        hash: hash,
+                                        network: "anchor",
                                     }
                                 }
                             });
@@ -274,19 +299,27 @@ const self = {
                                 try {
                                     data.raw = JSON.parse(data.raw);
                                     data.protocol = JSON.parse(data.protocol);
-                                    return ck && ck(data);
+
+                                    //check the owner, in case the anchor is [sold, diverted, dropped]
+                                    self.view(data.name, "owner", (res) => {
+                                        if (data.owner !== res.address) data.owner = res.address;
+                                        return ck && ck(data);
+                                    });
                                 } catch (error) {
                                     return ck && ck(data);
                                 }
                             } else {
                                 return ck && ck(false);
                             }
+                        }).catch((err) => {
+                            console.log(err);
+                            return ck && ck(false);
                         });
                     });
 
                     //2.check the latest block of the name
                     self.view(value.name, "owner", (owner) => {
-                        //console.log(owner);
+                        if (!owner) return ck && ck(false);
                         return self.view({ name: value.name, block: owner.block }, "anchor", ck);
                     });
 

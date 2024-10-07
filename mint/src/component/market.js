@@ -1,22 +1,37 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
+
+import AnchorJS from "../network/anchor";
 
 function Market(props) {
     const size = {
         row: [12],
+        half:[6],
     };
+
+    let [list, setList]=useState([]);
+
     const self={
-        
+        fresh:()=>{
+            AnchorJS.market((arr)=>{
+                console.log(arr);
+
+                setList(arr);
+            });
+        },
     }
     useEffect(() => {
-       
-    }, [props.update]);
+
+        self.fresh();
+    }, []);
 
     return (
         <Row>
-            <Col className="pt-4 text-center" sm={size.row[0]} xs={size.row[0]}>
-                Market list to show.
-            </Col>
+            {list.map((row, index) => (
+                <Col className="pt-2" key={index} sm={size.half[0]} xs={size.half[0]}>
+                    {row.name}:  $ANK {row.price}
+                </Col>
+            ))}
         </Row>
     )
 }

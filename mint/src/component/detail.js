@@ -8,7 +8,7 @@ import tools from "../lib/tools";
 import Copy from "../lib/clipboard";
 
 import RenderiNFT from "./inft";
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 
 import SmallHash from "./hash_small";
 import PartSection from "./part_section";

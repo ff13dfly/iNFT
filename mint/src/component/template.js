@@ -8,7 +8,8 @@ import Data from "../lib/data";
 import Render from "../lib/render";
 import Copy from "../lib/clipboard";
 import tools from "../lib/tools";
-import TPL from "../lib/tpl";
+
+import TPL from "../system/tpl";
 
 import { FaExchangeAlt, FaTrashAlt, FaCopy,FaFolderOpen } from "react-icons/fa";
 

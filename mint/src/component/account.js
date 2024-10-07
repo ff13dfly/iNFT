@@ -8,7 +8,7 @@ import tools from "../lib/tools";
 import Data from "../lib/data"
 
 import Network from "../network/router";
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 import Seed from "./seed";
 
 import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";

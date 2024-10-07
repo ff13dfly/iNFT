@@ -9,8 +9,8 @@ import Account from "./account";
 import tools from "../lib/tools";
 import Data from "../lib/data";
 
-import TPL from "../lib/tpl";
-import INFT from "../lib/inft";
+import TPL from "../system/tpl";
+import INFT from "../system/inft";
 import Network from "../network/router";
 
 import { FaCogs, FaIndent } from "react-icons/fa";

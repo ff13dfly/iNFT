@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Render from "../lib/render";
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 
 /* template section with mask support
 *   @param  {string}    template        //CID of showing template

@@ -1,4 +1,4 @@
-import { Container, Row, Col, Modal } from "react-bootstrap";
+import { Container,Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Preview from "./component/preview";
@@ -11,8 +11,8 @@ import config from "./config";
 import plugin from "./lib/plugin";
 import QR from "./lib/QR";
 
-import TPL from "./lib/tpl";
-import INFT from "./lib/inft";
+import TPL from "./system/tpl";
+import INFT from "./system/inft";
 import VERSION from "./lib/version";
 import Data from "./lib/data";
 
@@ -147,7 +147,7 @@ function App() {
       <Header fresh={self.fresh} dialog={self.dialog} update={update} panel={self.panel} />
       <Preview fresh={self.fresh} update={update} node={config.node[0]} />
       <Action fresh={self.fresh} dialog={self.dialog} update={update} />
-      <Modal dialogClassName="panel"
+      <Modal dialogClassName="modal-minter"
         show={!hide}
         size="lg"
         backdrop="static"

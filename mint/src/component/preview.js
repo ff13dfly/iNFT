@@ -5,7 +5,7 @@ import Hash from "./hash";
 import Counter from "./counter";
 import RenderiNFT from "./inft";
 
-import TPL from "../lib/tpl";
+import TPL from "../system/tpl";
 import tools from "../lib/tools";
 import Data from "../lib/data";
 

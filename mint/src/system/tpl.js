@@ -1,9 +1,10 @@
-import Local from "./local";
-import Data from "./data";
-import INDEXED from "./indexed";
+import Local from "../lib/local";
+import Data from "../lib/data";
+import INDEXED from "../lib/indexed";
+import tools from "../lib/tools";
+import Render from "../lib/render";
 import IPFS from "../network/ipfs";
-import tools from "./tools";
-import Render from "./render";
+
 const config={
     default:"bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",          //TREE
     indexDB: "minterDB",

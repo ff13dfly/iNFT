@@ -65,12 +65,7 @@ function Grid(props) {
 
     return (
         <Row>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FcPuzzle className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
-                    self.clickTemplate(ev);
-                }}/>
-                <h6 className="pt-4">Gene Template</h6>
-            </Col>
+            
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcWorkflow className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickBounty(ev);
@@ -82,6 +77,12 @@ function Grid(props) {
                     self.clickMarket(ev);
                 }}/>
                 <h6 className="pt-4">Market</h6>
+            </Col>
+            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+                <FcPuzzle className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickTemplate(ev);
+                }}/>
+                <h6 className="pt-4">Gene Template</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcBullish className="grid_icon bg-secondary" size={75} onClick={(ev)=>{

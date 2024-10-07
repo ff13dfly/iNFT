@@ -5,8 +5,8 @@ module.exports = {
     node:[
         //"wss://fraa-flashbox-2690-rpc.a.stagenet.tanssi.network",
         //"wss://wss.android.im",
-        //"ws://127.0.0.1:9944",
-        "wss://dev3.metanchor.net",
+        "ws://127.0.0.1:9944",
+        //"wss://dev3.metanchor.net",
     ],
     default:[
         "bafkreibtt7ciqypa3vogodmdmvyd3trwajv3l7cqi43yk4hrtgpyopn2e4",  //BTC tree
@@ -19,6 +19,28 @@ module.exports = {
         tanssi:"https://faucet.w3os.net",
         anchor:"https://faucet.w3os.net",
     },
+    market:[
+        {
+            domain:"localhost/iNFT/service/api/",
+            protocol:"http://",
+            partten:"php",
+            orgin:"W3OS",
+            lang:"php",
+            desc:"",
+            funs:"",
+            def:"",                 //get the definition of API (JSON format)
+        },
+        {
+            domain:"api.inft.w3os.net",
+            protocol:"https://",
+            partten:"php",
+            orgin:"W3OS",
+            lang:"php",
+            desc:"",
+            funs:"",
+            def:"",                 //get the definition of API (JSON format)
+        },
+    ],
     agent:{
         inft:[
             "wss://wss.android.im",

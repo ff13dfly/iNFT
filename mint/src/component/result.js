@@ -8,7 +8,7 @@ import Progress from "./progress";
 
 import Local from "../lib/local";
 import tools from "../lib/tools";
-import INFT from "../lib/inft";
+import INFT from "../system/inft";
 import Data from "../lib/data";
 
 import RenderiNFT from "./inft";

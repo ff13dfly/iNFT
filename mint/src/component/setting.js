@@ -6,8 +6,8 @@ import { FaCheck } from "react-icons/fa";
 import SettingNetwork from "./setting_network";
 
 import tools from "../lib/tools"
-import TPL from "../lib/tpl";
-import INFT from "../lib/inft";
+import TPL from "../system/tpl";
+import INFT from "../system/inft";
 
 function Setting(props) {
     const size = {
