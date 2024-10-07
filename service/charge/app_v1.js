@@ -163,25 +163,21 @@ self.init((cfg) => {
             const prefix = cfg.keys.prefix_record;
             const key = `${prefix}${hash}`;
 
-            //1.confirm the substrate account which to accept the $ANK
-            //2.confirm the payment hash, then calculate the amount
-            //3.do pay to target account.
-            // AnchorJS.view({name:anchor,block:block},"anchor",(data)=>{
-            //     console.log(data);
-            // });
-
+            //0. check wether duplicate request.
             REDIS.exsistKey(key, (here) => {
-                if (here) return res.send({ error: "Dumplicate request." });
+                //if (here) return res.send({ error: "Dumplicate request." });
                 Token.check(hash, (basic) => {
-
+                    //console.log(basic);
                     //1.saving the hash and set the status 
+                    const amount=basic.amount/basic.accuracy;
                     const record = {
-                        usdt: basic.amount,
+                        usdt: amount,
                         rate: cfg.rate,
                         coin: 0,
                         hash: hash,
                         status: status.payment.WAITING_FOR_PAYMENT,
                     }
+
                     REDIS.setKey(key, JSON.stringify(record), (tag) => {
                         if (!tag) return res.send({ error: "Internal error, failed to tag." });
                         console.log(key);

@@ -27,6 +27,7 @@ const config = {
         creator:"0xD4C8251C06C5776Fa2B488c6bCbE1Bf819D92d83",
         name:"INFT",
         contract:"InftToken",
+        accuracy:1000000000000000000n,
     }
 }
 
@@ -64,13 +65,25 @@ const self={
         //https://community.infura.io/t/web3-js-how-to-track-erc-20-token-transfers-specific-address-token/5571
         self.init(()=>{
             W3.eth.getTransactionReceipt(hash).then((data)=>{
+                console.log(data);
                 const dt=W3.eth.abi.decodeLog(
                     abi[9].inputs,                  //must index:9, it is the event format
                     data.logs[0].data,              
                     data.logs[0].topics
                 );
-                console.log(dt);
-                return ck && ck(dt);
+                const result={
+                    from: dt.from, 
+                    to: dt.to, 
+                    amount: dt.value,
+                    //accuracy:self.accuracy(),
+                    block:{
+                        hash:data.blockHash,
+                        height:data.blockNumber,
+                        index:data.transactionIndex,
+                    },
+                    contract:data.logs[0].address,                    //contract address, to confirm the right ERC20 token
+                }
+                return ck && ck(result);
             });
         });
     },

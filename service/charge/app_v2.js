@@ -103,19 +103,18 @@ self.init((cfg) => {
             //1.confirm duplicate request, local record
             const hash = req.params.hash;       //payment hash
             SYSTEM.transaction.exsist(hash,(here)=>{
-                if(here.error) return res.send(here);     //if exsist, return the error;
+                //if(here.error) return res.send(here);     //if exsist, return the error;
 
                 //2.get the amount by payin transaction hash
                 SYSTEM.token.check(hash, (basic) => {
                     if(basic.error) return res.send(basic);
 
-                    SYSTEM.account.exsist(basic.account,(binded)=>{
+                    SYSTEM.account.exsist(basic.from,(binded)=>{
                         if(binded.error) return res.send(binded);
 
-                        //console.log(binded);
                         const target=binded.address;
                         const amount=basic.amount;
-                        const more={rate:20};
+                        const more={rate:basic.rate,accuracy:basic.accuracy};
                         SYSTEM.transaction.run(target,amount,(done)=>{
                             if(done.eror) return res.send(done);
                             res.send(done);

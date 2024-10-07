@@ -152,24 +152,27 @@ const self = {
         });
     },
     run:(target,amount,ck,more)=>{
+        console.log(more,amount,target);
+
+        //FIXME, here to adjust the calculation by Bigint
+        const val=parseInt(amount)/(parseInt(more.accuracy)*more.rate)
+        const related_amount=parseInt(val*AnchorJS.accuracy());
         //1.get the senter account and pair
-        self.sender(amount,(pair)=>{
+        self.sender(related_amount,(pair)=>{
             if(pair.error) return ck && ck(pair);
 
             //2.do transfer
             //2.1. pay the amount to target.
             //console.log(`Ready to pay ${amount} to ${target}`);
-            AnchorJS.transfer(pair,target,amount,(process)=>{
+            AnchorJS.transfer(pair,target,related_amount,(process)=>{
                 console.log(process);
                 //2.2. destory the signature.
                 if(process.finalized){
                     //3. record the transaction local. 
-
                     //3.1. confirm the transaction success.
-
                     //TODO, here to check and confirm the transaction
                     const transaction_hash=process.finalized;
-                    self.record(transaction_hash,amount,target,pair.address,more,(record)=>{
+                    self.record(transaction_hash,related_amount,target,pair.address,more,(record)=>{
                         if(record.error) return ck && ck({error:`Failed to local record, hash: ${transaction_hash}`});
                         
                         //3.record the charge on chain.
@@ -177,7 +180,7 @@ const self = {
                             block:transaction_hash,
                             from:pair.address,
                             to:target,
-                            amount:amount,
+                            amount:related_amount,
                         }
                         self.onchain(raw,(alink)=>{
                             if(alink.error) return ck && ck(alink);
@@ -188,7 +191,7 @@ const self = {
 
                                 const result={
                                     block:transaction_hash,
-                                    amount:amount,
+                                    amount:related_amount,
                                     alink:alink,
                                     stamp:tools.stamp(),
                                 }

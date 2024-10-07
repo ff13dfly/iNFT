@@ -29,8 +29,11 @@ const self = {
             if (!local) return ck && ck({ error: "Failed to get related account." });
             try {
                 const data=JSON.parse(local);
+                //console.log(data);
+                data.related=addr;
                 return ck && ck(data);
             }catch (error) {
+                console.log(error);
                 return ck && ck({ error: "Failed to decode local account record." });
             }
         });

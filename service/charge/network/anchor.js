@@ -171,6 +171,7 @@ const self = {
     transfer: (pair, to, amount, ck, wallet, address) => {
         self.init(() => {
             const dest = { Id: to };
+            console.log(pair.address,dest,amount);
             try {
                 if (!wallet) {
                     wsAPI.tx.balances.transferAllowDeath(dest, parseInt(amount)).signAndSend(pair, (res) => {
