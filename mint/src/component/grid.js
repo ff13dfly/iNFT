@@ -1,8 +1,13 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
-import { FaList,FaPizzaSlice,FaPuzzlePiece } from "react-icons/fa";
+import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish } from "react-icons/fc";
 
 import Template from "./template";
+import Bounty from "./bounty";
+import Market from "./market";
+import Minting from "./minting";
+import Setting from "./setting";
+import Document from "./document";
 
 function Grid(props) {
     const size = {
@@ -13,7 +18,45 @@ function Grid(props) {
     const self={
         clickTemplate:(ev)=>{
             props.panel.hide();
-            dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Template");
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Gene Template");
+        },
+        clickBounty:(ev)=>{
+            props.panel.hide();
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Bounty fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Bounty");
+        },
+        clickMarket:(ev)=>{
+            props.panel.hide();
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Market fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Market");
+        },
+        clickMinting:(ev)=>{
+            props.panel.hide();
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Minting fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Minting");
+        },
+        clickSetting:(ev)=>{
+            props.panel.hide();
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Setting fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Setting");
+        },
+        clickDocument:(ev)=>{
+            props.panel.hide();
+            props.panel.callback(()=>{
+                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            });
+            dialog(<Document fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Document");
         },
     }
     useEffect(() => {
@@ -23,38 +66,38 @@ function Grid(props) {
     return (
         <Row>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPuzzlePiece className="pointer" size={45} onClick={(ev)=>{
+                <FcPuzzle className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
                 <h6 className="pt-4">Gene Template</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPizzaSlice className="pointer" size={45} onClick={(ev)=>{
-                    self.clickTemplate(ev);
+                <FcWorkflow className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickBounty(ev);
                 }}/>
                 <h6 className="pt-4">Bounty</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPizzaSlice className="pointer" size={45} onClick={(ev)=>{
-                    self.clickTemplate(ev);
+                <FcProcess className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickMarket(ev);
                 }}/>
                 <h6 className="pt-4">Market</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPizzaSlice className="pointer" size={45} onClick={(ev)=>{
-                    self.clickTemplate(ev);
+                <FcBullish className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickMinting(ev);
                 }}/>
-                <h6 className="pt-4">Mint Board</h6>
+                <h6 className="pt-4">Minting</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPizzaSlice className="pointer" size={45} onClick={(ev)=>{
-                    self.clickTemplate(ev);
+                <FcSettings className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickSetting(ev);
                 }}/>
                 <h6 className="pt-4">Setting</h6>
             </Col>
             <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
-                <FaPizzaSlice className="pointer" size={45} onClick={(ev)=>{
-                    self.clickTemplate(ev);
+                <FcRules className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
+                    self.clickDocument(ev);
                 }}/>
                 <h6 className="pt-4">Document</h6>
             </Col>

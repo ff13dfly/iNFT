@@ -16,6 +16,7 @@ import INFT from "./lib/inft";
 import VERSION from "./lib/version";
 import Data from "./lib/data";
 
+let callback=null;
 function App() {
   let [update, setUpdate] = useState(0);
   let [show, setShow] = useState(false);
@@ -43,6 +44,9 @@ function App() {
       hide: () => {
         setGrid("");
         setHide(true);
+      },
+      callback:(fun)=>{
+        callback=fun;
       },
     },
     decode: (str) => {
@@ -148,6 +152,8 @@ function App() {
         size="lg"
         backdrop="static"
         onHide={(ev) => {
+          //console.log(callback);
+          //if(callback!==null) callback();
           setHide(true);
         }}
         centered={false}
@@ -167,6 +173,10 @@ function App() {
         size="lg"
         backdrop="static"
         onHide={(ev) => {
+          if(callback!==null){    //Dialog callback when close
+            callback();
+            callback=null;    //reset callback
+          } 
           setShow(false);
         }}
         centered={false}

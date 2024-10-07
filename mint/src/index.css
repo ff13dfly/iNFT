@@ -39,6 +39,12 @@ code {
   cursor: pointer;
 }
 
+.grid_icon{
+  cursor: pointer;
+  padding: 15px 15px 15px 15px;
+  border-radius: 15px;
+}
+
 .operation{
   margin-top: 10px;
   margin-bottom: 20px;
