@@ -7,5 +7,6 @@
 node_modules
 build
 truffle-config-holesky.js
+truffle-config-sepolia.js
 truffle-config-local.js
 truffle-config.js

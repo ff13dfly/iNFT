@@ -8,6 +8,22 @@
 
 * Assets on Ethereum Network. It is the target asset network on iNFT system. Need to keep the balance result and generate NFT from iNFT.
 
+## Test Network
+
+### Sepolia
+
+* Deploy the ERC20 via `Remix`. Change to `Deployment` then select `WalletConnect`. At first time, you need to approve on `Metemask` side. URL here [Remix](https://remix.ethereum.org/).
+
+* After `Remix` get the account from `Metamask`, compile the ERC20 contract, you will find the `Deploy` button. Remix will follow the Metamask account setting to deploy on target network. So, make sure there is enought `ETH` and the network is correct. Faucet here:
+    1. [https://cloud.google.com/application/web3/faucet/ethereum/sepolia](https://cloud.google.com/application/web3/faucet/ethereum/sepolia)
+    2. [https://www.infura.io/faucet/sepolia](https://www.infura.io/faucet/sepolia)
+
+* After deploy successful, check the result on [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/).
+
+### Uniswap
+
+* Follow the document to set up the liquid pool [https://support.uniswap.org/hc/en-us/articles/20915582427917-How-to-add-liquidity-to-Uniswap-v2](https://support.uniswap.org/hc/en-us/articles/20915582427917-How-to-add-liquidity-to-Uniswap-v2). The `Uniswap` here [https://app.uniswap.org/swap](https://app.uniswap.org/swap)
+
 ## Local Test Envirment
 
 ### Truffle
@@ -178,6 +194,7 @@
     ```
 
     ```Javascript
+        //test call for sample smart contract
         let instance = await MyContract.deployed()
         let message = await instance.message()
         console.log(message)
