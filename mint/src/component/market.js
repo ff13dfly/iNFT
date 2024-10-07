@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useState,useEffect } from "react";
 
 import AnchorJS from "../network/anchor";
+import INFT from "../system/inft";
 
 function Market(props) {
     const size = {
@@ -15,8 +16,11 @@ function Market(props) {
         fresh:()=>{
             AnchorJS.market((arr)=>{
                 console.log(arr);
-
                 setList(arr);
+                // INFT.render(arr,(fs)=>{
+                //     console.log(fs);
+                //     setList(fs);
+                // });
             });
         },
     }

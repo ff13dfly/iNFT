@@ -12,10 +12,11 @@ function Bounty(props) {
     const size = {
         row: [12],
         page: [4, 4, 4],
+        right: [3,9],
     };
 
     let [page, setPage] = useState(1);
-    let [single,setSingle]=useState({});
+    let [single, setSingle] = useState({});
 
     let [list, setList] = useState([]);
     let [bonus, setBonus] = useState([]);
@@ -46,20 +47,23 @@ function Bounty(props) {
                 });
             });
         },
-
+        getThumb:(index)=>{
+            //console.log(index);
+            const all = single.template.raw.series[index];
+            return all.thumb[0];
+        },
     }
     useEffect(() => {
         API.bounty.list((res) => {
             console.log(res);
             if (res && res.success && res.data) {
                 self.prepareData(res.data, (bts) => {
-                    if(bts.length!==0){
-                        //const single=bts[0];
+                    if (bts.length !== 0) {
+                        console.log(bts[0]);
                         setSingle(bts[0]);
-                        //console.log(bts[0]);
                         setBonus(bts[0].orgin.raw.bonus);
                     }
-                    
+
                 });
             }
         }, page, 1);
@@ -67,15 +71,22 @@ function Bounty(props) {
 
     return (
         <Row>
-            <Row>
-                <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                    <h6>{single.alink}</h6>
-                </Col>
-
-            </Row>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <h6>{single.alink}</h6>
+            </Col>
             {bonus.map((row, index) => (
-                <Col className="pt-2" key={index} sm={size.row[0]} xs={size.row[0]}>
-                    Bonus:{row.bonus}, Amount:{row.amount}
+                <Col key={index} sm={size.row[0]} xs={size.row[0]}>
+                    <Row>
+                        <Col className="pt-2" sm={size.right[0]} xs={size.right[0]}>
+                        <img alt="" src={self.getThumb(row.series)} className="series_thumb pointer" />
+                        </Col>
+                        <Col className="pt-2" sm={size.right[1]} xs={size.right[1]}>
+                            Bonus:{row.bonus}, Amount:{row.amount}
+                        </Col>
+                        <Col key={index} sm={size.row[0]} xs={size.row[0]}>
+                        <hr />
+                        </Col>
+                    </Row>
                 </Col>
             ))}
             <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>

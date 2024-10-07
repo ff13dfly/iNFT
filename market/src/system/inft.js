@@ -338,7 +338,7 @@ const self = {
                     data.price = single.price===undefined?0:single.price;
                     data.free = single.free===undefined?false:single.free;
                     data.target = single.target===undefined?"":single.target;
-                    if (!data.Network) data.network = net;         //add default network settling
+                    if (!data.network) data.network = net;         //add default network settling
                     data.hash = hash;
 
                     map[key] = data;

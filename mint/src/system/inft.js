@@ -266,7 +266,6 @@ const self = {
         //2.cache basic setting of mint
         funs.getINFTMintDetail(addr);
     },
-
     list:(page,step,ck,filter_cfg)=>{
         const addr=funs.getAddress();
         if(!addr) return ck && ck(false);
@@ -358,7 +357,6 @@ const self = {
         }   
     },
     mint:{
-    
         //get current task
         detail:(key)=>{
             const addr=funs.getAddress();

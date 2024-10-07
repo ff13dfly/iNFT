@@ -18,9 +18,9 @@ function Grid(props) {
     const self={
         clickTemplate:(ev)=>{
             props.panel.hide();
-            props.panel.callback(()=>{
-                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
-            });
+            // props.panel.callback(()=>{
+            //     props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            // });
             dialog(<Template fresh={props.fresh} dialog={props.dialog} />,"Gene Template");
         },
         clickBounty:(ev)=>{
@@ -39,23 +39,23 @@ function Grid(props) {
         },
         clickMinting:(ev)=>{
             props.panel.hide();
-            props.panel.callback(()=>{
-                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
-            });
+            // props.panel.callback(()=>{
+            //     props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            // });
             dialog(<Minting fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Minting");
         },
         clickSetting:(ev)=>{
             props.panel.hide();
-            props.panel.callback(()=>{
-                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
-            });
+            // props.panel.callback(()=>{
+            //     props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            // });
             dialog(<Setting fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Setting");
         },
         clickDocument:(ev)=>{
             props.panel.hide();
-            props.panel.callback(()=>{
-                props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
-            });
+            // props.panel.callback(()=>{
+            //     props.panel.show(<Grid dialog={props.dialog} panel={props.panel}/>)
+            // });
             dialog(<Document fresh={props.fresh} dialog={props.dialog} panel={props.panel}/>,"Document");
         },
     }
@@ -65,43 +65,42 @@ function Grid(props) {
 
     return (
         <Row>
-            
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+            <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcWorkflow className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickBounty(ev);
                 }}/>
-                <h6 className="pt-4">Bounty</h6>
+                <h6 className="pt-2">Bounty</h6>
             </Col>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+            <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcProcess className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickMarket(ev);
                 }}/>
-                <h6 className="pt-4">Market</h6>
+                <h6 className="pt-2">Market</h6>
             </Col>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+            <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcPuzzle className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickTemplate(ev);
                 }}/>
-                <h6 className="pt-4">Gene Template</h6>
+                <h6 className="pt-2">Gene Template</h6>
             </Col>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+            {/* <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcBullish className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickMinting(ev);
                 }}/>
-                <h6 className="pt-4">Minting</h6>
-            </Col>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+                <h6 className="pt-2">Minting</h6>
+            </Col> */}
+            <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcSettings className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickSetting(ev);
                 }}/>
-                <h6 className="pt-4">Setting</h6>
+                <h6 className="pt-2">Setting</h6>
             </Col>
-            <Col className="pt-4 text-center" sm={size.grid[0]} xs={size.grid[0]}>
+            {/* <Col className="pt-2 text-center" sm={size.grid[0]} xs={size.grid[0]}>
                 <FcRules className="grid_icon bg-secondary" size={75} onClick={(ev)=>{
                     self.clickDocument(ev);
                 }}/>
-                <h6 className="pt-4">Document</h6>
-            </Col>
+                <h6 className="pt-2">Document</h6>
+            </Col> */}
         </Row>
     )
 }

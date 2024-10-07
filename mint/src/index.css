@@ -353,6 +353,17 @@ code {
 /***************************** Customize CSS ******************************/
 /**************************************************************************/
 
+.ml-10{
+  margin-left: 8px;
+}
+
+.series_thumb{
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
 .panel{
   max-width: 430px;
   margin-top: 150px;
