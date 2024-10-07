@@ -57,7 +57,8 @@ self.init((cfg) => {
         output(`** Author: Fuu, copyright 2024.                                                         **`, "success", true);
         output(`******************************************************************************************`, "success", true);
 
-        const demo_hash = "0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac";
+        //const demo_hash = "0x093fe698eb6d3c35b66dbf46f81824fa0daf4f0db3a72e1881136a28274c86ac";
+        const demo_hash = "0x3770069d4df60fd0c4af8b1b3e4bc1f32eec6be3c1bf9b7a134401862f2e71ca";
         const demo_anchor = "necwm_123";
         const demo_block = 46738;
         output(`Cors should be supported by Nginx.`);

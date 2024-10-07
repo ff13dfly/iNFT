@@ -94,10 +94,7 @@ const self = {
                                 return ck && ck(alink);
                             });
                         }
-                        
                     });
-
-                   
                 });
             });
         },true);

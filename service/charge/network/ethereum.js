@@ -21,14 +21,26 @@ const config = {
     node: "https://holesky.infura.io/v3/799349fbc6ff411983d3d1feba0a3bc7",  //Tanssi appchain URI
     target: 12000,           //How long to create a new block
     apikey: "799349fbc6ff411983d3d1feba0a3bc7",          //infura.io app key.
-    erc20: {
-        address: "0x9105c2ff36d2455d15273024dd0b002c8d2781f6",
-        creator: "0xD4C8251C06C5776Fa2B488c6bCbE1Bf819D92d83",
-        name: "INFT",
-        contract: "InftToken",
-        accuracy:1000000000000000000n,
-        rate:19.9,
-    }
+    uniswap:{
+        address:"0x34DC67Ac78c6e486073D7BA5C94776A0a83bE08d",
+    },
+    token:[
+        {
+            name:"INFT",
+            address:"0x9105c2ff36d2455d15273024dd0b002c8d2781f6",
+            network:"holesky",
+            accuracy:1000000000000000000n,
+            rate:1,
+        },
+        {
+            name:"USDT",
+            //address:"0x5dE69EE0A1b7019E57235aa3ab451F4aB92bd063",
+            address:"0x9105c2ff36d2455d15273024dd0b002c8d2781f6",           //mock to go througt the workflow
+            network:"holesky",
+            accuracy:1000000000000000000n,
+            rate:19.9,
+        },
+    ]
 }
 
 const funs = {
@@ -52,7 +64,8 @@ const self = {
     },
     balance: (addr, ck) => {
         self.init(() => {
-            const contract = new W3.eth.Contract(abi, config.erc20.address);
+            const token=config.token;
+            const contract = new W3.eth.Contract(abi, token[0].address);
             contract.methods.balanceOf(addr).call().then(ck);
         });
     },
@@ -73,14 +86,16 @@ const self = {
                 );
                 //console.log(data);
                 const contract=data.logs[0].address;
-                if(contract!==config.erc20.address) return ck && ck({error:"Not the special token."});
+                const USDT=config.token[1];
+
+                if(contract!==USDT.address) return ck && ck({error:"Not the special token."});
 
                 const result={
                     from: dt.from, 
                     to: dt.to, 
                     amount: dt.value,
-                    accuracy:config.erc20.accuracy,
-                    rate:config.erc20.rate,
+                    accuracy:USDT.accuracy,
+                    rate:USDT.rate,
                     block:{                                 //transaction details
                         hash:dt.blockHash,
                         height:dt.blockNumber,
