@@ -176,6 +176,9 @@ const self = {
     divide: () => {
         return 1000000;
     },
+    accuracy: (ck) => {
+        return 1000000;
+    },
 
     balance: (address, ck) => {
         let unsub = null;
