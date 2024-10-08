@@ -391,6 +391,62 @@ const self = {
 
         });
     },
+    bounty: {
+        //wether bounty ticket setting.
+        exsist: (name, block, ck) => {
+            self.init(() => {
+                let unsub = null;
+                wsAPI.query.bounty.bounty(name, block, (res) => {
+                    unsub();
+                    const dt = res.toJSON();
+                    if (!dt) return ck && ck(false);
+                    return ck && ck({ owner: dt[0], price: dt[1], expire: dt[2] });
+                }).then((fun) => {
+                    unsub = fun;
+                });
+            });
+        },
+
+        //buy a ticket
+        // ticket: (dapp, obj, ck) => {
+        //     self.init( async () => {
+        //         const allAccounts = await web3Accounts();
+        //         const address = allAccounts[0].address;
+        //         self.view({ name: obj.name, block: obj.block }, "anchor", (data) => {
+        //             console.log(data);
+        //             if(data.owner===address) return ck && ck({error:"Can not buy ticket when you are the owner of bounty."});
+                    
+        //             self.balance(address, async (bs) => {
+        //                 const amount = parseInt(parseFloat(obj.price) * self.divide());
+        //                 if (bs.free < (amount + 10)) return ck && ck({ error: `Low balance of ${address}` });
+        //                 const injector = await web3FromAddress(address);
+        //                 const tx=wsAPI.tx.bounty.ticket(obj.name, obj.block);
+        //                 tx.signAndSend(address, { signer: injector.signer }, (res) => {
+        //                     const status = res.status.toJSON();
+        //                     return ck && ck(status);
+        //                 });
+        //             });
+        //         });
+                
+        //     });
+        // },
+        //check wether bought ticket
+        check: (name, block, addr, ck) => {
+            self.init(() => {
+                let unsub = null;
+                wsAPI.query.bounty.tickets(name, block, addr, (res) => {
+                    unsub();
+                    const dt = res.toJSON();
+                    if (!dt) return ck && ck(false);
+
+                    return ck && ck({ block: dt });
+                }).then((fun) => {
+                    unsub = fun;
+                });
+            });
+            
+        },
+    },
     test: () => {
         test.auto();
     }

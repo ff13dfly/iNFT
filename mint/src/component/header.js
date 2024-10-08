@@ -11,6 +11,7 @@ import Mine from "./mine";
 import Bounty from "./bounty";
 import Market from "./market";
 import Setting from "./setting";
+import Document from "./document";
 
 function Header(props) {
     const size = {
@@ -40,7 +41,10 @@ function Header(props) {
             dialog(<Market  dialog={props.dialog} />,"Market");
         },
         clickSetting:(ev)=>{
-            dialog(<Setting  dialog={props.dialog} />,"Market");
+            dialog(<Setting  dialog={props.dialog} />,"Setting");
+        },
+        clickDocument:(ev)=>{
+            dialog(<Document  dialog={props.dialog} />,"Document");
         },
     }
     useEffect(() => {
@@ -73,12 +77,18 @@ function Header(props) {
                     
                     <Dropdown.Item></Dropdown.Item>
                     <Dropdown.Divider />
+
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickTemplate(ev);
                     }}>
                         <FcPuzzle size={24}/><span className="ml-10">Template</span>
                     </Dropdown.Item>
                      <Dropdown.Divider />
+                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
+                        self.clickDocument(ev);
+                    }}>
+                        <FcRules size={24}/><span className="ml-10">Document</span>
+                    </Dropdown.Item>
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickSetting(ev);
                     }}>

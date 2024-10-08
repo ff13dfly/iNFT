@@ -195,7 +195,7 @@ const self={
         list:(ck,page,step)=>{
             self.init((ready)=>{
                 if(ready.error) return ck && ck({error:"Internal error."});
-                const param={page:page-1};
+                const param={page:page};
                 if(step) param.step=parseInt(step);
     
                 funs.request("bounty","list",(res)=>{
