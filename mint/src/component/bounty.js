@@ -20,6 +20,7 @@ function Bounty(props) {
     };
 
     let [page, setPage] = useState(1);          //bounty page
+    let [total, setTotal]= useState(2);         //
     let [single, setSingle] = useState({});     //bounty data with template and on-chain orgin data
     let [bonus, setBonus] = useState([]);       //bonus list
     let [alink, setAlink] = useState("");       //bounty anchor link
@@ -83,9 +84,9 @@ function Bounty(props) {
                         if (bts.length !== 0) {
                             setSingle(bts[0]);
                             setBonus(bts[0].orgin.raw.bonus);
-                            const [total,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
+                            const [sum_bonus,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
                             //console.log(total,pieces);
-                            setSum(total);
+                            setSum(sum_bonus);
                             setAmount(pieces);
                         }
                     });
@@ -100,8 +101,8 @@ function Bounty(props) {
     return (
         <Row>
             <Col sm={size.left[0]} xs={size.left[0]}>
-                Total <strong className="text-info">{amount.toLocaleString()}</strong> pieces wanted.<br />
-                Prize Pool <strong className="text-info">{sum.toLocaleString()}</strong> $ANK.
+                Total <strong className="text-info">{amount.toLocaleString()}</strong>P wanted.<br />
+                Prize <strong className="text-info">{sum.toLocaleString()}</strong> $ANK.
             </Col>
             <Col className="text-center" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
@@ -109,19 +110,19 @@ function Bounty(props) {
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
-            <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink}/>
+            <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink} ticket={exsist}/>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="pt-2" sm={size.page[0]} xs={size.page[0]}>
-                        <FaAngleLeft className="pointer" size={36} onClick={(ev) => {
+                        <FaAngleLeft className="pointer" size={36} hidden={page<=1} onClick={(ev) => {
                             self.clickPrevious(ev);
                         }} />
                     </Col>
                     <Col className="pt-2 text-center unselect" sm={size.page[1]} xs={size.page[1]}>
-
+                        <h4> {page} / {total} </h4>
                     </Col>
                     <Col className="pt-2 text-end" sm={size.page[2]} xs={size.page[2]}>
-                        <FaAngleRight className="pointer" size={36} onClick={(ev) => {
+                        <FaAngleRight className="pointer" size={36} hidden={page>=total} onClick={(ev) => {
                             self.clickNext(ev);
                         }} />
                     </Col>

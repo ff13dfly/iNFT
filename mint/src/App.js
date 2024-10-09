@@ -134,7 +134,7 @@ function App() {
     //4.linke to server to subscribe block finalization
     self.autosetNetwork(() => {
       const cur = Data.getHash("cache", "network");
-      console.log(cur);
+      //console.log(cur);
       Network(cur).init((API) => {
 
       });
