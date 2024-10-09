@@ -48,7 +48,7 @@ self.init((cfg) => {
     const { output } = require("./lib/output.js");
     if (cfg.error) return output(`Error to load config file: ${config_file}`, "error", true);
 
-    const server = app.listen(cfg.server.port, function () {
+    const server = app.listen(cfg.server.port, ()=>{
 
         const host = server.address().address;
         const port = server.address().port;

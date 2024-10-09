@@ -173,7 +173,7 @@ function Result(props) {
     return (
         <Row>
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                {name} at block {block.toLocaleString()}
+                <strong>{name}</strong> at block {block.toLocaleString()}
             </Col>
             <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace className="pointer" size={40} color={"#FFAABB"} onClick={(ev) => {

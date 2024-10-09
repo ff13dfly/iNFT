@@ -22,17 +22,19 @@ function BountyApply(props) {
         left:[9,3]
     };
 
+    const logo=`${window.location.origin}/image/logo.png`;
+
     let [search, setSearch]=useState("");
-    let [infoSearch, setInfoSearch]=useState("");
-    let [wanted, setWanted]=useState(`${window.location.origin}/image/logo.png`);       //wanted iNFT thumb
-    let [mine, setMine]=useState(`${window.location.origin}/image/logo.png`);           //your iNFT thumb
+    let [infoSearch, setInfoSearch]=useState(props.alink);
+    let [wanted, setWanted]=useState(logo);       //wanted iNFT thumb
+    let [mine, setMine]=useState(logo);           //your iNFT thumb
     let [disabe, setDisable]=useState(true);
     let [info, setInfo]=useState("");           //apply infomation
 
     const self = {
         changeSearch:(ev)=>{
             setSearch(ev.target.value);
-            setInfoSearch("");
+            setInfoSearch(props.alink);
             self.search(ev.target.value);
         },
         clickBack:(ev)=>{
@@ -41,10 +43,17 @@ function BountyApply(props) {
 
         //ivnfxmtfhjbc_10
         search:(name)=>{
+            if(!name){
+                setMine(logo);
+                return setInfoSearch(props.alink);
+            } 
             const chain=Network("anchor");
             chain.view({name:name},"anchor",(inft)=>{
                 //console.log(inft);
-                if(inft===false) return setInfoSearch("No such iNFT");
+                if(inft===false){
+                    setMine(logo);
+                    return setInfoSearch("No such iNFT");
+                } 
                 if (!inft.protocol || 
                     !inft.protocol.fmt || 
                     !inft.protocol.tpl || 
@@ -53,8 +62,9 @@ function BountyApply(props) {
 
                 //1.get the thumb to show
                 inft.raw.hash=inft.hash;
-                INFT.single.thumb(inft.raw,(dt)=>{
-                    console.log(dt);
+                INFT.single.thumb(inft.raw,(bs64)=>{
+                    //console.log(bs64);
+                    setMine(bs64);
                 });
 
                 //2.check the applying iNFT validity.
@@ -70,8 +80,6 @@ function BountyApply(props) {
             const series=bs[props.index].series;
             const target=raw.series[series];
             setWanted(target.thumb[0]);
-
-            console.log(target);
         },
     }
     useEffect(() => {
@@ -81,7 +89,7 @@ function BountyApply(props) {
     return (
         <Row >
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                {props.alink}
+                {infoSearch}
             </Col>
             <Col className="pb-2 text-end" sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace className="pointer" size={40} color={"#FFAABB"} onClick={(ev) => {
@@ -94,8 +102,6 @@ function BountyApply(props) {
                     self.changeSearch(ev);
                 }}/>
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>{infoSearch}</Col>
-            
             <Col className="text-center pt-4" sm={size.half[0]} xs={size.half[0]}>
                 <h6>Yours</h6>
                 <img alt="" src={mine} className="apply_thumb"/>

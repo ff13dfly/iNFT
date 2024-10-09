@@ -143,10 +143,10 @@ const funs={
      * @param  function     ck      //callback
      */
     getThumb:(list,ck)=>{
+        //console.log(JSON.stringify(list));
         if(list.length===0) return ck && ck(true);
         const ii=list.pop();
         const me=raw[ii];
-        //console.log(iNFT.template.hash);
         TPL.view(me.template.hash,(dt)=>{
             if(dt===false) return funs.getThumb(list,ck); 
             const basic = {
@@ -317,10 +317,17 @@ const self = {
         });
     },
     single:{    //single iNFT functions here.
-        thumb:(raw,ck)=>{
-            funs.getThumb([raw],(list)=>{
-                if(!list || list.length===0) return {error:"Failed to get thumb"}
-                return ck && ck(list[0]);
+        thumb:(inft,ck)=>{
+            TPL.view(inft.tpl,(dt)=>{
+                if(dt===false) return ck && ck({error:"Invalid gene"});
+                const basic = {
+                    cell: dt.cell,
+                    grid: dt.grid,
+                    target: dt.size
+                }
+                Render.thumb(inft.hash,dt.image,dt.parts, basic,inft.offset,(bs64)=>{
+                    return ck && ck(bs64);
+                })
             });
         },
         fav:(name)=>{
