@@ -1,14 +1,15 @@
 import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import { FaBackspace } from "react-icons/fa";
+import { FaBackspace,FaRegCommentDots } from "react-icons/fa";
 
 import Bounty from "../bounty";
 
-function BountyProgress(props) {
+function BountyBoard(props) {
     const size = {
         row: [12],
         back:[9,3],
+        left: [10,2],
     };
 
 
@@ -22,7 +23,7 @@ function BountyProgress(props) {
     }, []);
 
     return (
-        <Row >
+        <Row hidden={false}>
             <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
                 {props.alink}
             </Col>
@@ -32,17 +33,16 @@ function BountyProgress(props) {
                 }} />
             </Col>
 
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty progress list.
+            <Col className="" sm={size.left[0]} xs={size.left[0]}>
+                <input type="text" className="form-control" placeholder="Message about bounty..." />
             </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty apply list.
-            </Col>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty winner list.
+            <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
+               <button className="btn btn-sm btn-secondary">
+                    <FaRegCommentDots className="text-info" size={24}/>
+                </button>
             </Col>
         </Row>
     )
 }
 
-export default BountyProgress;
+export default BountyBoard;

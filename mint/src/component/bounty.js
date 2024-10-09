@@ -10,6 +10,7 @@ import Network from "../network/router";
 
 import BountyTicket from "./bounty/bounty_ticket";
 import BountyBonus from "./bounty/bounty_bonus";
+import BountyChat from "./bounty/bounty_chat";
 
 function Bounty(props) {
     const size = {
@@ -109,19 +110,25 @@ function Bounty(props) {
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
+                {/* <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
+                <hr /> */}
             </Col>
+            
             <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink} ticket={exsist}/>
             <Col sm={size.row[0]} xs={size.row[0]}>
+                <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
+            </Col>
+            <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
-                    <Col className="pt-2" sm={size.page[0]} xs={size.page[0]}>
+                    <Col className="" sm={size.page[0]} xs={size.page[0]}>
                         <FaAngleLeft className="pointer" size={36} hidden={page<=1} onClick={(ev) => {
                             self.clickPrevious(ev);
                         }} />
                     </Col>
-                    <Col className="pt-2 text-center unselect" sm={size.page[1]} xs={size.page[1]}>
+                    <Col className="text-center unselect" sm={size.page[1]} xs={size.page[1]}>
                         <h4> {page} / {total} </h4>
                     </Col>
-                    <Col className="pt-2 text-end" sm={size.page[2]} xs={size.page[2]}>
+                    <Col className="text-end" sm={size.page[2]} xs={size.page[2]}>
                         <FaAngleRight className="pointer" size={36} hidden={page>=total} onClick={(ev) => {
                             self.clickNext(ev);
                         }} />

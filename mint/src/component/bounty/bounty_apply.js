@@ -43,7 +43,7 @@ function BountyApply(props) {
         search:(name)=>{
             const chain=Network("anchor");
             chain.view({name:name},"anchor",(inft)=>{
-                console.log(inft);
+                //console.log(inft);
                 if(inft===false) return setInfoSearch("No such iNFT");
                 if (!inft.protocol || 
                     !inft.protocol.fmt || 
@@ -58,7 +58,7 @@ function BountyApply(props) {
                 });
 
                 //2.check the applying iNFT validity.
-                
+
             });
         },
         getThumb:()=>{
@@ -110,11 +110,11 @@ function BountyApply(props) {
             <Col className="pt-4 text-end"  sm={size.left[1]} xs={size.left[1]}>
                 <button className="btn btn-md btn-primary" disabled={disabe}>Apply</button>
             </Col>
-            <Col  sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col  sm={size.row[0]} xs={size.row[0]}>
                22/100 Progress of bonus.
-            </Col>
+            </Col> */}
             <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
-                Winner Thumb List
+                Approved iNFT list to divert
             </Col>
         </Row>
     )

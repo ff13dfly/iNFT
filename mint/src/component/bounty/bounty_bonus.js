@@ -55,7 +55,7 @@ function BountyBonus(props) {
               n = n * rt.length;
               m = m * divide;
             }
-            return parseInt(m / n).toLocaleString();
+            return parseInt(m / n);
         },
         getRate:(index)=>{
             if(!props.bounty || 
@@ -64,6 +64,12 @@ function BountyBonus(props) {
                 !props.bounty.template.raw.parts
             ) return "NaN";
             return self.calcRarity(props.bounty.template.raw.parts,index);
+        },
+        getX:(prize,index)=>{
+            const rate=self.getRate(index);
+            if(rate==="NaN") return rate;
+            const chain=Network("anchor");
+            return parseInt(prize*chain.accuracy()/rate);
         },
 
         checkApply:()=>{
@@ -101,7 +107,7 @@ function BountyBonus(props) {
                                 Prize: <strong className="text-info">{row.bonus}</strong> $ANK, <strong>{row.amount}</strong>P wanted
                             </Col>
                             <Col sm={size.row[0]} xs={size.row[0]}>
-                                Rarity: 1 / <strong className="text-info">{self.getRate(row.series)}</strong>
+                                Rarity: 1 / <strong >{self.getRate(row.series).toLocaleString()}</strong> ( <strong className="text-warning">{self.getX(row.bonus,row.series).toLocaleString()}</strong> X )
                             </Col>
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 Progress of bonus
