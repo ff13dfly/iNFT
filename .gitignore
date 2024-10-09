@@ -9,3 +9,7 @@ build
 deploy
 substrate
 bridge
+
+whitepaper
+service/apply
+service/charge

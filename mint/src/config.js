@@ -19,6 +19,9 @@ module.exports = {
         tanssi:"https://faucet.w3os.net",
         anchor:"https://faucet.w3os.net",
     },
+    bounty:{
+        url:"http://localhost:6868",
+    },
     market:[
         {
             domain:"localhost/iNFT/service/api/",
