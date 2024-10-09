@@ -27,8 +27,13 @@ function BountyBonus(props) {
     let [show,setShow] = useState(false);            //wether show apply button
 
     const self = {
-        clickApply:(ev)=>{
-            props.dialog(<BountyApply dialog={props.dialog} alink={props.alink}/>,"Bounty Apply");
+        clickApply:(index)=>{
+            props.dialog(<BountyApply 
+                dialog={props.dialog} 
+                alink={props.alink} 
+                bounty={props.bounty}
+                index={index}
+            />,"Bounty Apply");
         },
         clickProgress:(ev)=>{
             props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink}/>,"Apply Progress");
@@ -102,11 +107,11 @@ function BountyBonus(props) {
                                 Progress of bonus
                             </Col>
                             <Col sm={size.left[0]} xs={size.left[0]}>
-                                
+                                {/* {"<--"} click to check */}
                             </Col>
                             <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
-                                    self.clickApply(ev);
+                                    self.clickApply(index);
                                 }}>Apply</button>
                             </Col>
                             {/* <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>

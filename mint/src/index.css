@@ -364,6 +364,12 @@ code {
   margin-right: 10px;
 }
 
+.apply_thumb{
+  width: 100%;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
 .panel{
   max-width: 430px;
   margin-top: 150px;

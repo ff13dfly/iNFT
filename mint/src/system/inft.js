@@ -317,6 +317,12 @@ const self = {
         });
     },
     single:{    //single iNFT functions here.
+        thumb:(raw,ck)=>{
+            funs.getThumb([raw],(list)=>{
+                if(!list || list.length===0) return {error:"Failed to get thumb"}
+                return ck && ck(list[0]);
+            });
+        },
         fav:(name)=>{
             if(map[name]===undefined) return false
             const index=map[name];
