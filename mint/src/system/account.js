@@ -1,4 +1,5 @@
 import Local from "../lib/local";
+import Network from "../network/router";
 
 const self={
     address:(ck)=>{
@@ -11,8 +12,16 @@ const self={
             return ck && ck({error:"Invalid JSON file."});
         }
     },
-    pair:(passoword,ck)=>{
-
+    keyring:(password,ck)=>{
+        const fa = Local.get("login");
+        if(!fa) return ck && ck({error:"Invalid account"});
+        try {
+            const login=JSON.parse(fa);
+            const chain=Network("anchor");
+            chain.load(JSON.stringify(login),password,ck);
+        } catch (error) {
+            return ck && ck({error:"Invalid JSON file."});
+        }
     },
 }
 
