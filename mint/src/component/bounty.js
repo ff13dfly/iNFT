@@ -13,6 +13,10 @@ import BountyTicket from "./bounty/bounty_ticket";
 import BountyBonus from "./bounty/bounty_bonus";
 import BountyChat from "./bounty/bounty_chat";
 
+import BOUNTY from  "../system/bounty";
+
+
+let bounties=null;
 function Bounty(props) {
     const size = {
         row: [12],
@@ -22,7 +26,8 @@ function Bounty(props) {
     };
 
     let [page, setPage] = useState(1);          //bounty page
-    let [total, setTotal]= useState(2);         //
+    let [list, setList] = useState([]);         //bounty list
+    let [total, setTotal]= useState(0);         //bounty amount
     let [single, setSingle] = useState({});     //bounty data with template and on-chain orgin data
     let [bonus, setBonus] = useState([]);       //bonus list
     let [alink, setAlink] = useState("");       //bounty anchor link
@@ -96,16 +101,35 @@ function Bounty(props) {
                         setSingle(bts[0]);
                         setBonus(bts[0].orgin.raw.bonus);
                         const [sum_bonus,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
-                            //console.log(total,pieces);
                         setSum(sum_bonus);
                         setAmount(pieces);
                     }
                 });
             });
         },
+        show:(alink)=>{
+            //console.log(alink)
+            BOUNTY.view(alink,(bt)=>{
+                bt.alink=alink;
+                const cid = bt.raw.template.cid;
+                TPL.view(cid, (dt) => {
+                    bt.template=dt;
+                    setSingle(bt);
+                    setBonus(bt.raw.bonus);
+                    const [sum_bonus,pieces]=self.calcSum(bt.raw.bonus);
+                    setSum(sum_bonus);
+                    setAmount(pieces);
+                });
+            });
+        },
     }
     useEffect(() => {
-        self.fresh(page);
+        BOUNTY.list((bts)=>{
+            console.log(bts);
+            setList(bts);
+            setTotal(bts.length);
+            self.show(bts[0]);
+        });
     }, []);
 
     return (

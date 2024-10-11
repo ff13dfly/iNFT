@@ -40,7 +40,7 @@ function BountyBonus(props) {
         },
         getThumb: (index) => {
             if(props.bounty){
-                const all = props.bounty.template.raw.series[index];
+                const all = props.bounty.template.series[index];
                 return all.thumb[0];
             }
             return "";

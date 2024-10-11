@@ -96,7 +96,7 @@ function BountyApply(props) {
                 });
 
                 //2.check the applying iNFT validity.
-                const parts=props.bounty.template.raw.parts;
+                const parts=props.bounty.template.parts;
                 const offset=inft.raw.offset;
                 if(!self.checkRarity(parts,inft.hash,offset,props.index)){
                     return setInfoSearch(`Not wanted.`);
@@ -125,7 +125,7 @@ function BountyApply(props) {
             });
         },
         checkRarity:(parts,hash,offset,index)=>{
-            return true;
+            //return true;
             //console.log(parts,hash,offset,index);
             for(let i=0;i<parts.length;i++){
                 const part=parts[i];
@@ -138,8 +138,8 @@ function BountyApply(props) {
             return true;
         },
         fresh: () => {
-            const raw = props.bounty.template.raw;
-            const bs = props.bounty.orgin.raw.bonus;
+            const raw = props.bounty.template;
+            const bs = props.bounty.raw.bonus;
             const series = bs[props.index].series;
             const target = raw.series[series];
             setWanted(target.thumb[0]);
