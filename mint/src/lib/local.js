@@ -11,10 +11,12 @@ const keys={
 
     mint:`${prefix}mint`,           //isolate by account
 
-    task: `${prefix}task`,
+    task: `${prefix}task`,          //Mint task
 
     token: `${prefix}token`,        //Market API token
     uuid:`${prefix}uuid`,           //Market API uuid
+
+    apply:`${prefix}apply`,         //bounty apply record
 }
 
 const self={

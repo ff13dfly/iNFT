@@ -148,13 +148,11 @@ function App() {
       <Header fresh={self.fresh} dialog={self.dialog} update={update} panel={self.panel} />
       <Preview fresh={self.fresh} update={update} node={config.node[0]} />
       <Action fresh={self.fresh} dialog={self.dialog} update={update} />
-      <Modal dialogClassName="modal-minter"
+      {/* <Modal dialogClassName="modal-minter"
         show={!hide}
         size="lg"
         backdrop="static"
         onHide={(ev) => {
-          //console.log(callback);
-          //if(callback!==null) callback();
           setHide(true);
         }}
         centered={false}
@@ -167,7 +165,7 @@ function App() {
         <Modal.Body>
           {grid}
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       <Modal dialogClassName="modal-minter"
         show={show}

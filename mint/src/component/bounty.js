@@ -3,11 +3,9 @@ import { useState, useEffect } from "react";
 
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-import API from "../system/api";
 import tools from "../lib/tools";
 import TPL from "../system/tpl";
 import Network from "../network/router";
-import config from "../config";
 
 import BountyTicket from "./bounty/bounty_ticket";
 import BountyBonus from "./bounty/bounty_bonus";
@@ -16,7 +14,6 @@ import BountyChat from "./bounty/bounty_chat";
 import BOUNTY from  "../system/bounty";
 
 
-let bounties=null;
 function Bounty(props) {
     const size = {
         row: [12],
@@ -38,11 +35,11 @@ function Bounty(props) {
     const self = {
         clickPrevious: (ev) => {
             setPage(page - 1);
-            self.fresh(page - 1);
+            self.show(list[page-2]);
         },
         clickNext: (ev) => {
-            setPage(page + 1);
-            self.fresh(page +1);
+            self.show(list[page]);
+            setPage(page+1);
         },
         checkExsist:(alink)=>{
             const chain = Network("anchor");
@@ -89,27 +86,9 @@ function Bounty(props) {
             }
             return [sum,amount];
         },
-        fresh: (p) => {
-            const chain = Network("anchor");
-            const source=config.bounty.source;
-            chain.view({name:source.name}, "anchor", (ak) => {
-                if(ak===false || !ak.raw || !ak.raw.data){
-                    return false;
-                }
-                self.prepareData(ak.raw.data, (bts) => {
-                    if (bts.length !== 0) {
-                        setSingle(bts[0]);
-                        setBonus(bts[0].orgin.raw.bonus);
-                        const [sum_bonus,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
-                        setSum(sum_bonus);
-                        setAmount(pieces);
-                    }
-                });
-            });
-        },
         show:(alink)=>{
-            //console.log(alink)
             BOUNTY.view(alink,(bt)=>{
+                console.log(bt);
                 bt.alink=alink;
                 const cid = bt.raw.template.cid;
                 TPL.view(cid, (dt) => {
@@ -125,10 +104,9 @@ function Bounty(props) {
     }
     useEffect(() => {
         BOUNTY.list((bts)=>{
-            console.log(bts);
             setList(bts);
             setTotal(bts.length);
-            self.show(bts[0]);
+            self.show(bts[page-1]);
         });
     }, []);
 

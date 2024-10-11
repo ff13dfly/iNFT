@@ -60,10 +60,9 @@ function BountyBonus(props) {
         getRate:(index)=>{
             if(!props.bounty || 
                 !props.bounty.template ||
-                !props.bounty.template.raw ||
-                !props.bounty.template.raw.parts
+                !props.bounty.template.parts
             ) return "NaN";
-            return self.calcRarity(props.bounty.template.raw.parts,index);
+            return self.calcRarity(props.bounty.template.parts,index);
         },
         getX:(prize,index)=>{
             const rate=self.getRate(index);
@@ -90,7 +89,7 @@ function BountyBonus(props) {
         //console.log(props.bounty);
         self.checkApply();
         if (props.data) setBonus(props.data);
-    }, [props.data,props.ticket]);
+    }, [props.data,props.ticket,props.alink]);
 
     return (
         <Col sm={size.row[0]} xs={size.row[0]}>

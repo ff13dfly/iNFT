@@ -68,11 +68,21 @@ function BountyApply(props) {
                         return setInfo(inft.error);
                     }
 
-                    Apply.submit(pair,inft,props.alink,props.index,(status)=>{
-                        if(status.message) return setInfo(status.message);
-                        if(status.done){
-                            console.log(`Appled to server.`);
+                    setPassword("");
+                    setDisablApply(true);
+                    Apply.submit(pair,inft,props.bounty.alink,props.index,(status)=>{
+                        console.log(status)
+                        setDisablApply(false);      //recover apply button
+                        if(status.error){
+                            return setInfo(status.error);
                         }
+
+                        //recover to default
+                        setInfo("Done");
+                        setSearch("");
+                        setTimeout(() => {
+                            setInfo("");
+                        }, 1500);
                     });
                 });
             });
@@ -125,7 +135,7 @@ function BountyApply(props) {
             });
         },
         checkRarity:(parts,hash,offset,index)=>{
-            //return true;
+            return true;
             //console.log(parts,hash,offset,index);
             for(let i=0;i<parts.length;i++){
                 const part=parts[i];
