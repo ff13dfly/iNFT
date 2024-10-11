@@ -68,8 +68,11 @@ function BountyApply(props) {
                         return setInfo(inft.error);
                     }
 
-                    Apply.submit(pair,inft,props.alink,props.index,()=>{
-
+                    Apply.submit(pair,inft,props.alink,props.index,(status)=>{
+                        if(status.message) return setInfo(status.message);
+                        if(status.done){
+                            console.log(`Appled to server.`);
+                        }
                     });
                 });
             });

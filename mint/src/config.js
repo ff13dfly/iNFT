@@ -21,6 +21,10 @@ module.exports = {
     },
     bounty:{
         url:"http://localhost:6868",
+        source:{
+            name:"inftbounty",
+            publisher:"5FQmGPk7qGBmU3K6kDfMSBiUHBYq5NqXpx93KFEvDvyz5sRJ",
+        },
     },
     market:[
         {

@@ -7,6 +7,7 @@ import API from "../system/api";
 import tools from "../lib/tools";
 import TPL from "../system/tpl";
 import Network from "../network/router";
+import config from "../config";
 
 import BountyTicket from "./bounty/bounty_ticket";
 import BountyBonus from "./bounty/bounty_bonus";
@@ -49,20 +50,25 @@ function Bounty(props) {
         prepareData: (list, ck, bts) => {
             if (!bts) bts = [];
             if (list.length === 0) return ck && ck(bts);
-            const row = list.pop();
-            setAlink(row.alink);            //update alink
-            self.checkExsist(row.alink);    //check ticket exsist
+            const alink = list.pop();
+            setAlink(alink);            //update alink
+            self.checkExsist(alink);    //check ticket exsist
 
-            const anchor = tools.decode(row.alink);
+            const anchor = tools.decode(alink);
             const chain = Network("anchor");
             chain.view(anchor, "anchor", (res) => {
                 if (res === false) return self.prepareData(list, ck, bts);
                 if (!res.raw || !res.raw.template || !res.raw.template.cid) return self.prepareData(list, ck, bts);
                 const cid = res.raw.template.cid;
                 TPL.view(cid, (dt) => {
-                    row.template = res.raw.template;
+                    const row={
+                        alink:alink,
+                        template:res.raw.template,
+                        orgin:res,
+                    }
+                    //row.template = res.raw.template;
                     row.template.raw = dt;
-                    row.orgin = res;
+                    //row.orgin = res;
                     bts.push(row);
                     return self.prepareData(list, ck, bts);
                 });
@@ -79,20 +85,23 @@ function Bounty(props) {
             return [sum,amount];
         },
         fresh: (p) => {
-            API.bounty.list((res) => {
-                if (res && res.success && res.data) {
-                    self.prepareData(res.data, (bts) => {
-                        if (bts.length !== 0) {
-                            setSingle(bts[0]);
-                            setBonus(bts[0].orgin.raw.bonus);
-                            const [sum_bonus,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
-                            //console.log(total,pieces);
-                            setSum(sum_bonus);
-                            setAmount(pieces);
-                        }
-                    });
+            const chain = Network("anchor");
+            const source=config.bounty.source;
+            chain.view({name:source.name}, "anchor", (ak) => {
+                if(ak===false || !ak.raw || !ak.raw.data){
+                    return false;
                 }
-            }, p, 1);
+                self.prepareData(ak.raw.data, (bts) => {
+                    if (bts.length !== 0) {
+                        setSingle(bts[0]);
+                        setBonus(bts[0].orgin.raw.bonus);
+                        const [sum_bonus,pieces]=self.calcSum(bts[0].orgin.raw.bonus);
+                            //console.log(total,pieces);
+                        setSum(sum_bonus);
+                        setAmount(pieces);
+                    }
+                });
+            });
         },
     }
     useEffect(() => {
