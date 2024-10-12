@@ -19,7 +19,29 @@ const funs={
                     network: "anchor",
                     address: address,
                 },
-                status: "apply",
+                action: "apply",
+            }
+        },
+        protocol:(bounty_alink)=>{
+            return {
+                fmt: "json",
+                type: "data",
+                app: "inft",
+                ref: bounty_alink,
+            };
+        },
+    },
+    divert:{
+        name:()=>{
+            return `divert_${tools.char(10)}`.toLocaleLowerCase();
+        },
+        raw:(inft_alink,bounty_alink,judge_alink,block)=>{
+            return {
+                inft: inft_alink,        //apply inft anchor link
+                bounty:bounty_alink,     //bounty alink
+                judge:judge_alink,       //judgement alink
+                block: 0,                //divert transaction block number
+                action: "divert",
             }
         },
         protocol:(bounty_alink)=>{
@@ -75,8 +97,32 @@ const funs={
             return false;
         }
     },
+    fetchData:(url,ck,onError)=>{
+        fetch(url).then((response)=>{
+            if(!response.ok){
+                if(onError) onError();
+                return ck && ck({error:"Failed to get respons from "+url});
+            } 
+            response.text().then((res)=>{
+                try {
+                    const dt=JSON.parse(res);
+                    if(dt.error && onError) onError();;
+                    return ck && ck(dt);
+                } catch (error) {
+                    if(onError) onError();
+                    return ck && ck({error:"Invalide content, please chech the response from server."})
+                }
+            }).catch((error)=>{
+                if(onError) onError();
+                return ck && ck({error:error});
+            });
+        }).catch((error)=>{
+            if(onError) onError();
+            return ck && ck({error:error});
+        });
+    },
 }
-
+const chain=Network("anchor");
 const self={
     submit:(pair,inft,bounty_alink,index,ck)=>{
         //console.log(pair,inft,bounty_alink,index);
@@ -89,7 +135,6 @@ const self={
             protocol:funs.apply.protocol(bounty_alink),
         }
         //console.log(obj);
-        const chain=Network("anchor");
         chain.write(pair,obj,(process)=>{
             //console.log(process);
             if(process.msg) ck && ck({message:process.msg});
@@ -111,32 +156,61 @@ const self={
                         const site=config.bounty.url;
                         const url=`${site}/apply/${obj.anchor}/${dt.block}`;
                         console.log(url);
-                        fetch(url).then((response)=>{
-                            if(!response.ok){
-                                funs.clearRecord(apply_alink);
-                                return ck && ck({error:"Failed to get respons from "+url});
-                            } 
-                            response.text().then((res)=>{
-                                try {
-                                    const dt=JSON.parse(res);
-                                    if(dt.error) funs.clearRecord(apply_alink);
-                                    return ck && ck(dt);
-                                } catch (error) {
-                                    funs.clearRecord(apply_alink);
-                                    return ck && ck({error:"Invalide content, please chech the response from server."})
-                                }
-                            }).catch((error)=>{
-                                funs.clearRecord(apply_alink);
-                                return ck && ck({error:error});
-                            });
-                        }).catch((error)=>{
+                        funs.fetchData(url,(result)=>{
+                            return ck && ck(result);
+                        },()=>{
                             funs.clearRecord(apply_alink);
-                            return ck && ck({error:error});
                         });
+                        // fetch(url).then((response)=>{
+                        //     if(!response.ok){
+                        //         funs.clearRecord(apply_alink);
+                        //         return ck && ck({error:"Failed to get respons from "+url});
+                        //     } 
+                        //     response.text().then((res)=>{
+                        //         try {
+                        //             const dt=JSON.parse(res);
+                        //             if(dt.error) funs.clearRecord(apply_alink);
+                        //             return ck && ck(dt);
+                        //         } catch (error) {
+                        //             funs.clearRecord(apply_alink);
+                        //             return ck && ck({error:"Invalide content, please chech the response from server."})
+                        //         }
+                        //     }).catch((error)=>{
+                        //         funs.clearRecord(apply_alink);
+                        //         return ck && ck({error:error});
+                        //     });
+                        // }).catch((error)=>{
+                        //     funs.clearRecord(apply_alink);
+                        //     return ck && ck({error:error});
+                        // });
                     });
                 });
             }
         });
+    },
+
+    divert:(pair,inft,bounty_alink,index,ck)=>{
+        //1. write the apply data on chain
+        // const inft_alink=`anchor://${inft.name}/${inft.block}`;
+        // const obj={
+        //     anchor:funs.divert.name(),
+        //     raw:funs.divert.raw(inft_alink,bounty_alink,index,inft.owner),
+        //     protocol:funs.divert.protocol(bounty_alink),
+        // }
+
+        //1.divert iNFT to target account
+
+        //2.write divert information on chain
+
+        //3.submit divert information to system
+        // const site=config.bounty.url;
+        // const url=`${site}/apply/${}/${}`;
+        // console.log(url);
+        // funs.fetchData(url,(result)=>{
+        //     return ck && ck(result);
+        // },()=>{
+        //     funs.clearRecord(apply_alink);
+        // });
     },
 }
 

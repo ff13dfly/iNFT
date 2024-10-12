@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 
 import BountyApply from "./bounty_apply";
 import BountyProgress from "./bounty_progress";
+import BountyDivert from "./bounty_divert";
 
 import Network from "../../network/router";
 import Account from "../../system/account";
 import tools from "../../lib/tools";
+import Local from "../../lib/local";
 
 /* Bounty bonus list, the entry to apply and check the progress
 *   @param  {array}     data        //bonus list
@@ -23,8 +25,9 @@ function BountyBonus(props) {
         left:[8,4],
     };
 
-    let [bonus, setBonus] = useState([]);
-    let [show,setShow] = useState(false);            //wether show apply button
+    let [bonus, setBonus] = useState([]);   //bonus list
+    let [show,setShow] = useState(false);   //wether show apply button
+    let [divert, setDivert]= useState({});  //divert buttons 
 
     const self = {
         clickApply:(index)=>{
@@ -34,6 +37,14 @@ function BountyBonus(props) {
                 bounty={props.bounty}
                 index={index}
             />,"Bounty Apply");
+        },
+        clickDivert:(inft)=>{
+            //console.log(inft,props.bounty);
+            props.dialog(<BountyDivert 
+                dialog={props.dialog}
+                bounty={props.bounty}
+                inft={inft}
+            />,"Bounty Divert");
         },
         clickProgress:(ev)=>{
             props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink}/>,"Apply Progress");
@@ -84,12 +95,46 @@ function BountyBonus(props) {
                 });
             })
         },
+        getApplyRecord:()=>{
+            const str=Local.get("apply");
+            if(!str) return false;
+            try {
+                return JSON.parse(str);
+            } catch (error) {
+                return false;
+            }
+        },
+        getAnchor:(alink,ck)=>{
+            const ak=tools.decode(alink);
+            const chain=Network("anchor");
+            chain.view(ak,"anchor",ck);
+        },
+        checkDivert:(apls,ck)=>{
+            const map=self.getApplyRecord();
+            for(let i=0;i<apls.length;i++){
+                const row=apls[i];
+                if(map[row.apply] && row.judge){
+                    //console.log(`Got apply, ready to check. ${row.apply}`,row);
+                    self.getAnchor(row.judge,(judge)=>{
+                        if(judge && judge.raw && judge.raw.result===true){
+                            //console.log(judge.raw);
+                            divert[judge.raw.bonus]=judge.raw.inft;
+                            setDivert(tools.clone(divert));
+                        }
+                    });
+                }
+            }
+        },
     }
     useEffect(() => {
-        //console.log(props.bounty);
+        console.log(props.bounty);
         self.checkApply();
+        if(props.bounty.system)  self.checkDivert(props.bounty.system.apply,()=>{
+
+        });
+
         if (props.data) setBonus(props.data);
-    }, [props.data,props.ticket,props.alink]);
+    }, [props.bounty,props.ticket,props.alink]);
 
     return (
         <Col sm={size.row[0]} xs={size.row[0]}>
@@ -111,19 +156,25 @@ function BountyBonus(props) {
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 Progress of bonus
                             </Col>
-                            <Col sm={size.left[0]} xs={size.left[0]}>
+
+                            <Col hidden={divert[index]} sm={size.left[0]} xs={size.left[0]}>
                                 {/* {"<--"} click to check */}
                             </Col>
-                            <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
+                            <Col hidden={divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
                                     self.clickApply(index);
                                 }}>Apply</button>
                             </Col>
-                            {/* <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
-                                <button className="btn btn-sm btn-primary" onClick={(ev)=>{
-                                    self.clickProgress(ev);
-                                }}>Progress</button>
-                            </Col> */}
+
+                            <Col hidden={!divert[index]} className="pt-1 text-info" sm={size.left[0]} xs={size.left[0]}>
+                                Great! Get prize now!
+                            </Col>
+                            <Col hidden={!divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
+                                <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
+                                    self.clickDivert(divert[index]);
+                                }}>Divert</button>
+                            </Col>
+
                         </Row>
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>

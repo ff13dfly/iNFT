@@ -88,7 +88,7 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
-                console.log(bt);
+                //console.log(bt);
                 bt.alink=alink;
                 const cid = bt.raw.template.cid;
                 TPL.view(cid, (dt) => {

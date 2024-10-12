@@ -135,7 +135,7 @@ function BountyApply(props) {
             });
         },
         checkRarity:(parts,hash,offset,index)=>{
-            return true;
+            //return true;
             //console.log(parts,hash,offset,index);
             for(let i=0;i<parts.length;i++){
                 const part=parts[i];
