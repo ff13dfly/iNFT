@@ -35,12 +35,13 @@ const funs={
         name:()=>{
             return `divert_${tools.char(10)}`.toLocaleLowerCase();
         },
-        raw:(inft_alink,bounty_alink,judge_alink,block)=>{
+        raw:(inft_alink,bounty_alink,judge_alink,owner,block)=>{
             return {
                 inft: inft_alink,        //apply inft anchor link
                 bounty:bounty_alink,     //bounty alink
                 judge:judge_alink,       //judgement alink
-                block: 0,                //divert transaction block number
+                from:owner,              //owner before diverting
+                block: block,            //divert transaction block number
                 action: "divert",
             }
         },
@@ -155,7 +156,7 @@ const self={
                         //4.apply to server
                         const site=config.bounty.url;
                         const url=`${site}/apply/${obj.anchor}/${dt.block}`;
-                        console.log(url);
+                        //console.log(url);
                         funs.fetchData(url,(result)=>{
                             return ck && ck(result);
                         },()=>{
@@ -189,28 +190,52 @@ const self={
         });
     },
 
-    divert:(pair,inft,bounty_alink,index,ck)=>{
-        //1. write the apply data on chain
-        // const inft_alink=`anchor://${inft.name}/${inft.block}`;
-        // const obj={
-        //     anchor:funs.divert.name(),
-        //     raw:funs.divert.raw(inft_alink,bounty_alink,index,inft.owner),
-        //     protocol:funs.divert.protocol(bounty_alink),
-        // }
-
+    divert:(pair,inft_alink,judge_alink,bounty_alink,target,ck)=>{
         //1.divert iNFT to target account
+        const ak=tools.decode(inft_alink);
+        chain.divert(pair,ak.name,target,(process)=>{
+            if(process.msg) ck && ck({message:process.msg});
+            if(process.status==="Finalized"){
+                const hash=process.hash;        //finalized block number
+                chain.view(hash,"block",(dt)=>{
 
-        //2.write divert information on chain
+                    //2.write divert information on chain
+                    const obj={
+                        anchor:funs.divert.name(),
+                        raw:funs.divert.raw(
+                            inft_alink,
+                            bounty_alink,
+                            judge_alink,
+                            pair.address,
+                            dt.block
+                        ),
+                        protocol:funs.divert.protocol(bounty_alink),
+                    }
+                    
+                    chain.write(pair,obj,(onchain)=>{
+                        if(onchain.status==="Finalized"){
+                            const divert_hash=onchain.hash;
+                            chain.view(divert_hash,"block",(dd)=>{
+                                //3.submit divert information to system
+                                const site=config.bounty.url;
+                                const url=`${site}/divert/${obj.name}/${dd.block}`;
+                                console.log(url);
+                                // funs.fetchData(url,(result)=>{
+                                //     return ck && ck(result);
+                                // },()=>{
+                                //     funs.clearRecord(apply_alink);
+                                // });
+                            });
+                        }
+                        
+                    });
+                });
+            }
+        });
 
-        //3.submit divert information to system
-        // const site=config.bounty.url;
-        // const url=`${site}/apply/${}/${}`;
-        // console.log(url);
-        // funs.fetchData(url,(result)=>{
-        //     return ck && ck(result);
-        // },()=>{
-        //     funs.clearRecord(apply_alink);
-        // });
+        
+
+        
     },
 }
 

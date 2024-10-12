@@ -247,6 +247,23 @@ const self = {
             });
         });
     },
+    divert: (pair, name, target, ck) => {
+        self.init(() => {
+            self.view(name, "owner", (signer) => {
+                if (signer === false || pair.address !== signer.address) return ck && ck({ error: "Invalid owner of iNFT." });
+                try {
+                    wsAPI.tx.anchor.divertAnchor(name, target).signAndSend(pair, (res) => {
+                        const dt = res.toHuman();
+                        funs.decodeProcess(dt, (status) => {
+                            return ck && ck(status);
+                        });
+                    });
+                } catch (error) {
+                    return ck && ck({ error: error });
+                }
+            });
+        });
+    },
     market: (ck) => {
         self.init(() => {
             wsAPI.query.anchor.sellList.entries().then((arr) => {

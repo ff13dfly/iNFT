@@ -28,6 +28,7 @@ function BountyBonus(props) {
     let [bonus, setBonus] = useState([]);   //bonus list
     let [show,setShow] = useState(false);   //wether show apply button
     let [divert, setDivert]= useState({});  //divert buttons 
+    let [judge, setJudge]= useState({});  //divert buttons 
 
     const self = {
         clickApply:(index)=>{
@@ -38,12 +39,12 @@ function BountyBonus(props) {
                 index={index}
             />,"Bounty Apply");
         },
-        clickDivert:(inft)=>{
-            //console.log(inft,props.bounty);
+        clickDivert:(inft,judge_alink)=>{
             props.dialog(<BountyDivert 
                 dialog={props.dialog}
                 bounty={props.bounty}
                 inft={inft}
+                judge={judge_alink}
             />,"Bounty Divert");
         },
         clickProgress:(ev)=>{
@@ -114,12 +115,16 @@ function BountyBonus(props) {
             for(let i=0;i<apls.length;i++){
                 const row=apls[i];
                 if(map[row.apply] && row.judge){
+                    //console.log(row.judge);
                     //console.log(`Got apply, ready to check. ${row.apply}`,row);
                     self.getAnchor(row.judge,(judge)=>{
                         if(judge && judge.raw && judge.raw.result===true){
-                            //console.log(judge.raw);
+
                             divert[judge.raw.bonus]=judge.raw.inft;
                             setDivert(tools.clone(divert));
+
+                            judge[judge.raw.bonus]=row.judge;
+                            setJudge(tools.clone(judge));
                         }
                     });
                 }
@@ -171,7 +176,7 @@ function BountyBonus(props) {
                             </Col>
                             <Col hidden={!divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
-                                    self.clickDivert(divert[index]);
+                                    self.clickDivert(divert[index],judge[index]);
                                 }}>Divert</button>
                             </Col>
 

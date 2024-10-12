@@ -5,6 +5,7 @@ import { FaBackspace } from "react-icons/fa";
 
 import Bounty from "../bounty";
 import Account from "../../system/account";
+import Apply from "../../system/apply";
 
 function BountyDivert(props) {
     const size = {
@@ -32,14 +33,20 @@ function BountyDivert(props) {
             props.dialog(<Bounty dialog={props.dialog} alink={props.alink} />, "Bounty");
         }, 
         clickDivert:(ev)=>{
+            if(!props.inft || !props.judge){
+                return setInfo("Invalid basic parameters.");
+            }
             Account.keyring(password,(pair)=>{
                 if(pair.error){
                     setPassword("");
                     return setInfo(pair.error);
                 }
 
-                console.log(pair);
-                console.log(props);
+                const bounty_alink=`anchor://${props.bounty.name}/${props.bounty.block}`;
+                const target=props.bounty.raw.consignee;
+                Apply.divert(pair,props.inft,props.judge,bounty_alink,target,(done)=>{
+                    console.log(done);
+                });
             });
         },
     }
