@@ -7,7 +7,7 @@ import Bounty from "../bounty";
 import Account from "../../system/account";
 import Apply from "../../system/apply";
 
-function BountyDivert(props) {
+function BountyRedeem(props) {
     const size = {
         row: [12],
         back: [9, 3],
@@ -116,4 +116,4 @@ function BountyDivert(props) {
     )
 }
 
-export default BountyDivert;
+export default BountyRedeem;

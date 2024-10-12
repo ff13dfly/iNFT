@@ -137,7 +137,7 @@ const self={
         }
         //console.log(obj);
         chain.write(pair,obj,(process)=>{
-            //console.log(process);
+            if(process.error) return ck && ck(process);
             if(process.msg) ck && ck({message:process.msg});
 
             //2.apply to server;
@@ -194,6 +194,8 @@ const self={
         //1.divert iNFT to target account
         const ak=tools.decode(inft_alink);
         chain.divert(pair,ak.name,target,(process)=>{
+            console.log(process);
+            if(process.error) return ck && ck(process);
             if(process.msg) ck && ck({message:process.msg});
             if(process.status==="Finalized"){
                 const hash=process.hash;        //finalized block number
@@ -212,13 +214,15 @@ const self={
                         protocol:funs.divert.protocol(bounty_alink),
                     }
                     
+                    console.log(obj);
+
                     chain.write(pair,obj,(onchain)=>{
                         if(onchain.status==="Finalized"){
                             const divert_hash=onchain.hash;
                             chain.view(divert_hash,"block",(dd)=>{
                                 //3.submit divert information to system
                                 const site=config.bounty.url;
-                                const url=`${site}/divert/${obj.name}/${dd.block}`;
+                                const url=`${site}/divert/${obj.anchor}/${dd.block}`;
                                 console.log(url);
                                 // funs.fetchData(url,(result)=>{
                                 //     return ck && ck(result);
@@ -232,10 +236,6 @@ const self={
                 });
             }
         });
-
-        
-
-        
     },
 }
 

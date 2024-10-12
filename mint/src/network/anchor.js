@@ -43,7 +43,7 @@ const funs = {
         }
     },
     filter: (exs, method, status) => {
-        console.log(exs);
+        //console.log(exs);
         let arr = [];
         exs.forEach((ex, index) => {
             console.log(ex)
@@ -384,10 +384,8 @@ const self = {
 
                         exs.forEach((ex, index) => {
                             if (index < 4) return false;
-                            //console.log(ex);
                             const row = ex.toHuman();
                             console.log(row);
-                            //console.log(ex.toJSON());
                         });
                     });
                     break;

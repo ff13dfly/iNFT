@@ -9,8 +9,9 @@ import Network from "../../network/router";
 
 import Config from "../../system/config";
 import RUNTIME from "../../system/runtime";
+import Account from "../../system/account";
 
-import {  FaCopy } from "react-icons/fa";
+import { FaCopy, FaFileDownload } from "react-icons/fa";
 
 function UserBasic(props) {
 
@@ -30,25 +31,31 @@ function UserBasic(props) {
 
   const self = {
     clickCharge: (ev) => {
-      if(props.dialog)props.dialog.show(<UseCharge dailog={props.dialog} />,"Account Charge");
+      if (props.dialog) props.dialog.show(<UseCharge dailog={props.dialog} />, "Account Charge");
     },
-    clickAddress:(addr)=>{
+    clickAddress: (addr) => {
       //console.log(addr);
       Copy(addr);
+    },
+    clickDownload:(addr)=>{
+      //console.log(addr);
+      Account.get(addr,(dt)=>{
+        console.log(dt);
+      });
     },
     getAvatar: () => {
       const cfg = Config.get(["system", "avatar"]);
       const addr = RUNTIME.account.get();
       return `${cfg.base}/${addr}.png${cfg.set}`;
     },
-    callRecover:(key, at) => {
+    callRecover: (key, at) => {
       if (!recover[key]) {
-          recover[key] = "text-warning";
+        recover[key] = "text-warning";
+        setRecover(tools.copy(recover));
+        setTimeout(() => {
+          delete recover[key];
           setRecover(tools.copy(recover));
-          setTimeout(() => {
-              delete recover[key];
-              setRecover(tools.copy(recover));
-          }, !at ? 1000 : at);
+        }, !at ? 1000 : at);
       }
     },
     fresh: () => {
@@ -106,19 +113,32 @@ function UserBasic(props) {
 
       </Col>
       <Col md={size.normal[1]} lg={size.normal[1]} xl={size.normal[1]} xxl={size.normal[1]}>
-        <h5>Manager</h5>
-        <Image
-          src={thumb}
-          rounded
-          width="100%"
-          style={{ minHeight: "80px" }}
-        />
-        <h6 className="pointer pt-4" onClick={(ev)=>{
-          self.clickAddress(address);
-          self.callRecover("address");
-        }}>
-          {tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" :`ml-5 ${recover.address}`}/>
-        </h6>
+        <Row>
+          <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]}>
+            <h5>Manager</h5>
+          </Col>
+          <Col className="text-end" md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]}>
+            <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+              self.clickDownload(address);
+            }}>
+              <FaFileDownload size={18}/>
+            </button>
+          </Col>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Image
+              src={thumb}
+              rounded
+              width="100%"
+              style={{ minHeight: "80px" }}
+            />
+            <h6 className="pointer pt-4" onClick={(ev) => {
+              self.clickAddress(address);
+              self.callRecover("address");
+            }}>
+              {tools.shorten(address)} <FaCopy className={!recover.address ? "ml-5" : `ml-5 ${recover.address}`} />
+            </h6>
+          </Col>
+        </Row>
       </Col>
 
       {/* <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>

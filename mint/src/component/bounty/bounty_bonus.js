@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import BountyApply from "./bounty_apply";
 import BountyProgress from "./bounty_progress";
-import BountyDivert from "./bounty_divert";
+import BountyRedeem from "./bounty_redeem";
 
 import Network from "../../network/router";
 import Account from "../../system/account";
@@ -40,12 +40,12 @@ function BountyBonus(props) {
             />,"Bounty Apply");
         },
         clickDivert:(inft,judge_alink)=>{
-            props.dialog(<BountyDivert 
+            props.dialog(<BountyRedeem 
                 dialog={props.dialog}
                 bounty={props.bounty}
                 inft={inft}
                 judge={judge_alink}
-            />,"Bounty Divert");
+            />,"Bounty Redeem");
         },
         clickProgress:(ev)=>{
             props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink}/>,"Apply Progress");
@@ -177,7 +177,7 @@ function BountyBonus(props) {
                             <Col hidden={!divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
                                     self.clickDivert(divert[index],judge[index]);
-                                }}>Divert</button>
+                                }}>Redeem</button>
                             </Col>
 
                         </Row>
