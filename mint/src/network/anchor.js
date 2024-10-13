@@ -294,46 +294,53 @@ const self = {
                     if (value.block !== undefined) return wsAPI.rpc.chain.getBlockHash(value.block, (res) => {
                         const hash = res.toJSON();
                         if (hash === "0x0000000000000000000000000000000000000000000000000000000000000000") return ck && ck(false);
-                        wsAPI.rpc.chain.getBlock(hash).then((full) => {
-                            let data = null;
-                            full.block.extrinsics.forEach((ex, index) => {
-                                const row = ex.toHuman();
-                                const dt = row.method;
+                        wsAPI.query.system.events.at(hash,(events)=>{
+                            const evs=funs.status(events);
 
-                                if (dt.method === "setAnchor" && dt.args.key === value.name) {
-                                    data = {
-                                        owner: row.signer.Id,
-                                        signer: row.signer.Id,
-                                        name: dt.args.key,
-                                        raw: dt.args.raw,
-                                        protocol: dt.args.protocol,
-                                        pre: parseInt(dt.args.pre),
-                                        block: value.block,
-                                        hash: hash,
-                                        network: "anchor",
+                            wsAPI.rpc.chain.getBlock(hash).then((full) => {
+                                let data = null;
+                                //console.log(full.block.extrinsics.toHuman());
+                                full.block.extrinsics.forEach((ex, index) => {
+                                    //console.log(index)
+                                    
+                                    const row = ex.toHuman();
+                                    const dt = row.method;
+                                    const success=evs[index];
+                                    if (success==="ExtrinsicSuccess" && dt.method === "setAnchor" && dt.args.key === value.name) {
+                                        data = {
+                                            owner: row.signer.Id,
+                                            signer: row.signer.Id,
+                                            name: dt.args.key,
+                                            raw: dt.args.raw,
+                                            protocol: dt.args.protocol,
+                                            pre: parseInt(dt.args.pre),
+                                            block: value.block,
+                                            hash: hash,
+                                            network: "anchor",
+                                        }
                                     }
-                                }
-                            });
-
-                            if (data !== null) {
-                                try {
-                                    data.raw = JSON.parse(data.raw);
-                                    data.protocol = JSON.parse(data.protocol);
-
-                                    //check the owner, in case the anchor is [sold, diverted, dropped]
-                                    self.view(data.name, "owner", (res) => {
-                                        if (data.owner !== res.address) data.owner = res.address;
+                                });
+    
+                                if (data !== null) {
+                                    try {
+                                        data.raw = JSON.parse(data.raw);
+                                        data.protocol = JSON.parse(data.protocol);
+    
+                                        //check the owner, in case the anchor is [sold, diverted, dropped]
+                                        self.view(data.name, "owner", (res) => {
+                                            if (data.owner !== res.address) data.owner = res.address;
+                                            return ck && ck(data);
+                                        });
+                                    } catch (error) {
                                         return ck && ck(data);
-                                    });
-                                } catch (error) {
-                                    return ck && ck(data);
+                                    }
+                                } else {
+                                    return ck && ck(false);
                                 }
-                            } else {
+                            }).catch((err) => {
+                                console.log(err);
                                 return ck && ck(false);
-                            }
-                        }).catch((err) => {
-                            console.log(err);
-                            return ck && ck(false);
+                            });
                         });
                     });
 

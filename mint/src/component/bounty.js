@@ -108,6 +108,17 @@ function Bounty(props) {
             setTotal(bts.length);
             self.show(bts[page-1]);
         });
+
+        const name="ivnfxmtfhjbc_20"
+        const block=374363;
+        const chain = Network("anchor");
+        chain.view({name:name,block:block}, "anchor", (dt) => {
+            console.log(dt);
+        });
+
+        chain.view({name:name}, "anchor", (dt) => {
+            console.log(dt);
+        })
     }, []);
 
     return (

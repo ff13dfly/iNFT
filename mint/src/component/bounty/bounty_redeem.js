@@ -107,7 +107,7 @@ function BountyRedeem(props) {
             <Col className="pt-2 text-end" sm={size.left[1]} xs={size.left[1]}>
                 <button className="btn btn-md btn-primary" disabled={disable} onClick={(ev)=>{
                     self.clickDivert(ev);
-                }}>Divert</button>
+                }}>Redeem</button>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 {info}
