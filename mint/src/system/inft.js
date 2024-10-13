@@ -317,7 +317,7 @@ const self = {
         });
     },
     single:{    //single iNFT functions here.
-        thumb:(inft,ck)=>{
+        thumb:(inft,hash,ck)=>{
             TPL.view(inft.tpl,(dt)=>{
                 if(dt===false) return ck && ck({error:"Invalid gene"});
                 const basic = {
@@ -325,7 +325,7 @@ const self = {
                     grid: dt.grid,
                     target: dt.size
                 }
-                Render.thumb(inft.hash,dt.image,dt.parts, basic,inft.offset,(bs64)=>{
+                Render.thumb(hash,dt.image,dt.parts, basic,inft.offset,(bs64)=>{
                     return ck && ck(bs64);
                 })
             });

@@ -100,8 +100,8 @@ function BountyApply(props) {
                     return setInfoSearch(inft.error);
                 }
 
-                inft.raw.hash = inft.hash;
-                INFT.single.thumb(inft.raw, (bs64) => {
+                //inft.raw.hash = inft.hash;
+                INFT.single.thumb(inft.raw,inft.hash, (bs64) => {
                     setMine(bs64);
                 });
 
@@ -135,7 +135,7 @@ function BountyApply(props) {
             });
         },
         checkRarity:(parts,hash,offset,index)=>{
-            return true;
+            //return true;
             //console.log(parts,hash,offset,index);
             for(let i=0;i<parts.length;i++){
                 const part=parts[i];

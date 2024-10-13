@@ -1,8 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useState,useEffect } from "react";
 
-import AnchorJS from "../network/anchor";
+import Network from "../network/router";
 import INFT from "../system/inft";
+
+import INFTBuy from "./market/inft_buy";
 
 function Market(props) {
     const size = {
@@ -13,14 +15,40 @@ function Market(props) {
     let [list, setList]=useState([]);
 
     const self={
+        clickSingle:(data)=>{
+            props.dialog(<INFTBuy dialog={props.dialog} data={data}/>,"iNFT Detail")
+        },
+        getThumbs:(list,ck,map)=>{
+            if(map===undefined) map={};
+            if(list.length===0){
+                const narr=[];
+                for(let k in map){
+                    narr.push(map[k]);
+                }
+                return ck && ck(narr);
+            } 
+            const row=list.pop();
+            //console.log(row);
+            const chain=Network("anchor");
+            chain.view({name:row.name},"anchor",(dt)=>{
+                //console.log(dt);
+                dt.free=row.free;
+                dt.price=row.price;
+                dt.target=row.target;
+                INFT.single.thumb(dt.raw,dt.hash, (bs64) => {
+                    dt.thumb=bs64;
+                    map[row.name]=dt;
+                    return self.getThumbs(list,ck,map);
+                });
+            });
+        },
         fresh:()=>{
-            AnchorJS.market((arr)=>{
-                console.log(arr);
-                setList(arr);
-                // INFT.render(arr,(fs)=>{
-                //     console.log(fs);
-                //     setList(fs);
-                // });
+            const chain=Network("anchor");
+            chain.market((ms)=>{
+                self.getThumbs(ms,(arr)=>{
+                    setList(arr);
+                    //console.log(map);
+                });
             });
         },
     }
@@ -32,8 +60,20 @@ function Market(props) {
     return (
         <Row>
             {list.map((row, index) => (
-                <Col className="pt-2" key={index} sm={size.half[0]} xs={size.half[0]}>
-                    {row.name}:  $ANK {row.price}
+                <Col className="pointer" key={index} sm={size.half[0]} xs={size.half[0]} onClick={(ev)=>{
+                    self.clickSingle(row);
+                }}>
+                    <Row className="pb-4">
+                        <Col sm={size.half[0]} xs={size.half[0]}>
+                            <h6>{row.name}</h6>
+                        </Col>
+                        <Col className="text-end" sm={size.half[0]} xs={size.half[0]}>
+                            {row.price}
+                        </Col>
+                        <Col sm={size.row[0]} xs={size.row[0]}>
+                            <img alt="" src={row.thumb} className="apply_thumb" />
+                        </Col>
+                    </Row>
                 </Col>
             ))}
         </Row>
