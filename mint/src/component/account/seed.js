@@ -2,9 +2,9 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import { FaBackspace,FaCopy } from "react-icons/fa";
-import Account from "./account";
-import Copy from "../lib/clipboard";
-import tools from "../lib/tools";
+import Account from "../account";
+import Copy from "../../lib/clipboard";
+import tools from "../../lib/tools";
 
 function Seed(props) {
     const size = {

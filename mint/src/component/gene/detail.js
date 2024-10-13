@@ -1,16 +1,16 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Template from "./template";
+import Template from "../template";
 
-import Data from "../lib/data";
-import tools from "../lib/tools";
-import Copy from "../lib/clipboard";
+import Data from "../../lib/data";
+import tools from "../../lib/tools";
+import Copy from "../../lib/clipboard";
 
-import RenderiNFT from "./inft";
-import TPL from "../system/tpl";
+import RenderiNFT from "../common/inft";
+import TPL from "../../system/tpl";
 
-import SmallHash from "./hash_small";
+import SmallHash from "../common/hash_small";
 import PartSection from "./part_section";
 
 import { FaBackspace, FaCopy, FaSyncAlt,FaCalculator } from "react-icons/fa";

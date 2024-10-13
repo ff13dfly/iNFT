@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { FaCheck } from "react-icons/fa";
 
-import SettingNetwork from "./setting_network";
+import SettingNetwork from "./setting/setting_network";
 
 import tools from "../lib/tools"
 import TPL from "../system/tpl";

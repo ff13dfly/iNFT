@@ -9,7 +9,7 @@ import Data from "../lib/data"
 
 import Network from "../network/router";
 import INFT from "../system/inft";
-import Seed from "./seed";
+import Seed from "./account/seed";
 
 import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
 

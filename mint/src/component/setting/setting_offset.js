@@ -1,16 +1,16 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Data from "../lib/data";
-import Local from "../lib/local";
-import tools from "../lib/tools"
+import Data from "../../lib/data";
+import Local from "../../lib/local";
+import tools from "../../lib/tools"
 import TPL from "../lib/tpl";
 import INFT from "../lib/inft";
 
 
 import SmallHash from "./hash_small";
 import PartSection from "./part_section";
-import RenderiNFT from "./inft";
+import RenderiNFT from "../common/inft";
 
 import { FaAngleDoubleUp,FaAngleDoubleDown } from "react-icons/fa";
 

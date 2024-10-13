@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import Network from "../network/router";
-import Data from "../lib/data";
-import tools from "../lib/tools";
+import Network from "../../network/router";
+import Data from "../../lib/data";
+import tools from "../../lib/tools";
 
 function SettingNetwork(props) {
 

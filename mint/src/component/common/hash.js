@@ -1,11 +1,11 @@
 import { Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Data from "../lib/data";
+import Data from "../../lib/data";
 import RowHash from "./row_hash";
 import RowPart from "./row_part";
 
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 //show the hash used by iNFT.
 let running=false;      //running status, if get new hash, set to true;

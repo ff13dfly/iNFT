@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import Render from "../lib/render";
-import TPL from "../system/tpl";
+import Render from "../../lib/render";
+import TPL from "../../system/tpl";
 
 /* iNFT render component parameters
 *   @param  {string}    id              //the canvas dom ID

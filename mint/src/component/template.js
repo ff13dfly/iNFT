@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Detail from "./detail";
+import Detail from "./gene/detail";
 
 import Local from "../lib/local";
 import Data from "../lib/data";

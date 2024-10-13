@@ -132,7 +132,7 @@ function BountyBonus(props) {
         },
     }
     useEffect(() => {
-        console.log(props.bounty);
+        //console.log(props.bounty);
         self.checkApply();
         if(props.bounty.system)  self.checkDivert(props.bounty.system.apply,()=>{
 

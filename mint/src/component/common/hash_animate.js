@@ -2,7 +2,7 @@ import { Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import RowHash from "./row_hash";
-import tools from "../lib/tools";
+import tools from "../../lib/tools";
 
 /* iNFT hash animation board
 *   @param  {string}    hash            //hash needed to render the iNFT

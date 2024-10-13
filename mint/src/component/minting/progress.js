@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 import { FaIdBadge } from "react-icons/fa";
 
-import Result from "../component/result"
-import Network from "../network/router";
+import Result from "./result"
+import Network from "../../network/router";
 
-import INFT from "../system/inft";
-import Local from "../lib/local";
-import Data from "../lib/data";
+import INFT from "../../system/inft";
+import Local from "../../lib/local";
+import Data from "../../lib/data";
 
 //let interval_timer=null;
 //const time=[];
@@ -65,7 +65,8 @@ function Progress(props) {
         },
         showTask:()=>{
             const details=INFT.mint.detail();
-            setList(details.task);            
+            console.log(details);
+            setList(details.task);
         },
     }
 

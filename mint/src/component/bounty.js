@@ -25,6 +25,8 @@ function Bounty(props) {
     let [page, setPage] = useState(1);          //bounty page
     let [list, setList] = useState([]);         //bounty list
     let [total, setTotal]= useState(0);         //bounty amount
+    let [desc, setDesc]= useState("");          //bounty desc
+    let [title, setTitle]= useState("");        //bounty title
     let [single, setSingle] = useState({});     //bounty data with template and on-chain orgin data
     let [bonus, setBonus] = useState([]);       //bonus list
     let [alink, setAlink] = useState("");       //bounty anchor link
@@ -88,12 +90,15 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
-                //console.log(bt);
+                console.log(bt);
+                
                 bt.alink=alink;
                 const cid = bt.raw.template.cid;
                 TPL.view(cid, (dt) => {
                     bt.template=dt;
                     setSingle(bt);
+                    setDesc(bt.raw.desc);
+                    setTitle(bt.raw.title);
                     setBonus(bt.raw.bonus);
                     const [sum_bonus,pieces]=self.calcSum(bt.raw.bonus);
                     setSum(sum_bonus);
@@ -101,6 +106,18 @@ function Bounty(props) {
                 });
             });
         },
+        test:()=>{
+            const name="ivnfxmtfhjbc_20"
+            const block=374363;
+            const chain = Network("anchor");
+            chain.view({name:name,block:block}, "anchor", (dt) => {
+                console.log(dt);
+            });
+
+            chain.view({name:name}, "anchor", (dt) => {
+                console.log(dt);
+            });
+        }
     }
     useEffect(() => {
         BOUNTY.list((bts)=>{
@@ -109,20 +126,17 @@ function Bounty(props) {
             self.show(bts[page-1]);
         });
 
-        const name="ivnfxmtfhjbc_20"
-        const block=374363;
-        const chain = Network("anchor");
-        chain.view({name:name,block:block}, "anchor", (dt) => {
-            console.log(dt);
-        });
-
-        chain.view({name:name}, "anchor", (dt) => {
-            console.log(dt);
-        })
     }, []);
 
     return (
         <Row>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <h6>{title}</h6>
+                {desc}
+            </Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <hr />
+            </Col>
             <Col sm={size.left[0]} xs={size.left[0]}>
                 Total <strong className="text-info">{amount.toLocaleString()}</strong>P wanted.<br />
                 Prize <strong className="text-info">{sum.toLocaleString()}</strong> $ANK.
@@ -130,10 +144,9 @@ function Bounty(props) {
             <Col className="text-center" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
             </Col>
+            
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
-                {/* <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
-                <hr /> */}
             </Col>
             
             <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink} ticket={exsist}/>

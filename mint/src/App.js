@@ -2,8 +2,8 @@ import { Container,Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import Preview from "./component/preview";
-import Action from "./component/action";
-import Header from "./component/header";
+import Action from "./component/common/action";
+import Header from "./component/common/header";
 
 import Network from "./network/router";
 import config from "./config";

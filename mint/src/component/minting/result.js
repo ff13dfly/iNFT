@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 
 import { FaBackspace, FaRegHeart, FaHeart } from "react-icons/fa";
 
-import Mine from "./mine";
+import Mine from "../mine";
 import Progress from "./progress";
 
-import Local from "../lib/local";
-import tools from "../lib/tools";
-import INFT from "../system/inft";
-import Data from "../lib/data";
+import Local from "../../lib/local";
+import tools from "../../lib/tools";
+import INFT from "../../system/inft";
+import Data from "../../lib/data";
 
-import RenderiNFT from "./inft";
-import Network from "../network/router";
+import RenderiNFT from "../common/inft";
+import Network from "../../network/router";
 
 /* iNFT result viewer component
 *   @param  {string}    name        //the anchor name of iNFT

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { FaAngleLeft, FaAngleRight, FaHeart, FaRegHeart } from "react-icons/fa";
 
-import Result from "./result";
+import Result from "./minting/result";
 import INFT from "../system/inft";
 
 //put the filter here to keep the status even the <Mine> freshed.

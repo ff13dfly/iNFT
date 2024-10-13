@@ -1,17 +1,17 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Setting from "./setting";
-import Progress from "./progress";
+import Setting from "../setting";
+import Progress from "../minting/progress";
 
-import Local from "../lib/local";
-import Account from "./account";
-import tools from "../lib/tools";
-import Data from "../lib/data";
+import Local from "../../lib/local";
+import Account from "../account";
+import tools from "../../lib/tools";
+import Data from "../../lib/data";
 
-import TPL from "../system/tpl";
-import INFT from "../system/inft";
-import Network from "../network/router";
+import TPL from "../../system/tpl";
+import INFT from "../../system/inft";
+import Network from "../../network/router";
 
 import { FaCogs, FaIndent } from "react-icons/fa";
 

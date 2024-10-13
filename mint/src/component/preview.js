@@ -1,9 +1,9 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Hash from "./hash";
-import Counter from "./counter";
-import RenderiNFT from "./inft";
+import Hash from "./common/hash";
+import Counter from "./common/counter";
+import RenderiNFT from "./common/inft";
 
 import TPL from "../system/tpl";
 import tools from "../lib/tools";

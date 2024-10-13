@@ -3,15 +3,15 @@ import { useEffect } from "react";
 import { FaList, FaRegUser, FaGripHorizontal,FaBuffer } from "react-icons/fa";
 import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish } from "react-icons/fc";
 
-import Grid from "./grid";
-import Account from "./account";
-import Template from "./template";
-import Mine from "./mine";
+import Grid from "../grid";
+import Account from "../account";
+import Template from "../template";
+import Mine from "../mine";
 
-import Bounty from "./bounty";
-import Market from "./market";
-import Setting from "./setting";
-import Document from "./document";
+import Bounty from "../bounty";
+import Market from "../market";
+import Setting from "../setting";
+import Document from "../document";
 
 function Header(props) {
     const size = {
