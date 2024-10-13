@@ -230,6 +230,35 @@ const self = {
             });
         });
     },
+    buy: (pair, anchor, ck) => {
+        self.init(() => {
+            anchor = anchor.toLocaleLowerCase();
+            if (funs.limited(anchor)) return ck && ck({ error: "Name error" });
+
+            self.view(anchor, "owner", (owner) => {
+                self.view(anchor, "selling", (dt) => {
+                    const cost = dt[1];
+                    console.log(cost);
+            
+                    if (owner.addresss === pair.address) return ck && ck({ error: "Your own anchor" });
+                    if (dt[0] !== dt[2] && dt[2] !== pair.address) return ck && ck({ error: "Your can not buy this one" });
+                    self.balance((pair.address), (bc) => {
+                        if (bc.free < cost) return ck && ck({ error: "Low balance" });
+                        try {
+                            wsAPI.tx.anchor.buyAnchor(anchor).signAndSend(pair, (res) => {
+                                const dt = res.toHuman();
+                                funs.decodeProcess(dt, (status) => {
+                                    return ck && ck(status);
+                                });
+                            });
+                        } catch (error) {
+                            return ck && ck({ error: error });
+                        }
+                    });
+                });
+            });
+        });
+    },
     revoke: (pair, name, ck) => {
         self.init(() => {
             self.view(name, "owner", (signer) => {
