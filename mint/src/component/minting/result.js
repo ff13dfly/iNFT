@@ -5,6 +5,7 @@ import { FaBackspace, FaRegHeart, FaHeart } from "react-icons/fa";
 
 import Mine from "../mine";
 import Progress from "./progress";
+import MiniBoard from "./mini_board";
 
 import Local from "../../lib/local";
 import tools from "../../lib/tools";
@@ -53,7 +54,7 @@ function Result(props) {
     const router = {
         progress: {
             title: "Mint Board",
-            content: <Progress dialog={props.dialog} />,
+            content: <MiniBoard dialog={props.dialog} />,
         }
     }
 

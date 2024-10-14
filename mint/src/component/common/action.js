@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Setting from "../setting";
 import Progress from "../minting/progress";
 
+import MiniBoard from "../minting/mini_board";
+
 import Local from "../../lib/local";
 import Account from "../account";
 import tools from "../../lib/tools";
@@ -71,7 +73,8 @@ function Action(props) {
             props.dialog(<Setting fresh={props.fresh} />, "Mint Configure");
         },
         clickPanel: () => {
-            props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");
+            props.dialog(<MiniBoard block={props.block} dialog={props.dialog} />, "Mint Board");
+            //props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");
         },
         clickTask: () => {
             const fa = Local.get("login");
@@ -98,7 +101,7 @@ function Action(props) {
                     return false;
                 }
 
-                props.dialog(<Progress block={props.block} dialog={props.dialog}/>, "Mint Board");
+                props.dialog(<MiniBoard block={props.block} dialog={props.dialog}/>, "Mint Board");
 
                 const tpl=TPL.current();
                 const mint_detail=INFT.mint.detail();
@@ -148,7 +151,7 @@ function Action(props) {
             const task = detail.task;
             if (task === false) return setInfo("Failed to get task data.");
 
-            let duration=2;
+            //let duration=1;
             const cur=Data.getHash("cache","network");
             Network(cur).subscribe("autorun", (bk, bhash) => {
                 //console.log(`Try to run task automatically.`);
@@ -165,12 +168,11 @@ function Action(props) {
                 if (index === -1) return true;
 
                 //1.1. check duration to make transactions start in the next 2 block
-                //console.log(`Duration: ${duration}`);
-                if(duration<config.circle){
-                    duration++;
-                    return true;
-                }
-                duration=0;
+                // if(duration<config.circle){
+                //     duration++;
+                //     return true;
+                // }
+                // duration=0;
 
                 //2.run mint from index data;
                 const cid=tpl.cid;

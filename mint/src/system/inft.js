@@ -155,6 +155,7 @@ const funs={
                 target: dt.size
             }
             Render.thumb(me.hash,dt.image,dt.parts, basic,me.offset,(bs64)=>{
+                //console.log(me.anchor);
                 imgs[me.anchor]=bs64;
                 return funs.getThumb(list,ck);
             });
@@ -301,7 +302,6 @@ const self = {
         if(!imap) imap={};
         if(names.length===0) return ck && ck(imap);
         const name=names.pop();
-        
         if(imgs[name]!==undefined){
             imap[name]=imgs[name];
             return self.thumbs(names,ck,imap);
@@ -318,6 +318,8 @@ const self = {
     },
     single:{    //single iNFT functions here.
         thumb:(inft,hash,ck)=>{
+            const name=inft.name;
+            if(imgs[name]) return ck && ck(imgs[name]);
             TPL.view(inft.tpl,(dt)=>{
                 if(dt===false) return ck && ck({error:"Invalid gene"});
                 const basic = {
@@ -326,6 +328,7 @@ const self = {
                     target: dt.size
                 }
                 Render.thumb(hash,dt.image,dt.parts, basic,inft.offset,(bs64)=>{
+                    imgs[name]=bs64;
                     return ck && ck(bs64);
                 })
             });

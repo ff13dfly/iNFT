@@ -9,10 +9,12 @@ import Network from "../../network/router";
 import INFT from "../../system/inft";
 import Data from "../../lib/data";
 
-function Progress(props) {
+let timer=null;     //timer to fresh minting.
+function MiniBoard(props) {
     const size = {
         row: [12],
         bar:[2,8,2],
+        done:[4],
         step:[1,2,2,1,2],
     };
 
@@ -32,6 +34,7 @@ function Progress(props) {
 
     let [block, setBlock]=useState(0);
     let [list,setList]=useState([]);
+    let [done, setDone]=useState([]);
 
     const self={
         getStatus:(order,now)=>{
@@ -60,27 +63,70 @@ function Progress(props) {
                 from={"progress"}
             />, "iNFT Details");
         },
+        getDataFromTask:(arr)=>{
+            //console.log(arr);
+            const done=[];
+            const going=[];
+            for(let i=0;i<arr.length;i++){
+                const row=arr[i];
+                if(row.now===def_progress.FINALIZED){
+                    done.push(row);
+                }else{
+                    going.push(row);
+                }
+            }
+            return {done:done,going:going,sum:arr.length}
+        },
+        getINFTs:(arr,ck,infts)=>{
+            if(infts===undefined) infts=[];
+            if(arr.length===0) return ck && ck(infts);
+            const row=arr.pop();
+            const cur=Data.getHash("cache","network");
+            const chain=Network(cur);
+            chain.view({name:row.name,block:row.block},"anchor",(dt)=>{
+                if(dt===false) return self.getINFTs(arr,ck,infts);
+                INFT.single.thumb(dt.raw,dt.hash, (bs64) => {
+                    dt.thumb=bs64;
+                    infts.push(dt);
+                    return self.getINFTs(arr,ck,infts);
+                });
+            });
+        },
         showTask:()=>{
             const details=INFT.mint.detail();
-            console.log(details);
+            //console.log(details);
 
-            setList(details.task);
+            //setList(details.task);
 
             //1.filter out the finished iNFT mint;
-            
-            
+            const dt=self.getDataFromTask(details.task);
+
+            //2.render the going result
+            if(dt.going.length===0 && timer!==null){
+                clearTimeout(timer);
+            }else{
+                const cur=Data.getHash("cache","network");
+                const chain=Network(cur);
+                chain.subscribe("progress",(bk, bhash)=>{
+                    setBlock(bk);
+                    timer=setTimeout(self.showTask,500);  //update task after finalized new block
+                });
+            }
+
+            setList(dt.going);
+
+            //3.render the results.
+            self.getINFTs(dt.done,(infts)=>{
+                //console.log(infts);
+                setDone(infts);
+            });
         },
     }
 
     useEffect(() => {
         self.showTask();
-        setBlock(props.block);
 
-        const cur=Data.getHash("cache","network");
-        Network(cur).subscribe("progress",(bk, bhash)=>{
-            setBlock(bk);
-            setTimeout(self.showTask,500);  //update task after finalized new block
-        });
+        setBlock(props.block);
 
     }, [props.block]);
 
@@ -93,6 +139,18 @@ function Progress(props) {
         <Row>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 Current block {!block?0:block.toLocaleString()}
+            </Col>
+            <Col className="pt-2 pointer" sm={size.row[0]} xs={size.row[0]}>
+                <Row>
+                    {done.map((row, index) => ( 
+                        <Col className="pb-4" key={index} sm={size.done[0]} xs={size.done[0]} onClick={(ev)=>{
+                            self.clickSingle(row.name,row.hash);
+                        }}>
+                            <h6>{row.name}</h6>
+                            <img alt="" src={row.thumb} className="apply_thumb" />
+                        </Col>
+                    ))}
+                </Row>
             </Col>
             <Col className="pt-2 pb-4" style={cmap} sm={size.row[0]} xs={size.row[0]}>
                 <Row>
@@ -133,4 +191,4 @@ function Progress(props) {
     )
 }
 
-export default Progress;
+export default MiniBoard;

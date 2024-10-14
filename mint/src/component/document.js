@@ -8,6 +8,12 @@ function Document(props) {
         row: [12],
         page: [4, 4, 4],
     };
+
+    const docs=[
+        {title:"What?",content:""},
+        {title:"Ticket",content:""},
+    ]
+
     const self={
         clickPrevious:(ev)=>{
 
