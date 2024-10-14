@@ -44,7 +44,7 @@ function Header(props) {
             dialog(<Setting  dialog={props.dialog} />,"Setting");
         },
         clickDocument:(ev)=>{
-            dialog(<Document  dialog={props.dialog} />,"Document");
+            dialog(<Document  dialog={props.dialog} />,"About iNFT");
         },
     }
     useEffect(() => {

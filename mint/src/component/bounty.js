@@ -150,9 +150,9 @@ function Bounty(props) {
             </Col>
             
             <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink} ticket={exsist}/>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            {/* <Col sm={size.row[0]} xs={size.row[0]}>
                 <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
-            </Col>
+            </Col> */}
             <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="" sm={size.page[0]} xs={size.page[0]}>

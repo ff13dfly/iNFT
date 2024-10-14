@@ -41,7 +41,7 @@ function Detail(props) {
 
     let [parts, setParts] = useState([]);        //iNFT parts list
 
-    let [selected, setSelected] = useState(0);        //selected iNFT parts
+    let [selected, setSelected] = useState(1);        //selected iNFT parts
     let [active, setActive] = useState(null);         //index of selected image range
 
     let [recover, setRecover] = useState({});

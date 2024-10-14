@@ -96,34 +96,38 @@ function PartSection(props) {
     }, [props.index,props.selected]);
 
     return (
-        <Row className="unselect pt-2 pb-2">
-            <canvas hidden={true} id={cut_id} width={width} height={height}></canvas>
-            <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>    
-                {grid.map((row, order) => (
-                    <div className="cover" key={order} style={{
-                        marginLeft: `${row.mX}px`,
-                        marginTop: `${row.mY}px`,
-                        width: `${row.wX}px`,
-                        height: `${row.wY}px`,
-                        lineHeight: `${row.wY}px`,
-                        backgroundColor:`${row.active?"#f7cece":"#4aab67"}` ,
-                        color: `${row.active?"#ff0000":"#ffffff"}`,
-                    }}>{order}</div>
-                ))}
+        // <div className="image-container">
+            <Row className="unselect pt-2 pb-2">
+                <canvas hidden={true} id={cut_id} width={width} height={height}></canvas>
+                <Col className="pt-1" sm={size.row[0]} xs={size.row[0]}>    
+                    {grid.map((row, order) => (
+                        <div className="cover" key={order} style={{
+                            marginLeft: `${row.mX}px`,
+                            marginTop: `${row.mY}px`,
+                            width: `${row.wX}px`,
+                            height: `${row.wY}px`,
+                            lineHeight: `${row.wY}px`,
+                            //height: `${row.wY>110?110:row.wY}px`,
+                            //lineHeight: `${row.wY>110?110:row.wY}px`,
+                            backgroundColor:`${row.active?"#f7cece":"#4aab67"}` ,
+                            color: `${row.active?"#ff0000":"#ffffff"}`,
+                        }}>{order}</div>
+                    ))}
 
-                <div className="full" 
-                    style={{
-                        backgroundImage:`url(${bs64})`,
-                        width:`${width}px`,
-                        height:`${height}px`
-                    }}></div>
-                {/* <img 
-                    src={bs64} 
-                    width={width} 
-                    height={height}
-                    alt="The target section of orgin template"/> */}
-            </Col>
-        </Row>
+                    <div className="full" 
+                        style={{
+                            backgroundImage:`url(${bs64})`,
+                            width:`${width}px`,
+                            height:`${height}px`
+                        }}></div>
+                    {/* <img 
+                        src={bs64} 
+                        width={width} 
+                        height={height}
+                        alt="The target section of orgin template"/> */}
+                </Col>
+            </Row>
+        //</div>
     )
 }
 
