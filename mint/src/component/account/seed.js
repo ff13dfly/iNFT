@@ -41,7 +41,6 @@ function Seed(props) {
     }
 
     useEffect(() => {
-        console.log(props);
         const nlist = self.getArrayFromMnemonic(props.mnemonic);
         setList(nlist);
 
@@ -54,11 +53,6 @@ function Seed(props) {
                     {props.address.substr(0,23)}<br/>
                     {props.address.substr(23)}
                 </p>
-                
-                {/* <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
-                    self.clickCopy(props.address);
-                    self.clickRecover("address");
-                }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button> */}
             </Col>
             <Col className="pb-2 text-end" sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace className="pointer" size={40} color={"#FFAABB"} onClick={(ev) => {

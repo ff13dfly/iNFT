@@ -1,5 +1,9 @@
-import { Row, Col, Badge } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
+
+import AccountLogin from "./account/account_login";
+import AccountFaucet from "./account/account_faucet";
+import AccountCharge from "./account/account_charge";
 
 import config from "../config";
 import Copy from "../lib/clipboard";
@@ -9,9 +13,8 @@ import Data from "../lib/data"
 
 import Network from "../network/router";
 import INFT from "../system/inft";
-import Seed from "./account/seed";
 
-import { FaCopy, FaDownload, FaSignInAlt,FaFaucet } from "react-icons/fa";
+import { FaCopy, FaDownload, FaSignInAlt } from "react-icons/fa";
 
 function Account(props) {
     const size = {
@@ -27,12 +30,7 @@ function Account(props) {
     let [balance, setBalance] = useState(0);
     let [address, setAddress] = useState("");
 
-    let [info, setInfo] = useState("");
     let [faucet, setFaucet] = useState("");
-
-    let [password, setPassword] = useState("");
-    let [dis_new, setNewDisable] = useState(true);
-
     let [recover, setRecover] = useState({});
 
     const self = {
@@ -40,28 +38,6 @@ function Account(props) {
             const cur=Data.getHash("cache","network");
             if(config.unit && config.unit[cur]) return config.unit[cur];
             return "unit";
-        },
-        getFaucetURL:(addr)=>{
-            const cur=Data.getHash("cache","network");
-            if(config.faucet && config.faucet[cur]) return `${config.faucet[cur]}/${addr}`;
-            return false;
-        },
-        changePassword: (ev) => {
-            setPassword(ev.target.value);
-            setNewDisable(!ev.target.value ? true : false);
-        },
-        clickNewAccount: (ev) => {
-            setNewDisable(true);
-            const cur=Data.getHash("cache","network");
-            Network(cur).generate(password,(fa,mnemonic)=>{
-                Local.set("login", JSON.stringify(fa));
-                setLogin(true);
-                self.show();
-                INFT.auto();
-
-                props.dialog(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic} address={fa.address}/>,"Seed Details");
-                props.fresh();
-            })
         },
         clickLogout: (ev) => {
             Local.remove("login");
@@ -88,70 +64,6 @@ function Account(props) {
                     delete recover[key];
                     setRecover(tools.copy(recover));
                 }, !at ? 1000 : at);
-            }
-        },
-        clickFaucet: async (ev) => {
-            const fa = Local.get("login");
-            if (fa === undefined) return self.faucetMessage("Account information missed.");
-            
-            try {
-                const login = JSON.parse(fa);
-                self.showBalance(login.address);
-
-                const furl=self.getFaucetURL(login.address);
-                if(furl===false){
-                    return self.faucetMessage(`Not support yet.`);
-                }else{
-                    const response = await fetch(furl);
-                    if (!response.ok) return self.faucetMessage("Failed to request to faucet server.");
-    
-                    const ctx = await response.text();
-                    const rep=JSON.parse(ctx);
-    
-                    if(rep.error) return self.faucetMessage(rep.error);
-                    return self.faucetMessage(rep.message);
-                }
-                
-            } catch (error) {
-                setFaucet("Cors issue.");
-                return setTimeout(() => {
-                    setFaucet("");
-                }, 3000);
-            }
-        },
-        faucetMessage:(ctx)=>{
-            //console.log(ctx);
-            setFaucet(ctx);
-            return setTimeout(() => {
-                setFaucet("");
-            }, 3000);
-        },
-        changeFile: (ev) => {
-            try {
-                const fa = ev.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const sign = JSON.parse(e.target.result);
-                        if (!sign.address || !sign.encoded)
-                            return setInfo("Error encry JSON file");
-                        if (sign.address.length !== 48)
-                            return setInfo("Error SS58 address");
-                        if (sign.encoded.length !== 268)
-                            return setInfo("Error encoded verification");
-                        setInfo("Encoded account file loaded");
-                        Local.set("login", e.target.result);
-                        setLogin(true);
-                        self.show();
-                        INFT.auto();
-                        props.fresh();
-                    } catch (error) {
-                        setInfo("Not encry JSON file");
-                    }
-                };
-                reader.readAsText(fa);
-            } catch (error) {
-                setInfo("Can not load target file");
             }
         },
         showBalance:(address)=>{
@@ -181,7 +93,6 @@ function Account(props) {
         self.show();
 
     }, [props.update]);
-
 
     const amap = {
         width: "90px",
@@ -214,10 +125,6 @@ function Account(props) {
                     self.clickRecover("download");
                     self.clickDownload(ev);
                 }}><FaDownload className={!recover.download ? "pb-1" : `pb-1 ${recover.download}`}/> Encried Key</button>
-                <button className="btn btn-md btn-secondary" disabled={recover.faucet} style={{ marginLeft: "10px"}} onClick={(ev) => {
-                    self.clickRecover("faucet");
-                    self.clickFaucet(ev);
-                }}><FaFaucet className={!recover.faucet ? "pb-1" : `pb-1 ${recover.faucet}`} /> Faucet</button>
             </Col>
             <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
                 <button className="btn btn-md btn-danger" onClick={(ev) => {
@@ -226,34 +133,25 @@ function Account(props) {
             </Col>
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
 
-            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Option 1</Badge> Upload the encry JSON file.</h4>
+            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}><hr/></Col>
+
+            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                <AccountFaucet dialog={props.dialog}/>
             </Col>
-            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <input type="file" onChange={(ev) => {
-                    self.changeFile(ev);
-                }} />
-                <p>{info}</p>
+
+            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                <AccountCharge dialog={props.dialog}/>
             </Col>
-            <Col className="pt-4" hidden={login} sm={size.row[0]} xs={size.row[0]}>
-                <hr />
+
+            <Col hidden={login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                <AccountLogin callback={()=>{
+                    console.log(`Here, callback.`);
+                    setLogin(true);
+                    props.fresh();
+                    self.show();
+                }}/>
             </Col>
-            <Col hidden={login} className="pt-4" sm={size.row[0]} xs={size.row[0]}>
-                <h4><Badge className="bg-info">Option 2</Badge> Create a new account.</h4>
-            </Col>
-            <Col hidden={login} className="pt-4 pb-4" sm={size.new[0]} xs={size.new[0]}>
-                <input className="form-control" type="password" placeholder="Password for new account"
-                    value={password}
-                    onChange={(ev) => {
-                        self.changePassword(ev);
-                    }}
-                />
-            </Col>
-            <Col hidden={login} className="pt-4 pb-4 text-end" sm={size.new[1]} xs={size.new[1]}>
-                <button disabled={dis_new} className="btn btn-md btn-primary" onClick={(ev) => {
-                    self.clickNewAccount(ev)
-                }}>Create</button>
-            </Col>
+
         </Row>
     )
 }

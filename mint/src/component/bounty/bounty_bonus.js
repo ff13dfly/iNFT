@@ -130,40 +130,18 @@ function BountyBonus(props) {
                 }
             }
         },
-        checkSystem:(apls,payment)=>{
-            const result={
-                going:[],
-                winner:[],
-            }
-
-            const map={};
-            for(let i=0;i<payment.length;i++){
-                const row=payment[i];
-                map[row.judge]=true;
-                result.winner.push({address:row.to,payment:row.payment});
-            }
-
-            for(let i=0;i<apls.length;i++){
-                const row=apls[i];
-                console.log(row);
-            }
-        },
+        
     }
     useEffect(() => {
         self.checkApply();
 
-        if(props.bounty.system){
+        if(props.bounty.system) {
             console.log(props.bounty.system);
-            self.checkSystem(props.bounty.system.apply,props.bounty.system.payment,()=>{
+            self.checkDivert(props.bounty.system.apply,()=>{
 
             });
-        }
+        } 
         
-
-        if(props.bounty.system)  self.checkDivert(props.bounty.system.apply,()=>{
-
-        });
-
         if (props.data) setBonus(props.data);
     }, [props.bounty,props.ticket,props.alink]);
 
