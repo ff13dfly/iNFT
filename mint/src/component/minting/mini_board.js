@@ -85,7 +85,7 @@ function MiniBoard(props) {
             const chain=Network(cur);
             chain.view({name:row.name,block:row.block},"anchor",(dt)=>{
                 if(dt===false) return self.getINFTs(arr,ck,infts);
-                INFT.single.thumb(dt.raw,dt.hash, (bs64) => {
+                INFT.single.thumb(dt.name,dt.raw,dt.hash, (bs64) => {
                     dt.thumb=bs64;
                     infts.push(dt);
                     return self.getINFTs(arr,ck,infts);

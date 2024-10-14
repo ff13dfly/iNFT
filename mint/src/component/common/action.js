@@ -1,10 +1,12 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Setting from "../setting";
-import Progress from "../minting/progress";
 
+import Setting from "../setting";
 import MiniBoard from "../minting/mini_board";
+
+import Market from "../market";
+import Bounty from "../bounty";
 
 import Local from "../../lib/local";
 import Account from "../account";
@@ -15,7 +17,8 @@ import TPL from "../../system/tpl";
 import INFT from "../../system/inft";
 import Network from "../../network/router";
 
-import { FaCogs, FaIndent } from "react-icons/fa";
+//import { FaCogs, FaIndent } from "react-icons/fa";
+import { FcCurrencyExchange,FcTimeline,FcProcess } from "react-icons/fc";
 
 function Action(props) {
     const size = {
@@ -71,6 +74,12 @@ function Action(props) {
         },
         clickSetting: () => {
             props.dialog(<Setting fresh={props.fresh} />, "Mint Configure");
+        },
+        clickBounty:()=>{
+            props.dialog(<Bounty  dialog={props.dialog}/>,"Bounty");
+        },
+        clickMarket:(ev)=>{
+            props.dialog(<Market  dialog={props.dialog} />,"Market");
         },
         clickPanel: () => {
             props.dialog(<MiniBoard block={props.block} dialog={props.dialog} />, "Mint Board");
@@ -253,14 +262,21 @@ function Action(props) {
             <Col className="text-center" hidden={hidden} sm={size.password[1]} xs={size.password[1]}>
                 <Row>
                     <Col className="text-end" sm={size.more[0]} xs={size.more[0]}>
-                        <button className="btn btn-md btn-secondary" onClick={(ev) => {
+                        {/* <button className="btn btn-md btn-secondary" onClick={(ev) => {
                             self.clickPanel();
-                        }}><FaIndent className="" /></button>
+                        }}><FcTimeline size={20}/></button> */}
+                        <button className="btn btn-md btn-dark" onClick={(ev) => {
+                            self.clickMarket();
+                        }}><FcProcess size={20}/></button>
                     </Col>
                     <Col className="text-end" sm={size.more[1]} xs={size.more[1]}>
-                        <button className="btn btn-md btn-secondary" onClick={(ev) => {
+                        {/* <button className="btn btn-md btn-secondary" onClick={(ev) => {
                             self.clickSetting();
-                        }}><FaCogs /></button>
+                        }}><FaCogs /></button> */}
+
+                        <button className="btn btn-md btn-dark" onClick={(ev) => {
+                            self.clickBounty();
+                        }}><FcCurrencyExchange  size={20}/></button>
                     </Col>
                     <Col className="" sm={size.more[2]} xs={size.more[2]}>
                         <input className="form-control" style={{ width: "100%" }} type="password" placeholder={holder}

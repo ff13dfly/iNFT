@@ -317,8 +317,7 @@ const self = {
         });
     },
     single:{    //single iNFT functions here.
-        thumb:(inft,hash,ck)=>{
-            const name=inft.name;
+        thumb:(name,inft,hash,ck)=>{
             if(imgs[name]) return ck && ck(imgs[name]);
             TPL.view(inft.tpl,(dt)=>{
                 if(dt===false) return ck && ck({error:"Invalid gene"});

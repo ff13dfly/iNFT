@@ -5,6 +5,15 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 import DocumentWhat from "./document/what";
 import DocumentTicket from "./document/ticket";
+import DocumentAccount from "./document/account";
+import DocumentCharge from "./document/charge";
+import DocumentERC20 from "./document/erc20";
+
+/* Entry of document
+*   @param  {number}    index       //document index to show, if here, need to setPage and show.
+*   @param  {function}  dialog      //system dialog function
+*/
+
 
 function Document(props) {
     const size = {
@@ -14,10 +23,11 @@ function Document(props) {
 
     const docs={
         en:[
-            {title:"What?",content:<DocumentWhat />},
-            {title:"Ticket",content:<DocumentTicket />},
-            {title:"Charge",content:"Good topic"},
-            {title:"ERC20",content:"About ERC20"},
+            {title:"What?",content:<DocumentWhat dialog={props.dialog}/>},
+            {title:"Ticket",content:<DocumentTicket dialog={props.dialog}/>},
+            {title:"Account",content:<DocumentAccount dialog={props.dialog}/>},
+            {title:"Charge",content:<DocumentCharge dialog={props.dialog}/>},
+            {title:"ERC20",content:<DocumentERC20 dialog={props.dialog}/>},
         ],
     }
     

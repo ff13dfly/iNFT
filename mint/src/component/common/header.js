@@ -1,7 +1,7 @@
 import { Row, Col,Dropdown, DropdownButton } from "react-bootstrap";
 import { useEffect } from "react";
 import { FaList, FaRegUser, FaGripHorizontal,FaBuffer } from "react-icons/fa";
-import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish } from "react-icons/fc";
+import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish,FcCurrencyExchange,FcTimeline } from "react-icons/fc";
 
 import Grid from "../grid";
 import Account from "../account";
@@ -12,6 +12,7 @@ import Bounty from "../bounty";
 import Market from "../market";
 import Setting from "../setting";
 import Document from "../document";
+import MiniBoard from "../minting/mini_board";
 
 function Header(props) {
     const size = {
@@ -40,6 +41,9 @@ function Header(props) {
         clickMarket:(ev)=>{
             dialog(<Market  dialog={props.dialog} />,"Market");
         },
+        clickBoard:(ev)=>{
+            dialog(<MiniBoard  block={0} dialog={props.dialog} />,"Mint Board");
+        },
         clickSetting:(ev)=>{
             dialog(<Setting  dialog={props.dialog} />,"Setting");
         },
@@ -61,13 +65,13 @@ function Header(props) {
             <Col sm={size.title[0]} xs={size.title[0]}>
                 <DropdownButton
                     id={`dropdown-variants-secondary`}
-                    variant={"secondary"}
+                    variant={"dark"}
                     title={""}
                 >
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickBounty(ev);
                     }}>
-                        <FcWorkflow size={24}/><span className="ml-10">Bounty</span> 
+                        <FcCurrencyExchange size={24}/><span className="ml-10">Bounty</span> 
                     </Dropdown.Item>
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickMarket(ev);
@@ -77,6 +81,12 @@ function Header(props) {
                     
                     <Dropdown.Item></Dropdown.Item>
                     <Dropdown.Divider />
+
+                    <Dropdown.Item className="pt-2" onClick={(ev)=>{
+                        self.clickBoard(ev);
+                    }}>
+                        <FcTimeline size={24}/><span className="ml-10">Mint Board</span>
+                    </Dropdown.Item>
 
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickTemplate(ev);

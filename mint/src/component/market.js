@@ -35,7 +35,7 @@ function Market(props) {
                 dt.free=row.free;
                 dt.price=row.price;
                 dt.target=row.target;
-                INFT.single.thumb(dt.raw,dt.hash, (bs64) => {
+                INFT.single.thumb(dt.name,dt.raw,dt.hash, (bs64) => {
                     dt.thumb=bs64;
                     map[row.name]=dt;
                     return self.getThumbs(list,ck,map);
@@ -58,25 +58,27 @@ function Market(props) {
     }, []);
 
     return (
-        <Row>
-            {list.map((row, index) => (
-                <Col className="pointer" key={index} sm={size.half[0]} xs={size.half[0]} onClick={(ev)=>{
-                    self.clickSingle(row);
-                }}>
-                    <Row className="pb-4">
-                        <Col sm={size.half[0]} xs={size.half[0]}>
-                            <h6>{row.name}</h6>
-                        </Col>
-                        <Col className="text-end" sm={size.half[0]} xs={size.half[0]}>
-                            {row.price}
-                        </Col>
-                        <Col sm={size.row[0]} xs={size.row[0]}>
-                            <img alt="" src={row.thumb} className="apply_thumb" />
-                        </Col>
-                    </Row>
-                </Col>
-            ))}
-        </Row>
+        <div className="market-container">
+            <Row>
+                {list.map((row, index) => (
+                    <Col className="pointer" key={index} sm={size.half[0]} xs={size.half[0]} onClick={(ev)=>{
+                        self.clickSingle(row);
+                    }}>
+                        <Row className="pb-4">
+                            <Col sm={size.half[0]} xs={size.half[0]}>
+                                <h6>{row.name}</h6>
+                            </Col>
+                            <Col className="text-end" sm={size.half[0]} xs={size.half[0]}>
+                                {row.price}
+                            </Col>
+                            <Col sm={size.row[0]} xs={size.row[0]}>
+                                <img alt="" src={row.thumb} className="apply_thumb" />
+                            </Col>
+                        </Row>
+                    </Col>
+                ))}
+            </Row>
+        </div>
     )
 }
 

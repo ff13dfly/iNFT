@@ -101,7 +101,7 @@ function BountyApply(props) {
                 }
 
                 //inft.raw.hash = inft.hash;
-                INFT.single.thumb(inft.raw,inft.hash, (bs64) => {
+                INFT.single.thumb(inft.name,inft.raw,inft.hash, (bs64) => {
                     setMine(bs64);
                 });
 
