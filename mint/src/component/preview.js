@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Hash from "./common/hash";
 import Counter from "./common/counter";
 import RenderiNFT from "./common/inft";
+import Minting from "./minting/minting";
 
 import TPL from "../system/tpl";
 import tools from "../lib/tools";
@@ -27,7 +28,8 @@ function Preview(props) {
     let [start, setStart] = useState(0);
     let [active, setActive] = useState(0);
     let [force, setForce] = useState(false);      //wether force to fresh the iNFT
-    let [network, setNetwork] = useState("");
+
+    let [show, setShow] = useState(false);      //wether show minting page
 
     let timer = null
     const self = {
@@ -50,9 +52,11 @@ function Preview(props) {
                 self.randomActive();
             }, 2000);
         },
+        getNetwork:()=>{
+            const cur=Data.getHash('cache', 'network');
+            return  tools.toUp(cur);
+        },
         fresh: () => {
-            const cur = Data.getHash('cache', 'network');
-            setNetwork(cur);
             setTimeout(() => {
                 const cur = Data.getHash('cache', 'network');
                 Network(cur).subscribe("preview", (bk, bhash) => {
@@ -97,7 +101,7 @@ function Preview(props) {
 
     return (
         <Row className="pt-2">
-            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center" hidden={show} sm={size.row[0]} xs={size.row[0]}>
                 <RenderiNFT
                     hash={hash}
                     offset={[]}
@@ -110,8 +114,12 @@ function Preview(props) {
                     }}
                 />
             </Col>
+            <Col className="text-center" hidden={!show} sm={size.row[0]} xs={size.row[0]}>
+                <Minting dialog={props.dialog} hash={hash}/>
+            </Col>
+
             <Col className="text-center pb-2" sm={size.row[0]} xs={size.row[0]}>
-                Block {block.toLocaleString()}, {tools.toUp(network)} Network
+                Block {block.toLocaleString()}, {self.getNetwork()} Network
             </Col>
             <Col className="text-center pt-3" sm={size.header[0]} xs={size.header[0]}>
                 <Counter start={start} duration={12} />

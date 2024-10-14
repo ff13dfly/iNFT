@@ -1,7 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
+import ChargeHome from "../charge/charge_home";
+
 import tools from "../../lib/tools";
+
 import { FaPlug } from "react-icons/fa";
 
 function AccountCharge(props) {
@@ -26,7 +29,7 @@ function AccountCharge(props) {
             }
         },
         clickCharge:(ev)=>{
-
+            props.dialog(<ChargeHome dialog={props.dialog} />,"Charge Details");
         },
     }
     useEffect(() => {

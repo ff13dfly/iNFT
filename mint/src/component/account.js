@@ -20,8 +20,9 @@ function Account(props) {
     const size = {
         row: [12],
         user: [4, 8],
-        logout: [8, 4],
-        new: [9, 3]
+        logout: [4, 8],
+        new: [9, 3],
+        left:[8,4]
     };
 
     let [login, setLogin] = useState(false);
@@ -108,28 +109,36 @@ function Account(props) {
             </Col>
             <Col hidden={!login} sm={size.user[1]} xs={size.user[1]}>
                 <Row>
-                    <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                        {tools.shorten(address, 8)}
+                    <Col className="" sm={size.left[0]} xs={size.left[0]}>
+                        {tools.shorten(address, 10)}
+                    </Col>
+                    <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
                         <button className="btn btn-sm btn-secondary" style={{ marginLeft: "10px" }} onClick={(ev) => {
                             self.clickCopy(ev);
                             self.clickRecover("copy");
-                        }}><FaCopy className={!recover.copy ? "" : recover.copy} /></button>
+                        }}>
+                            <FaCopy className={!recover.copy ? "" : recover.copy} />
+                        </button>
                     </Col>
                     <Col className="" sm={size.row[0]} xs={size.row[0]}>
                         <strong>{balance}</strong> {self.getUnit()}
                     </Col>
                 </Row>
             </Col>
-            <Col hidden={!login} className="pt-4" sm={size.logout[0]} xs={size.logout[0]}>
-                <button className="btn btn-md btn-secondary" disabled={recover.download} onClick={(ev) => {
-                    self.clickRecover("download");
-                    self.clickDownload(ev);
-                }}><FaDownload className={!recover.download ? "pb-1" : `pb-1 ${recover.download}`}/> Encried Key</button>
-            </Col>
-            <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
+            <Col hidden={!login} className="pt-4 text-center" sm={size.logout[0]} xs={size.logout[0]}>
                 <button className="btn btn-md btn-danger" onClick={(ev) => {
                     self.clickLogout(ev);
                 }}><FaSignInAlt className="pb-1"/> Logout</button>
+                
+            </Col>
+            <Col hidden={!login} className="pt-4 text-end" sm={size.logout[1]} xs={size.logout[1]}>
+                <button className="btn btn-md btn-secondary" disabled={recover.download} onClick={(ev) => {
+                    self.clickRecover("download");
+                    self.clickDownload(ev);
+                }}>
+                    <FaDownload className={!recover.download ? "pb-1" : `pb-1 ${recover.download}`}/> 
+                    Encried Key
+                </button>
             </Col>
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
 

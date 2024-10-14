@@ -119,6 +119,8 @@ function Bounty(props) {
         }
     }
     useEffect(() => {
+        //ghost cat test
+        //bafybeih4cxqhble3f43t4xvqitfwllvyl7toxk6rmywzje5djndxk3l7q4
         BOUNTY.list((bts)=>{
             setList(bts);
             setTotal(bts.length);
