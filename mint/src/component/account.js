@@ -30,8 +30,6 @@ function Account(props) {
     let [avatar, setAvatar] = useState("image/empty.png");
     let [balance, setBalance] = useState(0);
     let [address, setAddress] = useState("");
-
-    let [faucet, setFaucet] = useState("");
     let [recover, setRecover] = useState({});
 
     const self = {
@@ -51,12 +49,10 @@ function Account(props) {
             if (!fa) return false;
             const json_file=`${address}.json`;
             tools.download(json_file, fa);
-            self.faucetMessage(`Please keep the private key file safely.`)
         },
         clickCopy: (ev) => {
             Copy(address);
         },
-        //the icon recover function
         clickRecover: (key, at) => {
             if (!recover[key]) {
                 recover[key] = "text-info";
@@ -140,7 +136,6 @@ function Account(props) {
                     Encried Key
                 </button>
             </Col>
-            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>{faucet}</Col>
 
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}><hr/></Col>
 

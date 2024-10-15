@@ -6,6 +6,18 @@ import { FaBackspace } from "react-icons/fa";
 import Bounty from "../bounty";
 import Account from "../../system/account";
 import Apply from "../../system/apply";
+import INFT from "../../system/inft";
+
+import Network from "../../network/router";
+import tools from "../../lib/tools";
+
+/* Bounty bonus redeem action
+*   @param  {object}    bounty      //bounty data from parent
+*   @param  {string}    inft        //inft alink
+*   @param  {string}    judge       //jugdement alink
+*   @param  {number}    index       //bonus index
+*   @param  {function}  dialog      //system dialog function
+*/
 
 function BountyRedeem(props) {
     const size = {
@@ -17,10 +29,13 @@ function BountyRedeem(props) {
         target:[4,4,4]
     };
 
-    const logo = `${window.location.origin}/image/logo.png`;
+    const logo = `${window.location.origin}/image/logo.png`;        //iNFT logo url.
     let [password, setPassword] = useState("");
     let [disable, setDisable] =useState(true);
-    let [iNFT, setINFT]= useState(logo);
+
+    let [iNFT, setINFT]= useState(logo);            //iNFT thumb
+    let [from, setFrom]= useState("");              //iNFT owner to divert the anchor
+    let [consignee, setConsignee]= useState("");    //accpet
     let [info, setInfo]= useState("");
 
     const self = {
@@ -49,10 +64,39 @@ function BountyRedeem(props) {
                 });
             });
         },
+        getName:()=>{
+            const ak=tools.decode(props.inft);
+            return ak.name;
+        },
+        getBlock:()=>{
+            const ak=tools.decode(props.inft);
+            return ak.block;
+        },
+        renderINFT:(alink)=>{
+            const ak=tools.decode(alink);
+            const chain=Network("anchor");
+            chain.view(ak,"anchor",(dt)=>{
+                //console.log(dt);
+                setFrom(dt.owner);
+                INFT.single.thumb(dt.name,dt.raw,dt.hash,(bs64)=>{
+                    setINFT(bs64);
+                });
+            });
+        },
+        // checkConsigner:(alink)=>{
+        //     const ak=tools.decode(alink);
+        //     const chain=Network("anchor");
+        //     chain.view(ak,"anchor",(dt)=>{
+        //     });
+        // },
     }
     useEffect(() => {
-       console.log(props);
-
+        if(props.inft)self.renderINFT(props.inft);
+        //if(props.judge) self.checkConsigner(props.judge);
+        if(props.bounty){
+            //console.log(props.bounty);
+            setConsignee(props.bounty.raw.consignee);
+        }
     }, [props.inft]);
 
     return (
@@ -69,25 +113,27 @@ function BountyRedeem(props) {
                 <img alt="" src={iNFT} className="apply_thumb" />
             </Col>
             <Col sm={size.right[1]} xs={size.right[1]}>
-                Name: <br />
-                Block:<br/>
-                Bounty:
+                Name: {self.getName()}<br />
+                Block: {self.getBlock()}
+            </Col>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                Judgement:<strong>{props.judge}</strong>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
             <Col className="text-center" sm={size.target[0]} xs={size.target[0]}>
                 <h6>You</h6>
-                <img alt="" src={iNFT} className="apply_thumb" />
-                <h6>5ECZb...EjJjV</h6>
+                <img alt="" src={Account.avatar(from)} className="apply_thumb" />
+                <h6>{tools.shorten(from,5)}</h6>
             </Col>
             <Col className="pt-4" sm={size.target[1]} xs={size.target[1]}>
                 After diverting, you will get the bonus prize.
             </Col>
             <Col  className="text-center" sm={size.target[2]} xs={size.target[2]}>
-                <h6>Receiver</h6>
-                <img alt="" src={iNFT} className="apply_thumb" />
-                <h6>5D5K7...hcePg</h6>
+                <h6>Consignee</h6>
+                <img alt="" src={Account.avatar(consignee)} className="apply_thumb" />
+                <h6>{tools.shorten(consignee,5)}</h6>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />

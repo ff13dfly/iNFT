@@ -1,6 +1,7 @@
 import Local from "../lib/local";
 import Network from "../network/router";
 
+const logo=`${window.location.origin}/image/logo.png`;
 const self={
     address:(ck)=>{
         const fa = Local.get("login");
@@ -22,6 +23,10 @@ const self={
         } catch (error) {
             return ck && ck({error:"Invalid JSON file."});
         }
+    },
+    avatar:(addr)=>{
+        if(!addr) return logo;
+        return `https://robohash.org/${addr}?set=set2`;
     },
 }
 

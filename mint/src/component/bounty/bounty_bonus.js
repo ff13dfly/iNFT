@@ -28,12 +28,10 @@ function BountyBonus(props) {
     };
 
     let [bonus, setBonus] = useState([]);   //bonus list
-    let [divert, setDivert]= useState({});  //divert buttons 
-    let [judge, setJudge]= useState({});    //divert buttons 
 
     //`apply` and `redeem` buttons status 
     // data format: {INDEX:{apply:INFT_DETAIL,redeem:JUDGE_DETAIL,winner:[WINNER_ADDRESS]}}
-
+    let [going, setGoing]= useState({});  
     let [status, setStatus]= useState({});  
     let [login, setLogin]= useState(false);     //wether login 
 
@@ -46,12 +44,17 @@ function BountyBonus(props) {
                 index={index}
             />,"Bounty Apply");
         },
-        clickRedeem:(inft,judge_alink)=>{
+        clickRedeem:(index)=>{
+            if(!going[index]) return false;
+            const gs=going[index].going;
+            const target=gs[0];     //dealing one by one, if there is more judged apply
+            //console.log(gs);
+
             props.dialog(<BountyRedeem 
                 dialog={props.dialog}
                 bounty={props.bounty}
-                inft={inft}
-                judge={judge_alink}
+                inft={target.inft}
+                judge={target.judge.alink}
             />,"Bounty Redeem");
         },
         clickProgress:(index)=>{
@@ -91,52 +94,6 @@ function BountyBonus(props) {
             return "";
         },
 
-        // checkApply:()=>{
-        //     let setShow=()=>{};
-        //     if(props.ticket!==undefined && props.ticket===false) return setShow(true);
-        //     Account.address((addr)=>{
-        //         if(addr.error) return setShow(false);
-
-        //         const ak=tools.decode(props.alink);
-        //         const chain=Network("anchor");
-        //         chain.bounty.check(ak.name,ak.block,addr,(bought)=>{
-        //             if(bought===false) return setShow(false);
-        //             setShow(true);
-        //         });
-        //     });
-        // },
-        // getApplyRecord:()=>{
-        //     const str=Local.get("apply");
-        //     if(!str) return false;
-        //     try {
-        //         return JSON.parse(str);
-        //     } catch (error) {
-        //         return false;
-        //     }
-        // },
-        // getAnchor:(alink,ck)=>{
-        //     const ak=tools.decode(alink);
-        //     const chain=Network("anchor");
-        //     chain.view(ak,"anchor",ck);
-        // },
-        // checkDivert:(apls,ck)=>{
-        //     const map=self.getApplyRecord();
-        //     for(let i=0;i<apls.length;i++){
-        //         const row=apls[i];
-        //         if(map[row.apply] && row.judge){
-        //             self.getAnchor(row.judge,(judge)=>{
-        //                 if(judge && judge.raw && judge.raw.result===true){
-
-        //                     divert[judge.raw.bonus]=judge.raw.inft;
-        //                     setDivert(tools.clone(divert));
-
-        //                     judge[judge.raw.bonus]=row.judge;
-        //                     setJudge(tools.clone(judge));
-        //                 }
-        //             });
-        //         }
-        //     }
-        // },
         groupByAccount:(map,address)=>{
             const status={};
             for(let index in map){
@@ -165,7 +122,10 @@ function BountyBonus(props) {
     
                 if(props.bounty && props.bounty.system &&  props.bounty.system.apply) {
                     Bounty.group(tools.clone(props.bounty.system.apply),(map)=>{
+
                         if(map.error) return false;
+
+                        setGoing(map);      //cache the grouped data;
                         const redeem=self.groupByAccount(map,addr);
                         setStatus(redeem);      //set reddeem status;
                     });
@@ -230,7 +190,8 @@ function BountyBonus(props) {
                             </Col>
                             <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" onClick={(ev)=>{
-                                    self.clickRedeem(divert[index],judge[index]);
+                                    //console.log(going);
+                                    self.clickRedeem(index);
                                 }}>Redeem</button>
                             </Col>
                         </Row>
