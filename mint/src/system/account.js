@@ -4,7 +4,7 @@ import Network from "../network/router";
 const self={
     address:(ck)=>{
         const fa = Local.get("login");
-        if(!fa) return ck && ck({error:"Invalid account"});
+        if(!fa) return ck && ck({error:"Not login"});
         try {
             const login=JSON.parse(fa);
             return ck && ck(login.address);

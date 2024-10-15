@@ -5,10 +5,12 @@ import BountyApply from "./bounty_apply";
 import BountyProgress from "./bounty_progress";
 import BountyRedeem from "./bounty_redeem";
 
+
+import tools from "../../lib/tools";
+//import Local from "../../lib/local";
 import Network from "../../network/router";
 import Account from "../../system/account";
-import tools from "../../lib/tools";
-import Local from "../../lib/local";
+import Bounty from "../../system/bounty";
 
 /* Bounty bonus list, the entry to apply and check the progress
 *   @param  {array}     data        //bonus list
@@ -26,9 +28,14 @@ function BountyBonus(props) {
     };
 
     let [bonus, setBonus] = useState([]);   //bonus list
-    let [show,setShow] = useState(false);   //wether show apply button
     let [divert, setDivert]= useState({});  //divert buttons 
-    let [judge, setJudge]= useState({});  //divert buttons 
+    let [judge, setJudge]= useState({});    //divert buttons 
+
+    //`apply` and `redeem` buttons status 
+    // data format: {INDEX:{apply:INFT_DETAIL,redeem:JUDGE_DETAIL,winner:[WINNER_ADDRESS]}}
+
+    let [status, setStatus]= useState({});  
+    let [login, setLogin]= useState(false);     //wether login 
 
     const self = {
         clickApply:(index)=>{
@@ -39,7 +46,7 @@ function BountyBonus(props) {
                 index={index}
             />,"Bounty Apply");
         },
-        clickDivert:(inft,judge_alink)=>{
+        clickRedeem:(inft,judge_alink)=>{
             props.dialog(<BountyRedeem 
                 dialog={props.dialog}
                 bounty={props.bounty}
@@ -50,13 +57,7 @@ function BountyBonus(props) {
         clickProgress:(ev)=>{
             props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink}/>,"Apply Progress");
         },
-        getThumb: (index) => {
-            if(props.bounty){
-                const all = props.bounty.template.series[index];
-                return all.thumb[0];
-            }
-            return "";
-        },
+        
         calcRarity: (parts, index) => {
             let n = 1;    //target
             let m = 1;    //sum
@@ -82,67 +83,102 @@ function BountyBonus(props) {
             const chain=Network("anchor");
             return parseInt(prize*chain.accuracy()/rate);
         },
-
-        checkApply:()=>{
-            if(props.ticket!==undefined && props.ticket===false) return setShow(true);
-            Account.address((addr)=>{
-                if(addr.error) return setShow(false);
-
-                const ak=tools.decode(props.alink);
-                const chain=Network("anchor");
-                chain.bounty.check(ak.name,ak.block,addr,(bought)=>{
-                    if(bought===false) return setShow(false);
-                    setShow(true);
-                });
-            })
-        },
-        getApplyRecord:()=>{
-            const str=Local.get("apply");
-            if(!str) return false;
-            try {
-                return JSON.parse(str);
-            } catch (error) {
-                return false;
+        getThumb: (index) => {
+            if(props.bounty){
+                const all = props.bounty.template.series[index];
+                return all.thumb[0];
             }
+            return "";
         },
-        getAnchor:(alink,ck)=>{
-            const ak=tools.decode(alink);
-            const chain=Network("anchor");
-            chain.view(ak,"anchor",ck);
-        },
-        checkDivert:(apls,ck)=>{
-            const map=self.getApplyRecord();
-            for(let i=0;i<apls.length;i++){
-                const row=apls[i];
-                if(map[row.apply] && row.judge){
-                    //console.log(row.judge);
-                    //console.log(`Got apply, ready to check. ${row.apply}`,row);
-                    self.getAnchor(row.judge,(judge)=>{
-                        if(judge && judge.raw && judge.raw.result===true){
 
-                            divert[judge.raw.bonus]=judge.raw.inft;
-                            setDivert(tools.clone(divert));
+        // checkApply:()=>{
+        //     let setShow=()=>{};
+        //     if(props.ticket!==undefined && props.ticket===false) return setShow(true);
+        //     Account.address((addr)=>{
+        //         if(addr.error) return setShow(false);
 
-                            judge[judge.raw.bonus]=row.judge;
-                            setJudge(tools.clone(judge));
-                        }
-                    });
+        //         const ak=tools.decode(props.alink);
+        //         const chain=Network("anchor");
+        //         chain.bounty.check(ak.name,ak.block,addr,(bought)=>{
+        //             if(bought===false) return setShow(false);
+        //             setShow(true);
+        //         });
+        //     });
+        // },
+        // getApplyRecord:()=>{
+        //     const str=Local.get("apply");
+        //     if(!str) return false;
+        //     try {
+        //         return JSON.parse(str);
+        //     } catch (error) {
+        //         return false;
+        //     }
+        // },
+        // getAnchor:(alink,ck)=>{
+        //     const ak=tools.decode(alink);
+        //     const chain=Network("anchor");
+        //     chain.view(ak,"anchor",ck);
+        // },
+        // checkDivert:(apls,ck)=>{
+        //     const map=self.getApplyRecord();
+        //     for(let i=0;i<apls.length;i++){
+        //         const row=apls[i];
+        //         if(map[row.apply] && row.judge){
+        //             self.getAnchor(row.judge,(judge)=>{
+        //                 if(judge && judge.raw && judge.raw.result===true){
+
+        //                     divert[judge.raw.bonus]=judge.raw.inft;
+        //                     setDivert(tools.clone(divert));
+
+        //                     judge[judge.raw.bonus]=row.judge;
+        //                     setJudge(tools.clone(judge));
+        //                 }
+        //             });
+        //         }
+        //     }
+        // },
+        groupByAccount:(map,address)=>{
+            //console.log(map);
+            const status={};
+            for(let index in map){
+                const going=map[index].going;
+                if(going.length===0) continue;
+
+                for(let i=0;i<going.length;i++){
+                    const row=going[i];
+                    if(row.apply && 
+                        row.apply.signer===address && 
+                        row.judge &&
+                        row.judge.result===true
+                    ){
+                        status[index]={
+                            redeem:true,
+                        };
+                    }
                 }
             }
+            return status;
         },
-        
+        fresh:()=>{
+            Account.address((addr)=>{
+                if(addr.error) return setLogin(false);
+                setLogin(true);
+    
+                if(props.bounty && props.bounty.system &&  props.bounty.system.apply) {
+                    Bounty.group(tools.clone(props.bounty.system.apply),(map)=>{
+                        if(map.error) return false;
+                        const redeem=self.groupByAccount(map,addr);
+                        setStatus(redeem);      //set reddeem status;
+                    });
+                }
+            });
+        },
     }
     useEffect(() => {
-        self.checkApply();
-
-        if(props.bounty.system) {
-            console.log(props.bounty.system);
-            self.checkDivert(props.bounty.system.apply,()=>{
-
-            });
-        } 
-        
+        console.log(props.bounty);
         if (props.data) setBonus(props.data);
+        self.fresh();
+
     }, [props.bounty,props.ticket,props.alink]);
 
     return (
@@ -158,6 +194,7 @@ function BountyBonus(props) {
                         }} />
                     </Col>
                     <Col className="pt-2" sm={size.right[1]} xs={size.right[1]}>
+
                         <Row>
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 Prize: <strong className="text-info">{row.bonus}</strong> $ANK, <strong>{row.amount}</strong>P wanted
@@ -168,26 +205,37 @@ function BountyBonus(props) {
                             <Col sm={size.row[0]} xs={size.row[0]}>
                                 Progress of bonus
                             </Col>
+                        </Row>
 
-                            <Col hidden={divert[index]} sm={size.left[0]} xs={size.left[0]}>
-                                {/* {"<--"} click to check */}
+                        <Row hidden={login}>
+                            <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+                                <button className="btn btn-sm btn-primary" onClick={(ev)=>{
+                                    
+                                }}>Login</button>
                             </Col>
-                            <Col hidden={divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
-                                <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
+                        </Row>
+
+                        <Row hidden={!login || status[index]}>
+                            <Col  sm={size.left[0]} xs={size.left[0]}>
+                            </Col>
+                            <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
+                                <button className="btn btn-sm btn-primary" onClick={(ev)=>{
                                     self.clickApply(index);
                                 }}>Apply</button>
                             </Col>
+                        </Row>
 
-                            <Col hidden={!divert[index]} className="pt-1 text-info" sm={size.left[0]} xs={size.left[0]}>
+                        <Row hidden={!login || !status[index]}>
+                            <Col className="pt-1 text-info" sm={size.left[0]} xs={size.left[0]}>
                                 Great! Get prize now!
                             </Col>
-                            <Col hidden={!divert[index]} className="text-end" sm={size.left[1]} xs={size.left[1]}>
-                                <button className="btn btn-sm btn-primary" hidden={!show} onClick={(ev)=>{
-                                    self.clickDivert(divert[index],judge[index]);
+                            <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
+                                <button className="btn btn-sm btn-primary" onClick={(ev)=>{
+                                    self.clickRedeem(divert[index],judge[index]);
                                 }}>Redeem</button>
                             </Col>
-
                         </Row>
+
                     </Col>
                     <Col sm={size.row[0]} xs={size.row[0]}>
                         <hr />

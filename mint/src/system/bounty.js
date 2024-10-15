@@ -65,11 +65,50 @@ const self={
             return ck && ck(bt);
         });
     },
-    apply:(alink,ck)=>{
+    group:(apls,ck,map)=>{
+        if(!map) map={};
+        if(apls.length===0) return ck && ck(map);
+        const row=apls.pop();
+        if(!map[row.bonus]) map[row.bonus]={going:[],winner:[]};
 
-    },
-    divert:(alink,ck)=>{
+        //1.if payment, there is winner
+        if(row.payment){
+            map[row.bonus].winner.push({
+                address:row.payment.to,
+                from:row.payment.from,
+            });
+            return self.group(apls,ck,map);
+        } 
 
+        //2.check the apply progress
+        const task={inft:row.inft};
+        const chain=Network("anchor");
+        const ak=tools.decode(row.apply);
+        chain.view(ak,"anchor",(apply)=>{
+            if(apply===false) return ck && ck({error:"Invalid apply on-chain data."});
+            task.apply={
+                alink:row.apply,
+                signer:apply.signer,
+            };
+
+            if(!row.judge){
+                map[row.bonus].going.push(task);
+                return self.group(apls,ck,map);
+            } 
+
+            const judge_ak=tools.decode(row.judge);
+            chain.view(judge_ak,"anchor",(judge)=>{
+                if(judge===false) return ck && ck({error:"Invalid judge on-chain data."});
+                if(judge.raw.apply!==row.apply) return ck && ck({error:"Invalid judge for apply."});
+
+                task.judge={
+                    alink:row.judge,
+                    result:judge.raw.result,
+                };
+                map[row.bonus].going.push(task);
+                return self.group(apls,ck,map);
+            });
+        });
     },
 }
 
