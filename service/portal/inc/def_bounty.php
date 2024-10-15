@@ -28,7 +28,8 @@ define('BOUNTY_TARGET',array(
 ));
 
 define('BOUNTY_APPROVER',"5D5K7bHqrjqEMd9sgNeb28w9TsR8hFTTHYs6KTGSAZBhcePg");
-
+define('BOUNTY_ENTRY',"5FQmGPk7qGBmU3K6kDfMSBiUHBYq5NqXpx93KFEvDvyz5sRJ");
+define('ANCHOR_ENTRY',"inftbounty");
 //Polkadot frontend parameters
 
 define('ANCHOR_NETWORK_NODE',     "ws://localhost:9944");

@@ -24,6 +24,21 @@ if(!$a->bountyUpdate($data,$id)){
     $a->error("Failed to update apply");
 }
 
+//2. get bounty list
+//2.get the bounty list on-line;
+$warr=array(
+    "applied" => 1
+);
+$param=$a->bountyPages($warr);
+$list=$a->bountyList(0,$warr,'id',true,$param["sum"]);
+$bounty=array();
+foreach($list as $v){
+    $bounty[]=$v["alink"];
+}
+
+$result["nav"]=$param;
+$result["list"]=$bounty;
+
 $result["success"]=true;
 
 $a=Config::getInstance();

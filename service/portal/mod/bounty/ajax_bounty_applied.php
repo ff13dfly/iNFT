@@ -6,6 +6,7 @@ $id=(int)$_F['request']['id'];           //bounty anchor link
 
 $result=array('success'=>FALSE);
 
+//1. update bounty status;
 $a->load("bounty");
 $a=Bounty::getInstance();
 
@@ -23,6 +24,20 @@ if(!$a->bountyUpdate($data,$id)){
     $a=Config::getInstance();
     $a->error("Failed to update apply");
 }
+
+//2.get the bounty list on-line;
+$warr=array(
+    "applied" => 1
+);
+$param=$a->bountyPages($warr);
+$list=$a->bountyList(0,$warr,'id',true,$param["sum"]);
+$bounty=array();
+foreach($list as $v){
+    $bounty[]=$v["alink"];
+}
+
+$result["nav"]=$param;
+$result["list"]=$bounty;
 
 $result["success"]=true;
 
