@@ -18,7 +18,9 @@ function ListGoing(props) {
 
     return (
         <Row >
-            <Col sm={size.row[0]} xs={size.row[0]}></Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                On progress submission.
+            </Col>
             {list.map((row, index) => (
                 <Col key={index} sm={size.row[0]} xs={size.row[0]}>{row.inft}</Col>
             ))}

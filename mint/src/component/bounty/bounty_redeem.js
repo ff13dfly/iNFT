@@ -94,7 +94,7 @@ function BountyRedeem(props) {
         if(props.inft)self.renderINFT(props.inft);
         //if(props.judge) self.checkConsigner(props.judge);
         if(props.bounty){
-            //console.log(props.bounty);
+            console.log(props.bounty);
             setConsignee(props.bounty.raw.consignee);
         }
     }, [props.inft]);

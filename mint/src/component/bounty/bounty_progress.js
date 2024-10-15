@@ -68,7 +68,7 @@ function BountyProgress(props) {
             </Col>
 
             <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty: {self.getBountyAlink()}
+                Bounty: <strong>{self.getBountyAlink()}</strong>
                 <hr/>
             </Col>
 

@@ -396,6 +396,13 @@ code {
   margin-right: 10px;
 }
 
+.winner_thumb{
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background:#4aab67;
+}
+
 .apply_thumb{
   width: 100%;
   border-radius: 10px;
