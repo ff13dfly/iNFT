@@ -54,8 +54,8 @@ function BountyBonus(props) {
                 judge={judge_alink}
             />,"Bounty Redeem");
         },
-        clickProgress:(ev)=>{
-            props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink}/>,"Apply Progress");
+        clickProgress:(index)=>{
+            props.dialog(<BountyProgress dialog={props.dialog} bounty={props.bounty} index={index}/>,"Apply Progress");
         },
         
         calcRarity: (parts, index) => {
@@ -138,7 +138,6 @@ function BountyBonus(props) {
         //     }
         // },
         groupByAccount:(map,address)=>{
-            //console.log(map);
             const status={};
             for(let index in map){
                 const going=map[index].going;
@@ -175,7 +174,7 @@ function BountyBonus(props) {
         },
     }
     useEffect(() => {
-        console.log(props.bounty);
+        //console.log(props.bounty);
         if (props.data) setBonus(props.data);
         self.fresh();
 
@@ -190,7 +189,7 @@ function BountyBonus(props) {
                 <Row key={index}>
                     <Col className="pt-2" sm={size.right[0]} xs={size.right[0]}>
                         <img alt="" src={self.getThumb(row.series)} className="series_thumb pointer" onClick={(ev)=>{
-                            self.clickProgress(ev);
+                            self.clickProgress(index);
                         }} />
                     </Col>
                     <Col className="pt-2" sm={size.right[1]} xs={size.right[1]}>

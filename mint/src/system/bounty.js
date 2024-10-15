@@ -96,6 +96,7 @@ const self={
                 return self.group(apls,ck,map);
             } 
 
+            //3. check the judge data to confirm
             const judge_ak=tools.decode(row.judge);
             chain.view(judge_ak,"anchor",(judge)=>{
                 if(judge===false) return ck && ck({error:"Invalid judge on-chain data."});
