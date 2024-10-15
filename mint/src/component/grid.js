@@ -5,7 +5,7 @@ import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish } from "reac
 import Template from "./template";
 import Bounty from "./bounty";
 import Market from "./market";
-import Minting from "./minting/minting";
+import Minting from "./minting/list_minting";
 import Setting from "./setting";
 import Document from "./document";
 

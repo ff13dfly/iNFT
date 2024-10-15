@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Hash from "./common/hash";
 import Counter from "./common/counter";
 import RenderiNFT from "./common/inft";
-import Minting from "./minting/minting";
+import ListMinting from "./minting/list_minting";
 
 import TPL from "../system/tpl";
 import tools from "../lib/tools";
@@ -12,10 +12,17 @@ import Data from "../lib/data";
 
 import Network from "../network/router";
 
+/* App home preview
+*   @param  {function}  fresh       //force to fresh function
+*   @param  {number}    update      //update number, force to fresh
+*   @param  {function}  dialog      //system dialog function
+*/
+
 let animate = false;   //wether iNFT render animation
 let saving_hash = "";
 let saving_block = 0;
 let updating=null;
+let minting=[];
 function Preview(props) {
     const size = {
         row: [12],
@@ -30,6 +37,7 @@ function Preview(props) {
     let [force, setForce] = useState(false);      //wether force to fresh the iNFT
 
     let [show, setShow] = useState(false);      //wether show minting page
+    let [list, setList] = useState([]);         //minting iNFT list
 
     let timer = null
     const self = {
@@ -56,12 +64,27 @@ function Preview(props) {
             const cur=Data.getHash('cache', 'network');
             return  tools.toUp(cur);
         },
+        checkMinting:()=>{
+
+        },
         fresh: () => {
             setTimeout(() => {
                 const cur = Data.getHash('cache', 'network');
-                Network(cur).subscribe("preview", (bk, bhash) => {
+                const chain=Network(cur);
+                chain.subscribe("preview", (bk, bhash) => {
                     saving_hash = bhash;
                     saving_block = bk;
+                    chain.view(bhash,"detail",(ds)=>{
+                        if(ds.length > 9){
+                            setList(ds);
+                            //minting=list;
+                            setShow(true);
+                        }else{
+                            //minting=[];
+                            setList([]);
+                            setShow(false);
+                        }
+                    });
                 });
             }, 50);
         },
@@ -108,14 +131,15 @@ function Preview(props) {
                     id={"pre_home"}
                     hightlight={active}
                     force={force}
-                    animate={animate}
+                    //animate={animate}
+                    animate={false}
                     callback={() => {
                         //animate = false;
                     }}
                 />
             </Col>
             <Col className="text-center" hidden={!show} sm={size.row[0]} xs={size.row[0]}>
-                <Minting dialog={props.dialog} hash={hash}/>
+                <ListMinting dialog={props.dialog} data={list} block={saving_block}  limit={9}/>
             </Col>
 
             <Col className="text-center pb-2" sm={size.row[0]} xs={size.row[0]}>

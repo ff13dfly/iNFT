@@ -36,6 +36,7 @@ function App() {
       update++;
       setUpdate(update);
     },
+    //dropped, use menu when more functions.
     panel: {
       show: (ctx) => {
         setGrid(ctx);
@@ -146,7 +147,7 @@ function App() {
   return (
     <Container className="app" id="minter">
       <Header fresh={self.fresh} dialog={self.dialog} update={update} panel={self.panel} />
-      <Preview fresh={self.fresh} update={update} node={config.node[0]} />
+      <Preview fresh={self.fresh} dialog={self.dialog}  update={update} node={config.node[0]}  />
       <Action fresh={self.fresh} dialog={self.dialog} update={update} />
       {/* <Modal dialogClassName="modal-minter"
         show={!hide}

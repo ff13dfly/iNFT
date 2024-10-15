@@ -414,15 +414,40 @@ const self = {
 
                     break;
                 case "detail":
-                    wsAPI.rpc.chain.getBlock(value).then((dt) => {
-                        const exs = dt.block.extrinsics;
-                        if (exs.length === 4) return [];
-
+                    wsAPI.rpc.chain.getBlock(value).then((res) => {
+                        const exs = res.block.extrinsics;
+                        const bk = res.block.header.toJSON();
+                        const infts = [];
+                        if (exs.length === 1) return ck && ck(infts);
                         exs.forEach((ex, index) => {
-                            if (index < 4) return false;
                             const row = ex.toHuman();
-                            console.log(row);
+                            if (!row.isSigned) return false;     //skip the unsigned, no iNFT
+                            if (row.method && row.method.section === "anchor" && row.method.method === "setAnchor") {
+                                const dt = row.method.args;
+                                try {
+                                    const protocol = JSON.parse(dt.protocol);
+                                    if (protocol && protocol.tpl && protocol.tpl.toLowerCase() === "inft") {
+                                        const raw = JSON.parse(dt.raw);
+                                        const inft = {
+                                            name: dt.key,
+                                            raw: raw,
+                                            protocol: protocol,
+                                            pre: parseInt(dt.pre),
+                                            signer: row.signer.Id,
+                                            owner: row.signer.Id,
+                                            hash: value,
+                                            block: bk.number,
+                                            valid: true,
+                                            network: "anchor",
+                                        }
+                                        infts.push(inft);
+                                    }
+                                } catch (error) {
+
+                                }
+                            }
                         });
+                        return ck && ck(infts);
                     });
                     break;
                 case "blocknumber":   //value: hash(64)

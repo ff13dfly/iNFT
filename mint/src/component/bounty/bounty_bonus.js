@@ -143,8 +143,6 @@ function BountyBonus(props) {
     return (
         <Col sm={size.row[0]} xs={size.row[0]}>
             <div className="bonus-container">
-
-            
             {bonus.map((row, index) => (
                 <Row key={index}>
                     <Col className="pt-2" sm={size.right[0]} xs={size.right[0]}>
