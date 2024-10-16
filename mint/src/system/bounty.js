@@ -1,6 +1,7 @@
 import tools from "../lib/tools";
 import Network from "../network/router";
 import config from "../config";
+import TPL from "./tpl";
 
 let list=null;      //bounty list
 const cache={};     //bounty cache "alink" => bounty object
@@ -48,7 +49,7 @@ const funs={
         }
     },
     checkBountyFormat:(raw)=>{
-        console.log(raw);
+        //console.log(raw);
         if(!raw.template || !raw.template.cid || !raw.template.origin) return false;
         if(!raw.bonus)return false;
         if(!raw.consignee)return false;
@@ -62,15 +63,20 @@ const self={
             return ck && ck(list);
         });
     },
-    view:(alink,ck)=>{
-        if(cache[alink]!==undefined) return ck && ck(cache[alink]);
+    view:(alink,ck,force)=>{
+        if(!force && cache[alink]!==undefined) return ck && ck(cache[alink]);
         const ak=tools.decode(alink);
         const url=`${config.bounty.url}/view/${ak.name}/${ak.block}`;
-        console.log(url);
+
         funs.getData(url,(bt)=>{
             if(bt.error) return ck && ck(bt);
             if(!funs.checkBountyFormat(bt.raw)) return ck && ck({error:"Invalid bounty."});
-            return ck && ck(bt);
+
+            const cid = bt.raw.template.cid;
+            TPL.view(cid, (dt) => {
+                bt.template=dt;
+                return ck && ck(bt);
+            });
         });
     },
     group:(apls,ck,map)=>{

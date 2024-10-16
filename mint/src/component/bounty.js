@@ -63,9 +63,7 @@ function Bounty(props) {
                         template:res.raw.template,
                         orgin:res,
                     }
-                    //row.template = res.raw.template;
                     row.template.raw = dt;
-                    //row.orgin = res;
                     bts.push(row);
                     return self.prepareData(list, ck, bts);
                 });
@@ -82,7 +80,6 @@ function Bounty(props) {
             return [sum,amount];
         },
         removeBounty:(alink)=>{
-            console.log(alink);
             const narr=[];
             for(let i=0;i<list.length;i++){
                 if(list[i]!==alink) narr.push(list[i]);
@@ -92,20 +89,13 @@ function Bounty(props) {
             return narr[page];
         },
         show:(alink)=>{
-            //console.log(alink);
-            setAlink(alink);            //update alink
             BOUNTY.view(alink,(bt)=>{
                 if(bt.error) {
-                    //console.log(JSON.stringify(list));
                     const replace=self.removeBounty(alink);
                     return self.show(replace);
                 }
-                bt.alink=alink;
-                const cid = bt.raw.template.cid;
-                TPL.view(cid, (dt) => {
-                    bt.template=dt;
-                    setSingle(bt);
-                });
+                setAlink(alink);            //update alink
+                setSingle(bt);              //update bounty data
             });
         },
         test:()=>{
@@ -150,7 +140,7 @@ function Bounty(props) {
         <Row>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <h6>{self.getTitle()}</h6>
-                {self.getDesc()}
+                {self.getDesc()}<br />{alink}
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
@@ -167,9 +157,9 @@ function Bounty(props) {
                 <hr />
             </Col>
             
-            <BountyBonus dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
+            <BountyBonus dialog={props.dialog} alink={alink} ticket={exsist}/>
             <Col sm={size.row[0]} xs={size.row[0]}>
-                <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
+                <BountyChat dialog={props.dialog} alink={alink} ticket={exsist}/>
             </Col>
             <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Row>

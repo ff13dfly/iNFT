@@ -70,14 +70,13 @@ function BountyApply(props) {
 
                     setPassword("");
                     setDisablApply(true);
-                    Apply.submit(pair,inft,props.bounty.alink,props.index,(status)=>{
-                        console.log(status)
-                        setDisablApply(false);      //recover apply button
+                    Apply.submit(pair,inft,props.alink,props.index,(status)=>{
+                        
                         if(status.error){
-                            return setInfo(status.error);
+                            return setInfo(`Apply server error.`);
                         }
-
-                        //recover to default
+                    
+                        setDisablApply(false);      //recover apply button
                         setInfo("Done");
                         setSearch("");
                         setTimeout(() => {

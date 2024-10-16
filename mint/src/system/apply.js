@@ -126,8 +126,7 @@ const funs={
 const chain=Network("anchor");
 const self={
     submit:(pair,inft,bounty_alink,index,ck)=>{
-        //console.log(pair,inft,bounty_alink,index);
-        //return true;
+        //return console.log(pair,inft,bounty_alink,index);
         //1. write the apply data on chain
         const inft_alink=`anchor://${inft.name}/${inft.block}`;
         const obj={
@@ -135,7 +134,7 @@ const self={
             raw:funs.apply.raw(inft_alink,bounty_alink,index,inft.owner),
             protocol:funs.apply.protocol(bounty_alink),
         }
-        //console.log(obj);
+        console.log(obj);
         chain.write(pair,obj,(process)=>{
             if(process.error) return ck && ck(process);
             if(process.msg) ck && ck({message:process.msg});
@@ -156,34 +155,12 @@ const self={
                         //4.apply to server
                         const site=config.bounty.url;
                         const url=`${site}/apply/${obj.anchor}/${dt.block}`;
-                        //console.log(url);
+                        console.log(url);
                         funs.fetchData(url,(result)=>{
                             return ck && ck(result);
                         },()=>{
                             funs.clearRecord(apply_alink);
                         });
-                        // fetch(url).then((response)=>{
-                        //     if(!response.ok){
-                        //         funs.clearRecord(apply_alink);
-                        //         return ck && ck({error:"Failed to get respons from "+url});
-                        //     } 
-                        //     response.text().then((res)=>{
-                        //         try {
-                        //             const dt=JSON.parse(res);
-                        //             if(dt.error) funs.clearRecord(apply_alink);
-                        //             return ck && ck(dt);
-                        //         } catch (error) {
-                        //             funs.clearRecord(apply_alink);
-                        //             return ck && ck({error:"Invalide content, please chech the response from server."})
-                        //         }
-                        //     }).catch((error)=>{
-                        //         funs.clearRecord(apply_alink);
-                        //         return ck && ck({error:error});
-                        //     });
-                        // }).catch((error)=>{
-                        //     funs.clearRecord(apply_alink);
-                        //     return ck && ck({error:error});
-                        // });
                     });
                 });
             }

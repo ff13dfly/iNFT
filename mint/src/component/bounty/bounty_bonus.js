@@ -7,7 +7,6 @@ import BountyRedeem from "./bounty_redeem";
 
 
 import tools from "../../lib/tools";
-//import Local from "../../lib/local";
 import Network from "../../network/router";
 import Account from "../../system/account";
 import Bounty from "../../system/bounty";
@@ -26,10 +25,9 @@ function BountyBonus(props) {
         left:[8,4],
     };
 
+    let [bounty, setBounty] = useState({});
     let [bonus, setBonus] = useState([]);   //bonus list
 
-    //`apply` and `redeem` buttons status 
-    // data format: {INDEX:{apply:INFT_DETAIL,redeem:JUDGE_DETAIL,winner:[WINNER_ADDRESS]}}
     let [going, setGoing]= useState({});  
     let [status, setStatus]= useState({});  
     let [login, setLogin]= useState(false);     //wether login 
@@ -39,7 +37,7 @@ function BountyBonus(props) {
             props.dialog(<BountyApply 
                 dialog={props.dialog} 
                 alink={props.alink} 
-                bounty={props.bounty}
+                bounty={bounty}
                 index={index}
             />,"Bounty Apply");
         },
@@ -51,16 +49,17 @@ function BountyBonus(props) {
 
             props.dialog(<BountyRedeem 
                 dialog={props.dialog}
-                bounty={props.bounty}
+                bounty={bounty}
                 inft={target.inft}
                 judge={target.judge.alink}
             />,"Bounty Redeem");
         },
         clickProgress:(index)=>{
-            props.dialog(<BountyProgress dialog={props.dialog} bounty={props.bounty} index={index}/>,"Apply Progress");
+            props.dialog(<BountyProgress dialog={props.dialog} bounty={bounty} index={index}/>,"Apply Progress");
         },
         
         calcRarity: (parts, index) => {
+            //console.log(parts, index)
             let n = 1;    //target
             let m = 1;    //sum
             for (let i = 0; i < parts.length; i++) {
@@ -73,11 +72,11 @@ function BountyBonus(props) {
             return parseInt(m / n);
         },
         getRate:(index)=>{
-            if(!props.bounty || 
-                !props.bounty.template ||
-                !props.bounty.template.parts
+            if(!bounty || 
+                !bounty.template ||
+                !bounty.template.parts
             ) return "NaN";
-            return self.calcRarity(props.bounty.template.parts,index);
+            return self.calcRarity(bounty.template.parts,index);
         },
         getX:(prize,index)=>{
             const rate=self.getRate(index);
@@ -86,12 +85,11 @@ function BountyBonus(props) {
             return parseInt(prize*chain.accuracy()/rate);
         },
         getThumb: (index) => {
-            //console.log(index);
-            if(props.bounty){
-                const all = props.bounty.template.series[index];
-                if( props.bounty.template &&  
-                    props.bounty.template.series && 
-                    props.bounty.template.series[index]
+            if(bounty){
+                const all = bounty.template.series[index];
+                if( bounty.template &&  
+                    bounty.template.series && 
+                    bounty.template.series[index]
                 )return all.thumb[0];
                 return "";
             }
@@ -124,8 +122,8 @@ function BountyBonus(props) {
                 if(addr.error) return setLogin(false);
                 setLogin(true);
     
-                if(props.bounty && props.bounty.system &&  props.bounty.system.apply) {
-                    Bounty.group(tools.clone(props.bounty.system.apply),(map)=>{
+                if(bounty && bounty.system &&  bounty.system.apply) {
+                    Bounty.group(tools.clone(bounty.system.apply),(map)=>{
 
                         if(map.error) return false;
 
@@ -138,15 +136,17 @@ function BountyBonus(props) {
         },
     }
     useEffect(() => {
-        //console.log(props.bounty);
-        console.log(props.alink);
-        if (props.bounty && props.bounty.raw && props.bounty.raw.bonus){
-            console.log(props.bounty.raw.bonus)
-            setBonus(props.bounty.raw.bonus);
-        } 
+        //console.log(`Bonus:${props.alink}`)
+        if(props.alink){
+            Bounty.view(props.alink,(bt)=>{
+                if(bt.error) return false;
+                setBounty(bt);
+                setBonus(bt.raw.bonus);
+            });
+        }
         self.fresh();
 
-    }, [props.bounty]);
+    }, [props.alink]);
 
     return (
         <Col sm={size.row[0]} xs={size.row[0]}>
