@@ -208,6 +208,11 @@ function Playground(props) {
 <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
                         props.link("playground", ["bafkreid3jvmjgbdy4jyesbpjqmyde6mxvzxw427nmrqhinecc5q7o6zqqq"]);
                     }}>Block(bafkreid3j...)</span>
+                    <span className="pointer ml-10 text-secondary" onClick={(ev)=>{
+                        props.link("playground", ["bafybeih4cxqhble3f43t4xvqitfwllvyl7toxk6rmywzje5djndxk3l7q4"]);
+                    }}>Ghost(bafybeih4...)</span>
+
+
 
                 </Col>
             </Row>

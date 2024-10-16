@@ -13,7 +13,6 @@ import Account from "../../system/account";
 import Bounty from "../../system/bounty";
 
 /* Bounty bonus list, the entry to apply and check the progress
-*   @param  {array}     data        //bonus list
 *   @param  {object}    bounty      //bounty data from parent
 *   @param  {string}    alink       //bounty anchor link of bounty
 *   @param  {boolean}   ticket      //wether bounty ticket exsist
@@ -87,9 +86,14 @@ function BountyBonus(props) {
             return parseInt(prize*chain.accuracy()/rate);
         },
         getThumb: (index) => {
+            //console.log(index);
             if(props.bounty){
                 const all = props.bounty.template.series[index];
-                return all.thumb[0];
+                if( props.bounty.template &&  
+                    props.bounty.template.series && 
+                    props.bounty.template.series[index]
+                )return all.thumb[0];
+                return "";
             }
             return "";
         },
@@ -135,10 +139,14 @@ function BountyBonus(props) {
     }
     useEffect(() => {
         //console.log(props.bounty);
-        if (props.data) setBonus(props.data);
+        console.log(props.alink);
+        if (props.bounty && props.bounty.raw && props.bounty.raw.bonus){
+            console.log(props.bounty.raw.bonus)
+            setBonus(props.bounty.raw.bonus);
+        } 
         self.fresh();
 
-    }, [props.bounty,props.ticket,props.alink]);
+    }, [props.bounty]);
 
     return (
         <Col sm={size.row[0]} xs={size.row[0]}>

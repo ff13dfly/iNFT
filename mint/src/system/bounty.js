@@ -46,7 +46,14 @@ const funs={
 
             },
         }
-    }
+    },
+    checkBountyFormat:(raw)=>{
+        console.log(raw);
+        if(!raw.template || !raw.template.cid || !raw.template.origin) return false;
+        if(!raw.bonus)return false;
+        if(!raw.consignee)return false;
+        return true;
+    },
 }
 
 const self={
@@ -61,7 +68,8 @@ const self={
         const url=`${config.bounty.url}/view/${ak.name}/${ak.block}`;
         console.log(url);
         funs.getData(url,(bt)=>{
-            if(!bt.error) cache[alink]=bt;
+            if(bt.error) return ck && ck(bt);
+            if(!funs.checkBountyFormat(bt.raw)) return ck && ck({error:"Invalid bounty."});
             return ck && ck(bt);
         });
     },

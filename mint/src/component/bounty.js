@@ -24,15 +24,9 @@ function Bounty(props) {
 
     let [page, setPage] = useState(1);          //bounty page
     let [list, setList] = useState([]);         //bounty list
-    let [total, setTotal]= useState(0);         //bounty amount
-    let [desc, setDesc]= useState("");          //bounty desc
-    let [title, setTitle]= useState("");        //bounty title
     let [single, setSingle] = useState({});     //bounty data with template and on-chain orgin data
-    let [bonus, setBonus] = useState([]);       //bonus list
     let [alink, setAlink] = useState("");       //bounty anchor link
     let [exsist, setExsist]= useState(false);   //wether bounty ticket setting
-    let [sum, setSum]= useState(0);             //total bonus prize
-    let [amount,setAmount]= useState(0);        //total needed pieces
 
     const self = {
         clickPrevious: (ev) => {
@@ -55,7 +49,6 @@ function Bounty(props) {
             if (!bts) bts = [];
             if (list.length === 0) return ck && ck(bts);
             const alink = list.pop();
-            setAlink(alink);            //update alink
             self.checkExsist(alink);    //check ticket exsist
 
             const anchor = tools.decode(alink);
@@ -88,20 +81,30 @@ function Bounty(props) {
             }
             return [sum,amount];
         },
+        removeBounty:(alink)=>{
+            console.log(alink);
+            const narr=[];
+            for(let i=0;i<list.length;i++){
+                if(list[i]!==alink) narr.push(list[i]);
+            }
+            setList(narr);
+            if(page===narr.length) return narr[narr.length-1];
+            return narr[page];
+        },
         show:(alink)=>{
+            //console.log(alink);
+            setAlink(alink);            //update alink
             BOUNTY.view(alink,(bt)=>{
-                //console.log(bt);  
+                if(bt.error) {
+                    //console.log(JSON.stringify(list));
+                    const replace=self.removeBounty(alink);
+                    return self.show(replace);
+                }
                 bt.alink=alink;
                 const cid = bt.raw.template.cid;
                 TPL.view(cid, (dt) => {
                     bt.template=dt;
                     setSingle(bt);
-                    setDesc(bt.raw.desc);
-                    setTitle(bt.raw.title);
-                    setBonus(bt.raw.bonus);
-                    const [sum_bonus,pieces]=self.calcSum(bt.raw.bonus);
-                    setSum(sum_bonus);
-                    setAmount(pieces);
                 });
             });
         },
@@ -116,31 +119,45 @@ function Bounty(props) {
             chain.view({name:name}, "anchor", (dt) => {
                 console.log(dt);
             });
-        }
+        },
+        getTotal:()=>{
+            return list.length;
+        },
+        getDesc:()=>{
+            if(single && single.raw && single.raw.desc) return single.raw.desc;
+            return "";
+        },
+        getTitle:()=>{
+            if(single && single.raw && single.raw.title) return single.raw.title;
+            return "";
+        },
+        getSumOfBonus:()=>{
+            if(single && single.raw && single.raw.bonus){
+                const [sum_bonus,pieces]=self.calcSum(single.raw.bonus);
+                return {sum:sum_bonus,pieces:pieces};
+            }
+            return {sum:0,pieces:0};
+        },
     }
     useEffect(() => {
-        //ghost cat test
-        //bafybeih4cxqhble3f43t4xvqitfwllvyl7toxk6rmywzje5djndxk3l7q4
         BOUNTY.list((bts)=>{
             setList(bts);
-            setTotal(bts.length);
             self.show(bts[page-1]);
         });
-
     }, []);
 
     return (
         <Row>
             <Col sm={size.row[0]} xs={size.row[0]}>
-                <h6>{title}</h6>
-                {desc}
+                <h6>{self.getTitle()}</h6>
+                {self.getDesc()}
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
             <Col sm={size.left[0]} xs={size.left[0]}>
-                Total <strong className="text-info">{amount.toLocaleString()}</strong>P wanted.<br />
-                Prize <strong className="text-info">{sum.toLocaleString()}</strong> $ANK.
+                Total <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong>P wanted.<br />
+                Prize <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong> $ANK.
             </Col>
             <Col className="text-center" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
@@ -150,10 +167,10 @@ function Bounty(props) {
                 <hr />
             </Col>
             
-            <BountyBonus dialog={props.dialog}  data={bonus} bounty={single} alink={alink} ticket={exsist}/>
-            {/* <Col sm={size.row[0]} xs={size.row[0]}>
+            <BountyBonus dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
+            <Col sm={size.row[0]} xs={size.row[0]}>
                 <BountyChat dialog={props.dialog} bounty={single} alink={alink} ticket={exsist}/>
-            </Col> */}
+            </Col>
             <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="" sm={size.page[0]} xs={size.page[0]}>
@@ -162,10 +179,10 @@ function Bounty(props) {
                         }} />
                     </Col>
                     <Col className="text-center unselect" sm={size.page[1]} xs={size.page[1]}>
-                        <h4> {page} / {total} </h4>
+                        <h4> {page} / {self.getTotal()} </h4>
                     </Col>
                     <Col className="text-end" sm={size.page[2]} xs={size.page[2]}>
-                        <FaAngleRight className="pointer" size={36} hidden={page>=total} onClick={(ev) => {
+                        <FaAngleRight className="pointer" size={36} hidden={page>=self.getTotal()} onClick={(ev) => {
                             self.clickNext(ev);
                         }} />
                     </Col>
