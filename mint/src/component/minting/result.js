@@ -32,7 +32,7 @@ function Result(props) {
         row: [12],
         sell: [7, 5],
         back: [10, 2],
-        info: [10, 2],
+        info: [9, 3],
         fav: [10, 2],
     };
 

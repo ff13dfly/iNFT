@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
 import tools from "../lib/tools";
+import Copy from "../lib/clipboard";
 import TPL from "../system/tpl";
 import Network from "../network/router";
 
@@ -11,7 +12,7 @@ import Chat from "./common/chat";
 
 import BOUNTY from  "../system/bounty";
 
-import { FaAngleLeft, FaAngleRight,FaComments } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight,FaComments,FaCopy } from "react-icons/fa";
 
 /* Bounty entry
 *   @param  {string}    alink       //bonus anchor link
@@ -32,6 +33,7 @@ function Bounty(props) {
     let [single, setSingle] = useState({});     //bounty data with template and on-chain orgin data
     let [alink, setAlink] = useState("");       //bounty anchor link
     let [exsist, setExsist]= useState(false);   //wether bounty ticket setting
+    let [recover, setRecover] = useState({});
 
     const self = {
         clickPrevious: (ev) => {
@@ -50,6 +52,19 @@ function Bounty(props) {
                     props.dialog(<Bounty alink={alink} dialog={props.dialog}/>,"Bounty");
                 }}
             />, "Bounty Comments");
+        },
+        clickCopy: (name) => {
+            Copy(name);
+        },
+        clickRecover: (key, at) => {
+            if (!recover[key]) {
+                recover[key] = "text-info";
+                setRecover(tools.copy(recover));
+                setTimeout(() => {
+                    delete recover[key];
+                    setRecover(tools.copy(recover));
+                }, !at ? 1000 : at);
+            }
         },
         checkExsist:(alink)=>{
             const chain = Network("anchor");
@@ -130,6 +145,16 @@ function Bounty(props) {
             }
             return {sum:0,pieces:0};
         },
+        getPage:(alink,arr)=>{
+            for(let i=0;i<arr.length;i++){
+                if(alink===arr[i]) return i+1;
+            }
+            return 1;
+        },
+        getAlink:()=>{
+            if(props.alink) return props.alink;
+            return alink;
+        },
         //failed vs success anchor data
         test:()=>{
             const name="ivnfxmtfhjbc_20"
@@ -147,15 +172,22 @@ function Bounty(props) {
     useEffect(() => {
         BOUNTY.list((bts)=>{
             setList(bts);
-            self.show(bts[page-1]);
+            //router right bounty by alink
+            if(!props.alink){
+                self.show(bts[page-1]);
+            }else{
+                const p=self.getPage(props.alink,bts);
+                setPage(p);
+                self.show(props.alink);
+            }
         });
     }, [props.fresh]);
 
     return (
         <Row>
             <Col sm={size.title[0]} xs={size.title[0]}>
-                <h6>{self.getTitle()}</h6>
-                {self.getDesc()}<br />
+                <h5>{self.getTitle()}</h5>
+                <p>{self.getDesc()}</p>
             </Col>
             <Col className="pt-2 text-end" sm={size.title[1]} xs={size.title[1]}>
                 <button className="btn btn-sm btn-secondary" onClick={(ev) => {
@@ -164,11 +196,18 @@ function Bounty(props) {
                     <FaComments className="" size={24} />
                 </button>
             </Col>
+            <Col className="pt-2" sm={size.row[0]} xs={size.row[0]}>
+                <button className="btn btn-sm btn-secondary pr-2" onClick={(ev) => {
+                    self.clickCopy(self.getAlink());
+                    self.clickRecover("name");
+                }}>
+                    <FaCopy className={!recover.name ? "" : recover.name} />
+                </button>
+                <strong className="pt-1">{self.getAlink()}</strong>
+            </Col>   
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
-            </Col>    
-            
-            
+            </Col> 
             
             <BountyBonus dialog={props.dialog} alink={alink} ticket={exsist}/>
 
@@ -177,7 +216,7 @@ function Bounty(props) {
             </Col>
             <Col className="text-center pt-2" sm={size.left[0]} xs={size.left[0]}>
                 Total <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong>P wanted.<br />
-                Prize <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong> $ANK.
+                Prize <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong> $ANK.<br/>
             </Col>
             <Col className="text-center pb-1" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>

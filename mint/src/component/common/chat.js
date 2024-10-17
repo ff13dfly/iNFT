@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 
 import { FaBackspace,FaRegCommentDots } from "react-icons/fa";
 
-//import Bounty from "../bounty";
 import Account from "../../system/account";
+import API from "../../system/api";
 
 /* Chat on alink
 *   @param  {string}    alink       //bounty anchor link of bounty
@@ -20,15 +20,37 @@ function Chat(props) {
         left: [10,2],
     };
 
+    let [message, setMessage]=useState("");
+
+    let [page, setPage]=useState(1);     //chat page
+    let [list, setList]=useState([]);    //chat list;
 
     const self = {
+        changeMessage:(ev)=>{
+            setMessage(ev.target.value);
+        },
         clickBack:(ev)=>{
             props.callback();
-            //props.dialog(<Bounty dialog={props.dialog} alink={props.alink}/>,"Bounty");
+        },
+        clickSent:(ev)=>{
+            if(!message) return false;
+            Account.address((addr)=>{
+                if(!addr || !props.alink) return false;
+                API.comment.submit(addr,message,props.alink,(res)=>{
+                    console.log(res);
+                    if(res.success) return self.fresh(props.alink);
+                });
+            });
+        },
+        fresh:(alink)=>{
+            API.comment.list(alink,(dt)=>{
+                if(!dt.success) return false;
+                if(dt.data) setList(dt.data);
+            },page);
         },
     }
     useEffect(() => {
-       
+        if(props.alink) self.fresh(props.alink);
     }, []);
 
     return (
@@ -45,41 +67,37 @@ function Chat(props) {
                 <div className="chat-container" onScroll={(ev)=>{
                     console.log("here");
                 }}>
-                <Row>
-                    <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
-                        <Image
-                            className="avatar_bounty"
-                            src={Account.avatar("abc")}
-                            roundedCircle
-                            width="100%"
-                        />
-                    </Col>
-                    <Col className="pt-2" sm={size.comment[1]} xs={size.comment[1]}>
-                        <div className="bounty_chat">{"hello world"}</div>
-                    </Col>
-                </Row>
-                <Row className="pt-2">
-                    <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
-                        <Image
-                            className="avatar_bounty"
-                            src={Account.avatar("aaa")}
-                            roundedCircle
-                            width="100%"
-                        />
-                    </Col>
-                    <Col className="pt-2"  sm={size.comment[1]} xs={size.comment[1]}>
-                        <div className="bounty_chat">{"Really? No more words? This is such a good bounty to join. 1000X return."}</div>
-                    </Col>
-                </Row>
-
+                {list.map((row, index) => (
+                    <Row key={index}>
+                        <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
+                            <Image
+                                className="avatar_bounty"
+                                src={Account.avatar(row.address)}
+                                roundedCircle
+                                width="100%"
+                            />
+                        </Col>
+                        <Col className="pt-2" sm={size.comment[1]} xs={size.comment[1]}>
+                            <div className="bounty_chat">{row.memo}</div>
+                        </Col>
+                    </Row>
+                ))}
                 </div>
             </Col>
 
             <Col className="pt-4" sm={size.left[0]} xs={size.left[0]}>
-                <input type="text" className="form-control" placeholder="Message about bounty..." />
+                <input type="text" className="form-control" 
+                    placeholder="Message about bounty..." 
+                    value={message}
+                    onChange={(ev)=>{
+                        self.changeMessage(ev)
+                    }}
+                />
             </Col>
             <Col className="pt-4 text-end" sm={size.left[1]} xs={size.left[1]}>
-               <button className="btn btn-sm btn-secondary">
+               <button className="btn btn-sm btn-secondary" onClick={(ev)=>{
+                    self.clickSent(ev);
+               }}>  
                     <FaRegCommentDots className="text-info" size={24}/>
                 </button>
             </Col>
