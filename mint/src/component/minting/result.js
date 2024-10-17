@@ -1,19 +1,19 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { FaBackspace, FaRegHeart, FaHeart } from "react-icons/fa";
-
 import Mine from "../mine";
-import Progress from "./progress";
 import MiniBoard from "./mini_board";
 
 import Local from "../../lib/local";
 import tools from "../../lib/tools";
 import INFT from "../../system/inft";
 import Data from "../../lib/data";
+import Copy from "../../lib/clipboard";
 
 import RenderiNFT from "../common/inft";
 import Network from "../../network/router";
+
+import { FaCopy, FaBackspace, FaRegHeart, FaHeart } from "react-icons/fa";
 
 /* iNFT result viewer component
 *   @param  {string}    name        //the anchor name of iNFT
@@ -49,6 +49,8 @@ function Result(props) {
     let [name, setName] = useState("");
 
     let [fav, setFav] = useState(props.fav);
+
+    let [recover, setRecover] = useState({});
 
     const dom_id = "pre_result";
     const router = {
@@ -125,6 +127,19 @@ function Result(props) {
                 props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");
             }
         },
+        clickCopy: (name) => {
+            Copy(name);
+        },
+        clickRecover: (key, at) => {
+            if (!recover[key]) {
+                recover[key] = "text-info";
+                setRecover(tools.copy(recover));
+                setTimeout(() => {
+                    delete recover[key];
+                    setRecover(tools.copy(recover));
+                }, !at ? 1000 : at);
+            }
+        },
         show: () => {
             setName(props.name);
             setBlock(props.block);
@@ -173,15 +188,21 @@ function Result(props) {
 
     return (
         <Row>
-            <Col className="pt-2" sm={size.back[0]} xs={size.back[0]}>
-                <strong>{name}</strong> at block {block.toLocaleString()}
+            <Col className="" sm={size.back[0]} xs={size.back[0]}>
+                <button className="btn btn-sm btn-secondary pr-2" onClick={(ev) => {
+                    self.clickCopy(name);
+                    self.clickRecover("name");
+                }}>
+                    <FaCopy className={!recover.name ? "" : recover.name} />
+                </button>
+                <strong>{name} @ {block.toLocaleString()}</strong>
             </Col>
             <Col className="pb-2 text-end" hidden={!props.back} sm={size.back[1]} xs={size.back[1]}>
                 <FaBackspace className="pointer" size={40} color={"#FFAABB"} onClick={(ev) => {
                     self.clickHome(ev);
                 }} />
             </Col>
-            <Col className="text-center pt-2" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
+            <Col className="text-center" sm={size.row[0]} xs={size.row[0]} style={{ minHeight: "300px" }}>
                 <RenderiNFT 
                     hash={props.hash} 
                     id={dom_id}

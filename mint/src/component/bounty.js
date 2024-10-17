@@ -1,17 +1,17 @@
 import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-
 import tools from "../lib/tools";
 import TPL from "../system/tpl";
 import Network from "../network/router";
 
 import BountyTicket from "./bounty/bounty_ticket";
 import BountyBonus from "./bounty/bounty_bonus";
-import BountyChat from "./bounty/bounty_chat";
+import Chat from "./common/chat";
 
 import BOUNTY from  "../system/bounty";
+
+import { FaAngleLeft, FaAngleRight,FaComments } from "react-icons/fa";
 
 /* Bounty entry
 *   @param  {string}    alink       //bonus anchor link
@@ -24,6 +24,7 @@ function Bounty(props) {
         page: [4, 4, 4],
         right: [3, 9],
         left: [7, 5],
+        title:[10,2],
     };
 
     let [page, setPage] = useState(1);          //bounty page
@@ -40,6 +41,15 @@ function Bounty(props) {
         clickNext: (ev) => {
             self.show(list[page]);
             setPage(page+1);
+        },
+        clickChat: (ev) => {
+            props.dialog(<Chat
+                dialog={props.dialog}
+                alink={alink}
+                callback={()=>{
+                    props.dialog(<Bounty alink={alink} dialog={props.dialog}/>,"Bounty");
+                }}
+            />, "Bounty Comments");
         },
         checkExsist:(alink)=>{
             const chain = Network("anchor");
@@ -94,12 +104,10 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
-                console.log(bt);
                 if(bt.error) {
                     const replace=self.removeBounty(alink);
                     return self.show(replace);
                 }
-
                 setAlink(alink);            //update alink
                 setSingle(bt);              //update bounty data
             });
@@ -145,9 +153,16 @@ function Bounty(props) {
 
     return (
         <Row>
-            <Col sm={size.row[0]} xs={size.row[0]}>
+            <Col sm={size.title[0]} xs={size.title[0]}>
                 <h6>{self.getTitle()}</h6>
-                {self.getDesc()}<br />{alink}
+                {self.getDesc()}<br />
+            </Col>
+            <Col className="pt-2 text-end" sm={size.title[1]} xs={size.title[1]}>
+                <button className="btn btn-sm btn-secondary" onClick={(ev) => {
+                    self.clickChat(ev)
+                }}>
+                    <FaComments className="" size={24} />
+                </button>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
@@ -156,18 +171,15 @@ function Bounty(props) {
             
             
             <BountyBonus dialog={props.dialog} alink={alink} ticket={exsist}/>
-            
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <BountyChat dialog={props.dialog} alink={alink} ticket={exsist}/>
-            </Col>
+
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
             </Col>
-            <Col sm={size.left[0]} xs={size.left[0]}>
+            <Col className="text-center pt-2" sm={size.left[0]} xs={size.left[0]}>
                 Total <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong>P wanted.<br />
                 Prize <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong> $ANK.
             </Col>
-            <Col className="text-center" sm={size.left[1]} xs={size.left[1]}>
+            <Col className="text-center pb-1" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
             </Col>
 

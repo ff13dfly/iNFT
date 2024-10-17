@@ -3,10 +3,16 @@ import { useState, useEffect } from "react";
 
 import { FaBackspace,FaRegCommentDots } from "react-icons/fa";
 
-import Bounty from "../bounty";
+//import Bounty from "../bounty";
 import Account from "../../system/account";
 
-function BountyBoard(props) {
+/* Chat on alink
+*   @param  {string}    alink       //bounty anchor link of bounty
+*   @param  {function}  callback    //callback to close dailog
+*   @param  {function}  dialog      //system dialog function
+*/
+
+function Chat(props) {
     const size = {
         row: [12],
         back:[9,3],
@@ -17,7 +23,8 @@ function BountyBoard(props) {
 
     const self = {
         clickBack:(ev)=>{
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink}/>,"Bounty");
+            props.callback();
+            //props.dialog(<Bounty dialog={props.dialog} alink={props.alink}/>,"Bounty");
         },
     }
     useEffect(() => {
@@ -35,7 +42,9 @@ function BountyBoard(props) {
                 }} />
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                <div className="chat-container">
+                <div className="chat-container" onScroll={(ev)=>{
+                    console.log("here");
+                }}>
                 <Row>
                     <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
                         <Image
@@ -78,4 +87,4 @@ function BountyBoard(props) {
     )
 }
 
-export default BountyBoard;
+export default Chat;

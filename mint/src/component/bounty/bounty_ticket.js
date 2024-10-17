@@ -100,10 +100,10 @@ function BountyTicket(props) {
 
     return !props.exsist?(
         <Row>
-            {/* <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 Free to join
-            </Col> */}
-            <Col className="text-end" sm={size.row[0]} xs={size.row[0]}>
+            </Col>
+            <Col className="text-center" sm={size.row[0]} xs={size.row[0]}>
                 <button className="btn btn-md btn-warning" onClick={(ev)=>{
                     self.clickMint(ev);
                 }}>Mint Now</button>
