@@ -16,30 +16,18 @@ function ListWinner(props) {
     }
 
     useEffect(() => {
+        console.log(props.data);
         if (props.data) setList(props.data);
-    }, []);
+    }, [props.data]);
 
     return (
         <Row className="pt-4 pb-2">
-            <Col sm={size.row[0]} xs={size.row[0]}>10 Winners</Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>{list.length} {list.length===1?"winner":"winners"}</Col>
             {list.map((row, index) => (
                 <Col key={index} sm={size.grid[0]} xs={size.grid[0]}>
-                    <img alt="" src={Account.avatar("abc")} className="winner_thumb pointer" />
-
+                    <img alt="" src={Account.avatar(row.address)} className="winner_thumb pointer" />
                 </Col>
             ))}
-            <Col sm={size.grid[0]} xs={size.grid[0]}>
-                <img alt="" src={Account.avatar("abc")} className="winner_thumb pointer" />
-
-            </Col>
-            <Col sm={size.grid[0]} xs={size.grid[0]}>
-                <img alt="" src={Account.avatar("abcd")} className="winner_thumb pointer" />
-
-            </Col>
-            <Col sm={size.grid[0]} xs={size.grid[0]}>
-                <img alt="" src={Account.avatar("abc1")} className="winner_thumb pointer" />
-
-            </Col>
         </Row>
     )
 }

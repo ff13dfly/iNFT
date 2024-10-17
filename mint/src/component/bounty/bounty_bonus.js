@@ -54,6 +54,7 @@ function BountyBonus(props) {
                 const target=vs[0];     //dealing one by one, if there is more judged apply
                 props.dialog(<BountyRedeem 
                     dialog={props.dialog}
+                    alink={props.alink}
                     bounty={bounty}
                     inft={target.inft}
                     judge={target.judge.alink}
@@ -61,7 +62,7 @@ function BountyBonus(props) {
             });
         },
         clickProgress:(index)=>{
-            props.dialog(<BountyProgress dialog={props.dialog} bounty={bounty} index={index}/>,"Apply Progress");
+            props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink} index={index}/>,"Apply Progress");
         },
         
         calcRarity: (parts, index) => {

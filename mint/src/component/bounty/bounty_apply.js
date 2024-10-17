@@ -8,6 +8,7 @@ import INFT from "../../system/inft";
 import Apply from "../../system/apply";
 import Account from "../../system/account";
 import Network from "../../network/router";
+import BOUNTY from "../../system/bounty";
 
 /* Bounty apply page, need to check the iNFT status
 *   @param  {number}    index       //bonus index to apply
@@ -49,7 +50,7 @@ function BountyApply(props) {
             setPassword(pass);
         },
         clickBack: (ev) => {
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink} />, "Bounty");
+            props.dialog(<Bounty dialog={props.dialog} alink={props.alink} fresh={true} />, "Bounty");
         },
         clickApply:(ev)=>{
             //console.log(`ready to apply`);
@@ -75,13 +76,17 @@ function BountyApply(props) {
                         if(status.error){
                             return setInfo(`Apply server error.`);
                         }
-                    
-                        setDisablApply(false);      //recover apply button
-                        setInfo("Done");
-                        setSearch("");
-                        setTimeout(() => {
-                            setInfo("");
-                        }, 1500);
+
+                        //1.fresh bounty data
+                        BOUNTY.view(props.alink,(bty)=>{
+                            console.log(bty);
+                            setDisablApply(false);      //recover apply button
+                            setInfo("Done");
+                            setSearch("");
+                            setTimeout(() => {
+                                setInfo("");
+                            }, 1500);
+                        },true);
                     });
                 });
             });

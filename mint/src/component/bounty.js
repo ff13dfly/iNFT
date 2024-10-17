@@ -13,7 +13,11 @@ import BountyChat from "./bounty/bounty_chat";
 
 import BOUNTY from  "../system/bounty";
 
-
+/* Bounty entry
+*   @param  {string}    alink       //bonus anchor link
+*   @param  {function}  dialog      //system dialog function
+*   @param  {boolean}   fresh       //wether fresh 
+*/
 function Bounty(props) {
     const size = {
         row: [12],
@@ -95,6 +99,7 @@ function Bounty(props) {
                     const replace=self.removeBounty(alink);
                     return self.show(replace);
                 }
+                console.log(bt);
                 setAlink(alink);            //update alink
                 setSingle(bt);              //update bounty data
             });
@@ -136,7 +141,7 @@ function Bounty(props) {
             setList(bts);
             self.show(bts[page-1]);
         });
-    }, []);
+    }, [props.fresh]);
 
     return (
         <Row>

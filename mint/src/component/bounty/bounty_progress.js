@@ -25,7 +25,6 @@ function BountyProgress(props) {
     };
 
     let [empty, setEmpty] = useState(true);
-
     let [winner, setWinner] = useState([]);
     let [going, setGoing]= useState([]);
 
@@ -33,23 +32,19 @@ function BountyProgress(props) {
         clickBack:(ev)=>{
             props.dialog(<Entry dialog={props.dialog} alink={props.alink}/>,"Bounty");
         },
-        getBountyAlink:()=>{
-            if(!props.bounty) return "Invalid bounty";
-            return `anchor://${props.bounty.name}/${props.bounty.block}`
-        },
         fresh:()=>{
-            if(props.bounty && props.bounty.system &&  props.bounty.system.apply) {
-                Bounty.group(tools.clone(props.bounty.system.apply),(map)=>{
+            Bounty.view(props.alink,(data)=>{
+                if(data===false) return false;
+                Bounty.group(tools.clone(data.system.apply),(map)=>{
                     if(map.error) return setEmpty(true);
                     if(!map[props.index]) return setEmpty(true);
                     
                     setEmpty(false);
                     const data=map[props.index];
-                    console.log(data);
                     setWinner(data.winner);
                     setGoing(data.going);
                 });
-            }
+            })
         },
     }
     useEffect(() => {
@@ -68,7 +63,7 @@ function BountyProgress(props) {
             </Col>
 
             <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty: <strong>{self.getBountyAlink()}</strong>
+                Bounty: <strong>{props.alink}</strong>
                 <hr/>
             </Col>
 

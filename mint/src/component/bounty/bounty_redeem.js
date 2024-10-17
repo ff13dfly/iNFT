@@ -7,12 +7,15 @@ import Bounty from "../bounty";
 import Account from "../../system/account";
 import Apply from "../../system/apply";
 import INFT from "../../system/inft";
+import BOUNTY from "../../system/bounty";
 
 import Network from "../../network/router";
 import tools from "../../lib/tools";
 
+
 /* Bounty bonus redeem action
 *   @param  {object}    bounty      //bounty data from parent
+*   @param  {string}    alink       //bounty alink
 *   @param  {string}    inft        //inft alink
 *   @param  {string}    judge       //jugdement alink
 *   @param  {number}    index       //bonus index
@@ -45,10 +48,12 @@ function BountyRedeem(props) {
             setPassword(pass);
         },
         clickBack: (ev) => {
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink} />, "Bounty");
+            props.dialog(<Bounty dialog={props.dialog} alink={props.alink}/>, "Bounty");
         }, 
         clickDivert:(ev)=>{
+            setDisable(true);  //avoid multi request
             if(!props.inft || !props.judge){
+                setDisable(false);
                 return setInfo("Invalid basic parameters.");
             }
             Account.keyring(password,(pair)=>{
@@ -56,11 +61,14 @@ function BountyRedeem(props) {
                     setPassword("");
                     return setInfo(pair.error);
                 }
-
                 const bounty_alink=`anchor://${props.bounty.name}/${props.bounty.block}`;
                 const target=props.bounty.raw.consignee;
                 Apply.divert(pair,props.inft,props.judge,bounty_alink,target,(done)=>{
-                    console.log(done);
+                    if(done.error) return setInfo(done.error);
+                    BOUNTY.view(props.alink,(bty)=>{
+                        console.log(bty);
+                        setDisable(true); 
+                    },true);
                 });
             });
         },
