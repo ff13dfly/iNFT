@@ -350,13 +350,42 @@ code {
 }
 
 /**************************************************************************/
+/****************************** Bounty CSS ********************************/
+/**************************************************************************/
+
+.bounty_chat {
+  background: #7be1b3;
+  border-radius: 8px;
+  padding: 8px 10px 8px 10px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 20px;
+  display: inline-flex;
+  word-wrap: break-word;
+  font-weight: 500;
+}
+
+.avatar_bounty{
+  width: 60px;
+  height: 60px;
+  border: 1px solid #9ab4a1;
+}
+
+.avatar_mini{
+  width: 42px;
+  height: 42px;
+  border: 1px solid #9ab4a1;
+}
+
+
+/**************************************************************************/
 /***************************** Customize CSS ******************************/
 /**************************************************************************/
 
 .doc-container{
   min-height: 500px;
   max-height: 500px;
-  width:100%;
+  /* width:100%; */
   padding: 10px 10px 10px 10px;
   border-radius: 5px;
   background: #666666;
@@ -374,8 +403,16 @@ code {
 .bonus-container{
   min-height: 360px;
   max-height: 360px;
+  /* width:100%; */
+  overflow: auto;
+}
+
+.chat-container{
+  min-height: 480px;
+  max-height: 480px;
   width:100%;
   overflow: auto;
+  background: #666666;
 }
 
 .image-container{
@@ -400,7 +437,8 @@ code {
   width: 60px;
   height: 60px;
   border-radius: 30px;
-  background: #FFAABB,
+  background-color: #ffaabb;
+  /* background: #FFAABB, */
 }
 
 .apply_thumb{

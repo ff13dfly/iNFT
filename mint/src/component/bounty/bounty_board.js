@@ -32,11 +32,14 @@ function BountyBoard(props) {
                     self.clickBack(ev);
                 }} />
             </Col>
+            <Col className="" sm={size.row[0]} xs={size.row[0]}>
+                <div className="chat-container"></div>
+            </Col>
 
-            <Col className="" sm={size.left[0]} xs={size.left[0]}>
+            <Col className="pt-4" sm={size.left[0]} xs={size.left[0]}>
                 <input type="text" className="form-control" placeholder="Message about bounty..." />
             </Col>
-            <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
+            <Col className="pt-4 text-end" sm={size.left[1]} xs={size.left[1]}>
                <button className="btn btn-sm btn-secondary">
                     <FaRegCommentDots className="text-info" size={24}/>
                 </button>

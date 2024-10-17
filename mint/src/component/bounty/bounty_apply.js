@@ -79,7 +79,6 @@ function BountyApply(props) {
 
                         //1.fresh bounty data
                         BOUNTY.view(props.alink,(bty)=>{
-                            console.log(bty);
                             setDisablApply(false);      //recover apply button
                             setInfo("Done");
                             setSearch("");

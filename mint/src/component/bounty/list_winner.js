@@ -10,13 +10,7 @@ function ListWinner(props) {
     };
 
     let [list, setList] = useState([]);
-
-    const self = {
-
-    }
-
     useEffect(() => {
-        console.log(props.data);
         if (props.data) setList(props.data);
     }, [props.data]);
 

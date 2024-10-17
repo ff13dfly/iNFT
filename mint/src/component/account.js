@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AccountLogin from "./account/account_login";
 import AccountFaucet from "./account/account_faucet";
 import AccountCharge from "./account/account_charge";
+import AccountMarket from "./account/account_market";
 
 import config from "../config";
 import Copy from "../lib/clipboard";
@@ -133,7 +134,7 @@ function Account(props) {
                     self.clickDownload(ev);
                 }}>
                     <FaDownload className={!recover.download ? "pb-1" : `pb-1 ${recover.download}`}/> 
-                    Encried Key
+                    Encried JSON Key
                 </button>
             </Col>
 
@@ -145,6 +146,9 @@ function Account(props) {
 
             <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>
                 <AccountCharge dialog={props.dialog}/>
+            </Col>
+            <Col hidden={!login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>
+                <AccountMarket dialog={props.dialog}/>
             </Col>
 
             <Col hidden={login} className="pt-1" sm={size.row[0]} xs={size.row[0]}>

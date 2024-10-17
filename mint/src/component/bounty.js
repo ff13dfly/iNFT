@@ -94,12 +94,11 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
-                //console.log(bt);
                 if(bt.error) {
                     const replace=self.removeBounty(alink);
                     return self.show(replace);
                 }
-                console.log(bt);
+
                 setAlink(alink);            //update alink
                 setSingle(bt);              //update bounty data
             });
@@ -151,6 +150,17 @@ function Bounty(props) {
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 <hr />
+            </Col>    
+            
+            
+            
+            <BountyBonus dialog={props.dialog} alink={alink} ticket={exsist}/>
+            
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <BountyChat dialog={props.dialog} alink={alink} ticket={exsist}/>
+            </Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <hr />
             </Col>
             <Col sm={size.left[0]} xs={size.left[0]}>
                 Total <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong>P wanted.<br />
@@ -159,15 +169,7 @@ function Bounty(props) {
             <Col className="text-center" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
             </Col>
-            
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <hr />
-            </Col>
-            
-            <BountyBonus dialog={props.dialog} alink={alink} ticket={exsist}/>
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                <BountyChat dialog={props.dialog} alink={alink} ticket={exsist}/>
-            </Col>
+
             <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>
                 <Row>
                     <Col className="" sm={size.page[0]} xs={size.page[0]}>
