@@ -39,7 +39,7 @@ function BountyChat(props) {
                         />
                     </Col>
                     <Col sm={size.comment[1]} xs={size.comment[1]}>
-                        <div className="bounty_chat">{"hello world"}</div>
+                        <div className="bounty_mini">{"hello world"}</div>
                     </Col>
                 </Row>
             </Col>

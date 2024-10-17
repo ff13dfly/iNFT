@@ -353,8 +353,7 @@ code {
 /****************************** Bounty CSS ********************************/
 /**************************************************************************/
 
-.bounty_chat {
-  /* background: #7be1b3; */
+.bounty_mini{
   background: #3b604f;
   border-radius: 8px;
   padding: 8px 10px 8px 10px;
@@ -366,17 +365,32 @@ code {
   font-weight: 500;
 }
 
-.avatar_bounty{
-  width: 60px;
-  height: 60px;
-  border: 1px solid #9ab4a1;
-}
-
 .avatar_mini{
   width: 42px;
   height: 42px;
   border: 1px solid #9ab4a1;
 }
+
+.bounty_chat {
+  background: #7be1b3;
+  border-radius: 8px;
+  padding: 8px 10px 8px 10px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 20px;
+  display: inline-flex;
+  word-wrap: break-word;
+  font-weight: 500;
+  color:#000000
+}
+.avatar_bounty{
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ffffff;
+  background: #ffffff;
+}
+
+
 
 
 /**************************************************************************/
@@ -413,7 +427,9 @@ code {
   max-height: 480px;
   width:100%;
   overflow: auto;
-  background: #666666;
+  background: #BBBBBB;
+  border-radius: 8px;
+  padding: 10px 10px 10px 10px;
 }
 
 .image-container{

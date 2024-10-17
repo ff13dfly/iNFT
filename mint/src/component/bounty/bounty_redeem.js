@@ -128,7 +128,8 @@ function BountyRedeem(props) {
                 <h6>{tools.shorten(from,5)}</h6>
             </Col>
             <Col className="pt-4" sm={size.target[1]} xs={size.target[1]}>
-                After diverting, you will get the bonus prize.
+                <p className="text-warning">After diverting, you will get the bonus prize.</p>
+                <p>{"-------------->"}</p>
             </Col>
             <Col  className="text-center" sm={size.target[2]} xs={size.target[2]}>
                 <h6>Consignee</h6>

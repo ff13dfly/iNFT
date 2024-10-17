@@ -1,14 +1,16 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col,Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
 import { FaBackspace,FaRegCommentDots } from "react-icons/fa";
 
 import Bounty from "../bounty";
+import Account from "../../system/account";
 
 function BountyBoard(props) {
     const size = {
         row: [12],
         back:[9,3],
+        comment: [2,10],
         left: [10,2],
     };
 
@@ -33,7 +35,35 @@ function BountyBoard(props) {
                 }} />
             </Col>
             <Col className="" sm={size.row[0]} xs={size.row[0]}>
-                <div className="chat-container"></div>
+                <div className="chat-container">
+                <Row>
+                    <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
+                        <Image
+                            className="avatar_bounty"
+                            src={Account.avatar("abc")}
+                            roundedCircle
+                            width="100%"
+                        />
+                    </Col>
+                    <Col className="pt-2" sm={size.comment[1]} xs={size.comment[1]}>
+                        <div className="bounty_chat">{"hello world"}</div>
+                    </Col>
+                </Row>
+                <Row className="pt-2">
+                    <Col className="pt-1" sm={size.comment[0]} xs={size.comment[0]}>
+                        <Image
+                            className="avatar_bounty"
+                            src={Account.avatar("aaa")}
+                            roundedCircle
+                            width="100%"
+                        />
+                    </Col>
+                    <Col className="pt-2"  sm={size.comment[1]} xs={size.comment[1]}>
+                        <div className="bounty_chat">{"Really? No more words? This is such a good bounty to join. 1000X return."}</div>
+                    </Col>
+                </Row>
+
+                </div>
             </Col>
 
             <Col className="pt-4" sm={size.left[0]} xs={size.left[0]}>
