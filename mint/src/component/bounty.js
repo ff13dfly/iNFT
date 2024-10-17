@@ -94,6 +94,7 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
+                console.log(bt);
                 if(bt.error) {
                     const replace=self.removeBounty(alink);
                     return self.show(replace);

@@ -354,7 +354,8 @@ code {
 /**************************************************************************/
 
 .bounty_chat {
-  background: #7be1b3;
+  /* background: #7be1b3; */
+  background: #3b604f;
   border-radius: 8px;
   padding: 8px 10px 8px 10px;
   text-align: left;
