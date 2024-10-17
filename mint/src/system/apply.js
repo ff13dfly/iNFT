@@ -134,7 +134,7 @@ const self={
             raw:funs.apply.raw(inft_alink,bounty_alink,index,inft.owner),
             protocol:funs.apply.protocol(bounty_alink),
         }
-        console.log(obj);
+        //console.log(obj);
         chain.write(pair,obj,(process)=>{
             if(process.error) return ck && ck(process);
             if(process.msg) ck && ck({message:process.msg});
@@ -148,8 +148,6 @@ const self={
                     const apply_alink=`anchor://${obj.anchor}/${dt.block}`;
                     //console.log(apply_alink);
                     funs.recordApply(inft_alink,apply_alink,bounty_alink,index,(noted)=>{
-                        console.log(noted);
-
                         if(noted.error) return ck && ck(noted);
 
                         //4.apply to server
@@ -197,15 +195,15 @@ const self={
                         if(onchain.status==="Finalized"){
                             const divert_hash=onchain.hash;
                             chain.view(divert_hash,"block",(dd)=>{
+
                                 //3.submit divert information to system
                                 const site=config.bounty.url;
-                                const url=`${site}/divert/${obj.anchor}/${dd.block}`;
-                                console.log(url);
-                                // funs.fetchData(url,(result)=>{
-                                //     return ck && ck(result);
-                                // },()=>{
-                                //     funs.clearRecord(apply_alink);
-                                // });
+                                const url=`${site}/redeem/${obj.anchor}/${dd.block}`;
+                                funs.fetchData(url,(result)=>{
+                                    return ck && ck(result);
+                                },()=>{
+                                    console.log("Error");
+                                });
                             });
                         }
                         

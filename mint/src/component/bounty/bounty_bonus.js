@@ -44,15 +44,21 @@ function BountyBonus(props) {
         clickRedeem:(index)=>{
             if(!going[index]) return false;
             const gs=going[index].going;
-            const target=gs[0];     //dealing one by one, if there is more judged apply
-            //console.log(gs);
-
-            props.dialog(<BountyRedeem 
-                dialog={props.dialog}
-                bounty={bounty}
-                inft={target.inft}
-                judge={target.judge.alink}
-            />,"Bounty Redeem");
+            Account.address((addr)=>{
+                const vs=[];
+                for(let i=0;i<gs.length;i++){
+                    const row=gs[i];
+                    if(row.apply && row.apply.signer===addr) vs.push(row);
+                }
+                if(vs.length===0) return false;
+                const target=vs[0];     //dealing one by one, if there is more judged apply
+                props.dialog(<BountyRedeem 
+                    dialog={props.dialog}
+                    bounty={bounty}
+                    inft={target.inft}
+                    judge={target.judge.alink}
+                />,"Bounty Redeem");
+            });
         },
         clickProgress:(index)=>{
             props.dialog(<BountyProgress dialog={props.dialog} bounty={bounty} index={index}/>,"Apply Progress");
@@ -117,14 +123,13 @@ function BountyBonus(props) {
             }
             return status;
         },
-        fresh:()=>{
+        fresh:(bt)=>{
             Account.address((addr)=>{
                 if(addr.error) return setLogin(false);
                 setLogin(true);
     
-                if(bounty && bounty.system &&  bounty.system.apply) {
-                    Bounty.group(tools.clone(bounty.system.apply),(map)=>{
-
+                if(bt && bt.system &&  bt.system.apply) {
+                    Bounty.group(tools.clone(bt.system.apply),(map)=>{
                         if(map.error) return false;
 
                         setGoing(map);      //cache the grouped data;
@@ -142,10 +147,10 @@ function BountyBonus(props) {
                 if(bt.error) return false;
                 setBounty(bt);
                 setBonus(bt.raw.bonus);
+
+                self.fresh(bt);
             });
         }
-        self.fresh();
-
     }, [props.alink]);
 
     return (
@@ -196,7 +201,6 @@ function BountyBonus(props) {
                             </Col>
                             <Col className="text-end" sm={size.left[1]} xs={size.left[1]}>
                                 <button className="btn btn-sm btn-primary" onClick={(ev)=>{
-                                    //console.log(going);
                                     self.clickRedeem(index);
                                 }}>Redeem</button>
                             </Col>

@@ -67,7 +67,6 @@ const self={
         if(!force && cache[alink]!==undefined) return ck && ck(cache[alink]);
         const ak=tools.decode(alink);
         const url=`${config.bounty.url}/view/${ak.name}/${ak.block}`;
-
         funs.getData(url,(bt)=>{
             if(bt.error) return ck && ck(bt);
             if(!funs.checkBountyFormat(bt.raw)) return ck && ck({error:"Invalid bounty."});
@@ -75,6 +74,7 @@ const self={
             const cid = bt.raw.template.cid;
             TPL.view(cid, (dt) => {
                 bt.template=dt;
+                cache[alink]=bt;
                 return ck && ck(bt);
             });
         });

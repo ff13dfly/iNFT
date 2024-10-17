@@ -90,24 +90,13 @@ function Bounty(props) {
         },
         show:(alink)=>{
             BOUNTY.view(alink,(bt)=>{
+                //console.log(bt);
                 if(bt.error) {
                     const replace=self.removeBounty(alink);
                     return self.show(replace);
                 }
                 setAlink(alink);            //update alink
                 setSingle(bt);              //update bounty data
-            });
-        },
-        test:()=>{
-            const name="ivnfxmtfhjbc_20"
-            const block=374363;
-            const chain = Network("anchor");
-            chain.view({name:name,block:block}, "anchor", (dt) => {
-                console.log(dt);
-            });
-
-            chain.view({name:name}, "anchor", (dt) => {
-                console.log(dt);
             });
         },
         getTotal:()=>{
@@ -127,6 +116,19 @@ function Bounty(props) {
                 return {sum:sum_bonus,pieces:pieces};
             }
             return {sum:0,pieces:0};
+        },
+        //failed vs success anchor data
+        test:()=>{
+            const name="ivnfxmtfhjbc_20"
+            const block=374363;
+            const chain = Network("anchor");
+            chain.view({name:name,block:block}, "anchor", (dt) => {
+                console.log(dt);
+            });
+
+            chain.view({name:name}, "anchor", (dt) => {
+                console.log(dt);
+            });
         },
     }
     useEffect(() => {

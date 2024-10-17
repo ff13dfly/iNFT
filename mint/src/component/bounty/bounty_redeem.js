@@ -83,18 +83,10 @@ function BountyRedeem(props) {
                 });
             });
         },
-        // checkConsigner:(alink)=>{
-        //     const ak=tools.decode(alink);
-        //     const chain=Network("anchor");
-        //     chain.view(ak,"anchor",(dt)=>{
-        //     });
-        // },
     }
     useEffect(() => {
-        if(props.inft)self.renderINFT(props.inft);
-        //if(props.judge) self.checkConsigner(props.judge);
+        if(props.inft) self.renderINFT(props.inft);
         if(props.bounty){
-            console.log(props.bounty);
             setConsignee(props.bounty.raw.consignee);
         }
     }, [props.inft]);
