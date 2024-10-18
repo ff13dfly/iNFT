@@ -124,7 +124,7 @@ function BountyRedeem(props) {
             </Col>
             <Col className="text-center" sm={size.target[0]} xs={size.target[0]}>
                 <h6>You</h6>
-                <img alt="" src={Account.avatar(from)} className="apply_thumb" />
+                <img alt="" src={Account.avatar(from)} className="avatar_redeem" />
                 <h6>{tools.shorten(from,5)}</h6>
             </Col>
             <Col className="pt-4" sm={size.target[1]} xs={size.target[1]}>
@@ -133,7 +133,7 @@ function BountyRedeem(props) {
             </Col>
             <Col  className="text-center" sm={size.target[2]} xs={size.target[2]}>
                 <h6>Consignee</h6>
-                <img alt="" src={Account.avatar(consignee)} className="apply_thumb" />
+                <img alt="" src={Account.avatar(consignee)} className="avatar_redeem" />
                 <h6>{tools.shorten(consignee,5)}</h6>
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>

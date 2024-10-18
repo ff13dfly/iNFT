@@ -383,6 +383,7 @@ code {
   font-weight: 500;
   color:#000000
 }
+
 .avatar_bounty{
   width: 60px;
   height: 60px;
@@ -390,6 +391,12 @@ code {
   background: #ffffff;
 }
 
+.avatar_redeem{
+  width: 100%;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  background: #ffffff;
+}
 
 
 

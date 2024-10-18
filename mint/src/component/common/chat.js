@@ -5,6 +5,7 @@ import { FaBackspace,FaRegCommentDots } from "react-icons/fa";
 
 import Account from "../../system/account";
 import API from "../../system/api";
+import tools from "../../lib/tools";
 
 /* Chat on alink
 *   @param  {string}    alink       //bounty anchor link of bounty
@@ -78,7 +79,7 @@ function Chat(props) {
                             />
                         </Col>
                         <Col className="pt-2" sm={size.comment[1]} xs={size.comment[1]}>
-                            <div className="bounty_chat">{row.memo}</div>
+                            <div className="bounty_chat">{tools.decodeHtml(row.memo)}</div>
                         </Col>
                     </Row>
                 ))}

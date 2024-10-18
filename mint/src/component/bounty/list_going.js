@@ -49,8 +49,8 @@ function ListGoing(props) {
 
     return (
         <Row >
-            <Col sm={size.row[0]} xs={size.row[0]}>
-               <h6>Going</h6> 
+            <Col className="pb-2" sm={size.row[0]} xs={size.row[0]}>
+               <h5>{list.length} submisson</h5> 
             </Col>
             <Col sm={size.row[0]} xs={size.row[0]}>
                 {list.map((row, index) => (

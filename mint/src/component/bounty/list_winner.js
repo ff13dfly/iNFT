@@ -16,7 +16,9 @@ function ListWinner(props) {
 
     return (
         <Row className="pt-4 pb-2">
-            <Col sm={size.row[0]} xs={size.row[0]}>{list.length} {list.length===1?"winner":"winners"}</Col>
+            <Col className="pb-2" sm={size.row[0]} xs={size.row[0]}>
+                <h5>{list.length} {list.length===1?"winner":"winners"} </h5>
+            </Col>
             {list.map((row, index) => (
                 <Col key={index} sm={size.grid[0]} xs={size.grid[0]}>
                     <img alt="" src={Account.avatar(row.address)} className="winner_thumb pointer" />

@@ -132,11 +132,11 @@ function Bounty(props) {
         },
         getDesc:()=>{
             if(single && single.raw && single.raw.desc) return single.raw.desc;
-            return "";
+            return "No desc of this bounty.";
         },
         getTitle:()=>{
             if(single && single.raw && single.raw.title) return single.raw.title;
-            return "";
+            return "No title";
         },
         getSumOfBonus:()=>{
             if(single && single.raw && single.raw.bonus){
@@ -215,8 +215,8 @@ function Bounty(props) {
                 <hr />
             </Col>
             <Col className="text-center pt-2" sm={size.left[0]} xs={size.left[0]}>
-                Total <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong>P wanted.<br />
-                Prize <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong> $ANK.<br/>
+                Total <strong className="text-info">{self.getSumOfBonus().pieces.toLocaleString()}</strong>p wanted.<br />
+                Prize <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong> $ANK.<br/>
             </Col>
             <Col className="text-center pb-1" sm={size.left[1]} xs={size.left[1]}>
                 <BountyTicket bounty={single} alink={alink} exsist={exsist}/>

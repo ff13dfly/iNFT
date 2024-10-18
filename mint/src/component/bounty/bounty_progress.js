@@ -3,13 +3,10 @@ import { useState, useEffect } from "react";
 
 import { FaBackspace } from "react-icons/fa";
 
-import Entry from "../bounty";
 import ListGoing from "./list_going";
 import ListWinner from "./list_winner";
 
 import tools from "../../lib/tools";
-import Network from "../../network/router";
-import Account from "../../system/account";
 import Bounty from "../../system/bounty";
 
 /* Bounty bonus progress
@@ -30,7 +27,7 @@ function BountyProgress(props) {
 
     const self = {
         clickBack:(ev)=>{
-            props.dialog(<Entry dialog={props.dialog} alink={props.alink}/>,"Bounty");
+            props.callback();
         },
         fresh:()=>{
             Bounty.view(props.alink,(data)=>{
@@ -62,11 +59,6 @@ function BountyProgress(props) {
                 }} />
             </Col>
 
-            <Col sm={size.row[0]} xs={size.row[0]}>
-                Bounty: <strong>{props.alink}</strong>
-                <hr/>
-            </Col>
-
             <Col hidden={!empty} sm={size.row[0]} xs={size.row[0]}>
                 <h6>No apply record yet.</h6>
             </Col>
@@ -74,6 +66,12 @@ function BountyProgress(props) {
             <Col hidden={empty} sm={size.row[0]} xs={size.row[0]}>
                 <ListGoing  data={going}/>
                 <ListWinner data={winner} />
+            </Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                <hr />
+            </Col>
+            <Col sm={size.row[0]} xs={size.row[0]}>
+                {props.alink}
             </Col>
         </Row>
     )

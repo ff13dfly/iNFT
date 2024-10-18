@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import BountyApply from "./bounty_apply";
 import BountyProgress from "./bounty_progress";
 import BountyRedeem from "./bounty_redeem";
-
+import Entry from "../bounty";
 
 import tools from "../../lib/tools";
 import Network from "../../network/router";
@@ -62,7 +62,14 @@ function BountyBonus(props) {
             });
         },
         clickProgress:(index)=>{
-            props.dialog(<BountyProgress dialog={props.dialog} alink={props.alink} index={index}/>,"Apply Progress");
+            props.dialog(<BountyProgress 
+                dialog={props.dialog} 
+                alink={props.alink} 
+                index={index}
+                callback={()=>{
+                    props.dialog(<Entry alink={props.alink} dialog={props.dialog} />,"Bounty")
+                }}
+            />,"Apply Progress");
         },
         
         calcRarity: (parts, index) => {
@@ -168,13 +175,13 @@ function BountyBonus(props) {
 
                         <Row>
                             <Col sm={size.row[0]} xs={size.row[0]}>
+                                <strong className="text-warning">{self.getX(row.bonus,row.series).toLocaleString()}</strong>x return
+                            </Col>
+                            <Col sm={size.row[0]} xs={size.row[0]}>
                                 Prize: <strong className="text-info">{row.bonus}</strong> $ANK, <strong>{row.amount}</strong>P wanted
                             </Col>
                             <Col sm={size.row[0]} xs={size.row[0]}>
-                                Rarity: 1 / <strong >{self.getRate(row.series).toLocaleString()}</strong> ( <strong className="text-warning">{self.getX(row.bonus,row.series).toLocaleString()}</strong> X )
-                            </Col>
-                            <Col sm={size.row[0]} xs={size.row[0]}>
-                                Progress of bonus
+                                Rarity: 1 / <strong >{self.getRate(row.series).toLocaleString()}</strong>
                             </Col>
                         </Row>
 

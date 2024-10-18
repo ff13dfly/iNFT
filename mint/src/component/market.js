@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
 import INFTBuy from "./market/inft_buy";
+import Chat from "./common/chat";
 
 import Network from "../network/router";
 import INFT from "../system/inft";
@@ -23,7 +24,13 @@ function Market(props) {
             props.dialog(<INFTBuy dialog={props.dialog} data={data} />, "iNFT Detail")
         },
         clickChat:(alink)=>{
-            console.log(alink);
+            props.dialog(<Chat
+                dialog={props.dialog}
+                alink={alink}
+                callback={()=>{
+                    props.dialog(<Market alink={alink} dialog={props.dialog}/>,"Market");
+                }}
+            />, "Comments");
         },
         getThumbs: (list, ck, map) => {
             if (map === undefined) map = {};
@@ -68,8 +75,8 @@ function Market(props) {
         <div className="market-container">
             <Row>
                 {list.map((row, index) => (
-                    <Col className="pointer" key={index} sm={size.half[0]} xs={size.half[0]}>
-                        <Row className="pb-3">
+                    <Col className="pointer pb-4" key={index} sm={size.half[0]} xs={size.half[0]}>
+                        <Row>
                             <Col sm={size.half[0]} xs={size.half[0]}>
                                 <h6>{tools.shorten(row.name,4)}</h6>
                             </Col>
@@ -91,7 +98,6 @@ function Market(props) {
                                     <FaComments className="" size={16} />
                                 </button>
                             </Col>
-
                         </Row>
                     </Col>
                 ))}
