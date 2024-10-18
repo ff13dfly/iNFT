@@ -76,7 +76,7 @@ function Action(props) {
             props.dialog(<Setting fresh={props.fresh} />, "Mint Configure");
         },
         clickBounty:()=>{
-            props.dialog(<Bounty  dialog={props.dialog}/>,"Bounty");
+            props.dialog(<Bounty  dialog={props.dialog} fresh={props.fresh}/>,"Bounty");
         },
         clickMarket:(ev)=>{
             props.dialog(<Market  dialog={props.dialog} />,"Market");

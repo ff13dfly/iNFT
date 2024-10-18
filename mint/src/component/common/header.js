@@ -1,7 +1,7 @@
 import { Row, Col,Dropdown, DropdownButton } from "react-bootstrap";
 import { useEffect } from "react";
-import { FaList, FaRegUser, FaGripHorizontal,FaBuffer } from "react-icons/fa";
-import { FcPuzzle,FcWorkflow,FcProcess,FcSettings,FcRules,FcBullish,FcCurrencyExchange,FcTimeline } from "react-icons/fc";
+import { FaList, FaRegUser } from "react-icons/fa";
+import { FcBiotech,FcProcess,FcSettings,FcRules,FcCurrencyExchange,FcTimeline } from "react-icons/fc";
 
 import Grid from "../grid";
 import Account from "../account";
@@ -26,7 +26,7 @@ function Header(props) {
             dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");
         },
         clickTemplate: (ev) => {
-            dialog(<Template fresh={props.fresh} dialog={props.dialog} />, "Template");
+            dialog(<Template fresh={props.fresh} dialog={props.dialog} />, "Gene");
         },
         clickAccount: (ev) => {
             dialog(<Account fresh={props.fresh} dialog={props.dialog} />, "Account Management");
@@ -36,7 +36,7 @@ function Header(props) {
             props.panel.show(<Grid dialog={props.dialog} panel={props.panel} />)
         },
         clickBounty:(ev)=>{
-            dialog(<Bounty  dialog={props.dialog}/>,"Bounty");
+            dialog(<Bounty  dialog={props.dialog} fresh={props.fresh}/>,"Bounty");
         },
         clickMarket:(ev)=>{
             dialog(<Market  dialog={props.dialog} />,"Market");
@@ -52,7 +52,7 @@ function Header(props) {
         },
     }
     useEffect(() => {
-
+        console.log(props);
     }, [props.update]);
 
     return (
@@ -91,7 +91,7 @@ function Header(props) {
                     <Dropdown.Item className="pt-2" onClick={(ev)=>{
                         self.clickTemplate(ev);
                     }}>
-                        <FcPuzzle size={24}/><span className="ml-10">Template</span>
+                        <FcBiotech size={24}/><span className="ml-10">Gene</span>
                     </Dropdown.Item>
                      <Dropdown.Divider />
                      <Dropdown.Item className="pt-2" onClick={(ev)=>{
@@ -111,9 +111,6 @@ function Header(props) {
                 <h3>iNFT Minter</h3>
             </Col>
             <Col className="pt-1 text-end" sm={size.title[2]} xs={size.title[2]}>
-                {/* <FaPizzaSlice className="pointer" size={26} onClick={(ev)=>{
-                    self.clickTemplate(ev);
-                }}/> */}
 
                 <FaList className="pointer" size={26} onClick={(ev) => {
                     self.clickMine(ev);

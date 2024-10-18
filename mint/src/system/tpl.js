@@ -240,18 +240,6 @@ const funs={
         }
         return hs;
     },
-    getSeriesMock: (parts, series) => {
-        if (!series || series.length === 0 || parts.length === 0) return false;
-        const arr = [];
-        for (let i = 0; i < series.length; i++) {
-            const row = series[i];
-            const matrix = funs.getPartsArray(i, parts);
-            const count = funs.countSeries(matrix);
-            const hashes = funs.getHashesFromMatrix(matrix, parts);
-            arr.push({ mock: hashes, count: count });                //output the mock hashes and count
-        }
-        return arr;
-    },
     thumb: (mock, tpl, cid, ck) => {
         const basic = {
             cell: tpl.cell,
@@ -374,13 +362,51 @@ const self = {
         }
         Local.set("template",JSON.stringify(nlist));
     },
-    change:(index)=>{
+    change:(index,ck)=>{
         const arr=self.list();
-        const nlist=[arr[index]];
-        for(let i=0;i<arr.length;i++){
-            if(index!==i) nlist.push(arr[i]);
+        const nlist=[];
+        if(typeof(index)==="string"){
+            let atom=null;
+            for(let i=0;i<arr.length;i++){
+                const row=arr[i];
+                if(row.alink!==index){
+                    nlist.push(row);
+                }else{
+                    atom=row;
+                }
+            }
+            if(atom!==null){
+                nlist.unshift(atom);
+            }else{
+                const ntpl={
+                    alink: index, 
+                    name: "", 
+                    offset: [], 
+                    tags: []
+                }
+                nlist.unshift(ntpl);
+            }
+            const def=Data.getHash("cache", index);
+            if(def){
+                def.cid=index;
+                Data.set("template", def);
+            }
+            
+        }else{
+            nlist.push(arr[index]);
+            for(let i=0;i<arr.length;i++){
+                if(index!==i) nlist.push(arr[i]);
+            }
+
+            const def=Data.getHash("cache", arr[index].alink);
+            if(def){
+                def.cid=arr[index].alink;
+                Data.set("template", def);
+            }
         }
         Local.set("template",JSON.stringify(nlist));
+
+        return ck && ck();
     },
     add:(cid,ck,head)=>{
         console.log(`Ready to add template`);

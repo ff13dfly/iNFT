@@ -118,8 +118,11 @@ function Preview(props) {
     }
 
     useEffect(() => {
+        console.log(`update preview template.`);
         self.fresh();
         self.updateHash();
+        setForce(true);
+        
     }, [props.update]);
 
     return (
@@ -131,7 +134,6 @@ function Preview(props) {
                     id={"pre_home"}
                     hightlight={active}
                     force={force}
-                    //animate={animate}
                     animate={false}
                     callback={() => {
                         //animate = false;

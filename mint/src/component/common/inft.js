@@ -85,7 +85,7 @@ function RenderiNFT(props) {
         }
 
         
-    }, [props.hash,props.offset,props.id,props.template,props.hightlight]);
+    }, [props.hash,props.offset,props.id,props.template,props.hightlight,props.force]);
 
     
     return (

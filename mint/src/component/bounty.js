@@ -170,6 +170,7 @@ function Bounty(props) {
         },
     }
     useEffect(() => {
+        console.log(props)
         BOUNTY.list((bts)=>{
             setList(bts);
             //router right bounty by alink
@@ -181,7 +182,7 @@ function Bounty(props) {
                 self.show(props.alink);
             }
         });
-    }, [props.fresh]);
+    }, [props.update]);
 
     return (
         <Row>
@@ -219,7 +220,7 @@ function Bounty(props) {
                 Prize <strong className="text-info">{self.getSumOfBonus().sum.toLocaleString()}</strong> $ANK.<br/>
             </Col>
             <Col className="text-center pb-1" sm={size.left[1]} xs={size.left[1]}>
-                <BountyTicket bounty={single} alink={alink} exsist={exsist}/>
+                <BountyTicket bounty={single} alink={alink} exsist={exsist} fresh={props.fresh} dialog={props.dialog}/>
             </Col>
 
             <Col className="pt-4" sm={size.row[0]} xs={size.row[0]}>

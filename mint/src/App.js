@@ -23,8 +23,8 @@ function App() {
   let [title, setTitle] = useState("");
   let [content, setContent] = useState("");
 
-  let [grid, setGrid] = useState("");      //panel grid
-  let [hide, setHide] = useState(true);     //wether show panel
+  // let [grid, setGrid] = useState("");      //panel grid
+  // let [hide, setHide] = useState(true);     //wether show panel
 
   const self = {
     dialog: (ctx, title) => {
@@ -37,19 +37,19 @@ function App() {
       setUpdate(update);
     },
     //dropped, use menu when more functions.
-    panel: {
-      show: (ctx) => {
-        setGrid(ctx);
-        setHide(false);
-      },
-      hide: () => {
-        setGrid("");
-        setHide(true);
-      },
-      callback:(fun)=>{
-        callback=fun;
-      },
-    },
+    // panel: {
+    //   show: (ctx) => {
+    //     setGrid(ctx);
+    //     setHide(false);
+    //   },
+    //   hide: () => {
+    //     setGrid("");
+    //     setHide(true);
+    //   },
+    //   callback:(fun)=>{
+    //     callback=fun;
+    //   },
+    // },
     decode: (str) => {
       if (!str || str === "#") return false;
       const pure = str.slice(1, str.length);

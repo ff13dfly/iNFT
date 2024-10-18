@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import Local from "../../lib/local";
 import tools from "../../lib/tools";
 import Network from "../../network/router";
+import TPL from "../../system/tpl";
+import BOUNTY from "../../system/bounty";
 
 /* Bounty ticket status and operation
 *   @param  {object}    bounty      //bounty data from parent
 *   @param  {string}    alink       //bounty anchor link of bounty
 *   @param  {boolean}   exsist      //wether ticket exsists
+*   @param  {function}  dialog      //system dialog function
+*   @param  {function}  fresh       //system fresh function
 */
 
 function BountyTicket(props) {
@@ -58,9 +62,13 @@ function BountyTicket(props) {
             setShow(false);
         },
         clickMint:()=>{
-            //1.set template to current 
-
-            //2.close dialog
+            console.log(`Here to set default gene.`);
+            BOUNTY.view(props.alink,(bt)=>{
+                TPL.change(bt.template.cid,()=>{
+                    //console.log(props.fresh);
+                    if(props.fresh) props.fresh();
+                });
+            });
         },
         getPasswordStatus:()=>{
 

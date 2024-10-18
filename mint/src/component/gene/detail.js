@@ -158,9 +158,9 @@ function Detail(props) {
                 </h5>
             </Col>
             <Col className="pt-2 text-end" sm={size.formula[1]} xs={size.formula[1]}>
-                <FaCalculator className={showFormula?"pointer pt-2  text-info":"pointer pt-2"} size={30} onClick={(ev) => {
+                {/* <FaCalculator className={showFormula?"pointer pt-2  text-info":"pointer pt-2"} size={30} onClick={(ev) => {
                     self.clickFormula();
-                }} />
+                }} /> */}
             </Col>
             <Col hidden={!showFormula} className="pt-2" sm={size.row[0]} xs={size.row[0]}>
                 <small>SELECTED_PART = ( <br/>HASH_VALUE + <br/>OFFSET_TEMPLATE + <br/>OFFSET_MINT ) % <br/>PART_DIVIDE </small>
