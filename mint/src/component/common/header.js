@@ -1,5 +1,5 @@
 import { Row, Col,Dropdown, DropdownButton } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaList, FaRegUser } from "react-icons/fa";
 import { FcBiotech,FcProcess,FcSettings,FcRules,FcCurrencyExchange,FcTimeline } from "react-icons/fc";
 
@@ -7,18 +7,21 @@ import Grid from "../grid";
 import Account from "../account";
 import Template from "../template";
 import Mine from "../mine";
-
 import Bounty from "../bounty";
 import Market from "../market";
 import Setting from "../setting";
 import Document from "../document";
 import MiniBoard from "../minting/mini_board";
 
+import ACCOUNT from "../../system/account";
+
 function Header(props) {
     const size = {
         row: [12],
         title: [2, 7, 3]
     };
+
+    let [login, setLogin]=useState(false);      //wether login 
 
     const dialog = props.dialog;
     const self = {
@@ -52,7 +55,10 @@ function Header(props) {
         },
     }
     useEffect(() => {
-        console.log(props);
+        ACCOUNT.address((addr)=>{
+            if(addr.error) return setLogin(false);
+            setLogin(true);
+        });
     }, [props.update]);
 
     return (
@@ -82,7 +88,7 @@ function Header(props) {
                     <Dropdown.Item></Dropdown.Item>
                     <Dropdown.Divider />
 
-                    <Dropdown.Item className="pt-2" onClick={(ev)=>{
+                    <Dropdown.Item  className="pt-2" disabled={!login} onClick={(ev)=>{
                         self.clickBoard(ev);
                     }}>
                         <FcTimeline size={24}/><span className="ml-10">Mint Board</span>
@@ -99,7 +105,7 @@ function Header(props) {
                     }}>
                         <FcRules size={24}/><span className="ml-10">Document</span>
                     </Dropdown.Item>
-                    <Dropdown.Item className="pt-2" onClick={(ev)=>{
+                    <Dropdown.Item className="pt-2" disabled={!login} onClick={(ev)=>{
                         self.clickSetting(ev);
                     }}>
                         <FcSettings size={24}/><span className="ml-10">Setting</span>

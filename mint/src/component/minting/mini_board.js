@@ -64,7 +64,6 @@ function MiniBoard(props) {
             />, "iNFT Details");
         },
         getDataFromTask:(arr)=>{
-            //console.log(arr);
             const done=[];
             const going=[];
             for(let i=0;i<arr.length;i++){
@@ -94,9 +93,8 @@ function MiniBoard(props) {
         },
         showTask:()=>{
             const details=INFT.mint.detail();
+            if(!details) return false;
             //console.log(details);
-
-            //setList(details.task);
 
             //1.filter out the finished iNFT mint;
             const dt=self.getDataFromTask(details.task);

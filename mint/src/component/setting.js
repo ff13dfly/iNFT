@@ -124,6 +124,8 @@ function Setting(props) {
             }, 1000);
 
             const os = INFT.mint.detail("template");
+            if(!os) return false;
+            
             if (!os[active.cid]) {
                 os[active.cid] = {
                     way:1,
@@ -133,9 +135,6 @@ function Setting(props) {
                 INFT.mint.update({ template: os });
             }
             const multi = os[active.cid].multi;
-
-            //setAmount(active.parts.length);
-            //setCid(active.cid);
             setMulti(multi !== undefined ? multi : 1);
         },
 
