@@ -170,7 +170,7 @@ function Bounty(props) {
         },
     }
     useEffect(() => {
-        console.log(props)
+        //console.log(props)
         BOUNTY.list((bts)=>{
             setList(bts);
             //router right bounty by alink

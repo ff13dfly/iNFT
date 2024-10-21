@@ -24,7 +24,7 @@ function Market(props) {
             props.dialog.show(<INFTBuy dialog={props.dialog} data={data} />, "iNFT Detail")
         },
         clickChat:(alink)=>{
-            props.dialo.show(<Chat
+            props.dialog.show(<Chat
                 dialog={props.dialog}
                 alink={alink}
                 callback={()=>{

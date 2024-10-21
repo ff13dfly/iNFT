@@ -25,7 +25,6 @@ function App() {
 
   // let [grid, setGrid] = useState("");      //panel grid
   // let [hide, setHide] = useState(true);     //wether show panel
-
   const self = {
     dialog:{
       show:(ctx, title) => {
@@ -39,7 +38,6 @@ function App() {
         setShow(false);
       },
     },
-     
     fresh: (force) => {
       update++;
       setUpdate(update);
