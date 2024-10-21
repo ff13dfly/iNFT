@@ -34,7 +34,7 @@ function AccountLogin(props) {
                 Local.set("login", JSON.stringify(fa));
                 INFT.auto();
 
-                props.dialog(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic} address={fa.address}/>,"Seed Details");
+                props.dialog.show(<Seed fresh={props.fresh} dialog={props.dialog} mnemonic={mnemonic} address={fa.address}/>,"Seed Details");
                 props.fresh();
 
                 if(props.callback) props.callback();

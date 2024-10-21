@@ -29,7 +29,7 @@ function AccountMarket(props) {
             }
         },
         clickMarket:(ev)=>{
-            props.dialog(<ChargeMarket dialog={props.dialog} />,"Charge Market");
+            props.dialog.show(<ChargeMarket dialog={props.dialog} />,"Charge Market");
         },
     }
     useEffect(() => {

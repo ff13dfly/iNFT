@@ -14,7 +14,7 @@ function INFTBuy(props) {
 
     const self = {
         clickBack: (ev) => {
-            props.dialog(<Market dialog={props.dialog}/>, "Market");
+            props.dialog.show(<Market dialog={props.dialog}/>, "Market");
         },
     }
     useEffect(() => {

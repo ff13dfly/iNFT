@@ -13,7 +13,7 @@ function BountyApply(props) {
 
     const self = {
         clickBack: (ev) => {
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink} />, "Bounty");
+            props.dialog.show(<Bounty dialog={props.dialog} alink={props.alink} />, "Bounty");
         },
     }
     useEffect(() => {

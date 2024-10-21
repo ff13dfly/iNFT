@@ -28,7 +28,7 @@ function INFTBuy(props) {
             setPassword(pass);
         },
         clickBack: (ev) => {
-            props.dialog(<Market dialog={props.dialog}/>, "Market");
+            props.dialog.show(<Market dialog={props.dialog}/>, "Market");
         },
         clickBuy:(ev)=>{
             setDisable(true);

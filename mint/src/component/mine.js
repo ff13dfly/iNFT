@@ -64,7 +64,7 @@ function Mine(props) {
             const dt=INFT.single.target(name);
             if(!dt) return false;
 
-            return props.dialog(<Result 
+            return props.dialog.show(<Result 
                 name={dt.anchor} 
                 hash={dt.hash} 
                 block={dt.block} 

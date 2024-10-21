@@ -73,21 +73,21 @@ function Action(props) {
             setDisable(!ev.target.value ? true : false);
         },
         clickSetting: () => {
-            props.dialog(<Setting fresh={props.fresh} />, "Mint Configure");
+            props.dialog.show(<Setting fresh={props.fresh} />, "Mint Configure");
         },
         clickBounty:()=>{
-            props.dialog(<Bounty  dialog={props.dialog} fresh={props.fresh}/>,"Bounty");
+            props.dialog.show(<Bounty  dialog={props.dialog} fresh={props.fresh}/>,"Bounty");
         },
         clickMarket:(ev)=>{
-            props.dialog(<Market  dialog={props.dialog} />,"Market");
+            props.dialog.show(<Market  dialog={props.dialog} />,"Market");
         },
         clickPanel: () => {
-            props.dialog(<MiniBoard block={props.block} dialog={props.dialog} />, "Mint Board");
-            //props.dialog(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");
+            props.dialog.show(<MiniBoard block={props.block} dialog={props.dialog} />, "Mint Board");
+            //props.dialog.show(<Progress block={props.block} dialog={props.dialog} />, "Mint Board");
         },
         clickTask: () => {
             const fa = Local.get("login");
-            if (fa === undefined) return props.dialog(<Account fresh={props.fresh} dialog={props.dialog} />, "Account Management");
+            if (fa === undefined) return props.dialog.show(<Account fresh={props.fresh} dialog={props.dialog} />, "Account Management");
             if (!password) {
                 setDisable(true);
                 return false;
@@ -110,7 +110,7 @@ function Action(props) {
                     return false;
                 }
 
-                props.dialog(<MiniBoard block={props.block} dialog={props.dialog}/>, "Mint Board");
+                props.dialog.show(<MiniBoard block={props.block} dialog={props.dialog}/>, "Mint Board");
 
                 const tpl=TPL.current();
                 const mint_detail=INFT.mint.detail();

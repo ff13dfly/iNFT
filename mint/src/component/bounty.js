@@ -45,11 +45,11 @@ function Bounty(props) {
             setPage(page+1);
         },
         clickChat: (ev) => {
-            props.dialog(<Chat
+            props.dialog.show(<Chat
                 dialog={props.dialog}
                 alink={alink}
                 callback={()=>{
-                    props.dialog(<Bounty alink={alink} dialog={props.dialog}/>,"Bounty");
+                    props.dialog.show(<Bounty alink={alink} dialog={props.dialog}/>,"Bounty");
                 }}
             />, "Bounty Comments");
         },

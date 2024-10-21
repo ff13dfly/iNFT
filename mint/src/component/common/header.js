@@ -23,7 +23,7 @@ function Header(props) {
 
     let [login, setLogin]=useState(false);      //wether login 
 
-    const dialog = props.dialog;
+    const dialog = props.dialog.show;
     const self = {
         clickMine: (ev) => {
             dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");

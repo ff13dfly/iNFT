@@ -19,7 +19,7 @@ function Seed(props) {
 
     const self = {
         clickHome: () => {
-            props.dialog(<Account fresh={props.fresh} dialog={props.dialog} />,"Account Management");
+            props.dialog.show(<Account fresh={props.fresh} dialog={props.dialog} />,"Account Management");
         },
         clickCopy: (mnemonic) => {
             Copy(mnemonic);

@@ -27,11 +27,19 @@ function App() {
   // let [hide, setHide] = useState(true);     //wether show panel
 
   const self = {
-    dialog: (ctx, title) => {
-      setTitle(title);
-      setContent(ctx);
-      setShow(true);
+    dialog:{
+      show:(ctx, title) => {
+        setTitle(title);
+        setContent(ctx);
+        setShow(true);
+      },
+      close:()=>{
+        setTitle("");
+        setContent("");
+        setShow(false);
+      },
     },
+     
     fresh: (force) => {
       update++;
       setUpdate(update);

@@ -50,7 +50,7 @@ function BountyApply(props) {
             setPassword(pass);
         },
         clickBack: (ev) => {
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink} fresh={true} />, "Bounty");
+            props.dialog.show(<Bounty dialog={props.dialog} alink={props.alink} fresh={true} />, "Bounty");
         },
         clickApply:(ev)=>{
             //console.log(`ready to apply`);

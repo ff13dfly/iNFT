@@ -21,14 +21,14 @@ function Market(props) {
 
     const self = {
         clickSingle: (data) => {
-            props.dialog(<INFTBuy dialog={props.dialog} data={data} />, "iNFT Detail")
+            props.dialog.show(<INFTBuy dialog={props.dialog} data={data} />, "iNFT Detail")
         },
         clickChat:(alink)=>{
-            props.dialog(<Chat
+            props.dialo.show(<Chat
                 dialog={props.dialog}
                 alink={alink}
                 callback={()=>{
-                    props.dialog(<Market alink={alink} dialog={props.dialog}/>,"Market");
+                    props.dialog.show(<Market alink={alink} dialog={props.dialog}/>,"Market");
                 }}
             />, "Comments");
         },

@@ -122,9 +122,9 @@ function Result(props) {
         },
         clickHome: (ev) => {
             if (props.from && router[props.from]) {
-                props.dialog(router[props.from].content, router[props.from].title);
+                props.dialog.show(router[props.from].content, router[props.from].title);
             } else {
-                props.dialog(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");
+                props.dialog.show(<Mine fresh={props.fresh} dialog={props.dialog} />, "My iNFT List");
             }
         },
         clickCopy: (name) => {

@@ -29,7 +29,7 @@ function AccountCharge(props) {
             }
         },
         clickCharge:(ev)=>{
-            props.dialog(<ChargeHome dialog={props.dialog} />,"Charge Details");
+            props.dialog.show(<ChargeHome dialog={props.dialog} />,"Charge Details");
         },
     }
     useEffect(() => {

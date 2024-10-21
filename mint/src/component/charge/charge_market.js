@@ -18,7 +18,7 @@ function ChargeMarket(props) {
 
     const self = {
         clickBack: (ev) => {
-            props.dialog(<Account dialog={props.dialog}/>, "Account Management");
+            props.dialog.show(<Account dialog={props.dialog}/>, "Account Management");
         },
     }
     useEffect(() => {

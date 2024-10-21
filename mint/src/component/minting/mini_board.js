@@ -49,7 +49,7 @@ function MiniBoard(props) {
 
         clickSingle:(name,hash)=>{
             const dt=INFT.single.target(name);
-            props.dialog(<Result 
+            props.dialog.show(<Result 
                 name={dt.anchor} 
                 hash={dt.hash} 
                 block={dt.block} 

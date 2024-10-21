@@ -34,7 +34,7 @@ function BountyBonus(props) {
 
     const self = {
         clickApply:(index)=>{
-            props.dialog(<BountyApply 
+            props.dialog.show(<BountyApply 
                 dialog={props.dialog} 
                 alink={props.alink} 
                 bounty={bounty}
@@ -52,7 +52,7 @@ function BountyBonus(props) {
                 }
                 if(vs.length===0) return false;
                 const target=vs[0];     //dealing one by one, if there is more judged apply
-                props.dialog(<BountyRedeem 
+                props.dialog.show(<BountyRedeem 
                     dialog={props.dialog}
                     alink={props.alink}
                     bounty={bounty}
@@ -62,12 +62,12 @@ function BountyBonus(props) {
             });
         },
         clickProgress:(index)=>{
-            props.dialog(<BountyProgress 
+            props.dialog.show(<BountyProgress 
                 dialog={props.dialog} 
                 alink={props.alink} 
                 index={index}
                 callback={()=>{
-                    props.dialog(<Entry alink={props.alink} dialog={props.dialog} />,"Bounty")
+                    props.dialog.show(<Entry alink={props.alink} dialog={props.dialog} />,"Bounty")
                 }}
             />,"Apply Progress");
         },

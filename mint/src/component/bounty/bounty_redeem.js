@@ -48,7 +48,7 @@ function BountyRedeem(props) {
             setPassword(pass);
         },
         clickBack: (ev) => {
-            props.dialog(<Bounty dialog={props.dialog} alink={props.alink}/>, "Bounty");
+            props.dialog.show(<Bounty dialog={props.dialog} alink={props.alink}/>, "Bounty");
         }, 
         clickDivert:(ev)=>{
             setDisable(true);  //avoid multi request
