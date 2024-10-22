@@ -1,7 +1,6 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import CreativityBasic from "./creativity_basic";
 import CreativitySingle from "./creativity_single";
 
 import Gene from "../../system/gene";

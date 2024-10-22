@@ -5,6 +5,7 @@ import ImageOrgin from "./image_orgin";
 import ImageOperation from "./image_operation";
 
 import CreativityBasic from "./creativity_basic";
+import TemplateBasic from "./temlpate_basic";
 import PartsList from "./parts_list";
 import TemplateRaw from "./template_raw";
 import PartsOverview from "./parts_overview";
@@ -74,7 +75,7 @@ function CreativitySingle(props) {
         setActive(tab);
       }}>
       <Tab eventKey="basic" title={self.getTitle("basic")}>
-        <CreativityBasic name={props.name}/>
+        <TemplateBasic name={props.name}/>
       </Tab>
       <Tab eventKey="image" title={self.getTitle("image")}>
         <Row>

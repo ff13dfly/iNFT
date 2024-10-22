@@ -38,8 +38,10 @@ const funs={
                 name:name,
                 size:[900,900],
                 cell:[100,100],
-                image:"",
                 grid:[8,4],
+                image:"",
+                title:"",
+                desc:"",
                 parts:[],
                 series:[],
                 deploy:[],
@@ -61,19 +63,27 @@ const funs={
             }
         }
     },
+    save:(full,ck)=>{
+        funs.checkDB(table, (db) => {
+            if(db.error) return ck && ck(db);
+            INDEXED.updateRow(db, table, [full], ck);
+        });
+    },
 }
 
 const table = "gene";
 const self={
     list: (ck, page, step) => {
         funs.checkDB(table, (db) => {
-            
+            if(db.error) return ck && ck(db);
             INDEXED.pageRows(db, table, ck, {page: page, step: step })
         });
     },
     get:(name,ck)=>{
         funs.checkDB(table, (db) => {
+            if(db.error) return ck && ck(db);
             INDEXED.searchRows(db, table, "name", name, (arr) => {
+                if(db.error) return ck && ck(db);
                 if (arr.length !== 1) return ck && ck({ error: "Failed to get bounty" });
                 return ck && ck(arr[0]);
             });
@@ -90,6 +100,7 @@ const self={
     add:(ck)=>{
         const row=funs.format.gene();
         funs.checkDB(table, (db) => {
+            if(db.error) return ck && ck(db);
             INDEXED.insertRow(db, table, [row], ck);
         });
     },
@@ -100,11 +111,33 @@ const self={
         });
     },
     update:{
+        title:(name,title,ck)=>{
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.title=title;
+                funs.save(data,ck);
+            });
+        },
+        desc:(name,desc,ck)=>{
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.desc=desc;
+                funs.save(data,ck);
+            });
+        },
         size:(name,width,height,ck)=>{
-
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.size=[width,height];
+                funs.save(data,ck);
+            });
         },
         cell:(name,width,height,ck)=>{
-
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.cell=[width,height];
+                funs.save(data,ck);
+            });
         },
         grid:(name,x,y,ck)=>{
 

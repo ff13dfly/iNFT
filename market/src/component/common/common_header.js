@@ -33,10 +33,10 @@ function Header(props) {
       name: "blacksmith",
       icon:"",
     },
-    // {
-    //   name: "creativity",
-    //   icon:"",
-    // },
+    {
+      name: "creativity",
+      icon:"",
+    },
   ]
 
   const self = {
