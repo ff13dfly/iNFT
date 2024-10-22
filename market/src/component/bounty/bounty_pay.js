@@ -11,9 +11,9 @@ import Bounty from "../../system/bounty";
 import { FaCheck } from "react-icons/fa";
 
 /* Bounty payment detail
-*   @param  {string}    title           //button title
-*   @param  {string}    bounty          //alink of bounty
-*   @param  {function}  [callback]      //callback function 
+*   @param  {string}    props.title           //button title
+*   @param  {string}    props.bounty          //alink of bounty
+*   @param  {function}  [props.callback]      //callback function 
 */
 
 function BountyPay(props) {

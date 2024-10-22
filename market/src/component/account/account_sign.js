@@ -11,9 +11,9 @@ import Config from "../../system/config";
 import { FaCheck } from "react-icons/fa";
 
 /* iNFT render component parameters
-*   @param  {string}    title           //button title
-*   @param  {string}    network         //network to filter account
-*   @param  {function}  [callback]      //callback function 
+*   @param  {string}    props.title           //button title
+*   @param  {string}    props.network         //network to filter account
+*   @param  {function}  [props.callback]      //callback function 
 */
 
 function AccountSign(props) {

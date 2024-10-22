@@ -7,8 +7,8 @@ import API from "../../system/api";
 import tools from "../../lib/tools";
 
 /* iNFT comment list
-*   @param  {string}    bounty      //bounty alink
-*   @param  {function}  link        //system link function
+*   @param  {string}    props.bounty      //bounty alink
+*   @param  {function}  props.link        //system link function
 */
 
 function BountyComment(props) {

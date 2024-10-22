@@ -1,9 +1,9 @@
 import { useState,useEffect } from "react";
 
 /* Show image selected
-*   @param  {object}    grid          //{x:10,y:15},  image grid             
-*   @param  {object}    selected      //{row:1,start:4,ex:0,ey:0,amount:8}
-*   @param  {object}    [background]  //{highlight:"#aabbcc",normal:"#ffffff"}
+*   @param  {object}    props.grid          //{x:10,y:15},  image grid             
+*   @param  {object}    props.selected      //{row:1,start:4,ex:0,ey:0,amount:8}
+*   @param  {object}    [props.background]  //{highlight:"#aabbcc",normal:"#ffffff"}
 */
 
 function SVGImage(props) {

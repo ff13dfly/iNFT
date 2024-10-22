@@ -8,9 +8,9 @@ import INFT from "../../system/inft";
 
 
 /* iNFT list component
-*   @param  {array}     data            //iNFT[], list of iNFT to show
-*   @param  {string}    network         //network
-*   @param  {number}    [grid]          //react cols, default 3
+*   @param  {array}     props.data            //iNFT[], list of iNFT to show
+*   @param  {string}    props.network         //network
+*   @param  {number}    [props.grid]          //react cols, default 3
 */
 
 function ListNearby(props) {

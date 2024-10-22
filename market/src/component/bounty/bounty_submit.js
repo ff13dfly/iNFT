@@ -18,7 +18,7 @@ import API from "../../system/api";
 import tools from "../../lib/tools";
 
 /* Bounty submission entry
-*   @param  {function}  dialog      //system dialog 
+*   @param  {function}  props.dialog      //system dialog 
 */
 
 function BountySubmit(props) {

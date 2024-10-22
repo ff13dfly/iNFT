@@ -5,8 +5,8 @@ import API from "../../system/api";
 import RUNTIME from "../../system/runtime";
 
 /* iNFT comment list
-*   @param  {string}    alink       //alink
-*   @param  {function}  callback    //callback when comment added
+*   @param  {string}    props.alink         //alink
+*   @param  {function}  [props.callback]    //callback when comment added
 */
 
 function CommentSubmit(props) {

@@ -1,18 +1,12 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ProcessDetail from "./process_detail";
-
-import tools from "../../lib/tools";
-import Bounty from "../../system/bounty";
-import TPL from "../../system/tpl";
-
 import API from "../../system/api";
 
 import {  FaCopy, FaFileDownload, FaSkullCrossbones } from "react-icons/fa";
 
 /* Bounty bonus process mini board
-*   @param  {string}    bounty          //alink of bounty
+*   @param  {string}    props.bounty          //alink of bounty
 */
 
 function BountyProcess(props) {
@@ -52,7 +46,6 @@ function BountyProcess(props) {
             <h5>Bounty details ( {anchorBounty} <FaCopy className="pointer" /> ) </h5>
           </Col>
         </Row>
-        {/* <ProcessDetail raw={data}/> */}
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} ><hr/></Col>
 

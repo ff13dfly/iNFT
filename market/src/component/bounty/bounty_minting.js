@@ -5,9 +5,9 @@ import Network from "../../network/router";
 import INFT from "../../system/inft";
 
 /* iNFT minting list
-*   @param  {string}    template           //template cid
-*   @param  {string}    bounty             //bounty_name
-*   @param  {number}    amount             //amount to show, default=4
+*   @param  {string}    props.template           //template cid
+*   @param  {string}    props.bounty             //bounty_name
+*   @param  {number}    props.amount             //amount to show, default=4
 */
 
 function BountyMinting(props) {

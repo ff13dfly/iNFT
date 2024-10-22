@@ -9,10 +9,10 @@ import tools from "../../lib/tools";
 import INFT from "../../system/inft";
 
 /* Bounty Bonus Detail
-*   @param  {object}    raw           //raw bounty on chain
-*   @param  {object}    template      //template data
-*   @param  {string}    coin          //bonus coin
-*   @param  {function}  fresh         //fresh bounty list function
+*   @param  {object}    props.raw           //raw bounty on chain
+*   @param  {object}    props.template      //template data
+*   @param  {string}    props.coin          //bonus coin
+*   @param  {function}  props.fresh         //fresh bounty list function
 */
 
 function BountyBonus(props) {

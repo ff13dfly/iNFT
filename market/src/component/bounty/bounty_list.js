@@ -9,9 +9,9 @@ import tools from "../../lib/tools";
 import Network from "../../network/router";
 
 /* Bounty list, entry of list
-*   @param  {function}    link        //system link function
-*   @param  {function}    dailog      //system dialog 
-*   @param  {string[]}    extent      //input from url without entry
+*   @param  {function}    props.link        //system link function
+*   @param  {function}    props.dailog      //system dialog 
+*   @param  {string[]}    props.extent      //input from url without entry
 */
 
 

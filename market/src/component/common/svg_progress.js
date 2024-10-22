@@ -1,11 +1,11 @@
 import { useState,useEffect } from "react";
 
 /* progress bar
-*   @param  {number}    width         //width of the svg
-*   @param  {number}    amount        //total apply amount
-*   @param  {number}    done          //accepted apply amount
-*   @param  {number}    total         //bonus amount
-*   @param  {object}    [background]  //{amount:"#000000",total:"#FFFFFF",done:"#abccdd"}
+*   @param  {number}    props.width         //width of the svg
+*   @param  {number}    props.amount        //total apply amount
+*   @param  {number}    props.done          //accepted apply amount
+*   @param  {number}    props.total         //bonus amount
+*   @param  {object}    [props.background]  //{amount:"#000000",total:"#FFFFFF",done:"#abccdd"}
 */
 
 function SVGProgress(props) {

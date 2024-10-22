@@ -6,7 +6,7 @@ import Network from "../../network/router";
 import tools from "../../lib/tools";
 
 /* Mint result of nearby blocks
-*   @param  {function}  callback        //ck(address)
+*   @param  {function}  props.callback        //ck(address)
 */
 
 function MintAccount(props) {

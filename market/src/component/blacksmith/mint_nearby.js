@@ -6,8 +6,8 @@ import ListNearby from "./nearby_list";
 import Network from "../../network/router";
 
 /* Mint result of nearby blocks
-*   @param  {number}    [depth]        //blocks previous amount, default to 10
-*   @param  {number}    [grid]         //react cols amount
+*   @param  {number}    [props.depth]        //blocks previous amount, default to 10
+*   @param  {number}    [props.grid]         //react cols amount
 */
 
 function MintNearby(props) {

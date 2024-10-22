@@ -13,8 +13,8 @@ import { FaCopy} from "react-icons/fa";
 
 //TODO, need to support multi chain in future
 /* Account Generator
-*   @param  {string}    network       //targe network [anchor, tanssi, polkadot, ...]
-*   @param  {function}  dialog        //system dialog 
+*   @param  {string}    props.network       //targe network [anchor, tanssi, polkadot, ...]
+*   @param  {function}  props.dialog        //system dialog 
 */
 
 function AccountGenerate(props) {

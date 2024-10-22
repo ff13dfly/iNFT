@@ -5,10 +5,10 @@ import Network from "../../network/router";
 import INFT from "../../system/inft";
 
 /* iNFT minting list
-*   @param  {string}    uuid                //unique name
-*   @param  {string}    [template]           //template cid
-*   @param  {number}    [amount]             //amount to show, default=4
-*   @param  {number}    [grid]              //cell grid for react
+*   @param  {string}    props.uuid                //unique name
+*   @param  {string}    [props.template]           //template cid
+*   @param  {number}    [props.amount]             //amount to show, default=4
+*   @param  {number}    [props.grid]              //cell grid for react
 */
 
 function Minting(props) {

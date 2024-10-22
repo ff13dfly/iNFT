@@ -6,8 +6,6 @@ import RUNTIME from "../../system/runtime";
 
 import { FaCog } from "react-icons/fa";
 
-import { MdCurrencyExchange } from "react-icons/md";
-import { GiCardExchange } from "react-icons/gi";
 /* System footer
 *   @param  {string}    active       //selected nav name
 */
@@ -19,7 +17,7 @@ function Header(props) {
   const navs = [
     {
       name: "market",
-      //icon:<GiCardExchange size={24} color="#FF0000"/>,
+      icon:"",
     },
     {
       name: "bounty",

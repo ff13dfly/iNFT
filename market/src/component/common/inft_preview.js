@@ -4,15 +4,15 @@ import Render from "../../lib/render";
 import TPL from "../../system/tpl";
 
 /* iNFT render component parameters
-*   @param  {string}    id              //the canvas dom ID
-*   @param  {string}    hash            //hash needed to render the iNFT
-*   @param  {boolean}   hidden          //hide iNFT render result
-*   @param  {array}     [offset]        //customer offset array for rendering
-*   @param  {string}    [template]      //the template CID for rendering
-*   @param  {boolean}   [hightlight]    //index of parts which is needed to be hightlight
-*   @param  {boolean}   [force]         //force to autofresh the iNFT
-*   @param  {boolean}   [animate]       //animate support
-*   @param  {function}  [callback]      //callback function 
+*   @param  {string}    props.id              //the canvas dom ID
+*   @param  {string}    props.hash            //hash needed to render the iNFT
+*   @param  {boolean}   props.hidden          //hide iNFT render result
+*   @param  {array}     [props.offset]        //customer offset array for rendering
+*   @param  {string}    [props.template]      //the template CID for rendering
+*   @param  {boolean}   [props.hightlight]    //index of parts which is needed to be hightlight
+*   @param  {boolean}   [props.force]         //force to autofresh the iNFT
+*   @param  {boolean}   [props.animate]       //animate support
+*   @param  {function}  [props.callback]      //callback function 
 */
 
 let pre_hash = "";

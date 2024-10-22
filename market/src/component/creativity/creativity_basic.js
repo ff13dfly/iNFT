@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 function CreativityBasic(props) {
   const size = {

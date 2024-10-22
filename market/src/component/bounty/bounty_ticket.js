@@ -7,7 +7,7 @@ import Config from "../../system/config";
 import RUNTIME from "../../system/runtime";
 
 /* Pay for ticket component
-*   @param  {string}    bounty       //bounty_name, alink of bounty
+*   @param  {string}    props.bounty       //bounty_name, alink of bounty
 */
 
 function BountyTicket(props) {

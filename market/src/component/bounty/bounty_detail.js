@@ -5,8 +5,8 @@ import tools from "../../lib/tools";
 import Network from "../../network/router";
 
 /* Bounty payment detail
-*   @param  {object}    template      //template data
-*   @param  {string}    bounty        //bounty alink
+*   @param  {object}    props.template      //template data
+*   @param  {string}    props.bounty        //bounty alink
 */
 
 function BountyDetail(props) {

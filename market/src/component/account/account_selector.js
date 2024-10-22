@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Account from "../../system/account";
 
 /* Account Selector
-*   @param  {string}    network       //targe network [anchor, tanssi, polkadot, ...]
-*   @param  {function}  [callback]      //callback function
+*   @param  {string}    props.network       //targe network [anchor, tanssi, polkadot, ...]
+*   @param  {function}  [props.callback]      //callback function
 */
 
 function AccountSelector(props) {

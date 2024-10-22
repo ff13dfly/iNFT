@@ -1,6 +1,10 @@
 import tools from "../lib/tools";
 import Encry from "../lib/encry";
 
+/* iNFT market system config */
+//1. unique config setting here.
+//2. encried local saving support.
+
 //using account address (password optional) to encry the setting to localstorage
 const metadata={
     address:"",

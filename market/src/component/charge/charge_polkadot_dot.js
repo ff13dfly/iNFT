@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* DOT Charge Operation
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 
 function ChargePolkadotDOT(props) {

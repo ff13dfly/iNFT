@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Task list filter by template
-*   @param  {number}    page        //page of task
+*   @param  {number}    props.page        //page of task
 */
 
 function TaskList(props) {

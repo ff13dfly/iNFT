@@ -4,8 +4,12 @@ import tools from "../lib/tools";
 import Config from "./config";
 import Network from "../network/router";
 
-let cache=null      //cache the account
+/* Account management */
+//1.manage accounts, saving on IndexedDB;
+//2.import account from encried json file;
+//3.check balance of account with the support of `Network` lib;   
 
+let cache=null      //cache the account
 const table="accounts";
 const funs = {
     checkDB:(table,ck)=>{
@@ -60,6 +64,10 @@ const self = {
             INDEXED.searchRows(db,table,"address",addr,ck);
         });
     },
+    avatar: (address) => {
+        const cfg = Config.get(["system", "avatar"]);
+        return `${cfg.base}/${address}.png${cfg.set}`;
+    },
     check:(addr,ck)=>{
         if(cache===null) return self.map(()=>{
             self.check(addr,ck);
@@ -91,7 +99,6 @@ const self = {
     },
     
     import:(pass,row,ck)=>{
-        //console.log(pass,row);
         //0.check wether loaded;
 
         //1.saving the password to config

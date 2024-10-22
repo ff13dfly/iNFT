@@ -8,7 +8,7 @@ import Network from "../../network/router";
 import tools from "../../lib/tools";
 
 /* Template creator basic setting
-*   @param  {function}    callback        //callback to 
+*   @param  {function}    props.callback        //callback to 
 */
 
 function BountyLoad(props) {

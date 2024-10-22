@@ -15,10 +15,10 @@ import RUNTIME from "../../system/runtime";
 import tools from "../../lib/tools";
 
 /* Show the progress of bonus
-*   @param  {object}    raw         //raw bounty data from backend, the anchor data is docked on key "orgin"
-*   @param  {object}    template    //template data 
-*   @param  {number}    index       //index of bonus
-*   @param  {function}  dialog      //system dialog 
+*   @param  {object}    props.raw         //raw bounty data from backend, the anchor data is docked on key "orgin"
+*   @param  {object}    props.template    //template data 
+*   @param  {number}    props.index       //index of bonus
+*   @param  {function}  props.dialog      //system dialog 
 */
 
 function BonusProcess(props) {

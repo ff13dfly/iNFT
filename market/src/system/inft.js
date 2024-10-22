@@ -6,6 +6,10 @@ import Config from "./config";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 
+/* iNFT management */
+//1.manage iNFT, saving on IndexedDB.
+//2.cache iNFT when running, including the thumb.   
+
 const config = {
     indexDB: "inftDB",
     table: "infts",
@@ -108,6 +112,7 @@ const funs = {
     },
 }
 
+const chain=Network("anchor");
 const self = {
     format:{
         raw:(cid,offset,network,salt)=>{
@@ -199,8 +204,6 @@ const self = {
         },
     },
     
-    
-
     /*  get the anchor list by name and block
     *   @param  {list}  array       //{name:ANCHOR_NAME,block:BLOCK}
     *   @param  {ck}    [function]  //
@@ -210,8 +213,6 @@ const self = {
         if (!done) done = [];
         if (list.length === 0) return ck && ck(done);
         const single = list.pop();
-        //console.log(JSON.stringify(single));
-        const chain = Network("anchor");
         chain.view(single, "anchor", (dt) => {
             if(dt===false) return self.multi(list, ck, done);
             //console.log(JSON.stringify(single));
@@ -225,7 +226,7 @@ const self = {
     single: (name, ck, normal) => {
         if (map[name]) return ck && ck(map[name]);
         if (!normal) {
-            Network("anchor").view(name, "selling", (data) => {
+            chain.view(name, "selling", (data) => {
                 if (data === false) return ck && ck(false);
 
                 const row = {
@@ -241,7 +242,7 @@ const self = {
                 });
             });
         } else {
-            Network("anchor").view(name, "owner", (data) => {
+            chain.view(name, "owner", (data) => {
                 const row = {
                     name: name,
                     owner: data.address,
@@ -256,6 +257,10 @@ const self = {
             });
         }
     },
+
+    /* get the range and templates in cache
+    *   @param  {ck}    [function]      //ck({template:[],range:[MIN,MAX]}) , callback function
+    */
     overview: (ck) => {
         const tpls = [];
         let min = 0, max = 0;
@@ -274,6 +279,10 @@ const self = {
             range: [min, max],
         })
     },
+
+    /* get the nav of cache
+    *   @param  {number}  step       //step of page.
+    */
     nav: (step) => {
         const sum = Object.keys(map).length;
         return {
@@ -305,6 +314,7 @@ const self = {
         }
         return ck && ck(result);
     },
+
     /* get the thumb and cache
     *   @param  {list}  anchor[]       //anchor data array
     *   @param  {ck}    [function]      //
@@ -331,7 +341,6 @@ const self = {
                 return self.auto(list, ck, final);
             }, indexkey);
         } else {
-            const chain=Network(net);
             chain.view({ name: key }, "anchor", (data) => {
                 if (!data || !data.name) return self.auto(list, ck, final);
                 chain.view(data.block, "hash", (hash) => {

@@ -2,12 +2,12 @@ import { Row, Col, ButtonToolbar, ButtonGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* common page component parameters
-*   @param  {number}    [total]      //total page number
-*   @param  {boolean}   [show]      //wether hidden
-*   @param  {string}    [align]     //["left","right","center"] 
-*   @param  {number}    [now]       //current page, default 1
-*   @param  {number}    [step]      //how many page buttons to show
-*   @param  {function}  [callback]  //callback function, callback the selected page
+*   @param  {number}    [props.total]      //total page number
+*   @param  {boolean}   [props.show]      //wether hidden
+*   @param  {string}    [props.align]     //["left","right","center"] 
+*   @param  {number}    [props.now]       //current page, default 1
+*   @param  {number}    [props.step]      //how many page buttons to show
+*   @param  {function}  [props.callback]  //callback function, callback the selected page
 */
 
 function Page(props) {

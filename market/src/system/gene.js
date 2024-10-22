@@ -2,11 +2,12 @@ import INDEXED from "../lib/indexed";
 import Config from "./config";
 
 import tools from "../lib/tools";
-import { version } from "react";
 
-const cache={}          //image cache
+/* Gene template management */
+//1.manage gene, saving on IndexedDB.
+//2.definition of gene data format;   
+
 let active=null;        //active gene template
-
 const funs={
     checkDB: (table, ck) => {
         const cfg = Config.get(["storage"]);
@@ -115,8 +116,6 @@ const self={
     active:(name,ck)=>{
         self.get(name,(res)=>{
             if(res.error) return ck && ck(res);
-            
-            //set the active gene template, update here.
             active=tools.clone(res);                    
         });
     },

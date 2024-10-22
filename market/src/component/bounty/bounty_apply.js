@@ -8,7 +8,6 @@ import Config from "../../system/config";
 import Bounty from "../../system/bounty";
 import Account from "../../system/account";
 import RUNTIME from "../../system/runtime";
-import INFT from "../../system/inft";
 
 import tools from "../../lib/tools";
 
@@ -17,9 +16,9 @@ import PriveiwINFT from "../common/inft_preview";
 import { FaCheck } from "react-icons/fa";
 
 /* Bonus apply submission dailog
-*   @param  {object}    data        //raw bounty data from backend, the anchor data is docked on key "orgin"
-*   @param  {number}    index       //index of bonus
-*   @param  {function}  dialog      //system dialog 
+*   @param  {object}    props.data        //raw bounty data from backend, the anchor data is docked on key "orgin"
+*   @param  {number}    props.index       //index of bonus
+*   @param  {function}  props.dialog      //system dialog 
 */
 
 function BountyApply(props) {

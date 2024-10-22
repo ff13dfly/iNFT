@@ -11,9 +11,9 @@ import tools from "../../lib/tools";
 import { FaWindowClose, FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
 
 /* Mini task, show the details of minting robot
-*   @param  {number}    key           //list order
-*   @param  {object}    data          //task detail local
-*   @param  {function}  remove        //task remove function
+*   @param  {number}    props.key           //list order
+*   @param  {object}    props.data          //task detail local
+*   @param  {function}  props.remove        //task remove function
 */
 
 function MiniTask(props) {

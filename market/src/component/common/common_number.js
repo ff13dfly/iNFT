@@ -1,12 +1,12 @@
-import { Row, Col, ButtonToolbar, ButtonGroup } from "react-bootstrap";
+import { Row, Col  } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* common input with inc/dec buttons
-*   @param  {string}    title      //title of the input
-*   @param  {number}    value     //value 
-*   @param  {function}  callback  //ck && ck(value)
-*   @param  {boolean}   [disable]   //wether disable the input
-*   @param  {number}    [step]     //wether disable the input
+*   @param  {string}    props.title      //title of the input
+*   @param  {number}    props.value     //value 
+*   @param  {function}  props.callback  //ck && ck(value)
+*   @param  {boolean}   [props.disable]   //wether disable the input
+*   @param  {number}    [props.step]     //wether disable the input
 */
 
 function CommonNumber(props) {

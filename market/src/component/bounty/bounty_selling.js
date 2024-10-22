@@ -6,7 +6,7 @@ import Config from "../../system/config";
 import tools from "../../lib/tools";
 
 /* On chain bounty setting
-*   @param  {string}    bounty       //bounty_name, alink of bounty
+*   @param  {string}    props.bounty       //bounty_name, alink of bounty
 */
 
 function BountySelling(props) {

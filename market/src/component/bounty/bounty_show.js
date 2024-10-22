@@ -13,9 +13,9 @@ import tools from "../../lib/tools";
 import { FaClock, FaPizzaSlice, FaQrcode } from "react-icons/fa";
 
 /* Mint result of nearby blocks
-*   @param  {object}    data        //raw anchor data of bounty
-*   @param  {object}    template    //template raw data
-*   @param  {function}  fresh       //fresh the bounty list function
+*   @param  {object}    props.data        //raw anchor data of bounty
+*   @param  {object}    props.template    //template raw data
+*   @param  {function}  props.fresh       //fresh the bounty list function
 */
 
 function BountyShow(props) {

@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Template creator basic setting
-*   @param  {object}      template        //template data
+*   @param  {object}      props.template        //template data
 */
 
 function BountyTemplate(props) {

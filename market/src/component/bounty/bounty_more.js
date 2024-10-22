@@ -8,8 +8,8 @@ import Config from "../../system/config";
 import RUNTIME from "../../system/runtime";
 
 /* iNFT minting list
-*   @param  {string}    bounty             //bounty_name
-*   @param  {function}  callback           //ck( INPUT_DATA ),callback function
+*   @param  {string}    props.bounty             //bounty_name
+*   @param  {function}  props.callback           //ck( INPUT_DATA ),callback function
 */
 
 function BountyMore(props) {

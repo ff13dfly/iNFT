@@ -6,8 +6,8 @@ import tools from "../../lib/tools";
 import Bounty from "../../system/bounty";
 
 /* Template creator basic setting
-*   @param  {object}      template        //template data
-*   @param  {string}      [bounty]        //bounty alink, if empty, not submit yet.
+*   @param  {object}      props.template        //template data
+*   @param  {string}      [props.bounty]        //bounty alink, if empty, not submit yet.
 */
 
 function BountyTarget(props) {

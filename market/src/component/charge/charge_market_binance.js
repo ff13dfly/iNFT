@@ -2,12 +2,12 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* USDC Charge Operation
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 
 //https://developers.binance.com/docs/binance-pay/introduction
 
-function ChargeMarketBiance(props) {
+function ChargeMarketBinance(props) {
   const size = {
     row: [12],
   };
@@ -31,4 +31,4 @@ function ChargeMarketBiance(props) {
     </Row>
   );
 }
-export default ChargeMarketBiance;
+export default ChargeMarketBinance;

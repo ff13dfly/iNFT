@@ -17,9 +17,9 @@ import Network from "../../network/router";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 /* Bounty Preview, entry of view
-*   @param  {function}    link        //system link function
-*   @param  {function}    dailog      //system dialog 
-*   @param  {string[]}    extent      //input from url without entry
+*   @param  {function}    props.link        //system link function
+*   @param  {function}    props.dailog      //system dialog 
+*   @param  {string[]}    props.extent      //input from url without entry
 */
 
 

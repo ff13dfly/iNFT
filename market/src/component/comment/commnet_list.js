@@ -1,12 +1,12 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import Config from "../../system/config";
 import API from "../../system/api";
+import Account from "../../system/account";
 
 /* iNFT comment list
-*   @param  {string}    bounty      //bounty alink
-*   @param  {number}    [height]    //mini height of container
+*   @param  {string}    props.bounty      //bounty alink
+*   @param  {number}    [props.height]    //mini height of container
 */
 
 function CommentList(props) {
@@ -15,14 +15,9 @@ function CommentList(props) {
     comment: [1, 11],
   };
 
-  let [avatar, setAvatar] = useState("imgs/logo.png");
   let [list, setList] = useState([]);
 
   const self = {
-    getAvatar: (address) => {
-      const cfg = Config.get(["system", "avatar"]);
-      return `${cfg.base}/${address}.png${cfg.set}`;
-    },
     getMinHeight:()=>{
       if(props.height) return `${props.height}px`;
       return "540px";
@@ -47,7 +42,7 @@ function CommentList(props) {
             <Col className="" md={size.comment[0]} lg={size.comment[0]} xl={size.comment[0]} xxl={size.comment[0]}>
               <Image
                 className="avatar"
-                src={self.getAvatar(row.address)}
+                src={Account.avatar(row.address)}
                 roundedCircle
                 width="100%"
               />

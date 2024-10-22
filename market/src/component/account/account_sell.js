@@ -5,12 +5,9 @@ import { useEffect, useState } from "react";
 import tools from "../../lib/tools";
 import Network from "../../network/router";
 import Account from "../../system/account";
-import INFT from "../../system/inft";
-
-import { FaCheck } from "react-icons/fa";
 
 /* iNFT sell/revoke action panel
-*   @param  {string}    anchor           //anchor link
+*   @param  {string}    props.anchor           //anchor link
 */
 
 function AccountSell(props) {
