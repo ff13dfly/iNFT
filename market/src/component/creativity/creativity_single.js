@@ -62,7 +62,7 @@ function CreativitySingle(props) {
   }
 
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
   }, [props.name]);
 
   return (
@@ -77,7 +77,7 @@ function CreativitySingle(props) {
       <Tab eventKey="basic" title={self.getTitle("basic")}>
         <TemplateBasic name={props.name}/>
       </Tab>
-      <Tab eventKey="image" title={self.getTitle("image")}>
+      <Tab eventKey="image" title={self.getTitle("image")} >
         <Row>
           <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
             <ImageOperation name={props.name}/>

@@ -59,7 +59,7 @@ const funs={
         },
         part:()=>{
             return {
-                value:[16,2,8,0],
+                value:[16,2,6,0],
                 img: [0, 3, 0, 0],
                 position:[100,100],
                 center: [0, 0],

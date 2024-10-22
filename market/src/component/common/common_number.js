@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 *   @param  {number}    value     //value 
 *   @param  {function}  callback  //ck && ck(value)
 *   @param  {boolean}   [disable]   //wether disable the input
-*   @param  {number}   [step]     //wether disable the input
+*   @param  {number}    [step]     //wether disable the input
 */
 
 function CommonNumber(props) {
@@ -16,7 +16,6 @@ function CommonNumber(props) {
   };
 
   let [val, setVal] = useState(props.value);
-  let [step, setStep] = useState(!props.step ? 1 : props.step);
 
   const self = {
     changeInput: (ev) => {
@@ -25,16 +24,20 @@ function CommonNumber(props) {
       if (props.callback) props.callback(cur);
     },
     clickInc: () => {
-
+      const data=props.step?(val+props.step):(val+1);
+      setVal(data);
+      if (props.callback) props.callback(data);
     },
     clickDec: () => {
-
+      const data=props.step?(val-props.step):(val-1);
+      setVal(data);
+      if (props.callback) props.callback(data);
     },
   }
 
   useEffect(() => {
-
-  }, [props.value,]);
+    setVal(props.value);
+  }, [props.value]);
 
   return (
     <Row className="pt-2">
@@ -42,19 +45,24 @@ function CommonNumber(props) {
         <small>{props.title}</small>
       </Col>
       <Col className="pt-1 text-center" md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
-        <button className="btn btn-sm btn-default">-</button>
+        <button className="btn btn-sm btn-default" onClick={(ev)=>{
+          self.clickDec(ev);
+        }}>-</button>
       </Col>
       <Col className="pt-1 text-center" md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
         <input
           className="text-center form-control"
           type="number"
           value={val}
+          disabled={props.disable!==undefined?props.disable:false}
           onChange={(ev) => {
             self.changeInput(ev);
           }} />
       </Col>
       <Col className="pt-1  text-center" md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
-        <button className="btn btn-sm btn-default">+</button>
+        <button className="btn btn-sm btn-default" onClick={(ev)=>{
+          self.clickInc(ev);
+        }}>+</button>
       </Col>
     </Row>
   );

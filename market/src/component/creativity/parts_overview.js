@@ -6,7 +6,7 @@ import PartsDetail from "./parts_detail";
 import GENE from "../../system/gene";
 import tools from "../../lib/tools";
 
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown,FaRegTrashAlt,FaFileMedical } from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    hash        //unique hash
@@ -46,6 +46,17 @@ function PartsOverview(props) {
         return ck && ck();
       });
     },
+    clickRemove:(ck)=>{
+      const narr=[];
+      for(let i=0;i<list.length;i++){
+        if(i!==active) narr.push(list[i]);
+      }
+
+      GENE.update.parts(props.name,narr,()=>{
+        self.fresh();
+        return ck && ck();
+      });
+    },
     getPart:()=>{
       if(list.length===0) return GENE.format("part");
       const dt=tools.clone(!list[active]?list[list.length-1]:list[active]);
@@ -74,19 +85,27 @@ function PartsOverview(props) {
   }, [props.name]);
 
   return (
-    <Row>
+    <Row  style={{paddingBottom:"100px"}}>
       <Col className="text-center" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         {info}
       </Col>
       <Col className="parts_border" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
         <Row>
-          <Col className="text-center" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col className="" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            <button className="btn btn-md btn-danger" disabled={disable || list.length===0} onClick={(ev)=>{
+              setDisable(true);
+              self.clickRemove(()=>{
+                setDisable(false);
+              });
+            }}><FaRegTrashAlt /></button>
+          </Col>
+          <Col className="text-end" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
             <button className="btn btn-md btn-primary" disabled={disable} onClick={(ev)=>{
               setDisable(true);
               self.clickAdd(()=>{
                 setDisable(false);
               });
-            }}>+ New Part</button>
+            }}><FaFileMedical /></button>
           </Col>
           <Col className="text-center" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <hr />
@@ -100,16 +119,16 @@ function PartsOverview(props) {
               </button>
             </Col>
           ))}
-          <Col className="text-center" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <hr />
           </Col>
-          <Col className="text-end"  md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <button className="btn btn-md btn-primary" onClick={(ev) => {
+          <Col className=""  md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            <button className="btn btn-md btn-primary" disabled={disable} onClick={(ev) => {
               self.clickUp();
             }}><FaArrowUp /></button>
           </Col>
-          <Col className="" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
-            <button className="btn btn-md btn-primary" onClick={(ev) => {
+          <Col className="text-end" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+            <button className="btn btn-md btn-primary" disabled={disable} onClick={(ev) => {
               self.clickUp();
             }}><FaArrowDown /></button>
           </Col>
