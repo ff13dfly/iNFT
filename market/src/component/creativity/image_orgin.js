@@ -49,11 +49,12 @@ function ImageOrgin(props) {
 
     },
   }
-
+  
   useEffect(() => {
+    console.log(props.name, props.index);
     const arr=self.getCover(8);
     setList(arr);
-  }, []);
+  }, [props.name, props.index]);
 
   return (
     <div className="orgin-container pt-2">

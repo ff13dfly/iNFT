@@ -55,7 +55,8 @@ function CreativityNav(props) {
               }}>
               <h6>{row.title}</h6>
             </Col>
-            <Col className="creativity-under" hidden={show[index] ? false : true} key={index} md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <Col  className="creativity-under" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}
+              hidden={show[index] ? false : true}>
               {row.under}
             </Col>
           </Row>

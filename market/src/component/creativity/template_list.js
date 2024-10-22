@@ -69,7 +69,7 @@ function TemplateList(props) {
         <Col key={index} className="pointer" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
           <button 
             className={index===active?"btn btn-md btn-warning":"btn btn-md btn-default"} 
-            style={{width:"100$"}}
+            style={{width:"100%"}}
             onClick={(ev) => {
               self.clickGene(index,row.name,row.stamp);
             }}><FaDna size={16}/><span className="ml-5 pt-2">Gene: {row.name}</span></button>

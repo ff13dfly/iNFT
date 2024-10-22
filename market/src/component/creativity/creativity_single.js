@@ -1,13 +1,9 @@
-import { Row, Col, Tabs, Tab } from "react-bootstrap";
+import { Tabs, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import ImageOrgin from "./image_orgin";
-import ImageOperation from "./image_operation";
-
-//import CreativityBasic from "./creativity_basic";
 import TemplateBasic from "./temlpate_basic";
-import PartsList from "./parts_list";
 import TemplateRaw from "./template_raw";
+import ImageOverview from "./image_overview";
 import PartsOverview from "./parts_overview";
 import SeriesOverview from "./series_overview";
 
@@ -20,9 +16,6 @@ import { FaImage,FaCogs,FaPuzzlePiece,FaBraille,FaCloudUploadAlt } from "react-i
 function CreativitySingle(props) {
   const size = {
     row: [12],
-    head:[9,3],
-    parts:[4,4,4],
-    left:[9,3]
   };
 
   let [active,setActive]=useState("image");
@@ -78,15 +71,7 @@ function CreativitySingle(props) {
         <TemplateBasic name={props.name}/>
       </Tab>
       <Tab eventKey="image" title={self.getTitle("image")} >
-        <Row>
-          <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
-            <ImageOperation name={props.name}/>
-            <ImageOrgin name={props.name}/>
-          </Col>
-          <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]} >
-            <PartsList name={props.name}/>
-          </Col>
-        </Row>
+        <ImageOverview name={props.name}/>
       </Tab>
       <Tab eventKey="parts" title={self.getTitle("parts")}>
         <PartsOverview name={props.name}/>
@@ -94,7 +79,6 @@ function CreativitySingle(props) {
       <Tab eventKey="series" title={self.getTitle("series")}>
         <SeriesOverview name={props.name}/>
       </Tab>
-      
       <Tab eventKey="raw" title={self.getTitle("raw")}>
         <TemplateRaw name={props.name}/>
       </Tab>

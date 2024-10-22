@@ -7,14 +7,13 @@ import CommonNumber from "../common/common_number";
 *   @param  {string}    hash        //unique hash
 */
 
-function PartsList(props) {
+function ImageParameter(props) {
   const size = {
     row: [12],
     amount: [3, 6, 3],
     half: [6],
   };
 
-  let [list, setList] = useState([]);
   let [amount, setAmount] = useState(8);
   let [ex, setEX] = useState(0);
   let [ey, setEY] = useState(0);
@@ -36,9 +35,8 @@ function PartsList(props) {
   }
 
   useEffect(() => {
-    const arr = [{ part: 1 }, { part: 2 }]
-    setList(arr);
-  }, []);
+    console.log(props.name, props.index);
+  }, [props.name, props.index]);
 
   return (
     <Row>
@@ -81,4 +79,4 @@ function PartsList(props) {
     </Row>
   );
 }
-export default PartsList;
+export default ImageParameter;

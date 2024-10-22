@@ -9,8 +9,7 @@ import { useEffect, useState } from "react";
 function PartSelector(props) {
   const size = {
     row: [12],
-    amount: [3, 6, 3],
-    half: [6],
+    right: [1,11],
   };
 
   let [list, setList] = useState([]);
@@ -26,6 +25,7 @@ function PartSelector(props) {
       for(let i=0;i<props.amount;i++){
         arr.push({key:`part_${i}`});
       }
+      console.log(arr);
       setList(arr);
     }
   }
@@ -36,8 +36,11 @@ function PartSelector(props) {
 
 
   return (
-    <Row>
-      <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+    <Row className="pt-1 pb-1">
+      <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
+        <h6 className="pt-1">Parts</h6> 
+      </Col>
+      <Col md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
         {list.map((row, index) => (
           <button 
             key={index}
@@ -48,7 +51,6 @@ function PartSelector(props) {
           > #{index}</button>
         ))}
       </Col>
-      
     </Row>
   );
 }
