@@ -92,7 +92,7 @@ function TemplateBasic(props) {
       if (dt.error) return false;
       self.updateData(dt);
     });
-  }, [props.name]);
+  }, [props.name,props.update]);
 
   return (
     <Row>

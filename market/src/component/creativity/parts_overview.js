@@ -82,7 +82,7 @@ function PartsOverview(props) {
 
   useEffect(() => {
     self.fresh();
-  }, [props.name]);
+  }, [props.name,props.update]);
 
   return (
     <Row  style={{paddingBottom:"100px"}}>

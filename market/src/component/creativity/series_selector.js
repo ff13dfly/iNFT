@@ -59,7 +59,6 @@ function SeriesSelector(props) {
         GENE.update.parts(props.name,parts,()=>{
 
         });
-
       });
     },
   }
@@ -78,7 +77,7 @@ function SeriesSelector(props) {
       setList(arr);
     });
 
-  }, [props.name,props.index]);
+  }, [props.name,props.index,props.update]);
 
 
   return (

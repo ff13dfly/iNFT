@@ -40,7 +40,7 @@ function ImageOverview(props) {
       if(!dt.parts) return self.warning("Invalid Gene data format");
       setAmount(dt.parts.length);
     });
-  }, []);
+  }, [props.name,props.update]);
 
   return (
     <Row>

@@ -19,6 +19,7 @@ function CreativitySingle(props) {
   };
 
   let [active,setActive]=useState("image");
+  let [update, setUpdate]=useState(0);
 
   const tabs={
     image:{
@@ -52,6 +53,9 @@ function CreativitySingle(props) {
           {target.icon} {target.title}
         </h6>)
     },
+    fresh:()=>{
+      setUpdate(update+1);
+    },
   }
 
   useEffect(() => {
@@ -68,19 +72,19 @@ function CreativitySingle(props) {
         setActive(tab);
       }}>
       <Tab eventKey="basic" title={self.getTitle("basic")}>
-        <TemplateBasic name={props.name}/>
+        <TemplateBasic name={props.name} fresh={self.fresh} update={update}/>
       </Tab>
       <Tab eventKey="image" title={self.getTitle("image")} >
-        <ImageOverview name={props.name}/>
+        <ImageOverview name={props.name} fresh={self.fresh} update={update}/>
       </Tab>
       <Tab eventKey="parts" title={self.getTitle("parts")}>
-        <PartsOverview name={props.name}/>
+        <PartsOverview name={props.name} fresh={self.fresh} update={update}/>
       </Tab>
       <Tab eventKey="series" title={self.getTitle("series")}>
-        <SeriesOverview name={props.name}/>
+        <SeriesOverview name={props.name} fresh={self.fresh} update={update}/>
       </Tab>
       <Tab eventKey="raw" title={self.getTitle("raw")}>
-        <TemplateRaw name={props.name}/>
+        <TemplateRaw name={props.name} fresh={self.fresh} update={update}/>
       </Tab>
     </Tabs>
   );

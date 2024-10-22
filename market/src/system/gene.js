@@ -40,7 +40,6 @@ const funs={
                 size:[900,900],
                 cell:[100,100],
                 grid:[8,4],
-                image:"",
                 title:"",
                 desc:"",
                 parts:[],
@@ -49,6 +48,7 @@ const funs={
                 stamp:tools.stamp(),
                 type:2,
                 version:"2024_flamingo",
+                image:"",
             };
         },
         series:()=>{

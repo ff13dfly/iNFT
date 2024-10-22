@@ -96,7 +96,7 @@ function SeriesOverview(props) {
 
   useEffect(() => {
     self.fresh();
-  }, []);
+  }, [props.name,props.update]);
 
   return (
     <Row>
@@ -173,7 +173,7 @@ function SeriesOverview(props) {
             <hr />
           </Col>
           <Col className="pt-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-            <SeriesSelector name={props.name} index={active}/>
+            <SeriesSelector name={props.name} index={active} fresh={props.fresh} update={props.update}/>
           </Col>
         </Row>
 
