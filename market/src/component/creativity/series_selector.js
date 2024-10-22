@@ -1,7 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-/* Component Sample
+import GENE from "../../system/gene";
+import tools from "../../lib/tools";
+
+/*  Series part select to calc rareity.
 *   @param  {string}    name        //unique hash
 */
 
@@ -14,25 +17,68 @@ function SeriesSelector(props) {
   let [list, setList] = useState([]);
 
   const self = {
+    clickSingle:(index_part,index_atom)=>{
+      list[index_part][index_atom]=!list[index_part][index_atom];
+      setList(tools.clone(list));
+      self.updateSeries();
+    },
     getArrayByLen:(n)=>{
       const arr=[];
       for(let i=0;i<n;i++){
-        arr.push({value:i});
+        arr.push(false);
       }
       return arr;
+    },
+    getButtons:(n,rarity)=>{
+      const arr=[];
+      for(let i=0;i<n;i++){
+        arr.push(rarity.includes(i));
+      }
+      return arr;
+    },
+    getRarityArray:(index)=>{
+      const arr=list[index];
+      const narr=[];
+      for(let i=0;i<arr.length;i++){
+        if(arr[i]===true) narr.push(i);
+      }
+      return narr;
+    },
+    updateSeries:()=>{
+      //console.log(JSON.stringify(list));
+      GENE.get(props.name, (dt) => {
+        if(!dt || !dt.parts) return false;
+        const parts=dt.parts;
+        
+        for(let i=0;i<parts.length;i++){
+          if(!parts[i].rarity)parts[i].rarity=[];
+          if(!parts[i].rarity[props.index])parts[i].rarity[props.index]=[];
+          parts[i].rarity[props.index]=self.getRarityArray(i);
+        }
+
+        GENE.update.parts(props.name,parts,()=>{
+
+        });
+
+      });
     },
   }
 
   useEffect(() => {
-    const arr=[
-        self.getArrayByLen(9),
-        self.getArrayByLen(6),
-        self.getArrayByLen(8),
-        self.getArrayByLen(1)
-      ]
-    //console.log(arr);
-    setList(arr);
-  }, [props.name]);
+
+    GENE.get(props.name, (dt) => {
+      if(!dt || !dt.parts) return false;
+      const arr=[];
+      for(let i=0;i<dt.parts.length;i++){
+        const part=dt.parts[i];
+        const rarity_arr=!part.rarity[props.index]?[]:part.rarity[props.index];
+        const btns=self.getButtons(part.value[2],rarity_arr);
+        arr.push(btns);
+      }
+      setList(arr);
+    });
+
+  }, [props.name,props.index]);
 
 
   return (
@@ -50,10 +96,10 @@ function SeriesSelector(props) {
             {row.map((data, vkey) => (
               <button 
                 key={vkey} 
-                className={vkey===3?"btn btn-sm btn-primary mr-5":"btn btn-sm btn-secondary mr-5"}
+                className={data===true?"btn btn-md btn-primary mr-5":"btn btn-md btn-secondary mr-5"}
                 onClick={(ev)=>{
-
-                }}>{data.value}</button>
+                  self.clickSingle(index,vkey);
+                }}>{vkey}</button>
             ))}
           </Col>
         </Row>

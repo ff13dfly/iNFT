@@ -21,7 +21,7 @@ function ImageOperation(props) {
   }
 
   useEffect(() => {
-    console.log(props.name, props.index,props.order);
+    //console.log(props.name, props.index,props.order);
   }, [props.name, props.index,props.order]);
   return (
     <Row>

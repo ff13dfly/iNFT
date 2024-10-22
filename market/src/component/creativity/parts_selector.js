@@ -25,7 +25,6 @@ function PartSelector(props) {
       for(let i=0;i<props.amount;i++){
         arr.push({key:`part_${i}`});
       }
-      console.log(arr);
       setList(arr);
     }
   }

@@ -35,7 +35,11 @@ function TemplateList(props) {
       if (props.show) props.show(<CreativitySingle name={name} fullscreen={props.fullscreen}/>);
 
       //2. fresh entry page title
-      if(props.fresh) props.fresh(`Selected gene template: ${name}, created on ${tools.day(stamp,"-")}`);
+      if(props.fresh) props.fresh(<Row>
+        <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+          Selected gene template: <strong>{name}</strong>, created on <strong>{tools.day(stamp,"-")}</strong>
+        </Col>
+      </Row>);
 
       //3. set the active gene template in lib
       //GENE.active(name);

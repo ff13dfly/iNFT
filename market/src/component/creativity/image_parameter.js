@@ -35,7 +35,7 @@ function ImageParameter(props) {
   }
 
   useEffect(() => {
-    console.log(props.name, props.index);
+    //console.log(props.name, props.index);
   }, [props.name, props.index]);
 
   return (

@@ -73,8 +73,6 @@ function PartsDetail(props) {
           return self.warning("Invalid Gene data format");
         } 
         const target=dt.parts[props.index];
-        console.log(target);
-       
         setValue(target.value);
         setImage(target.img);
         setPosition(target.position);
