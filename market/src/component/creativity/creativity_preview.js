@@ -21,9 +21,11 @@ function CreativityPreview(props) {
   const style={
     hidden:{
       height:"50px",
+      width:"300px",
     },
     show:{
       height:"300px",
+      width:"60%",
     },
   }
 

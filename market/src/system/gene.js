@@ -160,7 +160,11 @@ const self={
             });
         },
         series:(name,arr,ck)=>{
-
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.series=arr;
+                funs.save(data,ck);
+            });
         },
         image:(name,bs64,ck)=>{
 

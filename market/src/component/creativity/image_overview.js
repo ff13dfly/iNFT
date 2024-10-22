@@ -18,13 +18,19 @@ function ImageOverview(props) {
     left: [9, 3]
   };
 
+  let [info, setInfo]=useState("");
   let [active, setActive] = useState(0);      //current active part, for modification.
   let [amount, setAmount]=useState(0);        //parts amount for selector
   let [order, setOrder] = useState(0);        //the selected part image order
 
   const self = {
-    fresh:()=>{
-
+    warning:(txt,at)=>{
+      setInfo(txt);
+      if(at!==undefined){
+        setTimeout(() => {
+          setInfo("");
+        }, at);
+      }
     },
   }
 
@@ -43,6 +49,11 @@ function ImageOverview(props) {
         <PartSelector amount={amount}  callback={(index)=>{
           setActive(index);
         }}/>
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            {info}
+          </Col>
+        </Row>
         <ImageOrgin name={props.name} index={active} callback={(od)=>{
           setOrder(od);
         }}/>
