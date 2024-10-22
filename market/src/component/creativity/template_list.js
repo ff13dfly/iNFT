@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import CreativitySingle from "./creativity_single";
 
-import Gene from "../../system/gene";
+import GENE from "../../system/gene";
 import tools from "../../lib/tools";
 
-import { FaDna } from "react-icons/fa";
+import { FaDna,FaRegTrashAlt,FaFileMedical } from "react-icons/fa";
 
 /* Component Sample
 *   @param  {string}    hash        //unique hash
@@ -19,34 +19,41 @@ import { FaDna } from "react-icons/fa";
 function TemplateList(props) {
   const size = {
     row: [12],
+    half:[6]
   };
 
   let [list, setList] = useState([]);
   let [active, setActive]= useState(999);
+  let [name, setName]= useState("");
 
   const self = {
     clickGene: (index,name,stamp) => {
       setActive(index);
-      //1.show UI on entry page
-      // if (props.show) props.show(<div>
-      //   <CreativityBasic name={name} fullscreen={props.fullscreen}/>
-      //   <CreativitySingle name={name} fullscreen={props.fullscreen}/>
-      // </div>);
+      setName(name);
+
+      //1.shwo gene 
       if (props.show) props.show(<CreativitySingle name={name} fullscreen={props.fullscreen}/>);
 
       //2. fresh entry page title
       if(props.fresh) props.fresh(`Selected gene template: ${name}, created on ${tools.day(stamp,"-")}`);
 
       //3. set the active gene template in lib
-      Gene.active(name);
+      //GENE.active(name);
     },
     clickAdd:(ev)=>{
-      Gene.add(()=>{
+      GENE.add(()=>{
+        self.fresh();
+      });
+    },
+    clickRemove:(ev)=>{
+      if(!name) return ;
+      GENE.remove(name,(res)=>{
+        setActive(0);
         self.fresh();
       });
     },
     fresh:()=>{
-      Gene.list((arr)=>{
+      GENE.list((arr)=>{
         setList(arr);
       })
     },
@@ -68,10 +75,15 @@ function TemplateList(props) {
             }}><FaDna size={16}/><span className="ml-5 pt-2">Gene: {row.name}</span></button>
         </Col>
       ))}
-      <Col className="text-center pt-4" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+      <Col className="pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
+        <button className="btn btn-md btn-danger" onClick={(ev)=>{
+          self.clickRemove(ev);
+        }}><FaRegTrashAlt /></button>
+      </Col>
+      <Col className="text-end pt-4" md={size.half[0]} lg={size.half[0]} xl={size.half[0]} xxl={size.half[0]}>
         <button className="btn btn-md btn-primary" onClick={(ev)=>{
           self.clickAdd(ev);
-        }}>+ New Gene</button>
+        }}><FaFileMedical /></button>
       </Col>
     </Row>
   );

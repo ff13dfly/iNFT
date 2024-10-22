@@ -85,9 +85,6 @@ function TemplateBasic(props) {
         }, at);
       }
     },
-    saving:()=>{
-
-    },
   }
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ImageOrgin from "./image_orgin";
 import ImageOperation from "./image_operation";
 
-import CreativityBasic from "./creativity_basic";
+//import CreativityBasic from "./creativity_basic";
 import TemplateBasic from "./temlpate_basic";
 import PartsList from "./parts_list";
 import TemplateRaw from "./template_raw";

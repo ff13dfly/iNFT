@@ -2,6 +2,7 @@ import INDEXED from "../lib/indexed";
 import Config from "./config";
 
 import tools from "../lib/tools";
+import { version } from "react";
 
 const cache={}          //image cache
 let active=null;        //active gene template
@@ -35,7 +36,7 @@ const funs={
         gene:()=>{
             const name=tools.char(10);
             return {
-                name:name,
+                name:name.toLocaleLowerCase(),
                 size:[900,900],
                 cell:[100,100],
                 grid:[8,4],
@@ -44,22 +45,26 @@ const funs={
                 desc:"",
                 parts:[],
                 series:[],
-                deploy:[],
+                deploy:[],                  
                 stamp:tools.stamp(),
+                type:2,
+                version:"2024_flamingo",
             };
         },
         series:()=>{
             return {
-                title:"",
+                name:"",
                 desc:"",
             }
         },
         part:()=>{
             return {
-                value:[],
-                position:[],
-                rotation:[],
-                rarety:[],
+                value:[16,2,8,0],
+                img: [0, 3, 0, 0],
+                position:[100,100],
+                center: [0, 0],
+                rotation:[0],
+                rarity:[],
             }
         }
     },
@@ -89,16 +94,8 @@ const self={
             });
         });
     },
-    active:(name,ck)=>{
-        self.get(name,(res)=>{
-            if(res.error) return ck && ck(res);
-            
-            //set the active gene template, update here.
-            active=tools.clone(res);                    
-        });
-    },
     add:(ck)=>{
-        const row=funs.format.gene();
+        const row=self.format();
         funs.checkDB(table, (db) => {
             if(db.error) return ck && ck(db);
             INDEXED.insertRow(db, table, [row], ck);
@@ -108,6 +105,19 @@ const self={
         funs.checkDB(table, (db) => {
             if(db.error) return ck && ck(db);
             INDEXED.removeRow(db, table, "name", name, ck);
+        });
+    },
+    format:(type)=>{
+        const key=!type?"gene":type;
+        if(!funs.format[key]) return {error:"Invalid format type."};
+        return funs.format[key]();
+    },
+    active:(name,ck)=>{
+        self.get(name,(res)=>{
+            if(res.error) return ck && ck(res);
+            
+            //set the active gene template, update here.
+            active=tools.clone(res);                    
         });
     },
     update:{
@@ -142,10 +152,17 @@ const self={
         grid:(name,x,y,ck)=>{
 
         },
+        parts:(name,arr,ck)=>{
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.parts=arr;
+                funs.save(data,ck);
+            });
+        },
         series:(name,arr,ck)=>{
 
         },
-        image:(name,json,ck)=>{
+        image:(name,bs64,ck)=>{
 
         },
     },
