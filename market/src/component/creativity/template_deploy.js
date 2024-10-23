@@ -6,7 +6,7 @@ import DeployW3S from "./deploy_w3s";
 import DeployCrust from "./deploy_crust";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.name        //unique name
 */
 
 function TemplateDeploy(props) {

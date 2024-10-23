@@ -5,8 +5,8 @@ import ParameterINFT from "./inft_parameter";
 import tools from "../../lib/tools";
 
 /* iNFT parts preview
-*   @param  {array}     data          //parts array
-*   @param  {function}  [callback]    //selected change callback
+*   @param  {array}     props.data          //parts array
+*   @param  {function}  [props.callback]    //selected change callback
 */
 
 function PartsINFT(props) {

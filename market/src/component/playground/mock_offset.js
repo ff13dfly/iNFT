@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { FaCode, FaAlignJustify } from "react-icons/fa";
 
 /* iNFT mock offset
-*   @param  {string}   hash     //hash needed to render the iNFT       
-*   @param  {array}    parts    //iNFT parts raw data
-*   @param  {function}  [callback]      //hash change callback
+*   @param  {string}   props.hash     //hash needed to render the iNFT       
+*   @param  {array}    props.parts    //iNFT parts raw data
+*   @param  {function}  [props.callback]      //hash change callback
 */
 
 function MockOffset(props) {

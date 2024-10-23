@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 
 import CommonNumber from "../common/common_number";
 
-/* Component Sample
-*   @param  {string}    hash        //unique hash
+/* Basic image parameters
+*   @param  {string}    props.name        //unique name
+*   @param  {number}    props.index       //index of parts
 */
 
 function ImageParameter(props) {

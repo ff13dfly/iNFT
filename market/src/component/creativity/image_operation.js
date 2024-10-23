@@ -6,7 +6,7 @@ import ImageGrid from "./image_grid";
 import { FaCopy, FaFileImage,FaTrashAlt,FaAngleLeft,FaAngleRight, FaDownload} from "react-icons/fa";
 
 /* Image operation panel
-*   @param  {string}    name        //unique nam
+*   @param  {string}    props.name        //unique nam
 */
 
 function ImageOperation(props) {

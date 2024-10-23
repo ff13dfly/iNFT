@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import TPL from "../../system/tpl";
 
 /* template series thumb list
-*   @param  {string}    template         //template cid
+*   @param  {string}    props.template         //template cid
 */
 
 function ListSeries(props) {

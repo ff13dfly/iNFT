@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 
 function DeployW3S(props) {

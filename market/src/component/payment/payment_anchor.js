@@ -7,8 +7,8 @@ import Network from "../../network/router";
 import { FaCheck } from "react-icons/fa";
 
 /* Component Sample
-*   @param  {string}    target        //target account to pay
-*   @param  {number}    amount
+*   @param  {string}    props.target        //target account to pay
+*   @param  {number}    props.amount
 */
 
 function PaymentAnchor(props) {

@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 
 import CommonNumber from "../common/common_number";
 import GENE from "../../system/gene";
-import tools from "../../lib/tools";
 
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
-/* Component Sample
-*   @param  {string}    name        //gene template name
-*   @param  {number}    index       //parts index
+/* Gene parts parameters
+*   @param  {string}    props.name        //gene template name
+*   @param  {number}    props.index       //parts index
 */
 
 function PartsDetail(props) {

@@ -2,8 +2,8 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Component Sample
-*   @param  {number}    amount        //unique hash
-*   @param  {function}  callback      // ck && ck(index), callback the selected part index
+*   @param  {number}    props.amount        //unique hash
+*   @param  {function}  [props.callback]      // ck && ck(index), callback the selected part index
 */
 
 function PartSelector(props) {

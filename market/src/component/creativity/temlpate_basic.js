@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import GENE from "../../system/gene";
 
 /* Component Sample
-*   @param  {string}    name        //unique name to load data from local indexedDB
+*   @param  {string}    props.name        //unique name to load data from local indexedDB
+*   @param  {number}    props.update      //force update count
 */
 
 function TemplateBasic(props) {

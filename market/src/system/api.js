@@ -1,11 +1,17 @@
+/* 
+*  API management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-05-25
+*  @functions
+*  1.unique API entry here;
+*  2.auto get spam from server;
+*  3.unique request format; 
+*/
+
 import Local from "../lib/local";
 import Config from "../system/config"
 import Status from "../system/status";
-
-/* API management */
-//1.unique API entry here;
-//2.auto get spam from server;
-//3.unique request format;
 
 const cfg=Config.get(["proxy","nodes","market"])[0];
 const site=`${cfg.protocol}${cfg.domain}`;

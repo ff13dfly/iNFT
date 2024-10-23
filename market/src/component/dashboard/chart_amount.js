@@ -6,7 +6,7 @@ import ReactEcharts from 'echarts-for-react';
 import tools from "../../lib/tools";
 
 /* Line chart of iNFT minted on each block
-*   @param  {}    hash        //unique hash
+*   @param  {}   props.hash        //unique hash
 */
 
 function ChartAmount(props) {

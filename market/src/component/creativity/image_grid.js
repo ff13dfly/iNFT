@@ -2,7 +2,7 @@ import { Row, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 
 function ImageGrid(props) {
@@ -35,9 +35,6 @@ function ImageGrid(props) {
         <Form.Control size="sm" type="number" name="line" placeholder="Image Line" value={line} onChange={(ev) => {
           self.changeLine(ev);
         }} />
-        {/* <input type="number" className="form-control" value={line} onChange={(ev) => {
-          self.changeLine(ev);
-        }} /> */}
       </Col>
 
       <Col className="pt-1" md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
@@ -47,9 +44,6 @@ function ImageGrid(props) {
         <Form.Control size="sm" type="number" name="row" placeholder="Image Row" value={row} onChange={(ev) => {
           self.changeRow(ev);
         }} />
-        {/* <input type="number" className="form-control" value={row} onChange={(ev) => {
-          self.changeRow(ev);
-        }} /> */}
       </Col>
     </Row>
   );

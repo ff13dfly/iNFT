@@ -1,13 +1,19 @@
+/* 
+*  Account management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-07-07
+*  @functions
+*  1.manage accounts, saving on IndexedDB;
+*  2.import account from encried json file;
+*  3.check balance of account with the support of `Network` lib;   
+*/
+
 import INDEXED from "../lib/indexed";
 import tools from "../lib/tools";
 
 import Config from "./config";
 import Network from "../network/router";
-
-/* Account management */
-//1.manage accounts, saving on IndexedDB;
-//2.import account from encried json file;
-//3.check balance of account with the support of `Network` lib;   
 
 let cache=null      //cache the account
 const table="accounts";

@@ -10,7 +10,7 @@ import SeriesOverview from "./series_overview";
 import { FaImage,FaCogs,FaPuzzlePiece,FaBraille,FaCloudUploadAlt } from "react-icons/fa";
 
 /* Component Sample
-*   @param  {string}    name        //unique name to load data from local indexedDB
+*   @param  {string}    props.name        //unique name to load data from local indexedDB
 */
 
 function CreativitySingle(props) {

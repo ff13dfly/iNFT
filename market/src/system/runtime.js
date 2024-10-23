@@ -1,4 +1,14 @@
-import { web3Accounts, web3Enable, web3FromAddress } from "@polkadot/extension-dapp";
+/* 
+*  iNFT runtime functions
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-07-05
+*  @functions
+*  1.auto check wallet;
+*  2.not clear definition of this lib
+*/
+
+import { web3Accounts, web3Enable } from "@polkadot/extension-dapp";
 import Config from "./config";
 
 const cache={

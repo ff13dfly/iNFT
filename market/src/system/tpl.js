@@ -1,23 +1,34 @@
+/* 
+*  Gene template management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-05-04
+*  @functions
+*  1.task storage, saving on IndexedDB;
+*  2.auto minting;
+*/
+
 import Local from "../lib/local";
 import Data from "../lib/data";
 import IPFS from "../network/ipfs";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
+import Config from "./config";
 
-const config = {
-    default: "bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
-    indexDB: "inftDB",
-    table: "template",
-    keypath: "cid",
-    map: {
-        cid: { unique: true },
-        stamp: { unique: false },
-        thumb: { unique: false },
-        image: { unique: false },
-        content: { unique: false },
-    },
-}
+// const config = {
+//     default: "bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
+//     indexDB: "inftDB",
+//     table: "template",
+//     keypath: "cid",
+//     map: {
+//         cid: { unique: true },
+//         stamp: { unique: false },
+//         thumb: { unique: false },
+//         image: { unique: false },
+//         content: { unique: false },
+//     },
+// }
 
 let agent = false;     //wether use agent
 let local = true;     //get template from local
@@ -31,14 +42,16 @@ const funs = {
     getLocal: (alinks, ck, left) => {
         if (left === undefined) left = [];
         if (alinks.length === 0) return ck && ck(left);
-
-        INDEXED.checkDB(config.indexDB, (db) => {
+        const DB=Config.get(["storage","DBname"]);
+        const table="template";
+        const cfg=Config.get(["storage","tables",table]);
+        INDEXED.checkDB(DB, (db) => {
             const tbs = db.objectStoreNames;
-            if (!funs.checkTable(config.table, tbs)) {
+            if (!funs.checkTable(table, tbs)) {
                 //no indexDB, init it
                 db.close();
-                const tb = { table: config.table, keyPath: config.keypath, map: config.map }
-                INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
+                const tb = { table: table, keyPath: cfg.keyPath, map: cfg.map }
+                INDEXED.initDB(DB, [tb], db.version + 1).then((ndb) => {
                     return ck && ck(tools.copy(alinks));
                 }).catch((error) => {
                     return ck && ck({ error: "failed to init indexDB" });
@@ -46,7 +59,7 @@ const funs = {
             } else {
                 //console.log(`Here to search the templates.`);
                 const single = alinks.pop();
-                INDEXED.searchRows(db, config.table, "cid", single, (res) => {
+                INDEXED.searchRows(db, table, "cid", single, (res) => {
                     if (res.length !== 1) {
                         left.push(single);
                         return funs.getLocal(alinks, ck, left)
@@ -119,7 +132,8 @@ const funs = {
                                         if (count === 0) {
                                             if (local) {
                                                 //console.log(`Ready to cache to local indexDB.`);
-                                                INDEXED.checkDB(config.indexDB, (db) => {
+                                                const DB=Config.get(["storage","DBname"]);
+                                                INDEXED.checkDB(DB, (db) => {
                                                     //console.log(db);
                                                     const row = {
                                                         cid: single,
@@ -128,8 +142,8 @@ const funs = {
                                                         image: ctx.image,
                                                         content: funs.formatContent(ctx),
                                                     }
-                                                    //console.log(row);
-                                                    INDEXED.insertRow(db, config.table, [row]);
+                                                    const table="template"
+                                                    INDEXED.insertRow(db, table, [row]);
                                                 });
                                             }
                                             return funs.cacheIPFS(alinks, ck, dels);
@@ -270,7 +284,8 @@ const self = {
     auto: (ck, only_first) => {
         const list = self.list(true);
         if (list === false) {
-            return self.add(config.default, self.auto);
+            const default_cid=Config.get(["runtime","template","default"]);
+            return self.add(default_cid, self.auto);
         } else {
             funs.cacheIPFS(only_first ? [list[0]] : list, (dels) => {
                 //1. need to remove the dels templates

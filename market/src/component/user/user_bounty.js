@@ -17,7 +17,7 @@ import tools from "../../lib/tools";
 import { FaCopy,FaBitcoin, FaSkullCrossbones, FaRoad, FaTicketAlt } from "react-icons/fa";
 
 /* user fav bounty list. Any bounty can be loaded.
-*   @param  {function}    dialog        //system dialog function
+*   @param  {function}    props.dialog        //system dialog function
 */
 
 

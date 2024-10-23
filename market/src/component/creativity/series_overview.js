@@ -6,8 +6,9 @@ import GENE from "../../system/gene";
 
 import { FaChevronUp, FaChevronDown, FaRegTrashAlt, FaFileMedical } from "react-icons/fa";
 
-/* Component Sample
-*   @param  {string}    hash        //unique hash
+/* Series editor entry
+*   @param  {string}    props.name        //unique name
+*   @param  {number}    props.update      //force update count
 */
 
 function SeriesOverview(props) {

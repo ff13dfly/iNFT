@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import GENE from "../../system/gene";
 import tools from "../../lib/tools";
 
-/*  Series part select to calc rareity.
-*   @param  {string}    name        //unique hash
+/* Series selector
+*   @param  {string}    props.name        //unique name
+*   @param  {number}    props.index       //index of parts
+*   @param  {number}    props.update      //force update count
 */
 
 function SeriesSelector(props) {

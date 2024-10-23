@@ -1,5 +1,5 @@
 
-const RDS={};   //缓存render的方法
+const RDS={};
 
 const config={
     container:"thumb_handle",

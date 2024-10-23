@@ -1,3 +1,13 @@
+/* 
+*  Minting task management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-09-02
+*  @functions
+*  1.task storage, saving on IndexedDB;
+*  2.auto minting;
+*/
+
 import INDEXED from "../lib/indexed";
 import Config from "./config";
 

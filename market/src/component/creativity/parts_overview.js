@@ -8,8 +8,9 @@ import tools from "../../lib/tools";
 
 import { FaArrowUp, FaArrowDown,FaRegTrashAlt,FaFileMedical } from "react-icons/fa";
 
-/* Component Sample
-*   @param  {string}    hash        //unique hash
+/* Parts editor entry
+*   @param  {string}    props.name        //unique name
+*   @param  {number}    props.update      //force update count
 */
 
 function PartsOverview(props) {

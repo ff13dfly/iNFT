@@ -2,7 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Ads for iNFT
-*   @param  {boolean}    show        //wether show the ads
+*   @param  {boolean}    props.show        //wether show the ads
 */
 
 function Ads(props) {

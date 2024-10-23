@@ -2,8 +2,8 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 /* Original image selector 
-*   @param  {string}    name        //unique name to load data from local indexedDB
-*   @param  {function}  callback    //callback the selected parts index
+*   @param  {string}    props.name        //unique name to load data from local indexedDB
+*   @param  {function}  props.callback    //callback the selected parts index
 */
 
 function ImageOrgin(props) {

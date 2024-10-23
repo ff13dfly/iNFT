@@ -1,3 +1,11 @@
+/* 
+*  Network status management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-07-23
+*  @functions
+*  1.network status, can be added to runtime
+*/
 
 const data={}
 

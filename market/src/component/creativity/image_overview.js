@@ -9,7 +9,7 @@ import PartSelector from "./parts_selector";
 import GENE from "../../system/gene";
 
 /* Image editor entry
-*   @param  {string}    name        //unique hash
+*   @param  {string}    props.name        //unique hash
 */
 
 function ImageOverview(props) {

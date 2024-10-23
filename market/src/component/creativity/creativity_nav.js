@@ -6,10 +6,10 @@ import TemplateList from "./template_list";
 import tools from "../../lib/tools";
 
 /* Template creator basic setting
-*   @param  {function}    show        //function to update content on home page
-*   @param  {number}      update      //force to update
-*   @param  {boolean}     sidebar     //wether the sidebar is hidden
-*   @param  {function}    fresh       //entry fresh function, update the title
+*   @param  {function}    props.show        //function to update content on home page
+*   @param  {number}      props.update      //force to update
+*   @param  {boolean}     props.sidebar     //wether the sidebar is hidden
+*   @param  {function}    props.fresh       //entry fresh function, update the title
 */
 
 function CreativityNav(props) {

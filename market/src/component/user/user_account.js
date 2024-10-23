@@ -5,7 +5,7 @@ import AccountAdd from "../account/account_add";
 import AccountList from "../account/account_list";
 
 /* Account management homepage
-*   @param  {function}  dialog        //system dialog
+*   @param  {function}  props.dialog        //system dialog
 */
 
 function UserAccount(props) {

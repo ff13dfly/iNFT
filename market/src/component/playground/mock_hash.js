@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { FaCode, FaBuromobelexperte } from "react-icons/fa";
 
 /* iNFT mock hash
-*   @param  {string}    hash            //hash needed to render the iNFT
-*   @param  {array}     active          //selected hash
-*   @param  {function}  [callback]      //hash change callback
+*   @param  {string}    props.hash            //hash needed to render the iNFT
+*   @param  {array}     props.active          //selected hash
+*   @param  {function}  [props.callback]      //hash change callback
 */
 
 function MockHash(props) {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ChargeEthereumUSDT from "../charge/charge_ethereum_usdt";
 
 /* Component Sample
-*   @param  {string}    hash        //unique hash
+*   @param  {string}    props.hash        //unique hash
 */
 
 function UseCharge(props) {

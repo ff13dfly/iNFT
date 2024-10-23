@@ -8,7 +8,7 @@ import tools from "../../lib/tools";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 /* Component Sample
-*   @param  {boolean}    sidebar        //wether show sidebar
+*   @param  {boolean}    props.sidebar        //wether show sidebar
 
 */
 function CreativityPreview(props) {
@@ -28,8 +28,7 @@ function CreativityPreview(props) {
       width:"60%",
     },
   }
-
-  let [list, setList] = useState([]);
+  
   let [hidden, setHidden] = useState(false);
   let [cmap, setCmap]=useState(style.show);
 
@@ -43,9 +42,6 @@ function CreativityPreview(props) {
   }
 
   useEffect(() => {
-    const arr=[{mock:"a"},{mock:"b"}]
-    setList(arr);
-
     if(hidden===false && first===true){
       setTimeout(()=>{
         setCmap(tools.clone(style.hidden));

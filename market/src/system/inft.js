@@ -1,3 +1,13 @@
+/* 
+*  iNFT management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-06-15
+*  @functions
+*  1.manage iNFT, saving on IndexedDB.
+* 2.cache iNFT when running, including the thumb.
+*/
+
 import TPL from "./tpl";
 import Network from "../network/router";
 import INDEXED from "../lib/indexed";
@@ -5,10 +15,6 @@ import Config from "./config";
 
 import Render from "../lib/render";
 import tools from "../lib/tools";
-
-/* iNFT management */
-//1.manage iNFT, saving on IndexedDB.
-//2.cache iNFT when running, including the thumb.   
 
 const config = {
     indexDB: "inftDB",

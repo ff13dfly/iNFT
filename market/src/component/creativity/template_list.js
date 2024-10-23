@@ -8,12 +8,11 @@ import tools from "../../lib/tools";
 
 import { FaDna,FaRegTrashAlt,FaFileMedical } from "react-icons/fa";
 
-/* Component Sample
-*   @param  {string}    hash        //unique hash
-*   @param  {string}    active      //active gene template
-*   @param  {function}  show          // set content to show on entry creativity.js
-*   @param  {function}  [fresh]         // show the title content
-*   @param  {function}  [fullscreen]  //get the fullscreen status
+/* Gene list and selector
+*   @param  {string}    props.hash        //unique hash
+*   @param  {string}    props.active      //active gene template
+*   @param  {function}  props.show        // set content to show on entry creativity.js
+*   @param  {function}  [props.fresh]     // show the title content
 */
 
 function TemplateList(props) {

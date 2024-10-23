@@ -11,8 +11,8 @@ import INFT from "../../system/inft";
 import { FaAnchor } from "react-icons/fa";
 
 /* iNFT list component
-*   @param  {array}     data            //iNFT[], list of iNFT to show
-*   @param  {string}    network         //network
+*   @param  {array}     props.data            //iNFT[], list of iNFT to show
+*   @param  {string}    props.network         //network
 */
 
 function ListAddress(props) {

@@ -1,12 +1,17 @@
+/* 
+*  Bounty management
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-07-07
+*  @functions
+*  1.manage bounty, saving on IndexedDB.
+*  2.definition of bounty format.
+*  3.definition of bounty apply progress.
+*/
+
 import INDEXED from "../lib/indexed";
 import tools from "../lib/tools";
 import Config from "./config";
-
-/* Bounty management */
-//1.manage bounty, saving on IndexedDB.
-//2.definition of bounty format.
-//3.definition of bounty apply progress.
-
 
 const prefix = {          //anchor name prefix
     submit: "bounty_",

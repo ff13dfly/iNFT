@@ -1,9 +1,15 @@
+/* 
+*  iNFT market system config
+*  @auth [ Fuu ]
+*  @creator Fuu
+*  @date 2024-07-01
+*  @functions
+*  1.unique config setting here.
+*  2.encried local saving support.
+*/
+
 import tools from "../lib/tools";
 import Encry from "../lib/encry";
-
-/* iNFT market system config */
-//1. unique config setting here.
-//2. encried local saving support.
 
 //using account address (password optional) to encry the setting to localstorage
 const metadata={

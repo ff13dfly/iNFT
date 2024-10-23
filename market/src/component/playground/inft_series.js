@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import TPL from "../../system/tpl";
 
 /* iNFT series preview
-*   @param  {array}     data          //series array
-*   @param  {array}     parts         //parts array
+*   @param  {array}     props.data          //series array
+*   @param  {array}     props.parts         //parts array
 */
 
 function SeriesINFT(props) {

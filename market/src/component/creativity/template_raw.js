@@ -5,7 +5,8 @@ import GENE from "../../system/gene";
 import tools from "../../lib/tools";
 
 /* Gene template deployment data
-*   @param  {string}    name        //unique name of Gene
+*   @param  {string}    props.name        //unique name of Gene
+*   @param  {number}    props.update      //force update count
 */
 
 function TemplateRaw(props) {
