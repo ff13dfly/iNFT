@@ -16,17 +16,6 @@ import Config from "./config";
 import Render from "../lib/render";
 import tools from "../lib/tools";
 
-const config = {
-    indexDB: "inftDB",
-    table: "infts",
-    keypath: "name",
-    map: {
-        name: { unique: true },
-        stamp: { unique: false },
-        thumb: { unique: false },
-    },
-}
-
 const map = {};
 
 let local = true;     //get iNFT render result from local
@@ -54,25 +43,27 @@ const funs = {
         });
     },
     getThumb: (tpl_name, hash, offset, ck, key) => {
-        //console.log(key);
+        const table="infts";
+        const cfg=Config.get(["storage","tables",table]);
+
         if (local) {
             //console.log(`Here to go...`);
-            INDEXED.checkDB(config.indexDB, (db) => {
+            INDEXED.checkDB(DBname, (db) => {
                 //console.log(db);
                 const tbs = db.objectStoreNames;
-                if (!funs.checkTable(config.table, tbs)) {
+                if (!funs.checkTable(table, tbs)) {
                     //no indexDB, init it
-                    const tb = { table: config.table, keyPath: config.keypath, map: config.map }
+                    const tb = { table: table, keyPath: cfg.keyPath, map: cfg.map }
                     //console.log(`Ready to create table: ${JSON.stringify(tb)}`);
                     db.close();         //must close, or the DB is blocked
-                    INDEXED.initDB(config.indexDB, [tb], db.version + 1).then((ndb) => {
+                    INDEXED.initDB(DBname, [tb], db.version + 1).then((ndb) => {
                         //console.log(ndb);
                         return funs.render(tpl_name, hash, offset, ck);
                     }).catch((error) => {
                         return ck && ck({ error: "failed to init indexDB" });
                     });
                 } else {
-                    INDEXED.searchRows(db, config.table, "name", key, (res) => {
+                    INDEXED.searchRows(db, table, "name", key, (res) => {
                         //console.log(res);
                         if (res.length !== 1) {
                             return funs.render(tpl_name, hash, offset, (bs64) => {
@@ -82,7 +73,7 @@ const funs = {
                                     stamp: tools.stamp(),
                                     thumb: bs64,
                                 }
-                                INDEXED.insertRow(db, config.table, [row]);
+                                INDEXED.insertRow(db, table, [row]);
                                 return ck && ck(bs64);
                             });
                         } else {
