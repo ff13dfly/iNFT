@@ -261,6 +261,8 @@ code {
   cursor: pointer;
   float: left;
   text-align: center;
+  position: relative;
+  /* position: absolute; */
 }
 
 .cover-default{

@@ -30,19 +30,25 @@ function ImageOrgin(props) {
     },
 
     getCover:(part,basic)=>{
-      //console.log(part,basic);
       const arr=[];
       const [line,row,ex,ey]=part.img;
       const [start,step,divide,offset]=part.value;
       const w=(1+ex)*basic.cell[0]*rate;
       const h=(1+ey)*basic.cell[1]*rate;
       const top=row*basic.cell[1]*rate;
-      //console.log(rate);
+
+      const max=basic.grid[0]/(1+ex);
+      
       for(let i=0;i<divide;i++){
+        const bs=Math.floor((i*(1+ex)+line)/basic.grid[0]);
+        const be=((i+1)*(1+ex)+line)/basic.grid[0];
+        const br=(be<=1)?bs:Math.floor(be);
+        //console.log(`Index[${i}]: max ${max},start ${bs}, end ${be}, line:${br}`);
         arr.push({
           width:w,
           height:h,
-          top:top,
+          top:br===0?top:0,
+          left:(i===0?line*basic.cell[0]:0),
         });
       }
       setList(arr);
@@ -50,11 +56,11 @@ function ImageOrgin(props) {
     calcRate:(width)=>{
       const w=container.current.clientWidth;
       if(!width || !w) return false;
-      setRate(width/w);
+      setRate(w/width);
     },
     fresh:()=>{
       GENE.get(props.name, (dt) => {
-        self.calcRate(dt.size[0]);
+        self.calcRate(dt.cell[0]*dt.grid[0]);
         if (dt.error) return false;
         if (!dt.parts || !dt.parts[props.index]) return false;
 
@@ -78,7 +84,7 @@ function ImageOrgin(props) {
   }
   
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
     self.fresh();
   }, [props.name, props.index,props.update]);
 
@@ -94,6 +100,7 @@ function ImageOrgin(props) {
               height: `${row.height}px`,
               lineHeight: `${row.height}px`,
               marginTop:`${row.top}px`,
+              marginLeft:`${row.left}px`,
             }}
             onClick={(ev)=>{
               self.clickCover(index);
