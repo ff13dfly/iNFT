@@ -22,6 +22,7 @@ function ImageOverview(props) {
   let [active, setActive] = useState(0);      //current active part, for modification.
   let [amount, setAmount]=useState(0);        //parts amount for selector
   let [order, setOrder] = useState(0);        //the selected part image order
+  let [detail, setDetail]= useState("");      //image details 
 
   const self = {
     warning:(txt,at)=>{
@@ -32,6 +33,13 @@ function ImageOverview(props) {
         }, at);
       }
     },
+    getImageDetails:(bs64)=>{
+      const img = new Image();
+      img.src = bs64;
+      img.onload = (e) => {
+        setDetail(`${img.width}px * ${img.height}px, size: ${bs64.length.toLocaleString()} bytes.`);
+      }
+    },
   }
 
   useEffect(() => {
@@ -40,6 +48,9 @@ function ImageOverview(props) {
       if (dt.error) return self.warning(dt.error);
       if(!dt.parts) return self.warning("Invalid Gene data format");
       setAmount(dt.parts.length);
+      if(dt.image){
+        self.getImageDetails(dt.image);
+      }
     });
   }, [props.name,props.update]);
 
@@ -59,6 +70,11 @@ function ImageOverview(props) {
         <ImageOrgin name={props.name} index={active} fresh={props.fresh} update={props.update} callback={(od)=>{
           setOrder(od);
         }}/>
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
+            <strong>Image</strong>: {detail}
+          </Col>
+        </Row>
       </Col>
       <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]} >
         <ImageParameter name={props.name} index={active} fresh={props.fresh} update={props.update} />

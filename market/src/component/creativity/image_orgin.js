@@ -2,6 +2,7 @@ import { Row, Col } from "react-bootstrap";
 import { useEffect, useState, useRef } from "react";
 
 import GENE from "../../system/gene";
+import Drawing from "../../system/drawing";
 
 /* Original image selector 
 *   @param  {string}    props.name        //unique name to load data from local indexedDB
@@ -58,6 +59,40 @@ function ImageOrgin(props) {
       if(!width || !w) return false;
       setRate(w/width);
     },
+    getImageDetail:(bs64,ck)=>{
+      const img = new Image();
+      img.src = bs64;
+      img.onload = (e) => {
+        return ck && ck({width:img.width,height:img.height});
+      }
+    },
+    showImage:(image,iw,ih)=>{
+      if(!image){
+        Drawing.create(iw,ih,(bs64)=>{
+          setOrgin(bs64);
+          GENE.update.image(props.name,bs64,(res)=>{
+            console.log(res);
+            if(res.error) return false;
+            if(props.fresh) props.fresh();
+          });
+        })
+      }else{
+        self.getImageDetail(image,(img)=>{
+          if(img.width!==iw || img.height!==ih){
+            //FIXME, here to save the old image.
+            return Drawing.create(iw,ih,(bs64)=>{
+              setOrgin(bs64);
+              GENE.update.image(props.name,bs64,(res)=>{
+                console.log(res);
+                if(res.error) return false;
+                if(props.fresh) props.fresh();
+              });
+            })
+          } 
+          setOrgin(image);
+        });
+      }
+    },
     fresh:()=>{
       GENE.get(props.name, (dt) => {
         self.calcRate(dt.cell[0]*dt.grid[0]);
@@ -65,11 +100,9 @@ function ImageOrgin(props) {
         if (!dt.parts || !dt.parts[props.index]) return false;
 
         //1.check wether image here
-        if(!dt.image){
-
-        }else{
-
-        }
+        const iw=dt.cell[0]*dt.grid[0];
+        const ih=dt.cell[1]*dt.grid[1];
+        self.showImage(dt.image,iw,ih);
 
         //2.show cover of image
         const basic={
@@ -84,7 +117,6 @@ function ImageOrgin(props) {
   }
   
   useEffect(() => {
-    //console.log(props);
     self.fresh();
   }, [props.name, props.index,props.update]);
 

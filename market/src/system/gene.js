@@ -134,6 +134,14 @@ const self={
                 funs.save(data,ck);
             });
         },
+        image:(name,bs64,ck)=>{
+            console.log(name,bs64);
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.image=bs64;
+                funs.save(data,ck);
+            });
+        },
         size:(name,width,height,ck)=>{
             self.get(name,(data)=>{
                 if(data.error) return ck && ck(data);
@@ -168,9 +176,6 @@ const self={
                 data.series=arr;
                 funs.save(data,ck);
             });
-        },
-        image:(name,bs64,ck)=>{
-
         },
     },
 }
