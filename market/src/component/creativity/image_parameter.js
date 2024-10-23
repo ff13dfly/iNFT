@@ -85,11 +85,10 @@ function ImageParameter(props) {
         {info}
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
-        <h5>Image Parameter</h5>
+        <h5>Part Image Selection</h5>
       </Col>
       <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
         <CommonNumber value={image[0]} title={"Start Line"} callback={(val) => {
-          console.log(val);
           self.updatePart("img",0,val);
         }} />
       </Col>

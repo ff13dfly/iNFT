@@ -1,6 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import CommonNumber from "../common/common_number";
 import GENE from "../../system/gene";
 
 /* Component Sample
@@ -17,12 +18,12 @@ function TemplateBasic(props) {
   };
 
   let [info, setInfo]=useState("");
-  let [width, setWidth] = useState(900);
-  let [height, setHeigth] = useState(900);
-  let [cellX, setCellX] = useState(100);
-  let [cellY, setCellY] = useState(100);
   let [desc, setDesc] = useState("");
   let [title, setTitle] = useState("");
+
+  let [image, setImage]=useState([900,900]);
+  let [grid, setGrid]=useState([8,4]);
+  let [cell, setCell]=useState([100,100]);
 
   const self = {
     changeTitle: (ev) => {
@@ -39,45 +40,6 @@ function TemplateBasic(props) {
         if(res.error) return self.warning(res.error);
       });
     },
-    changeWidth: (ev) => {
-      const w=parseInt(ev.target.value);
-      setWidth(w);
-      GENE.update.size(props.name,w,height,(res)=>{
-        if(res.error) return self.warning(res.error);
-      });
-    },
-    changeHeight: (ev) => {
-      const h=parseInt(ev.target.value);
-      setHeigth(h);
-      GENE.update.size(props.name,width,h,(res)=>{
-        if(res.error) return self.warning(res.error);
-      });
-    },
-    changeCellX: (ev) => {
-      const x=parseInt(ev.target.value);
-      setCellX(x);
-      GENE.update.cell(props.name,x,cellY,(res)=>{
-        if(res.error) return self.warning(res.error);
-      });
-    },
-    changeCellY: (ev) => {
-      const y=parseInt(ev.target.value);
-      setCellY(y);
-      GENE.update.cell(props.name,cellX,y,(res)=>{
-        if(res.error) return self.warning(res.error);
-      });
-    },
-
-    updateData: (data) => {
-      setWidth(data.size[0]);
-      setHeigth(data.size[1]);
-
-      setCellX(data.cell[0]);
-      setCellY(data.cell[1]);
-
-      setTitle(!data.title?"":data.title);
-      setDesc(!data.desc?"":data.desc);
-    },
     warning:(txt,at)=>{
       setInfo(txt);
       if(at!==undefined){
@@ -86,13 +48,27 @@ function TemplateBasic(props) {
         }, at);
       }
     },
+    updateData:(cat,arr)=>{
+      if(!GENE.update[cat]) return self.warning("Unexcepted update.");
+      GENE.update[cat](props.name,arr[0],arr[1],(res)=>{
+        if(res.error) return self.warning(res.error);
+        self.fresh();
+      });
+    },
+    fresh:()=>{
+      GENE.get(props.name, (dt) => {
+        if (dt.error) return false;
+        setImage(dt.size);
+        setGrid(dt.grid);
+        setCell(dt.cell);
+        setTitle(dt.title);
+        setDesc(dt.desc)
+      });
+    }
   }
 
   useEffect(() => {
-    GENE.get(props.name, (dt) => {
-      if (dt.error) return false;
-      self.updateData(dt);
-    });
+    self.fresh();
   }, [props.name,props.update]);
 
   return (
@@ -106,15 +82,13 @@ function TemplateBasic(props) {
             <h5>iNFT Size</h5>
           </Col>
           <Col md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
-            <small>iNFT Width</small>
-            <input type="number" className="form-control" value={width} onChange={(ev) => {
-              self.changeWidth(ev);
+            <CommonNumber value={image[0]} title={"iNFT Width"} callback={(val) => {
+              self.updateData("size",[val,image[1]]);
             }} />
           </Col>
           <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
-            <small>iNFT Height</small>
-            <input type="number" className="form-control" value={height} onChange={(ev) => {
-              self.changeHeight(ev);
+            <CommonNumber value={image[0]} title={"iNFT Height"} callback={(val) => {
+              self.updateData("size",[image[0],val]);
             }} />
           </Col>
         </Row>
@@ -124,19 +98,33 @@ function TemplateBasic(props) {
             <h5>Cell Size</h5>
           </Col>
           <Col md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
-            <small>Cell Width</small>
-            <input type="number" className="form-control" value={cellX} onChange={(ev) => {
-              self.changeCellX(ev);
+            <CommonNumber value={cell[0]} title={"Cell Width"} step={10} callback={(val) => {
+              self.updateData("cell",[val,cell[1]]);
             }} />
           </Col>
           <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
-            <small>Cell Height</small>
-            <input type="number" className="form-control" value={cellY} onChange={(ev) => {
-              self.changeCellY(ev);
+            <CommonNumber value={cell[1]} title={"Cell Height"} step={10} callback={(val) => {
+              self.updateData("cell",[cell[0],val]);
             }} />
           </Col>
-
         </Row>
+
+        <Row>
+          <Col md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
+            <h5>Grid Setting</h5>
+          </Col>
+          <Col md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
+            <CommonNumber value={grid[0]} title={"Lines"} callback={(val) => {
+              self.updateData("grid",[val,grid[1]]);
+            }} />
+          </Col>
+          <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
+            <CommonNumber value={grid[1]} title={"Rows"} callback={(val) => {
+              self.updateData("grid",[grid[0],val]);
+            }} />
+          </Col>
+        </Row>
+
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
             <hr />

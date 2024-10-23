@@ -9,6 +9,7 @@ import { FaPlus,FaMinus } from "react-icons/fa";
 *   @param  {function}  props.callback  //ck && ck(value)
 *   @param  {boolean}   [props.disable]   //wether disable the input
 *   @param  {number}    [props.step]     //wether disable the input
+*   @param  {array}     [props.range]     //[min,max], the input range
 */
 
 function CommonNumber(props) {

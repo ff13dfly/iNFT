@@ -149,7 +149,11 @@ const self={
             });
         },
         grid:(name,x,y,ck)=>{
-
+            self.get(name,(data)=>{
+                if(data.error) return ck && ck(data);
+                data.grid=[x,y];
+                funs.save(data,ck);
+            });
         },
         parts:(name,arr,ck)=>{
             self.get(name,(data)=>{

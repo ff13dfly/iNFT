@@ -74,6 +74,7 @@ function BasicINFT(props) {
             </Col>
           </Row>
       </Col>
+      
       <Col md={size.grid[0]} lg={size.grid[0]} xl={size.grid[0]} xxl={size.grid[0]}>
           <Row>
             <Col className="pb-2" md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
