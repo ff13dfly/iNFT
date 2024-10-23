@@ -1,8 +1,11 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+import GENE from "../../system/gene";
 
 /* Original image selector 
 *   @param  {string}    props.name        //unique name to load data from local indexedDB
+*   @param  {number}    props.index       //parts index
 *   @param  {function}  props.callback    //callback the selected parts index
 */
 
@@ -12,53 +15,76 @@ function ImageOrgin(props) {
     grid: [1, 3],
   };
 
+
+
   let [list, setList]=useState([]);
   let [orgin, setOrgin] = useState(`${window.location.origin}/imgs/full.png`);    //the image to edit
-  let [active, setActive]=useState(0);    //selected cover 
+  let [active, setActive]=useState(0);      //selected cover 
+  let [rate, setRate]=useState(1);          // INFT_IMAGE_WIDTH / CONTAIONER_WIDTH, the rate to calc all components
 
-  let [line, setLine] = useState(8);
-  let [row, setRow] = useState(4);
-
-
+  const container = useRef(null);
   const self = {
-    changeLine: (ev) => {
-      setLine(ev.target.value);
-    },
-    changeRow: (ev) => {
-      setRow(ev.target.value);
-    },
     clickCover:(index)=>{
       setActive(index);
       if(props.callback)  props.callback(index);
     },
-    getCover:(n)=>{
+
+    getCover:(part,basic)=>{
+      //console.log(part,basic);
       const arr=[];
-      const w=100,h=200,top=200;
-      for(let i=0;i<n;i++){
+      const [line,row,ex,ey]=part.img;
+      const [start,step,divide,offset]=part.value;
+      const w=(1+ex)*basic.cell[0]*rate;
+      const h=(1+ey)*basic.cell[1]*rate;
+      const top=row*basic.cell[1]*rate;
+      //console.log(rate);
+      for(let i=0;i<divide;i++){
         arr.push({
           width:w,
           height:h,
           top:top,
         });
       }
-      return arr;
+      setList(arr);
     },
+    calcRate:(width)=>{
+      const w=container.current.clientWidth;
+      if(!width || !w) return false;
+      setRate(width/w);
+    },
+    fresh:()=>{
+      GENE.get(props.name, (dt) => {
+        self.calcRate(dt.size[0]);
+        if (dt.error) return false;
+        if (!dt.parts || !dt.parts[props.index]) return false;
 
-    //get the image basic parameters from image URL or Base64 string
-    getImageDetail:(img)=>{   
+        //1.check wether image here
+        if(!dt.image){
 
+        }else{
+
+        }
+
+        //2.show cover of image
+        const basic={
+          cell:dt.cell,
+          size:dt.size,
+          grid:dt.grid,
+        }
+        const part=dt.parts[props.index];
+        self.getCover(part,basic);
+      });
     },
   }
   
   useEffect(() => {
-    //console.log(props.name, props.index);
-    const arr=self.getCover(8);
-    setList(arr);
-  }, [props.name, props.index]);
+    console.log(props);
+    self.fresh();
+  }, [props.name, props.index,props.update]);
 
   return (
     <div className="orgin-container pt-2">
-      <div className="orgin-image" style={{ backgroundImage: `url(${orgin})` }}>
+      <div className="orgin-image" style={{backgroundImage: `url(${orgin})`}} ref={container}>
         {list.map((row, index) => (
           <div 
             key={index}
@@ -76,18 +102,6 @@ function ImageOrgin(props) {
             <h3 style={{ lineHeight: `${row.height}px`}}>{index}</h3>
           </div>
         ))}
-        {/* <div className="orgin-cover cover-default" style={{ width: "100px", height: "100px", lineHeight: "100px", marginTop:"200px" }}>
-          <h3 style={{ lineHeight: "100px" }}>0</h3>
-        </div>
-        <div className="orgin-cover cover-default" style={{ width: "100px", height: "100px", lineHeight: "100px", marginTop:"200px" }}>
-          <h3 style={{ lineHeight: "100px" }}>1</h3>
-        </div>
-        <div className="orgin-cover cover-active" style={{ width: "100px", height: "100px", lineHeight: "100px", marginTop:"200px" }}>
-          <h3 style={{ lineHeight: "100px" }}>2</h3>
-        </div>
-        <div className="orgin-cover cover-default" style={{ width: "100px", height: "100px", lineHeight: "100px", marginTop:"200px" }}>
-          <h3 style={{ lineHeight: "100px" }}>3</h3>
-        </div> */}
       </div>
     </div>
   );

@@ -97,7 +97,7 @@ function SeriesSelector(props) {
             {row.map((data, vkey) => (
               <button 
                 key={vkey} 
-                className={data===true?"btn btn-md btn-primary mr-5":"btn btn-md btn-secondary mr-5"}
+                className={data===true?"btn btn-md btn-info mr-5":"btn btn-md btn-secondary mr-5"}
                 onClick={(ev)=>{
                   self.clickSingle(index,vkey);
                 }}>{vkey}</button>

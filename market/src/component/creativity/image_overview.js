@@ -35,6 +35,7 @@ function ImageOverview(props) {
   }
 
   useEffect(() => {
+    //console.log(props);
     GENE.get(props.name, (dt) => {
       if (dt.error) return self.warning(dt.error);
       if(!dt.parts) return self.warning("Invalid Gene data format");
@@ -45,21 +46,22 @@ function ImageOverview(props) {
   return (
     <Row>
       <Col md={size.left[0]} lg={size.left[0]} xl={size.left[0]} xxl={size.left[0]} >
-        <ImageOperation name={props.name} index={active} order={order}/>
-        <PartSelector amount={amount}  callback={(index)=>{
+        <ImageOperation name={props.name} index={active} order={order} fresh={props.fresh} update={props.update}/>
+        <PartSelector amount={amount} fresh={props.fresh} update={props.update} callback={(index)=>{
           setActive(index);
+          if(props.fresh) props.fresh();
         }}/>
         <Row>
           <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]} >
             {info}
           </Col>
         </Row>
-        <ImageOrgin name={props.name} index={active} callback={(od)=>{
+        <ImageOrgin name={props.name} index={active} fresh={props.fresh} update={props.update} callback={(od)=>{
           setOrder(od);
         }}/>
       </Col>
       <Col md={size.left[1]} lg={size.left[1]} xl={size.left[1]} xxl={size.left[1]} >
-        <ImageParameter name={props.name} index={active}  />
+        <ImageParameter name={props.name} index={active} fresh={props.fresh} update={props.update} />
       </Col>
     </Row>
   );

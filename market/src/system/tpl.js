@@ -16,20 +16,6 @@ import tools from "../lib/tools";
 import INDEXED from "../lib/indexed";
 import Config from "./config";
 
-// const config = {
-//     default: "bafkreiddy2rqwebw5gm5hdqqqrbsqzkrubjk3ldzr2bia5jk4w5o2w5w4i",
-//     indexDB: "inftDB",
-//     table: "template",
-//     keypath: "cid",
-//     map: {
-//         cid: { unique: true },
-//         stamp: { unique: false },
-//         thumb: { unique: false },
-//         image: { unique: false },
-//         content: { unique: false },
-//     },
-// }
-
 let agent = false;     //wether use agent
 let local = true;     //get template from local
 const funs = {

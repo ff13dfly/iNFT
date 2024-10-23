@@ -31,7 +31,7 @@ function PartSelector(props) {
 
   useEffect(() => {
     self.fresh();
-  }, [props.amount]);
+  }, [props.amount,props.update]);
 
 
   return (
@@ -39,11 +39,11 @@ function PartSelector(props) {
       <Col md={size.right[0]} lg={size.right[0]} xl={size.right[0]} xxl={size.right[0]}>
         <h6 className="pt-1">Parts</h6> 
       </Col>
-      <Col md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
+      <Col className="text-end" md={size.right[1]} lg={size.right[1]} xl={size.right[1]} xxl={size.right[1]}>
         {list.map((row, index) => (
           <button 
             key={index}
-            className={active===index?"btn btn-sm btn-primary mr-5":"btn btn-sm btn-default mr-5"}
+            className={active===index?"btn btn-sm btn-warning mr-5":"btn btn-sm btn-secondary mr-5"}
             onClick={(ev)=>{
               self.clickPart(index);
             }}

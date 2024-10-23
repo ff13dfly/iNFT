@@ -21,8 +21,8 @@ function ImageOperation(props) {
   }
 
   useEffect(() => {
-    //console.log(props.name, props.index,props.order);
-  }, [props.name, props.index,props.order]);
+    
+  }, [props.name, props.index,props.order,props.update]);
   return (
     <Row>
       <Col md={size.opt[0]} lg={size.opt[0]} xl={size.opt[0]} xxl={size.opt[0]}>

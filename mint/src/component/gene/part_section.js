@@ -19,8 +19,6 @@ function PartSection(props) {
     let [width, setWidth]=useState(400);
     let [height, setHeight]=useState(50);
     let [bs64, setBS64] = useState("image/section.png");
-    //let [rate, setRate]=useState(1);
-
     let [grid, setGrid]=useState([]);
 
     const cut_id = "pre_cut";

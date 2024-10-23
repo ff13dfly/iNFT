@@ -1,6 +1,8 @@
 import { Row, Col  } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+import { FaPlus,FaMinus } from "react-icons/fa";
+
 /* common input with inc/dec buttons
 *   @param  {string}    props.title      //title of the input
 *   @param  {number}    props.value     //value 
@@ -47,7 +49,7 @@ function CommonNumber(props) {
       <Col className="pt-1 text-center" md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
         <button className="btn btn-sm btn-default" onClick={(ev)=>{
           self.clickDec(ev);
-        }}>-</button>
+        }}><FaMinus className="text-secondary"/></button>
       </Col>
       <Col className="pt-1 text-center" md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
         <input
@@ -62,7 +64,7 @@ function CommonNumber(props) {
       <Col className="pt-1  text-center" md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
         <button className="btn btn-sm btn-default" onClick={(ev)=>{
           self.clickInc(ev);
-        }}>+</button>
+        }}><FaPlus className="text-secondary"/></button>
       </Col>
     </Row>
   );
