@@ -77,21 +77,7 @@ function TemplateBasic(props) {
         {info}
       </Col>
       <Col md={size.layout[0]} lg={size.layout[0]} xl={size.layout[0]} xxl={size.layout[0]}>
-        <Row>
-          <Col md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
-            <h5>iNFT Size</h5>
-          </Col>
-          <Col md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
-            <CommonNumber value={image[0]} title={"iNFT Width"} callback={(val) => {
-              self.updateData("size",[val,image[1]]);
-            }} />
-          </Col>
-          <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
-            <CommonNumber value={image[0]} title={"iNFT Height"} callback={(val) => {
-              self.updateData("size",[image[0],val]);
-            }} />
-          </Col>
-        </Row>
+        
 
         <Row>
           <Col md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
@@ -121,6 +107,26 @@ function TemplateBasic(props) {
           <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
             <CommonNumber value={grid[1]} title={"Rows"} callback={(val) => {
               self.updateData("grid",[grid[0],val]);
+            }} />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={size.row[0]} lg={size.row[0]} xl={size.row[0]} xxl={size.row[0]}>
+            <hr />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={size.input[0]} lg={size.input[0]} xl={size.input[0]} xxl={size.input[0]}>
+            <h5>iNFT Size</h5>
+          </Col>
+          <Col md={size.input[1]} lg={size.input[1]} xl={size.input[1]} xxl={size.input[1]}>
+            <CommonNumber value={image[0]} title={"iNFT Width"} callback={(val) => {
+              self.updateData("size",[val,image[1]]);
+            }} />
+          </Col>
+          <Col md={size.input[2]} lg={size.input[2]} xl={size.input[2]} xxl={size.input[2]}>
+            <CommonNumber value={image[0]} title={"iNFT Height"} callback={(val) => {
+              self.updateData("size",[image[0],val]);
             }} />
           </Col>
         </Row>
