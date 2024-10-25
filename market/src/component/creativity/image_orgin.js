@@ -44,7 +44,7 @@ function ImageOrgin(props) {
         Drawing.combine(source, target, (bs64) => {
           setOrgin(bs64);
           GENE.update.image(props.name, bs64, (res) => {
-            console.log(res);
+            //console.log(res);
             if (res.error) return false;
             if (props.fresh) props.fresh();
           });
@@ -100,16 +100,16 @@ function ImageOrgin(props) {
           setCmap(imap);
 
           GENE.update.image(props.name, bs64, (res) => {
-            console.log(res);
+            //console.log(res);
             if (res.error) return false;
             if (props.fresh) props.fresh();
           });
         })
       } else {
         self.getImageDetail(image, (img) => {
-          console.log(iw,ih,ih*rate,img);
+          //console.log(iw,ih,ih*rate,img);
           if (img.width !== iw || img.height !== ih) {
-            console.log(`Here to reset the image size.`);
+            //console.log(`Here to reset the image size.`);
             
             return Drawing.extend(image, iw, ih, (bs64) => {
               const imap={
@@ -124,7 +124,7 @@ function ImageOrgin(props) {
               });
             })
           }else{
-            console.log(`Here to set container style.`);
+            //console.log(`Here to set container style.`);
             const imap={
               backgroundImage:`url(${image})`,
               height:`${ih*rate}px`,
