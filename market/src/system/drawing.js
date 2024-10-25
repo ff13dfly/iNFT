@@ -75,14 +75,16 @@ const self={
             const img = new Image();
             img.src = image;
             img.onload = (e) => {
-                // const cx=0;
-                // const cy=row*h;
-                // const vx=0;
-                // const vy=0;
-                // const dx=w*line;
-                // const dy=h*step;
-                // pen.drawImage(img, cx , cy , dx , dy , vx, vy, dx, dy);
+                const cs_x=0;
+                const cs_y=0;
+                const ce_x=img.width;
+                const ce_y=img.height;
 
+                const ts_x=0;
+                const ts_y=0;
+                const te_x=img.width;
+                const te_y=img.height;
+                pen.drawImage(img, cs_x, cs_y , ce_x , ce_y , ts_x, ts_y, te_x, te_y);
                 return funs.getBase64(pen,ck);
             }
         },width,height);

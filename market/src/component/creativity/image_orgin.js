@@ -110,14 +110,18 @@ function ImageOrgin(props) {
           console.log(iw,ih,ih*rate,img);
           if (img.width !== iw || img.height !== ih) {
             console.log(`Here to reset the image size.`);
+            
             return Drawing.extend(image, iw, ih, (bs64) => {
-              
-              // setOrgin(bs64);
-              // GENE.update.image(props.name, bs64, (res) => {
-              //   console.log(res);
-              //   if (res.error) return false;
-              //   if (props.fresh) props.fresh();
-              // });
+              const imap={
+                backgroundImage:`url(${image})`,
+                height:`${ih*rate}px`,
+              }
+              setCmap(imap);
+              GENE.update.image(props.name, bs64, (res) => {
+                //console.log(res);
+                if (res.error) return false;
+                if (props.fresh) props.fresh();
+              });
             })
           }else{
             console.log(`Here to set container style.`);
