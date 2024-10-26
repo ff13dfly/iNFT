@@ -15,7 +15,7 @@ import GENE from "../../system/gene";
 function ImageOverview(props) {
   const size = {
     row: [12],
-    left: [9, 3]
+    left: [9,3]
   };
 
   let [info, setInfo]=useState("");

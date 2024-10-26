@@ -114,7 +114,8 @@ function Header(props) {
             </Col>
 
             <Col className="pt-1" sm={size.title[1]} xs={size.title[1]}>
-                <h3>iNFT Minter</h3>
+                {/* <h3>iNFT Minter</h3> */}
+                <h3>Hash Lottery</h3>
             </Col>
             <Col className="pt-1 text-end" sm={size.title[2]} xs={size.title[2]}>
 

@@ -13,7 +13,7 @@ function AccountMarket(props) {
         left:[9,3],
     };
 
-    const default_info="Get $ANK on market.";
+    const default_info="$ANK exchange market.";
     let [info, setInfo]=useState(default_info);
     let [recover, setRecover] = useState({});
 
